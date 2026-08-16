@@ -12,8 +12,11 @@ and they have to be fast.
 ## Status
 
 Greenfield. Architecture and the initial GitHub backlog are in place; the app
-itself is not scaffolded yet. Start at
-[`docs/issues-priority.md`](docs/issues-priority.md).
+itself is not scaffolded yet.
+
+**Repo:** [github.com/ZhannaM85/pocket-balance](https://github.com/ZhannaM85/pocket-balance)
+
+Start at [`docs/issues-priority.md`](docs/issues-priority.md).
 
 ## What it will do
 

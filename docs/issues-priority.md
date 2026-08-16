@@ -2,12 +2,103 @@
 
 Active work queue only (open, pending validation, not started, partial). Closed history lives in [`docs/issues-priority-archive/`](./issues-priority-archive/README.md).
 
-Work top-to-bottom within each tier; dependencies are noted where order matters.
+Work top-to-bottom within each tier; dependencies are noted where order matters. When an issue is confirmed done, move its row to the archive.
 
-The initial backlog (Tiers 1–7) is the planned implementation sequence from `PROJECT_BRIEF.md`, filed at project start — same shape as turtle-steps' original Phase 1/2 epics. Later live-feedback filings on a given calendar day append to that day's tier rather than opening a new one.
+The **initial backlog (Tiers 1–7)** is the planned implementation sequence from `PROJECT_BRIEF.md`, filed at project start — same shape as turtle-steps' original Phase 1/2 epics, not a same-day live-feedback split. Later live-feedback filings on a given calendar day append to that day's tier (see `docs/AGENT_WORKFLOW.md`).
 
-Issue numbers and links will be filled in as soon as the GitHub issues exist.
+Prototype checkpoint after Tier 5: the four flows in `PROJECT_BRIEF.md` §25 (onboarding, dashboard, update, asset details) should feel good before native platforms.
 
 ---
 
-_Placeholder — replaced in the issue-logging commit._
+## Tier 1 — Architecture foundation (Phase 1)
+
+_Scaffolding, domain model, and persistence. Everything downstream depends on this._
+
+| # | Status | Issue | Notes |
+|---|--------|-------|-------|
+| [#1](https://github.com/ZhannaM85/pocket-balance/issues/1) | 🔲 Open | Epic 0 — Project scaffolding & tooling | Vite + React 19 + TS strict + Tailwind/shadcn + Vitest. Empty shell only. |
+| [#2](https://github.com/ZhannaM85/pocket-balance/issues/2) | 🔲 Open | Epic 1 — Domain model & persistence layer | Depends on #1. `Asset` + snapshots + settings; liabilities are `assetClass: 'liabilities'`. Pure net-worth/FX-apply math with an injected rate table. |
+
+---
+
+## Tier 2 — Design system & app shell
+
+_Shared primitives and routing skeleton before any real feature screen._
+
+| # | Status | Issue | Notes |
+|---|--------|-------|-------|
+| [#3](https://github.com/ZhannaM85/pocket-balance/issues/3) | 🔲 Open | Epic 2 — Design system & app shell | Depends on #1. Bottom nav from the starting mock; empty screens are fine. |
+
+---
+
+## Tier 3 — First vertical slice
+
+_Base currency → create assets → first net worth. This is prototype Flow 1. Single-currency is enough; FX can still be identity rates._
+
+| # | Status | Issue | Notes |
+|---|--------|-------|-------|
+| [#4](https://github.com/ZhannaM85/pocket-balance/issues/4) | 🔲 Open | Epic 3 — Settings: base currency and preferences | Depends on #2 and #3. Changing base currency must not rewrite snapshots. |
+| [#5](https://github.com/ZhannaM85/pocket-balance/issues/5) | 🔲 Open | Epic 4 — Assets: create, edit, archive, tracking | Depends on #2 and #3. Includes liabilities, valuation method, update frequency, included/excluded/archived. |
+| [#6](https://github.com/ZhannaM85/pocket-balance/issues/6) | 🔲 Open | Epic 5 — Onboarding: first assets to first net worth | Depends on #4 and #5. Stop and fix this flow before piling on more screens. |
+
+---
+
+## Tier 4 — Data safety & deployment (pulled forward)
+
+_Once real balances exist (Tier 3), IndexedDB is the only copy — backup and a real deployed build should not wait until the end of the queue. Same pull-forward as turtle-steps Epic 8/9._
+
+| # | Status | Issue | Notes |
+|---|--------|-------|-------|
+| [#13](https://github.com/ZhannaM85/pocket-balance/issues/13) | 🔲 Open | Epic 12 — JSON export and import | The backup format; contract with the future iOS app. |
+| [#14](https://github.com/ZhannaM85/pocket-balance/issues/14) | 🔲 Open | Epic 13 — GitHub Pages deployment | CI + Pages; verify persistence survives a real deploy + reload. |
+
+---
+
+## Tier 5 — Core product (prototype flows 2–4)
+
+_FX, then the remaining three prototype flows, plus allocation and history. Order matters: FX before converted totals and historical series._
+
+| # | Status | Issue | Notes |
+|---|--------|-------|-------|
+| [#7](https://github.com/ZhannaM85/pocket-balance/issues/7) | 🔲 Open | Epic 6 — FX rates via Frankfurter | No API key. Cache quotes. Historical points use that date’s rate. User data never sent. |
+| [#8](https://github.com/ZhannaM85/pocket-balance/issues/8) | 🔲 Open | Epic 7 — Dashboard | Flow 2. Net worth, period change, chart, class totals. |
+| [#9](https://github.com/ZhannaM85/pocket-balance/issues/9) | 🔲 Open | Epic 8 — Quick update flow | Flow 3. Target &lt; 60s for 5–10 assets. Pause on the exact “no change” snapshot rule. |
+| [#10](https://github.com/ZhannaM85/pocket-balance/issues/10) | 🔲 Open | Epic 9 — Asset details | Flow 4. Native vs base toggle; optional FX-vs-value split is not required to close. |
+| [#11](https://github.com/ZhannaM85/pocket-balance/issues/11) | 🔲 Open | Epic 10 — Allocation screen | By class / currency / type. Open fork: own route vs Dashboard. |
+| [#12](https://github.com/ZhannaM85/pocket-balance/issues/12) | 🔲 Open | Epic 11 — History: net worth over time | Range chips + snapshot list; historical FX per date. |
+
+---
+
+## Tier 6 — Completeness
+
+_CSV, PWA, i18n, accessibility. Any order after Tier 5, except CSV should not precede JSON (#13)._
+
+| # | Status | Issue | Notes |
+|---|--------|-------|-------|
+| [#15](https://github.com/ZhannaM85/pocket-balance/issues/15) | 🔲 Open | Epic 14 — CSV export and import | Mapping flow; JSON remains the backup. |
+| [#16](https://github.com/ZhannaM85/pocket-balance/issues/16) | 🔲 Open | Epic 15 — PWA installability | Offline-tolerant (cached FX); Capacitor-compatible. |
+| [#17](https://github.com/ZhannaM85/pocket-balance/issues/17) | 🔲 Open | Epic 16 — Localization (English and Russian) | Typed dictionary; backup field names stay English. |
+| [#18](https://github.com/ZhannaM85/pocket-balance/issues/18) | 🔲 Open | Epic 17 — Accessibility and responsive QA pass | Sweep only — a11y is still required on each earlier epic as it ships. |
+
+---
+
+## Tier 7 — Native platforms
+
+_After the four web flows feel good. Android wraps this app; iOS does not._
+
+| # | Status | Issue | Notes |
+|---|--------|-------|-------|
+| [#19](https://github.com/ZhannaM85/pocket-balance/issues/19) | 🔲 Open | Epic 18 — Android via Capacitor | Wrap, don’t rewrite. Store listing can be child issues later. |
+| [#20](https://github.com/ZhannaM85/pocket-balance/issues/20) | 🔲 Open | Epic 19 — Native iOS app (Swift / SwiftUI) | Tracking epic. Requires a Mac. Split into children when scheduled. Shares JSON schema with #13. |
+
+---
+
+## Explicitly not filed
+
+Out of scope for the MVP (`PROJECT_BRIEF.md` §20) — do not implement from chat:
+
+- Bank / Open Banking / brokerage / crypto live sync
+- Transactions, budgeting, expense categories
+- Advice, AI, tax, social, trading
+- Automatic property / jewelry valuation
+- Required cloud accounts or sync
