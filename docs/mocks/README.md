@@ -2,6 +2,8 @@
 
 Starting UI mocks for Pocket Balance. These are a design sketch, not a contract — layout, copy, and navigation can change during implementation.
 
+![Six starting screens: Dashboard, Assets, Update balances, Allocation, History, Asset details](ui-mockups.png)
+
 Intended screens (from the initial mock):
 
 1. **Dashboard** — net worth, monthly change, trend chart, category totals, bottom nav.
