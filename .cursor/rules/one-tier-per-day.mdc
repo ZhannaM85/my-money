@@ -1,0 +1,12 @@
+---
+description: One calendar day gets one issues-priority tier for live-feedback filings.
+alwaysApply: true
+---
+
+# One day → one tier
+
+When adding **new live-feedback** rows to `docs/issues-priority.md`, one calendar day gets at most one new tier.
+
+The initial planned backlog (Tiers 1–7, filed at project start) is a work-order sequence. Do not collapse it. Do not invent Tier 8 on the same date as another new live-feedback tier.
+
+If today's date already has a live-feedback tier, append to that tier.

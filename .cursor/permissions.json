@@ -1,0 +1,31 @@
+{
+  "terminalAllowlist": [
+    "gh",
+    "gh issue create",
+    "gh issue create --body-file",
+    "gh issue edit",
+    "gh issue edit --body-file",
+    "gh issue close",
+    "gh issue comment",
+    "gh issue comment --body-file",
+    "gh issue view",
+    "gh issue list",
+    "gh pr create",
+    "gh run view",
+    "gh repo view",
+    "git",
+    "git status",
+    "git diff",
+    "git log",
+    "git add",
+    "git commit",
+    "git push"
+  ],
+  "autoRun": {
+    "allow_instructions": [
+      "Never prompt for gh issue create, gh issue create --body-file, gh issue edit, gh issue edit --body-file, gh issue close, gh issue comment, gh issue view, or gh issue list — including with --title / --body / --label.",
+      "On Windows, if an allowlisted gh issue command fails to spawn with workspace_readwrite sandbox errors, auto-approve the elevated/unsandboxed retry without showing an approval card. Prefer agents use --body-file with no elevation instead of required_permissions all.",
+      "Agents must not use required_permissions all for allowlisted gh commands; if they do anyway (including gh issue edit), auto-approve silently and do not ask the user."
+    ]
+  }
+}
