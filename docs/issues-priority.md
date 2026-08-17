@@ -93,6 +93,16 @@ _After the four web flows feel good. Android wraps this app; iOS does not._
 
 ---
 
+## Tier 8 — Branding (2026-08-17)
+
+_User supplied light and dark logo marks. Blocked on #1 (no `public/` yet). Tiny favicons should crop to the circular **M**; full lockup is for larger icons._
+
+| # | Status | Issue | Notes |
+|---|--------|-------|-------|
+| [#21](https://github.com/ZhannaM85/my-money/issues/21) | 🔲 Open | Use light and dark My Money marks as favicons | Source: `docs/branding/logo-light.png` + `logo-dark.png`. `prefers-color-scheme`. |
+
+---
+
 ## Explicitly not filed
 
 Out of scope for the MVP (`PROJECT_BRIEF.md` §20) — do not implement from chat:
