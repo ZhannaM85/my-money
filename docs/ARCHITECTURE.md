@@ -4,7 +4,7 @@ This document is updated after each issue is completed. It explains what every f
 
 Product context lives in `PROJECT_BRIEF.md`; the active work queue lives in `docs/issues-priority.md` (closed history: `docs/issues-priority-archive/`); the public-facing overview lives in `README.md`.
 
-**Status (2026-08-17):** Epics 0–16 (#1–#17) plus GitHub Pages landed. Deployed at `https://zhannam85.github.io/my-money/`. Remaining completeness: a11y. Native platforms (#19–#20) wait until the web flows feel good.
+**Status (2026-08-17):** Epics 0–17 (#1–#18) plus GitHub Pages landed. Deployed at `https://zhannam85.github.io/my-money/`. Native platforms (#19–#20) wait until the web flows feel good.
 
 ---
 
@@ -276,7 +276,7 @@ Calm, numbers-first, light theme with a green accent in the starting mock. Tailw
 
 No gamification. Estimated valuations must look distinct from account balances. Liability amounts display as negative in summaries.
 
-Accessibility as we build: semantic HTML, visible focus, ARIA on icon-only controls, WCAG AA contrast, keyboard nav.
+Accessibility as we build: semantic HTML, visible focus, ARIA on icon-only controls, WCAG AA contrast, keyboard nav. Sweep (#18): skip-to-content, `aria-pressed` on chips, allocation colors darkened for contrast, main column `min-w-0` so tables/chips scroll on small screens.
 
 ---
 

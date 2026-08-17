@@ -94,6 +94,7 @@ export function HistoryScreen() {
                 ? 'bg-primary text-primary-foreground'
                 : 'bg-muted text-muted-foreground',
             )}
+            aria-pressed={range === item}
           >
             {item}
           </button>

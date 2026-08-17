@@ -69,6 +69,12 @@ export function AppShell() {
 
   return (
     <div className="min-h-svh bg-background">
+      <a
+        href="#main-content"
+        className="bg-primary text-primary-foreground absolute top-3 left-3 z-50 -translate-y-[200%] rounded-lg px-3 py-2 text-sm font-medium focus:translate-y-0"
+      >
+        {t.common.skipToContent}
+      </a>
       <header className="sticky top-0 z-10 border-b border-border bg-background">
         <div className="mx-auto flex max-w-3xl items-center px-4 pt-[calc(env(safe-area-inset-top)+0.75rem)] pb-3">
           <span className="text-sm font-semibold text-foreground">
@@ -77,8 +83,9 @@ export function AppShell() {
         </div>
       </header>
       <main
+        id="main-content"
         className={cn(
-          'mx-auto max-w-3xl px-4 py-6',
+          'mx-auto w-full max-w-3xl min-w-0 px-4 py-6',
           onboarding ? 'pb-6' : 'pb-28',
         )}
       >

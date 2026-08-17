@@ -52,6 +52,9 @@ describe('AppShell', () => {
     ).toBeInTheDocument()
     expect(screen.getByRole('link', { name: 'Dashboard' })).toBeInTheDocument()
     expect(screen.getByRole('link', { name: 'Update' })).toBeInTheDocument()
+    expect(
+      screen.getByRole('link', { name: 'Skip to content' }),
+    ).toHaveAttribute('href', '#main-content')
   })
 
   it('keeps the shell usable and shows cached FX copy when rates cannot refresh', async () => {

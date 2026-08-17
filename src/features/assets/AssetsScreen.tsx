@@ -72,6 +72,7 @@ export function AssetsScreen() {
                 ? 'bg-primary text-primary-foreground'
                 : 'bg-muted text-muted-foreground',
             )}
+            aria-pressed={filter === item.id}
           >
             {item.label}
           </button>

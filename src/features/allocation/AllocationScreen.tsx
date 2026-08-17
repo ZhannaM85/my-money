@@ -14,11 +14,11 @@ type View = 'class' | 'currency' | 'type'
 
 const SLICE_COLORS = [
   'var(--primary)',
-  '#4ade80',
-  '#86efac',
+  '#14532d',
   '#166534',
-  '#bbf7d0',
-  '#22c55e',
+  '#3f6212',
+  '#047857',
+  '#15803d',
 ]
 
 export function AllocationScreen() {
@@ -74,7 +74,7 @@ export function AllocationScreen() {
         title={t.allocation.title}
         description={t.allocation.description}
       />
-      <div className="flex gap-2">
+      <div className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1">
         {views.map((item) => (
           <button
             key={item.id}
@@ -86,6 +86,7 @@ export function AllocationScreen() {
                 ? 'bg-primary text-primary-foreground'
                 : 'bg-muted text-muted-foreground',
             )}
+            aria-pressed={view === item.id}
           >
             {item.label}
           </button>
