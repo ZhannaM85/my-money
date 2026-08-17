@@ -12,9 +12,11 @@ import { formatAmount } from '@/shared/lib/money'
 export function NetWorthChart({
   points,
   currency,
+  seriesName = 'Net worth',
 }: {
   points: readonly { date: string; total: number }[]
   currency: string
+  seriesName?: string
 }) {
   if (points.length === 0) return null
 
@@ -67,7 +69,7 @@ export function NetWorthChart({
             stroke="var(--primary)"
             strokeWidth={2}
             dot={false}
-            name="Net worth"
+            name={seriesName}
           />
         </LineChart>
       </ResponsiveContainer>
