@@ -100,6 +100,7 @@ _User supplied light and dark logo marks. Blocked on #1 (no `public/` yet). Tiny
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
 | [#21](https://github.com/ZhannaM85/my-money/issues/21) | 🔍 Pending validation | Use light and dark My Money marks as favicons | Source: `docs/branding/logo-light.png` + `logo-dark.png`. `prefers-color-scheme`. Tiny sizes are a center crop of the **M**. |
+| [#22](https://github.com/ZhannaM85/my-money/issues/22) | 🔲 Open | Tab favicon is clipped; generate tiny sizes from the 192px marks | Tab still shows the full lockup. Use `public/icon-light-192.png` + `icon-dark-192.png`. Pad the circular **M**. |
 
 ---
 
