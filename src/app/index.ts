@@ -1,1 +1,2 @@
-export { App } from './App'
+export { AppShell } from './AppShell'
+export { router, routes } from './router'

@@ -27,7 +27,7 @@ _Shared primitives and routing skeleton before any real feature screen._
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
-| [#3](https://github.com/ZhannaM85/my-money/issues/3) | 🔲 Open | Epic 2 — Design system & app shell | Depends on #1. Bottom nav from the starting mock; empty screens are fine. |
+| [#3](https://github.com/ZhannaM85/my-money/issues/3) | 🔍 Pending validation | Epic 2 — Design system & app shell | Primitives + bottom nav + empty route screens. |
 
 ---
 

@@ -5,3 +5,5 @@ import { cleanup } from '@testing-library/react'
 afterEach(() => {
   cleanup()
 })
+
+window.scrollTo = (() => {}) as typeof window.scrollTo
