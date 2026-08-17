@@ -1,0 +1,184 @@
+import type { Asset, AssetClass } from '@/domain/asset'
+import { contributesToNetWorth, isLiability } from '@/domain/asset'
+import { convertAmount, lookupRate, type RateTable } from '@/domain/fx'
+import {
+  latestSnapshot,
+  snapshotsOnOrBefore,
+  type AssetSnapshot,
+} from '@/domain/snapshot'
+
+export interface ClassTotal {
+  assetClass: AssetClass
+  amount: number
+}
+
+export interface MissingRate {
+  assetId: string
+  from: string
+  to: string
+  date: string
+}
+
+export interface NetWorthResult {
+  total: number
+  byClass: ClassTotal[]
+  missingRates: MissingRate[]
+}
+
+function emptyByClass(): ClassTotal[] {
+  return [
+    { assetClass: 'money', amount: 0 },
+    { assetClass: 'investments', amount: 0 },
+    { assetClass: 'property', amount: 0 },
+    { assetClass: 'valuables', amount: 0 },
+    { assetClass: 'liabilities', amount: 0 },
+  ]
+}
+
+function convertedContribution(
+  asset: Asset,
+  snapshot: AssetSnapshot,
+  rates: RateTable,
+  baseCurrency: string,
+  rateDate: string,
+): { amount: number } | { missing: MissingRate } {
+  const rate = lookupRate(rates, snapshot.currency, baseCurrency, rateDate)
+  if (rate === undefined) {
+    return {
+      missing: {
+        assetId: asset.id,
+        from: snapshot.currency,
+        to: baseCurrency,
+        date: rateDate,
+      },
+    }
+  }
+  const native = convertAmount(snapshot.amount, rate)
+  return { amount: isLiability(asset) ? -native : native }
+}
+
+export function netWorth(
+  assets: readonly Asset[],
+  snapshots: readonly AssetSnapshot[],
+  rates: RateTable,
+  baseCurrency: string,
+): NetWorthResult {
+  const byClass = emptyByClass()
+  const missingRates: MissingRate[] = []
+  let total = 0
+
+  for (const asset of assets) {
+    if (!contributesToNetWorth(asset)) continue
+    const snapshot = latestSnapshot(snapshots, asset.id)
+    if (!snapshot) continue
+    const result = convertedContribution(
+      asset,
+      snapshot,
+      rates,
+      baseCurrency,
+      snapshot.date,
+    )
+    if ('missing' in result) {
+      missingRates.push(result.missing)
+      continue
+    }
+    total += result.amount
+    const bucket = byClass.find((row) => row.assetClass === asset.assetClass)
+    if (bucket) bucket.amount += result.amount
+  }
+
+  return { total, byClass, missingRates }
+}
+
+export function historicalNetWorth(
+  assets: readonly Asset[],
+  snapshots: readonly AssetSnapshot[],
+  rates: RateTable,
+  dates: readonly string[],
+  baseCurrency: string,
+): { date: string; total: number; missingRates: MissingRate[] }[] {
+  return dates.map((date) => {
+    const missingRates: MissingRate[] = []
+    let total = 0
+    for (const asset of assets) {
+      if (!contributesToNetWorth(asset)) continue
+      const snapshot = snapshotsOnOrBefore(snapshots, asset.id, date)
+      if (!snapshot) continue
+      const result = convertedContribution(
+        asset,
+        snapshot,
+        rates,
+        baseCurrency,
+        date,
+      )
+      if ('missing' in result) {
+        missingRates.push(result.missing)
+        continue
+      }
+      total += result.amount
+    }
+    return { date, total, missingRates }
+  })
+}
+
+export function allocation(byClass: readonly ClassTotal[]): {
+  assetClass: AssetClass
+  amount: number
+  percent: number
+}[] {
+  const absSum = byClass.reduce((sum, row) => sum + Math.abs(row.amount), 0)
+  return byClass.map((row) => ({
+    assetClass: row.assetClass,
+    amount: row.amount,
+    percent: absSum === 0 ? 0 : (Math.abs(row.amount) / absSum) * 100,
+  }))
+}
+
+export function periodChange(
+  from: number,
+  to: number,
+): { absolute: number; percent: number | null } {
+  const absolute = to - from
+  if (from === 0) return { absolute, percent: null }
+  return { absolute, percent: (absolute / Math.abs(from)) * 100 }
+}
+
+export function assetPerformance(
+  snapshots: readonly AssetSnapshot[],
+  rates: RateTable,
+  baseCurrency: string,
+): {
+  nativeAbsolute: number
+  nativePercent: number | null
+  baseAbsolute: number | null
+  basePercent: number | null
+} | null {
+  if (snapshots.length === 0) return null
+  const ordered = [...snapshots].sort((a, b) =>
+    a.date === b.date
+      ? a.createdAt.localeCompare(b.createdAt)
+      : a.date.localeCompare(b.date),
+  )
+  const first = ordered[0]
+  const last = ordered[ordered.length - 1]
+  const nativeAbsolute = last.amount - first.amount
+  const nativePercent =
+    first.amount === 0 ? null : (nativeAbsolute / Math.abs(first.amount)) * 100
+
+  const firstRate = lookupRate(rates, first.currency, baseCurrency, first.date)
+  const lastRate = lookupRate(rates, last.currency, baseCurrency, last.date)
+  if (firstRate === undefined || lastRate === undefined) {
+    return {
+      nativeAbsolute,
+      nativePercent,
+      baseAbsolute: null,
+      basePercent: null,
+    }
+  }
+  const firstBase = convertAmount(first.amount, firstRate)
+  const lastBase = convertAmount(last.amount, lastRate)
+  const baseAbsolute = lastBase - firstBase
+  const basePercent =
+    firstBase === 0 ? null : (baseAbsolute / Math.abs(firstBase)) * 100
+  return { nativeAbsolute, nativePercent, baseAbsolute, basePercent }
+}

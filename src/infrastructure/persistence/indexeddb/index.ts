@@ -1,2 +1,5 @@
-// Placeholder -- filled by a later epic.
-export {}
+export { db, AppDatabase } from './db'
+export { IndexedDbAssetRepository } from './assetRepository'
+export { IndexedDbSnapshotRepository } from './snapshotRepository'
+export { IndexedDbSettingsRepository } from './settingsRepository'
+export { IndexedDbFxRateRepository } from './fxRateRepository'

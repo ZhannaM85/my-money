@@ -4,7 +4,7 @@ This document is updated after each issue is completed. It explains what every f
 
 Product context lives in `PROJECT_BRIEF.md`; the active work queue lives in `docs/issues-priority.md` (closed history: `docs/issues-priority-archive/`); the public-facing overview lives in `README.md`.
 
-**Status (2026-08-17):** Epic 0 (#1) landed — Vite + React 19 + TypeScript strict + Tailwind v4 + shadcn config + Vitest. `src/` exists with placeholder barrels. No domain, persistence, or feature screens yet. Module tables below are still the intended shape until those epics land.
+**Status (2026-08-17):** Epic 0 (#1) and Epic 1 (#2) landed. Vite shell + Dexie behind repository interfaces + pure net-worth/FX math. No feature screens yet.
 
 ---
 
@@ -89,7 +89,7 @@ Display unit / base currency is a **settings** concern. Stored snapshot amounts 
 
 ---
 
-## Domain model (planned)
+## Domain model
 
 ```ts
 type AssetClass =
@@ -285,7 +285,7 @@ Accessibility as we build: semantic HTML, visible focus, ARIA on icon-only contr
 
 ## Module Reference (planned)
 
-Until Epic 1 lands, this section is the intended map rather than an inventory of existing files.
+Until later feature epics land, UI module tables below are still the intended map. Domain and IndexedDB files exist as of #2.
 
 ### Domain
 
