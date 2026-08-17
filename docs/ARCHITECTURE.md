@@ -1,4 +1,4 @@
-# Pocket Balance — Architecture
+# My Money — Architecture
 
 This document is updated after each issue is completed. It explains what every file does, why it exists, and how the pieces connect.
 
@@ -10,7 +10,7 @@ Product context lives in `PROJECT_BRIEF.md`; the active work queue lives in `doc
 
 ## System Overview
 
-Pocket Balance is a local-first personal balance sheet: the user manually records assets and liabilities, the app converts them into one base currency, and history is a first-class feature. Everything for the web/PWA/Android client runs in the browser — no backend, no accounts, no telemetry, no AI. User data lives in IndexedDB. The only expected network call in the MVP is a public FX API (Frankfurter / ECB reference rates).
+My Money is a local-first personal balance sheet: the user manually records assets and liabilities, the app converts them into one base currency, and history is a first-class feature. Everything for the web/PWA/Android client runs in the browser — no backend, no accounts, no telemetry, no AI. User data lives in IndexedDB. The only expected network call in the MVP is a public FX API (Frankfurter / ECB reference rates).
 
 iOS is a **separate native Swift/SwiftUI app** that must share the same product model, calculations, terminology, and JSON/CSV import/export format — not a Capacitor wrapper of this UI.
 

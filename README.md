@@ -1,4 +1,4 @@
-# Pocket Balance
+# My Money
 
 A private, local-first personal balance sheet. Add what you own and owe — bank
 accounts, investments, cash, property, valuables, loans — see everything in one
@@ -14,7 +14,7 @@ and they have to be fast.
 Greenfield. Architecture and the initial GitHub backlog are in place; the app
 itself is not scaffolded yet.
 
-**Repo:** [github.com/ZhannaM85/pocket-balance](https://github.com/ZhannaM85/pocket-balance)
+**Repo:** [github.com/ZhannaM85/my-money](https://github.com/ZhannaM85/my-money)
 
 Start at [`docs/issues-priority.md`](docs/issues-priority.md).
 

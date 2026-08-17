@@ -1,6 +1,6 @@
 # Screen mocks
 
-Starting UI mocks for Pocket Balance. These are a design sketch, not a contract — layout, copy, and navigation can change during implementation.
+Starting UI mocks for My Money. These are a design sketch, not a contract — layout, copy, and navigation can change during implementation.
 
 ![Six starting screens: Dashboard, Assets, Update balances, Allocation, History, Asset details](ui-mockups.png)
 

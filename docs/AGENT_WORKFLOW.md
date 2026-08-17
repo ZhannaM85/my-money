@@ -10,7 +10,7 @@ same issue-first habit; do not invent a second process.
 
 ## What this project is
 
-`pocket-balance` — a local-first personal wealth / net-worth tracker
+`my-money` (app name: **My Money**) — a local-first personal wealth / net-worth tracker
 (React 19 + TypeScript + Vite + Tailwind + Dexie/IndexedDB for web/PWA/
 Android; native Swift/SwiftUI later for iOS). No backend, no accounts, no
 bank connections. The original scope is `PROJECT_BRIEF.md`. The living

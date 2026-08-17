@@ -1,11 +1,14 @@
-# Pocket Balance — Project Brief
+# My Money — Project Brief
 
-**Repo:** `pocket-balance`  
+**App:** My Money  
+**Repo:** `my-money`  
 **Positioning:** Know what you own. In one currency. Over time.
+
+Formerly drafted as pocket-balance / Personal Wealth Tracker.
 
 Architecture lives in `docs/ARCHITECTURE.md`. The work queue lives in `docs/issues-priority.md`. Screen mocks live in `docs/mocks/`.
 
-The original product brief follows. Implementation is sequenced as GitHub issues, not as a single-pass build.
+The original product brief follows (written before the My Money name). Implementation is sequenced as GitHub issues, not as a single-pass build.
 
 ---
 
@@ -596,6 +599,8 @@ The project is worth continuing if, after using it personally for several weeks,
 ---
 
 ## 27. Working Product Concept
+
+**Name:** My Money
 
 **Category:** Personal wealth / net-worth tracker
 
