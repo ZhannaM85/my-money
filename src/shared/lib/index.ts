@@ -5,4 +5,10 @@ export {
   formatSignedAmount,
   formatPercent,
 } from './money'
-export { addDaysIso, monthStartIso, isoDatesInclusive } from './dates'
+export {
+  addDaysIso,
+  monthStartIso,
+  isoDatesInclusive,
+  rangeStartIso,
+} from './dates'
+export type { HistoryRange } from './dates'
