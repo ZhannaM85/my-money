@@ -4,7 +4,7 @@ This document is updated after each issue is completed. It explains what every f
 
 Product context lives in `PROJECT_BRIEF.md`; the active work queue lives in `docs/issues-priority.md` (closed history: `docs/issues-priority-archive/`); the public-facing overview lives in `README.md`.
 
-**Status (2026-08-17):** Epics 0–11 (#1–#12), JSON backup (#13), and GitHub Pages (#14) landed. Deployed at `https://zhannam85.github.io/my-money/`. Completeness tier (CSV / PWA / i18n / a11y) is next.
+**Status (2026-08-17):** Epics 0–14 (#1–#15) plus GitHub Pages landed. Deployed at `https://zhannam85.github.io/my-money/`. Remaining completeness: PWA / i18n / a11y.
 
 ---
 
@@ -350,7 +350,7 @@ interface BackupBundle {
 }
 ```
 
-CSV is a tabular view of snapshots (date, asset name/id, amount, currency), not a second source of truth. JSON is the backup format.
+CSV is a tabular view of snapshots (date, asset id/name, amount, currency, class, type), not a second source of truth. JSON is the backup format. Import maps those four fields, appends snapshots to assets that already exist, and lists unmatched or invalid rows instead of dropping them.
 
 Restore is empty-book only: if any asset already exists, import is refused rather than merged. Settings, assets, and snapshots are the contract; FX cache is not part of the backup.
 
