@@ -27,7 +27,6 @@ export function DashboardScreen() {
   const settingsLoaded = useSettingsStore((state) => state.loaded)
   const baseCurrency = useSettingsStore((state) => state.settings.baseCurrency)
   const quotes = useFxStore((state) => state.quotes)
-  const fxError = useFxStore((state) => state.error)
   const ensureRange = useFxStore((state) => state.ensureRange)
 
   const today = todayIsoDate()
@@ -69,7 +68,7 @@ export function DashboardScreen() {
       ? `No reference rate for ${missingCodes.join(', ')} on the snapshot date. Where a rate exists it is an ECB estimate, not an executable quote.`
       : converted
         ? 'Converted with ECB reference rates. Estimates, not executable quotes.'
-        : fxError
+        : undefined
   const changeLabel =
     change.percent === null
       ? `${formatSignedAmount(change.absolute, baseCurrency)} this month`

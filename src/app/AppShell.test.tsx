@@ -5,8 +5,15 @@ import { beforeEach, describe, expect, it } from 'vitest'
 import { DEFAULT_SETTINGS } from '@/domain/settings'
 import { db } from '@/infrastructure/persistence/indexeddb'
 import { useAssetStore } from '@/stores/assetStore'
+import { useFxStore } from '@/stores/fxStore'
 import { useSettingsStore } from '@/stores/settingsStore'
 import { AppShell } from './AppShell'
+
+const fxApi = {
+  loadCached: useFxStore.getState().loadCached,
+  ensureRates: useFxStore.getState().ensureRates,
+  ensureRange: useFxStore.getState().ensureRange,
+}
 
 beforeEach(async () => {
   await db.settings.clear()
@@ -22,6 +29,14 @@ beforeEach(async () => {
     loaded: false,
   })
   useAssetStore.setState({ assets: [], snapshots: [], loaded: false })
+  useFxStore.setState({
+    quotes: [],
+    loading: false,
+    error: undefined,
+    loadCached: fxApi.loadCached,
+    ensureRates: fxApi.ensureRates,
+    ensureRange: fxApi.ensureRange,
+  })
 })
 
 describe('AppShell', () => {
@@ -37,5 +52,23 @@ describe('AppShell', () => {
     ).toBeInTheDocument()
     expect(screen.getByRole('link', { name: 'Dashboard' })).toBeInTheDocument()
     expect(screen.getByRole('link', { name: 'Update' })).toBeInTheDocument()
+  })
+
+  it('keeps the shell usable and shows cached FX copy when rates cannot refresh', async () => {
+    const noop = async () => {}
+    useFxStore.setState({
+      loadCached: noop,
+      ensureRates: noop,
+      error: 'Could not refresh reference rates. Using last cached rates.',
+    })
+    render(
+      <MemoryRouter>
+        <AppShell />
+      </MemoryRouter>,
+    )
+    expect(
+      await screen.findByText(/Using last cached rates/),
+    ).toBeInTheDocument()
+    expect(screen.getByRole('navigation', { name: 'Tabs' })).toBeInTheDocument()
   })
 })

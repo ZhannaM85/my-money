@@ -43,6 +43,7 @@ def main() -> None:
         )
 
     save_png(fit_with_padding(dark, 180), OUT / 'apple-touch-icon.png')
+    save_png(dark.resize((512, 512), Image.Resampling.LANCZOS), OUT / 'icon-512.png')
 
 
 if __name__ == '__main__':

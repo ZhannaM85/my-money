@@ -4,7 +4,7 @@ This document is updated after each issue is completed. It explains what every f
 
 Product context lives in `PROJECT_BRIEF.md`; the active work queue lives in `docs/issues-priority.md` (closed history: `docs/issues-priority-archive/`); the public-facing overview lives in `README.md`.
 
-**Status (2026-08-17):** Epics 0–14 (#1–#15) plus GitHub Pages landed. Deployed at `https://zhannam85.github.io/my-money/`. Remaining completeness: PWA / i18n / a11y.
+**Status (2026-08-17):** Epics 0–15 (#1–#16) plus GitHub Pages landed. Deployed at `https://zhannam85.github.io/my-money/`. Remaining completeness: i18n / a11y.
 
 ---
 
@@ -208,6 +208,8 @@ Nothing outside `infrastructure/persistence/indexeddb/` imports Dexie. Nothing o
 
 GitHub Pages is a project site at `/my-money/`. Production builds pass `--base=/my-money/` so Vite rewrites `index.html` asset URLs and React Router uses that `basename`. SPA deep links copy `index.html` to `404.html`.
 
+The web app is installable as a PWA (`public/manifest.json`, Workbox service worker). Registration is skipped inside Capacitor so a later Android wrap is not double-caching the shell. IndexedDB remains the data store offline; FX fetch failures keep last cached quotes and surface a note instead of blocking the UI.
+
 ---
 
 ## Routing (web)
@@ -281,13 +283,15 @@ Accessibility as we build: semantic HTML, visible focus, ARIA on icon-only contr
 | File | Purpose |
 |------|---------|
 | `package.json` | React 19, Vite 8, Tailwind 4, Vitest, ESLint, Prettier, shadcn CLI |
-| `vite.config.ts` | React + Tailwind plugins, `@` → `src/`, jsdom tests |
+| `vite.config.ts` | React + Tailwind + `vite-plugin-pwa` (web only; skipped in Vitest). `@` → `src/`. |
 | `components.json` | shadcn aliases into `src/shared/{ui,lib,hooks}` |
 | `src/app/AppShell.tsx` | Bottom tab shell + routed placeholders (#3) |
 | `src/shared/lib/utils.ts` | `cn()` for shadcn |
 | `src/**/index.ts` placeholders | Feature/domain barrels from the folder map above; filled by later epics |
 | `test/setup.ts` | jest-dom + RTL cleanup |
 | `public/favicon-*-64.png` (#22) | Tab icons, turtle-steps pattern: 64px circular mark with padding. Generated from `public/icon-*-192.png`. |
+| `public/manifest.json` (#16) | PWA install manifest. Relative `start_url` / `scope` for the GitHub Pages subpath. |
+| `src/shared/lib/registerServiceWorker.ts` (#16) | Registers `sw.js` on web; skipped when Capacitor reports native. |
 
 ---
 

@@ -22,6 +22,7 @@ export function AppShell() {
   const onboardingCompleted = useSettingsStore(
     (state) => state.settings.onboardingCompleted,
   )
+  const fxError = useFxStore((state) => state.error)
   const onboarding = pathname === '/onboarding'
 
   useEffect(() => {
@@ -74,6 +75,9 @@ export function AppShell() {
           onboarding ? 'pb-6' : 'pb-28',
         )}
       >
+        {fxError && (
+          <p className="mb-4 text-sm text-muted-foreground">{fxError}</p>
+        )}
         <Outlet />
       </main>
       {!onboarding && <BottomNav />}

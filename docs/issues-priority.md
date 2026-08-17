@@ -76,7 +76,7 @@ _CSV, PWA, i18n, accessibility. Any order after Tier 5, except CSV should not pr
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
 | [#15](https://github.com/ZhannaM85/my-money/issues/15) | 🔍 Pending validation | Epic 14 — CSV export and import | Mapping flow on More. Appends snapshots; unmatched rows listed. JSON remains the backup. |
-| [#16](https://github.com/ZhannaM85/my-money/issues/16) | 🔲 Open | Epic 15 — PWA installability | Offline-tolerant (cached FX); Capacitor-compatible. |
+| [#16](https://github.com/ZhannaM85/my-money/issues/16) | 🔍 Pending validation | Epic 15 — PWA installability | Manifest + SW (skipped in Capacitor). FX failures keep cached quotes. |
 | [#17](https://github.com/ZhannaM85/my-money/issues/17) | 🔲 Open | Epic 16 — Localization (English and Russian) | Typed dictionary; backup field names stay English. |
 | [#18](https://github.com/ZhannaM85/my-money/issues/18) | 🔲 Open | Epic 17 — Accessibility and responsive QA pass | Sweep only — a11y is still required on each earlier epic as it ships. |
 

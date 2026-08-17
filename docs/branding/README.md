@@ -17,3 +17,4 @@ Tab icons follow turtle-steps: a **64px** PNG of the circular mark (`favicon-*-6
 | `public/favicon-dark-64.png` / `32` | Browser tab, dark (`prefers-color-scheme`) |
 | `public/apple-touch-icon.png` | iOS home-screen (180, dark circular mark) |
 | `public/icon-light-192.png` / `icon-dark-192.png` | Source circular marks (do not overwrite from this script) |
+| `public/icon-512.png` | PWA install icon (scaled from the dark 192) |
