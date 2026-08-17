@@ -4,7 +4,7 @@ This document is updated after each issue is completed. It explains what every f
 
 Product context lives in `PROJECT_BRIEF.md`; the active work queue lives in `docs/issues-priority.md` (closed history: `docs/issues-priority-archive/`); the public-facing overview lives in `README.md`.
 
-**Status (2026-08-17):** Epics 0–7 (#1–#8), JSON backup (#13), and GitHub Pages (#14) landed. Deployed at `https://zhannam85.github.io/my-money/`. Quick update is next.
+**Status (2026-08-17):** Epics 0–8 (#1–#9), JSON backup (#13), and GitHub Pages (#14) landed. Deployed at `https://zhannam85.github.io/my-money/`. Asset details are next.
 
 ---
 
@@ -76,7 +76,7 @@ sequenceDiagram
     UF->>AS: draft amounts (or "no change")
     UF->>SR: append snapshots for changed assets
     SR->>DB: assetSnapshots.add
-    Note over SR,DB: Unchanged assets get a confirmed snapshot<br/>only when the user explicitly saves / marks no-change<br/>(exact rule lands with the Quick Update epic)
+    Note over SR,DB: Unchanged assets get a same-amount snapshot<br/>when the user taps No change and saves
 
     DS->>AR: list included assets
     DS->>SR: latest snapshot per asset
@@ -234,6 +234,8 @@ Bottom nav from the starting mock: Dashboard, Assets, center **+** (update), His
 
 Zustand owns UI/session state only (update-flow drafts, list filters, selected range). It never owns persisted domain data as the source of truth — stores read/write through repository interfaces.
 
+**No change** on the quick-update screen writes a same-amount snapshot for today. That keeps historical net worth and “last updated” on one path. There is no separate `lastConfirmedAt` field.
+
 Base currency is stored in `Settings`. Changing it re-reads FX and re-renders; it does not rewrite historical snapshot amounts.
 
 ---
@@ -358,7 +360,6 @@ Restore is empty-book only: if any asset already exists, import is refused rathe
 
 These are real forks — pause and ask rather than picking silently when the issue is implemented:
 
-- Exact “no change” snapshot rule (write a same-amount snapshot vs. only bump `lastConfirmedAt`).
 - Whether Allocation is its own tab or lives under Dashboard / More.
 - iOS storage engine (Core Data vs. SQLite vs. JSON file) — irrelevant until the native epic.
 - Encrypted-at-rest local storage — not required to validate the prototype; revisit before store release.

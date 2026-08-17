@@ -25,6 +25,12 @@ interface AssetStoreState {
     id: string,
     trackingStatus: TrackingStatus,
   ) => Promise<void>
+  saveSnapshots: (
+    snapshots: readonly (Omit<AssetSnapshot, 'id' | 'createdAt'> & {
+      id?: string
+      createdAt?: string
+    })[],
+  ) => Promise<void>
 }
 
 export const useAssetStore = create<AssetStoreState>((set, get) => ({
@@ -62,6 +68,19 @@ export const useAssetStore = create<AssetStoreState>((set, get) => ({
       trackingStatus,
       updatedAt: new Date().toISOString(),
     })
+    await get().load()
+  },
+  saveSnapshots: async (snapshots) => {
+    for (const snapshot of snapshots) {
+      await snapshotRepository.append({
+        id: snapshot.id ?? crypto.randomUUID(),
+        createdAt: snapshot.createdAt ?? new Date().toISOString(),
+        assetId: snapshot.assetId,
+        date: snapshot.date,
+        amount: snapshot.amount,
+        currency: snapshot.currency,
+      })
+    }
     await get().load()
   },
 }))

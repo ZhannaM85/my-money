@@ -41,4 +41,36 @@ describe('assetStore', () => {
     expect(state.snapshots).toHaveLength(1)
     expect(state.snapshots[0].amount).toBe(1000)
   })
+
+  it('appends same-amount snapshots in bulk', async () => {
+    await useAssetStore.getState().saveAsset(
+      {
+        id: 'a1',
+        name: 'Revolut',
+        assetClass: 'money',
+        type: 'bank',
+        currency: 'EUR',
+        trackingStatus: 'included',
+        valuationMethod: 'account_balance',
+        updateFrequency: 'weekly',
+        createdAt: '2026-08-17T00:00:00.000Z',
+        updatedAt: '2026-08-17T00:00:00.000Z',
+      },
+      {
+        assetId: 'a1',
+        date: '2026-08-01',
+        amount: 1000,
+        currency: 'EUR',
+      },
+    )
+    await useAssetStore.getState().saveSnapshots([
+      {
+        assetId: 'a1',
+        date: '2026-08-17',
+        amount: 1000,
+        currency: 'EUR',
+      },
+    ])
+    expect(useAssetStore.getState().snapshots).toHaveLength(2)
+  })
 })

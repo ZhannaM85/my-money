@@ -16,6 +16,11 @@ export {
   contributesToNetWorth,
 } from './Asset'
 export {
+  daysBetweenIso,
+  isSuggestedUpdate,
+  lastUpdatedCopy,
+} from './updateSuggestion'
+export {
   TYPES_BY_CLASS,
   CLASS_LABELS,
   TYPE_LABELS,
