@@ -4,7 +4,7 @@ This document is updated after each issue is completed. It explains what every f
 
 Product context lives in `PROJECT_BRIEF.md`; the active work queue lives in `docs/issues-priority.md` (closed history: `docs/issues-priority-archive/`); the public-facing overview lives in `README.md`.
 
-**Status (2026-08-17):** Epics 0–5 (#1–#6) landed. First-run onboarding chooses a base currency, creates the first asset, and lands on a Dashboard that shows calculated net worth. JSON backup is next.
+**Status (2026-08-17):** Epics 0–5 (#1–#6) and JSON backup (#13) landed. First-run onboarding lands on calculated net worth. GitHub Pages is next.
 
 ---
 
@@ -177,6 +177,7 @@ src/
     asset/
     snapshot/
     settings/
+    backup/                # versioned BackupBundle — no I/O
     fx/                    # convertAmount, rate lookup types — no fetch
     netWorth/              # netWorth, allocation, periodChange, history
   infrastructure/
@@ -346,6 +347,8 @@ interface BackupBundle {
 ```
 
 CSV is a tabular view of snapshots (date, asset name/id, amount, currency), not a second source of truth. JSON is the backup format.
+
+Restore is empty-book only: if any asset already exists, import is refused rather than merged. Settings, assets, and snapshots are the contract; FX cache is not part of the backup.
 
 ---
 

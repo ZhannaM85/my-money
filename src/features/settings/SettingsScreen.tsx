@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { BASE_CURRENCIES } from '@/domain/settings'
+import { BackupSection } from '@/features/export'
 import { Button } from '@/shared/ui/button'
 import { PageHeader } from '@/shared/ui/page-header'
 import { useAssetStore } from '@/stores/assetStore'
@@ -61,6 +62,7 @@ export function SettingsScreen() {
           </Button>
         </div>
       )}
+      <BackupSection />
     </div>
   )
 }

@@ -49,7 +49,7 @@ _Once real balances exist (Tier 3), IndexedDB is the only copy — backup and a 
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
-| [#13](https://github.com/ZhannaM85/my-money/issues/13) | 🔲 Open | Epic 12 — JSON export and import | The backup format; contract with the future iOS app. |
+| [#13](https://github.com/ZhannaM85/my-money/issues/13) | 🔍 Pending validation | Epic 12 — JSON export and import | Version 1 bundle. Restore into an empty book only. Entry point on Settings. |
 | [#14](https://github.com/ZhannaM85/my-money/issues/14) | 🔲 Open | Epic 13 — GitHub Pages deployment | CI + Pages; verify persistence survives a real deploy + reload. |
 
 ---

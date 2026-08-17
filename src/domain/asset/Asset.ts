@@ -28,30 +28,33 @@ export const UPDATE_FREQUENCIES = [
 ] as const
 export type UpdateFrequency = (typeof UPDATE_FREQUENCIES)[number]
 
-export type AssetType =
-  | 'bank'
-  | 'savings'
-  | 'cash'
-  | 'deposit'
-  | 'brokerage'
-  | 'stocks'
-  | 'etf'
-  | 'bonds'
-  | 'crypto'
-  | 'other_investment'
-  | 'apartment'
-  | 'house'
-  | 'land'
-  | 'vehicle'
-  | 'jewelry'
-  | 'watch'
-  | 'electronics'
-  | 'collectible'
-  | 'other_valuable'
-  | 'mortgage'
-  | 'personal_loan'
-  | 'credit_card'
-  | 'other_debt'
+export const ASSET_TYPES = [
+  'bank',
+  'savings',
+  'cash',
+  'deposit',
+  'brokerage',
+  'stocks',
+  'etf',
+  'bonds',
+  'crypto',
+  'other_investment',
+  'apartment',
+  'house',
+  'land',
+  'vehicle',
+  'jewelry',
+  'watch',
+  'electronics',
+  'collectible',
+  'other_valuable',
+  'mortgage',
+  'personal_loan',
+  'credit_card',
+  'other_debt',
+] as const
+
+export type AssetType = (typeof ASSET_TYPES)[number]
 
 export interface Asset {
   id: string

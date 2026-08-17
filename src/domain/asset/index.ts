@@ -8,6 +8,7 @@ export type {
 } from './Asset'
 export {
   ASSET_CLASSES,
+  ASSET_TYPES,
   TRACKING_STATUSES,
   VALUATION_METHODS,
   UPDATE_FREQUENCIES,
