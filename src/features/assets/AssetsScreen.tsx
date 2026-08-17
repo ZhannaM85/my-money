@@ -2,13 +2,11 @@ import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import {
   ASSET_CLASSES,
-  CLASS_LABELS,
-  TYPE_LABELS,
-  VALUATION_LABELS,
   type AssetClass,
 } from '@/domain/asset'
 import { latestSnapshot } from '@/domain/snapshot'
 import { convertAmount, lookupRate } from '@/domain/fx'
+import { useLocale, useTranslation } from '@/i18n'
 import { formatAmount } from '@/shared/lib/money'
 import { Button } from '@/shared/ui/button'
 import { EmptyState } from '@/shared/ui/empty-state'
@@ -20,13 +18,9 @@ import { cn } from '@/shared/lib/utils'
 
 type Filter = 'all' | AssetClass | 'archived'
 
-const FILTERS: { id: Filter; label: string }[] = [
-  { id: 'all', label: 'All' },
-  ...ASSET_CLASSES.map((id) => ({ id, label: CLASS_LABELS[id] })),
-  { id: 'archived', label: 'Archived' },
-]
-
 export function AssetsScreen() {
+  const t = useTranslation()
+  const locale = useLocale()
   const loadAssets = useAssetStore((state) => state.load)
   const assets = useAssetStore((state) => state.assets)
   const snapshots = useAssetStore((state) => state.snapshots)
@@ -35,6 +29,12 @@ export function AssetsScreen() {
   const baseCurrency = useSettingsStore((state) => state.settings.baseCurrency)
   const quotes = useFxStore((state) => state.quotes)
   const [filter, setFilter] = useState<Filter>('all')
+
+  const filters: { id: Filter; label: string }[] = [
+    { id: 'all', label: t.assets.filterAll },
+    ...ASSET_CLASSES.map((id) => ({ id, label: t.asset.classes[id] })),
+    { id: 'archived', label: t.assets.filterArchived },
+  ]
 
   useEffect(() => {
     void loadAssets()
@@ -53,15 +53,15 @@ export function AssetsScreen() {
   return (
     <div className="flex flex-col gap-6">
       <PageHeader
-        title="Assets"
+        title={t.assets.title}
         action={
           <Button asChild>
-            <Link to="/assets/new">Add</Link>
+            <Link to="/assets/new">{t.common.add}</Link>
           </Button>
         }
       />
       <div className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1">
-        {FILTERS.map((item) => (
+        {filters.map((item) => (
           <button
             key={item.id}
             type="button"
@@ -78,14 +78,18 @@ export function AssetsScreen() {
         ))}
       </div>
       {!loaded ? (
-        <p className="text-sm text-muted-foreground">Loading…</p>
+        <p className="text-sm text-muted-foreground">{t.common.loading}</p>
       ) : visible.length === 0 ? (
         <EmptyState
-          title={filter === 'archived' ? 'No archived assets' : 'No assets yet'}
-          description="Add what you own or owe. Updates stay on this device."
+          title={
+            filter === 'archived'
+              ? t.assets.emptyArchivedTitle
+              : t.assets.emptyTitle
+          }
+          description={t.assets.emptyDescription}
           action={
             <Button asChild>
-              <Link to="/assets/new">Add asset</Link>
+              <Link to="/assets/new">{t.common.addAsset}</Link>
             </Button>
           }
         />
@@ -111,9 +115,9 @@ export function AssetsScreen() {
                   <span className="flex min-w-0 flex-col">
                     <span className="truncate font-medium">{asset.name}</span>
                     <span className="text-sm text-muted-foreground">
-                      {TYPE_LABELS[asset.type]}
+                      {t.asset.types[asset.type]}
                       {estimated
-                        ? ` · ${VALUATION_LABELS[asset.valuationMethod]}`
+                        ? ` · ${t.asset.valuation[asset.valuationMethod]}`
                         : ''}
                     </span>
                   </span>
@@ -121,7 +125,7 @@ export function AssetsScreen() {
                     {snapshot ? (
                       <>
                         <span className="block tabular-nums">
-                          {formatAmount(snapshot.amount, snapshot.currency)}
+                          {formatAmount(snapshot.amount, snapshot.currency, locale)}
                         </span>
                         {sameCurrency ? (
                           <span className="text-xs text-muted-foreground">
@@ -129,17 +133,19 @@ export function AssetsScreen() {
                           </span>
                         ) : converted !== undefined ? (
                           <span className="text-xs text-muted-foreground">
-                            est. {formatAmount(converted, baseCurrency)}
+                            {t.common.estimated(
+                              formatAmount(converted, baseCurrency, locale),
+                            )}
                           </span>
                         ) : (
                           <span className="text-xs text-muted-foreground">
-                            native {snapshot.currency}
+                            {t.common.native(snapshot.currency)}
                           </span>
                         )}
                       </>
                     ) : (
                       <span className="text-sm text-muted-foreground">
-                        No value
+                        {t.assets.noValue}
                       </span>
                     )}
                   </span>

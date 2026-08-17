@@ -7,17 +7,21 @@ import {
   XAxis,
   YAxis,
 } from 'recharts'
-import { formatAmount } from '@/shared/lib/money'
+import { formatAmount, formatCompactNumber } from '@/shared/lib/money'
+import { useLocale, useTranslation } from '@/i18n'
 
 export function NetWorthChart({
   points,
   currency,
-  seriesName = 'Net worth',
+  seriesName,
 }: {
   points: readonly { date: string; total: number }[]
   currency: string
   seriesName?: string
 }) {
+  const t = useTranslation()
+  const locale = useLocale()
+  const name = seriesName ?? t.dashboard.netWorth
   if (points.length === 0) return null
 
   return (
@@ -40,10 +44,7 @@ export function NetWorthChart({
             width={52}
             tick={{ fontSize: 11, fill: 'var(--muted-foreground)' }}
             tickFormatter={(value: number) =>
-              new Intl.NumberFormat(undefined, {
-                notation: 'compact',
-                maximumFractionDigits: 1,
-              }).format(value)
+              formatCompactNumber(value, locale)
             }
             axisLine={false}
             tickLine={false}
@@ -54,6 +55,7 @@ export function NetWorthChart({
               formatAmount(
                 typeof value === 'number' ? value : Number(value),
                 currency,
+                locale,
               )
             }
             labelFormatter={(label) => String(label)}
@@ -69,7 +71,7 @@ export function NetWorthChart({
             stroke="var(--primary)"
             strokeWidth={2}
             dot={false}
-            name={seriesName}
+            name={name}
           />
         </LineChart>
       </ResponsiveContainer>

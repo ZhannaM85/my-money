@@ -1,7 +1,7 @@
 import { useEffect, useMemo } from 'react'
 import { Link } from 'react-router-dom'
-import { CLASS_LABELS } from '@/domain/asset'
 import { historicalNetWorth, netWorth, periodChange } from '@/domain/netWorth'
+import { useLocale, useTranslation } from '@/i18n'
 import {
   formatAmount,
   formatPercent,
@@ -19,6 +19,8 @@ import { useSettingsStore } from '@/stores/settingsStore'
 import { NetWorthChart } from './NetWorthChart'
 
 export function DashboardScreen() {
+  const t = useTranslation()
+  const locale = useLocale()
   const loadAssets = useAssetStore((state) => state.load)
   const assets = useAssetStore((state) => state.assets)
   const snapshots = useAssetStore((state) => state.snapshots)
@@ -65,38 +67,38 @@ export function DashboardScreen() {
   const missingCodes = [...new Set(result.missingRates.map((row) => row.from))]
   const fxNote =
     missingCodes.length > 0
-      ? `No reference rate for ${missingCodes.join(', ')} on the snapshot date. Where a rate exists it is an ECB estimate, not an executable quote.`
+      ? t.dashboard.fxMissing(missingCodes.join(', '))
       : converted
-        ? 'Converted with ECB reference rates. Estimates, not executable quotes.'
+        ? t.dashboard.fxConverted
         : undefined
   const changeLabel =
     change.percent === null
-      ? `${formatSignedAmount(change.absolute, baseCurrency)} this month`
-      : `${formatSignedAmount(change.absolute, baseCurrency)} (${formatPercent(change.percent)}) this month`
+      ? `${formatSignedAmount(change.absolute, baseCurrency, locale)} ${t.dashboard.thisMonth}`
+      : `${formatSignedAmount(change.absolute, baseCurrency, locale)} (${formatPercent(change.percent, locale)}) ${t.dashboard.thisMonth}`
 
   return (
     <div className="flex flex-col gap-6">
       <PageHeader
-        title="Dashboard"
-        description="What you own minus what you owe, in your base currency."
+        title={t.dashboard.title}
+        description={t.dashboard.description}
       />
       {!loaded ? (
-        <p className="text-sm text-muted-foreground">Loading…</p>
+        <p className="text-sm text-muted-foreground">{t.common.loading}</p>
       ) : assets.length === 0 ? (
         <EmptyState
-          title="No assets yet"
-          description="Add what you own or owe to see your first net worth."
+          title={t.dashboard.emptyTitle}
+          description={t.dashboard.emptyDescription}
           action={
             <Button asChild>
-              <Link to="/assets/new">Add asset</Link>
+              <Link to="/assets/new">{t.common.addAsset}</Link>
             </Button>
           }
         />
       ) : (
         <>
           <StatCard
-            label="Net worth"
-            value={formatAmount(result.total, baseCurrency)}
+            label={t.dashboard.netWorth}
+            value={formatAmount(result.total, baseCurrency, locale)}
             description={changeLabel}
           />
           {fxNote && <p className="text-sm text-muted-foreground">{fxNote}</p>}
@@ -109,17 +111,17 @@ export function DashboardScreen() {
                   className="flex items-center justify-between rounded-xl bg-card px-4 py-3 ring-1 ring-foreground/10"
                 >
                   <span className="text-sm">
-                    {CLASS_LABELS[row.assetClass]}
+                    {t.asset.classes[row.assetClass]}
                   </span>
                   <span className="tabular-nums text-sm">
-                    {formatAmount(row.amount, baseCurrency)}
+                    {formatAmount(row.amount, baseCurrency, locale)}
                   </span>
                 </li>
               ))}
             </ul>
           )}
           <Button asChild variant="outline">
-            <Link to="/allocation">Allocation</Link>
+            <Link to="/allocation">{t.dashboard.allocation}</Link>
           </Button>
         </>
       )}

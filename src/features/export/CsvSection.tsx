@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
+import { useTranslation } from '@/i18n'
 import { Button } from '@/shared/ui/button'
 import { useAssetStore } from '@/stores/assetStore'
 import { exportCsv, importCsv, InvalidCsvError } from './csvActions'
@@ -9,17 +10,9 @@ import {
   mappingIsComplete,
   previewCsvImport,
   type CsvColumnMapping,
-  type CsvField,
 } from './csvImport'
 import { parseCsv } from './csvParse'
 import { downloadCsv } from './downloadCsv'
-
-const FIELD_LABELS: Record<CsvField, string> = {
-  date: 'Date',
-  asset: 'Asset (name or id)',
-  amount: 'Amount',
-  currency: 'Currency',
-}
 
 type CsvDraft = {
   text: string
@@ -28,6 +21,7 @@ type CsvDraft = {
 }
 
 export function CsvSection() {
+  const t = useTranslation()
   const inputRef = useRef<HTMLInputElement>(null)
   const [message, setMessage] = useState<string | undefined>()
   const [error, setError] = useState<string | undefined>()
@@ -54,9 +48,9 @@ export function CsvSection() {
     try {
       const csv = await exportCsv()
       downloadCsv(csv)
-      setMessage('CSV downloaded.')
+      setMessage(t.csv.exported)
     } catch {
-      setError('Could not export CSV.')
+      setError(t.csv.exportFailed)
     } finally {
       setBusy(false)
     }
@@ -77,9 +71,9 @@ export function CsvSection() {
       } catch (caught) {
         setDraft(undefined)
         if (caught instanceof InvalidCsvError) {
-          setError(caught.message)
+          setError(t.csv.invalidFile)
         } else {
-          setError('Could not read this file.')
+          setError(t.csv.importFailed)
         }
       }
     })
@@ -94,20 +88,14 @@ export function CsvSection() {
     try {
       const result = await importCsv(draft.text, draft.mapping)
       await loadAssets()
-      const imported = result.snapshots.length
-      const skipped = result.issues.length
-      setMessage(
-        skipped === 0
-          ? `Imported ${imported} snapshot${imported === 1 ? '' : 's'}.`
-          : `Imported ${imported} snapshot${imported === 1 ? '' : 's'}. ${skipped} row${skipped === 1 ? '' : 's'} could not be imported.`,
-      )
-      setIssues(result.issues.map(describeCsvIssue))
+      setMessage(t.csv.imported(result.snapshots.length, result.issues.length))
+      setIssues(result.issues.map((issue) => describeCsvIssue(issue, t)))
       setDraft(undefined)
     } catch (caught) {
       if (caught instanceof InvalidCsvError) {
-        setError(caught.message)
+        setError(t.csv.invalidFile)
       } else {
-        setError('Could not import this file.')
+        setError(t.csv.importFailed)
       }
     } finally {
       setBusy(false)
@@ -120,12 +108,8 @@ export function CsvSection() {
 
   return (
     <section className="flex flex-col gap-3">
-      <h2 className="text-lg font-semibold">CSV</h2>
-      <p className="text-sm text-muted-foreground">
-        Spreadsheet of snapshots. JSON remains the backup. Import adds
-        balances to assets that already exist; unmatched rows are listed, not
-        dropped.
-      </p>
+      <h2 className="text-lg font-semibold">{t.csv.title}</h2>
+      <p className="text-sm text-muted-foreground">{t.csv.description}</p>
       <Button
         type="button"
         size="xl"
@@ -133,14 +117,14 @@ export function CsvSection() {
         disabled={busy}
         onClick={() => void handleExport()}
       >
-        Export CSV
+        {t.csv.exportCsv}
       </Button>
       <input
         ref={inputRef}
         type="file"
         accept="text/csv,.csv"
         className="sr-only"
-        aria-label="Import CSV"
+        aria-label={t.csv.importAria}
         disabled={busy}
         onChange={(event) => {
           const file = event.target.files?.[0]
@@ -155,14 +139,14 @@ export function CsvSection() {
         disabled={busy}
         onClick={() => inputRef.current?.click()}
       >
-        Import CSV
+        {t.csv.importCsv}
       </Button>
       {draft && (
         <div className="flex flex-col gap-3 rounded-lg border border-border p-3">
-          <p className="text-sm font-medium">Map columns</p>
+          <p className="text-sm font-medium">{t.csv.mapColumns}</p>
           {CSV_FIELDS.map((field) => (
             <label key={field} className="flex flex-col gap-1.5">
-              <span className="text-sm font-medium">{FIELD_LABELS[field]}</span>
+              <span className="text-sm font-medium">{t.csv.fields[field]}</span>
               <select
                 className="h-12 rounded-lg border border-input bg-background px-2.5 text-base"
                 value={draft.mapping[field] ?? ''}
@@ -177,10 +161,10 @@ export function CsvSection() {
                   })
                 }}
               >
-                <option value="">Select column</option>
+                <option value="">{t.csv.selectColumn}</option>
                 {headers.map((header, index) => (
                   <option key={`${header}-${index}`} value={index}>
-                    {header || `Column ${index + 1}`}
+                    {header || t.csv.columnN(index + 1)}
                   </option>
                 ))}
               </select>
@@ -188,12 +172,7 @@ export function CsvSection() {
           ))}
           {preview && (
             <p className="text-sm text-muted-foreground">
-              {preview.snapshots.length} snapshot
-              {preview.snapshots.length === 1 ? '' : 's'} ready
-              {preview.issues.length > 0
-                ? `, ${preview.issues.length} row${preview.issues.length === 1 ? '' : 's'} unmatched or invalid`
-                : ''}
-              .
+              {t.csv.ready(preview.snapshots.length, preview.issues.length)}
             </p>
           )}
           {previewIssues.map((issue) => (
@@ -201,12 +180,12 @@ export function CsvSection() {
               key={`${issue.rowNumber}-${issue.reason}`}
               className="text-sm text-muted-foreground"
             >
-              {describeCsvIssue(issue)}
+              {describeCsvIssue(issue, t)}
             </p>
           ))}
           {extraIssues > 0 && (
             <p className="text-sm text-muted-foreground">
-              And {extraIssues} more.
+              {t.csv.andMore(extraIssues)}
             </p>
           )}
           <Button
@@ -216,7 +195,7 @@ export function CsvSection() {
             disabled={busy || !mappingIsComplete(draft.mapping)}
             onClick={() => void handleImport()}
           >
-            Import mapped rows
+            {t.csv.importMapped}
           </Button>
           <Button
             type="button"
@@ -229,7 +208,7 @@ export function CsvSection() {
               setIssues([])
             }}
           >
-            Cancel
+            {t.common.cancel}
           </Button>
         </div>
       )}

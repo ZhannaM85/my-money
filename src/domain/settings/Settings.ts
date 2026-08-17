@@ -1,9 +1,11 @@
+import type { Locale } from './detectLocale'
+
 export const SETTINGS_ID = 'singleton' as const
 
 export interface Settings {
   id: typeof SETTINGS_ID
   baseCurrency: string
-  locale: 'en' | 'ru'
+  locale: Locale
   onboardingCompleted: boolean
   updatedAt: string
 }

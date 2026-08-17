@@ -1,5 +1,7 @@
 export { SETTINGS_ID, DEFAULT_SETTINGS, shouldShowOnboarding } from './Settings'
 export type { Settings } from './Settings'
+export type { Locale } from './detectLocale'
+export { detectDefaultLocale } from './detectLocale'
 export type { SettingsRepository } from './SettingsRepository'
 export { BASE_CURRENCIES } from './currencies'
 export type { BaseCurrency } from './currencies'

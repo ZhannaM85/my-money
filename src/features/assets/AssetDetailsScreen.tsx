@@ -1,10 +1,10 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import { TYPE_LABELS, lastUpdatedCopy } from '@/domain/asset'
 import { convertAmount, lookupRate } from '@/domain/fx'
 import { assetPerformance } from '@/domain/netWorth'
 import { latestSnapshot } from '@/domain/snapshot'
 import { NetWorthChart } from '@/features/dashboard/NetWorthChart'
+import { formatLastUpdated, useLocale, useTranslation } from '@/i18n'
 import {
   formatAmount,
   formatPercent,
@@ -24,6 +24,8 @@ import { AssetForm } from './AssetForm'
 type DisplayMode = 'native' | 'base'
 
 export function AssetDetailsScreen() {
+  const t = useTranslation()
+  const locale = useLocale()
   const { id } = useParams()
   const navigate = useNavigate()
   const load = useAssetStore((state) => state.load)
@@ -87,14 +89,14 @@ export function AssetDetailsScreen() {
       : undefined
 
   if (!loaded) {
-    return <p className="text-sm text-muted-foreground">Loading…</p>
+    return <p className="text-sm text-muted-foreground">{t.common.loading}</p>
   }
   if (!asset) {
     return (
       <div className="flex flex-col gap-4">
-        <PageHeader title="Asset not found" />
+        <PageHeader title={t.asset.notFound} />
         <Button asChild variant="outline">
-          <Link to="/assets">Back to assets</Link>
+          <Link to="/assets">{t.asset.backToAssets}</Link>
         </Button>
       </div>
     )
@@ -120,7 +122,7 @@ export function AssetDetailsScreen() {
   async function saveAmount() {
     const amount = Number(amountDraft)
     if (amountDraft.trim() === '' || Number.isNaN(amount)) {
-      setAmountError('Enter a current amount')
+      setAmountError(t.asset.enterCurrentAmount)
       return
     }
     setAmountError(undefined)
@@ -139,7 +141,7 @@ export function AssetDetailsScreen() {
     <div className="flex flex-col gap-6">
       <PageHeader
         title={asset.name}
-        description={`${TYPE_LABELS[asset.type]} · ${asset.currency}`}
+        description={`${t.asset.types[asset.type]} · ${asset.currency}`}
       />
       <div className="flex gap-2">
         <Button
@@ -147,7 +149,7 @@ export function AssetDetailsScreen() {
           variant={mode === 'native' ? 'default' : 'outline'}
           onClick={() => setMode('native')}
         >
-          Native
+          {t.asset.native}
         </Button>
         <Button
           type="button"
@@ -158,7 +160,7 @@ export function AssetDetailsScreen() {
         </Button>
       </div>
       <StatCard
-        label={mode === 'native' ? 'Current value' : 'In base currency'}
+        label={mode === 'native' ? t.asset.currentValue : t.asset.inBaseCurrency}
         value={
           snapshot
             ? formatAmount(
@@ -166,32 +168,36 @@ export function AssetDetailsScreen() {
                   ? snapshot.amount
                   : (convertedAmount ?? snapshot.amount),
                 displayCurrency ?? asset.currency,
+                locale,
               )
             : '—'
         }
         description={
           snapshot
-            ? `${lastUpdatedCopy(snapshot.date, today)}${
+            ? `${formatLastUpdated(snapshot.date, today, t)}${
                 mode === 'native' && convertedAmount !== undefined
-                  ? ` · est. ${formatAmount(convertedAmount, baseCurrency)}`
+                  ? ` · ${t.common.estimated(formatAmount(convertedAmount, baseCurrency, locale))}`
                   : ''
               }`
-            : 'No snapshots yet'
+            : t.asset.noSnapshotsYet
         }
       />
       {change && (
         <p className="text-sm text-muted-foreground">
-          Since first snapshot:{' '}
+          {t.asset.sinceFirst}{' '}
           {formatSignedAmount(
             change.absolute,
             displayCurrency ?? asset.currency,
+            locale,
           )}
-          {change.percent !== null ? ` (${formatPercent(change.percent)})` : ''}
+          {change.percent !== null
+            ? ` (${formatPercent(change.percent, locale)})`
+            : ''}
         </p>
       )}
       {mode === 'base' && convertedAmount === undefined && snapshot && (
         <p className="text-sm text-muted-foreground">
-          No reference rate for {snapshot.currency} on {snapshot.date}.
+          {t.asset.noRateOnDate(snapshot.currency, snapshot.date)}
         </p>
       )}
       <NetWorthChart
@@ -210,8 +216,12 @@ export function AssetDetailsScreen() {
             )
             const shown =
               mode === 'native' || rate === undefined
-                ? formatAmount(row.amount, row.currency)
-                : formatAmount(convertAmount(row.amount, rate), baseCurrency)
+                ? formatAmount(row.amount, row.currency, locale)
+                : formatAmount(
+                    convertAmount(row.amount, rate),
+                    baseCurrency,
+                    locale,
+                  )
             return (
               <li
                 key={row.id}
@@ -227,14 +237,16 @@ export function AssetDetailsScreen() {
         </ul>
       )}
       <section className="flex flex-col gap-3">
-        <h2 className="text-lg font-semibold">Update this asset</h2>
+        <h2 className="text-lg font-semibold">{t.asset.updateThisAsset}</h2>
         <div className="flex gap-2">
           <div className="relative min-w-0 flex-1">
             <Input
-              aria-label="New amount"
+              aria-label={t.asset.newAmount}
               inputMode="decimal"
               value={amountDraft}
-              placeholder={snapshot ? String(snapshot.amount) : 'Amount'}
+              placeholder={
+                snapshot ? String(snapshot.amount) : t.asset.amountPlaceholder
+              }
               className="h-12 pr-12"
               onChange={(event) => setAmountDraft(event.target.value)}
             />
@@ -247,18 +259,18 @@ export function AssetDetailsScreen() {
             className={cn('h-12 shrink-0')}
             onClick={() => void saveAmount()}
           >
-            Save
+            {t.common.save}
           </Button>
         </div>
         {amountError && (
           <p className="text-sm text-destructive">{amountError}</p>
         )}
       </section>
-      <h2 className="text-lg font-semibold">Details</h2>
+      <h2 className="text-lg font-semibold">{t.asset.details}</h2>
       <AssetForm
         initial={asset}
         requireAmount={false}
-        submitLabel="Save details"
+        submitLabel={t.asset.saveDetails}
         onSubmit={async ({ asset: next, amount }) => {
           await saveAsset(
             next,
@@ -285,7 +297,7 @@ export function AssetDetailsScreen() {
             )
           }}
         >
-          Archive asset
+          {t.asset.archive}
         </Button>
       )}
     </div>

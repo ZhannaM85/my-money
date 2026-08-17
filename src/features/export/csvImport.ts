@@ -1,5 +1,7 @@
 import type { Asset } from '@/domain/asset'
 import type { AssetSnapshot } from '@/domain/snapshot'
+import type { Dictionary } from '@/i18n/Dictionary'
+import { en } from '@/i18n/en'
 
 export const CSV_FIELDS = ['date', 'asset', 'amount', 'currency'] as const
 export type CsvField = (typeof CSV_FIELDS)[number]
@@ -170,18 +172,21 @@ export function previewCsvImport(
   return { snapshots, issues }
 }
 
-export function describeCsvIssue(issue: CsvRowIssue): string {
+export function describeCsvIssue(
+  issue: CsvRowIssue,
+  t: Dictionary = en,
+): string {
   const who = issue.asset ? ` (${issue.asset})` : ''
   switch (issue.reason) {
     case 'missing_field':
-      return `Row ${issue.rowNumber}${who}: missing date, asset, amount, or currency.`
+      return t.csv.issue.missingField(issue.rowNumber, who)
     case 'invalid_date':
-      return `Row ${issue.rowNumber}${who}: date must be YYYY-MM-DD.`
+      return t.csv.issue.invalidDate(issue.rowNumber, who)
     case 'invalid_amount':
-      return `Row ${issue.rowNumber}${who}: amount is not a number.`
+      return t.csv.issue.invalidAmount(issue.rowNumber, who)
     case 'unmatched_asset':
-      return `Row ${issue.rowNumber}${who}: no matching asset.`
+      return t.csv.issue.unmatchedAsset(issue.rowNumber, who)
     case 'ambiguous_asset':
-      return `Row ${issue.rowNumber}${who}: matches more than one asset.`
+      return t.csv.issue.ambiguousAsset(issue.rowNumber, who)
   }
 }

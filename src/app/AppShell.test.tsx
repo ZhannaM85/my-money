@@ -59,7 +59,7 @@ describe('AppShell', () => {
     useFxStore.setState({
       loadCached: noop,
       ensureRates: noop,
-      error: 'Could not refresh reference rates. Using last cached rates.',
+      error: 'cached_rates',
     })
     render(
       <MemoryRouter>

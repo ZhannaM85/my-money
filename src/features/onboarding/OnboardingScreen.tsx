@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { BASE_CURRENCIES } from '@/domain/settings'
 import { AssetForm } from '@/features/assets/AssetForm'
+import { useTranslation } from '@/i18n'
 import { todayIsoDate } from '@/shared/lib/money'
 import { Button } from '@/shared/ui/button'
 import { PageHeader } from '@/shared/ui/page-header'
@@ -11,6 +12,7 @@ import { useSettingsStore } from '@/stores/settingsStore'
 type Step = 'currency' | 'asset' | 'next'
 
 export function OnboardingScreen() {
+  const t = useTranslation()
   const navigate = useNavigate()
   const [step, setStep] = useState<Step>('currency')
   const [formKey, setFormKey] = useState(0)
@@ -40,8 +42,8 @@ export function OnboardingScreen() {
     return (
       <div className="flex flex-col gap-6">
         <PageHeader
-          title="Asset saved"
-          description="Add another, or see your first net worth."
+          title={t.onboarding.assetSavedTitle}
+          description={t.onboarding.assetSavedDescription}
         />
         <Button
           type="button"
@@ -52,7 +54,7 @@ export function OnboardingScreen() {
             setStep('asset')
           }}
         >
-          Add another
+          {t.onboarding.addAnother}
         </Button>
         <Button
           type="button"
@@ -61,7 +63,7 @@ export function OnboardingScreen() {
           className="w-full"
           onClick={() => void goToDashboard()}
         >
-          See my net worth
+          {t.onboarding.seeNetWorth}
         </Button>
       </div>
     )
@@ -71,14 +73,14 @@ export function OnboardingScreen() {
     return (
       <div className="flex flex-col gap-6">
         <PageHeader
-          title="First asset"
-          description="Add what you own or owe. The amount becomes the first snapshot."
+          title={t.onboarding.firstAssetTitle}
+          description={t.onboarding.firstAssetDescription}
         />
         <AssetForm
           key={formKey}
           requireAmount
           defaultCurrency={settings.baseCurrency}
-          submitLabel="Save asset"
+          submitLabel={t.asset.saveAsset}
           onSubmit={async ({ asset, amount }) => {
             await saveAsset(asset, {
               assetId: asset.id,
@@ -91,7 +93,7 @@ export function OnboardingScreen() {
           }}
         />
         <Button type="button" variant="ghost" onClick={() => void skip()}>
-          Skip for now
+          {t.common.skipForNow}
         </Button>
       </div>
     )
@@ -100,11 +102,11 @@ export function OnboardingScreen() {
   return (
     <div className="flex flex-col gap-6">
       <PageHeader
-        title="Welcome"
-        description="Know what you own. In one currency. Over time."
+        title={t.onboarding.welcomeTitle}
+        description={t.onboarding.welcomeDescription}
       />
       <label className="flex flex-col gap-1.5">
-        <span className="text-sm font-medium">Base currency</span>
+        <span className="text-sm font-medium">{t.settings.baseCurrency}</span>
         <select
           className="h-12 rounded-lg border border-input bg-background px-2.5 text-base"
           value={settings.baseCurrency}
@@ -125,10 +127,10 @@ export function OnboardingScreen() {
         className="w-full"
         onClick={() => setStep('asset')}
       >
-        Continue
+        {t.common.continue}
       </Button>
       <Button type="button" variant="ghost" onClick={() => void skip()}>
-        Skip for now
+        {t.common.skipForNow}
       </Button>
     </div>
   )

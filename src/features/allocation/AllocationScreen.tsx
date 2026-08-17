@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts'
-import { CLASS_LABELS, TYPE_LABELS } from '@/domain/asset'
 import { breakdownBy } from '@/domain/netWorth'
+import { useLocale, useTranslation } from '@/i18n'
 import { formatAmount } from '@/shared/lib/money'
 import { EmptyState } from '@/shared/ui/empty-state'
 import { PageHeader } from '@/shared/ui/page-header'
@@ -12,12 +12,6 @@ import { cn } from '@/shared/lib/utils'
 
 type View = 'class' | 'currency' | 'type'
 
-const VIEWS: { id: View; label: string }[] = [
-  { id: 'class', label: 'Class' },
-  { id: 'currency', label: 'Currency' },
-  { id: 'type', label: 'Type' },
-]
-
 const SLICE_COLORS = [
   'var(--primary)',
   '#4ade80',
@@ -27,14 +21,9 @@ const SLICE_COLORS = [
   '#22c55e',
 ]
 
-function labelFor(view: View, id: string): string {
-  if (view === 'class')
-    return CLASS_LABELS[id as keyof typeof CLASS_LABELS] ?? id
-  if (view === 'type') return TYPE_LABELS[id as keyof typeof TYPE_LABELS] ?? id
-  return id
-}
-
 export function AllocationScreen() {
+  const t = useTranslation()
+  const locale = useLocale()
   const loadAssets = useAssetStore((state) => state.load)
   const assets = useAssetStore((state) => state.assets)
   const snapshots = useAssetStore((state) => state.snapshots)
@@ -43,6 +32,20 @@ export function AllocationScreen() {
   const baseCurrency = useSettingsStore((state) => state.settings.baseCurrency)
   const quotes = useFxStore((state) => state.quotes)
   const [view, setView] = useState<View>('class')
+
+  const views: { id: View; label: string }[] = [
+    { id: 'class', label: t.allocation.byClass },
+    { id: 'currency', label: t.allocation.byCurrency },
+    { id: 'type', label: t.allocation.byType },
+  ]
+
+  function labelFor(id: string): string {
+    if (view === 'class')
+      return t.asset.classes[id as keyof typeof t.asset.classes] ?? id
+    if (view === 'type')
+      return t.asset.types[id as keyof typeof t.asset.types] ?? id
+    return id
+  }
 
   useEffect(() => {
     void loadAssets()
@@ -62,17 +65,17 @@ export function AllocationScreen() {
   const pieData = rows.map((row) => ({
     ...row,
     slice: Math.abs(row.amount),
-    name: labelFor(view, row.id),
+    name: labelFor(row.id),
   }))
 
   return (
     <div className="flex flex-col gap-6">
       <PageHeader
-        title="Allocation"
-        description="Share of the picture in your base currency. Liabilities are a negative slice — the chart uses size, the list shows the sign."
+        title={t.allocation.title}
+        description={t.allocation.description}
       />
       <div className="flex gap-2">
-        {VIEWS.map((item) => (
+        {views.map((item) => (
           <button
             key={item.id}
             type="button"
@@ -89,11 +92,11 @@ export function AllocationScreen() {
         ))}
       </div>
       {!loaded ? (
-        <p className="text-sm text-muted-foreground">Loading…</p>
+        <p className="text-sm text-muted-foreground">{t.common.loading}</p>
       ) : pieData.length === 0 ? (
         <EmptyState
-          title="Nothing to split yet"
-          description="Add included assets to see allocation."
+          title={t.allocation.emptyTitle}
+          description={t.allocation.emptyDescription}
         />
       ) : (
         <>
@@ -121,7 +124,7 @@ export function AllocationScreen() {
                       typeof item?.payload?.amount === 'number'
                         ? item.payload.amount
                         : Number(value)
-                    return formatAmount(amount, baseCurrency)
+                    return formatAmount(amount, baseCurrency, locale)
                   }}
                 />
               </PieChart>
@@ -141,11 +144,11 @@ export function AllocationScreen() {
                     }}
                   />
                   {row.name}
-                  {row.amount < 0 ? ' (owe)' : ''}
+                  {row.amount < 0 ? t.common.owe : ''}
                 </span>
                 <span className="text-right text-sm">
                   <span className="block tabular-nums">
-                    {formatAmount(row.amount, baseCurrency)}
+                    {formatAmount(row.amount, baseCurrency, locale)}
                   </span>
                   <span className="text-xs text-muted-foreground">
                     {row.percent.toFixed(0)}%

@@ -42,7 +42,7 @@ export const useFxStore = create<FxStoreState>((set) => ({
       set({
         quotes,
         loading: false,
-        error: 'Could not refresh reference rates. Using last cached rates.',
+        error: 'cached_rates',
       })
     }
   },
@@ -63,7 +63,7 @@ export const useFxStore = create<FxStoreState>((set) => ({
       set({
         quotes,
         loading: false,
-        error: 'Could not refresh reference rates. Using last cached rates.',
+        error: 'cached_rates',
       })
     }
   },

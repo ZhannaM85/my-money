@@ -4,7 +4,7 @@ This document is updated after each issue is completed. It explains what every f
 
 Product context lives in `PROJECT_BRIEF.md`; the active work queue lives in `docs/issues-priority.md` (closed history: `docs/issues-priority-archive/`); the public-facing overview lives in `README.md`.
 
-**Status (2026-08-17):** Epics 0–15 (#1–#16) plus GitHub Pages landed. Deployed at `https://zhannam85.github.io/my-money/`. Remaining completeness: i18n / a11y.
+**Status (2026-08-17):** Epics 0–16 (#1–#17) plus GitHub Pages landed. Deployed at `https://zhannam85.github.io/my-money/`. Remaining completeness: a11y. Native platforms (#19–#20) wait until the web flows feel good.
 
 ---
 
@@ -210,6 +210,8 @@ GitHub Pages is a project site at `/my-money/`. Production builds pass `--base=/
 
 The web app is installable as a PWA (`public/manifest.json`, Workbox service worker). Registration is skipped inside Capacitor so a later Android wrap is not double-caching the shell. IndexedDB remains the data store offline; FX fetch failures keep last cached quotes and surface a note instead of blocking the UI.
 
+Copy goes through `src/i18n/` (English + Russian). Locale is `settings.locale` in IndexedDB so the backup field name stays `locale`. First visit follows `navigator.language`; More has an explicit switcher. Amounts use `en-US` / `ru-RU` number formatting.
+
 ---
 
 ## Routing (web)
@@ -292,6 +294,7 @@ Accessibility as we build: semantic HTML, visible focus, ARIA on icon-only contr
 | `public/favicon-*-64.png` (#22) | Tab icons, turtle-steps pattern: 64px circular mark with padding. Generated from `public/icon-*-192.png`. |
 | `public/manifest.json` (#16) | PWA install manifest. Relative `start_url` / `scope` for the GitHub Pages subpath. |
 | `src/shared/lib/registerServiceWorker.ts` (#16) | Registers `sw.js` on web; skipped when Capacitor reports native. |
+| `src/i18n/` (#17) | Typed `Dictionary`, `en` + `ru`. `useTranslation` reads `settings.locale`. Backup JSON keeps English field names. |
 
 ---
 

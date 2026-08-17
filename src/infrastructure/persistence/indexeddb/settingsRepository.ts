@@ -1,5 +1,6 @@
 import {
   DEFAULT_SETTINGS,
+  detectDefaultLocale,
   SETTINGS_ID,
   type Settings,
   type SettingsRepository,
@@ -9,7 +10,9 @@ import { db } from './db'
 export class IndexedDbSettingsRepository implements SettingsRepository {
   async get(): Promise<Settings> {
     const stored = await db.settings.get(SETTINGS_ID)
-    if (!stored) return DEFAULT_SETTINGS
+    if (!stored) {
+      return { ...DEFAULT_SETTINGS, locale: detectDefaultLocale() }
+    }
     return { ...DEFAULT_SETTINGS, ...stored }
   }
 

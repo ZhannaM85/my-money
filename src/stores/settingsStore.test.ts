@@ -35,4 +35,12 @@ describe('settingsStore', () => {
     await useSettingsStore.getState().load()
     expect(useSettingsStore.getState().settings.onboardingCompleted).toBe(true)
   })
+
+  it('persists an explicit language override', async () => {
+    await useSettingsStore.getState().load()
+    await useSettingsStore.getState().setLocale('ru')
+    expect(useSettingsStore.getState().settings.locale).toBe('ru')
+    await useSettingsStore.getState().load()
+    expect(useSettingsStore.getState().settings.locale).toBe('ru')
+  })
 })

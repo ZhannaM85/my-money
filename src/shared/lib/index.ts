@@ -4,6 +4,7 @@ export {
   formatAmount,
   formatSignedAmount,
   formatPercent,
+  formatCompactNumber,
 } from './money'
 export {
   addDaysIso,

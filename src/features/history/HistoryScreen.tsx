@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { historicalNetWorth, netWorth, periodChange } from '@/domain/netWorth'
 import { NetWorthChart } from '@/features/dashboard/NetWorthChart'
+import { useLocale, useTranslation } from '@/i18n'
 import {
   isoDatesInclusive,
   rangeStartIso,
@@ -22,6 +23,8 @@ import { cn } from '@/shared/lib/utils'
 const RANGES: HistoryRange[] = ['1M', '3M', '6M', '1Y', 'All']
 
 export function HistoryScreen() {
+  const t = useTranslation()
+  const locale = useLocale()
   const loadAssets = useAssetStore((state) => state.load)
   const assets = useAssetStore((state) => state.assets)
   const snapshots = useAssetStore((state) => state.snapshots)
@@ -76,8 +79,8 @@ export function HistoryScreen() {
   return (
     <div className="flex flex-col gap-6">
       <PageHeader
-        title="History"
-        description="Net worth over time. Each day uses that date’s reference rate, not today’s."
+        title={t.history.title}
+        description={t.history.description}
       />
       <div className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1">
         {RANGES.map((item) => (
@@ -97,18 +100,18 @@ export function HistoryScreen() {
         ))}
       </div>
       {!loaded ? (
-        <p className="text-sm text-muted-foreground">Loading…</p>
+        <p className="text-sm text-muted-foreground">{t.common.loading}</p>
       ) : assets.length === 0 ? (
         <EmptyState
-          title="No history yet"
-          description="Snapshots from updates become the history line."
+          title={t.history.emptyTitle}
+          description={t.history.emptyDescription}
         />
       ) : (
         <>
           <StatCard
-            label="Net worth"
-            value={formatAmount(current.total, baseCurrency)}
-            description={`${formatSignedAmount(change.absolute, baseCurrency)} over ${range}`}
+            label={t.dashboard.netWorth}
+            value={formatAmount(current.total, baseCurrency, locale)}
+            description={`${formatSignedAmount(change.absolute, baseCurrency, locale)} ${t.history.overRange(range)}`}
           />
           <NetWorthChart points={series} currency={baseCurrency} />
           <ul className="flex flex-col gap-2">
@@ -122,11 +125,11 @@ export function HistoryScreen() {
                 </span>
                 <span className="text-right">
                   <span className="block tabular-nums text-sm">
-                    {formatAmount(row.total, baseCurrency)}
+                    {formatAmount(row.total, baseCurrency, locale)}
                   </span>
                   {row.delta !== null && (
                     <span className="text-xs text-muted-foreground">
-                      {formatSignedAmount(row.delta, baseCurrency)}
+                      {formatSignedAmount(row.delta, baseCurrency, locale)}
                     </span>
                   )}
                 </span>

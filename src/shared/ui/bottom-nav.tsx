@@ -1,19 +1,21 @@
 import { History, LayoutDashboard, Plus, Settings, Wallet } from 'lucide-react'
 import { NavLink } from 'react-router-dom'
+import { useTranslation } from '@/i18n'
 import { cn } from '@/shared/lib/utils'
 
-const tabs = [
-  { to: '/', label: 'Dashboard', end: true, icon: LayoutDashboard },
-  { to: '/assets', label: 'Assets', icon: Wallet },
-  { to: '/update', label: 'Update', icon: Plus, prominent: true },
-  { to: '/history', label: 'History', icon: History },
-  { to: '/settings', label: 'More', icon: Settings },
-] as const
-
 export function BottomNav() {
+  const t = useTranslation()
+  const tabs = [
+    { to: '/', label: t.nav.dashboard, end: true, icon: LayoutDashboard },
+    { to: '/assets', label: t.nav.assets, icon: Wallet },
+    { to: '/update', label: t.nav.update, icon: Plus, prominent: true },
+    { to: '/history', label: t.nav.history, icon: History },
+    { to: '/settings', label: t.nav.more, icon: Settings },
+  ] as const
+
   return (
     <nav
-      aria-label="Tabs"
+      aria-label={t.nav.tabs}
       className="fixed inset-x-0 bottom-0 z-10 border-t border-border bg-background pr-[env(safe-area-inset-right)] pb-[env(safe-area-inset-bottom)] pl-[env(safe-area-inset-left)]"
     >
       <ul className="mx-auto flex max-w-3xl px-4">

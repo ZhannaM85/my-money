@@ -1,5 +1,9 @@
 import { create } from 'zustand'
-import { DEFAULT_SETTINGS, type Settings } from '@/domain/settings'
+import {
+  DEFAULT_SETTINGS,
+  type Locale,
+  type Settings,
+} from '@/domain/settings'
 import { IndexedDbSettingsRepository } from '@/infrastructure/persistence/indexeddb'
 
 const settingsRepository = new IndexedDbSettingsRepository()
@@ -9,6 +13,7 @@ interface SettingsStoreState {
   loaded: boolean
   load: () => Promise<void>
   setBaseCurrency: (baseCurrency: string) => Promise<void>
+  setLocale: (locale: Locale) => Promise<void>
   completeOnboarding: () => Promise<void>
 }
 
@@ -23,6 +28,15 @@ export const useSettingsStore = create<SettingsStoreState>((set, get) => ({
     const next: Settings = {
       ...get().settings,
       baseCurrency,
+      updatedAt: new Date().toISOString(),
+    }
+    await settingsRepository.save(next)
+    set({ settings: next })
+  },
+  setLocale: async (locale) => {
+    const next: Settings = {
+      ...get().settings,
+      locale,
       updatedAt: new Date().toISOString(),
     }
     await settingsRepository.save(next)

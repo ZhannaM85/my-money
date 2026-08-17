@@ -1,11 +1,10 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import {
-  FREQUENCY_LABELS,
   isSuggestedUpdate,
-  lastUpdatedCopy,
 } from '@/domain/asset'
 import { latestSnapshot } from '@/domain/snapshot'
+import { formatLastUpdated, useLocale, useTranslation } from '@/i18n'
 import { formatAmount, todayIsoDate } from '@/shared/lib/money'
 import { Button } from '@/shared/ui/button'
 import { EmptyState } from '@/shared/ui/empty-state'
@@ -15,6 +14,8 @@ import { useAssetStore } from '@/stores/assetStore'
 import { cn } from '@/shared/lib/utils'
 
 export function UpdateFinancesScreen() {
+  const t = useTranslation()
+  const locale = useLocale()
   const navigate = useNavigate()
   const load = useAssetStore((state) => state.load)
   const saveSnapshots = useAssetStore((state) => state.saveSnapshots)
@@ -70,7 +71,7 @@ export function UpdateFinancesScreen() {
       if (raw !== '') {
         const amount = Number(raw)
         if (Number.isNaN(amount)) {
-          setError(`Enter a number for ${asset.name}`)
+          setError(t.update.enterNumberFor(asset.name))
           return
         }
         toWrite.push({
@@ -91,7 +92,7 @@ export function UpdateFinancesScreen() {
       }
     }
     if (toWrite.length === 0) {
-      setError('Mark no change or enter an amount for at least one asset.')
+      setError(t.update.needOneRow)
       return
     }
     setError(undefined)
@@ -107,18 +108,18 @@ export function UpdateFinancesScreen() {
   return (
     <div className="flex flex-col gap-6">
       <PageHeader
-        title="Update"
-        description="Previous amounts, then a new number or No change. Yearly and manual assets stay optional."
+        title={t.update.title}
+        description={t.update.description}
       />
       {!loaded ? (
-        <p className="text-sm text-muted-foreground">Loading…</p>
+        <p className="text-sm text-muted-foreground">{t.common.loading}</p>
       ) : rows.length === 0 ? (
         <EmptyState
-          title="Nothing to update"
-          description="Add an included asset first."
+          title={t.update.emptyTitle}
+          description={t.update.emptyDescription}
           action={
             <Button asChild>
-              <Link to="/assets/new">Add asset</Link>
+              <Link to="/assets/new">{t.common.addAsset}</Link>
             </Button>
           }
         />
@@ -134,25 +135,27 @@ export function UpdateFinancesScreen() {
                   <span className="font-medium">{asset.name}</span>
                   <span className="text-sm text-muted-foreground">
                     {snapshot
-                      ? formatAmount(snapshot.amount, snapshot.currency)
-                      : 'No value yet'}
+                      ? formatAmount(snapshot.amount, snapshot.currency, locale)
+                      : t.asset.noValueYet}
                   </span>
                 </div>
                 <p className="text-xs text-muted-foreground">
-                  {lastUpdatedCopy(snapshot?.date, today)}
+                  {formatLastUpdated(snapshot?.date, today, t)}
                   {' · '}
                   {suggested
-                    ? 'Suggested now'
-                    : FREQUENCY_LABELS[asset.updateFrequency]}
+                    ? t.asset.suggestedNow
+                    : t.asset.frequency[asset.updateFrequency]}
                 </p>
                 <div className="flex gap-2">
                   <div className="relative min-w-0 flex-1">
                     <Input
-                      aria-label={`${asset.name} new amount`}
+                      aria-label={t.update.newAmountAria(asset.name)}
                       inputMode="decimal"
                       value={drafts[asset.id] ?? ''}
                       placeholder={
-                        snapshot ? String(snapshot.amount) : 'Amount'
+                        snapshot
+                          ? String(snapshot.amount)
+                          : t.asset.amountPlaceholder
                       }
                       className="h-12 pr-12"
                       onChange={(event) => {
@@ -180,7 +183,7 @@ export function UpdateFinancesScreen() {
                     disabled={!snapshot}
                     onClick={() => markUnchanged(asset.id, snapshot?.amount)}
                   >
-                    No change
+                    {t.update.noChange}
                   </Button>
                 </div>
               </li>
@@ -194,7 +197,7 @@ export function UpdateFinancesScreen() {
             disabled={saving}
             onClick={() => void handleSave()}
           >
-            Save updates
+            {t.update.saveUpdates}
           </Button>
         </>
       )}

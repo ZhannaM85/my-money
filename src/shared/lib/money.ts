@@ -1,10 +1,20 @@
+import type { Locale } from '@/domain/settings'
+
 export function todayIsoDate(now = new Date()): string {
   return now.toISOString().slice(0, 10)
 }
 
-export function formatAmount(amount: number, currency: string): string {
+function localeTag(locale: Locale): string {
+  return locale === 'ru' ? 'ru-RU' : 'en-US'
+}
+
+export function formatAmount(
+  amount: number,
+  currency: string,
+  locale: Locale = 'en',
+): string {
   try {
-    return new Intl.NumberFormat(undefined, {
+    return new Intl.NumberFormat(localeTag(locale), {
       style: 'currency',
       currency,
       maximumFractionDigits: 2,
@@ -14,14 +24,29 @@ export function formatAmount(amount: number, currency: string): string {
   }
 }
 
-export function formatSignedAmount(amount: number, currency: string): string {
-  const formatted = formatAmount(Math.abs(amount), currency)
+export function formatSignedAmount(
+  amount: number,
+  currency: string,
+  locale: Locale = 'en',
+): string {
+  const formatted = formatAmount(Math.abs(amount), currency, locale)
   if (amount > 0) return `+${formatted}`
   if (amount < 0) return `−${formatted}`
   return formatted
 }
 
-export function formatPercent(percent: number): string {
+export function formatPercent(percent: number, locale: Locale = 'en'): string {
+  const formatted = new Intl.NumberFormat(localeTag(locale), {
+    minimumFractionDigits: 1,
+    maximumFractionDigits: 1,
+  }).format(Math.abs(percent))
   const sign = percent > 0 ? '+' : percent < 0 ? '−' : ''
-  return `${sign}${Math.abs(percent).toFixed(1)}%`
+  return `${sign}${formatted}%`
+}
+
+export function formatCompactNumber(value: number, locale: Locale = 'en'): string {
+  return new Intl.NumberFormat(localeTag(locale), {
+    notation: 'compact',
+    maximumFractionDigits: 1,
+  }).format(value)
 }

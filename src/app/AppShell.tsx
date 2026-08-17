@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { shouldShowOnboarding } from '@/domain/settings'
+import { useTranslation } from '@/i18n'
 import { BottomNav } from '@/shared/ui/bottom-nav'
 import { cn } from '@/shared/lib/utils'
 import { useAssetStore } from '@/stores/assetStore'
@@ -23,7 +24,13 @@ export function AppShell() {
     (state) => state.settings.onboardingCompleted,
   )
   const fxError = useFxStore((state) => state.error)
+  const t = useTranslation()
+  const locale = useSettingsStore((state) => state.settings.locale)
   const onboarding = pathname === '/onboarding'
+
+  useEffect(() => {
+    document.documentElement.lang = locale
+  }, [locale])
 
   useEffect(() => {
     window.scrollTo(0, 0)
@@ -65,7 +72,7 @@ export function AppShell() {
       <header className="sticky top-0 z-10 border-b border-border bg-background">
         <div className="mx-auto flex max-w-3xl items-center px-4 pt-[calc(env(safe-area-inset-top)+0.75rem)] pb-3">
           <span className="text-sm font-semibold text-foreground">
-            My Money
+            {t.appName}
           </span>
         </div>
       </header>
@@ -76,7 +83,9 @@ export function AppShell() {
         )}
       >
         {fxError && (
-          <p className="mb-4 text-sm text-muted-foreground">{fxError}</p>
+          <p className="mb-4 text-sm text-muted-foreground">
+            {t.fx.usingCachedRates}
+          </p>
         )}
         <Outlet />
       </main>

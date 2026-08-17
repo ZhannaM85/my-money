@@ -1,14 +1,9 @@
 import { useState, type FormEvent, type ReactNode } from 'react'
 import {
   ASSET_CLASSES,
-  CLASS_LABELS,
-  FREQUENCY_LABELS,
-  TRACKING_LABELS,
   TRACKING_STATUSES,
   TYPES_BY_CLASS,
-  TYPE_LABELS,
   UPDATE_FREQUENCIES,
-  VALUATION_LABELS,
   VALUATION_METHODS,
   type Asset,
   type AssetClass,
@@ -18,6 +13,7 @@ import {
   type ValuationMethod,
 } from '@/domain/asset'
 import { BASE_CURRENCIES } from '@/domain/settings'
+import { useTranslation } from '@/i18n'
 import { Button } from '@/shared/ui/button'
 import { NumberInput } from '@/shared/ui/number-input'
 import { TextField } from '@/shared/ui/text-field'
@@ -67,6 +63,7 @@ export function AssetForm({
   submitLabel: string
   onSubmit: (values: AssetFormValues) => Promise<void>
 }) {
+  const t = useTranslation()
   const now = new Date().toISOString()
   const [name, setName] = useState(initial?.name ?? '')
   const [assetClass, setAssetClass] = useState<AssetClass>(
@@ -101,7 +98,7 @@ export function AssetForm({
     event.preventDefault()
     const trimmed = name.trim()
     if (!trimmed) {
-      setError('Name is required')
+      setError(t.asset.nameRequired)
       return
     }
     const parsedAmount = amount.trim() === '' ? undefined : Number(amount)
@@ -109,17 +106,17 @@ export function AssetForm({
       requireAmount &&
       (parsedAmount === undefined || Number.isNaN(parsedAmount))
     ) {
-      setError('Enter a current amount')
+      setError(t.asset.enterCurrentAmount)
       return
     }
     if (parsedAmount !== undefined && Number.isNaN(parsedAmount)) {
-      setError('Amount must be a number')
+      setError(t.asset.amountMustBeNumber)
       return
     }
     const purchase =
       purchaseValue.trim() === '' ? undefined : Number(purchaseValue)
     if (purchaseValue.trim() !== '' && Number.isNaN(purchase)) {
-      setError('Purchase value must be a number')
+      setError(t.asset.purchaseMustBeNumber)
       return
     }
     setError(undefined)
@@ -153,13 +150,13 @@ export function AssetForm({
       onSubmit={(event) => void handleSubmit(event)}
     >
       <TextField
-        label="Name"
+        label={t.asset.name}
         value={name}
         onChange={(event) => setName(event.target.value)}
-        error={error === 'Name is required' ? error : undefined}
+        error={error === t.asset.nameRequired ? error : undefined}
       />
       <SelectField
-        label="Class"
+        label={t.asset.class}
         value={assetClass}
         onChange={(value) => {
           const next = value as AssetClass
@@ -169,22 +166,22 @@ export function AssetForm({
       >
         {ASSET_CLASSES.map((value) => (
           <option key={value} value={value}>
-            {CLASS_LABELS[value]}
+            {t.asset.classes[value]}
           </option>
         ))}
       </SelectField>
       <SelectField
-        label="Type"
+        label={t.asset.type}
         value={type}
         onChange={(value) => setType(value as AssetType)}
       >
         {types.map((value) => (
           <option key={value} value={value}>
-            {TYPE_LABELS[value]}
+            {t.asset.types[value]}
           </option>
         ))}
       </SelectField>
-      <SelectField label="Currency" value={currency} onChange={setCurrency}>
+      <SelectField label={t.asset.currency} value={currency} onChange={setCurrency}>
         {BASE_CURRENCIES.map((code) => (
           <option key={code} value={code}>
             {code}
@@ -192,68 +189,68 @@ export function AssetForm({
         ))}
       </SelectField>
       <TextField
-        label="Institution (optional)"
+        label={t.asset.institutionOptional}
         value={institution}
         onChange={(event) => setInstitution(event.target.value)}
       />
       <SelectField
-        label="Valuation"
+        label={t.asset.valuationLabel}
         value={valuationMethod}
         onChange={(value) => setValuationMethod(value as ValuationMethod)}
       >
         {VALUATION_METHODS.map((value) => (
           <option key={value} value={value}>
-            {VALUATION_LABELS[value]}
+            {t.asset.valuation[value]}
           </option>
         ))}
       </SelectField>
       {valuationMethod !== 'account_balance' && (
         <NumberInput
-          label="Purchase value (optional)"
+          label={t.asset.purchaseValueOptional}
           value={purchaseValue}
           onChange={(event) => setPurchaseValue(event.target.value)}
         />
       )}
       <SelectField
-        label="Update frequency"
+        label={t.asset.updateFrequency}
         value={updateFrequency}
         onChange={(value) => setUpdateFrequency(value as UpdateFrequency)}
       >
         {UPDATE_FREQUENCIES.map((value) => (
           <option key={value} value={value}>
-            {FREQUENCY_LABELS[value]}
+            {t.asset.frequency[value]}
           </option>
         ))}
       </SelectField>
       {initial && (
         <SelectField
-          label="Tracking"
+          label={t.asset.trackingLabel}
           value={trackingStatus}
           onChange={(value) => setTrackingStatus(value as TrackingStatus)}
         >
           {TRACKING_STATUSES.map((value) => (
             <option key={value} value={value}>
-              {TRACKING_LABELS[value]}
+              {t.asset.tracking[value]}
             </option>
           ))}
         </SelectField>
       )}
       <NumberInput
-        label={requireAmount ? 'Current amount' : 'New amount (optional)'}
+        label={requireAmount ? t.asset.currentAmount : t.asset.newAmountOptional}
         value={amount}
         onChange={(event) => setAmount(event.target.value)}
         unit={currency}
         error={
-          error === 'Enter a current amount' ||
-          error === 'Amount must be a number'
+          error === t.asset.enterCurrentAmount ||
+          error === t.asset.amountMustBeNumber
             ? error
             : undefined
         }
       />
       {error &&
-        error !== 'Name is required' &&
-        error !== 'Enter a current amount' &&
-        error !== 'Amount must be a number' && (
+        error !== t.asset.nameRequired &&
+        error !== t.asset.enterCurrentAmount &&
+        error !== t.asset.amountMustBeNumber && (
           <p className="text-sm text-destructive">{error}</p>
         )}
       <Button type="submit" size="xl" className="w-full" disabled={saving}>
