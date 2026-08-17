@@ -37,7 +37,7 @@ _Base currency → create assets → first net worth. This is prototype Flow 1. 
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
-| [#4](https://github.com/ZhannaM85/my-money/issues/4) | 🔲 Open | Epic 3 — Settings: base currency and preferences | Depends on #2 and #3. Changing base currency must not rewrite snapshots. |
+| [#4](https://github.com/ZhannaM85/my-money/issues/4) | 🔍 Pending validation | Epic 3 — Settings: base currency and preferences | IndexedDB settings + Zustand. Changing currency does not rewrite snapshots. |
 | [#5](https://github.com/ZhannaM85/my-money/issues/5) | 🔲 Open | Epic 4 — Assets: create, edit, archive, tracking | Depends on #2 and #3. Includes liabilities, valuation method, update frequency, included/excluded/archived. |
 | [#6](https://github.com/ZhannaM85/my-money/issues/6) | 🔲 Open | Epic 5 — Onboarding: first assets to first net worth | Depends on #4 and #5. Stop and fix this flow before piling on more screens. |
 

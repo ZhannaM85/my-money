@@ -1,2 +1,1 @@
-// Placeholder -- filled by a later epic.
-export {}
+export { useSettingsStore } from './settingsStore'
