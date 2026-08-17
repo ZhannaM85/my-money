@@ -11,10 +11,12 @@ and they have to be fast.
 
 ## Status
 
-Greenfield product, empty app shell in place (#1). Domain and screens are
-still ahead.
+Greenfield product. Domain, assets, onboarding, and JSON backup are on `main`.
+Confirm each issue on a device before it is closed.
 
 **Repo:** [github.com/ZhannaM85/my-money](https://github.com/ZhannaM85/my-money)
+
+**Live app:** [zhannam85.github.io/my-money](https://zhannam85.github.io/my-money/)
 
 Start at [`docs/issues-priority.md`](docs/issues-priority.md).
 

@@ -4,7 +4,7 @@ This document is updated after each issue is completed. It explains what every f
 
 Product context lives in `PROJECT_BRIEF.md`; the active work queue lives in `docs/issues-priority.md` (closed history: `docs/issues-priority-archive/`); the public-facing overview lives in `README.md`.
 
-**Status (2026-08-17):** Epics 0–5 (#1–#6) and JSON backup (#13) landed. First-run onboarding lands on calculated net worth. GitHub Pages is next.
+**Status (2026-08-17):** Epics 0–5 (#1–#6), JSON backup (#13), and GitHub Pages (#14) landed. Deployed at `https://zhannam85.github.io/my-money/`. FX rates are next.
 
 ---
 
@@ -205,6 +205,8 @@ test/
 ```
 
 Nothing outside `infrastructure/persistence/indexeddb/` imports Dexie. Nothing outside `infrastructure/fx/` calls the network for rates.
+
+GitHub Pages is a project site at `/my-money/`. Production builds pass `--base=/my-money/` so Vite rewrites `index.html` asset URLs and React Router uses that `basename`. SPA deep links copy `index.html` to `404.html`.
 
 ---
 
