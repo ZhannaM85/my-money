@@ -4,7 +4,12 @@ import { MemoryRouter } from 'react-router-dom'
 import { beforeEach, describe, expect, it } from 'vitest'
 import { DEFAULT_SETTINGS } from '@/domain/settings'
 import { db } from '@/infrastructure/persistence/indexeddb'
-import { formatAmount } from '@/shared/lib/money'
+import {
+  formatAmount,
+  formatSignedAmount,
+  todayIsoDate,
+} from '@/shared/lib/money'
+import { monthStartIso } from '@/shared/lib/dates'
 import { useAssetStore } from '@/stores/assetStore'
 import { useSettingsStore } from '@/stores/settingsStore'
 import { DashboardScreen } from './DashboardScreen'
@@ -53,5 +58,49 @@ describe('DashboardScreen', () => {
       screen.getAllByText(formatAmount(1000, 'EUR')).length,
     ).toBeGreaterThan(0)
     expect(screen.getByText('Money')).toBeInTheDocument()
+  })
+
+  it('shows this-month change from the month-start snapshot', async () => {
+    const today = todayIsoDate()
+    const start = monthStartIso(today)
+    const now = `${today}T00:00:00.000Z`
+    const asset = {
+      id: 'a1',
+      name: 'Revolut',
+      assetClass: 'money' as const,
+      type: 'bank' as const,
+      currency: 'EUR',
+      trackingStatus: 'included' as const,
+      valuationMethod: 'account_balance' as const,
+      updateFrequency: 'weekly' as const,
+      createdAt: now,
+      updatedAt: now,
+    }
+    await useAssetStore.getState().saveAsset(asset, {
+      assetId: 'a1',
+      date: start,
+      amount: 800,
+      currency: 'EUR',
+    })
+    if (start !== today) {
+      await useAssetStore.getState().saveAsset(asset, {
+        assetId: 'a1',
+        date: today,
+        amount: 1000,
+        currency: 'EUR',
+      })
+    }
+    render(
+      <MemoryRouter>
+        <DashboardScreen />
+      </MemoryRouter>,
+    )
+    const expected =
+      start === today
+        ? /this month/
+        : new RegExp(
+            `${formatSignedAmount(200, 'EUR').replaceAll('+', '\\+')}.*this month`,
+          )
+    expect(await screen.findByText(expected)).toBeInTheDocument()
   })
 })

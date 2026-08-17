@@ -61,7 +61,7 @@ _FX, then the remaining three prototype flows, plus allocation and history. Orde
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
 | [#7](https://github.com/ZhannaM85/my-money/issues/7) | 🔍 Pending validation | Epic 6 — FX rates via Frankfurter | Cached historical quotes. RUB is not in the ECB set. Converted figures labeled as estimates. |
-| [#8](https://github.com/ZhannaM85/my-money/issues/8) | 🔲 Open | Epic 7 — Dashboard | Flow 2. Net worth, period change, chart, class totals. |
+| [#8](https://github.com/ZhannaM85/my-money/issues/8) | 🔍 Pending validation | Epic 7 — Dashboard | Net worth, this-month change, line chart, class totals. |
 | [#9](https://github.com/ZhannaM85/my-money/issues/9) | 🔲 Open | Epic 8 — Quick update flow | Flow 3. Target &lt; 60s for 5–10 assets. Pause on the exact “no change” snapshot rule. |
 | [#10](https://github.com/ZhannaM85/my-money/issues/10) | 🔲 Open | Epic 9 — Asset details | Flow 4. Native vs base toggle; optional FX-vs-value split is not required to close. |
 | [#11](https://github.com/ZhannaM85/my-money/issues/11) | 🔲 Open | Epic 10 — Allocation screen | By class / currency / type. Open fork: own route vs Dashboard. |

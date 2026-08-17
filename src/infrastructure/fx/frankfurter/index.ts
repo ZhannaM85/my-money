@@ -4,5 +4,5 @@ export {
   FRANKFURTER_UNSUPPORTED,
   isFrankfurterUnsupported,
 } from './currencies'
-export { ensureFxRates, uniqueRateRequests } from './ensureRates'
+export { ensureFxRates, ensureFxRange, uniqueRateRequests } from './ensureRates'
 export type { RateRequest } from './ensureRates'

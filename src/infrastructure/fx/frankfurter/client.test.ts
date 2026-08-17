@@ -53,4 +53,28 @@ describe('FrankfurterFxClient', () => {
     expect(await client.latest('RUB', ['USD'])).toEqual([])
     expect(fetchFn).not.toHaveBeenCalled()
   })
+
+  it('fill-forwards weekend gaps in a timeseries', async () => {
+    const fetchFn = vi.fn(async () =>
+      jsonResponse({
+        amount: 1,
+        base: 'EUR',
+        start_date: '2026-08-14',
+        end_date: '2026-08-16',
+        rates: {
+          '2026-08-14': { USD: 1.08 },
+        },
+      }),
+    )
+    const client = new FrankfurterFxClient(fetchFn)
+    const quotes = await client.timeseries('2026-08-14', '2026-08-16', 'EUR', [
+      'USD',
+    ])
+    expect(quotes.map((quote) => quote.date)).toEqual([
+      '2026-08-14',
+      '2026-08-15',
+      '2026-08-16',
+    ])
+    expect(quotes.every((quote) => quote.rate === 1.08)).toBe(true)
+  })
 })

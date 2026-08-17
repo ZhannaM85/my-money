@@ -1,5 +1,6 @@
 import { lookupRate, type FxRateQuote, type RateTable } from '@/domain/fx'
 import type { FxRateRepository } from '@/domain/fx'
+import { isoDatesInclusive } from '@/shared/lib/dates'
 import { FrankfurterFxClient } from './client'
 import { isFrankfurterUnsupported } from './currencies'
 
@@ -63,5 +64,34 @@ export async function ensureFxRates(
   if (fetched.length > 0) {
     await repository.put(fetched)
   }
+  return repository.getAll()
+}
+
+export async function ensureFxRange(
+  start: string,
+  end: string,
+  base: string,
+  symbols: readonly string[],
+  repository: FxRateRepository,
+  client: FrankfurterFxClient,
+): Promise<RateTable> {
+  const wanted = [
+    ...new Set(
+      symbols.filter(
+        (code) => code !== base && !isFrankfurterUnsupported(code),
+      ),
+    ),
+  ]
+  if (wanted.length === 0 || isFrankfurterUnsupported(base)) {
+    return repository.getAll()
+  }
+  const cached = await repository.getAll()
+  const dates = isoDatesInclusive(start, end)
+  const missing = wanted.some((symbol) =>
+    dates.some((date) => lookupRate(cached, symbol, base, date) === undefined),
+  )
+  if (!missing) return cached
+  const quotes = await client.timeseries(start, end, base, wanted)
+  if (quotes.length > 0) await repository.put(quotes)
   return repository.getAll()
 }

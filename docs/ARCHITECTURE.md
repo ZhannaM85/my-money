@@ -4,7 +4,7 @@ This document is updated after each issue is completed. It explains what every f
 
 Product context lives in `PROJECT_BRIEF.md`; the active work queue lives in `docs/issues-priority.md` (closed history: `docs/issues-priority-archive/`); the public-facing overview lives in `README.md`.
 
-**Status (2026-08-17):** Epics 0–6 (#1–#7), JSON backup (#13), and GitHub Pages (#14) landed. Deployed at `https://zhannam85.github.io/my-money/`. Dashboard polish is next.
+**Status (2026-08-17):** Epics 0–7 (#1–#8), JSON backup (#13), and GitHub Pages (#14) landed. Deployed at `https://zhannam85.github.io/my-money/`. Quick update is next.
 
 ---
 

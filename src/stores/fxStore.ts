@@ -3,6 +3,7 @@ import { lookupRate, type RateTable } from '@/domain/fx'
 import { IndexedDbFxRateRepository } from '@/infrastructure/persistence/indexeddb'
 import {
   ensureFxRates,
+  ensureFxRange,
   FrankfurterFxClient,
   type RateRequest,
 } from '@/infrastructure/fx/frankfurter'
@@ -16,6 +17,12 @@ interface FxStoreState {
   error?: string
   loadCached: () => Promise<void>
   ensureRates: (requests: readonly RateRequest[]) => Promise<void>
+  ensureRange: (
+    start: string,
+    end: string,
+    base: string,
+    symbols: readonly string[],
+  ) => Promise<void>
 }
 
 export const useFxStore = create<FxStoreState>((set) => ({
@@ -29,6 +36,27 @@ export const useFxStore = create<FxStoreState>((set) => ({
     set({ loading: true, error: undefined })
     try {
       const quotes = await ensureFxRates(requests, fxRepository, frankfurter)
+      set({ quotes, loading: false })
+    } catch {
+      const quotes = await fxRepository.getAll()
+      set({
+        quotes,
+        loading: false,
+        error: 'Could not refresh reference rates.',
+      })
+    }
+  },
+  ensureRange: async (start, end, base, symbols) => {
+    set({ loading: true, error: undefined })
+    try {
+      const quotes = await ensureFxRange(
+        start,
+        end,
+        base,
+        symbols,
+        fxRepository,
+        frankfurter,
+      )
       set({ quotes, loading: false })
     } catch {
       const quotes = await fxRepository.getAll()
