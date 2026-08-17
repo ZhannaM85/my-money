@@ -4,7 +4,7 @@ This document is updated after each issue is completed. It explains what every f
 
 Product context lives in `PROJECT_BRIEF.md`; the active work queue lives in `docs/issues-priority.md` (closed history: `docs/issues-priority-archive/`); the public-facing overview lives in `README.md`.
 
-**Status (2026-08-17):** Epics 0–5 (#1–#6), JSON backup (#13), and GitHub Pages (#14) landed. Deployed at `https://zhannam85.github.io/my-money/`. FX rates are next.
+**Status (2026-08-17):** Epics 0–6 (#1–#7), JSON backup (#13), and GitHub Pages (#14) landed. Deployed at `https://zhannam85.github.io/my-money/`. Dashboard polish is next.
 
 ---
 
@@ -240,13 +240,13 @@ Base currency is stored in `Settings`. Changing it re-reads FX and re-renders; i
 
 ## FX
 
-- Provider: [Frankfurter](https://www.frankfurter.app/) (ECB reference rates, no API key).
-- Cache quotes in IndexedDB so historical charts work offline after a fetch.
-- Converted values are estimates, labeled as such.
+- Provider: [Frankfurter](https://api.frankfurter.dev/) (ECB reference rates, no API key). Client: `infrastructure/fx/frankfurter/`.
+- Cache quotes in IndexedDB via `FxRateRepository` so charts work offline after a fetch.
+- Converted values are estimates / reference rates, labeled as such — not executable quotes.
 - Same-currency pairs are rate `1` with no network.
-- Historical net worth **must** use the rate for the snapshot date.
-
-If Frankfurter is missing a currency the user needs, document the gap in the FX epic rather than inventing a second provider ad hoc.
+- Historical net worth **must** use the rate for the snapshot date (weekend/holiday dates reuse the previous ECB business day).
+- Only currency codes and dates are sent. User balances, names, and assets never leave the device.
+- **Not covered (do not invent a second provider):** `RUB` is not in the Frankfurter/ECB set. Other listed base currencies (EUR, USD, GBP, CHF, JPY, CAD, AUD, PLN, SEK, NOK, DKK, CNY, INR) are.
 
 ---
 

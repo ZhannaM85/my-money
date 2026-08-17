@@ -4,6 +4,7 @@ import { shouldShowOnboarding } from '@/domain/settings'
 import { BottomNav } from '@/shared/ui/bottom-nav'
 import { cn } from '@/shared/lib/utils'
 import { useAssetStore } from '@/stores/assetStore'
+import { useFxStore } from '@/stores/fxStore'
 import { useSettingsStore } from '@/stores/settingsStore'
 
 export function AppShell() {
@@ -11,9 +12,13 @@ export function AppShell() {
   const navigate = useNavigate()
   const loadAssets = useAssetStore((state) => state.load)
   const loadSettings = useSettingsStore((state) => state.load)
+  const loadCachedRates = useFxStore((state) => state.loadCached)
+  const ensureRates = useFxStore((state) => state.ensureRates)
   const assetsLoaded = useAssetStore((state) => state.loaded)
   const settingsLoaded = useSettingsStore((state) => state.loaded)
   const assetCount = useAssetStore((state) => state.assets.length)
+  const snapshots = useAssetStore((state) => state.snapshots)
+  const baseCurrency = useSettingsStore((state) => state.settings.baseCurrency)
   const onboardingCompleted = useSettingsStore(
     (state) => state.settings.onboardingCompleted,
   )
@@ -26,7 +31,19 @@ export function AppShell() {
   useEffect(() => {
     void loadAssets()
     void loadSettings()
-  }, [loadAssets, loadSettings])
+    void loadCachedRates()
+  }, [loadAssets, loadCachedRates, loadSettings])
+
+  useEffect(() => {
+    if (!assetsLoaded || !settingsLoaded) return
+    void ensureRates(
+      snapshots.map((snapshot) => ({
+        from: snapshot.currency,
+        to: baseCurrency,
+        date: snapshot.date,
+      })),
+    )
+  }, [assetsLoaded, baseCurrency, ensureRates, settingsLoaded, snapshots])
 
   useEffect(() => {
     if (!assetsLoaded || !settingsLoaded) return

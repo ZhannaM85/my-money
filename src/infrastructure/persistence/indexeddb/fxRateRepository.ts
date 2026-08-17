@@ -26,6 +26,10 @@ export class IndexedDbFxRateRepository implements FxRateRepository {
     return lookupRate(quotes, from, to, latestDate)
   }
 
+  async getAll(): Promise<FxRateQuote[]> {
+    return db.fxRates.toArray()
+  }
+
   async put(quotes: readonly FxRateQuote[]): Promise<void> {
     await db.fxRates.bulkPut([...quotes])
   }

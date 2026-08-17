@@ -1,0 +1,56 @@
+import { describe, expect, it, vi } from 'vitest'
+import { FrankfurterFxClient } from './client'
+import { FRANKFURTER_API_BASE } from './currencies'
+
+function jsonResponse(body: unknown, status = 200): Response {
+  return new Response(JSON.stringify(body), {
+    status,
+    headers: { 'Content-Type': 'application/json' },
+  })
+}
+
+describe('FrankfurterFxClient', () => {
+  it('fetches latest and historical quotes without sending user data', async () => {
+    const fetchFn = vi.fn(async (input: RequestInfo | URL) => {
+      const url = String(input)
+      expect(url.startsWith(FRANKFURTER_API_BASE)).toBe(true)
+      expect(url).not.toMatch(/Revolut|1000|asset/i)
+      if (url.includes('/latest')) {
+        return jsonResponse({
+          amount: 1,
+          base: 'EUR',
+          date: '2026-08-17',
+          rates: { USD: 1.1 },
+        })
+      }
+      return jsonResponse({
+        amount: 1,
+        base: 'EUR',
+        date: '2026-08-14',
+        rates: { USD: 1.08 },
+      })
+    })
+    const client = new FrankfurterFxClient(fetchFn)
+
+    const latest = await client.latest('EUR', ['USD', 'EUR', 'RUB'])
+    expect(latest).toEqual([
+      { date: '2026-08-17', base: 'EUR', quote: 'USD', rate: 1.1 },
+    ])
+    expect(String(fetchFn.mock.calls[0][0])).toContain('symbols=USD')
+    expect(String(fetchFn.mock.calls[0][0])).not.toContain('RUB')
+
+    const historical = await client.onDate('2026-08-16', 'EUR', ['USD'])
+    expect(historical).toEqual([
+      { date: '2026-08-16', base: 'EUR', quote: 'USD', rate: 1.08 },
+      { date: '2026-08-14', base: 'EUR', quote: 'USD', rate: 1.08 },
+    ])
+  })
+
+  it('does not call the network for same-currency or unsupported bases', async () => {
+    const fetchFn = vi.fn()
+    const client = new FrankfurterFxClient(fetchFn)
+    expect(await client.latest('EUR', ['EUR'])).toEqual([])
+    expect(await client.latest('RUB', ['USD'])).toEqual([])
+    expect(fetchFn).not.toHaveBeenCalled()
+  })
+})

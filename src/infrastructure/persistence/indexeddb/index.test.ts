@@ -104,5 +104,6 @@ describe('IndexedDb repositories', () => {
     expect(await fx.getRate('EUR', 'USD', '2026-08-01')).toBe(1.1)
     expect(await fx.getRate('USD', 'EUR', '2026-08-01')).toBeCloseTo(1 / 1.1)
     expect(await fx.getRate('EUR', 'EUR', '2026-08-01')).toBe(1)
+    expect(await fx.getAll()).toHaveLength(1)
   })
 })

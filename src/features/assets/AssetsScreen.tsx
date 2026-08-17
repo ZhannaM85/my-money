@@ -8,11 +8,13 @@ import {
   type AssetClass,
 } from '@/domain/asset'
 import { latestSnapshot } from '@/domain/snapshot'
+import { convertAmount, lookupRate } from '@/domain/fx'
 import { formatAmount } from '@/shared/lib/money'
 import { Button } from '@/shared/ui/button'
 import { EmptyState } from '@/shared/ui/empty-state'
 import { PageHeader } from '@/shared/ui/page-header'
 import { useAssetStore } from '@/stores/assetStore'
+import { useFxStore } from '@/stores/fxStore'
 import { useSettingsStore } from '@/stores/settingsStore'
 import { cn } from '@/shared/lib/utils'
 
@@ -31,6 +33,7 @@ export function AssetsScreen() {
   const loaded = useAssetStore((state) => state.loaded)
   const loadSettings = useSettingsStore((state) => state.load)
   const baseCurrency = useSettingsStore((state) => state.settings.baseCurrency)
+  const quotes = useFxStore((state) => state.quotes)
   const [filter, setFilter] = useState<Filter>('all')
 
   useEffect(() => {
@@ -92,6 +95,13 @@ export function AssetsScreen() {
             const snapshot = latestSnapshot(snapshots, asset.id)
             const estimated = asset.valuationMethod !== 'account_balance'
             const sameCurrency = snapshot?.currency === baseCurrency
+            const rate =
+              snapshot &&
+              lookupRate(quotes, snapshot.currency, baseCurrency, snapshot.date)
+            const converted =
+              snapshot && rate !== undefined && !sameCurrency
+                ? convertAmount(snapshot.amount, rate)
+                : undefined
             return (
               <li key={asset.id}>
                 <Link
@@ -116,6 +126,10 @@ export function AssetsScreen() {
                         {sameCurrency ? (
                           <span className="text-xs text-muted-foreground">
                             {baseCurrency}
+                          </span>
+                        ) : converted !== undefined ? (
+                          <span className="text-xs text-muted-foreground">
+                            est. {formatAmount(converted, baseCurrency)}
                           </span>
                         ) : (
                           <span className="text-xs text-muted-foreground">

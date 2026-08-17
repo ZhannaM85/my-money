@@ -8,6 +8,7 @@ import { EmptyState } from '@/shared/ui/empty-state'
 import { PageHeader } from '@/shared/ui/page-header'
 import { StatCard } from '@/shared/ui/stat-card'
 import { useAssetStore } from '@/stores/assetStore'
+import { useFxStore } from '@/stores/fxStore'
 import { useSettingsStore } from '@/stores/settingsStore'
 
 export function DashboardScreen() {
@@ -18,6 +19,8 @@ export function DashboardScreen() {
   const loadSettings = useSettingsStore((state) => state.load)
   const settingsLoaded = useSettingsStore((state) => state.loaded)
   const baseCurrency = useSettingsStore((state) => state.settings.baseCurrency)
+  const quotes = useFxStore((state) => state.quotes)
+  const fxError = useFxStore((state) => state.error)
 
   useEffect(() => {
     void loadAssets()
@@ -25,12 +28,22 @@ export function DashboardScreen() {
   }, [loadAssets, loadSettings])
 
   const result = useMemo(
-    () => netWorth(assets, snapshots, [], baseCurrency),
-    [assets, baseCurrency, snapshots],
+    () => netWorth(assets, snapshots, quotes, baseCurrency),
+    [assets, baseCurrency, quotes, snapshots],
   )
 
   const classRows = result.byClass.filter((row) => row.amount !== 0)
   const loaded = assetsLoaded && settingsLoaded
+  const converted = snapshots.some(
+    (snapshot) => snapshot.currency !== baseCurrency,
+  )
+  const missingCodes = [...new Set(result.missingRates.map((row) => row.from))]
+  const fxNote =
+    missingCodes.length > 0
+      ? `No reference rate for ${missingCodes.join(', ')} on the snapshot date. Where a rate exists it is an ECB estimate, not an executable quote.`
+      : converted
+        ? 'Converted with ECB reference rates. Estimates, not executable quotes.'
+        : fxError
 
   return (
     <div className="flex flex-col gap-6">
@@ -55,11 +68,7 @@ export function DashboardScreen() {
           <StatCard
             label="Net worth"
             value={formatAmount(result.total, baseCurrency)}
-            description={
-              result.missingRates.length > 0
-                ? 'Some amounts are in another currency. Converted totals wait for FX rates.'
-                : undefined
-            }
+            description={fxNote}
           />
           {classRows.length > 0 && (
             <ul className="flex flex-col gap-2">
