@@ -106,7 +106,7 @@ _User supplied light and dark logo marks. Blocked on #1 (no `public/` yet). Tiny
 
 ## Tier 9 — Live feedback (2026-08-18)
 
-_EUR base + RUB assets; iPhone tab bar; appearance; car; joint ownership._
+_EUR base + RUB assets; iPhone tab bar; appearance; car; joint ownership; decimals._
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
@@ -116,6 +116,7 @@ _EUR base + RUB assets; iPhone tab bar; appearance; car; joint ownership._
 | [#26](https://github.com/ZhannaM85/my-money/issues/26) | 🔲 Open | Add a colorful appearance mood matching the design mockups | Keep current green as one mood. Second mood: neutral chrome + category colors (blue/teal, green, amber, purple, coral). Turtle `data-mood` pattern. |
 | [#27](https://github.com/ZhannaM85/my-money/issues/27) | 🔲 Open | Make car a first-class, obvious asset | Brief already includes cars. Model has Property → Vehicle. Forks: own class vs keep under Property; Car vs Vehicle; included vs excluded by default. |
 | [#28](https://github.com/ZhannaM85/my-money/issues/28) | 🔲 Open | Record ownership share for jointly owned assets | Lake house 1/2 with spouse. Store full value + share; net worth uses share × value. Forks: share on asset vs snapshot; % vs fraction. |
+| [#29](https://github.com/ZhannaM85/my-money/issues/29) | 🔲 Open | Cannot enter kopecks/cents: comma decimals fail validation | `16155,11` → “Enter a current amount”. Forms use `Number()`; CSV `parseAmount` already accepts comma decimals. |
 
 ---
 
