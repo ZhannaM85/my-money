@@ -106,7 +106,7 @@ _User supplied light and dark logo marks. Blocked on #1 (no `public/` yet). Tiny
 
 ## Tier 9 — Live feedback (2026-08-18)
 
-_EUR base + RUB assets; iPhone tab bar; appearance._
+_EUR base + RUB assets; iPhone tab bar; appearance; car as asset._
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
@@ -114,6 +114,7 @@ _EUR base + RUB assets; iPhone tab bar; appearance._
 | [#24](https://github.com/ZhannaM85/my-money/issues/24) | 🔲 Open | Tab bar sits flush on the iPhone home indicator | Turtle: `viewport-fit=cover` so `pb-[env(safe-area-inset-bottom)]` is not 0. Tab links `min-h-20`. |
 | [#25](https://github.com/ZhannaM85/my-money/issues/25) | 🔲 Open | Tab bar disconnects from the bottom on iPhone Safari | CSS is already `fixed bottom-0`. Same WebKit visual-viewport class as Turtle #120/#188 — hide bar while keyboard/viewport shrunk. |
 | [#26](https://github.com/ZhannaM85/my-money/issues/26) | 🔲 Open | Add a colorful appearance mood matching the design mockups | Keep current green as one mood. Second mood: neutral chrome + category colors (blue/teal, green, amber, purple, coral). Turtle `data-mood` pattern. |
+| [#27](https://github.com/ZhannaM85/my-money/issues/27) | 🔲 Open | Make car a first-class, obvious asset | Brief already includes cars. Model has Property → Vehicle. Forks: own class vs keep under Property; Car vs Vehicle; included vs excluded by default. |
 
 ---
 
