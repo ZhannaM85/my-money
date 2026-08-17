@@ -11,8 +11,8 @@ and they have to be fast.
 
 ## Status
 
-Greenfield. Architecture and the initial GitHub backlog are in place; the app
-itself is not scaffolded yet.
+Greenfield product, empty app shell in place (#1). Domain and screens are
+still ahead.
 
 **Repo:** [github.com/ZhannaM85/my-money](https://github.com/ZhannaM85/my-money)
 
@@ -35,16 +35,26 @@ Start at [`docs/issues-priority.md`](docs/issues-priority.md).
 | Android | Same web app, wrapped with Capacitor |
 | iOS | Native Swift / SwiftUI, sharing the data model and export format |
 
-## Tech stack (planned)
+## Tech stack
 
 - React 19 + TypeScript (strict) + Vite
 - Tailwind CSS + shadcn/ui
-- IndexedDB via Dexie, behind repository interfaces (see `docs/ARCHITECTURE.md`)
-- Zustand for UI/session state
-- React Hook Form + Zod
-- Recharts
+- IndexedDB via Dexie, behind repository interfaces (see `docs/ARCHITECTURE.md`) — not wired yet
+- Zustand for UI/session state — not wired yet
+- React Hook Form + Zod — not wired yet
+- Recharts — not wired yet
 - Vitest + React Testing Library
-- English and Russian localization
+- English and Russian localization — not wired yet
+
+## Development
+
+```bash
+npm install
+npm run dev      # start the dev server
+npm test         # run the test suite
+npm run lint     # lint
+npm run build    # typecheck + production build
+```
 
 ## More
 

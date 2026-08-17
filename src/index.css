@@ -1,0 +1,83 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import 'shadcn/tailwind.css';
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  color-scheme: light dark;
+  --radius: 0.625rem;
+  --background: #f8faf8;
+  --foreground: #14532d;
+  --card: #ffffff;
+  --card-foreground: #14532d;
+  --popover: #ffffff;
+  --popover-foreground: #14532d;
+  --primary: #15803d;
+  --primary-foreground: #ffffff;
+  --secondary: #ecfdf3;
+  --secondary-foreground: #14532d;
+  --muted: #f0fdf4;
+  --muted-foreground: #3f6212;
+  --accent: #dcfce7;
+  --accent-foreground: #14532d;
+  --destructive: oklch(0.52 0.245 27.325);
+  --border: #d1e7d7;
+  --input: #6b8f74;
+  --ring: #15803d;
+}
+
+.dark {
+  --background: #0f1a12;
+  --foreground: #ecfdf3;
+  --card: #152018;
+  --card-foreground: #ecfdf3;
+  --popover: #152018;
+  --popover-foreground: #ecfdf3;
+  --primary: #4ade80;
+  --primary-foreground: #052e16;
+  --secondary: #1a2e1f;
+  --secondary-foreground: #ecfdf3;
+  --muted: #1a2e1f;
+  --muted-foreground: #86efac;
+  --accent: #1a2e1f;
+  --accent-foreground: #ecfdf3;
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: #243328;
+  --input: #4ade80;
+  --ring: #4ade80;
+}
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}

@@ -4,7 +4,7 @@ This document is updated after each issue is completed. It explains what every f
 
 Product context lives in `PROJECT_BRIEF.md`; the active work queue lives in `docs/issues-priority.md` (closed history: `docs/issues-priority-archive/`); the public-facing overview lives in `README.md`.
 
-**Status (2026-08-16):** Target architecture for a greenfield repo. No `src/` yet — Epic 0 has not been implemented. Treat the module tables below as the intended shape, not a file-by-file inventory of code that already exists.
+**Status (2026-08-17):** Epic 0 (#1) landed — Vite + React 19 + TypeScript strict + Tailwind v4 + shadcn config + Vitest. `src/` exists with placeholder barrels. No domain, persistence, or feature screens yet. Module tables below are still the intended shape until those epics land.
 
 ---
 
@@ -268,9 +268,23 @@ Accessibility as we build: semantic HTML, visible focus, ARIA on icon-only contr
 
 ---
 
+## Scaffold (Epic 0 / #1)
+
+| File | Purpose |
+|------|---------|
+| `package.json` | React 19, Vite 8, Tailwind 4, Vitest, ESLint, Prettier, shadcn CLI |
+| `vite.config.ts` | React + Tailwind plugins, `@` → `src/`, jsdom tests |
+| `components.json` | shadcn aliases into `src/shared/{ui,lib,hooks}` |
+| `src/app/App.tsx` | Empty shell: product name + tagline. No routes. |
+| `src/shared/lib/utils.ts` | `cn()` for shadcn |
+| `src/**/index.ts` placeholders | Feature/domain barrels from the folder map above; filled by later epics |
+| `test/setup.ts` | jest-dom + RTL cleanup |
+
+---
+
 ## Module Reference (planned)
 
-Until Epic 0–1 land, this section is the intended map rather than an inventory of existing files.
+Until Epic 1 lands, this section is the intended map rather than an inventory of existing files.
 
 ### Domain
 
