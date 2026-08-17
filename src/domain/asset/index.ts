@@ -14,4 +14,12 @@ export {
   isLiability,
   contributesToNetWorth,
 } from './Asset'
+export {
+  TYPES_BY_CLASS,
+  CLASS_LABELS,
+  TYPE_LABELS,
+  VALUATION_LABELS,
+  FREQUENCY_LABELS,
+  TRACKING_LABELS,
+} from './labels'
 export type { AssetRepository } from './AssetRepository'

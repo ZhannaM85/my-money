@@ -4,7 +4,7 @@ This document is updated after each issue is completed. It explains what every f
 
 Product context lives in `PROJECT_BRIEF.md`; the active work queue lives in `docs/issues-priority.md` (closed history: `docs/issues-priority-archive/`); the public-facing overview lives in `README.md`.
 
-**Status (2026-08-17):** Epics 0–3 (#1–#4) landed. Shell, domain, routing, and base-currency settings exist. Asset CRUD is next.
+**Status (2026-08-17):** Epics 0–4 (#1–#5) landed. Assets can be created, edited, filtered, and archived. Onboarding is next.
 
 ---
 
