@@ -1,45 +1,48 @@
-"""Derive favicon sizes from docs/branding/logo-*.png. Do not redraw the marks."""
+"""Derive tab favicons from public/icon-*-192.png. Do not overwrite those sources."""
 
 from pathlib import Path
 
 from PIL import Image
 
 ROOT = Path(__file__).resolve().parents[1]
-SRC = ROOT / 'docs' / 'branding'
 OUT = ROOT / 'public'
+LIGHT_192 = OUT / 'icon-light-192.png'
+DARK_192 = OUT / 'icon-dark-192.png'
 
-SIZES = (32, 64)
-
-
-def center_crop(image: Image.Image, fraction: float) -> Image.Image:
-    """Keep the middle of the mark so the surrounding asset ring drops out at 16–32px."""
-    w, h = image.size
-    side = int(min(w, h) * fraction)
-    left = (w - side) // 2
-    top = (h - side) // 2
-    return image.crop((left, top, left + side, top + side))
+# Turtle-steps uses a 64px tab icon. Padding matches that mark: the circle
+# sits inside the square so a rounded tab mask does not clip the ring.
+TAB_SIZES = (32, 64)
+PAD_RATIO = 0.08
 
 
-def save_resized(image: Image.Image, path: Path, size: int) -> None:
-    resized = image.resize((size, size), Image.Resampling.LANCZOS)
-    resized.save(path, format='PNG', optimize=True)
+def fit_with_padding(image: Image.Image, size: int, pad_ratio: float = PAD_RATIO) -> Image.Image:
+    canvas = Image.new('RGBA', (size, size), (0, 0, 0, 0))
+    inner = max(1, int(size * (1 - 2 * pad_ratio)))
+    resized = image.resize((inner, inner), Image.Resampling.LANCZOS)
+    offset = (size - inner) // 2
+    canvas.paste(resized, (offset, offset), resized)
+    return canvas
+
+
+def save_png(image: Image.Image, path: Path) -> None:
+    image.save(path, format='PNG', optimize=True)
 
 
 def main() -> None:
-    OUT.mkdir(exist_ok=True)
-    light = Image.open(SRC / 'logo-light.png').convert('RGBA')
-    dark = Image.open(SRC / 'logo-dark.png').convert('RGBA')
+    light = Image.open(LIGHT_192).convert('RGBA')
+    dark = Image.open(DARK_192).convert('RGBA')
 
-    light_mark = center_crop(light, 0.5)
-    dark_mark = center_crop(dark, 0.5)
+    for size in TAB_SIZES:
+        save_png(
+            fit_with_padding(light, size),
+            OUT / f'favicon-light-{size}.png',
+        )
+        save_png(
+            fit_with_padding(dark, size),
+            OUT / f'favicon-dark-{size}.png',
+        )
 
-    for size in SIZES:
-        save_resized(light_mark, OUT / f'favicon-light-{size}.png', size)
-        save_resized(dark_mark, OUT / f'favicon-dark-{size}.png', size)
-
-    save_resized(dark, OUT / 'apple-touch-icon.png', 180)
-    save_resized(light, OUT / 'icon-light-192.png', 192)
-    save_resized(dark, OUT / 'icon-dark-192.png', 192)
+    save_png(fit_with_padding(dark, 180), OUT / 'apple-touch-icon.png')
 
 
 if __name__ == '__main__':
