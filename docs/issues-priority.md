@@ -104,6 +104,16 @@ _User supplied light and dark logo marks. Blocked on #1 (no `public/` yet). Tiny
 
 ---
 
+## Tier 9 — Live feedback (2026-08-18)
+
+_EUR base + RUB assets._
+
+| # | Status | Issue | Notes |
+|---|--------|-------|-------|
+| [#23](https://github.com/ZhannaM85/my-money/issues/23) | 🔲 Open | RUB assets show €0 when base currency is EUR | ECB/Frankfurter has no RUB. Missing rates currently skip the amount, so Dashboard shows €0. Product fork: never-zero vs second rate source vs both. |
+
+---
+
 ## Explicitly not filed
 
 Out of scope for the MVP (`PROJECT_BRIEF.md` §20) — do not implement from chat:
