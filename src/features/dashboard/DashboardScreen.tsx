@@ -119,6 +119,9 @@ export function DashboardScreen() {
               ))}
             </ul>
           )}
+          <Button asChild variant="outline">
+            <Link to="/allocation">Allocation</Link>
+          </Button>
         </>
       )}
     </div>

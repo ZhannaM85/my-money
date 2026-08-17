@@ -134,6 +134,39 @@ export function allocation(byClass: readonly ClassTotal[]): {
   }))
 }
 
+export function breakdownBy(
+  assets: readonly Asset[],
+  snapshots: readonly AssetSnapshot[],
+  rates: RateTable,
+  baseCurrency: string,
+  keyOf: (asset: Asset) => string,
+): { id: string; amount: number; percent: number }[] {
+  const buckets = new Map<string, number>()
+  for (const asset of assets) {
+    if (!contributesToNetWorth(asset)) continue
+    const snapshot = latestSnapshot(snapshots, asset.id)
+    if (!snapshot) continue
+    const result = convertedContribution(
+      asset,
+      snapshot,
+      rates,
+      baseCurrency,
+      snapshot.date,
+    )
+    if ('missing' in result) continue
+    const key = keyOf(asset)
+    buckets.set(key, (buckets.get(key) ?? 0) + result.amount)
+  }
+  const rows = [...buckets.entries()].map(([id, amount]) => ({ id, amount }))
+  const absSum = rows.reduce((sum, row) => sum + Math.abs(row.amount), 0)
+  return rows
+    .map((row) => ({
+      ...row,
+      percent: absSum === 0 ? 0 : (Math.abs(row.amount) / absSum) * 100,
+    }))
+    .sort((a, b) => Math.abs(b.amount) - Math.abs(a.amount))
+}
+
 export function periodChange(
   from: number,
   to: number,

@@ -4,7 +4,7 @@ This document is updated after each issue is completed. It explains what every f
 
 Product context lives in `PROJECT_BRIEF.md`; the active work queue lives in `docs/issues-priority.md` (closed history: `docs/issues-priority-archive/`); the public-facing overview lives in `README.md`.
 
-**Status (2026-08-17):** Epics 0–9 (#1–#10), JSON backup (#13), and GitHub Pages (#14) landed. Deployed at `https://zhannam85.github.io/my-money/`. Allocation is next.
+**Status (2026-08-17):** Epics 0–10 (#1–#11), JSON backup (#13), and GitHub Pages (#14) landed. Deployed at `https://zhannam85.github.io/my-money/`. History is next.
 
 ---
 
@@ -226,7 +226,7 @@ GitHub Pages is a project site at `/my-money/`. Production builds pass `--base=/
 
 An empty book that has not skipped welcome is redirected to `/onboarding`. `/settings` stays reachable so Skip is available there too. Once any asset exists, or `settings.onboardingCompleted` is true, the gate does not run again. Dashboard already shows calculated net worth (identity FX for same-currency books); period change and the chart wait for later epics.
 
-Bottom nav from the starting mock: Dashboard, Assets, center **+** (update), History, More (Settings / Allocation / export). Mocks may change.
+Bottom nav from the starting mock: Dashboard, Assets, center **+** (update), History, More (Settings / Allocation / export). Allocation stays its own route (`/allocation`), linked from More and Dashboard — not a sixth tab.
 
 ---
 
@@ -360,6 +360,5 @@ Restore is empty-book only: if any asset already exists, import is refused rathe
 
 These are real forks — pause and ask rather than picking silently when the issue is implemented:
 
-- Whether Allocation is its own tab or lives under Dashboard / More.
 - iOS storage engine (Core Data vs. SQLite vs. JSON file) — irrelevant until the native epic.
 - Encrypted-at-rest local storage — not required to validate the prototype; revisit before store release.

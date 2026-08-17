@@ -3,6 +3,7 @@ export {
   netWorth,
   historicalNetWorth,
   allocation,
+  breakdownBy,
   periodChange,
   assetPerformance,
 } from './netWorth'

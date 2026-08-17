@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import { BASE_CURRENCIES } from '@/domain/settings'
 import { BackupSection } from '@/features/export'
 import { Button } from '@/shared/ui/button'
@@ -62,6 +63,9 @@ export function SettingsScreen() {
           </Button>
         </div>
       )}
+      <Button asChild variant="outline" size="xl" className="w-full">
+        <Link to="/allocation">Allocation</Link>
+      </Button>
       <BackupSection />
     </div>
   )

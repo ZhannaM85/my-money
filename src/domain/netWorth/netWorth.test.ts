@@ -5,6 +5,7 @@ import { convertAmount, lookupRate, type FxRateQuote } from '@/domain/fx'
 import {
   allocation,
   assetPerformance,
+  breakdownBy,
   historicalNetWorth,
   netWorth,
   periodChange,
@@ -171,5 +172,35 @@ describe('allocation / periodChange / history / performance', () => {
     expect(result?.nativeAbsolute).toBe(20)
     expect(result?.nativePercent).toBe(20)
     expect(result?.baseAbsolute).toBeNull()
+  })
+})
+
+describe('breakdownBy', () => {
+  it('groups signed amounts and percents by class', () => {
+    const cash = asset({ id: 'cash', name: 'Cash', type: 'cash' })
+    const loan = asset({
+      id: 'loan',
+      name: 'Loan',
+      assetClass: 'liabilities',
+      type: 'personal_loan',
+    })
+    const rows = breakdownBy(
+      [cash, loan],
+      [
+        snap({ id: 's1', assetId: 'cash', amount: 100 }),
+        snap({
+          id: 's2',
+          assetId: 'loan',
+          amount: 25,
+        }),
+      ],
+      [],
+      'EUR',
+      (row) => row.assetClass,
+    )
+    expect(rows).toEqual([
+      { id: 'money', amount: 100, percent: 80 },
+      { id: 'liabilities', amount: -25, percent: 20 },
+    ])
   })
 })
