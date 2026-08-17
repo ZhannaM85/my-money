@@ -279,6 +279,7 @@ Accessibility as we build: semantic HTML, visible focus, ARIA on icon-only contr
 | `src/shared/lib/utils.ts` | `cn()` for shadcn |
 | `src/**/index.ts` placeholders | Feature/domain barrels from the folder map above; filled by later epics |
 | `test/setup.ts` | jest-dom + RTL cleanup |
+| `public/favicon-*-32.png` (#21) | Light/dark tab icons via `prefers-color-scheme`; generated from `docs/branding/` |
 
 ---
 

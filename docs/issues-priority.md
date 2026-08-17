@@ -99,7 +99,7 @@ _User supplied light and dark logo marks. Blocked on #1 (no `public/` yet). Tiny
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
-| [#21](https://github.com/ZhannaM85/my-money/issues/21) | 🔲 Open | Use light and dark My Money marks as favicons | Source: `docs/branding/logo-light.png` + `logo-dark.png`. `prefers-color-scheme`. |
+| [#21](https://github.com/ZhannaM85/my-money/issues/21) | 🔍 Pending validation | Use light and dark My Money marks as favicons | Source: `docs/branding/logo-light.png` + `logo-dark.png`. `prefers-color-scheme`. Tiny sizes are a center crop of the **M**. |
 
 ---
 
