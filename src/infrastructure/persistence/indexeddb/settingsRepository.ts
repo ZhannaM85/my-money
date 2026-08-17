@@ -8,7 +8,9 @@ import { db } from './db'
 
 export class IndexedDbSettingsRepository implements SettingsRepository {
   async get(): Promise<Settings> {
-    return (await db.settings.get(SETTINGS_ID)) ?? DEFAULT_SETTINGS
+    const stored = await db.settings.get(SETTINGS_ID)
+    if (!stored) return DEFAULT_SETTINGS
+    return { ...DEFAULT_SETTINGS, ...stored }
   }
 
   async save(settings: Settings): Promise<void> {

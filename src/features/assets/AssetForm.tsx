@@ -55,12 +55,14 @@ export interface AssetFormValues {
 export function AssetForm({
   initial,
   initialAmount,
+  defaultCurrency,
   requireAmount,
   submitLabel,
   onSubmit,
 }: {
   initial?: Asset
   initialAmount?: number
+  defaultCurrency?: string
   requireAmount: boolean
   submitLabel: string
   onSubmit: (values: AssetFormValues) => Promise<void>
@@ -71,7 +73,9 @@ export function AssetForm({
     initial?.assetClass ?? 'money',
   )
   const [type, setType] = useState<AssetType>(initial?.type ?? 'bank')
-  const [currency, setCurrency] = useState(initial?.currency ?? 'EUR')
+  const [currency, setCurrency] = useState(
+    initial?.currency ?? defaultCurrency ?? 'EUR',
+  )
   const [institution, setInstitution] = useState(initial?.institution ?? '')
   const [valuationMethod, setValuationMethod] = useState<ValuationMethod>(
     initial?.valuationMethod ?? 'account_balance',

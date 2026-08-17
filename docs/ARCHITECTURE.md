@@ -4,7 +4,7 @@ This document is updated after each issue is completed. It explains what every f
 
 Product context lives in `PROJECT_BRIEF.md`; the active work queue lives in `docs/issues-priority.md` (closed history: `docs/issues-priority-archive/`); the public-facing overview lives in `README.md`.
 
-**Status (2026-08-17):** Epics 0–4 (#1–#5) landed. Assets can be created, edited, filtered, and archived. Onboarding is next.
+**Status (2026-08-17):** Epics 0–5 (#1–#6) landed. First-run onboarding chooses a base currency, creates the first asset, and lands on a Dashboard that shows calculated net worth. JSON backup is next.
 
 ---
 
@@ -114,6 +114,7 @@ interface Settings {
   id: 'singleton';
   baseCurrency: string; // ISO 4217, e.g. 'EUR'
   locale: 'en' | 'ru';
+  onboardingCompleted: boolean;
   updatedAt: string;
 }
 
@@ -219,6 +220,8 @@ Nothing outside `infrastructure/persistence/indexeddb/` imports Dexie. Nothing o
 | `/history` | Net-worth history + range chips |
 | `/settings` | Base currency, locale, appearance, export/import |
 | `/onboarding` | First-run: base currency + first assets |
+
+An empty book that has not skipped welcome is redirected to `/onboarding`. `/settings` stays reachable so Skip is available there too. Once any asset exists, or `settings.onboardingCompleted` is true, the gate does not run again. Dashboard already shows calculated net worth (identity FX for same-currency books); period change and the chart wait for later epics.
 
 Bottom nav from the starting mock: Dashboard, Assets, center **+** (update), History, More (Settings / Allocation / export). Mocks may change.
 

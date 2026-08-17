@@ -9,6 +9,7 @@ interface SettingsStoreState {
   loaded: boolean
   load: () => Promise<void>
   setBaseCurrency: (baseCurrency: string) => Promise<void>
+  completeOnboarding: () => Promise<void>
 }
 
 export const useSettingsStore = create<SettingsStoreState>((set, get) => ({
@@ -22,6 +23,15 @@ export const useSettingsStore = create<SettingsStoreState>((set, get) => ({
     const next: Settings = {
       ...get().settings,
       baseCurrency,
+      updatedAt: new Date().toISOString(),
+    }
+    await settingsRepository.save(next)
+    set({ settings: next })
+  },
+  completeOnboarding: async () => {
+    const next: Settings = {
+      ...get().settings,
+      onboardingCompleted: true,
       updatedAt: new Date().toISOString(),
     }
     await settingsRepository.save(next)

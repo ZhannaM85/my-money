@@ -10,6 +10,7 @@ beforeEach(async () => {
       id: 'singleton',
       baseCurrency: 'EUR',
       locale: 'en',
+      onboardingCompleted: false,
       updatedAt: '1970-01-01T00:00:00.000Z',
     },
     loaded: false,
@@ -24,5 +25,14 @@ describe('settingsStore', () => {
     expect(useSettingsStore.getState().settings.baseCurrency).toBe('USD')
     await useSettingsStore.getState().load()
     expect(useSettingsStore.getState().settings.baseCurrency).toBe('USD')
+  })
+
+  it('persists skipping onboarding', async () => {
+    await useSettingsStore.getState().load()
+    expect(useSettingsStore.getState().settings.onboardingCompleted).toBe(false)
+    await useSettingsStore.getState().completeOnboarding()
+    expect(useSettingsStore.getState().settings.onboardingCompleted).toBe(true)
+    await useSettingsStore.getState().load()
+    expect(useSettingsStore.getState().settings.onboardingCompleted).toBe(true)
   })
 })

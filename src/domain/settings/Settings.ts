@@ -4,6 +4,7 @@ export interface Settings {
   id: typeof SETTINGS_ID
   baseCurrency: string
   locale: 'en' | 'ru'
+  onboardingCompleted: boolean
   updatedAt: string
 }
 
@@ -11,5 +12,13 @@ export const DEFAULT_SETTINGS: Settings = {
   id: SETTINGS_ID,
   baseCurrency: 'EUR',
   locale: 'en',
+  onboardingCompleted: false,
   updatedAt: '1970-01-01T00:00:00.000Z',
+}
+
+export function shouldShowOnboarding(
+  assetCount: number,
+  onboardingCompleted: boolean,
+): boolean {
+  return assetCount === 0 && !onboardingCompleted
 }

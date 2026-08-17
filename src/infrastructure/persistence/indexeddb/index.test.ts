@@ -87,6 +87,18 @@ describe('IndexedDb repositories', () => {
     expect((await settings.get()).baseCurrency).toBe('USD')
   })
 
+  it('fills missing onboardingCompleted on older settings rows', async () => {
+    await db.settings.put({
+      id: 'singleton',
+      baseCurrency: 'GBP',
+      locale: 'en',
+      updatedAt: '2026-08-01T00:00:00.000Z',
+    } as never)
+    const loaded = await settings.get()
+    expect(loaded.baseCurrency).toBe('GBP')
+    expect(loaded.onboardingCompleted).toBe(false)
+  })
+
   it('stores FX quotes and looks up inverse rates', async () => {
     await fx.put([{ date: '2026-08-01', base: 'EUR', quote: 'USD', rate: 1.1 }])
     expect(await fx.getRate('EUR', 'USD', '2026-08-01')).toBe(1.1)
