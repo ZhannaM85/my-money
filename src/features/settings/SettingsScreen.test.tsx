@@ -1,5 +1,5 @@
 import 'fake-indexeddb/auto'
-import { render, screen } from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router-dom'
 import { beforeEach, describe, expect, it } from 'vitest'
@@ -49,7 +49,9 @@ describe('SettingsScreen', () => {
         <SettingsScreen />
       </MemoryRouter>,
     )
-    expect(await screen.findByLabelText('Base currency')).not.toBeDisabled()
+    await waitFor(() => {
+      expect(screen.getByLabelText('Base currency')).not.toBeDisabled()
+    })
   })
 
   it('applies Soft Finance, Neutral, and Pastel appearance moods', async () => {
