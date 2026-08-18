@@ -91,9 +91,12 @@ export interface Dictionary {
     amountPlaceholder: string
     details: string
     archive: string
+    hide: string
+    restore: string
     excludeFromNetWorth: string
     includeInNetWorth: string
     notCountedInNetWorth: string
+    hiddenFromLists: string
     suggestedNow: string
   }
   update: {

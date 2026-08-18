@@ -42,9 +42,9 @@ export const ru: Dictionary = {
   assets: {
     title: 'Активы',
     filterAll: 'Все',
-    filterArchived: 'Архив',
+    filterArchived: 'Скрытые',
     emptyTitle: 'Пока нет активов',
-    emptyArchivedTitle: 'В архиве пусто',
+    emptyArchivedTitle: 'Нет скрытых активов',
     emptyDescription:
       'Добавьте то, чем владеете или что должны. Данные остаются на этом устройстве.',
     noValue: 'Нет суммы',
@@ -137,9 +137,12 @@ export const ru: Dictionary = {
     amountPlaceholder: 'Сумма',
     details: 'Сведения',
     archive: 'В архив',
+    hide: 'Скрыть актив',
+    restore: 'Вернуть в список',
     excludeFromNetWorth: 'Не учитывать в капитале',
     includeInNetWorth: 'Учитывать в капитале',
     notCountedInNetWorth: 'Не учитывается в капитале',
+    hiddenFromLists: 'Скрыт из списков',
     suggestedNow: 'Пора обновить',
   },
   update: {

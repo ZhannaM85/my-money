@@ -115,4 +115,20 @@ describe('AssetDetailsScreen', () => {
       expect(useAssetStore.getState().assets[0].trackingStatus).toBe('included')
     })
   })
+
+  it('hides and restores an asset', async () => {
+    const user = userEvent.setup()
+    render(
+      <MemoryRouter initialEntries={['/assets/a1']}>
+        <Routes>
+          <Route path="/assets/:id" element={<AssetDetailsScreen />} />
+        </Routes>
+      </MemoryRouter>,
+    )
+    await screen.findByRole('heading', { name: 'Revolut' })
+    await user.click(screen.getByRole('button', { name: 'Hide asset' }))
+    await waitFor(() => {
+      expect(useAssetStore.getState().assets[0].trackingStatus).toBe('archived')
+    })
+  })
 })

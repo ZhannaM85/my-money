@@ -151,6 +151,11 @@ export function AssetDetailsScreen() {
           {t.asset.notCountedInNetWorth}
         </p>
       )}
+      {asset.trackingStatus === 'archived' && (
+        <p className="text-sm font-medium text-muted-foreground">
+          {t.asset.hiddenFromLists}
+        </p>
+      )}
       <div className="flex gap-2">
         <Button
           type="button"
@@ -326,10 +331,10 @@ export function AssetDetailsScreen() {
           {t.asset.includeInNetWorth}
         </Button>
       )}
-      {asset.trackingStatus !== 'archived' && (
+      {asset.trackingStatus !== 'archived' ? (
         <Button
           type="button"
-          variant="destructive"
+          variant="outline"
           size="xl"
           className="w-full"
           onClick={() => {
@@ -338,7 +343,17 @@ export function AssetDetailsScreen() {
             )
           }}
         >
-          {t.asset.archive}
+          {t.asset.hide}
+        </Button>
+      ) : (
+        <Button
+          type="button"
+          variant="outline"
+          size="xl"
+          className="w-full"
+          onClick={() => void setTrackingStatus(asset.id, 'included')}
+        >
+          {t.asset.restore}
         </Button>
       )}
     </div>
