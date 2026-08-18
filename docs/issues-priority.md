@@ -133,6 +133,7 @@ _EUR base + RUB assets; iPhone tab bar; appearance; car; joint ownership; decima
 | [#43](https://github.com/ZhannaM85/my-money/issues/43) | 🔍 Pending validation | Add a Dashboard currency filter dropdown | Dashboard now has its own currency dropdown that filters totals and the chart locally, independent from Settings display/conversion mode. |
 | [#44](https://github.com/ZhannaM85/my-money/issues/44) | 🔍 Pending validation | Own a static RUB FX dataset for the PWA | Static `RUB` history is now generated during deploy and loaded from same-origin files into the FX cache instead of relying on fragile browser-side runtime fetches. |
 | [#45](https://github.com/ZhannaM85/my-money/issues/45) | 🔲 Open | Allow manual entry of today's FX rates as a fallback | Add a dedicated modal/screen for same-day manual FX overrides when external rates are missing or unreliable. |
+| [#46](https://github.com/ZhannaM85/my-money/issues/46) | 🔲 Open | Original + All should show every native holding; disable the inactive currency dropdown | Original + All must list both native holdings (e.g. RUB 20,000 and EUR 1,000). Settings base currency is disabled in Original; Dashboard currency filter is disabled in Converted. Do not reopen #23/#44. |
 
 ---
 
