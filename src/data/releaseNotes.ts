@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 51,
+    issue: 50,
+    date: '2026-08-18T13:30:00+03:00',
+    en: 'Saving today’s manual FX rates now collapses the editor and shows the saved rates as a read-only list.',
+    ru: 'После сохранения ручных курсов на сегодня редактор сворачивается, а сохранённые курсы показываются списком только для чтения.',
+  },
+  {
     version: 50,
     issue: 45,
     date: '2026-08-18T13:20:00+03:00',

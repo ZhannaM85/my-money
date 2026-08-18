@@ -72,6 +72,10 @@ describe('ManualRatesSection', () => {
         'Saved. Converted totals will use these overrides for today.',
       ),
     ).toBeInTheDocument()
+    expect(
+      screen.queryByRole('button', { name: "Save today's rates" }),
+    ).not.toBeInTheDocument()
+    expect(screen.getByText(/1 EUR = … RUB/)).toBeInTheDocument()
 
     const quotes = useFxStore.getState().quotes
     expect(lookupRate(quotes, 'EUR', 'RUB', today)).toBe(100)

@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { BASE_CURRENCIES } from '@/domain/settings'
 import { lookupRate } from '@/domain/fx'
 import { useLocale, useTranslation } from '@/i18n'
-import { parseAmount, todayIsoDate } from '@/shared/lib/money'
+import { formatAmount, parseAmount, todayIsoDate } from '@/shared/lib/money'
 import { Button } from '@/shared/ui/button'
 import { MoneyInput } from '@/shared/ui/money-input'
 import { useAssetStore } from '@/stores/assetStore'
@@ -22,9 +22,9 @@ export function ManualRatesSection() {
   const clearManualRatesForDate = useFxStore(
     (state) => state.clearManualRatesForDate,
   )
-  const [open, setOpen] = useState(false)
+  const [editing, setEditing] = useState(false)
   const [drafts, setDrafts] = useState<Record<string, string>>({})
-  const [saved, setSaved] = useState(false)
+  const [justSaved, setJustSaved] = useState(false)
   const today = todayIsoDate()
 
   useEffect(() => {
@@ -35,15 +35,26 @@ export function ManualRatesSection() {
   const foreignCodes = useMemo(() => {
     const fromAssets = assets.map((asset) => asset.currency)
     return [
-      ...new Set([...fromAssets, ...BASE_CURRENCIES].filter(
-        (code) => code !== baseCurrency,
-      )),
+      ...new Set(
+        [...fromAssets, ...BASE_CURRENCIES].filter(
+          (code) => code !== baseCurrency,
+        ),
+      ),
     ].sort()
   }, [assets, baseCurrency])
 
-  const todayManualCount = manualQuotes.filter(
-    (quote) => quote.date === today,
-  ).length
+  const todayManuals = useMemo(
+    () =>
+      manualQuotes
+        .filter(
+          (quote) =>
+            quote.date === today &&
+            quote.base === baseCurrency &&
+            quote.quote !== baseCurrency,
+        )
+        .sort((a, b) => a.quote.localeCompare(b.quote)),
+    [baseCurrency, manualQuotes, today],
+  )
 
   function seedDrafts() {
     const next: Record<string, string> = {}
@@ -54,7 +65,7 @@ export function ManualRatesSection() {
       next[code] = rate !== undefined ? String(rate) : ''
     }
     setDrafts(next)
-    setSaved(false)
+    setJustSaved(false)
   }
 
   async function handleSave() {
@@ -74,7 +85,8 @@ export function ManualRatesSection() {
     if (quotesToSave.length > 0) {
       await saveManualRates(quotesToSave)
     }
-    setSaved(true)
+    setEditing(false)
+    setJustSaved(true)
   }
 
   return (
@@ -84,22 +96,65 @@ export function ManualRatesSection() {
         <p className="text-sm text-muted-foreground">
           {t.settings.manualRatesDescription}
         </p>
-        {todayManualCount > 0 && (
+        {todayManuals.length > 0 && (
           <p className="text-xs text-muted-foreground">
-            {t.settings.manualRatesActive(todayManualCount, today)}
+            {t.settings.manualRatesActive(todayManuals.length, today)}
           </p>
         )}
       </div>
-      <Button
-        type="button"
-        variant="outline"
-        onClick={() => {
-          if (!open) seedDrafts()
-          setOpen((value) => !value)
-        }}
-      >
-        {open ? t.settings.manualRatesHide : t.settings.manualRatesEdit}
-      </Button>      {open && (
+
+      {!editing && todayManuals.length > 0 && (
+        <ul className="flex flex-col gap-2 rounded-xl bg-card p-4 ring-1 ring-foreground/10">
+          {todayManuals.map((quote) => (
+            <li
+              key={`${quote.base}-${quote.quote}`}
+              className="flex items-center justify-between gap-3 text-sm"
+            >
+              <span className="text-muted-foreground">
+                {t.settings.manualRatesPair(quote.base, quote.quote)}
+              </span>
+              <span className="tabular-nums font-medium">
+                {formatAmount(quote.rate, quote.quote, locale)}
+              </span>
+            </li>
+          ))}
+        </ul>
+      )}
+
+      {justSaved && !editing && (
+        <p className="text-sm text-muted-foreground">
+          {t.settings.manualRatesSaved}
+        </p>
+      )}
+
+      {!editing ? (
+        <div className="flex flex-wrap gap-2">
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => {
+              seedDrafts()
+              setEditing(true)
+            }}
+          >
+            {t.settings.manualRatesEdit}
+          </Button>
+          {todayManuals.length > 0 && (
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => {
+                void clearManualRatesForDate(today).then(() => {
+                  setDrafts({})
+                  setJustSaved(false)
+                })
+              }}
+            >
+              {t.settings.manualRatesClear}
+            </Button>
+          )}
+        </div>
+      ) : (
         <div className="flex flex-col gap-4 rounded-xl bg-card p-4 ring-1 ring-foreground/10">
           <p className="text-sm text-muted-foreground">
             {t.settings.manualRatesHint(today)}
@@ -127,20 +182,13 @@ export function ManualRatesSection() {
               type="button"
               variant="outline"
               onClick={() => {
-                void clearManualRatesForDate(today).then(() => {
-                  setDrafts({})
-                  setSaved(false)
-                })
+                setEditing(false)
+                setJustSaved(false)
               }}
             >
-              {t.settings.manualRatesClear}
+              {t.settings.manualRatesHide}
             </Button>
           </div>
-          {saved && (
-            <p className="text-sm text-muted-foreground">
-              {t.settings.manualRatesSaved}
-            </p>
-          )}
         </div>
       )}
     </section>
