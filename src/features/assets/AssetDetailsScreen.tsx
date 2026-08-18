@@ -146,6 +146,11 @@ export function AssetDetailsScreen() {
         title={asset.name}
         description={`${t.asset.types[asset.type]} · ${asset.currency}`}
       />
+      {asset.trackingStatus === 'excluded' && (
+        <p className="text-sm font-medium text-muted-foreground">
+          {t.asset.notCountedInNetWorth}
+        </p>
+      )}
       <div className="flex gap-2">
         <Button
           type="button"
@@ -299,6 +304,28 @@ export function AssetDetailsScreen() {
           )
         }}
       />
+      {asset.trackingStatus === 'included' && (
+        <Button
+          type="button"
+          variant="outline"
+          size="xl"
+          className="w-full"
+          onClick={() => void setTrackingStatus(asset.id, 'excluded')}
+        >
+          {t.asset.excludeFromNetWorth}
+        </Button>
+      )}
+      {asset.trackingStatus === 'excluded' && (
+        <Button
+          type="button"
+          variant="outline"
+          size="xl"
+          className="w-full"
+          onClick={() => void setTrackingStatus(asset.id, 'included')}
+        >
+          {t.asset.includeInNetWorth}
+        </Button>
+      )}
       {asset.trackingStatus !== 'archived' && (
         <Button
           type="button"

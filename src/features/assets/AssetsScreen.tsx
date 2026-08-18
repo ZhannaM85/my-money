@@ -117,6 +117,9 @@ export function AssetsScreen() {
                     <span className="truncate font-medium">{asset.name}</span>
                     <span className="text-sm text-muted-foreground">
                       {t.asset.types[asset.type]}
+                      {asset.trackingStatus === 'excluded'
+                        ? ` · ${t.asset.notCountedInNetWorth}`
+                        : ''}
                       {estimated
                         ? ` · ${t.asset.valuation[asset.valuationMethod]}`
                         : ''}

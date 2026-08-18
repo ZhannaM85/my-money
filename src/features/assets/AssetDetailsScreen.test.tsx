@@ -90,4 +90,29 @@ describe('AssetDetailsScreen', () => {
       ).toHaveLength(3)
     })
   })
+
+  it('excludes and re-includes an asset from net worth', async () => {
+    const user = userEvent.setup()
+    render(
+      <MemoryRouter initialEntries={['/assets/a1']}>
+        <Routes>
+          <Route path="/assets/:id" element={<AssetDetailsScreen />} />
+        </Routes>
+      </MemoryRouter>,
+    )
+    await screen.findByRole('heading', { name: 'Revolut' })
+    await user.click(
+      screen.getByRole('button', { name: 'Exclude from net worth' }),
+    )
+    await waitFor(() => {
+      expect(useAssetStore.getState().assets[0].trackingStatus).toBe('excluded')
+    })
+    expect(screen.getByText('Not counted in net worth')).toBeInTheDocument()
+    await user.click(
+      screen.getByRole('button', { name: 'Include in net worth' }),
+    )
+    await waitFor(() => {
+      expect(useAssetStore.getState().assets[0].trackingStatus).toBe('included')
+    })
+  })
 })

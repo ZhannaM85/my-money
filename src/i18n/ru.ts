@@ -137,6 +137,9 @@ export const ru: Dictionary = {
     amountPlaceholder: 'Сумма',
     details: 'Сведения',
     archive: 'В архив',
+    excludeFromNetWorth: 'Не учитывать в капитале',
+    includeInNetWorth: 'Учитывать в капитале',
+    notCountedInNetWorth: 'Не учитывается в капитале',
     suggestedNow: 'Пора обновить',
   },
   update: {

@@ -133,6 +133,9 @@ export const en: Dictionary = {
     amountPlaceholder: 'Amount',
     details: 'Details',
     archive: 'Archive asset',
+    excludeFromNetWorth: 'Exclude from net worth',
+    includeInNetWorth: 'Include in net worth',
+    notCountedInNetWorth: 'Not counted in net worth',
     suggestedNow: 'Suggested now',
   },
   update: {
