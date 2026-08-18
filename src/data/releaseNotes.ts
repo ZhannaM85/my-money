@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 62,
+    issue: 60,
+    date: '2026-08-18T14:50:00+03:00',
+    en: 'Dashboard Holdings start collapsed so the chart stays near net worth; tap Holdings to expand the list.',
+    ru: 'Список позиций на Сводке свёрнут по умолчанию, чтобы график был рядом с чистым капиталом; нажмите «Позиции», чтобы развернуть.',
+  },
+  {
     version: 61,
     issue: 58,
     date: '2026-08-18T14:40:00+03:00',

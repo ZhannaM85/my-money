@@ -391,6 +391,9 @@ describe('DashboardScreen', () => {
       </MemoryRouter>,
     )
 
+    expect(await screen.findByRole('button', { name: 'Holdings' })).toBeInTheDocument()
+    expect(screen.queryByText('Ruble cash')).not.toBeInTheDocument()
+    await userEvent.click(screen.getByRole('button', { name: 'Holdings' }))
     expect(await screen.findByText('Ruble cash')).toBeInTheDocument()
     expect(screen.getByText('Conversion not available')).toBeInTheDocument()
     expect(
@@ -455,6 +458,7 @@ describe('DashboardScreen', () => {
       </MemoryRouter>,
     )
 
+    await userEvent.click(await screen.findByRole('button', { name: 'Holdings' }))
     expect(await screen.findByText('Ruble cash')).toBeInTheDocument()
     expect(screen.getByText('Euro cash')).toBeInTheDocument()
     expect(
