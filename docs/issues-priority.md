@@ -157,6 +157,7 @@ _#61 did not reach the phone because Pages deploy failed._
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
 | [#62](https://github.com/ZhannaM85/my-money/issues/62) | 🔍 Pending validation | Pages deploy of #61 failed on a racy Settings currency test | Converted-mode Base currency test now waits until settings have loaded before asserting the dropdown is enabled. |
+| [#63](https://github.com/ZhannaM85/my-money/issues/63) | 🔲 Open | Pages deploy fails type-check on Colorful CSS test Node imports | `src/index.css.test.ts` uses `node:fs`; app tsconfig has no Node types. |
 
 ---
 
