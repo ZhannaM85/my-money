@@ -283,4 +283,8 @@ export const ru: Dictionary = {
     reloadButton: 'Обновить',
     reloadingText: 'Обновление…',
   },
+  offline: {
+    offlineText:
+      'Нет сети — ваши данные по-прежнему сохранены на этом устройстве.',
+  },
 }

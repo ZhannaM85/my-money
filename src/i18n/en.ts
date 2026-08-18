@@ -276,4 +276,7 @@ export const en: Dictionary = {
     reloadButton: 'Reload',
     reloadingText: 'Reloading…',
   },
+  offline: {
+    offlineText: "You're offline — your data is still saved on this device.",
+  },
 }

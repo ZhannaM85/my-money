@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { AppUpdateBanner } from '@/app/AppUpdateBanner'
+import { OfflineBanner } from '@/app/OfflineBanner'
 import { shouldShowOnboarding } from '@/domain/settings'
 import { useTranslation } from '@/i18n'
 import { useIsTextInputFocused, useVisualViewportShrunk } from '@/shared/hooks'
@@ -80,6 +81,7 @@ export function AppShell() {
       >
         {t.common.skipToContent}
       </a>
+      <OfflineBanner />
       <AppUpdateBanner />
       <header className="sticky top-0 z-10 border-b border-border bg-background">
         <div className="mx-auto flex max-w-3xl items-center px-4 pt-[calc(env(safe-area-inset-top)+0.75rem)] pb-3">

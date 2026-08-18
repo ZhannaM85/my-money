@@ -210,4 +210,7 @@ export interface Dictionary {
     reloadButton: string
     reloadingText: string
   }
+  offline: {
+    offlineText: string
+  }
 }
