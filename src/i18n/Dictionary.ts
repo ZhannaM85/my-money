@@ -168,6 +168,16 @@ export interface Dictionary {
     moodGreen: string
     versionBadgeLabel: (version: number) => string
     releaseNotesLabel: string
+    manualRatesTitle: string
+    manualRatesDescription: string
+    manualRatesEdit: string
+    manualRatesHide: string
+    manualRatesHint: (date: string) => string
+    manualRatesPair: (base: string, quote: string) => string
+    manualRatesSave: string
+    manualRatesClear: string
+    manualRatesSaved: string
+    manualRatesActive: (count: number, date: string) => string
   }
   backup: {
     title: string

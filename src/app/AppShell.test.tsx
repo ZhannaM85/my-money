@@ -14,12 +14,16 @@ const fxApi = {
   loadCached: useFxStore.getState().loadCached,
   ensureRates: useFxStore.getState().ensureRates,
   ensureRange: useFxStore.getState().ensureRange,
+  saveManualRates: useFxStore.getState().saveManualRates,
+  clearManualRatesForDate: useFxStore.getState().clearManualRatesForDate,
 }
 
 beforeEach(async () => {
   await db.settings.clear()
   await db.assets.clear()
   await db.snapshots.clear()
+  await db.fxRates.clear()
+  await db.manualFxRates.clear()
   await db.settings.put({
     ...DEFAULT_SETTINGS,
     onboardingCompleted: true,
@@ -32,11 +36,14 @@ beforeEach(async () => {
   useAssetStore.setState({ assets: [], snapshots: [], loaded: false })
   useFxStore.setState({
     quotes: [],
+    manualQuotes: [],
     loading: false,
     error: undefined,
     loadCached: fxApi.loadCached,
     ensureRates: fxApi.ensureRates,
     ensureRange: fxApi.ensureRange,
+    saveManualRates: fxApi.saveManualRates,
+    clearManualRatesForDate: fxApi.clearManualRatesForDate,
   })
 })
 

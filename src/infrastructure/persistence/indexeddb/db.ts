@@ -9,6 +9,7 @@ export class AppDatabase extends Dexie {
   snapshots!: Table<AssetSnapshot, string>
   settings!: Table<Settings, string>
   fxRates!: Table<FxRateQuote, [string, string, string]>
+  manualFxRates!: Table<FxRateQuote, [string, string, string]>
 
   constructor() {
     super('my-money')
@@ -17,6 +18,13 @@ export class AppDatabase extends Dexie {
       snapshots: 'id, assetId, date, [assetId+date]',
       settings: 'id',
       fxRates: '[date+base+quote], date, base, quote',
+    })
+    this.version(2).stores({
+      assets: 'id, assetClass, trackingStatus, currency',
+      snapshots: 'id, assetId, date, [assetId+date]',
+      settings: 'id',
+      fxRates: '[date+base+quote], date, base, quote',
+      manualFxRates: '[date+base+quote], date',
     })
   }
 }

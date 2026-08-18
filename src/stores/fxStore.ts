@@ -1,6 +1,10 @@
 import { create } from 'zustand'
-import { lookupRate, type RateTable } from '@/domain/fx'
-import { IndexedDbFxRateRepository } from '@/infrastructure/persistence/indexeddb'
+import { lookupRate, mergeRateTables, type RateTable } from '@/domain/fx'
+import type { FxRateQuote } from '@/domain/fx'
+import {
+  IndexedDbFxRateRepository,
+  IndexedDbManualFxRateRepository,
+} from '@/infrastructure/persistence/indexeddb'
 import {
   ensureFxRates,
   ensureFxRange,
@@ -14,11 +18,27 @@ import {
 } from '@/infrastructure/fx/rubStatic'
 
 const fxRepository = new IndexedDbFxRateRepository()
+const manualRepository = new IndexedDbManualFxRateRepository()
 const frankfurter = new FrankfurterFxClient()
 const staticRub = new StaticRubRateClient()
 
+async function loadMergedQuotes(): Promise<{
+  quotes: RateTable
+  manualQuotes: RateTable
+}> {
+  const [system, manualQuotes] = await Promise.all([
+    fxRepository.getAll(),
+    manualRepository.getAll(),
+  ])
+  return {
+    quotes: mergeRateTables(system, manualQuotes),
+    manualQuotes,
+  }
+}
+
 interface FxStoreState {
   quotes: RateTable
+  manualQuotes: RateTable
   loading: boolean
   error?: string
   loadCached: () => Promise<void>
@@ -29,14 +49,17 @@ interface FxStoreState {
     base: string,
     symbols: readonly string[],
   ) => Promise<void>
+  saveManualRates: (quotes: readonly FxRateQuote[]) => Promise<void>
+  clearManualRatesForDate: (date: string) => Promise<void>
 }
 
 export const useFxStore = create<FxStoreState>((set) => ({
   quotes: [],
+  manualQuotes: [],
   loading: false,
   loadCached: async () => {
-    const quotes = await fxRepository.getAll()
-    set({ quotes })
+    const { quotes, manualQuotes } = await loadMergedQuotes()
+    set({ quotes, manualQuotes })
   },
   ensureRates: async (requests) => {
     set({ loading: true, error: undefined })
@@ -51,9 +74,10 @@ export const useFxStore = create<FxStoreState>((set) => ({
     } catch {
       failed = true
     }
-    const quotes = await fxRepository.getAll()
+    const { quotes, manualQuotes } = await loadMergedQuotes()
     set({
       quotes,
+      manualQuotes,
       loading: false,
       error: failed ? 'cached_rates' : undefined,
     })
@@ -71,12 +95,23 @@ export const useFxStore = create<FxStoreState>((set) => ({
     } catch {
       failed = true
     }
-    const quotes = await fxRepository.getAll()
+    const { quotes, manualQuotes } = await loadMergedQuotes()
     set({
       quotes,
+      manualQuotes,
       loading: false,
       error: failed ? 'cached_rates' : undefined,
     })
+  },
+  saveManualRates: async (quotes) => {
+    await manualRepository.put(quotes)
+    const merged = await loadMergedQuotes()
+    set({ quotes: merged.quotes, manualQuotes: merged.manualQuotes })
+  },
+  clearManualRatesForDate: async (date) => {
+    await manualRepository.clearDate(date)
+    const merged = await loadMergedQuotes()
+    set({ quotes: merged.quotes, manualQuotes: merged.manualQuotes })
   },
 }))
 

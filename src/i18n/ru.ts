@@ -231,6 +231,20 @@ export const ru: Dictionary = {
     moodGreen: 'Зелёное',
     versionBadgeLabel: (version) => `v${version}`,
     releaseNotesLabel: 'Что нового',
+    manualRatesTitle: 'Курсы на сегодня',
+    manualRatesDescription:
+      'Введите курсы вручную на сегодня, если справочный курс недоступен. Это переопределения и оценки, а не банковские котировки.',
+    manualRatesEdit: 'Изменить курсы на сегодня',
+    manualRatesHide: 'Скрыть редактор курсов',
+    manualRatesHint: (date) =>
+      `Курсы действуют только на ${date}. Оставьте строку пустой, чтобы пропустить валюту.`,
+    manualRatesPair: (base, quote) => `1 ${base} = … ${quote}`,
+    manualRatesSave: 'Сохранить курсы на сегодня',
+    manualRatesClear: 'Очистить курсы на сегодня',
+    manualRatesSaved:
+      'Сохранено. Пересчитанные итоги будут использовать эти курсы на сегодня.',
+    manualRatesActive: (count, date) =>
+      `Активно ручных курсов на ${date}: ${count}.`,
   },
   backup: {
     title: 'Резервная копия',

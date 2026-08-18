@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 50,
+    issue: 45,
+    date: '2026-08-18T13:20:00+03:00',
+    en: 'Settings now has a dedicated editor for today’s manual FX rates, used as overrides when reference rates are missing.',
+    ru: 'В настройках теперь есть отдельный редактор ручных курсов на сегодня — они используются как переопределения, если справочные курсы недоступны.',
+  },
+  {
     version: 49,
     issue: 47,
     date: '2026-08-18T13:05:00+03:00',

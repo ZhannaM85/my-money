@@ -225,6 +225,19 @@ export const en: Dictionary = {
     moodGreen: 'Green',
     versionBadgeLabel: (version) => `v${version}`,
     releaseNotesLabel: 'Release notes',
+    manualRatesTitle: "Today's exchange rates",
+    manualRatesDescription:
+      'Enter manual rates for today when a reference rate is missing. These are overrides and estimates, not bank quotes.',
+    manualRatesEdit: "Edit today's rates",
+    manualRatesHide: 'Hide rate editor',
+    manualRatesHint: (date) =>
+      `Rates apply only to ${date}. Leave a row blank to skip that currency.`,
+    manualRatesPair: (base, quote) => `1 ${base} = … ${quote}`,
+    manualRatesSave: "Save today's rates",
+    manualRatesClear: "Clear today's rates",
+    manualRatesSaved: 'Saved. Converted totals will use these overrides for today.',
+    manualRatesActive: (count, date) =>
+      `${count} manual rate${count === 1 ? '' : 's'} active for ${date}.`,
   },
   backup: {
     title: 'Backup',

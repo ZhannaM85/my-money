@@ -30,12 +30,12 @@ describe('SettingsScreen', () => {
         <SettingsScreen />
       </MemoryRouter>,
     )
-    expect(await screen.findByLabelText('Base currency')).toBeDisabled()
     expect(
-      screen.getByText(
+      await screen.findByText(
         'Base currency is inactive in Original mode. Switch to Converted to use it.',
       ),
     ).toBeInTheDocument()
+    expect(screen.getByLabelText('Base currency')).toBeDisabled()
   })
 
   it('keeps base currency enabled in Converted mode', async () => {
