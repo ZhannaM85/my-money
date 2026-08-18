@@ -6,7 +6,9 @@ import {
   allocation,
   assetPerformance,
   breakdownBy,
+  historicalNativeNetWorth,
   historicalNetWorth,
+  nativeTotalsByCurrency,
   netWorth,
   periodChange,
 } from '@/domain/netWorth'
@@ -218,6 +220,70 @@ describe('breakdownBy', () => {
     expect(rows).toEqual([
       { id: 'money', amount: 100, percent: 80 },
       { id: 'liabilities', amount: -25, percent: 20 },
+    ])
+  })
+})
+
+describe('nativeTotalsByCurrency', () => {
+  it('keeps every native currency even when FX is missing', () => {
+    const eur = asset({ id: 'eur', currency: 'EUR' })
+    const rub = asset({ id: 'rub', name: 'Ruble cash', currency: 'RUB' })
+    expect(
+      nativeTotalsByCurrency(
+        [eur, rub],
+        [
+          snap({ id: 's1', assetId: 'eur', amount: 1000, currency: 'EUR' }),
+          snap({
+            id: 's2',
+            assetId: 'rub',
+            amount: 20000,
+            currency: 'RUB',
+          }),
+        ],
+      ),
+    ).toEqual([
+      { currency: 'EUR', amount: 1000 },
+      { currency: 'RUB', amount: 20000 },
+    ])
+  })
+})
+
+describe('historicalNativeNetWorth', () => {
+  it('sums only the selected native currency over time', () => {
+    const eur = asset({ id: 'eur', currency: 'EUR' })
+    const rub = asset({ id: 'rub', currency: 'RUB' })
+    expect(
+      historicalNativeNetWorth(
+        [eur, rub],
+        [
+          snap({
+            id: 's1',
+            assetId: 'eur',
+            date: '2026-08-01',
+            amount: 900,
+            currency: 'EUR',
+          }),
+          snap({
+            id: 's2',
+            assetId: 'rub',
+            date: '2026-08-01',
+            amount: 20000,
+            currency: 'RUB',
+          }),
+          snap({
+            id: 's3',
+            assetId: 'eur',
+            date: '2026-08-02',
+            amount: 1000,
+            currency: 'EUR',
+          }),
+        ],
+        ['2026-08-01', '2026-08-02'],
+        'EUR',
+      ),
+    ).toEqual([
+      { date: '2026-08-01', total: 900 },
+      { date: '2026-08-02', total: 1000 },
     ])
   })
 })

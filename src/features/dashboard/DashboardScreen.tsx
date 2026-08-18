@@ -1,6 +1,12 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { historicalNetWorth, netWorth, periodChange } from '@/domain/netWorth'
+import {
+  historicalNativeNetWorth,
+  historicalNetWorth,
+  nativeTotalsByCurrency,
+  netWorth,
+  periodChange,
+} from '@/domain/netWorth'
 import { useLocale, useTranslation } from '@/i18n'
 import {
   formatAmount,
@@ -31,12 +37,17 @@ export function DashboardScreen() {
   const loadSettings = useSettingsStore((state) => state.load)
   const settingsLoaded = useSettingsStore((state) => state.loaded)
   const baseCurrency = useSettingsStore((state) => state.settings.baseCurrency)
+  const currencyDisplayMode = useSettingsStore(
+    (state) => state.settings.currencyDisplayMode,
+  )
   const quotes = useFxStore((state) => state.quotes)
   const ensureRange = useFxStore((state) => state.ensureRange)
   const [range, setRange] = useState<HistoryRange>('1M')
   const [currencyFilter, setCurrencyFilter] = useState<string>('all')
 
   const today = todayIsoDate()
+  const isOriginal = currencyDisplayMode === 'native'
+  const activeCurrencyFilter = isOriginal ? currencyFilter : 'all'
 
   useEffect(() => {
     void loadAssets()
@@ -59,55 +70,109 @@ export function DashboardScreen() {
     [snapshots],
   )
   const filteredAssets = useMemo(() => {
-    if (currencyFilter === 'all') return assets
-    return assets.filter((asset) => asset.currency === currencyFilter)
-  }, [assets, currencyFilter])
+    if (activeCurrencyFilter === 'all') return assets
+    return assets.filter((asset) => asset.currency === activeCurrencyFilter)
+  }, [assets, activeCurrencyFilter])
   const filteredAssetIds = useMemo(
     () => new Set(filteredAssets.map((asset) => asset.id)),
     [filteredAssets],
   )
   const filteredSnapshots = useMemo(() => {
-    if (currencyFilter === 'all') return snapshots
+    if (activeCurrencyFilter === 'all') return snapshots
     return snapshots.filter((snapshot) => filteredAssetIds.has(snapshot.assetId))
-  }, [currencyFilter, filteredAssetIds, snapshots])
+  }, [activeCurrencyFilter, filteredAssetIds, snapshots])
 
   useEffect(() => {
+    if (isOriginal) return
     const symbols = [
       ...new Set(filteredSnapshots.map((snapshot) => snapshot.currency)),
     ]
     void ensureRange(start, today, baseCurrency, symbols)
-  }, [baseCurrency, ensureRange, filteredSnapshots, start, today])
+  }, [
+    baseCurrency,
+    ensureRange,
+    filteredSnapshots,
+    isOriginal,
+    start,
+    today,
+  ])
 
-  const result = useMemo(
+  const convertedResult = useMemo(
     () => netWorth(filteredAssets, filteredSnapshots, quotes, baseCurrency),
     [baseCurrency, filteredAssets, filteredSnapshots, quotes],
   )
-  const series = useMemo(
+  const nativeTotals = useMemo(
+    () => nativeTotalsByCurrency(filteredAssets, filteredSnapshots),
+    [filteredAssets, filteredSnapshots],
+  )
+  const convertedSeries = useMemo(
     () =>
-      historicalNetWorth(filteredAssets, filteredSnapshots, quotes, dates, baseCurrency),
+      historicalNetWorth(
+        filteredAssets,
+        filteredSnapshots,
+        quotes,
+        dates,
+        baseCurrency,
+      ),
     [baseCurrency, dates, filteredAssets, filteredSnapshots, quotes],
   )
-  const change = periodChange(series[0]?.total ?? 0, result.total)
+  const nativeSeries = useMemo(() => {
+    if (!isOriginal || activeCurrencyFilter === 'all') return []
+    return historicalNativeNetWorth(
+      filteredAssets,
+      filteredSnapshots,
+      dates,
+      activeCurrencyFilter,
+    )
+  }, [
+    activeCurrencyFilter,
+    dates,
+    filteredAssets,
+    filteredSnapshots,
+    isOriginal,
+  ])
+
+  const series = isOriginal ? nativeSeries : convertedSeries
+  const singleNativeTotal =
+    isOriginal && activeCurrencyFilter !== 'all'
+      ? (nativeTotals.find((row) => row.currency === activeCurrencyFilter)
+          ?.amount ?? 0)
+      : null
+  const changeFrom = series[0]?.total ?? 0
+  const changeTo = isOriginal
+    ? (singleNativeTotal ?? 0)
+    : convertedResult.total
+  const change = periodChange(changeFrom, changeTo)
   const rangeIndex = RANGES.indexOf(range)
   const canZoomIn = rangeIndex > 0
   const canZoomOut = rangeIndex < RANGES.length - 1
 
-  const classRows = result.byClass.filter((row) => row.amount !== 0)
+  const classRows = convertedResult.byClass.filter((row) => row.amount !== 0)
   const loaded = assetsLoaded && settingsLoaded
   const converted = filteredSnapshots.some(
     (snapshot) => snapshot.currency !== baseCurrency,
   )
-  const missingCodes = [...new Set(result.missingRates.map((row) => row.from))]
-  const fxNote =
-    missingCodes.length > 0
+  const missingCodes = [
+    ...new Set(convertedResult.missingRates.map((row) => row.from)),
+  ]
+  const fxNote = isOriginal
+    ? undefined
+    : missingCodes.length > 0
       ? t.dashboard.fxMissing(missingCodes.join(', '))
       : converted
         ? t.dashboard.fxConverted
         : undefined
+  const changeCurrency = isOriginal
+    ? activeCurrencyFilter === 'all'
+      ? null
+      : activeCurrencyFilter
+    : baseCurrency
   const changeLabel =
-    change.percent === null
-      ? `${formatSignedAmount(change.absolute, baseCurrency, locale)} ${range === '1M' ? t.dashboard.thisMonth : t.history.overRange(range)}`
-      : `${formatSignedAmount(change.absolute, baseCurrency, locale)} (${formatPercent(change.percent, locale)}) ${range === '1M' ? t.dashboard.thisMonth : t.history.overRange(range)}`
+    changeCurrency === null
+      ? undefined
+      : change.percent === null
+        ? `${formatSignedAmount(change.absolute, changeCurrency, locale)} ${range === '1M' ? t.dashboard.thisMonth : t.history.overRange(range)}`
+        : `${formatSignedAmount(change.absolute, changeCurrency, locale)} (${formatPercent(change.percent, locale)}) ${range === '1M' ? t.dashboard.thisMonth : t.history.overRange(range)}`
 
   return (
     <div className="flex flex-col gap-6">
@@ -129,66 +194,121 @@ export function DashboardScreen() {
         />
       ) : (
         <>
-          <label className="flex flex-col gap-1.5">
-            <span className="text-sm font-medium">{t.asset.currency}</span>
-            <select
-              className="h-12 rounded-lg border border-input bg-background px-2.5 text-base"
-              value={currencyFilter}
-              onChange={(event) => setCurrencyFilter(event.target.value)}
+          <div className="flex flex-col gap-1.5">
+            <label
+              className="flex flex-col gap-1.5"
+              htmlFor="dashboard-currency-filter"
             >
-              <option value="all">{t.assets.filterAll}</option>
-              {availableCurrencies.map((code) => (
-                <option key={code} value={code}>
-                  {code}
-                </option>
-              ))}
-            </select>
-          </label>
-          <StatCard
-            label={t.dashboard.netWorth}
-            value={formatAmount(result.total, baseCurrency, locale)}
-            description={changeLabel}
-          />
-          {fxNote && <p className="text-sm text-muted-foreground">{fxNote}</p>}
-          <div className="flex items-center justify-between gap-2">
-            <span className="text-sm text-muted-foreground">
-              {t.dashboard.zoomRange}: {range}
-            </span>
-            <div className="flex gap-2">
-              <button
-                type="button"
+              <span className="text-sm font-medium">{t.asset.currency}</span>
+              <select
+                id="dashboard-currency-filter"
                 className={cn(
-                  'rounded-full px-3 py-1.5 text-sm font-medium',
-                  canZoomIn
-                    ? 'bg-muted text-foreground'
-                    : 'bg-muted text-muted-foreground',
+                  'h-12 rounded-lg border border-input bg-background px-2.5 text-base',
+                  !isOriginal && 'text-muted-foreground opacity-60',
                 )}
-                disabled={!canZoomIn}
-                onClick={() => {
-                  if (canZoomIn) setRange(RANGES[rangeIndex - 1])
-                }}
+                value={activeCurrencyFilter}
+                disabled={!isOriginal}
+                onChange={(event) => setCurrencyFilter(event.target.value)}
               >
-                {t.dashboard.zoomIn}
-              </button>
-              <button
-                type="button"
-                className={cn(
-                  'rounded-full px-3 py-1.5 text-sm font-medium',
-                  canZoomOut
-                    ? 'bg-muted text-foreground'
-                    : 'bg-muted text-muted-foreground',
-                )}
-                disabled={!canZoomOut}
-                onClick={() => {
-                  if (canZoomOut) setRange(RANGES[rangeIndex + 1])
-                }}
-              >
-                {t.dashboard.zoomOut}
-              </button>
-            </div>
+                <option value="all">{t.assets.filterAll}</option>
+                {availableCurrencies.map((code) => (
+                  <option key={code} value={code}>
+                    {code}
+                  </option>
+                ))}
+              </select>
+            </label>
+            {!isOriginal && (
+              <span className="text-xs text-muted-foreground">
+                {t.dashboard.currencyFilterDisabledHint}
+              </span>
+            )}
           </div>
-          <NetWorthChart points={series} currency={baseCurrency} />
-          {classRows.length > 0 && (
+          {isOriginal && activeCurrencyFilter === 'all' ? (
+            <div className="flex flex-col gap-2">
+              <span className="text-sm text-muted-foreground">
+                {t.dashboard.nativeHoldings}
+              </span>
+              <ul className="flex flex-col gap-2">
+                {nativeTotals.map((row) => (
+                  <li
+                    key={row.currency}
+                    className="flex items-center justify-between rounded-xl bg-card px-4 py-3 ring-1 ring-foreground/10"
+                  >
+                    <span className="text-sm font-medium">{row.currency}</span>
+                    <span className="tabular-nums text-base font-semibold">
+                      {formatAmount(row.amount, row.currency, locale)}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ) : (
+            <StatCard
+              label={t.dashboard.netWorth}
+              value={formatAmount(
+                isOriginal
+                  ? (singleNativeTotal ?? 0)
+                  : convertedResult.total,
+                isOriginal ? activeCurrencyFilter : baseCurrency,
+                locale,
+              )}
+              description={changeLabel}
+            />
+          )}
+          {fxNote && <p className="text-sm text-muted-foreground">{fxNote}</p>}
+          {isOriginal && activeCurrencyFilter === 'all' ? (
+            <p className="text-sm text-muted-foreground">
+              {t.dashboard.originalChartHint}
+            </p>
+          ) : (
+            <>
+              <div className="flex items-center justify-between gap-2">
+                <span className="text-sm text-muted-foreground">
+                  {t.dashboard.zoomRange}: {range}
+                </span>
+                <div className="flex gap-2">
+                  <button
+                    type="button"
+                    className={cn(
+                      'rounded-full px-3 py-1.5 text-sm font-medium',
+                      canZoomIn
+                        ? 'bg-muted text-foreground'
+                        : 'bg-muted text-muted-foreground',
+                    )}
+                    disabled={!canZoomIn}
+                    onClick={() => {
+                      if (canZoomIn) setRange(RANGES[rangeIndex - 1])
+                    }}
+                  >
+                    {t.dashboard.zoomIn}
+                  </button>
+                  <button
+                    type="button"
+                    className={cn(
+                      'rounded-full px-3 py-1.5 text-sm font-medium',
+                      canZoomOut
+                        ? 'bg-muted text-foreground'
+                        : 'bg-muted text-muted-foreground',
+                    )}
+                    disabled={!canZoomOut}
+                    onClick={() => {
+                      if (canZoomOut) setRange(RANGES[rangeIndex + 1])
+                    }}
+                  >
+                    {t.dashboard.zoomOut}
+                  </button>
+                </div>
+              </div>
+              <NetWorthChart
+                points={series}
+                currency={
+                  isOriginal ? activeCurrencyFilter : baseCurrency
+                }
+              />
+            </>
+          )}
+          {!isOriginal && classRows.length > 0 && (
             <ul className="flex flex-col gap-2">
               {classRows.map((row) => (
                 <li

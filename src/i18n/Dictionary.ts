@@ -43,6 +43,9 @@ export interface Dictionary {
     fxMissing: (codes: string) => string
     fxConverted: string
     allocation: string
+    nativeHoldings: string
+    originalChartHint: string
+    currencyFilterDisabledHint: string
   }
   assets: {
     title: string
@@ -153,6 +156,7 @@ export interface Dictionary {
     currencyDisplay: string
     currencyDisplayBase: string
     currencyDisplayNative: string
+    baseCurrencyDisabledHint: string
     language: string
     languageEn: string
     languageRu: string

@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 48,
+    issue: 46,
+    date: '2026-08-18T12:55:00+03:00',
+    en: 'Original mode now lists every native currency total on the Dashboard, and only one currency control stays active at a time.',
+    ru: 'В режиме «В оригинале» Сводка теперь показывает суммы по каждой валюте, и активен только один выбор валюты за раз.',
+  },
+  {
     version: 47,
     issue: 48,
     date: '2026-08-18T12:45:00+03:00',

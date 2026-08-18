@@ -69,23 +69,38 @@ export function SettingsScreen() {
           )
         }
       />
-      <label className="flex flex-col gap-1.5">
-        <span className="text-sm font-medium">{t.settings.baseCurrency}</span>
-        <select
-          className="h-12 rounded-lg border border-input bg-background px-2.5 text-base"
-          value={settings.baseCurrency}
-          disabled={!loaded}
-          onChange={(event) => {
-            void setBaseCurrency(event.target.value)
-          }}
+      <div className="flex flex-col gap-1.5">
+        <label
+          className="flex flex-col gap-1.5"
+          htmlFor="settings-base-currency"
         >
-          {BASE_CURRENCIES.map((code) => (
-            <option key={code} value={code}>
-              {code}
-            </option>
-          ))}
-        </select>
-      </label>
+          <span className="text-sm font-medium">{t.settings.baseCurrency}</span>
+          <select
+            id="settings-base-currency"
+            className={cn(
+              'h-12 rounded-lg border border-input bg-background px-2.5 text-base',
+              settings.currencyDisplayMode === 'native' &&
+                'text-muted-foreground opacity-60',
+            )}
+            value={settings.baseCurrency}
+            disabled={!loaded || settings.currencyDisplayMode === 'native'}
+            onChange={(event) => {
+              void setBaseCurrency(event.target.value)
+            }}
+          >
+            {BASE_CURRENCIES.map((code) => (
+              <option key={code} value={code}>
+                {code}
+              </option>
+            ))}
+          </select>
+        </label>
+        {settings.currencyDisplayMode === 'native' && (
+          <span className="text-xs text-muted-foreground">
+            {t.settings.baseCurrencyDisabledHint}
+          </span>
+        )}
+      </div>
       <div className="flex flex-col gap-2">
         <span className="text-sm font-medium">{t.settings.currencyDisplay}</span>
         <div className="flex flex-wrap gap-2">

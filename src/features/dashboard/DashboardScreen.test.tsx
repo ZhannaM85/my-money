@@ -152,8 +152,7 @@ describe('DashboardScreen', () => {
     expect(screen.getByText(/Chart range: 3M/)).toBeInTheDocument()
   })
 
-  it('filters dashboard totals by the selected currency', async () => {
-    const user = userEvent.setup()
+  it('disables the currency filter in Converted mode', async () => {
     const now = '2026-08-17T00:00:00.000Z'
     useFxStore.setState({
       ...useFxStore.getState(),
@@ -207,7 +206,137 @@ describe('DashboardScreen', () => {
     )
 
     expect(await screen.findAllByText(formatAmount(1100, 'EUR'))).not.toHaveLength(0)
-    await user.selectOptions(screen.getByLabelText('Currency'), 'USD')
-    expect(screen.getAllByText(formatAmount(100, 'EUR')).length).toBeGreaterThan(0)
+    expect(screen.getByLabelText('Currency')).toBeDisabled()
+  })
+
+  it('shows every native holding in Original + All', async () => {
+    const now = '2026-08-17T00:00:00.000Z'
+    await db.settings.put({
+      ...DEFAULT_SETTINGS,
+      currencyDisplayMode: 'native',
+    })
+    useSettingsStore.setState({
+      settings: { ...DEFAULT_SETTINGS, currencyDisplayMode: 'native' },
+      loaded: false,
+    })
+    await useAssetStore.getState().saveAsset(
+      {
+        id: 'eur',
+        name: 'Euro cash',
+        assetClass: 'money',
+        type: 'cash',
+        currency: 'EUR',
+        trackingStatus: 'included',
+        valuationMethod: 'account_balance',
+        updateFrequency: 'weekly',
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        assetId: 'eur',
+        date: '2026-08-17',
+        amount: 1000,
+        currency: 'EUR',
+      },
+    )
+    await useAssetStore.getState().saveAsset(
+      {
+        id: 'rub',
+        name: 'Ruble cash',
+        assetClass: 'money',
+        type: 'cash',
+        currency: 'RUB',
+        trackingStatus: 'included',
+        valuationMethod: 'account_balance',
+        updateFrequency: 'weekly',
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        assetId: 'rub',
+        date: '2026-08-17',
+        amount: 20000,
+        currency: 'RUB',
+      },
+    )
+
+    render(
+      <MemoryRouter>
+        <DashboardScreen />
+      </MemoryRouter>,
+    )
+
+    expect(await screen.findByText('Holdings by currency')).toBeInTheDocument()
+    expect(screen.getByText(formatAmount(1000, 'EUR'))).toBeInTheDocument()
+    expect(
+      screen.getByText((_, node) => node?.textContent === formatAmount(20000, 'RUB')),
+    ).toBeInTheDocument()
+    expect(screen.getByLabelText('Currency')).not.toBeDisabled()
+  })
+
+  it('filters Original mode to one native currency', async () => {
+    const user = userEvent.setup()
+    const now = '2026-08-17T00:00:00.000Z'
+    await db.settings.put({
+      ...DEFAULT_SETTINGS,
+      currencyDisplayMode: 'native',
+    })
+    useSettingsStore.setState({
+      settings: { ...DEFAULT_SETTINGS, currencyDisplayMode: 'native' },
+      loaded: false,
+    })
+    await useAssetStore.getState().saveAsset(
+      {
+        id: 'eur',
+        name: 'Euro cash',
+        assetClass: 'money',
+        type: 'cash',
+        currency: 'EUR',
+        trackingStatus: 'included',
+        valuationMethod: 'account_balance',
+        updateFrequency: 'weekly',
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        assetId: 'eur',
+        date: '2026-08-17',
+        amount: 1000,
+        currency: 'EUR',
+      },
+    )
+    await useAssetStore.getState().saveAsset(
+      {
+        id: 'rub',
+        name: 'Ruble cash',
+        assetClass: 'money',
+        type: 'cash',
+        currency: 'RUB',
+        trackingStatus: 'included',
+        valuationMethod: 'account_balance',
+        updateFrequency: 'weekly',
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        assetId: 'rub',
+        date: '2026-08-17',
+        amount: 20000,
+        currency: 'RUB',
+      },
+    )
+
+    render(
+      <MemoryRouter>
+        <DashboardScreen />
+      </MemoryRouter>,
+    )
+
+    expect(await screen.findByText('Holdings by currency')).toBeInTheDocument()
+    await user.selectOptions(screen.getByLabelText('Currency'), 'EUR')
+    expect(screen.getByText(formatAmount(1000, 'EUR'))).toBeInTheDocument()
+    expect(
+      screen.queryByText((_, node) => node?.textContent === formatAmount(20000, 'RUB')),
+    ).not.toBeInTheDocument()
   })
 })

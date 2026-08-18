@@ -57,6 +57,48 @@ function convertedContribution(
   return { amount: isLiability(asset) ? -native : native }
 }
 
+/** Latest native totals by snapshot currency. Never skips for missing FX. */
+export function nativeTotalsByCurrency(
+  assets: readonly Asset[],
+  snapshots: readonly AssetSnapshot[],
+): { currency: string; amount: number }[] {
+  const buckets = new Map<string, number>()
+  for (const asset of assets) {
+    if (!contributesToNetWorth(asset)) continue
+    const snapshot = latestSnapshot(snapshots, asset.id)
+    if (!snapshot) continue
+    const native = effectiveAmount(snapshot.amount, asset)
+    const signed = isLiability(asset) ? -native : native
+    buckets.set(
+      snapshot.currency,
+      (buckets.get(snapshot.currency) ?? 0) + signed,
+    )
+  }
+  return [...buckets.entries()]
+    .map(([currency, amount]) => ({ currency, amount }))
+    .sort((a, b) => a.currency.localeCompare(b.currency))
+}
+
+/** Native (unconverted) historical series for one currency filter. */
+export function historicalNativeNetWorth(
+  assets: readonly Asset[],
+  snapshots: readonly AssetSnapshot[],
+  dates: readonly string[],
+  currency: string,
+): { date: string; total: number }[] {
+  return dates.map((date) => {
+    let total = 0
+    for (const asset of assets) {
+      if (!contributesToNetWorth(asset)) continue
+      const snapshot = snapshotsOnOrBefore(snapshots, asset.id, date)
+      if (!snapshot || snapshot.currency !== currency) continue
+      const native = effectiveAmount(snapshot.amount, asset)
+      total += isLiability(asset) ? -native : native
+    }
+    return { date, total }
+  })
+}
+
 export function netWorth(
   assets: readonly Asset[],
   snapshots: readonly AssetSnapshot[],

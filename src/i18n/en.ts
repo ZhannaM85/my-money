@@ -39,6 +39,11 @@ export const en: Dictionary = {
     fxConverted:
       'Converted with reference exchange rates. Estimates, not executable quotes.',
     allocation: 'Allocation',
+    nativeHoldings: 'Holdings by currency',
+    originalChartHint:
+      'A combined chart needs Converted mode. Pick one currency to see its native history.',
+    currencyFilterDisabledHint:
+      'Currency filter is inactive in Converted mode. Change the base currency in Settings.',
   },
   assets: {
     title: 'Assets',
@@ -207,6 +212,8 @@ export const en: Dictionary = {
     currencyDisplay: 'Asset display',
     currencyDisplayBase: 'Converted',
     currencyDisplayNative: 'Original',
+    baseCurrencyDisabledHint:
+      'Base currency is inactive in Original mode. Switch to Converted to use it.',
     language: 'Language',
     languageEn: 'English',
     languageRu: 'Русский',

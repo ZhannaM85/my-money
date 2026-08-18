@@ -41,6 +41,11 @@ export const ru: Dictionary = {
     fxConverted:
       'Пересчитано по справочным курсам. Это оценки, а не исполняемые котировки.',
     allocation: 'Распределение',
+    nativeHoldings: 'Суммы по валютам',
+    originalChartHint:
+      'Общий график доступен в режиме «В пересчёте». Выберите одну валюту, чтобы увидеть её историю в оригинале.',
+    currencyFilterDisabledHint:
+      'Фильтр валюты неактивен в режиме «В пересчёте». Базовую валюту меняйте в настройках.',
   },
   assets: {
     title: 'Активы',
@@ -212,6 +217,8 @@ export const ru: Dictionary = {
     currencyDisplay: 'Показ активов',
     currencyDisplayBase: 'В пересчёте',
     currencyDisplayNative: 'В оригинале',
+    baseCurrencyDisabledHint:
+      'Базовая валюта неактивна в режиме «В оригинале». Переключитесь на «В пересчёте», чтобы использовать её.',
     language: 'Язык',
     languageEn: 'English',
     languageRu: 'Русский',
