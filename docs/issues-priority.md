@@ -148,6 +148,7 @@ _EUR base + RUB assets; iPhone tab bar; appearance; car; joint ownership; decima
 | [#58](https://github.com/ZhannaM85/my-money/issues/58) | 🔍 Pending validation | History shows 0,00 ₽ for the selected range while the list and chart moved | History (and Dashboard range line) now use last − first of the visible series, so FX moves on later dates are not shown as 0,00. |
 | [#59](https://github.com/ZhannaM85/my-money/issues/59) | 🔍 Pending validation | Retune Colorful mood so it is not a black UI | Colorful now uses vivid teal chrome and saturated category colors; dark mode is teal-slate, not #0a0a0a. Other moods unchanged. |
 | [#60](https://github.com/ZhannaM85/my-money/issues/60) | 🔲 Open | Collapse Dashboard holdings behind an accordion | Converted Holdings list (and Original + All native totals if crowded) should start collapsed so the chart stays near the net-worth card. |
+| [#61](https://github.com/ZhannaM85/my-money/issues/61) | 🔲 Open | Allow adding an asset with a past first-snapshot date | New asset form always stamps today. Add a date field (default today; past allowed, future rejected) so history can start before install day. |
 
 ---
 
