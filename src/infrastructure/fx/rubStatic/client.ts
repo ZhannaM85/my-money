@@ -4,6 +4,7 @@ import type { FxRateQuote } from '@/domain/fx'
 const staticRubSeriesSchema = z.object({
   base: z.string(),
   quote: z.literal('RUB'),
+  source: z.string().optional(),
   quotes: z.array(
     z.object({
       date: z.string(),

@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 49,
+    issue: 47,
+    date: '2026-08-18T13:05:00+03:00',
+    en: 'Ruble conversions now use National Bank of Georgia reference rates (via GEL) in the hosted static dataset.',
+    ru: 'Конвертация рубля теперь использует справочные курсы Национального банка Грузии (через GEL) во встроенном статическом наборе.',
+  },
+  {
     version: 48,
     issue: 46,
     date: '2026-08-18T12:55:00+03:00',
