@@ -2,6 +2,9 @@ import type { Asset } from '@/domain/asset'
 import type { AssetSnapshot } from '@/domain/snapshot'
 import type { Dictionary } from '@/i18n/Dictionary'
 import { en } from '@/i18n/en'
+import { parseAmount } from '@/shared/lib/money'
+
+export { parseAmount }
 
 export const CSV_FIELDS = ['date', 'asset', 'amount', 'currency'] as const
 export type CsvField = (typeof CSV_FIELDS)[number]
@@ -67,16 +70,6 @@ export function mappingIsComplete(
 export function parseIsoDate(raw: string): string | undefined {
   const trimmed = raw.trim().slice(0, 10)
   return ISO_DATE.test(trimmed) ? trimmed : undefined
-}
-
-export function parseAmount(raw: string): number | undefined {
-  const trimmed = raw.trim().replace(/\s/g, '')
-  if (trimmed === '') return undefined
-  const normalized = trimmed.includes('.')
-    ? trimmed.replace(/,/g, '')
-    : trimmed.replace(',', '.')
-  const amount = Number(normalized)
-  return Number.isFinite(amount) ? amount : undefined
 }
 
 function resolveAsset(

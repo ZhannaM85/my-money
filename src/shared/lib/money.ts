@@ -4,6 +4,29 @@ export function todayIsoDate(now = new Date()): string {
   return now.toISOString().slice(0, 10)
 }
 
+/** Parse a typed or imported amount. Accepts `,` or `.` as the decimal separator. */
+export function parseAmount(raw: string): number | undefined {
+  const trimmed = raw.trim().replace(/\s/g, '')
+  if (trimmed === '') return undefined
+  const lastComma = trimmed.lastIndexOf(',')
+  const lastDot = trimmed.lastIndexOf('.')
+  const lastSep = Math.max(lastComma, lastDot)
+  let normalized: string
+  if (lastSep === -1) {
+    normalized = trimmed
+  } else {
+    const fraction = trimmed.slice(lastSep + 1)
+    const decimal = /^\d{1,2}$/.test(fraction)
+    const integer = (decimal ? trimmed.slice(0, lastSep) : trimmed).replace(
+      /[.,]/g,
+      '',
+    )
+    normalized = decimal ? `${integer}.${fraction}` : integer
+  }
+  const amount = Number(normalized)
+  return Number.isFinite(amount) ? amount : undefined
+}
+
 function localeTag(locale: Locale): string {
   return locale === 'ru' ? 'ru-RU' : 'en-US'
 }

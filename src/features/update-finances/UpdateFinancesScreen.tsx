@@ -5,7 +5,7 @@ import {
 } from '@/domain/asset'
 import { latestSnapshot } from '@/domain/snapshot'
 import { formatLastUpdated, useLocale, useTranslation } from '@/i18n'
-import { formatAmount, todayIsoDate } from '@/shared/lib/money'
+import { formatAmount, parseAmount, todayIsoDate } from '@/shared/lib/money'
 import { Button } from '@/shared/ui/button'
 import { EmptyState } from '@/shared/ui/empty-state'
 import { Input } from '@/shared/ui/input'
@@ -69,8 +69,8 @@ export function UpdateFinancesScreen() {
     for (const { asset, snapshot } of rows) {
       const raw = drafts[asset.id]?.trim() ?? ''
       if (raw !== '') {
-        const amount = Number(raw)
-        if (Number.isNaN(amount)) {
+        const amount = parseAmount(raw)
+        if (amount === undefined) {
           setError(t.update.enterNumberFor(asset.name))
           return
         }

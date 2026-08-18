@@ -9,6 +9,7 @@ import {
   formatAmount,
   formatPercent,
   formatSignedAmount,
+  parseAmount,
   todayIsoDate,
 } from '@/shared/lib/money'
 import { Button } from '@/shared/ui/button'
@@ -120,8 +121,8 @@ export function AssetDetailsScreen() {
         : null
 
   async function saveAmount() {
-    const amount = Number(amountDraft)
-    if (amountDraft.trim() === '' || Number.isNaN(amount)) {
+    const amount = parseAmount(amountDraft)
+    if (amount === undefined) {
       setAmountError(t.asset.enterCurrentAmount)
       return
     }

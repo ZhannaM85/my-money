@@ -14,6 +14,7 @@ import {
 } from '@/domain/asset'
 import { BASE_CURRENCIES } from '@/domain/settings'
 import { useTranslation } from '@/i18n'
+import { parseAmount } from '@/shared/lib/money'
 import { Button } from '@/shared/ui/button'
 import { NumberInput } from '@/shared/ui/number-input'
 import { TextField } from '@/shared/ui/text-field'
@@ -101,21 +102,17 @@ export function AssetForm({
       setError(t.asset.nameRequired)
       return
     }
-    const parsedAmount = amount.trim() === '' ? undefined : Number(amount)
-    if (
-      requireAmount &&
-      (parsedAmount === undefined || Number.isNaN(parsedAmount))
-    ) {
+    const parsedAmount = parseAmount(amount)
+    if (requireAmount && parsedAmount === undefined) {
       setError(t.asset.enterCurrentAmount)
       return
     }
-    if (parsedAmount !== undefined && Number.isNaN(parsedAmount)) {
+    if (amount.trim() !== '' && parsedAmount === undefined) {
       setError(t.asset.amountMustBeNumber)
       return
     }
-    const purchase =
-      purchaseValue.trim() === '' ? undefined : Number(purchaseValue)
-    if (purchaseValue.trim() !== '' && Number.isNaN(purchase)) {
+    const purchase = parseAmount(purchaseValue)
+    if (purchaseValue.trim() !== '' && purchase === undefined) {
       setError(t.asset.purchaseMustBeNumber)
       return
     }
