@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 46,
+    issue: 43,
+    date: '2026-08-18T11:44:00+03:00',
+    en: 'The Dashboard can now be filtered to one currency at a time without changing the global Settings display mode.',
+    ru: 'Сводку теперь можно отфильтровать по одной валюте, не меняя глобальный режим отображения в настройках.',
+  },
+  {
     version: 45,
     issue: 42,
     date: '2026-08-18T11:41:00+03:00',

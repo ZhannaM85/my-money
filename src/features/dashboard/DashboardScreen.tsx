@@ -34,6 +34,7 @@ export function DashboardScreen() {
   const quotes = useFxStore((state) => state.quotes)
   const ensureRange = useFxStore((state) => state.ensureRange)
   const [range, setRange] = useState<HistoryRange>('1M')
+  const [currencyFilter, setCurrencyFilter] = useState<string>('all')
 
   const today = todayIsoDate()
 
@@ -53,19 +54,38 @@ export function DashboardScreen() {
   const start = rangeStartIso(range, today, earliest)
   const dates = useMemo(() => isoDatesInclusive(start, today), [start, today])
 
+  const availableCurrencies = useMemo(
+    () => [...new Set(snapshots.map((snapshot) => snapshot.currency))].sort(),
+    [snapshots],
+  )
+  const filteredAssets = useMemo(() => {
+    if (currencyFilter === 'all') return assets
+    return assets.filter((asset) => asset.currency === currencyFilter)
+  }, [assets, currencyFilter])
+  const filteredAssetIds = useMemo(
+    () => new Set(filteredAssets.map((asset) => asset.id)),
+    [filteredAssets],
+  )
+  const filteredSnapshots = useMemo(() => {
+    if (currencyFilter === 'all') return snapshots
+    return snapshots.filter((snapshot) => filteredAssetIds.has(snapshot.assetId))
+  }, [currencyFilter, filteredAssetIds, snapshots])
+
   useEffect(() => {
-    const symbols = [...new Set(snapshots.map((snapshot) => snapshot.currency))]
+    const symbols = [
+      ...new Set(filteredSnapshots.map((snapshot) => snapshot.currency)),
+    ]
     void ensureRange(start, today, baseCurrency, symbols)
-  }, [baseCurrency, ensureRange, snapshots, start, today])
+  }, [baseCurrency, ensureRange, filteredSnapshots, start, today])
 
   const result = useMemo(
-    () => netWorth(assets, snapshots, quotes, baseCurrency),
-    [assets, baseCurrency, quotes, snapshots],
+    () => netWorth(filteredAssets, filteredSnapshots, quotes, baseCurrency),
+    [baseCurrency, filteredAssets, filteredSnapshots, quotes],
   )
   const series = useMemo(
     () =>
-      historicalNetWorth(assets, snapshots, quotes, dates, baseCurrency),
-    [assets, baseCurrency, dates, quotes, snapshots],
+      historicalNetWorth(filteredAssets, filteredSnapshots, quotes, dates, baseCurrency),
+    [baseCurrency, dates, filteredAssets, filteredSnapshots, quotes],
   )
   const change = periodChange(series[0]?.total ?? 0, result.total)
   const rangeIndex = RANGES.indexOf(range)
@@ -74,7 +94,7 @@ export function DashboardScreen() {
 
   const classRows = result.byClass.filter((row) => row.amount !== 0)
   const loaded = assetsLoaded && settingsLoaded
-  const converted = snapshots.some(
+  const converted = filteredSnapshots.some(
     (snapshot) => snapshot.currency !== baseCurrency,
   )
   const missingCodes = [...new Set(result.missingRates.map((row) => row.from))]
@@ -109,6 +129,21 @@ export function DashboardScreen() {
         />
       ) : (
         <>
+          <label className="flex flex-col gap-1.5">
+            <span className="text-sm font-medium">{t.asset.currency}</span>
+            <select
+              className="h-12 rounded-lg border border-input bg-background px-2.5 text-base"
+              value={currencyFilter}
+              onChange={(event) => setCurrencyFilter(event.target.value)}
+            >
+              <option value="all">{t.assets.filterAll}</option>
+              {availableCurrencies.map((code) => (
+                <option key={code} value={code}>
+                  {code}
+                </option>
+              ))}
+            </select>
+          </label>
           <StatCard
             label={t.dashboard.netWorth}
             value={formatAmount(result.total, baseCurrency, locale)}

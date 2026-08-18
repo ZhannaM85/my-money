@@ -12,6 +12,7 @@ import {
 } from '@/shared/lib/money'
 import { monthStartIso } from '@/shared/lib/dates'
 import { useAssetStore } from '@/stores/assetStore'
+import { useFxStore } from '@/stores/fxStore'
 import { useSettingsStore } from '@/stores/settingsStore'
 import { DashboardScreen } from './DashboardScreen'
 
@@ -20,6 +21,12 @@ beforeEach(async () => {
   await db.snapshots.clear()
   await db.settings.clear()
   useAssetStore.setState({ assets: [], snapshots: [], loaded: false })
+  useFxStore.setState({
+    ...useFxStore.getState(),
+    quotes: [],
+    loading: false,
+    error: undefined,
+  })
   useSettingsStore.setState({
     settings: DEFAULT_SETTINGS,
     loaded: false,
@@ -143,5 +150,64 @@ describe('DashboardScreen', () => {
     expect(await screen.findByText(/Chart range: 1M/)).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: 'Zoom out' }))
     expect(screen.getByText(/Chart range: 3M/)).toBeInTheDocument()
+  })
+
+  it('filters dashboard totals by the selected currency', async () => {
+    const user = userEvent.setup()
+    const now = '2026-08-17T00:00:00.000Z'
+    useFxStore.setState({
+      ...useFxStore.getState(),
+      quotes: [{ date: '2026-08-17', base: 'EUR', quote: 'USD', rate: 1.1 }],
+    })
+    await useAssetStore.getState().saveAsset(
+      {
+        id: 'eur',
+        name: 'Euro cash',
+        assetClass: 'money',
+        type: 'cash',
+        currency: 'EUR',
+        trackingStatus: 'included',
+        valuationMethod: 'account_balance',
+        updateFrequency: 'weekly',
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        assetId: 'eur',
+        date: '2026-08-17',
+        amount: 1000,
+        currency: 'EUR',
+      },
+    )
+    await useAssetStore.getState().saveAsset(
+      {
+        id: 'usd',
+        name: 'Dollar cash',
+        assetClass: 'money',
+        type: 'cash',
+        currency: 'USD',
+        trackingStatus: 'included',
+        valuationMethod: 'account_balance',
+        updateFrequency: 'weekly',
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        assetId: 'usd',
+        date: '2026-08-17',
+        amount: 110,
+        currency: 'USD',
+      },
+    )
+
+    render(
+      <MemoryRouter>
+        <DashboardScreen />
+      </MemoryRouter>,
+    )
+
+    expect(await screen.findAllByText(formatAmount(1100, 'EUR'))).not.toHaveLength(0)
+    await user.selectOptions(screen.getByLabelText('Currency'), 'USD')
+    expect(screen.getAllByText(formatAmount(100, 'EUR')).length).toBeGreaterThan(0)
   })
 })
