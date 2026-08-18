@@ -139,6 +139,7 @@ _EUR base + RUB assets; iPhone tab bar; appearance; car; joint ownership; decima
 | [#49](https://github.com/ZhannaM85/my-money/issues/49) | 🔲 Open | Converted totals still fail on device — add FX diagnostic loggers | Live `EUR.json` is healthy (NBG, 1826 quotes). Suspected stale PWA/SW cache, IndexedDB FX cache, or silent missing-rate skips. Logging only — do not reopen #23/#44/#47/#48. |
 | [#50](https://github.com/ZhannaM85/my-money/issues/50) | 🔲 Open | Manual FX save gives no feedback — collapse or show read-only rates | After Save today's rates, editor should collapse or switch to read-only so save does not feel inert. |
 | [#51](https://github.com/ZhannaM85/my-money/issues/51) | 🔲 Open | Converted Dashboard should list each item with original and converted amounts | Keep the combined total; also list holdings (or currency rows) with native + base amounts, similar spirit to Original + All. |
+| [#52](https://github.com/ZhannaM85/my-money/issues/52) | 🔲 Open | Show unconvertible holdings instead of hiding them | When FX is missing, still show the entry with its native amount and a clear “conversion not available” note. |
 
 ---
 
