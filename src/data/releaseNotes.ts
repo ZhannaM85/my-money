@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 64,
+    issue: 59,
+    date: '2026-08-19T00:50:00+03:00',
+    en: 'Colorful stays dark: charcoal page and cards, with violet on buttons and actions instead of a teal/green skin.',
+    ru: 'Цветное остаётся тёмным: угольные фон и карточки, фиолетовые кнопки и действия вместо бирюзово-зелёной оболочки.',
+  },
+  {
     version: 63,
     issue: 61,
     date: '2026-08-18T14:55:00+03:00',

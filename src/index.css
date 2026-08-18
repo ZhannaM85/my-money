@@ -6,31 +6,31 @@
 
 :root,
 :root[data-mood='ledger'] {
-  color-scheme: light dark;
+  color-scheme: dark;
   --radius: 0.625rem;
-  --background: #f3f7f6;
-  --foreground: #1a2b3c;
-  --card: #ffffff;
-  --card-foreground: #1a2b3c;
-  --popover: #ffffff;
-  --popover-foreground: #1a2b3c;
-  --primary: #0e8a7d;
+  --background: #0a0a0a;
+  --foreground: #fafafa;
+  --card: #171717;
+  --card-foreground: #fafafa;
+  --popover: #171717;
+  --popover-foreground: #fafafa;
+  --primary: #7c3aed;
   --primary-foreground: #ffffff;
-  --secondary: #e7f2f0;
-  --secondary-foreground: #1a2b3c;
-  --muted: #e7f2f0;
-  --muted-foreground: #5b6b7c;
-  --accent: #d4f3ee;
-  --accent-foreground: #1a2b3c;
+  --secondary: #262626;
+  --secondary-foreground: #fafafa;
+  --muted: #262626;
+  --muted-foreground: #a3a3a3;
+  --accent: #262626;
+  --accent-foreground: #fafafa;
   --destructive: oklch(0.52 0.245 27.325);
-  --border: #d5e3e0;
-  --input: #5b6b7c;
-  --ring: #0e8a7d;
-  --chart-money: #0e8a7d;
-  --chart-investments: #22a06b;
-  --chart-property: #7c5cf5;
-  --chart-valuables: #e8a017;
-  --chart-liabilities: #e05a5a;
+  --border: #404040;
+  --input: #a3a3a3;
+  --ring: #7c3aed;
+  --chart-money: #2dd4bf;
+  --chart-investments: #4ade80;
+  --chart-property: #a78bfa;
+  --chart-valuables: #fbbf24;
+  --chart-liabilities: #fb7185;
 }
 
 :root[data-mood='green'] {
@@ -60,25 +60,25 @@
 
 .dark,
 :root[data-mood='ledger'].dark {
-  --background: #12222a;
-  --foreground: #e8f2f4;
-  --card: #1a3038;
-  --card-foreground: #e8f2f4;
-  --popover: #1a3038;
-  --popover-foreground: #e8f2f4;
-  --primary: #2ec4b6;
-  --primary-foreground: #0a1a1e;
-  --secondary: #1a3038;
-  --secondary-foreground: #e8f2f4;
-  --muted: #1a3038;
-  --muted-foreground: #8aa3ad;
-  --accent: #1e4a48;
-  --accent-foreground: #e8f2f4;
+  --background: #0a0a0a;
+  --foreground: #fafafa;
+  --card: #171717;
+  --card-foreground: #fafafa;
+  --popover: #171717;
+  --popover-foreground: #fafafa;
+  --primary: #a78bfa;
+  --primary-foreground: #0a0a0a;
+  --secondary: #262626;
+  --secondary-foreground: #fafafa;
+  --muted: #262626;
+  --muted-foreground: #a3a3a3;
+  --accent: #262626;
+  --accent-foreground: #fafafa;
   --destructive: oklch(0.704 0.191 22.216);
-  --border: #2a454c;
-  --input: #8aa3ad;
-  --ring: #2ec4b6;
-  --chart-money: #2ec4b6;
+  --border: #404040;
+  --input: #a3a3a3;
+  --ring: #a78bfa;
+  --chart-money: #2dd4bf;
   --chart-investments: #4ade80;
   --chart-property: #a78bfa;
   --chart-valuables: #fbbf24;
