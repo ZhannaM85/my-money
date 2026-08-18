@@ -9,7 +9,7 @@ export function OfflineBanner() {
   if (isNativePlatform() || isOnline) return null
 
   return (
-    <div className="border-b border-border bg-muted px-4 py-2 text-sm text-foreground">
+    <div className="sticky top-0 z-20 border-b border-border bg-muted px-4 py-2 text-sm text-foreground">
       {t.offline.offlineText}
     </div>
   )

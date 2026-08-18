@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 16,
+    issue: 38,
+    date: '2026-08-18T10:15:00+03:00',
+    en: 'The offline banner now appears in iPhone Safari when airplane mode is on, not only when the browser reports offline.',
+    ru: 'Баннер «нет сети» теперь появляется в Safari на iPhone при включённом режиме полёта, а не только когда браузер сам сообщает об отсутствии сети.',
+  },
+  {
     version: 15,
     issue: 37,
     date: '2026-08-18T10:10:00+03:00',
