@@ -145,6 +145,7 @@ _EUR base + RUB assets; iPhone tab bar; appearance; car; joint ownership; decima
 | [#52](https://github.com/ZhannaM85/my-money/issues/52) | 🔍 Pending validation | Show unconvertible holdings instead of hiding them | Converted Dashboard lists missing-rate holdings with native amount + “Conversion not available”. Combined total still excludes them. |
 | [#56](https://github.com/ZhannaM85/my-money/issues/56) | 🔍 Pending validation | Chart Y-axis repeats the same compact label on every tick | Compact axis labels now keep enough fraction digits so nearby million-scale ticks stay distinct (1,97 млн vs 2 млн). |
 | [#57](https://github.com/ZhannaM85/my-money/issues/57) | 🔍 Pending validation | Add Soft Finance, Neutral, and Pastel appearance moods | Colorful and Green stay. Extra moods: Soft Finance, Neutral (slate, not black-black), Pastel. |
+| [#58](https://github.com/ZhannaM85/my-money/issues/58) | 🔲 Open | History shows 0,00 ₽ for the selected range while the list and chart moved | Live 3M: card says 0,00 ₽ за 3M and 2 810 175,64 ₽ (17 Aug); list 18 Aug is 2 821 334,32 ₽ (+11 158,68). Card should use last − first of the visible series. |
 
 ---
 
