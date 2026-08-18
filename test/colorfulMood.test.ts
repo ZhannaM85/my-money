@@ -4,7 +4,7 @@ import { fileURLToPath } from 'node:url'
 import { describe, expect, it } from 'vitest'
 
 const css = readFileSync(
-  join(dirname(fileURLToPath(import.meta.url)), 'index.css'),
+  join(dirname(fileURLToPath(import.meta.url)), '../src/index.css'),
   'utf8',
 )
 
