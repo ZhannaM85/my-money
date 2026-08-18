@@ -392,8 +392,74 @@ describe('DashboardScreen', () => {
     expect(await screen.findByText('Ruble cash')).toBeInTheDocument()
     expect(screen.getByText('Conversion not available')).toBeInTheDocument()
     expect(
+      screen.getAllByText(
+        (_, node) =>
+          node?.children.length === 0 &&
+          node.textContent === formatAmount(20000, 'RUB'),
+      ).length,
+    ).toBeGreaterThan(0)
+    expect(screen.getAllByText(formatAmount(1000, 'EUR')).length).toBeGreaterThan(0)
+  })
+
+  it('lists each Converted holding with original and converted amounts', async () => {
+    const now = '2026-08-17T00:00:00.000Z'
+    useFxStore.setState({
+      ...useFxStore.getState(),
+      quotes: [{ date: '2026-08-17', base: 'EUR', quote: 'RUB', rate: 100 }],
+    })
+    await useAssetStore.getState().saveAsset(
+      {
+        id: 'eur',
+        name: 'Euro cash',
+        assetClass: 'money',
+        type: 'cash',
+        currency: 'EUR',
+        trackingStatus: 'included',
+        valuationMethod: 'account_balance',
+        updateFrequency: 'weekly',
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        assetId: 'eur',
+        date: '2026-08-17',
+        amount: 1000,
+        currency: 'EUR',
+      },
+    )
+    await useAssetStore.getState().saveAsset(
+      {
+        id: 'rub',
+        name: 'Ruble cash',
+        assetClass: 'money',
+        type: 'cash',
+        currency: 'RUB',
+        trackingStatus: 'included',
+        valuationMethod: 'account_balance',
+        updateFrequency: 'weekly',
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        assetId: 'rub',
+        date: '2026-08-17',
+        amount: 20000,
+        currency: 'RUB',
+      },
+    )
+
+    render(
+      <MemoryRouter>
+        <DashboardScreen />
+      </MemoryRouter>,
+    )
+
+    expect(await screen.findByText('Ruble cash')).toBeInTheDocument()
+    expect(screen.getByText('Euro cash')).toBeInTheDocument()
+    expect(
       screen.getByText((_, node) => node?.textContent === formatAmount(20000, 'RUB')),
     ).toBeInTheDocument()
-    expect(screen.getAllByText(formatAmount(1000, 'EUR')).length).toBeGreaterThan(0)
+    expect(screen.getAllByText(formatAmount(200, 'EUR')).length).toBeGreaterThan(0)
+    expect(screen.getAllByText(formatAmount(1200, 'EUR')).length).toBeGreaterThan(0)
   })
 })

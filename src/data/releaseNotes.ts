@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 53,
+    issue: 51,
+    date: '2026-08-18T13:45:00+03:00',
+    en: 'Converted Dashboard now lists each holding with its original amount and the converted base-currency amount under the combined total.',
+    ru: 'В режиме пересчёта Сводка теперь показывает каждую позицию с суммой в оригинале и пересчитанной суммой в базовой валюте под общим итогом.',
+  },
+  {
     version: 52,
     issue: 52,
     date: '2026-08-18T13:40:00+03:00',

@@ -138,7 +138,7 @@ _EUR base + RUB assets; iPhone tab bar; appearance; car; joint ownership; decima
 | [#48](https://github.com/ZhannaM85/my-money/issues/48) | 🔍 Pending validation | Static CBR RUB dataset deploys empty (no EUR/RUB quotes) | Parser now accepts `Date`+`Id` on CBR `Record`s; empty series fails the generate step. Missing-rate copy no longer claims ECB. |
 | [#49](https://github.com/ZhannaM85/my-money/issues/49) | 🔲 Open | Converted totals still fail on device — add FX diagnostic loggers | Live `EUR.json` is healthy (NBG, 1826 quotes). Suspected stale PWA/SW cache, IndexedDB FX cache, or silent missing-rate skips. Logging only — do not reopen #23/#44/#47/#48. |
 | [#50](https://github.com/ZhannaM85/my-money/issues/50) | 🔍 Pending validation | Manual FX save gives no feedback — collapse or show read-only rates | After save, editor collapses and today’s overrides show as a read-only list. |
-| [#51](https://github.com/ZhannaM85/my-money/issues/51) | 🔲 Open | Converted Dashboard should list each item with original and converted amounts | Keep the combined total; also list holdings (or currency rows) with native + base amounts, similar spirit to Original + All. |
+| [#51](https://github.com/ZhannaM85/my-money/issues/51) | 🔍 Pending validation | Converted Dashboard should list each item with original and converted amounts | Converted Dashboard lists each holding with native + base amounts under the combined total. |
 | [#52](https://github.com/ZhannaM85/my-money/issues/52) | 🔍 Pending validation | Show unconvertible holdings instead of hiding them | Converted Dashboard lists missing-rate holdings with native amount + “Conversion not available”. Combined total still excludes them. |
 
 ---

@@ -112,10 +112,6 @@ export function DashboardScreen() {
       ),
     [baseCurrency, filteredAssets, filteredSnapshots, quotes],
   )
-  const unconvertibleHoldings = useMemo(
-    () => convertedHoldings.filter((row) => !row.conversionAvailable),
-    [convertedHoldings],
-  )
   const nativeTotals = useMemo(
     () => nativeTotalsByCurrency(filteredAssets, filteredSnapshots),
     [filteredAssets, filteredSnapshots],
@@ -272,13 +268,13 @@ export function DashboardScreen() {
             />
           )}
           {fxNote && <p className="text-sm text-muted-foreground">{fxNote}</p>}
-          {!isOriginal && unconvertibleHoldings.length > 0 && (
+          {!isOriginal && convertedHoldings.length > 0 && (
             <div className="flex flex-col gap-2">
               <span className="text-sm text-muted-foreground">
                 {t.dashboard.holdings}
               </span>
               <ul className="flex flex-col gap-2">
-                {unconvertibleHoldings.map((row) => (
+                {convertedHoldings.map((row) => (
                   <li
                     key={row.assetId}
                     className="flex items-center justify-between gap-3 rounded-xl bg-card px-4 py-3 ring-1 ring-foreground/10"
@@ -288,11 +284,25 @@ export function DashboardScreen() {
                         {row.name}
                       </span>
                       <span className="text-xs text-muted-foreground">
-                        {t.dashboard.conversionUnavailable}
+                        {row.conversionAvailable
+                          ? formatAmount(row.nativeAmount, row.currency, locale)
+                          : t.dashboard.conversionUnavailable}
                       </span>
                     </span>
-                    <span className="shrink-0 tabular-nums text-sm">
-                      {formatAmount(row.nativeAmount, row.currency, locale)}
+                    <span className="shrink-0 text-right">
+                      {row.conversionAvailable && row.convertedAmount !== null ? (
+                        <span className="block tabular-nums text-sm font-medium">
+                          {formatAmount(
+                            row.convertedAmount,
+                            baseCurrency,
+                            locale,
+                          )}
+                        </span>
+                      ) : (
+                        <span className="block tabular-nums text-sm">
+                          {formatAmount(row.nativeAmount, row.currency, locale)}
+                        </span>
+                      )}
                     </span>
                   </li>
                 ))}
