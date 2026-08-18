@@ -129,6 +129,7 @@ _EUR base + RUB assets; iPhone tab bar; appearance; car; joint ownership; decima
 | [#39](https://github.com/ZhannaM85/my-money/issues/39) | 🔍 Pending validation | Show pull-to-refresh loading indicator in the PWA | Turtle `PullToRefreshIndicator`: floating `RefreshCw` badge while dragging down, spinner once refresh starts. My Money has no visible pull feedback today. |
 | [#40](https://github.com/ZhannaM85/my-money/issues/40) | 🔲 Open | Add spacing between bottom content and sticky footer | Dashboard bottom content, especially `Allocation`, sits too close to the sticky tab bar on iPhone. Keep footer sticky, but add breathing room above it. |
 | [#41](https://github.com/ZhannaM85/my-money/issues/41) | 🔲 Open | Add zoom in and zoom out controls for graphs | Turtle Steps allows zooming chart ranges on Dashboard. My Money graphs currently have no similar zoom interaction. |
+| [#42](https://github.com/ZhannaM85/my-money/issues/42) | 🔲 Open | Add a show all currencies display option | Current base-currency setting acts as a conversion target. Add an explicit mode for showing mixed-currency books without forcing everything into one display currency. |
 
 ---
 
