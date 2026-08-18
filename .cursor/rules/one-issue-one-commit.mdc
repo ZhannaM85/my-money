@@ -1,0 +1,33 @@
+---
+description: One GitHub issue = one commit, one push, then the validation label. Never bulk-ship a batch.
+alwaysApply: true
+---
+
+# One issue → one commit → push → `validation`
+
+Live-feedback issues use the **same** ship path as epics. A phone deploy is not an excuse to collapse them.
+
+Do **not** leave completed work local. Unless the user explicitly says to keep changes unpushed, "finished" means:
+
+- local checks for that change passed
+- commit created
+- commit pushed
+- and, for issue-backed work, the `validation` label added after the push
+
+If you have already implemented a requested fix and verified it, **push before telling the user it is done**.
+
+After each issue is implemented and the local checks for that issue pass:
+
+1. **One commit** whose subject starts with `#N:` (only that issue’s code + its `docs/issues-priority.md` row → 🔍 Pending validation).
+2. **`git push` that commit** before starting the next issue.
+3. **`gh issue edit N --add-label validation`** immediately after the push.
+
+Do **not** wait for on-device confirmation to add `validation`. Closing / `validated` / archive still wait for the user.
+
+```
+# ❌ BAD
+Implement #23–#33, then one commit / one push “so it shows up on the phone”
+
+# ✅ GOOD
+Finish #24 → commit `#24: …` → push → label `validation` → only then start #25
+```
