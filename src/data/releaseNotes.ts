@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 38,
+    issue: 38,
+    date: '2026-08-18T10:25:00+03:00',
+    en: 'The offline banner now follows the same pattern as Turtle Steps, with a small iPhone Safari fix kept for airplane mode.',
+    ru: 'Баннер «нет сети» теперь устроен так же, как в Turtle Steps, с небольшой правкой для Safari на iPhone в режиме полёта.',
+  },
+  {
     version: 37,
     issue: 36,
     date: '2026-08-18T10:12:00+03:00',

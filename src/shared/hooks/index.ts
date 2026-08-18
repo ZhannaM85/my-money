@@ -1,4 +1,5 @@
 export { useAppUpdateAvailable } from './useAppUpdateAvailable'
 export { useIsTextInputFocused } from './useIsTextInputFocused'
+export { useOfflineBannerVisible } from './useOfflineBannerVisible'
 export { useOnlineStatus } from './useOnlineStatus'
 export { useVisualViewportShrunk } from './useVisualViewportShrunk'

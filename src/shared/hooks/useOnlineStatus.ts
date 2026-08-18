@@ -1,16 +1,11 @@
 import { useEffect, useState } from 'react'
-import { isNativePlatform } from '@/shared/lib/registerServiceWorker'
-
-const PROBE_INTERVAL_MS = 30 * 1000
-
-function probeUrl(): string {
-  return `${import.meta.env.BASE_URL}version.json?probe=${Date.now()}`
-}
 
 /**
- * Tracks connectivity for the offline banner. `navigator.onLine` alone is
- * unreliable on iOS Safari (airplane mode can still report online), so we
- * also probe `version.json` with `cache: 'no-store'`.
+ * Reads `navigator.onLine`, kept live via the `online`/`offline` window
+ * events (#163) — the app is fully usable offline once the service worker
+ * has cached the app shell (all data already lives in IndexedDB), but a
+ * quiet indicator still helps explain why, say, the update-check banner
+ * never appears while offline.
  */
 export function useOnlineStatus(): boolean {
   const [isOnline, setIsOnline] = useState(
@@ -18,44 +13,17 @@ export function useOnlineStatus(): boolean {
   )
 
   useEffect(() => {
-    if (isNativePlatform()) return
-    let cancelled = false
-
-    async function probe() {
-      if (typeof document !== 'undefined' && document.hidden) return
-      if (!navigator.onLine) {
-        if (!cancelled) setIsOnline(false)
-        return
-      }
-      try {
-        const response = await fetch(probeUrl(), { cache: 'no-store' })
-        if (!cancelled) setIsOnline(response.ok)
-      } catch {
-        if (!cancelled) setIsOnline(false)
-      }
-    }
-
     function handleOnline() {
-      void probe()
+      setIsOnline(true)
     }
     function handleOffline() {
       setIsOnline(false)
     }
-    function onVisibilityChange() {
-      if (!document.hidden) void probe()
-    }
-
-    void probe()
-    const interval = setInterval(probe, PROBE_INTERVAL_MS)
     window.addEventListener('online', handleOnline)
     window.addEventListener('offline', handleOffline)
-    document.addEventListener('visibilitychange', onVisibilityChange)
     return () => {
-      cancelled = true
-      clearInterval(interval)
       window.removeEventListener('online', handleOnline)
       window.removeEventListener('offline', handleOffline)
-      document.removeEventListener('visibilitychange', onVisibilityChange)
     }
   }, [])
 
