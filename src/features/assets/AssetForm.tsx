@@ -17,7 +17,8 @@ import {
 } from '@/domain/asset'
 import { BASE_CURRENCIES } from '@/domain/settings'
 import { useLocale, useTranslation } from '@/i18n'
-import { formatEditableAmount, parseAmount } from '@/shared/lib/money'
+import { formatEditableAmount, parseAmount, todayIsoDate } from '@/shared/lib/money'
+import { isIsoDateOnOrBefore } from '@/shared/lib/dates'
 import { Button } from '@/shared/ui/button'
 import { MoneyInput } from '@/shared/ui/money-input'
 import { TextField } from '@/shared/ui/text-field'
@@ -51,6 +52,7 @@ function SelectField({
 export interface AssetFormValues {
   asset: Asset
   amount?: number
+  snapshotDate?: string
 }
 
 export function AssetForm({
@@ -107,6 +109,7 @@ export function AssetForm({
       ? ''
       : formatEditableAmount(initialAmount, locale, currency),
   )
+  const [snapshotDate, setSnapshotDate] = useState(todayIsoDate())
   const [ownershipShare, setOwnershipShare] = useState(
     formatOwnershipShare(
       initial
@@ -148,6 +151,15 @@ export function AssetForm({
       setError(t.asset.ownershipShareInvalid)
       return
     }
+    const today = todayIsoDate()
+    if (
+      requireAmount &&
+      !initial &&
+      !isIsoDateOnOrBefore(snapshotDate, today)
+    ) {
+      setError(t.asset.snapshotDateInvalid)
+      return
+    }
     setError(undefined)
     setSaving(true)
     try {
@@ -169,6 +181,7 @@ export function AssetForm({
           updatedAt: now,
         },
         amount: parsedAmount,
+        snapshotDate: requireAmount && !initial ? snapshotDate : undefined,
       })
     } finally {
       setSaving(false)
@@ -178,6 +191,7 @@ export function AssetForm({
   return (
     <form
       className="flex flex-col gap-4"
+      noValidate
       onSubmit={(event) => void handleSubmit(event)}
     >
       {showPresets && !initial && (
@@ -314,11 +328,24 @@ export function AssetForm({
             : undefined
         }
       />
+      {requireAmount && !initial && (
+        <TextField
+          label={t.asset.snapshotDate}
+          type="date"
+          value={snapshotDate}
+          max={todayIsoDate()}
+          onChange={(event) => setSnapshotDate(event.target.value)}
+          error={
+            error === t.asset.snapshotDateInvalid ? error : undefined
+          }
+        />
+      )}
       {error &&
         error !== t.asset.nameRequired &&
         error !== t.asset.enterCurrentAmount &&
         error !== t.asset.amountMustBeNumber &&
-        error !== t.asset.ownershipShareInvalid && (
+        error !== t.asset.ownershipShareInvalid &&
+        error !== t.asset.snapshotDateInvalid && (
           <p className="text-sm text-destructive">{error}</p>
         )}
       <Button type="submit" size="xl" className="w-full" disabled={saving}>

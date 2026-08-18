@@ -78,6 +78,8 @@ export interface Dictionary {
     updateFrequency: string
     trackingLabel: string
     currentAmount: string
+    snapshotDate: string
+    snapshotDateInvalid: string
     newAmountOptional: string
     nameRequired: string
     enterCurrentAmount: string

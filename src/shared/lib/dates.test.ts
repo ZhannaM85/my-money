@@ -2,6 +2,8 @@ import { describe, expect, it } from 'vitest'
 import {
   addDaysIso,
   isoDatesInclusive,
+  isIsoDate,
+  isIsoDateOnOrBefore,
   monthStartIso,
   rangeStartIso,
   stepHistoryRange,
@@ -28,5 +30,12 @@ describe('date helpers', () => {
     expect(stepHistoryRange('1M', 'out')).toBe('3M')
     expect(stepHistoryRange('All', 'out')).toBe('All')
     expect(stepHistoryRange('All', 'in')).toBe('1Y')
+  })
+
+  it('accepts calendar ISO dates on or before today', () => {
+    expect(isIsoDate('2026-08-17')).toBe(true)
+    expect(isIsoDate('2026-08-32')).toBe(false)
+    expect(isIsoDateOnOrBefore('2026-08-17', '2026-08-18')).toBe(true)
+    expect(isIsoDateOnOrBefore('2026-08-19', '2026-08-18')).toBe(false)
   })
 })

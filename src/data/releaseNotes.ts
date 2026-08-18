@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 63,
+    issue: 61,
+    date: '2026-08-18T14:55:00+03:00',
+    en: 'New assets can start on a past date: the As of field defaults to today and rejects future dates.',
+    ru: 'Новый актив можно завести на прошедшую дату: поле «На дату» по умолчанию сегодня и не принимает будущие дни.',
+  },
+  {
     version: 62,
     issue: 60,
     date: '2026-08-18T14:50:00+03:00',

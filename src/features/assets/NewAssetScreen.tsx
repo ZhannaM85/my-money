@@ -22,10 +22,10 @@ export function NewAssetScreen() {
         defaultType={preset?.type}
         requireAmount
         submitLabel={t.asset.saveAsset}
-        onSubmit={async ({ asset, amount }) => {
+        onSubmit={async ({ asset, amount, snapshotDate }) => {
           await saveAsset(asset, {
             assetId: asset.id,
-            date: todayIsoDate(),
+            date: snapshotDate ?? todayIsoDate(),
             amount: amount ?? 0,
             currency: asset.currency,
           })

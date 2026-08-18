@@ -125,6 +125,8 @@ export const ru: Dictionary = {
     updateFrequency: 'Как часто обновлять',
     trackingLabel: 'Учёт',
     currentAmount: 'Текущая сумма',
+    snapshotDate: 'На дату',
+    snapshotDateInvalid: 'Выберите сегодня или прошедшую дату',
     newAmountOptional: 'Новая сумма (необязательно)',
     nameRequired: 'Нужно название',
     enterCurrentAmount: 'Введите текущую сумму',

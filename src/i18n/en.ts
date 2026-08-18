@@ -121,6 +121,8 @@ export const en: Dictionary = {
     updateFrequency: 'Update frequency',
     trackingLabel: 'Tracking',
     currentAmount: 'Current amount',
+    snapshotDate: 'As of',
+    snapshotDateInvalid: 'Choose today or a past date',
     newAmountOptional: 'New amount (optional)',
     nameRequired: 'Name is required',
     enterCurrentAmount: 'Enter a current amount',
