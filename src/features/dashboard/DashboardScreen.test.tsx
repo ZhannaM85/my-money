@@ -20,10 +20,13 @@ beforeEach(async () => {
   await db.assets.clear()
   await db.snapshots.clear()
   await db.settings.clear()
+  await db.fxRates.clear()
+  await db.manualFxRates.clear()
   useAssetStore.setState({ assets: [], snapshots: [], loaded: false })
   useFxStore.setState({
     ...useFxStore.getState(),
     quotes: [],
+    manualQuotes: [],
     loading: false,
     error: undefined,
   })
@@ -154,10 +157,9 @@ describe('DashboardScreen', () => {
 
   it('disables the currency filter in Converted mode', async () => {
     const now = '2026-08-17T00:00:00.000Z'
-    useFxStore.setState({
-      ...useFxStore.getState(),
-      quotes: [{ date: '2026-08-17', base: 'EUR', quote: 'USD', rate: 1.1 }],
-    })
+    await useFxStore.getState().saveManualRates([
+      { date: '2026-08-17', base: 'EUR', quote: 'USD', rate: 1.1 },
+    ])
     await useAssetStore.getState().saveAsset(
       {
         id: 'eur',
@@ -403,10 +405,9 @@ describe('DashboardScreen', () => {
 
   it('lists each Converted holding with original and converted amounts', async () => {
     const now = '2026-08-17T00:00:00.000Z'
-    useFxStore.setState({
-      ...useFxStore.getState(),
-      quotes: [{ date: '2026-08-17', base: 'EUR', quote: 'RUB', rate: 100 }],
-    })
+    await useFxStore.getState().saveManualRates([
+      { date: '2026-08-17', base: 'EUR', quote: 'RUB', rate: 100 },
+    ])
     await useAssetStore.getState().saveAsset(
       {
         id: 'eur',
@@ -457,8 +458,12 @@ describe('DashboardScreen', () => {
     expect(await screen.findByText('Ruble cash')).toBeInTheDocument()
     expect(screen.getByText('Euro cash')).toBeInTheDocument()
     expect(
-      screen.getByText((_, node) => node?.textContent === formatAmount(20000, 'RUB')),
-    ).toBeInTheDocument()
+      screen.getAllByText(
+        (_, node) =>
+          node?.children.length === 0 &&
+          node.textContent === formatAmount(20000, 'RUB'),
+      ).length,
+    ).toBeGreaterThan(0)
     expect(screen.getAllByText(formatAmount(200, 'EUR')).length).toBeGreaterThan(0)
     expect(screen.getAllByText(formatAmount(1200, 'EUR')).length).toBeGreaterThan(0)
   })
