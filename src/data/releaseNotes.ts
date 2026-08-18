@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 60,
+    issue: 59,
+    date: '2026-08-18T14:35:00+03:00',
+    en: 'Colorful appearance is no longer a black skin: teal actions, tinted surfaces, and slate-teal dark mode, with category colors kept vivid.',
+    ru: 'Цветное оформление больше не чёрное: бирюзовые кнопки, слегка тонированные поверхности и тёмно-бирюзовый ночной режим, цвета категорий остаются яркими.',
+  },
+  {
     version: 59,
     issue: 57,
     date: '2026-08-18T14:25:00+03:00',
