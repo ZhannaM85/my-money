@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 52,
+    issue: 52,
+    date: '2026-08-18T13:40:00+03:00',
+    en: 'When a holding cannot be converted, the Dashboard still lists it with its original amount and a clear note instead of hiding it.',
+    ru: 'Если позицию нельзя пересчитать, Сводка всё равно показывает её с суммой в оригинале и понятной пометкой, а не скрывает.',
+  },
+  {
     version: 51,
     issue: 50,
     date: '2026-08-18T13:30:00+03:00',

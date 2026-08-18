@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import {
   historicalNativeNetWorth,
   historicalNetWorth,
+  holdingsWithConversion,
   nativeTotalsByCurrency,
   netWorth,
   periodChange,
@@ -100,6 +101,20 @@ export function DashboardScreen() {
   const convertedResult = useMemo(
     () => netWorth(filteredAssets, filteredSnapshots, quotes, baseCurrency),
     [baseCurrency, filteredAssets, filteredSnapshots, quotes],
+  )
+  const convertedHoldings = useMemo(
+    () =>
+      holdingsWithConversion(
+        filteredAssets,
+        filteredSnapshots,
+        quotes,
+        baseCurrency,
+      ),
+    [baseCurrency, filteredAssets, filteredSnapshots, quotes],
+  )
+  const unconvertibleHoldings = useMemo(
+    () => convertedHoldings.filter((row) => !row.conversionAvailable),
+    [convertedHoldings],
   )
   const nativeTotals = useMemo(
     () => nativeTotalsByCurrency(filteredAssets, filteredSnapshots),
@@ -257,6 +272,33 @@ export function DashboardScreen() {
             />
           )}
           {fxNote && <p className="text-sm text-muted-foreground">{fxNote}</p>}
+          {!isOriginal && unconvertibleHoldings.length > 0 && (
+            <div className="flex flex-col gap-2">
+              <span className="text-sm text-muted-foreground">
+                {t.dashboard.holdings}
+              </span>
+              <ul className="flex flex-col gap-2">
+                {unconvertibleHoldings.map((row) => (
+                  <li
+                    key={row.assetId}
+                    className="flex items-center justify-between gap-3 rounded-xl bg-card px-4 py-3 ring-1 ring-foreground/10"
+                  >
+                    <span className="flex min-w-0 flex-col">
+                      <span className="truncate text-sm font-medium">
+                        {row.name}
+                      </span>
+                      <span className="text-xs text-muted-foreground">
+                        {t.dashboard.conversionUnavailable}
+                      </span>
+                    </span>
+                    <span className="shrink-0 tabular-nums text-sm">
+                      {formatAmount(row.nativeAmount, row.currency, locale)}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
           {isOriginal && activeCurrencyFilter === 'all' ? (
             <p className="text-sm text-muted-foreground">
               {t.dashboard.originalChartHint}

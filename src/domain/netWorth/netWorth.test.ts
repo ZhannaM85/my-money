@@ -8,6 +8,7 @@ import {
   breakdownBy,
   historicalNativeNetWorth,
   historicalNetWorth,
+  holdingsWithConversion,
   nativeTotalsByCurrency,
   netWorth,
   periodChange,
@@ -221,6 +222,61 @@ describe('breakdownBy', () => {
       { id: 'money', amount: 100, percent: 80 },
       { id: 'liabilities', amount: -25, percent: 20 },
     ])
+  })
+})
+
+describe('holdingsWithConversion', () => {
+  it('keeps missing-rate holdings visible with conversionAvailable false', () => {
+    const eur = asset({ id: 'eur', name: 'Euro cash', currency: 'EUR' })
+    const rub = asset({ id: 'rub', name: 'Ruble cash', currency: 'RUB' })
+    const rows = holdingsWithConversion(
+      [eur, rub],
+      [
+        snap({ id: 's1', assetId: 'eur', amount: 1000, currency: 'EUR' }),
+        snap({
+          id: 's2',
+          assetId: 'rub',
+          amount: 20000,
+          currency: 'RUB',
+        }),
+      ],
+      [],
+      'EUR',
+    )
+    expect(rows).toEqual([
+      {
+        assetId: 'eur',
+        name: 'Euro cash',
+        currency: 'EUR',
+        nativeAmount: 1000,
+        convertedAmount: 1000,
+        conversionAvailable: true,
+      },
+      {
+        assetId: 'rub',
+        name: 'Ruble cash',
+        currency: 'RUB',
+        nativeAmount: 20000,
+        convertedAmount: null,
+        conversionAvailable: false,
+      },
+    ])
+    expect(netWorth([eur, rub], [
+      snap({ id: 's1', assetId: 'eur', amount: 1000, currency: 'EUR' }),
+      snap({ id: 's2', assetId: 'rub', amount: 20000, currency: 'RUB' }),
+    ], [], 'EUR').total).toBe(1000)
+  })
+
+  it('includes converted amounts when a rate exists', () => {
+    const rub = asset({ id: 'rub', name: 'Ruble cash', currency: 'RUB' })
+    const rows = holdingsWithConversion(
+      [rub],
+      [snap({ id: 's1', assetId: 'rub', amount: 20000, currency: 'RUB' })],
+      [{ date: '2026-08-01', base: 'EUR', quote: 'RUB', rate: 100 }],
+      'EUR',
+    )
+    expect(rows[0]?.convertedAmount).toBeCloseTo(200)
+    expect(rows[0]?.conversionAvailable).toBe(true)
   })
 })
 

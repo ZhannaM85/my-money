@@ -46,6 +46,8 @@ export interface Dictionary {
     nativeHoldings: string
     originalChartHint: string
     currencyFilterDisabledHint: string
+    conversionUnavailable: string
+    holdings: string
   }
   assets: {
     title: string

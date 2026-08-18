@@ -1,6 +1,12 @@
-export type { ClassTotal, MissingRate, NetWorthResult } from './netWorth'
+export type {
+  ClassTotal,
+  HoldingConversion,
+  MissingRate,
+  NetWorthResult,
+} from './netWorth'
 export {
   netWorth,
+  holdingsWithConversion,
   nativeTotalsByCurrency,
   historicalNativeNetWorth,
   historicalNetWorth,

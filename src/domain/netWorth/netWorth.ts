@@ -99,6 +99,60 @@ export function historicalNativeNetWorth(
   })
 }
 
+export interface HoldingConversion {
+  assetId: string
+  name: string
+  currency: string
+  nativeAmount: number
+  /** Base-currency amount when a rate exists; otherwise null. */
+  convertedAmount: number | null
+  conversionAvailable: boolean
+}
+
+/**
+ * Every contributing holding with native amount. Missing FX does not drop the row;
+ * `convertedAmount` is null and `conversionAvailable` is false instead.
+ * Combined Converted totals should still use `netWorth()` (excludes missing).
+ */
+export function holdingsWithConversion(
+  assets: readonly Asset[],
+  snapshots: readonly AssetSnapshot[],
+  rates: RateTable,
+  baseCurrency: string,
+): HoldingConversion[] {
+  const rows: HoldingConversion[] = []
+  for (const asset of assets) {
+    if (!contributesToNetWorth(asset)) continue
+    const snapshot = latestSnapshot(snapshots, asset.id)
+    if (!snapshot) continue
+    const nativeRaw = effectiveAmount(snapshot.amount, asset)
+    const nativeAmount = isLiability(asset) ? -nativeRaw : nativeRaw
+    const rate = lookupRate(rates, snapshot.currency, baseCurrency, snapshot.date)
+    if (rate === undefined) {
+      rows.push({
+        assetId: asset.id,
+        name: asset.name,
+        currency: snapshot.currency,
+        nativeAmount,
+        convertedAmount: null,
+        conversionAvailable: false,
+      })
+      continue
+    }
+    const convertedRaw = effectiveAmount(convertAmount(snapshot.amount, rate), asset)
+    const convertedAmount = isLiability(asset) ? -convertedRaw : convertedRaw
+    rows.push({
+      assetId: asset.id,
+      name: asset.name,
+      currency: snapshot.currency,
+      nativeAmount,
+      convertedAmount,
+      conversionAvailable: true,
+    })
+  }
+  return rows.sort((a, b) => a.name.localeCompare(b.name))
+}
+
 export function netWorth(
   assets: readonly Asset[],
   snapshots: readonly AssetSnapshot[],

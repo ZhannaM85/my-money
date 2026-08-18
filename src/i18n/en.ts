@@ -44,6 +44,8 @@ export const en: Dictionary = {
       'A combined chart needs Converted mode. Pick one currency to see its native history.',
     currencyFilterDisabledHint:
       'Currency filter is inactive in Converted mode. Change the base currency in Settings.',
+    conversionUnavailable: 'Conversion not available',
+    holdings: 'Holdings',
   },
   assets: {
     title: 'Assets',
