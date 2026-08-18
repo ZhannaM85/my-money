@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 55,
+    issue: 53,
+    date: '2026-08-18T14:00:00+03:00',
+    en: 'Settings now has an on-phone FX debug panel: turn logging on, open Dashboard, then copy the log without needing a Mac console.',
+    ru: 'В настройках теперь есть панель отладки FX на телефоне: включите журнал, откройте Сводку и скопируйте лог без консоли на Mac.',
+  },
+  {
     version: 54,
     issue: 49,
     date: '2026-08-18T13:55:00+03:00',

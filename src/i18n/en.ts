@@ -240,6 +240,16 @@ export const en: Dictionary = {
     manualRatesSaved: 'Saved. Converted totals will use these overrides for today.',
     manualRatesActive: (count, date) =>
       `${count} manual rate${count === 1 ? '' : 's'} active for ${date}.`,
+    fxDebugTitle: 'FX debug',
+    fxDebugDescription:
+      'On-phone log for conversion issues. Turn on, open Dashboard, then copy the log. Nothing is uploaded automatically.',
+    fxDebugEnable: 'Turn on FX debug',
+    fxDebugDisable: 'Turn off FX debug',
+    fxDebugCopy: 'Copy log',
+    fxDebugClear: 'Clear log',
+    fxDebugCopied: 'Log copied.',
+    fxDebugCopyFailed: 'Could not copy the log.',
+    fxDebugEmpty: 'No events yet. Open Dashboard while debug is on.',
   },
   backup: {
     title: 'Backup',

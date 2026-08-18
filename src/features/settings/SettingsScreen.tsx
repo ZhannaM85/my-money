@@ -15,6 +15,7 @@ import { useSettingsStore } from '@/stores/settingsStore'
 import { useThemeStore, type Mood } from '@/stores/themeStore'
 import { cn } from '@/shared/lib/utils'
 import { ManualRatesSection } from './ManualRatesSection'
+import { FxDebugSection } from './FxDebugSection'
 import { ReleaseNotesSection } from './ReleaseNotesSection'
 
 export function SettingsScreen() {
@@ -173,6 +174,7 @@ export function SettingsScreen() {
         </div>
       )}
       <ManualRatesSection />
+      <FxDebugSection />
       <Button asChild variant="outline" size="xl" className="w-full">
         <Link to="/allocation">{t.settings.allocation}</Link>
       </Button>

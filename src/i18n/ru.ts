@@ -247,6 +247,16 @@ export const ru: Dictionary = {
       'Сохранено. Пересчитанные итоги будут использовать эти курсы на сегодня.',
     manualRatesActive: (count, date) =>
       `Активно ручных курсов на ${date}: ${count}.`,
+    fxDebugTitle: 'Отладка FX',
+    fxDebugDescription:
+      'Журнал на телефоне для проблем с конвертацией. Включите, откройте Сводку, затем скопируйте лог. Ничего не отправляется само.',
+    fxDebugEnable: 'Включить отладку FX',
+    fxDebugDisable: 'Выключить отладку FX',
+    fxDebugCopy: 'Копировать лог',
+    fxDebugClear: 'Очистить лог',
+    fxDebugCopied: 'Лог скопирован.',
+    fxDebugCopyFailed: 'Не удалось скопировать лог.',
+    fxDebugEmpty: 'Пока нет событий. Откройте Сводку при включённой отладке.',
   },
   backup: {
     title: 'Резервная копия',

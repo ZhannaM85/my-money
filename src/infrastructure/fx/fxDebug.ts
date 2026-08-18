@@ -1,7 +1,26 @@
 const FLAG = 'my-money:fx-debug'
+const MAX_ENTRIES = 80
 
-/** Enable in Safari/Web Inspector: `localStorage.setItem('my-money:fx-debug','1')` */
-export function isFxDebugEnabled(): boolean {
+export interface FxDebugEntry {
+  at: string
+  message: string
+  details?: unknown
+}
+
+export interface FxDebugSnapshot {
+  enabled: boolean
+  entries: readonly FxDebugEntry[]
+}
+
+const entries: FxDebugEntry[] = []
+const listeners = new Set<() => void>()
+
+let snapshot: FxDebugSnapshot = {
+  enabled: false,
+  entries: [],
+}
+
+function readEnabled(): boolean {
   try {
     return globalThis.localStorage?.getItem(FLAG) === '1'
   } catch {
@@ -9,11 +28,87 @@ export function isFxDebugEnabled(): boolean {
   }
 }
 
+function publish(): void {
+  snapshot = {
+    enabled: readEnabled(),
+    entries: [...entries],
+  }
+  for (const listener of listeners) listener()
+}
+
+export function getFxDebugSnapshot(): FxDebugSnapshot {
+  return snapshot
+}
+
+export function isFxDebugEnabled(): boolean {
+  return snapshot.enabled || readEnabled()
+}
+
+export function setFxDebugEnabled(enabled: boolean): void {
+  try {
+    if (enabled) {
+      globalThis.localStorage?.setItem(FLAG, '1')
+    } else {
+      globalThis.localStorage?.removeItem(FLAG)
+    }
+  } catch {
+    // ignore quota / private mode
+  }
+  publish()
+}
+
+export function getFxDebugLog(): readonly FxDebugEntry[] {
+  return snapshot.entries
+}
+
+export function clearFxDebugLog(): void {
+  entries.length = 0
+  publish()
+}
+
+export function subscribeFxDebugLog(listener: () => void): () => void {
+  listeners.add(listener)
+  return () => {
+    listeners.delete(listener)
+  }
+}
+
+export function formatFxDebugLog(
+  log: readonly FxDebugEntry[] = snapshot.entries,
+): string {
+  return log
+    .map((entry) => {
+      const details =
+        entry.details === undefined
+          ? ''
+          : ` ${JSON.stringify(entry.details)}`
+      return `${entry.at} ${entry.message}${details}`
+    })
+    .join('\n')
+}
+
+/** Sync snapshot.enabled with localStorage (e.g. after tests or cold start). */
+export function refreshFxDebugFromStorage(): void {
+  publish()
+}
+
 export function fxDebug(message: string, details?: unknown): void {
-  if (!isFxDebugEnabled()) return
+  if (!readEnabled()) return
+  entries.push({
+    at: new Date().toISOString(),
+    message,
+    details,
+  })
+  if (entries.length > MAX_ENTRIES) {
+    entries.splice(0, entries.length - MAX_ENTRIES)
+  }
+  publish()
   if (details === undefined) {
     console.info(`[fx-debug] ${message}`)
     return
   }
   console.info(`[fx-debug] ${message}`, details)
 }
+
+// Initialize snapshot from storage once on module load.
+publish()

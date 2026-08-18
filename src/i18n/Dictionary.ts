@@ -180,6 +180,15 @@ export interface Dictionary {
     manualRatesClear: string
     manualRatesSaved: string
     manualRatesActive: (count: number, date: string) => string
+    fxDebugTitle: string
+    fxDebugDescription: string
+    fxDebugEnable: string
+    fxDebugDisable: string
+    fxDebugCopy: string
+    fxDebugClear: string
+    fxDebugCopied: string
+    fxDebugCopyFailed: string
+    fxDebugEmpty: string
   }
   backup: {
     title: string
