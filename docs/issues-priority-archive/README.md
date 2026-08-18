@@ -4,7 +4,9 @@ Closed and cancelled rows from the historical backlog, split into smaller files 
 
 **Active / open queue:** [../issues-priority.md](../issues-priority.md)
 
-Nothing archived yet — this file exists so the same layout as sibling projects is in place from day one.
+## Parts
+
+- [Tiers 8+](./tiers-008-plus.md)
 
 ## Notes
 
