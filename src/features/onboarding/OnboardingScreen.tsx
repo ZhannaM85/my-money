@@ -78,6 +78,7 @@ export function OnboardingScreen() {
         />
         <AssetForm
           key={formKey}
+          showPresets
           requireAmount
           defaultCurrency={settings.baseCurrency}
           submitLabel={t.asset.saveAsset}

@@ -146,6 +146,14 @@ export const ru: Dictionary = {
     deleteAsset: 'Удалить актив',
     deleteConfirm:
       'Удалить этот актив и всю его историю с этого устройства? Это нельзя отменить.',
+    quickAdd: 'Быстро добавить',
+    presets: {
+      bank: 'Банковский счёт',
+      cash: 'Наличные',
+      vehicle: 'Транспорт',
+      apartment: 'Квартира',
+      brokerage: 'Брокерский счёт',
+    },
     suggestedNow: 'Пора обновить',
   },
   update: {

@@ -142,6 +142,14 @@ export const en: Dictionary = {
     deleteAsset: 'Delete asset',
     deleteConfirm:
       'Delete this asset and all its history from this device? This cannot be undone.',
+    quickAdd: 'Quick add',
+    presets: {
+      bank: 'Bank account',
+      cash: 'Cash',
+      vehicle: 'Vehicle',
+      apartment: 'Apartment',
+      brokerage: 'Brokerage',
+    },
     suggestedNow: 'Suggested now',
   },
   update: {

@@ -99,6 +99,8 @@ export interface Dictionary {
     hiddenFromLists: string
     deleteAsset: string
     deleteConfirm: string
+    quickAdd: string
+    presets: Record<'bank' | 'cash' | 'vehicle' | 'apartment' | 'brokerage', string>
     suggestedNow: string
   }
   update: {

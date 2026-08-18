@@ -29,3 +29,4 @@ export {
   TRACKING_LABELS,
 } from './labels'
 export type { AssetRepository } from './AssetRepository'
+export { ASSET_PRESETS, findAssetPreset, type AssetPreset } from './presets'

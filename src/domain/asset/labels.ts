@@ -10,7 +10,7 @@ export const TYPES_BY_CLASS: Record<AssetClass, readonly AssetType[]> = {
     'crypto',
     'other_investment',
   ],
-  property: ['apartment', 'house', 'land', 'vehicle'],
+  property: ['vehicle', 'apartment', 'house', 'land'],
   valuables: [
     'jewelry',
     'watch',

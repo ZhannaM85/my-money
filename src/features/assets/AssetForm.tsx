@@ -1,6 +1,7 @@
 import { useState, type FormEvent, type ReactNode } from 'react'
 import {
   ASSET_CLASSES,
+  ASSET_PRESETS,
   TRACKING_STATUSES,
   TYPES_BY_CLASS,
   UPDATE_FREQUENCIES,
@@ -18,6 +19,7 @@ import { formatEditableAmount, parseAmount } from '@/shared/lib/money'
 import { Button } from '@/shared/ui/button'
 import { MoneyInput } from '@/shared/ui/money-input'
 import { TextField } from '@/shared/ui/text-field'
+import { cn } from '@/shared/lib/utils'
 
 function SelectField({
   label,
@@ -53,6 +55,9 @@ export function AssetForm({
   initial,
   initialAmount,
   defaultCurrency,
+  defaultAssetClass,
+  defaultType,
+  showPresets = false,
   requireAmount,
   submitLabel,
   onSubmit,
@@ -60,6 +65,9 @@ export function AssetForm({
   initial?: Asset
   initialAmount?: number
   defaultCurrency?: string
+  defaultAssetClass?: AssetClass
+  defaultType?: AssetType
+  showPresets?: boolean
   requireAmount: boolean
   submitLabel: string
   onSubmit: (values: AssetFormValues) => Promise<void>
@@ -69,9 +77,11 @@ export function AssetForm({
   const now = new Date().toISOString()
   const [name, setName] = useState(initial?.name ?? '')
   const [assetClass, setAssetClass] = useState<AssetClass>(
-    initial?.assetClass ?? 'money',
+    initial?.assetClass ?? defaultAssetClass ?? 'money',
   )
-  const [type, setType] = useState<AssetType>(initial?.type ?? 'bank')
+  const [type, setType] = useState<AssetType>(
+    initial?.type ?? defaultType ?? 'bank',
+  )
   const [currency, setCurrency] = useState(
     initial?.currency ?? defaultCurrency ?? 'EUR',
   )
@@ -151,6 +161,31 @@ export function AssetForm({
       className="flex flex-col gap-4"
       onSubmit={(event) => void handleSubmit(event)}
     >
+      {showPresets && !initial && (
+        <div className="flex flex-col gap-2">
+          <span className="text-sm font-medium">{t.asset.quickAdd}</span>
+          <div className="flex flex-wrap gap-2">
+            {ASSET_PRESETS.map((preset) => (
+              <button
+                key={preset.id}
+                type="button"
+                className={cn(
+                  'rounded-full px-3 py-1.5 text-sm font-medium',
+                  assetClass === preset.assetClass && type === preset.type
+                    ? 'bg-primary text-primary-foreground'
+                    : 'bg-muted text-muted-foreground',
+                )}
+                onClick={() => {
+                  setAssetClass(preset.assetClass)
+                  setType(preset.type)
+                }}
+              >
+                {t.asset.presets[preset.id as keyof typeof t.asset.presets]}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
       <TextField
         label={t.asset.name}
         value={name}
