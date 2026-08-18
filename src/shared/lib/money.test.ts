@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import {
+  compactAxisFractionDigits,
+  formatCompactNumber,
   formatEditableAmount,
   parseAmount,
   reformatAmountInput,
@@ -38,6 +40,31 @@ describe('formatEditableAmount', () => {
     expect(formatted).toMatch(/420/)
     expect(formatted).toMatch(/00/)
     expect(formatted).not.toMatch(/€|EUR/)
+  })
+})
+
+describe('compact chart axis labels', () => {
+  it('does not round a 1.97 million series to 2 млн', () => {
+    const value = 1_969_089
+    const digits = compactAxisFractionDigits(value, value, 'ru')
+    expect(formatCompactNumber(value, 'ru', digits)).toMatch(/1,97/)
+    expect(formatCompactNumber(value, 'ru', digits)).not.toBe(
+      formatCompactNumber(2_000_000, 'ru', 0),
+    )
+  })
+
+  it('keeps nearby million-scale ticks distinct', () => {
+    const ticks = [1_850_000, 1_900_000, 1_950_000, 2_000_000, 2_050_000]
+    const digits = compactAxisFractionDigits(ticks[0], ticks[ticks.length - 1], 'ru')
+    const labels = ticks.map((tick) => formatCompactNumber(tick, 'ru', digits))
+    expect(new Set(labels).size).toBe(labels.length)
+  })
+
+  it('keeps padded ticks distinct when the series is a round 2 million', () => {
+    const digits = compactAxisFractionDigits(2_000_000, 2_000_000, 'ru')
+    const padded = [1_900_000, 1_950_000, 2_000_000, 2_050_000, 2_100_000]
+    const labels = padded.map((tick) => formatCompactNumber(tick, 'ru', digits))
+    expect(new Set(labels).size).toBe(labels.length)
   })
 })
 

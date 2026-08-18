@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 58,
+    issue: 56,
+    date: '2026-08-18T14:10:00+03:00',
+    en: 'Chart Y-axis ticks now keep distinct compact labels, so a ~2 million series is not all labeled 2M.',
+    ru: 'Подписи оси Y на графике больше не сливаются: ряд около 2 миллионов не подписывается одним и тем же «2 млн» на каждой риске.',
+  },
+  {
     version: 57,
     issue: 54,
     date: '2026-08-18T13:58:00+03:00',

@@ -7,7 +7,11 @@ import {
   XAxis,
   YAxis,
 } from 'recharts'
-import { formatAmount, formatCompactNumber } from '@/shared/lib/money'
+import {
+  compactAxisFractionDigits,
+  formatAmount,
+  formatCompactNumber,
+} from '@/shared/lib/money'
 import { usePinchZoom } from '@/shared/hooks/usePinchZoom'
 import { useLocale, useTranslation } from '@/i18n'
 
@@ -29,6 +33,12 @@ export function NetWorthChart({
   const pinchRef = usePinchZoom(onZoomIn, onZoomOut)
   const name = seriesName ?? t.dashboard.netWorth
   if (points.length === 0) return null
+  const totals = points.map((point) => point.total)
+  const axisDigits = compactAxisFractionDigits(
+    Math.min(...totals),
+    Math.max(...totals),
+    locale,
+  )
 
   return (
     <div
@@ -51,10 +61,10 @@ export function NetWorthChart({
             minTickGap={24}
           />
           <YAxis
-            width={52}
+            width={68}
             tick={{ fontSize: 11, fill: 'var(--muted-foreground)' }}
             tickFormatter={(value: number) =>
-              formatCompactNumber(value, locale)
+              formatCompactNumber(value, locale, axisDigits)
             }
             axisLine={false}
             tickLine={false}

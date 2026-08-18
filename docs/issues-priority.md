@@ -143,7 +143,7 @@ _EUR base + RUB assets; iPhone tab bar; appearance; car; joint ownership; decima
 | [#50](https://github.com/ZhannaM85/my-money/issues/50) | 🔍 Pending validation | Manual FX save gives no feedback — collapse or show read-only rates | After save, editor collapses and today’s overrides show as a read-only list. |
 | [#51](https://github.com/ZhannaM85/my-money/issues/51) | 🔍 Pending validation | Converted Dashboard should list each item with original and converted amounts | Converted Dashboard lists each holding with native + base amounts under the combined total. |
 | [#52](https://github.com/ZhannaM85/my-money/issues/52) | 🔍 Pending validation | Show unconvertible holdings instead of hiding them | Converted Dashboard lists missing-rate holdings with native amount + “Conversion not available”. Combined total still excludes them. |
-| [#56](https://github.com/ZhannaM85/my-money/issues/56) | 🔲 Open | Chart Y-axis repeats the same compact label on every tick | Live: 1M Dashboard chart, ~2 млн ₽ flat series, all five Y ticks say «2 млн». Compact `formatCompactNumber` rounding. |
+| [#56](https://github.com/ZhannaM85/my-money/issues/56) | 🔍 Pending validation | Chart Y-axis repeats the same compact label on every tick | Compact axis labels now keep enough fraction digits so nearby million-scale ticks stay distinct (1,97 млн vs 2 млн). |
 
 ---
 
