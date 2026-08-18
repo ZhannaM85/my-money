@@ -1,4 +1,5 @@
 import type { FxRateQuote } from '@/domain/fx'
+import { browserFetch } from '@/infrastructure/fx/browserFetch'
 
 export const NBG_CURRENCIES_URL =
   'https://nbg.gov.ge/gw/api/ct/monetarypolicy/currencies/en/json/'
@@ -80,7 +81,7 @@ export function quotesFromNbgDay(
 export class NbgFxClient {
   private readonly fetchFn: typeof fetch
 
-  constructor(fetchFn: typeof fetch = fetch) {
+  constructor(fetchFn: typeof fetch = browserFetch) {
     this.fetchFn = fetchFn
   }
 

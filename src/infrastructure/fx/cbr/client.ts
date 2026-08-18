@@ -1,5 +1,6 @@
 import type { FxRateQuote } from '@/domain/fx'
 import { isoDatesInclusive } from '@/shared/lib/dates'
+import { browserFetch } from '@/infrastructure/fx/browserFetch'
 
 export const CBR_DAILY_URL = 'https://www.cbr.ru/scripts/XML_daily.asp'
 
@@ -43,7 +44,7 @@ export function quotesFromCbrXml(date: string, xml: string): FxRateQuote[] {
 export class CbrFxClient {
   private readonly fetchFn: typeof fetch
 
-  constructor(fetchFn: typeof fetch = fetch) {
+  constructor(fetchFn: typeof fetch = browserFetch) {
     this.fetchFn = fetchFn
   }
 

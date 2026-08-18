@@ -1,6 +1,7 @@
 import { z } from 'zod'
 import type { FxRateQuote } from '@/domain/fx'
 import { isoDatesInclusive } from '@/shared/lib/dates'
+import { browserFetch } from '@/infrastructure/fx/browserFetch'
 import { FRANKFURTER_API_BASE, isFrankfurterUnsupported } from './currencies'
 
 const quoteRowSchema = z.object({
@@ -39,7 +40,7 @@ function parseQuoteRows(payload: unknown): FxRateQuote[] {
 export class FrankfurterFxClient {
   private readonly fetchFn: typeof fetch
 
-  constructor(fetchFn: typeof fetch = fetch) {
+  constructor(fetchFn: typeof fetch = browserFetch) {
     this.fetchFn = fetchFn
   }
 

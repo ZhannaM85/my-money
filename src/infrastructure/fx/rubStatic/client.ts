@@ -1,5 +1,6 @@
 import { z } from 'zod'
 import type { FxRateQuote } from '@/domain/fx'
+import { browserFetch } from '@/infrastructure/fx/browserFetch'
 import { fxDebug } from '@/infrastructure/fx/fxDebug'
 
 const staticRubSeriesSchema = z.object({
@@ -24,7 +25,7 @@ export class StaticRubRateRequestError extends Error {
 export class StaticRubRateClient {
   private readonly fetchFn: typeof fetch
 
-  constructor(fetchFn: typeof fetch = fetch) {
+  constructor(fetchFn: typeof fetch = browserFetch) {
     this.fetchFn = fetchFn
   }
 

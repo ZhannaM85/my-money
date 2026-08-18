@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 56,
+    issue: 55,
+    date: '2026-08-18T13:55:00+03:00',
+    en: 'Ruble rate files now load on iPhone Safari by calling fetch as a window method instead of a detached function.',
+    ru: 'Файлы курсов рубля теперь загружаются в Safari на iPhone: fetch вызывается как метод окна, а не как отвязанная функция.',
+  },
+  {
     version: 55,
     issue: 53,
     date: '2026-08-18T14:00:00+03:00',
