@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import {
+  chartAxisScale,
   compactAxisFractionDigits,
   formatCompactNumber,
   formatEditableAmount,
@@ -54,8 +55,7 @@ describe('compact chart axis labels', () => {
   })
 
   it('keeps nearby million-scale ticks distinct', () => {
-    const ticks = [1_850_000, 1_900_000, 1_950_000, 2_000_000, 2_050_000]
-    const digits = compactAxisFractionDigits(ticks[0], ticks[ticks.length - 1], 'ru')
+    const { ticks, digits } = chartAxisScale(1_850_000, 2_050_000, 'ru')
     const labels = ticks.map((tick) => formatCompactNumber(tick, 'ru', digits))
     expect(new Set(labels).size).toBe(labels.length)
   })
@@ -64,6 +64,13 @@ describe('compact chart axis labels', () => {
     const digits = compactAxisFractionDigits(2_000_000, 2_000_000, 'ru')
     const padded = [1_900_000, 1_950_000, 2_000_000, 2_050_000, 2_100_000]
     const labels = padded.map((tick) => formatCompactNumber(tick, 'ru', digits))
+    expect(new Set(labels).size).toBe(labels.length)
+  })
+
+  it('gives a flat ~2 million series unique compact Y labels', () => {
+    const { ticks, digits } = chartAxisScale(1_969_089, 1_969_089, 'ru')
+    const labels = ticks.map((tick) => formatCompactNumber(tick, 'ru', digits))
+    expect(labels.length).toBeGreaterThan(1)
     expect(new Set(labels).size).toBe(labels.length)
   })
 })

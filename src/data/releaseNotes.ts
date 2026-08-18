@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 65,
+    issue: 56,
+    date: '2026-08-19T00:56:00+03:00',
+    en: 'Chart Y-axis now pads a tight net-worth range and draws unique compact ticks, so a flat ~2 million series is not labeled 2M five times.',
+    ru: 'Ось Y графика теперь расширяет узкий диапазон чистого капитала и подписывает деления разными компактными числами, так что плоская серия около 2 млн не подписывается «2 млн» пять раз.',
+  },
+  {
     version: 64,
     issue: 59,
     date: '2026-08-19T00:50:00+03:00',

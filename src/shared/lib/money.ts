@@ -132,30 +132,34 @@ export function compactAxisFractionDigits(
   max: number,
   locale: Locale = 'en',
 ): number {
+  return chartAxisScale(min, max, locale).digits
+}
+
+export function chartAxisScale(
+  min: number,
+  max: number,
+  locale: Locale = 'en',
+  tickCount = 5,
+): { domain: [number, number]; ticks: number[]; digits: number } {
   const lo = Math.min(min, max)
   const hi = Math.max(min, max)
   const magnitude = Math.max(Math.abs(lo), Math.abs(hi), 1)
-  const pad = Math.max((hi - lo) * 0.1, magnitude * 0.05)
-  let digits = Math.max(
-    digitsMatchingTwoPlaceCompact(lo, locale),
-    digitsMatchingTwoPlaceCompact(hi, locale),
+  const pad = Math.max((hi - lo) * 0.1, magnitude * 0.05, 1)
+  const domain: [number, number] = [lo - pad, hi + pad]
+  const span = domain[1] - domain[0]
+  const steps = Math.max(tickCount, 2)
+  const ticks = Array.from(
+    { length: steps },
+    (_, step) => domain[0] + (span * step) / (steps - 1),
   )
-  const samples = [0, 1, 2, 3, 4].map(
-    (step) => lo - pad + ((hi - lo + 2 * pad) * step) / 4,
-  )
+  let digits = 0
   for (; digits <= 3; digits += 1) {
-    const labels = samples.map((value) =>
+    const labels = ticks.map((value) =>
       formatCompactNumber(value, locale, digits),
     )
-    if (new Set(labels).size === labels.length) return digits
+    if (new Set(labels).size === labels.length) {
+      return { domain, ticks, digits }
+    }
   }
-  return 3
-}
-
-function digitsMatchingTwoPlaceCompact(value: number, locale: Locale): number {
-  const precise = formatCompactNumber(value, locale, 2)
-  for (let digits = 0; digits <= 2; digits += 1) {
-    if (formatCompactNumber(value, locale, digits) === precise) return digits
-  }
-  return 2
+  return { domain, ticks, digits: 3 }
 }
