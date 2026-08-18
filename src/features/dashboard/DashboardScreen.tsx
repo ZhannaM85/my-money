@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { historicalNetWorth, netWorth, periodChange } from '@/domain/netWorth'
 import { useLocale, useTranslation } from '@/i18n'
@@ -8,15 +8,18 @@ import {
   formatSignedAmount,
   todayIsoDate,
 } from '@/shared/lib/money'
-import { isoDatesInclusive, monthStartIso } from '@/shared/lib/dates'
+import { isoDatesInclusive, rangeStartIso, type HistoryRange } from '@/shared/lib/dates'
 import { Button } from '@/shared/ui/button'
 import { EmptyState } from '@/shared/ui/empty-state'
 import { PageHeader } from '@/shared/ui/page-header'
 import { StatCard } from '@/shared/ui/stat-card'
+import { cn } from '@/shared/lib/utils'
 import { useAssetStore } from '@/stores/assetStore'
 import { useFxStore } from '@/stores/fxStore'
 import { useSettingsStore } from '@/stores/settingsStore'
 import { NetWorthChart } from './NetWorthChart'
+
+const RANGES: HistoryRange[] = ['1M', '3M', '6M', '1Y', 'All']
 
 export function DashboardScreen() {
   const t = useTranslation()
@@ -30,23 +33,30 @@ export function DashboardScreen() {
   const baseCurrency = useSettingsStore((state) => state.settings.baseCurrency)
   const quotes = useFxStore((state) => state.quotes)
   const ensureRange = useFxStore((state) => state.ensureRange)
+  const [range, setRange] = useState<HistoryRange>('1M')
 
   const today = todayIsoDate()
-  const monthStart = monthStartIso(today)
-  const monthDates = useMemo(
-    () => isoDatesInclusive(monthStart, today),
-    [monthStart, today],
-  )
 
   useEffect(() => {
     void loadAssets()
     void loadSettings()
   }, [loadAssets, loadSettings])
 
+  const earliest = useMemo(() => {
+    if (snapshots.length === 0) return today
+    return snapshots.reduce(
+      (min, snapshot) => (snapshot.date < min ? snapshot.date : min),
+      snapshots[0].date,
+    )
+  }, [snapshots, today])
+
+  const start = rangeStartIso(range, today, earliest)
+  const dates = useMemo(() => isoDatesInclusive(start, today), [start, today])
+
   useEffect(() => {
     const symbols = [...new Set(snapshots.map((snapshot) => snapshot.currency))]
-    void ensureRange(monthStart, today, baseCurrency, symbols)
-  }, [baseCurrency, ensureRange, monthStart, snapshots, today])
+    void ensureRange(start, today, baseCurrency, symbols)
+  }, [baseCurrency, ensureRange, snapshots, start, today])
 
   const result = useMemo(
     () => netWorth(assets, snapshots, quotes, baseCurrency),
@@ -54,10 +64,13 @@ export function DashboardScreen() {
   )
   const series = useMemo(
     () =>
-      historicalNetWorth(assets, snapshots, quotes, monthDates, baseCurrency),
-    [assets, baseCurrency, monthDates, quotes, snapshots],
+      historicalNetWorth(assets, snapshots, quotes, dates, baseCurrency),
+    [assets, baseCurrency, dates, quotes, snapshots],
   )
   const change = periodChange(series[0]?.total ?? 0, result.total)
+  const rangeIndex = RANGES.indexOf(range)
+  const canZoomIn = rangeIndex > 0
+  const canZoomOut = rangeIndex < RANGES.length - 1
 
   const classRows = result.byClass.filter((row) => row.amount !== 0)
   const loaded = assetsLoaded && settingsLoaded
@@ -73,8 +86,8 @@ export function DashboardScreen() {
         : undefined
   const changeLabel =
     change.percent === null
-      ? `${formatSignedAmount(change.absolute, baseCurrency, locale)} ${t.dashboard.thisMonth}`
-      : `${formatSignedAmount(change.absolute, baseCurrency, locale)} (${formatPercent(change.percent, locale)}) ${t.dashboard.thisMonth}`
+      ? `${formatSignedAmount(change.absolute, baseCurrency, locale)} ${range === '1M' ? t.dashboard.thisMonth : t.history.overRange(range)}`
+      : `${formatSignedAmount(change.absolute, baseCurrency, locale)} (${formatPercent(change.percent, locale)}) ${range === '1M' ? t.dashboard.thisMonth : t.history.overRange(range)}`
 
   return (
     <div className="flex flex-col gap-6">
@@ -102,6 +115,43 @@ export function DashboardScreen() {
             description={changeLabel}
           />
           {fxNote && <p className="text-sm text-muted-foreground">{fxNote}</p>}
+          <div className="flex items-center justify-between gap-2">
+            <span className="text-sm text-muted-foreground">
+              {t.dashboard.zoomRange}: {range}
+            </span>
+            <div className="flex gap-2">
+              <button
+                type="button"
+                className={cn(
+                  'rounded-full px-3 py-1.5 text-sm font-medium',
+                  canZoomIn
+                    ? 'bg-muted text-foreground'
+                    : 'bg-muted text-muted-foreground',
+                )}
+                disabled={!canZoomIn}
+                onClick={() => {
+                  if (canZoomIn) setRange(RANGES[rangeIndex - 1])
+                }}
+              >
+                {t.dashboard.zoomIn}
+              </button>
+              <button
+                type="button"
+                className={cn(
+                  'rounded-full px-3 py-1.5 text-sm font-medium',
+                  canZoomOut
+                    ? 'bg-muted text-foreground'
+                    : 'bg-muted text-muted-foreground',
+                )}
+                disabled={!canZoomOut}
+                onClick={() => {
+                  if (canZoomOut) setRange(RANGES[rangeIndex + 1])
+                }}
+              >
+                {t.dashboard.zoomOut}
+              </button>
+            </div>
+          </div>
           <NetWorthChart points={series} currency={baseCurrency} />
           {classRows.length > 0 && (
             <ul className="flex flex-col gap-2">

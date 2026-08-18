@@ -29,6 +29,9 @@ export const en: Dictionary = {
       'What you own minus what you owe, in your base currency.',
     netWorth: 'Net worth',
     thisMonth: 'this month',
+    zoomRange: 'Chart range',
+    zoomIn: 'Zoom in',
+    zoomOut: 'Zoom out',
     emptyTitle: 'No assets yet',
     emptyDescription: 'Add what you own or owe to see your first net worth.',
     fxMissing: (codes) =>

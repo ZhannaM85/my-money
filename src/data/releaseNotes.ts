@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 44,
+    issue: 41,
+    date: '2026-08-18T11:36:00+03:00',
+    en: 'The Dashboard chart now has zoom-in and zoom-out controls that switch between shorter and longer history windows.',
+    ru: 'На графике Сводки теперь есть кнопки увеличения и уменьшения диапазона истории.',
+  },
+  {
     version: 43,
     issue: 40,
     date: '2026-08-18T11:33:00+03:00',

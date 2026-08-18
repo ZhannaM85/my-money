@@ -35,6 +35,9 @@ export interface Dictionary {
     description: string
     netWorth: string
     thisMonth: string
+    zoomRange: string
+    zoomIn: string
+    zoomOut: string
     emptyTitle: string
     emptyDescription: string
     fxMissing: (codes: string) => string
