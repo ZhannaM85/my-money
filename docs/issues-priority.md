@@ -152,6 +152,16 @@ _EUR base + RUB assets; iPhone tab bar; appearance; car; joint ownership; decima
 
 ---
 
+## Tier 10 — Live feedback (2026-08-19)
+
+_#61 did not reach the phone because Pages deploy failed._
+
+| # | Status | Issue | Notes |
+|---|--------|-------|-------|
+| [#62](https://github.com/ZhannaM85/my-money/issues/62) | 🔲 Open | Pages deploy of #61 failed on a racy Settings currency test | Converted-mode Base currency test asserts enabled before `loaded`; deploy job failed, CI passed. |
+
+---
+
 ## Explicitly not filed
 
 Out of scope for the MVP (`PROJECT_BRIEF.md` §20) — do not implement from chat:
