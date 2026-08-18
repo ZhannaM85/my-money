@@ -153,6 +153,9 @@ export interface Dictionary {
     skipWelcomeHint: string
     skipWelcome: string
     allocation: string
+    appearance: string
+    moodLedger: string
+    moodGreen: string
   }
   backup: {
     title: string

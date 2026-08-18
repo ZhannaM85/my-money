@@ -13,12 +13,11 @@ import { cn } from '@/shared/lib/utils'
 type View = 'class' | 'currency' | 'type'
 
 const SLICE_COLORS = [
-  'var(--primary)',
-  '#14532d',
-  '#166534',
-  '#3f6212',
-  '#047857',
-  '#15803d',
+  'var(--chart-money)',
+  'var(--chart-investments)',
+  'var(--chart-property)',
+  'var(--chart-valuables)',
+  'var(--chart-liabilities)',
 ]
 
 export function AllocationScreen() {

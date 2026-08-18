@@ -7,6 +7,8 @@ import { Button } from '@/shared/ui/button'
 import { PageHeader } from '@/shared/ui/page-header'
 import { useAssetStore } from '@/stores/assetStore'
 import { useSettingsStore } from '@/stores/settingsStore'
+import { useThemeStore, type Mood } from '@/stores/themeStore'
+import { cn } from '@/shared/lib/utils'
 
 export function SettingsScreen() {
   const t = useTranslation()
@@ -20,6 +22,13 @@ export function SettingsScreen() {
   )
   const loadAssets = useAssetStore((state) => state.load)
   const assetCount = useAssetStore((state) => state.assets.length)
+  const mood = useThemeStore((state) => state.mood)
+  const setMood = useThemeStore((state) => state.setMood)
+
+  const moods: { id: Mood; label: string }[] = [
+    { id: 'ledger', label: t.settings.moodLedger },
+    { id: 'green', label: t.settings.moodGreen },
+  ]
 
   useEffect(() => {
     void load()
@@ -66,6 +75,27 @@ export function SettingsScreen() {
           <option value="ru">{t.settings.languageRu}</option>
         </select>
       </label>
+      <div className="flex flex-col gap-2">
+        <span className="text-sm font-medium">{t.settings.appearance}</span>
+        <div className="flex flex-wrap gap-2">
+          {moods.map((item) => (
+            <button
+              key={item.id}
+              type="button"
+              className={cn(
+                'rounded-full px-3 py-1.5 text-sm font-medium',
+                mood === item.id
+                  ? 'bg-primary text-primary-foreground'
+                  : 'bg-muted text-muted-foreground',
+              )}
+              aria-pressed={mood === item.id}
+              onClick={() => setMood(item.id)}
+            >
+              {item.label}
+            </button>
+          ))}
+        </div>
+      </div>
       {canSkipWelcome && (
         <div className="flex flex-col gap-2">
           <p className="text-sm text-muted-foreground">

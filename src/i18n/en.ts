@@ -207,6 +207,9 @@ export const en: Dictionary = {
     skipWelcomeHint: 'Welcome still wants a first asset. Skip it to use the app empty.',
     skipWelcome: 'Skip welcome',
     allocation: 'Allocation',
+    appearance: 'Appearance',
+    moodLedger: 'Colorful',
+    moodGreen: 'Green',
   },
   backup: {
     title: 'Backup',
