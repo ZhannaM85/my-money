@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { historicalNetWorth, netWorth, periodChange } from '@/domain/netWorth'
+import { historicalNetWorth, periodChange } from '@/domain/netWorth'
 import { NetWorthChart } from '@/features/dashboard/NetWorthChart'
 import { useLocale, useTranslation } from '@/i18n'
 import {
@@ -57,15 +57,12 @@ export function HistoryScreen() {
     void ensureRange(start, today, baseCurrency, symbols)
   }, [baseCurrency, ensureRange, snapshots, start, today])
 
-  const current = useMemo(
-    () => netWorth(assets, snapshots, quotes, baseCurrency),
-    [assets, baseCurrency, quotes, snapshots],
-  )
   const series = useMemo(
     () => historicalNetWorth(assets, snapshots, quotes, dates, baseCurrency),
     [assets, baseCurrency, dates, quotes, snapshots],
   )
-  const change = periodChange(series[0]?.total ?? 0, current.total)
+  const latestPoint = series[series.length - 1]
+  const change = periodChange(series[0]?.total ?? 0, latestPoint?.total ?? 0)
   const list = useMemo(() => {
     return [...series].reverse().map((point, index, rows) => {
       const older = rows[index + 1]
@@ -111,7 +108,7 @@ export function HistoryScreen() {
         <>
           <StatCard
             label={t.dashboard.netWorth}
-            value={formatAmount(current.total, baseCurrency, locale)}
+            value={formatAmount(latestPoint?.total ?? 0, baseCurrency, locale)}
             description={`${formatSignedAmount(change.absolute, baseCurrency, locale)} ${t.history.overRange(range)}`}
           />
           <NetWorthChart

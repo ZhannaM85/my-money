@@ -180,9 +180,12 @@ export function DashboardScreen() {
           ?.amount ?? 0)
       : null
   const changeFrom = series[0]?.total ?? 0
-  const changeTo = isOriginal
-    ? (singleNativeTotal ?? 0)
-    : convertedResult.total
+  const changeTo =
+    series.length > 0
+      ? (series[series.length - 1]?.total ?? 0)
+      : isOriginal
+        ? (singleNativeTotal ?? 0)
+        : convertedResult.total
   const change = periodChange(changeFrom, changeTo)
   const rangeIndex = HISTORY_RANGES.indexOf(range)
   const canZoomIn = rangeIndex > 0

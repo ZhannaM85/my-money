@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 61,
+    issue: 58,
+    date: '2026-08-18T14:40:00+03:00',
+    en: 'History now shows the change over the selected chart range (last minus first), instead of 0.00 when today’s FX differs from the latest snapshot date.',
+    ru: 'История теперь показывает изменение за выбранный диапазон графика (последняя точка минус первая), а не 0,00, когда курс на сегодня отличается от даты последнего снимка.',
+  },
+  {
     version: 60,
     issue: 59,
     date: '2026-08-18T14:35:00+03:00',

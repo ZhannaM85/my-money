@@ -4,8 +4,10 @@ import { MemoryRouter } from 'react-router-dom'
 import { beforeEach, describe, expect, it } from 'vitest'
 import { DEFAULT_SETTINGS } from '@/domain/settings'
 import { db } from '@/infrastructure/persistence/indexeddb'
-import { formatAmount } from '@/shared/lib/money'
+import { addDaysIso } from '@/shared/lib/dates'
+import { formatAmount, formatSignedAmount, todayIsoDate } from '@/shared/lib/money'
 import { useAssetStore } from '@/stores/assetStore'
+import { useFxStore } from '@/stores/fxStore'
 import { useSettingsStore } from '@/stores/settingsStore'
 import { HistoryScreen } from './HistoryScreen'
 
@@ -14,7 +16,16 @@ const now = '2026-08-17T00:00:00.000Z'
 beforeEach(async () => {
   await db.assets.clear()
   await db.snapshots.clear()
+  await db.fxRates.clear()
+  await db.manualFxRates.clear()
   useAssetStore.setState({ assets: [], snapshots: [], loaded: false })
+  useFxStore.setState({
+    ...useFxStore.getState(),
+    quotes: [],
+    manualQuotes: [],
+    loading: false,
+    error: undefined,
+  })
   useSettingsStore.setState({ settings: DEFAULT_SETTINGS, loaded: true })
   await useAssetStore.getState().saveAsset(
     {
@@ -60,5 +71,79 @@ describe('HistoryScreen', () => {
     expect(
       screen.getAllByText(formatAmount(1000, 'EUR')).length,
     ).toBeGreaterThan(0)
+  })
+
+  it('shows the selected-range change from the visible series, not zero vs current net worth', async () => {
+    await db.assets.clear()
+    await db.snapshots.clear()
+    useAssetStore.setState({ assets: [], snapshots: [], loaded: false })
+
+    const today = todayIsoDate()
+    const yesterday = addDaysIso(today, -1)
+    const created = `${yesterday}T00:00:00.000Z`
+    await useFxStore.getState().saveManualRates([
+      { date: yesterday, base: 'EUR', quote: 'RUB', rate: 100 },
+      { date: today, base: 'EUR', quote: 'RUB', rate: 90 },
+    ])
+    await useAssetStore.getState().saveAsset(
+      {
+        id: 'eur',
+        name: 'Euro cash',
+        assetClass: 'money',
+        type: 'cash',
+        currency: 'EUR',
+        trackingStatus: 'included',
+        valuationMethod: 'account_balance',
+        updateFrequency: 'weekly',
+        createdAt: created,
+        updatedAt: created,
+      },
+      {
+        assetId: 'eur',
+        date: yesterday,
+        amount: 1000,
+        currency: 'EUR',
+      },
+    )
+    await useAssetStore.getState().saveAsset(
+      {
+        id: 'rub',
+        name: 'Ruble cash',
+        assetClass: 'money',
+        type: 'cash',
+        currency: 'RUB',
+        trackingStatus: 'included',
+        valuationMethod: 'account_balance',
+        updateFrequency: 'weekly',
+        createdAt: created,
+        updatedAt: created,
+      },
+      {
+        assetId: 'rub',
+        date: yesterday,
+        amount: 20000,
+        currency: 'RUB',
+      },
+    )
+
+    render(
+      <MemoryRouter>
+        <HistoryScreen />
+      </MemoryRouter>,
+    )
+
+    const startTotal = 1000 + 200
+    const endTotal = 1000 + 20000 / 90
+    expect(
+      (await screen.findAllByText(formatAmount(endTotal, 'EUR'))).length,
+    ).toBeGreaterThan(0)
+    expect(
+      screen.getByText(
+        `${formatSignedAmount(endTotal - startTotal, 'EUR')} over 3M`,
+      ),
+    ).toBeInTheDocument()
+    expect(
+      screen.queryByText(`${formatSignedAmount(0, 'EUR')} over 3M`),
+    ).not.toBeInTheDocument()
   })
 })
