@@ -136,6 +136,7 @@ _EUR base + RUB assets; iPhone tab bar; appearance; car; joint ownership; decima
 | [#46](https://github.com/ZhannaM85/my-money/issues/46) | 🔍 Pending validation | Original + All should show every native holding; disable the inactive currency dropdown | Original + All lists native totals per currency. Settings base currency disabled in Original; Dashboard currency filter disabled in Converted. |
 | [#47](https://github.com/ZhannaM85/my-money/issues/47) | 🔍 Pending validation | Use National Bank of Georgia rates for RUB conversion | Deploy generator now builds `fx/rub/*.json` from NBG JSON (GEL cross, quantity applied). Same-origin static load unchanged. |
 | [#48](https://github.com/ZhannaM85/my-money/issues/48) | 🔍 Pending validation | Static CBR RUB dataset deploys empty (no EUR/RUB quotes) | Parser now accepts `Date`+`Id` on CBR `Record`s; empty series fails the generate step. Missing-rate copy no longer claims ECB. |
+| [#49](https://github.com/ZhannaM85/my-money/issues/49) | 🔲 Open | Converted totals still fail on device — add FX diagnostic loggers | Live `EUR.json` is healthy (NBG, 1826 quotes). Suspected stale PWA/SW cache, IndexedDB FX cache, or silent missing-rate skips. Logging only — do not reopen #23/#44/#47/#48. |
 
 ---
 
