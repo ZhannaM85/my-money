@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { shouldShowOnboarding } from '@/domain/settings'
 import { useTranslation } from '@/i18n'
+import { useIsTextInputFocused, useVisualViewportShrunk } from '@/shared/hooks'
 import { BottomNav } from '@/shared/ui/bottom-nav'
 import { cn } from '@/shared/lib/utils'
 import { useAssetStore } from '@/stores/assetStore'
@@ -27,6 +28,9 @@ export function AppShell() {
   const t = useTranslation()
   const locale = useSettingsStore((state) => state.settings.locale)
   const onboarding = pathname === '/onboarding'
+  const isTextInputFocused = useIsTextInputFocused()
+  const isViewportShrunk = useVisualViewportShrunk()
+  const hideTabBar = onboarding || isTextInputFocused || isViewportShrunk
 
   useEffect(() => {
     document.documentElement.lang = locale
@@ -96,7 +100,7 @@ export function AppShell() {
         )}
         <Outlet />
       </main>
-      {!onboarding && <BottomNav />}
+      {!hideTabBar && <BottomNav />}
     </div>
   )
 }
