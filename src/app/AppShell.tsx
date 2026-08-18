@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { AppUpdateBanner } from '@/app/AppUpdateBanner'
 import { OfflineBanner } from '@/app/OfflineBanner'
+import { PullToRefreshIndicator } from '@/app/PullToRefreshIndicator'
 import { shouldShowOnboarding } from '@/domain/settings'
 import { useTranslation } from '@/i18n'
 import { useIsTextInputFocused, useVisualViewportShrunk } from '@/shared/hooks'
@@ -75,6 +76,7 @@ export function AppShell() {
 
   return (
     <div className="min-h-svh bg-background">
+      <PullToRefreshIndicator />
       <a
         href="#main-content"
         className="bg-primary text-primary-foreground absolute top-3 left-3 z-50 -translate-y-[200%] rounded-lg px-3 py-2 text-sm font-medium focus:translate-y-0"

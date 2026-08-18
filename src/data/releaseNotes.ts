@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 39,
+    issue: 39,
+    date: '2026-08-18T10:50:00+03:00',
+    en: 'Pulling down from the top now shows a loading spinner, like in Turtle Steps.',
+    ru: 'При вытягивании вниз с верха страницы теперь виден индикатор загрузки, как в Turtle Steps.',
+  },
+  {
     version: 38,
     issue: 38,
     date: '2026-08-18T10:25:00+03:00',
