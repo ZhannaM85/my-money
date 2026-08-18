@@ -150,6 +150,9 @@ export interface Dictionary {
     title: string
     description: string
     baseCurrency: string
+    currencyDisplay: string
+    currencyDisplayBase: string
+    currencyDisplayNative: string
     language: string
     languageEn: string
     languageRu: string

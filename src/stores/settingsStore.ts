@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import {
+  type CurrencyDisplayMode,
   DEFAULT_SETTINGS,
   type Locale,
   type Settings,
@@ -13,6 +14,7 @@ interface SettingsStoreState {
   loaded: boolean
   load: () => Promise<void>
   setBaseCurrency: (baseCurrency: string) => Promise<void>
+  setCurrencyDisplayMode: (mode: CurrencyDisplayMode) => Promise<void>
   setLocale: (locale: Locale) => Promise<void>
   completeOnboarding: () => Promise<void>
 }
@@ -28,6 +30,15 @@ export const useSettingsStore = create<SettingsStoreState>((set, get) => ({
     const next: Settings = {
       ...get().settings,
       baseCurrency,
+      updatedAt: new Date().toISOString(),
+    }
+    await settingsRepository.save(next)
+    set({ settings: next })
+  },
+  setCurrencyDisplayMode: async (currencyDisplayMode) => {
+    const next: Settings = {
+      ...get().settings,
+      currencyDisplayMode,
       updatedAt: new Date().toISOString(),
     }
     await settingsRepository.save(next)

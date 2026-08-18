@@ -47,8 +47,11 @@ export function AssetDetailsScreen() {
   const loaded = useAssetStore((state) => state.loaded)
   const loadSettings = useSettingsStore((state) => state.load)
   const baseCurrency = useSettingsStore((state) => state.settings.baseCurrency)
+  const displayMode = useSettingsStore(
+    (state) => state.settings.currencyDisplayMode,
+  )
   const quotes = useFxStore((state) => state.quotes)
-  const [mode, setMode] = useState<DisplayMode>('native')
+  const [mode, setMode] = useState<DisplayMode>(displayMode)
   const [amountDraft, setAmountDraft] = useState('')
   const [amountError, setAmountError] = useState<string | undefined>()
   const today = todayIsoDate()

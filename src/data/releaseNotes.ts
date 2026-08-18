@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 45,
+    issue: 42,
+    date: '2026-08-18T11:41:00+03:00',
+    en: 'Settings now include an original-currency display mode for asset-level views, so asset lists can stay native instead of always showing converted values first.',
+    ru: 'В настройках теперь есть режим показа активов в оригинальной валюте, чтобы списки активов могли оставаться в родных валютах без приоритета пересчитанных сумм.',
+  },
+  {
     version: 44,
     issue: 41,
     date: '2026-08-18T11:36:00+03:00',

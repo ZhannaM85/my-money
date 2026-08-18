@@ -27,6 +27,9 @@ export function AssetsScreen() {
   const loaded = useAssetStore((state) => state.loaded)
   const loadSettings = useSettingsStore((state) => state.load)
   const baseCurrency = useSettingsStore((state) => state.settings.baseCurrency)
+  const displayMode = useSettingsStore(
+    (state) => state.settings.currencyDisplayMode,
+  )
   const quotes = useFxStore((state) => state.quotes)
   const [filter, setFilter] = useState<Filter>('all')
 
@@ -107,6 +110,20 @@ export function AssetsScreen() {
               snapshot && rate !== undefined && !sameCurrency
                 ? convertAmount(snapshot.amount, rate)
                 : undefined
+            const showConverted = displayMode === 'base'
+            const primaryAmount =
+              snapshot && showConverted && converted !== undefined
+                ? formatAmount(converted, baseCurrency, locale)
+                : snapshot
+                  ? formatAmount(snapshot.amount, snapshot.currency, locale)
+                  : null
+            const secondaryLabel = sameCurrency
+              ? baseCurrency
+              : showConverted
+                ? t.common.native(snapshot?.currency ?? asset.currency)
+                : converted !== undefined
+                  ? t.common.estimated(formatAmount(converted, baseCurrency, locale))
+                  : t.common.native(snapshot?.currency ?? asset.currency)
             return (
               <li key={asset.id}>
                 <Link
@@ -129,23 +146,11 @@ export function AssetsScreen() {
                     {snapshot ? (
                       <>
                         <span className="block tabular-nums">
-                          {formatAmount(snapshot.amount, snapshot.currency, locale)}
+                          {primaryAmount}
                         </span>
-                        {sameCurrency ? (
-                          <span className="text-xs text-muted-foreground">
-                            {baseCurrency}
-                          </span>
-                        ) : converted !== undefined ? (
-                          <span className="text-xs text-muted-foreground">
-                            {t.common.estimated(
-                              formatAmount(converted, baseCurrency, locale),
-                            )}
-                          </span>
-                        ) : (
-                          <span className="text-xs text-muted-foreground">
-                            {t.common.native(snapshot.currency)}
-                          </span>
-                        )}
+                        <span className="text-xs text-muted-foreground">
+                          {secondaryLabel}
+                        </span>
                       </>
                     ) : (
                       <span className="text-sm text-muted-foreground">

@@ -209,6 +209,9 @@ export const ru: Dictionary = {
     description:
       'Базовая валюта — настройка отображения. Её смена не переписывает прошлые суммы.',
     baseCurrency: 'Базовая валюта',
+    currencyDisplay: 'Показ активов',
+    currencyDisplayBase: 'В пересчёте',
+    currencyDisplayNative: 'В оригинале',
     language: 'Язык',
     languageEn: 'English',
     languageRu: 'Русский',

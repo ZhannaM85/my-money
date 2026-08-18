@@ -11,6 +11,7 @@ import { BACKUP_VERSION, type BackupBundle } from '@/domain/backup'
 const settingsSchema = z.object({
   id: z.literal('singleton'),
   baseCurrency: z.string().min(1),
+  currencyDisplayMode: z.enum(['base', 'native']).default('base'),
   locale: z.enum(['en', 'ru']),
   onboardingCompleted: z.boolean().default(false),
   updatedAt: z.string().min(1),

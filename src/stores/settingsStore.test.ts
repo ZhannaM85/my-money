@@ -9,6 +9,7 @@ beforeEach(async () => {
     settings: {
       id: 'singleton',
       baseCurrency: 'EUR',
+      currencyDisplayMode: 'base',
       locale: 'en',
       onboardingCompleted: false,
       updatedAt: '1970-01-01T00:00:00.000Z',
@@ -42,5 +43,17 @@ describe('settingsStore', () => {
     expect(useSettingsStore.getState().settings.locale).toBe('ru')
     await useSettingsStore.getState().load()
     expect(useSettingsStore.getState().settings.locale).toBe('ru')
+  })
+
+  it('persists the asset display mode preference', async () => {
+    await useSettingsStore.getState().load()
+    await useSettingsStore.getState().setCurrencyDisplayMode('native')
+    expect(useSettingsStore.getState().settings.currencyDisplayMode).toBe(
+      'native',
+    )
+    await useSettingsStore.getState().load()
+    expect(useSettingsStore.getState().settings.currencyDisplayMode).toBe(
+      'native',
+    )
   })
 })

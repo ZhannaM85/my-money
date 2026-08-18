@@ -1,6 +1,10 @@
 import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { BASE_CURRENCIES, type Locale } from '@/domain/settings'
+import {
+  BASE_CURRENCIES,
+  type CurrencyDisplayMode,
+  type Locale,
+} from '@/domain/settings'
 import { BackupSection, CsvSection } from '@/features/export'
 import { releaseNotes } from '@/data/releaseNotes'
 import { useTranslation } from '@/i18n'
@@ -18,6 +22,9 @@ export function SettingsScreen() {
   const loaded = useSettingsStore((state) => state.loaded)
   const load = useSettingsStore((state) => state.load)
   const setBaseCurrency = useSettingsStore((state) => state.setBaseCurrency)
+  const setCurrencyDisplayMode = useSettingsStore(
+    (state) => state.setCurrencyDisplayMode,
+  )
   const setLocale = useSettingsStore((state) => state.setLocale)
   const completeOnboarding = useSettingsStore(
     (state) => state.completeOnboarding,
@@ -30,6 +37,10 @@ export function SettingsScreen() {
   const moods: { id: Mood; label: string }[] = [
     { id: 'ledger', label: t.settings.moodLedger },
     { id: 'green', label: t.settings.moodGreen },
+  ]
+  const displayModes: { id: CurrencyDisplayMode; label: string }[] = [
+    { id: 'base', label: t.settings.currencyDisplayBase },
+    { id: 'native', label: t.settings.currencyDisplayNative },
   ]
 
   useEffect(() => {
@@ -75,6 +86,27 @@ export function SettingsScreen() {
           ))}
         </select>
       </label>
+      <div className="flex flex-col gap-2">
+        <span className="text-sm font-medium">{t.settings.currencyDisplay}</span>
+        <div className="flex flex-wrap gap-2">
+          {displayModes.map((item) => (
+            <button
+              key={item.id}
+              type="button"
+              className={cn(
+                'rounded-full px-3 py-1.5 text-sm font-medium',
+                settings.currencyDisplayMode === item.id
+                  ? 'bg-primary text-primary-foreground'
+                  : 'bg-muted text-muted-foreground',
+              )}
+              aria-pressed={settings.currencyDisplayMode === item.id}
+              onClick={() => void setCurrencyDisplayMode(item.id)}
+            >
+              {item.label}
+            </button>
+          ))}
+        </div>
+      </div>
       <label className="flex flex-col gap-1.5">
         <span className="text-sm font-medium">{t.settings.language}</span>
         <select

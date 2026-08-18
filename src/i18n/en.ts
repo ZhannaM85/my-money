@@ -204,6 +204,9 @@ export const en: Dictionary = {
     description:
       'Base currency is a display setting. Changing it does not rewrite past balances.',
     baseCurrency: 'Base currency',
+    currencyDisplay: 'Asset display',
+    currencyDisplayBase: 'Converted',
+    currencyDisplayNative: 'Original',
     language: 'Language',
     languageEn: 'English',
     languageRu: 'Русский',
