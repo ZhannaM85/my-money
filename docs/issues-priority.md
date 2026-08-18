@@ -146,7 +146,7 @@ _EUR base + RUB assets; iPhone tab bar; appearance; car; joint ownership; decima
 | [#56](https://github.com/ZhannaM85/my-money/issues/56) | 🔍 Pending validation | Chart Y-axis repeats the same compact label on every tick | Compact axis labels now keep enough fraction digits so nearby million-scale ticks stay distinct (1,97 млн vs 2 млн). |
 | [#57](https://github.com/ZhannaM85/my-money/issues/57) | 🔍 Pending validation | Add Soft Finance, Neutral, and Pastel appearance moods | Colorful and Green stay. Extra moods: Soft Finance, Neutral (slate, not black-black), Pastel. |
 | [#58](https://github.com/ZhannaM85/my-money/issues/58) | 🔍 Pending validation | History shows 0,00 ₽ for the selected range while the list and chart moved | History (and Dashboard range line) now use last − first of the visible series, so FX moves on later dates are not shown as 0,00. |
-| [#59](https://github.com/ZhannaM85/my-money/issues/59) | 🔍 Pending validation | Retune Colorful mood so it is not a black UI | Colorful now uses vivid teal chrome and saturated category colors; dark mode is teal-slate, not #0a0a0a. Other moods unchanged. |
+| [#59](https://github.com/ZhannaM85/my-money/issues/59) | 🔲 Open | Retune Colorful mood so it is not a black UI | Live: teal/green chrome was wrong. Colorful must stay dark; only buttons and actions are colorful. |
 | [#61](https://github.com/ZhannaM85/my-money/issues/61) | 🔍 Pending validation | Allow adding an asset with a past first-snapshot date | New asset and onboarding forms have As of (default today). Past dates save; future dates are rejected. |
 
 ---
