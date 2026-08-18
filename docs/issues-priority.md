@@ -135,7 +135,7 @@ _EUR base + RUB assets; iPhone tab bar; appearance; car; joint ownership; decima
 | [#45](https://github.com/ZhannaM85/my-money/issues/45) | 🔲 Open | Allow manual entry of today's FX rates as a fallback | Add a dedicated modal/screen for same-day manual FX overrides when external rates are missing or unreliable. |
 | [#46](https://github.com/ZhannaM85/my-money/issues/46) | 🔲 Open | Original + All should show every native holding; disable the inactive currency dropdown | Original + All must list both native holdings (e.g. RUB 20,000 and EUR 1,000). Settings base currency is disabled in Original; Dashboard currency filter is disabled in Converted. Do not reopen #23/#44. |
 | [#47](https://github.com/ZhannaM85/my-money/issues/47) | 🔲 Open | Use National Bank of Georgia rates for RUB conversion | NBG JSON API publishes RUB and EUR vs GEL, including historical `?date=`. Cross via GEL for Converted totals. Do not reopen #23/#44. |
-| [#48](https://github.com/ZhannaM85/my-money/issues/48) | 🔲 Open | Static CBR RUB dataset deploys empty (no EUR/RUB quotes) | Live `fx/rub/EUR.json` is `{ quotes: [] }`. CBR XML `Record` has Date+Id; generator regex misses all rows. CI does not fail on empty series. Do not reopen #23/#44. |
+| [#48](https://github.com/ZhannaM85/my-money/issues/48) | 🔍 Pending validation | Static CBR RUB dataset deploys empty (no EUR/RUB quotes) | Parser now accepts `Date`+`Id` on CBR `Record`s; empty series fails the generate step. Missing-rate copy no longer claims ECB. |
 
 ---
 

@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 47,
+    issue: 48,
+    date: '2026-08-18T12:45:00+03:00',
+    en: 'The hosted ruble rate files now include real daily quotes again, and deploy fails if a series comes out empty.',
+    ru: 'Файлы курсов рубля снова содержат реальные дневные котировки, а деплой падает, если серия получается пустой.',
+  },
+  {
     version: 46,
     issue: 43,
     date: '2026-08-18T11:44:00+03:00',

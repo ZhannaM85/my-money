@@ -35,9 +35,9 @@ export const en: Dictionary = {
     emptyTitle: 'No assets yet',
     emptyDescription: 'Add what you own or owe to see your first net worth.',
     fxMissing: (codes) =>
-      `No reference rate for ${codes} on the snapshot date. Where a rate exists it is an ECB estimate, not an executable quote.`,
+      `No reference rate for ${codes} on the snapshot date. Where a rate exists it is a reference estimate, not an executable quote.`,
     fxConverted:
-      'Converted with ECB reference rates. Estimates, not executable quotes.',
+      'Converted with reference exchange rates. Estimates, not executable quotes.',
     allocation: 'Allocation',
   },
   assets: {
