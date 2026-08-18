@@ -1,6 +1,5 @@
 import { create } from 'zustand'
 import { lookupRate, type RateTable } from '@/domain/fx'
-import { ensureCbrRates, ensureCbrRange, CbrFxClient } from '@/infrastructure/fx/cbr'
 import { IndexedDbFxRateRepository } from '@/infrastructure/persistence/indexeddb'
 import {
   ensureFxRates,
@@ -11,7 +10,6 @@ import {
 
 const fxRepository = new IndexedDbFxRateRepository()
 const frankfurter = new FrankfurterFxClient()
-const cbr = new CbrFxClient()
 
 interface FxStoreState {
   quotes: RateTable
@@ -38,7 +36,6 @@ export const useFxStore = create<FxStoreState>((set) => ({
     set({ loading: true, error: undefined })
     try {
       await ensureFxRates(requests, fxRepository, frankfurter)
-      await ensureCbrRates(requests, fxRepository, cbr)
       const quotes = await fxRepository.getAll()
       set({ quotes, loading: false })
     } catch {
@@ -54,7 +51,6 @@ export const useFxStore = create<FxStoreState>((set) => ({
     set({ loading: true, error: undefined })
     try {
       await ensureFxRange(start, end, base, symbols, fxRepository, frankfurter)
-      await ensureCbrRange(start, end, base, symbols, fxRepository, cbr)
       const quotes = await fxRepository.getAll()
       set({ quotes, loading: false })
     } catch {

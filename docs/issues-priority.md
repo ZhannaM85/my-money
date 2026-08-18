@@ -110,7 +110,7 @@ _EUR base + RUB assets; iPhone tab bar; appearance; car; joint ownership; decima
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
-| [#23](https://github.com/ZhannaM85/my-money/issues/23) | 🔍 Pending validation | RUB assets show €0 when base currency is EUR | ECB/Frankfurter has no RUB. Missing rates currently skip the amount, so Dashboard shows €0. Product fork: never-zero vs second rate source vs both. |
+| [#23](https://github.com/ZhannaM85/my-money/issues/23) | 🔍 Pending validation | RUB assets show €0 when base currency is EUR | Root cause: app still used old Frankfurter v1 assumptions and filtered out `RUB` before fetch. Fix switches to Frankfurter v2, which serves browser-safe RUB historical rates. |
 | [#24](https://github.com/ZhannaM85/my-money/issues/24) | 🔍 Pending validation | Tab bar sits flush on the iPhone home indicator | Turtle: `viewport-fit=cover` so `pb-[env(safe-area-inset-bottom)]` is not 0. Tab links `min-h-20`. |
 | [#25](https://github.com/ZhannaM85/my-money/issues/25) | 🔍 Pending validation | Tab bar disconnects from the bottom on iPhone Safari | CSS is already `fixed bottom-0`. Same WebKit visual-viewport class as Turtle #120/#188 — hide bar while keyboard/viewport shrunk. |
 | [#26](https://github.com/ZhannaM85/my-money/issues/26) | 🔍 Pending validation | Add a colorful appearance mood matching the design mockups | Keep current green as one mood. Second mood: neutral chrome + category colors (blue/teal, green, amber, purple, coral). Turtle `data-mood` pattern. |

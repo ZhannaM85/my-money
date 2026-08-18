@@ -15,56 +15,45 @@ describe('FrankfurterFxClient', () => {
       const url = String(input)
       expect(url.startsWith(FRANKFURTER_API_BASE)).toBe(true)
       expect(url).not.toMatch(/Revolut|1000|asset/i)
-      if (url.includes('/latest')) {
-        return jsonResponse({
-          amount: 1,
-          base: 'EUR',
-          date: '2026-08-17',
-          rates: { USD: 1.1 },
-        })
+      if (!url.includes('date=')) {
+        return jsonResponse([
+          { date: '2026-08-17', base: 'EUR', quote: 'USD', rate: 1.1 },
+          { date: '2026-08-17', base: 'EUR', quote: 'RUB', rate: 92.5 },
+        ])
       }
-      return jsonResponse({
-        amount: 1,
-        base: 'EUR',
-        date: '2026-08-14',
-        rates: { USD: 1.08 },
-      })
+      return jsonResponse([
+        { date: '2026-08-16', base: 'EUR', quote: 'USD', rate: 1.08 },
+        { date: '2026-08-16', base: 'EUR', quote: 'RUB', rate: 93.2 },
+      ])
     })
     const client = new FrankfurterFxClient(fetchFn)
 
     const latest = await client.latest('EUR', ['USD', 'EUR', 'RUB'])
     expect(latest).toEqual([
       { date: '2026-08-17', base: 'EUR', quote: 'USD', rate: 1.1 },
+      { date: '2026-08-17', base: 'EUR', quote: 'RUB', rate: 92.5 },
     ])
-    expect(String(fetchFn.mock.calls[0][0])).toContain('symbols=USD')
-    expect(String(fetchFn.mock.calls[0][0])).not.toContain('RUB')
+    expect(String(fetchFn.mock.calls[0][0])).toContain('quotes=USD%2CRUB')
 
-    const historical = await client.onDate('2026-08-16', 'EUR', ['USD'])
+    const historical = await client.onDate('2026-08-16', 'EUR', ['USD', 'RUB'])
     expect(historical).toEqual([
       { date: '2026-08-16', base: 'EUR', quote: 'USD', rate: 1.08 },
-      { date: '2026-08-14', base: 'EUR', quote: 'USD', rate: 1.08 },
+      { date: '2026-08-16', base: 'EUR', quote: 'RUB', rate: 93.2 },
     ])
   })
 
-  it('does not call the network for same-currency or unsupported bases', async () => {
+  it('does not call the network for same-currency-only requests', async () => {
     const fetchFn = vi.fn()
     const client = new FrankfurterFxClient(fetchFn)
     expect(await client.latest('EUR', ['EUR'])).toEqual([])
-    expect(await client.latest('RUB', ['USD'])).toEqual([])
     expect(fetchFn).not.toHaveBeenCalled()
   })
 
   it('fill-forwards weekend gaps in a timeseries', async () => {
     const fetchFn = vi.fn(async () =>
-      jsonResponse({
-        amount: 1,
-        base: 'EUR',
-        start_date: '2026-08-14',
-        end_date: '2026-08-16',
-        rates: {
-          '2026-08-14': { USD: 1.08 },
-        },
-      }),
+      jsonResponse([
+        { date: '2026-08-14', base: 'EUR', quote: 'USD', rate: 1.08 },
+      ]),
     )
     const client = new FrankfurterFxClient(fetchFn)
     const quotes = await client.timeseries('2026-08-14', '2026-08-16', 'EUR', [

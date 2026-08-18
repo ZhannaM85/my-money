@@ -246,13 +246,13 @@ Base currency is stored in `Settings`. Changing it re-reads FX and re-renders; i
 
 ## FX
 
-- Provider: [Frankfurter](https://api.frankfurter.dev/) (ECB reference rates, no API key). Client: `infrastructure/fx/frankfurter/`.
+- Provider: [Frankfurter](https://api.frankfurter.dev/) v2 (multi-provider reference rates, no API key). Client: `infrastructure/fx/frankfurter/`.
 - Cache quotes in IndexedDB via `FxRateRepository` so charts work offline after a fetch.
 - Converted values are estimates / reference rates, labeled as such — not executable quotes.
 - Same-currency pairs are rate `1` with no network.
 - Historical net worth **must** use the rate for the snapshot date (weekend/holiday dates reuse the previous ECB business day).
 - Only currency codes and dates are sent. User balances, names, and assets never leave the device.
-- **Not covered (do not invent a second provider):** `RUB` is not in the Frankfurter/ECB set. Other listed base currencies (EUR, USD, GBP, CHF, JPY, CAD, AUD, PLN, SEK, NOK, DKK, CNY, INR) are.
+- `RUB` is supported through Frankfurter v2 as well, so the web app stays on one browser-safe FX provider instead of a separate RUB-only path.
 
 ---
 

@@ -17,12 +17,9 @@ describe('ensureFxRates', () => {
   it('skips same-currency pairs and reuses the IndexedDB cache', async () => {
     const fetchFn = vi.fn(async () => {
       return new Response(
-        JSON.stringify({
-          amount: 1,
-          base: 'EUR',
-          date: '2026-08-17',
-          rates: { USD: 1.1 },
-        }),
+        JSON.stringify([
+          { date: '2026-08-17', base: 'EUR', quote: 'USD', rate: 1.1 },
+        ]),
         { headers: { 'Content-Type': 'application/json' } },
       )
     })
@@ -46,5 +43,27 @@ describe('ensureFxRates', () => {
       client,
     )
     expect(fetchFn).toHaveBeenCalledTimes(1)
+  })
+
+  it('requests RUB conversions through Frankfurter v2', async () => {
+    const fetchFn = vi.fn(async () => {
+      return new Response(
+        JSON.stringify([
+          { date: '2026-08-18', base: 'EUR', quote: 'RUB', rate: 100 },
+        ]),
+        { headers: { 'Content-Type': 'application/json' } },
+      )
+    })
+    const client = new FrankfurterFxClient(fetchFn)
+
+    const quotes = await ensureFxRates(
+      [{ from: 'RUB', to: 'EUR', date: '2026-08-18' }],
+      repo,
+      client,
+    )
+
+    expect(fetchFn).toHaveBeenCalledTimes(1)
+    expect(String(fetchFn.mock.calls.at(0)?.at(0))).toContain('quotes=RUB')
+    expect(quotes.some((quote) => quote.quote === 'RUB')).toBe(true)
   })
 })

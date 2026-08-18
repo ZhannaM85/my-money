@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 40,
+    issue: 23,
+    date: '2026-08-18T11:05:00+03:00',
+    en: 'Ruble balances now convert to euros again by using Frankfurter v2 instead of the old RUB-blocked FX path.',
+    ru: 'Суммы в рублях снова конвертируются в евро: вместо старого FX-пути с блокировкой RUB теперь используется Frankfurter v2.',
+  },
+  {
     version: 39,
     issue: 39,
     date: '2026-08-18T10:50:00+03:00',
