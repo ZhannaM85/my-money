@@ -42,6 +42,9 @@ jobs:
       - name: Test
         run: npm test
 
+      - name: Write version.json for update detection
+        run: echo "{\"version\":\"${{ github.sha }}\"}" > public/version.json
+
       - name: Build application
         run: npx vite build --base=/my-money/
 

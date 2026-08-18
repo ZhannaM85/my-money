@@ -278,4 +278,9 @@ export const ru: Dictionary = {
     usingCachedRates:
       'Не удалось обновить справочные курсы. Показаны последние сохранённые.',
   },
+  appUpdate: {
+    availableText: 'Доступна новая версия.',
+    reloadButton: 'Обновить',
+    reloadingText: 'Обновление…',
+  },
 }

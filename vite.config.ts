@@ -18,6 +18,7 @@ export default defineConfig(({ mode }) => ({
             injectRegister: false,
             workbox: {
               globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
+              globIgnores: ['version.json'],
             },
           }),
         ]),
@@ -30,5 +31,8 @@ export default defineConfig(({ mode }) => ({
   test: {
     environment: 'jsdom',
     setupFiles: ['./test/setup.ts'],
+  },
+  define: {
+    __APP_VERSION__: JSON.stringify(process.env.GITHUB_SHA ?? 'dev'),
   },
 }))

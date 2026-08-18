@@ -271,4 +271,9 @@ export const en: Dictionary = {
     usingCachedRates:
       'Could not refresh reference rates. Using last cached rates.',
   },
+  appUpdate: {
+    availableText: 'A new version is available.',
+    reloadButton: 'Reload',
+    reloadingText: 'Reloading…',
+  },
 }

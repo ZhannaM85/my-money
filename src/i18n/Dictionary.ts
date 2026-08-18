@@ -205,4 +205,9 @@ export interface Dictionary {
   fx: {
     usingCachedRates: string
   }
+  appUpdate: {
+    availableText: string
+    reloadButton: string
+    reloadingText: string
+  }
 }

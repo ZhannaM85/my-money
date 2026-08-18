@@ -32,6 +32,9 @@ coverage
 # Scratch files for gh issue --body-file (never commit)
 tmp/issue-bodies/
 
+# Regenerated on every deploy (#34)
+public/version.json
+
 # Playwright
 /test-results/
 /playwright-report/
