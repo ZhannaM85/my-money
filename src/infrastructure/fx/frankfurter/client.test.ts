@@ -18,12 +18,10 @@ describe('FrankfurterFxClient', () => {
       if (!url.includes('date=')) {
         return jsonResponse([
           { date: '2026-08-17', base: 'EUR', quote: 'USD', rate: 1.1 },
-          { date: '2026-08-17', base: 'EUR', quote: 'RUB', rate: 92.5 },
         ])
       }
       return jsonResponse([
         { date: '2026-08-16', base: 'EUR', quote: 'USD', rate: 1.08 },
-        { date: '2026-08-16', base: 'EUR', quote: 'RUB', rate: 93.2 },
       ])
     })
     const client = new FrankfurterFxClient(fetchFn)
@@ -31,21 +29,21 @@ describe('FrankfurterFxClient', () => {
     const latest = await client.latest('EUR', ['USD', 'EUR', 'RUB'])
     expect(latest).toEqual([
       { date: '2026-08-17', base: 'EUR', quote: 'USD', rate: 1.1 },
-      { date: '2026-08-17', base: 'EUR', quote: 'RUB', rate: 92.5 },
     ])
-    expect(String(fetchFn.mock.calls[0][0])).toContain('quotes=USD%2CRUB')
+    expect(String(fetchFn.mock.calls[0][0])).toContain('quotes=USD')
+    expect(String(fetchFn.mock.calls[0][0])).not.toContain('RUB')
 
     const historical = await client.onDate('2026-08-16', 'EUR', ['USD', 'RUB'])
     expect(historical).toEqual([
       { date: '2026-08-16', base: 'EUR', quote: 'USD', rate: 1.08 },
-      { date: '2026-08-16', base: 'EUR', quote: 'RUB', rate: 93.2 },
     ])
   })
 
-  it('does not call the network for same-currency-only requests', async () => {
+  it('does not call the network for same-currency-only or RUB requests', async () => {
     const fetchFn = vi.fn()
     const client = new FrankfurterFxClient(fetchFn)
     expect(await client.latest('EUR', ['EUR'])).toEqual([])
+    expect(await client.latest('RUB', ['USD'])).toEqual([])
     expect(fetchFn).not.toHaveBeenCalled()
   })
 

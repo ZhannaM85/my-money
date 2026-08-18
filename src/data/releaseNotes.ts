@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 42,
+    issue: 23,
+    date: '2026-08-18T11:30:00+03:00',
+    en: 'Mixed-currency totals now use the app-hosted ruble dataset instead of treating ruble conversions like a failing live API lookup.',
+    ru: 'Смешанные валютные итоги теперь используют встроенный в приложение набор курсов рубля, а не обращаются к падающему live API.',
+  },
+  {
     version: 41,
     issue: 44,
     date: '2026-08-18T11:27:00+03:00',

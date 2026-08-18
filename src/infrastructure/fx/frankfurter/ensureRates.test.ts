@@ -45,7 +45,7 @@ describe('ensureFxRates', () => {
     expect(fetchFn).toHaveBeenCalledTimes(1)
   })
 
-  it('requests RUB conversions through Frankfurter v2', async () => {
+  it('leaves RUB conversions to the static same-origin dataset', async () => {
     const fetchFn = vi.fn(async () => {
       return new Response(
         JSON.stringify([
@@ -62,8 +62,7 @@ describe('ensureFxRates', () => {
       client,
     )
 
-    expect(fetchFn).toHaveBeenCalledTimes(1)
-    expect(String(fetchFn.mock.calls.at(0)?.at(0))).toContain('quotes=RUB')
-    expect(quotes.some((quote) => quote.quote === 'RUB')).toBe(true)
+    expect(fetchFn).not.toHaveBeenCalled()
+    expect(quotes).toEqual([])
   })
 })
