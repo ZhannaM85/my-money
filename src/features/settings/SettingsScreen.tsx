@@ -12,7 +12,7 @@ import { Button } from '@/shared/ui/button'
 import { PageHeader } from '@/shared/ui/page-header'
 import { useAssetStore } from '@/stores/assetStore'
 import { useSettingsStore } from '@/stores/settingsStore'
-import { useThemeStore, type Mood } from '@/stores/themeStore'
+import { useThemeStore, MOODS, type Mood } from '@/stores/themeStore'
 import { cn } from '@/shared/lib/utils'
 import { ManualRatesSection } from './ManualRatesSection'
 import { FxDebugSection } from './FxDebugSection'
@@ -35,11 +35,14 @@ export function SettingsScreen() {
   const assetCount = useAssetStore((state) => state.assets.length)
   const mood = useThemeStore((state) => state.mood)
   const setMood = useThemeStore((state) => state.setMood)
-
-  const moods: { id: Mood; label: string }[] = [
-    { id: 'ledger', label: t.settings.moodLedger },
-    { id: 'green', label: t.settings.moodGreen },
-  ]
+  const moodLabels: Record<Mood, string> = {
+    ledger: t.settings.moodLedger,
+    green: t.settings.moodGreen,
+    soft: t.settings.moodSoft,
+    neutral: t.settings.moodNeutral,
+    pastel: t.settings.moodPastel,
+  }
+  const moods = MOODS.map((id) => ({ id, label: moodLabels[id] }))
   const displayModes: { id: CurrencyDisplayMode; label: string }[] = [
     { id: 'base', label: t.settings.currencyDisplayBase },
     { id: 'native', label: t.settings.currencyDisplayNative },

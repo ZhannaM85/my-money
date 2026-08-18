@@ -101,6 +101,156 @@
   --ring: #4ade80;
 }
 
+:root[data-mood='soft'] {
+  --background: #f7f7f4;
+  --foreground: #1f2937;
+  --card: #ffffff;
+  --card-foreground: #1f2937;
+  --popover: #ffffff;
+  --popover-foreground: #1f2937;
+  --primary: #2f7d57;
+  --primary-foreground: #ffffff;
+  --secondary: #eeeee8;
+  --secondary-foreground: #1f2937;
+  --muted: #eeeee8;
+  --muted-foreground: #6b7280;
+  --accent: #e8f3ec;
+  --accent-foreground: #1f2937;
+  --border: #e5e5e0;
+  --input: #6b7280;
+  --ring: #2f7d57;
+  --chart-money: #2fa7a0;
+  --chart-investments: #2f7d57;
+  --chart-property: #8b6bd6;
+  --chart-valuables: #d9a441;
+  --chart-liabilities: #e07a5f;
+}
+
+:root[data-mood='soft'].dark {
+  --background: #111827;
+  --card: #1f2937;
+  --card-foreground: #f3f4f6;
+  --popover: #1f2937;
+  --popover-foreground: #f3f4f6;
+  --foreground: #f3f4f6;
+  --primary: #4faf7a;
+  --primary-foreground: #0b1f16;
+  --secondary: #1f2937;
+  --secondary-foreground: #f3f4f6;
+  --muted: #1f2937;
+  --muted-foreground: #9ca3af;
+  --accent: #1b3a2c;
+  --accent-foreground: #f3f4f6;
+  --border: #374151;
+  --input: #9ca3af;
+  --ring: #4faf7a;
+  --chart-money: #2dd4bf;
+  --chart-investments: #4faf7a;
+  --chart-property: #a78bfa;
+  --chart-valuables: #eab308;
+  --chart-liabilities: #fb7185;
+}
+
+:root[data-mood='neutral'] {
+  --background: #f5f5f7;
+  --foreground: #1d1d1f;
+  --card: #ffffff;
+  --card-foreground: #1d1d1f;
+  --popover: #ffffff;
+  --popover-foreground: #1d1d1f;
+  --primary: #4c7dff;
+  --primary-foreground: #ffffff;
+  --secondary: #f5f5f7;
+  --secondary-foreground: #1d1d1f;
+  --muted: #f5f5f7;
+  --muted-foreground: #6e6e73;
+  --accent: #e8eeff;
+  --accent-foreground: #1d1d1f;
+  --border: #d2d2d7;
+  --input: #6e6e73;
+  --ring: #4c7dff;
+  --chart-money: #4c7dff;
+  --chart-investments: #34c759;
+  --chart-property: #af52de;
+  --chart-valuables: #ff9f0a;
+  --chart-liabilities: #ff6961;
+}
+
+:root[data-mood='neutral'].dark {
+  --background: #1c1c1e;
+  --foreground: #f5f5f7;
+  --card: #2c2c2e;
+  --card-foreground: #f5f5f7;
+  --popover: #2c2c2e;
+  --popover-foreground: #f5f5f7;
+  --primary: #6b93ff;
+  --primary-foreground: #1c1c1e;
+  --secondary: #2c2c2e;
+  --secondary-foreground: #f5f5f7;
+  --muted: #2c2c2e;
+  --muted-foreground: #98989d;
+  --accent: #2a3348;
+  --accent-foreground: #f5f5f7;
+  --border: #3a3a3c;
+  --input: #98989d;
+  --ring: #6b93ff;
+  --chart-money: #6b93ff;
+  --chart-investments: #30d158;
+  --chart-property: #bf5af2;
+  --chart-valuables: #ffd60a;
+  --chart-liabilities: #ff6961;
+}
+
+:root[data-mood='pastel'] {
+  --background: #f8f6f1;
+  --foreground: #3f3a36;
+  --card: #fffcf7;
+  --card-foreground: #3f3a36;
+  --popover: #fffcf7;
+  --popover-foreground: #3f3a36;
+  --primary: #5b8a7a;
+  --primary-foreground: #ffffff;
+  --secondary: #f1ece3;
+  --secondary-foreground: #3f3a36;
+  --muted: #f1ece3;
+  --muted-foreground: #8a8279;
+  --accent: #e8f4f1;
+  --accent-foreground: #3f3a36;
+  --border: #e6dfd4;
+  --input: #8a8279;
+  --ring: #5b8a7a;
+  --chart-money: #7eb6d9;
+  --chart-investments: #7cbc9a;
+  --chart-property: #b8a4d8;
+  --chart-valuables: #e0c07a;
+  --chart-liabilities: #e8a090;
+}
+
+:root[data-mood='pastel'].dark {
+  --background: #1e2422;
+  --foreground: #f2eee8;
+  --card: #2a3230;
+  --card-foreground: #f2eee8;
+  --popover: #2a3230;
+  --popover-foreground: #f2eee8;
+  --primary: #8fcbb3;
+  --primary-foreground: #1e2422;
+  --secondary: #2a3230;
+  --secondary-foreground: #f2eee8;
+  --muted: #2a3230;
+  --muted-foreground: #b5aea4;
+  --accent: #33443f;
+  --accent-foreground: #f2eee8;
+  --border: #3d4845;
+  --input: #b5aea4;
+  --ring: #8fcbb3;
+  --chart-money: #8ec5e8;
+  --chart-investments: #8fd0b0;
+  --chart-property: #cbb6e8;
+  --chart-valuables: #e8d08c;
+  --chart-liabilities: #f0b0a0;
+}
+
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);

@@ -1,7 +1,9 @@
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
 
-export type Mood = 'ledger' | 'green'
+export type Mood = 'ledger' | 'green' | 'soft' | 'neutral' | 'pastel'
+
+export const MOODS: Mood[] = ['ledger', 'green', 'soft', 'neutral', 'pastel']
 
 export function applyTheme(mood: Mood) {
   if (typeof document === 'undefined') return

@@ -168,6 +168,9 @@ export interface Dictionary {
     appearance: string
     moodLedger: string
     moodGreen: string
+    moodSoft: string
+    moodNeutral: string
+    moodPastel: string
     versionBadgeLabel: (version: number) => string
     releaseNotesLabel: string
     manualRatesTitle: string

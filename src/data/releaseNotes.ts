@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 59,
+    issue: 57,
+    date: '2026-08-18T14:25:00+03:00',
+    en: 'Appearance now includes Soft Finance, Neutral, and Pastel in addition to Colorful and Green, so Colorful is not the only non-green look.',
+    ru: 'В оформлении теперь есть Спокойное, Нейтральное и Пастель вместе с Цветным и Зелёным — Цветное больше не единственная альтернатива зелёному.',
+  },
+  {
     version: 58,
     issue: 56,
     date: '2026-08-18T14:10:00+03:00',

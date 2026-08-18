@@ -144,7 +144,7 @@ _EUR base + RUB assets; iPhone tab bar; appearance; car; joint ownership; decima
 | [#51](https://github.com/ZhannaM85/my-money/issues/51) | 🔍 Pending validation | Converted Dashboard should list each item with original and converted amounts | Converted Dashboard lists each holding with native + base amounts under the combined total. |
 | [#52](https://github.com/ZhannaM85/my-money/issues/52) | 🔍 Pending validation | Show unconvertible holdings instead of hiding them | Converted Dashboard lists missing-rate holdings with native amount + “Conversion not available”. Combined total still excludes them. |
 | [#56](https://github.com/ZhannaM85/my-money/issues/56) | 🔍 Pending validation | Chart Y-axis repeats the same compact label on every tick | Compact axis labels now keep enough fraction digits so nearby million-scale ticks stay distinct (1,97 млн vs 2 млн). |
-| [#57](https://github.com/ZhannaM85/my-money/issues/57) | 🔲 Open | Add Soft Finance, Neutral, and Pastel appearance moods | Colorful stays the black ledger. Extra moods: Soft Finance, Neutral (not black-black), Pastel. Green kept. |
+| [#57](https://github.com/ZhannaM85/my-money/issues/57) | 🔍 Pending validation | Add Soft Finance, Neutral, and Pastel appearance moods | Colorful and Green stay. Extra moods: Soft Finance, Neutral (slate, not black-black), Pastel. |
 
 ---
 
