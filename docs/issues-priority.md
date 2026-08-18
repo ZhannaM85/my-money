@@ -131,7 +131,7 @@ _EUR base + RUB assets; iPhone tab bar; appearance; car; joint ownership; decima
 | [#41](https://github.com/ZhannaM85/my-money/issues/41) | 🔲 Open | Add zoom in and zoom out controls for graphs | Turtle Steps allows zooming chart ranges on Dashboard. My Money graphs currently have no similar zoom interaction. |
 | [#42](https://github.com/ZhannaM85/my-money/issues/42) | 🔲 Open | Add a show original currencies mode in Settings | Settings should allow a native/original-currency display mode without conversion. This is separate from Dashboard filtering. |
 | [#43](https://github.com/ZhannaM85/my-money/issues/43) | 🔲 Open | Add a Dashboard currency filter dropdown | Add a separate Dashboard-only dropdown to filter the view by a specific currency, independent from Settings display/conversion mode. |
-| [#44](https://github.com/ZhannaM85/my-money/issues/44) | 🔲 Open | Own a static RUB FX dataset for the PWA | Replace fragile browser-side `RUB` rate fetching with CI-generated static JSON hosted with the app, so `#23` can use stable historical conversions. |
+| [#44](https://github.com/ZhannaM85/my-money/issues/44) | 🔍 Pending validation | Own a static RUB FX dataset for the PWA | Static `RUB` history is now generated during deploy and loaded from same-origin files into the FX cache instead of relying on fragile browser-side runtime fetches. |
 | [#45](https://github.com/ZhannaM85/my-money/issues/45) | 🔲 Open | Allow manual entry of today's FX rates as a fallback | Add a dedicated modal/screen for same-day manual FX overrides when external rates are missing or unreliable. |
 
 ---

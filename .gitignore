@@ -34,6 +34,7 @@ tmp/issue-bodies/
 
 # Regenerated on every deploy (#34)
 public/version.json
+public/fx/rub/
 
 # Playwright
 /test-results/

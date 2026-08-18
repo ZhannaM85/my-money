@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 41,
+    issue: 44,
+    date: '2026-08-18T11:27:00+03:00',
+    en: 'Ruble reference rates now load from static data shipped with the app instead of a fragile browser-side live fetch.',
+    ru: 'Справочные курсы рубля теперь загружаются из статических данных вместе с приложением, а не через ненадёжный браузерный live-fetch.',
+  },
+  {
     version: 40,
     issue: 23,
     date: '2026-08-18T11:05:00+03:00',

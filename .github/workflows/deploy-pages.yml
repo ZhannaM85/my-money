@@ -45,6 +45,9 @@ jobs:
       - name: Write version.json for update detection
         run: echo "{\"version\":\"${{ github.sha }}\"}" > public/version.json
 
+      - name: Generate static RUB rates dataset
+        run: npm run generate:rub-rates
+
       - name: Build application
         run: npx vite build --base=/my-money/
 
