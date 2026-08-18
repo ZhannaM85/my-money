@@ -26,6 +26,8 @@ const assetSchema = z.object({
   trackingStatus: z.enum(TRACKING_STATUSES),
   valuationMethod: z.enum(VALUATION_METHODS),
   purchaseValue: z.number().optional(),
+  ownershipShareNumerator: z.number().int().positive().optional(),
+  ownershipShareDenominator: z.number().int().positive().optional(),
   updateFrequency: z.enum(UPDATE_FREQUENCIES),
   createdAt: z.string().min(1),
   updatedAt: z.string().min(1),

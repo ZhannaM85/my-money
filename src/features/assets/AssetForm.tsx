@@ -6,6 +6,8 @@ import {
   TYPES_BY_CLASS,
   UPDATE_FREQUENCIES,
   VALUATION_METHODS,
+  formatOwnershipShare,
+  parseOwnershipShare,
   type Asset,
   type AssetClass,
   type AssetType,
@@ -105,6 +107,16 @@ export function AssetForm({
       ? ''
       : formatEditableAmount(initialAmount, locale, currency),
   )
+  const [ownershipShare, setOwnershipShare] = useState(
+    formatOwnershipShare(
+      initial
+        ? {
+            numerator: initial.ownershipShareNumerator ?? 1,
+            denominator: initial.ownershipShareDenominator ?? 1,
+          }
+        : undefined,
+    ),
+  )
   const [error, setError] = useState<string | undefined>()
   const [saving, setSaving] = useState(false)
 
@@ -131,6 +143,11 @@ export function AssetForm({
       setError(t.asset.purchaseMustBeNumber)
       return
     }
+    const parsedShare = parseOwnershipShare(ownershipShare)
+    if (parsedShare === undefined) {
+      setError(t.asset.ownershipShareInvalid)
+      return
+    }
     setError(undefined)
     setSaving(true)
     try {
@@ -145,6 +162,8 @@ export function AssetForm({
           trackingStatus,
           valuationMethod,
           purchaseValue: purchase,
+          ownershipShareNumerator: parsedShare.numerator,
+          ownershipShareDenominator: parsedShare.denominator,
           updateFrequency,
           createdAt: initial?.createdAt ?? now,
           updatedAt: now,
@@ -261,6 +280,14 @@ export function AssetForm({
           </option>
         ))}
       </SelectField>
+      <TextField
+        label={t.asset.ownershipShare}
+        value={ownershipShare}
+        onChange={(event) => setOwnershipShare(event.target.value)}
+        error={
+          error === t.asset.ownershipShareInvalid ? error : undefined
+        }
+      />
       {initial && (
         <SelectField
           label={t.asset.trackingLabel}
@@ -290,7 +317,8 @@ export function AssetForm({
       {error &&
         error !== t.asset.nameRequired &&
         error !== t.asset.enterCurrentAmount &&
-        error !== t.asset.amountMustBeNumber && (
+        error !== t.asset.amountMustBeNumber &&
+        error !== t.asset.ownershipShareInvalid && (
           <p className="text-sm text-destructive">{error}</p>
         )}
       <Button type="submit" size="xl" className="w-full" disabled={saving}>

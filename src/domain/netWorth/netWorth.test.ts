@@ -114,6 +114,23 @@ describe('netWorth', () => {
     )
     expect(result.total).toBe(0)
   })
+
+  it('applies ownership share to included assets', () => {
+    const house = asset({
+      id: 'house',
+      assetClass: 'property',
+      type: 'house',
+      ownershipShareNumerator: 1,
+      ownershipShareDenominator: 2,
+    })
+    const result = netWorth(
+      [house],
+      [snap({ id: 's', assetId: 'house', amount: 1000 })],
+      [],
+      'EUR',
+    )
+    expect(result.total).toBe(500)
+  })
 })
 
 describe('allocation / periodChange / history / performance', () => {

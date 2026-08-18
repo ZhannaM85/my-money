@@ -66,6 +66,8 @@ export interface Asset {
   trackingStatus: TrackingStatus
   valuationMethod: ValuationMethod
   purchaseValue?: number
+  ownershipShareNumerator?: number
+  ownershipShareDenominator?: number
   updateFrequency: UpdateFrequency
   createdAt: string
   updatedAt: string

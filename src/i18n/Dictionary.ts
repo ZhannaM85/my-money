@@ -101,6 +101,9 @@ export interface Dictionary {
     deleteConfirm: string
     quickAdd: string
     presets: Record<'bank' | 'cash' | 'vehicle' | 'apartment' | 'brokerage', string>
+    ownershipShare: string
+    ownershipShareInvalid: string
+    yourShare: (share: string) => string
     suggestedNow: string
   }
   update: {

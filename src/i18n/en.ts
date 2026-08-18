@@ -150,6 +150,9 @@ export const en: Dictionary = {
       apartment: 'Apartment',
       brokerage: 'Brokerage',
     },
+    ownershipShare: 'Your ownership share',
+    ownershipShareInvalid: 'Enter a share like 1/2 or 1/1',
+    yourShare: (share) => `Your share: ${share}`,
     suggestedNow: 'Suggested now',
   },
   update: {

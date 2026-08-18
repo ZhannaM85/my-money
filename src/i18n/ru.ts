@@ -154,6 +154,9 @@ export const ru: Dictionary = {
       apartment: 'Квартира',
       brokerage: 'Брокерский счёт',
     },
+    ownershipShare: 'Ваша доля',
+    ownershipShareInvalid: 'Введите долю, например 1/2 или 1/1',
+    yourShare: (share) => `Ваша доля: ${share}`,
     suggestedNow: 'Пора обновить',
   },
   update: {

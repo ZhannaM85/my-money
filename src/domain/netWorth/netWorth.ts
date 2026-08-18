@@ -1,5 +1,5 @@
 import type { Asset, AssetClass } from '@/domain/asset'
-import { contributesToNetWorth, isLiability } from '@/domain/asset'
+import { contributesToNetWorth, effectiveAmount, isLiability } from '@/domain/asset'
 import { convertAmount, lookupRate, type RateTable } from '@/domain/fx'
 import {
   latestSnapshot,
@@ -53,7 +53,7 @@ function convertedContribution(
       },
     }
   }
-  const native = convertAmount(snapshot.amount, rate)
+  const native = effectiveAmount(convertAmount(snapshot.amount, rate), asset)
   return { amount: isLiability(asset) ? -native : native }
 }
 

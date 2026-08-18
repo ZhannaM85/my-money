@@ -6,6 +6,10 @@ import { latestSnapshot } from '@/domain/snapshot'
 import { NetWorthChart } from '@/features/dashboard/NetWorthChart'
 import { formatLastUpdated, useLocale, useTranslation } from '@/i18n'
 import {
+  formatOwnershipShare,
+  ownershipMultiplier,
+} from '@/domain/asset'
+import {
   formatAmount,
   formatEditableAmount,
   formatPercent,
@@ -107,6 +111,11 @@ export function AssetDetailsScreen() {
   }
 
   const currentAsset = asset
+  const shareLabel = formatOwnershipShare({
+    numerator: asset.ownershipShareNumerator ?? 1,
+    denominator: asset.ownershipShareDenominator ?? 1,
+  })
+  const hasPartialShare = ownershipMultiplier(asset) < 1
   const change =
     mode === 'native'
       ? performance
@@ -189,6 +198,8 @@ export function AssetDetailsScreen() {
         description={
           snapshot
             ? `${formatLastUpdated(snapshot.date, today, t)}${
+                hasPartialShare ? ` · ${t.asset.yourShare(shareLabel)}` : ''
+              }${
                 mode === 'native' && convertedAmount !== undefined
                   ? ` · ${t.common.estimated(formatAmount(convertedAmount, baseCurrency, locale))}`
                   : ''

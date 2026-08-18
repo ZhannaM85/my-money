@@ -30,3 +30,11 @@ export {
 } from './labels'
 export type { AssetRepository } from './AssetRepository'
 export { ASSET_PRESETS, findAssetPreset, type AssetPreset } from './presets'
+export {
+  defaultOwnershipShare,
+  effectiveAmount,
+  formatOwnershipShare,
+  ownershipMultiplier,
+  parseOwnershipShare,
+  type OwnershipShare,
+} from './ownershipShare'
