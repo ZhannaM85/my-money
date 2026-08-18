@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 43,
+    issue: 40,
+    date: '2026-08-18T11:33:00+03:00',
+    en: 'Bottom sections now keep more distance from the sticky tab bar on phone screens.',
+    ru: 'Нижние секции теперь имеют больший отступ от липкой панели вкладок на экранах телефонов.',
+  },
+  {
     version: 42,
     issue: 23,
     date: '2026-08-18T11:30:00+03:00',

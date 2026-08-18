@@ -96,7 +96,7 @@ export function AppShell() {
         id="main-content"
         className={cn(
           'mx-auto w-full max-w-3xl min-w-0 px-4 py-6',
-          onboarding ? 'pb-6' : 'pb-28',
+          onboarding ? 'pb-6' : 'pb-[calc(env(safe-area-inset-bottom)+9rem)]',
         )}
       >
         {fxError && (

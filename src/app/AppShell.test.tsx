@@ -58,6 +58,17 @@ describe('AppShell', () => {
     ).toHaveAttribute('href', '#main-content')
   })
 
+  it('reserves extra bottom space above the sticky tab bar', async () => {
+    render(
+      <MemoryRouter>
+        <AppShell />
+      </MemoryRouter>,
+    )
+
+    const main = await screen.findByRole('main')
+    expect(main.className).toContain('pb-[calc(env(safe-area-inset-bottom)+9rem)]')
+  })
+
   it('keeps the shell usable and shows cached FX copy when rates cannot refresh', async () => {
     const noop = async () => {}
     useFxStore.setState({
