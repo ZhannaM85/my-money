@@ -5,7 +5,13 @@ import {
 } from '@/domain/asset'
 import { latestSnapshot } from '@/domain/snapshot'
 import { formatLastUpdated, useLocale, useTranslation } from '@/i18n'
-import { formatAmount, parseAmount, todayIsoDate } from '@/shared/lib/money'
+import {
+  formatAmount,
+  formatEditableAmount,
+  parseAmount,
+  reformatAmountInput,
+  todayIsoDate,
+} from '@/shared/lib/money'
 import { Button } from '@/shared/ui/button'
 import { EmptyState } from '@/shared/ui/empty-state'
 import { Input } from '@/shared/ui/input'
@@ -52,10 +58,13 @@ export function UpdateFinancesScreen() {
       .sort((a, b) => Number(b.suggested) - Number(a.suggested))
   }, [assets, snapshots, today])
 
-  function markUnchanged(assetId: string, previous?: number) {
+  function markUnchanged(assetId: string, previous?: number, currency?: string) {
     setUnchanged((current) => ({ ...current, [assetId]: true }))
     if (previous !== undefined) {
-      setDrafts((current) => ({ ...current, [assetId]: String(previous) }))
+      setDrafts((current) => ({
+        ...current,
+        [assetId]: formatEditableAmount(previous, locale, currency),
+      }))
     }
   }
 
@@ -154,7 +163,11 @@ export function UpdateFinancesScreen() {
                       value={drafts[asset.id] ?? ''}
                       placeholder={
                         snapshot
-                          ? String(snapshot.amount)
+                          ? formatEditableAmount(
+                              snapshot.amount,
+                              locale,
+                              snapshot.currency,
+                            )
                           : t.asset.amountPlaceholder
                       }
                       className="h-12 pr-12"
@@ -171,6 +184,20 @@ export function UpdateFinancesScreen() {
                           }))
                         }
                       }}
+                      onBlur={() => {
+                        setDrafts((current) => {
+                          const raw = current[asset.id]
+                          if (raw === undefined) return current
+                          return {
+                            ...current,
+                            [asset.id]: reformatAmountInput(
+                              raw,
+                              locale,
+                              asset.currency,
+                            ),
+                          }
+                        })
+                      }}
                     />
                     <span className="pointer-events-none absolute inset-y-0 right-2.5 flex items-center text-sm text-muted-foreground">
                       {asset.currency}
@@ -181,7 +208,13 @@ export function UpdateFinancesScreen() {
                     variant={unchanged[asset.id] ? 'default' : 'outline'}
                     className={cn('h-12 shrink-0')}
                     disabled={!snapshot}
-                    onClick={() => markUnchanged(asset.id, snapshot?.amount)}
+                    onClick={() =>
+                      markUnchanged(
+                        asset.id,
+                        snapshot?.amount,
+                        snapshot?.currency ?? asset.currency,
+                      )
+                    }
                   >
                     {t.update.noChange}
                   </Button>

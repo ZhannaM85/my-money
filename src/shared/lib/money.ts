@@ -4,13 +4,18 @@ export function todayIsoDate(now = new Date()): string {
   return now.toISOString().slice(0, 10)
 }
 
-/** Parse a typed or imported amount. Accepts `,` or `.` as the decimal separator. */
+/**
+ * Parse a typed or imported amount. Accepts `,` or `.` as decimal or
+ * grouping separators, and whitespace grouping (e.g. `116 420,00`).
+ */
 export function parseAmount(raw: string): number | undefined {
   const trimmed = raw.trim().replace(/\s/g, '')
   if (trimmed === '') return undefined
+
   const lastComma = trimmed.lastIndexOf(',')
   const lastDot = trimmed.lastIndexOf('.')
   const lastSep = Math.max(lastComma, lastDot)
+
   let normalized: string
   if (lastSep === -1) {
     normalized = trimmed
@@ -23,12 +28,51 @@ export function parseAmount(raw: string): number | undefined {
     )
     normalized = decimal ? `${integer}.${fraction}` : integer
   }
+
   const amount = Number(normalized)
   return Number.isFinite(amount) ? amount : undefined
 }
 
 function localeTag(locale: Locale): string {
   return locale === 'ru' ? 'ru-RU' : 'en-US'
+}
+
+export function currencyFractionDigits(currency?: string): number {
+  if (!currency) return 2
+  try {
+    return (
+      new Intl.NumberFormat('en', {
+        style: 'currency',
+        currency,
+      }).resolvedOptions().maximumFractionDigits ?? 2
+    )
+  } catch {
+    return 2
+  }
+}
+
+/** Grouped amount for a money <input> — no currency symbol (shown beside the field). */
+export function formatEditableAmount(
+  amount: number,
+  locale: Locale = 'en',
+  currency?: string,
+): string {
+  const fractionDigits = currencyFractionDigits(currency)
+  return new Intl.NumberFormat(localeTag(locale), {
+    useGrouping: true,
+    minimumFractionDigits: fractionDigits,
+    maximumFractionDigits: fractionDigits,
+  }).format(amount)
+}
+
+export function reformatAmountInput(
+  raw: string,
+  locale: Locale = 'en',
+  currency?: string,
+): string {
+  const parsed = parseAmount(raw)
+  if (parsed === undefined) return raw
+  return formatEditableAmount(parsed, locale, currency)
 }
 
 export function formatAmount(

@@ -120,7 +120,7 @@ _EUR base + RUB assets; iPhone tab bar; appearance; car; joint ownership; decima
 | [#30](https://github.com/ZhannaM85/my-money/issues/30) | 🔲 Open | Exclude an asset from net worth without hiding it | Domain already has `excluded`. Only a buried Tracking select on edit. Surface a clear Exclude control. |
 | [#31](https://github.com/ZhannaM85/my-money/issues/31) | 🔲 Open | Hide an asset from the active list | Archive already hides from All. Make hide/restore obvious (not only “Archive asset”). |
 | [#32](https://github.com/ZhannaM85/my-money/issues/32) | 🔲 Open | Permanently delete an asset and its history | No UI/store delete. Must cascade snapshots. Confirm. Archive stays the default. |
-| [#33](https://github.com/ZhannaM85/my-money/issues/33) | 🔲 Open | Format money inputs with locale grouping and decimals | Current amount shows `116420`. Lists use `formatAmount`; inputs do not. Share a parser with #29. |
+| [#33](https://github.com/ZhannaM85/my-money/issues/33) | 🔍 Pending validation | Format money inputs with locale grouping and decimals | Current amount shows `116420`. Lists use `formatAmount`; inputs do not. Share a parser with #29. |
 
 ---
 

@@ -13,10 +13,10 @@ import {
   type ValuationMethod,
 } from '@/domain/asset'
 import { BASE_CURRENCIES } from '@/domain/settings'
-import { useTranslation } from '@/i18n'
-import { parseAmount } from '@/shared/lib/money'
+import { useLocale, useTranslation } from '@/i18n'
+import { formatEditableAmount, parseAmount } from '@/shared/lib/money'
 import { Button } from '@/shared/ui/button'
-import { NumberInput } from '@/shared/ui/number-input'
+import { MoneyInput } from '@/shared/ui/money-input'
 import { TextField } from '@/shared/ui/text-field'
 
 function SelectField({
@@ -65,6 +65,7 @@ export function AssetForm({
   onSubmit: (values: AssetFormValues) => Promise<void>
 }) {
   const t = useTranslation()
+  const locale = useLocale()
   const now = new Date().toISOString()
   const [name, setName] = useState(initial?.name ?? '')
   const [assetClass, setAssetClass] = useState<AssetClass>(
@@ -79,7 +80,9 @@ export function AssetForm({
     initial?.valuationMethod ?? 'account_balance',
   )
   const [purchaseValue, setPurchaseValue] = useState(
-    initial?.purchaseValue?.toString() ?? '',
+    initial?.purchaseValue === undefined
+      ? ''
+      : formatEditableAmount(initial.purchaseValue, locale, initial.currency),
   )
   const [updateFrequency, setUpdateFrequency] = useState<UpdateFrequency>(
     initial?.updateFrequency ?? 'weekly',
@@ -88,7 +91,9 @@ export function AssetForm({
     initial?.trackingStatus ?? 'included',
   )
   const [amount, setAmount] = useState(
-    initialAmount === undefined ? '' : String(initialAmount),
+    initialAmount === undefined
+      ? ''
+      : formatEditableAmount(initialAmount, locale, currency),
   )
   const [error, setError] = useState<string | undefined>()
   const [saving, setSaving] = useState(false)
@@ -202,10 +207,12 @@ export function AssetForm({
         ))}
       </SelectField>
       {valuationMethod !== 'account_balance' && (
-        <NumberInput
+        <MoneyInput
           label={t.asset.purchaseValueOptional}
+          locale={locale}
+          currency={currency}
           value={purchaseValue}
-          onChange={(event) => setPurchaseValue(event.target.value)}
+          onValueChange={setPurchaseValue}
         />
       )}
       <SelectField
@@ -232,11 +239,12 @@ export function AssetForm({
           ))}
         </SelectField>
       )}
-      <NumberInput
+      <MoneyInput
         label={requireAmount ? t.asset.currentAmount : t.asset.newAmountOptional}
+        locale={locale}
+        currency={currency}
         value={amount}
-        onChange={(event) => setAmount(event.target.value)}
-        unit={currency}
+        onValueChange={setAmount}
         error={
           error === t.asset.enterCurrentAmount ||
           error === t.asset.amountMustBeNumber

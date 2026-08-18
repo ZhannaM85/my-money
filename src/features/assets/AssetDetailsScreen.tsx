@@ -7,9 +7,11 @@ import { NetWorthChart } from '@/features/dashboard/NetWorthChart'
 import { formatLastUpdated, useLocale, useTranslation } from '@/i18n'
 import {
   formatAmount,
+  formatEditableAmount,
   formatPercent,
   formatSignedAmount,
   parseAmount,
+  reformatAmountInput,
   todayIsoDate,
 } from '@/shared/lib/money'
 import { Button } from '@/shared/ui/button'
@@ -246,10 +248,21 @@ export function AssetDetailsScreen() {
               inputMode="decimal"
               value={amountDraft}
               placeholder={
-                snapshot ? String(snapshot.amount) : t.asset.amountPlaceholder
+                snapshot
+                  ? formatEditableAmount(
+                      snapshot.amount,
+                      locale,
+                      snapshot.currency,
+                    )
+                  : t.asset.amountPlaceholder
               }
               className="h-12 pr-12"
               onChange={(event) => setAmountDraft(event.target.value)}
+              onBlur={() =>
+                setAmountDraft((current) =>
+                  reformatAmountInput(current, locale, asset.currency),
+                )
+              }
             />
             <span className="pointer-events-none absolute inset-y-0 right-2.5 flex items-center text-sm text-muted-foreground">
               {asset.currency}
