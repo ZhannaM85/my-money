@@ -156,6 +156,8 @@ export interface Dictionary {
     appearance: string
     moodLedger: string
     moodGreen: string
+    versionBadgeLabel: (version: number) => string
+    releaseNotesLabel: string
   }
   backup: {
     title: string

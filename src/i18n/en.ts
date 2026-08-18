@@ -210,6 +210,8 @@ export const en: Dictionary = {
     appearance: 'Appearance',
     moodLedger: 'Colorful',
     moodGreen: 'Green',
+    versionBadgeLabel: (version) => `v${version}`,
+    releaseNotesLabel: 'Release notes',
   },
   backup: {
     title: 'Backup',

@@ -216,6 +216,8 @@ export const ru: Dictionary = {
     appearance: 'Оформление',
     moodLedger: 'Цветное',
     moodGreen: 'Зелёное',
+    versionBadgeLabel: (version) => `v${version}`,
+    releaseNotesLabel: 'Что нового',
   },
   backup: {
     title: 'Резервная копия',

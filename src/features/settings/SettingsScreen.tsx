@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { BASE_CURRENCIES, type Locale } from '@/domain/settings'
 import { BackupSection, CsvSection } from '@/features/export'
+import { releaseNotes } from '@/data/releaseNotes'
 import { useTranslation } from '@/i18n'
 import { Button } from '@/shared/ui/button'
 import { PageHeader } from '@/shared/ui/page-header'
@@ -9,6 +10,7 @@ import { useAssetStore } from '@/stores/assetStore'
 import { useSettingsStore } from '@/stores/settingsStore'
 import { useThemeStore, type Mood } from '@/stores/themeStore'
 import { cn } from '@/shared/lib/utils'
+import { ReleaseNotesSection } from './ReleaseNotesSection'
 
 export function SettingsScreen() {
   const t = useTranslation()
@@ -38,11 +40,23 @@ export function SettingsScreen() {
   const canSkipWelcome =
     loaded && !settings.onboardingCompleted && assetCount === 0
 
+  const currentVersion = releaseNotes[0]?.version
+
   return (
     <div className="flex flex-col gap-6">
       <PageHeader
         title={t.settings.title}
         description={t.settings.description}
+        action={
+          currentVersion !== undefined && (
+            <a
+              href="#release-notes"
+              className="text-sm text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
+            >
+              {t.settings.versionBadgeLabel(currentVersion)}
+            </a>
+          )
+        }
       />
       <label className="flex flex-col gap-1.5">
         <span className="text-sm font-medium">{t.settings.baseCurrency}</span>
@@ -115,6 +129,10 @@ export function SettingsScreen() {
       </Button>
       <BackupSection />
       <CsvSection />
+      <section id="release-notes" className="flex flex-col gap-3">
+        <h2 className="text-lg font-semibold">{t.settings.releaseNotesLabel}</h2>
+        <ReleaseNotesSection />
+      </section>
     </div>
   )
 }
