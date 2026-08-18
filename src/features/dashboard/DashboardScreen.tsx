@@ -9,6 +9,7 @@ import {
   periodChange,
 } from '@/domain/netWorth'
 import { useLocale, useTranslation } from '@/i18n'
+import { fxDebug } from '@/infrastructure/fx/fxDebug'
 import {
   formatAmount,
   formatPercent,
@@ -112,6 +113,31 @@ export function DashboardScreen() {
       ),
     [baseCurrency, filteredAssets, filteredSnapshots, quotes],
   )
+  useEffect(() => {
+    if (isOriginal) return
+    fxDebug('dashboard converted holdings', {
+      baseCurrency,
+      displayMode: currencyDisplayMode,
+      quoteCount: quotes.length,
+      total: convertedResult.total,
+      missingRates: convertedResult.missingRates,
+      holdings: convertedHoldings.map((row) => ({
+        name: row.name,
+        currency: row.currency,
+        nativeAmount: row.nativeAmount,
+        convertedAmount: row.convertedAmount,
+        conversionAvailable: row.conversionAvailable,
+      })),
+    })
+  }, [
+    baseCurrency,
+    convertedHoldings,
+    convertedResult.missingRates,
+    convertedResult.total,
+    currencyDisplayMode,
+    isOriginal,
+    quotes.length,
+  ])
   const nativeTotals = useMemo(
     () => nativeTotalsByCurrency(filteredAssets, filteredSnapshots),
     [filteredAssets, filteredSnapshots],

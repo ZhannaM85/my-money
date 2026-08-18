@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 54,
+    issue: 49,
+    date: '2026-08-18T13:55:00+03:00',
+    en: 'FX diagnostic logging can be turned on with localStorage my-money:fx-debug=1 to inspect static RUB fetches and Converted holdings on device.',
+    ru: 'Диагностические логи FX можно включить через localStorage my-money:fx-debug=1, чтобы на устройстве смотреть загрузку курсов рубля и позиции в режиме пересчёта.',
+  },
+  {
     version: 53,
     issue: 51,
     date: '2026-08-18T13:45:00+03:00',

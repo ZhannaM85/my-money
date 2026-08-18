@@ -2,6 +2,7 @@ import { lookupRate, type RateTable } from '@/domain/fx'
 import type { FxRateRepository } from '@/domain/fx'
 import type { RateRequest } from '@/infrastructure/fx/frankfurter'
 import { uniqueRateRequests } from '@/infrastructure/fx/frankfurter'
+import { fxDebug } from '@/infrastructure/fx/fxDebug'
 import { StaticRubRateClient } from './client'
 
 function needsStaticRub(request: RateRequest): boolean {
@@ -33,6 +34,10 @@ export async function ensureStaticRubRates(
         lookupRate(cached, request.from, request.to, request.date) === undefined,
     ),
   )
+  fxDebug('ensureStaticRubRates', {
+    needed: needed.length,
+    missingCodes: codes,
+  })
   if (codes.length === 0) return cached
 
   const fetched = await Promise.all(codes.map((code) => client.onCode(code)))
@@ -40,6 +45,7 @@ export async function ensureStaticRubRates(
   if (quotes.length > 0) {
     await repository.put(quotes)
   }
+  fxDebug('ensureStaticRubRates stored', { quoteCount: quotes.length })
   return repository.getAll()
 }
 
@@ -63,6 +69,13 @@ export async function ensureStaticRubRange(
       lookupRate(cached, code, 'RUB', start) === undefined ||
       lookupRate(cached, code, 'RUB', end) === undefined,
   )
+  fxDebug('ensureStaticRubRange', {
+    start,
+    end,
+    base,
+    symbols,
+    missingForeign,
+  })
   if (missingForeign.length === 0) return cached
 
   const fetched = await Promise.all(
@@ -72,5 +85,6 @@ export async function ensureStaticRubRange(
   if (quotes.length > 0) {
     await repository.put(quotes)
   }
+  fxDebug('ensureStaticRubRange stored', { quoteCount: quotes.length })
   return repository.getAll()
 }

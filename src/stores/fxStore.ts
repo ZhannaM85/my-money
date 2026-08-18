@@ -11,6 +11,7 @@ import {
   FrankfurterFxClient,
   type RateRequest,
 } from '@/infrastructure/fx/frankfurter'
+import { fxDebug } from '@/infrastructure/fx/fxDebug'
 import {
   ensureStaticRubRates,
   ensureStaticRubRange,
@@ -59,22 +60,34 @@ export const useFxStore = create<FxStoreState>((set) => ({
   loading: false,
   loadCached: async () => {
     const { quotes, manualQuotes } = await loadMergedQuotes()
+    fxDebug('loadCached', {
+      systemAndManual: quotes.length,
+      manual: manualQuotes.length,
+    })
     set({ quotes, manualQuotes })
   },
   ensureRates: async (requests) => {
     set({ loading: true, error: undefined })
     let failed = false
+    fxDebug('ensureRates start', { requests: [...requests] })
     try {
       await ensureFxRates(requests, fxRepository, frankfurter)
-    } catch {
+    } catch (error) {
       failed = true
+      fxDebug('ensureRates frankfurter failed', { error: String(error) })
     }
     try {
       await ensureStaticRubRates(requests, fxRepository, staticRub)
-    } catch {
+    } catch (error) {
       failed = true
+      fxDebug('ensureRates static RUB failed', { error: String(error) })
     }
     const { quotes, manualQuotes } = await loadMergedQuotes()
+    fxDebug('ensureRates done', {
+      quoteCount: quotes.length,
+      manualCount: manualQuotes.length,
+      failed,
+    })
     set({
       quotes,
       manualQuotes,
@@ -85,17 +98,32 @@ export const useFxStore = create<FxStoreState>((set) => ({
   ensureRange: async (start, end, base, symbols) => {
     set({ loading: true, error: undefined })
     let failed = false
+    fxDebug('ensureRange start', { start, end, base, symbols: [...symbols] })
     try {
       await ensureFxRange(start, end, base, symbols, fxRepository, frankfurter)
-    } catch {
+    } catch (error) {
       failed = true
+      fxDebug('ensureRange frankfurter failed', { error: String(error) })
     }
     try {
-      await ensureStaticRubRange(start, end, base, symbols, fxRepository, staticRub)
-    } catch {
+      await ensureStaticRubRange(
+        start,
+        end,
+        base,
+        symbols,
+        fxRepository,
+        staticRub,
+      )
+    } catch (error) {
       failed = true
+      fxDebug('ensureRange static RUB failed', { error: String(error) })
     }
     const { quotes, manualQuotes } = await loadMergedQuotes()
+    fxDebug('ensureRange done', {
+      quoteCount: quotes.length,
+      manualCount: manualQuotes.length,
+      failed,
+    })
     set({
       quotes,
       manualQuotes,
@@ -106,11 +134,13 @@ export const useFxStore = create<FxStoreState>((set) => ({
   saveManualRates: async (quotes) => {
     await manualRepository.put(quotes)
     const merged = await loadMergedQuotes()
+    fxDebug('saveManualRates', { saved: quotes.length })
     set({ quotes: merged.quotes, manualQuotes: merged.manualQuotes })
   },
   clearManualRatesForDate: async (date) => {
     await manualRepository.clearDate(date)
     const merged = await loadMergedQuotes()
+    fxDebug('clearManualRatesForDate', { date })
     set({ quotes: merged.quotes, manualQuotes: merged.manualQuotes })
   },
 }))
