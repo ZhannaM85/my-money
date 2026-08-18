@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 15,
+    issue: 37,
+    date: '2026-08-18T10:10:00+03:00',
+    en: 'Installed copies check more often for a new deploy and bypass a stuck service-worker cache, so Reload can actually load the new version.',
+    ru: 'Установленное приложение чаще проверяет новую версию и обходит застрявший кэш service worker, чтобы «Обновить» действительно загрузило новую сборку.',
+  },
+  {
     version: 14,
     issue: 36,
     date: '2026-08-18T10:00:00+03:00',

@@ -12,13 +12,24 @@ export function isNativePlatform(): boolean {
 /**
  * Manual registration so Capacitor can skip the worker. App-shell assets are
  * already bundled in the native app; a SW would only recache them in WebView.
+ *
+ * `updateViaCache: 'none'` (#37) bypasses HTTP caching of `sw.js` — GitHub
+ * Pages otherwise keeps serving a stale worker, so the installed PWA never
+ * sees a new deploy.
  */
 export function registerServiceWorker(): void {
   if (isNativePlatform()) return
   if (!('serviceWorker' in navigator)) return
   window.addEventListener('load', () => {
-    void navigator.serviceWorker.register(`${import.meta.env.BASE_URL}sw.js`, {
-      scope: import.meta.env.BASE_URL,
-    })
+    void (async () => {
+      const registration = await navigator.serviceWorker.register(
+        `${import.meta.env.BASE_URL}sw.js`,
+        {
+          scope: import.meta.env.BASE_URL,
+          updateViaCache: 'none',
+        },
+      )
+      await registration.update()
+    })()
   })
 }

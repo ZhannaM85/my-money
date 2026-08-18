@@ -13,7 +13,7 @@ export function AppUpdateBanner() {
   if (!updateAvailable) return null
 
   return (
-    <div className="flex items-center justify-between gap-2 border-b border-border bg-muted px-4 py-2 text-sm text-foreground">
+    <div className="sticky top-0 z-20 flex items-center justify-between gap-2 border-b border-border bg-muted px-4 py-2 text-sm text-foreground">
       <span>{t.appUpdate.availableText}</span>
       {reloading ? (
         <span className="flex items-center gap-1.5 text-muted-foreground">

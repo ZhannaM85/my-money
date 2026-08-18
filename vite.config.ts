@@ -20,6 +20,7 @@ export default defineConfig(({ mode }) => ({
               globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
               globIgnores: ['version.json'],
               navigateFallback: 'index.html',
+              cleanupOutdatedCaches: true,
             },
           }),
         ]),
