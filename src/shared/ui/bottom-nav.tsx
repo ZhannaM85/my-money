@@ -29,7 +29,7 @@ export function BottomNav() {
                 end={'end' in item ? item.end : false}
                 replace
                 aria-label={item.label}
-                className="flex min-h-16 flex-col items-center justify-center text-xs font-medium"
+                className="flex min-h-20 flex-col items-center justify-center text-xs font-medium"
               >
                 {({ isActive }) => (
                   <span
