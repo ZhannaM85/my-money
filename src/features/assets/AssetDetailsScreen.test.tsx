@@ -2,7 +2,7 @@ import 'fake-indexeddb/auto'
 import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter, Route, Routes } from 'react-router-dom'
-import { beforeEach, describe, expect, it } from 'vitest'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { DEFAULT_SETTINGS } from '@/domain/settings'
 import { db } from '@/infrastructure/persistence/indexeddb'
 import { formatAmount } from '@/shared/lib/money'
@@ -129,6 +129,24 @@ describe('AssetDetailsScreen', () => {
     await user.click(screen.getByRole('button', { name: 'Hide asset' }))
     await waitFor(() => {
       expect(useAssetStore.getState().assets[0].trackingStatus).toBe('archived')
+    })
+  })
+
+  it('deletes an asset and its snapshots after confirmation', async () => {
+    const user = userEvent.setup()
+    vi.spyOn(window, 'confirm').mockReturnValue(true)
+    render(
+      <MemoryRouter initialEntries={['/assets/a1']}>
+        <Routes>
+          <Route path="/assets/:id" element={<AssetDetailsScreen />} />
+        </Routes>
+      </MemoryRouter>,
+    )
+    await screen.findByRole('heading', { name: 'Revolut' })
+    await user.click(screen.getByRole('button', { name: 'Delete asset' }))
+    await waitFor(() => {
+      expect(useAssetStore.getState().assets).toHaveLength(0)
+      expect(useAssetStore.getState().snapshots).toHaveLength(0)
     })
   })
 })

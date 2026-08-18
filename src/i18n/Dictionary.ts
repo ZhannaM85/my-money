@@ -97,6 +97,8 @@ export interface Dictionary {
     includeInNetWorth: string
     notCountedInNetWorth: string
     hiddenFromLists: string
+    deleteAsset: string
+    deleteConfirm: string
     suggestedNow: string
   }
   update: {

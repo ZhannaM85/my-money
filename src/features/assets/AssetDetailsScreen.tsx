@@ -35,6 +35,7 @@ export function AssetDetailsScreen() {
   const saveAsset = useAssetStore((state) => state.saveAsset)
   const saveSnapshots = useAssetStore((state) => state.saveSnapshots)
   const setTrackingStatus = useAssetStore((state) => state.setTrackingStatus)
+  const deleteAsset = useAssetStore((state) => state.deleteAsset)
   const asset = useAssetStore((state) =>
     state.assets.find((row) => row.id === id),
   )
@@ -356,6 +357,18 @@ export function AssetDetailsScreen() {
           {t.asset.restore}
         </Button>
       )}
+        <Button
+          type="button"
+          variant="destructive"
+          size="xl"
+          className="w-full"
+          onClick={() => {
+            if (!window.confirm(t.asset.deleteConfirm)) return
+            void deleteAsset(asset.id).then(() => navigate('/assets'))
+          }}
+        >
+          {t.asset.deleteAsset}
+        </Button>
     </div>
   )
 }

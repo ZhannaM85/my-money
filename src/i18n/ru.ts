@@ -143,6 +143,9 @@ export const ru: Dictionary = {
     includeInNetWorth: 'Учитывать в капитале',
     notCountedInNetWorth: 'Не учитывается в капитале',
     hiddenFromLists: 'Скрыт из списков',
+    deleteAsset: 'Удалить актив',
+    deleteConfirm:
+      'Удалить этот актив и всю его историю с этого устройства? Это нельзя отменить.',
     suggestedNow: 'Пора обновить',
   },
   update: {

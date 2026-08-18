@@ -139,6 +139,9 @@ export const en: Dictionary = {
     includeInNetWorth: 'Include in net worth',
     notCountedInNetWorth: 'Not counted in net worth',
     hiddenFromLists: 'Hidden from lists',
+    deleteAsset: 'Delete asset',
+    deleteConfirm:
+      'Delete this asset and all its history from this device? This cannot be undone.',
     suggestedNow: 'Suggested now',
   },
   update: {

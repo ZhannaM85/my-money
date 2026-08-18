@@ -75,6 +75,8 @@ describe('IndexedDb repositories', () => {
     expect(
       (await snapshots.getOnOrBefore('asset-1', '2026-07-15'))?.amount,
     ).toBe(10)
+    await snapshots.deleteByAsset('asset-1')
+    expect(await snapshots.getByAsset('asset-1')).toEqual([])
   })
 
   it('returns default settings until saved', async () => {

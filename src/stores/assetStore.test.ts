@@ -73,4 +73,31 @@ describe('assetStore', () => {
     ])
     expect(useAssetStore.getState().snapshots).toHaveLength(2)
   })
+
+  it('deletes an asset and its snapshots', async () => {
+    const now = '2026-08-17T00:00:00.000Z'
+    await useAssetStore.getState().saveAsset(
+      {
+        id: 'a1',
+        name: 'Revolut',
+        assetClass: 'money',
+        type: 'bank',
+        currency: 'EUR',
+        trackingStatus: 'included',
+        valuationMethod: 'account_balance',
+        updateFrequency: 'weekly',
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        assetId: 'a1',
+        date: '2026-08-17',
+        amount: 1000,
+        currency: 'EUR',
+      },
+    )
+    await useAssetStore.getState().deleteAsset('a1')
+    expect(useAssetStore.getState().assets).toHaveLength(0)
+    expect(useAssetStore.getState().snapshots).toHaveLength(0)
+  })
 })
