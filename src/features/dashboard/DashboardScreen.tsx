@@ -16,7 +16,13 @@ import {
   formatSignedAmount,
   todayIsoDate,
 } from '@/shared/lib/money'
-import { isoDatesInclusive, rangeStartIso, type HistoryRange } from '@/shared/lib/dates'
+import {
+  HISTORY_RANGES,
+  isoDatesInclusive,
+  rangeStartIso,
+  stepHistoryRange,
+  type HistoryRange,
+} from '@/shared/lib/dates'
 import { Button } from '@/shared/ui/button'
 import { EmptyState } from '@/shared/ui/empty-state'
 import { PageHeader } from '@/shared/ui/page-header'
@@ -26,8 +32,6 @@ import { useAssetStore } from '@/stores/assetStore'
 import { useFxStore } from '@/stores/fxStore'
 import { useSettingsStore } from '@/stores/settingsStore'
 import { NetWorthChart } from './NetWorthChart'
-
-const RANGES: HistoryRange[] = ['1M', '3M', '6M', '1Y', 'All']
 
 export function DashboardScreen() {
   const t = useTranslation()
@@ -180,9 +184,9 @@ export function DashboardScreen() {
     ? (singleNativeTotal ?? 0)
     : convertedResult.total
   const change = periodChange(changeFrom, changeTo)
-  const rangeIndex = RANGES.indexOf(range)
+  const rangeIndex = HISTORY_RANGES.indexOf(range)
   const canZoomIn = rangeIndex > 0
-  const canZoomOut = rangeIndex < RANGES.length - 1
+  const canZoomOut = rangeIndex < HISTORY_RANGES.length - 1
 
   const classRows = convertedResult.byClass.filter((row) => row.amount !== 0)
   const loaded = assetsLoaded && settingsLoaded
@@ -356,7 +360,7 @@ export function DashboardScreen() {
                     )}
                     disabled={!canZoomIn}
                     onClick={() => {
-                      if (canZoomIn) setRange(RANGES[rangeIndex - 1])
+                      if (canZoomIn) setRange((current) => stepHistoryRange(current, 'in'))
                     }}
                   >
                     {t.dashboard.zoomIn}
@@ -371,7 +375,7 @@ export function DashboardScreen() {
                     )}
                     disabled={!canZoomOut}
                     onClick={() => {
-                      if (canZoomOut) setRange(RANGES[rangeIndex + 1])
+                      if (canZoomOut) setRange((current) => stepHistoryRange(current, 'out'))
                     }}
                   >
                     {t.dashboard.zoomOut}
@@ -382,6 +386,12 @@ export function DashboardScreen() {
                 points={series}
                 currency={
                   isOriginal ? activeCurrencyFilter : baseCurrency
+                }
+                onZoomIn={() =>
+                  setRange((current) => stepHistoryRange(current, 'in'))
+                }
+                onZoomOut={() =>
+                  setRange((current) => stepHistoryRange(current, 'out'))
                 }
               />
             </>

@@ -6,11 +6,26 @@ export function addDaysIso(isoDate: string, days: number): string {
 
 export type HistoryRange = '1M' | '3M' | '6M' | '1Y' | 'All'
 
+export const HISTORY_RANGES: HistoryRange[] = ['1M', '3M', '6M', '1Y', 'All']
+
 const RANGE_DAYS: Record<Exclude<HistoryRange, 'All'>, number> = {
   '1M': 30,
   '3M': 90,
   '6M': 180,
   '1Y': 365,
+}
+
+/** Pinch-out / Zoom in → narrower window; pinch-in / Zoom out → wider. */
+export function stepHistoryRange(
+  current: HistoryRange,
+  direction: 'in' | 'out',
+): HistoryRange {
+  const index = HISTORY_RANGES.indexOf(current)
+  if (index < 0) return current
+  if (direction === 'in') {
+    return HISTORY_RANGES[Math.max(0, index - 1)]
+  }
+  return HISTORY_RANGES[Math.min(HISTORY_RANGES.length - 1, index + 1)]
 }
 
 export function rangeStartIso(

@@ -8,24 +8,34 @@ import {
   YAxis,
 } from 'recharts'
 import { formatAmount, formatCompactNumber } from '@/shared/lib/money'
+import { usePinchZoom } from '@/shared/hooks/usePinchZoom'
 import { useLocale, useTranslation } from '@/i18n'
 
 export function NetWorthChart({
   points,
   currency,
   seriesName,
+  onZoomIn,
+  onZoomOut,
 }: {
   points: readonly { date: string; total: number }[]
   currency: string
   seriesName?: string
+  onZoomIn?: () => void
+  onZoomOut?: () => void
 }) {
   const t = useTranslation()
   const locale = useLocale()
+  const pinchRef = usePinchZoom(onZoomIn, onZoomOut)
   const name = seriesName ?? t.dashboard.netWorth
   if (points.length === 0) return null
 
   return (
-    <div className="h-48 w-full">
+    <div
+      ref={pinchRef}
+      className="h-48 w-full touch-pan-y"
+      data-testid="net-worth-chart"
+    >
       <ResponsiveContainer width="100%" height="100%">
         <LineChart
           data={[...points]}

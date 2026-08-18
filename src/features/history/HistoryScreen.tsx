@@ -3,8 +3,10 @@ import { historicalNetWorth, netWorth, periodChange } from '@/domain/netWorth'
 import { NetWorthChart } from '@/features/dashboard/NetWorthChart'
 import { useLocale, useTranslation } from '@/i18n'
 import {
+  HISTORY_RANGES,
   isoDatesInclusive,
   rangeStartIso,
+  stepHistoryRange,
   type HistoryRange,
 } from '@/shared/lib/dates'
 import {
@@ -19,8 +21,6 @@ import { useAssetStore } from '@/stores/assetStore'
 import { useFxStore } from '@/stores/fxStore'
 import { useSettingsStore } from '@/stores/settingsStore'
 import { cn } from '@/shared/lib/utils'
-
-const RANGES: HistoryRange[] = ['1M', '3M', '6M', '1Y', 'All']
 
 export function HistoryScreen() {
   const t = useTranslation()
@@ -83,7 +83,7 @@ export function HistoryScreen() {
         description={t.history.description}
       />
       <div className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1">
-        {RANGES.map((item) => (
+        {HISTORY_RANGES.map((item) => (
           <button
             key={item}
             type="button"
@@ -114,7 +114,16 @@ export function HistoryScreen() {
             value={formatAmount(current.total, baseCurrency, locale)}
             description={`${formatSignedAmount(change.absolute, baseCurrency, locale)} ${t.history.overRange(range)}`}
           />
-          <NetWorthChart points={series} currency={baseCurrency} />
+          <NetWorthChart
+            points={series}
+            currency={baseCurrency}
+            onZoomIn={() =>
+              setRange((current) => stepHistoryRange(current, 'in'))
+            }
+            onZoomOut={() =>
+              setRange((current) => stepHistoryRange(current, 'out'))
+            }
+          />
           <ul className="flex flex-col gap-2">
             {list.map((row) => (
               <li

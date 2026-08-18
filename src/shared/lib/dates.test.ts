@@ -4,6 +4,7 @@ import {
   isoDatesInclusive,
   monthStartIso,
   rangeStartIso,
+  stepHistoryRange,
 } from './dates'
 
 describe('date helpers', () => {
@@ -20,5 +21,12 @@ describe('date helpers', () => {
   it('clamps history ranges to the earliest snapshot', () => {
     expect(rangeStartIso('1M', '2026-08-17', '2026-08-01')).toBe('2026-08-01')
     expect(rangeStartIso('All', '2026-08-17', '2026-01-01')).toBe('2026-01-01')
+  })
+
+  it('steps chart ranges the same way as zoom in / zoom out', () => {
+    expect(stepHistoryRange('1M', 'in')).toBe('1M')
+    expect(stepHistoryRange('1M', 'out')).toBe('3M')
+    expect(stepHistoryRange('All', 'out')).toBe('All')
+    expect(stepHistoryRange('All', 'in')).toBe('1Y')
   })
 })
