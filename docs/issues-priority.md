@@ -161,6 +161,16 @@ _#61 did not reach the phone because Pages deploy failed._
 
 ---
 
+## Tier 11 — Live feedback (2026-08-20)
+
+_Converted Dashboard: chart dropped while holdings stayed the same._
+
+| # | Status | Issue | Notes |
+|---|--------|-------|-------|
+| [#64](https://github.com/ZhannaM85/my-money/issues/64) | 📋 Not started | Dashboard chart shows a decrease when holdings did not change | 1M tooltip 19 Aug = €1,200 (Test only); live Money = €1,422.69 including RUB 22,000. Carry forward last known FX instead of dropping the holding. |
+
+---
+
 ## Explicitly not filed
 
 Out of scope for the MVP (`PROJECT_BRIEF.md` §20) — do not implement from chat:
