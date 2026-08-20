@@ -191,6 +191,7 @@ export const ru: Dictionary = {
     emptyTitle: 'Истории пока нет',
     emptyDescription: 'Снимки из обновлений становятся линией истории.',
     overRange: (range) => `за ${range}`,
+    holdingsOn: (date) => `Позиции на ${date}`,
   },
   allocation: {
     title: 'Распределение',

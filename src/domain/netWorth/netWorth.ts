@@ -115,6 +115,13 @@ export interface HoldingConversion {
   conversionAvailable: boolean
 }
 
+export interface HistoricalPoint {
+  date: string
+  total: number
+  missingRates: MissingRate[]
+  holdings: HoldingConversion[]
+}
+
 /**
  * Every contributing holding with native amount. Missing FX does not drop the row;
  * `convertedAmount` is null and `conversionAvailable` is false instead.
@@ -198,14 +205,17 @@ export function historicalNetWorth(
   rates: RateTable,
   dates: readonly string[],
   baseCurrency: string,
-): { date: string; total: number; missingRates: MissingRate[] }[] {
+): HistoricalPoint[] {
   return dates.map((date) => {
     const missingRates: MissingRate[] = []
+    const holdings: HoldingConversion[] = []
     let total = 0
     for (const asset of assets) {
       if (!contributesToNetWorth(asset)) continue
       const snapshot = snapshotsOnOrBefore(snapshots, asset.id, date)
       if (!snapshot) continue
+      const nativeRaw = effectiveAmount(snapshot.amount, asset)
+      const nativeAmount = isLiability(asset) ? -nativeRaw : nativeRaw
       const result = convertedContribution(
         asset,
         snapshot,
@@ -216,11 +226,28 @@ export function historicalNetWorth(
       )
       if ('missing' in result) {
         missingRates.push(result.missing)
+        holdings.push({
+          assetId: asset.id,
+          name: asset.name,
+          currency: snapshot.currency,
+          nativeAmount,
+          convertedAmount: null,
+          conversionAvailable: false,
+        })
         continue
       }
       total += result.amount
+      holdings.push({
+        assetId: asset.id,
+        name: asset.name,
+        currency: snapshot.currency,
+        nativeAmount,
+        convertedAmount: result.amount,
+        conversionAvailable: true,
+      })
     }
-    return { date, total, missingRates }
+    holdings.sort((a, b) => a.name.localeCompare(b.name))
+    return { date, total, missingRates, holdings }
   })
 }
 

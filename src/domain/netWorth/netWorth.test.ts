@@ -216,6 +216,52 @@ describe('allocation / periodChange / history / performance', () => {
     expect(points[1].missingRates).toEqual([])
   })
 
+  it('lists each holding on a historical point, including unconverted ones', () => {
+    const eur = asset({ id: 'eur', name: 'Test', currency: 'EUR' })
+    const rub = asset({ id: 'rub', name: 'Russian bank', currency: 'RUB' })
+    const points = historicalNetWorth(
+      [eur, rub],
+      [
+        snap({
+          id: 's-eur',
+          assetId: 'eur',
+          amount: 1200,
+          currency: 'EUR',
+          date: '2026-08-18',
+        }),
+        snap({
+          id: 's-rub',
+          assetId: 'rub',
+          amount: 22000,
+          currency: 'RUB',
+          date: '2026-08-18',
+        }),
+      ],
+      [],
+      ['2026-08-19'],
+      'EUR',
+    )
+    expect(points[0]?.total).toBe(1200)
+    expect(points[0]?.holdings).toEqual([
+      {
+        assetId: 'rub',
+        name: 'Russian bank',
+        currency: 'RUB',
+        nativeAmount: 22000,
+        convertedAmount: null,
+        conversionAvailable: false,
+      },
+      {
+        assetId: 'eur',
+        name: 'Test',
+        currency: 'EUR',
+        nativeAmount: 1200,
+        convertedAmount: 1200,
+        conversionAvailable: true,
+      },
+    ])
+  })
+
   it('reports native performance even when FX is missing', () => {
     const result = assetPerformance(
       [

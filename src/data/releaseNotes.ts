@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 67,
+    issue: 65,
+    date: '2026-08-20T22:40:00+03:00',
+    en: 'Tap a chart point to see which holdings make up that day’s total. History rows expand the same breakdown.',
+    ru: 'Нажмите точку на графике, чтобы увидеть, из каких позиций складывается сумма за этот день. В истории строка дня раскрывается так же.',
+  },
+  {
     version: 66,
     issue: 64,
     date: '2026-08-20T22:30:00+03:00',

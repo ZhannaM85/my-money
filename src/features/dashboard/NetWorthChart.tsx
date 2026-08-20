@@ -7,6 +7,7 @@ import {
   XAxis,
   YAxis,
 } from 'recharts'
+import type { HoldingConversion } from '@/domain/netWorth'
 import {
   formatAmount,
   formatCompactNumber,
@@ -14,6 +15,46 @@ import {
 } from '@/shared/lib/money'
 import { usePinchZoom } from '@/shared/hooks/usePinchZoom'
 import { useLocale, useTranslation } from '@/i18n'
+import { HoldingBreakdownList } from './HoldingBreakdownList'
+
+export interface NetWorthChartPoint {
+  date: string
+  total: number
+  holdings?: readonly HoldingConversion[]
+}
+
+export function NetWorthChartTooltip({
+  active,
+  payload,
+  currency,
+}: {
+  active?: boolean
+  payload?: ReadonlyArray<{ payload?: NetWorthChartPoint }>
+  currency: string
+}) {
+  const t = useTranslation()
+  const locale = useLocale()
+  if (!active || payload?.[0]?.payload === undefined) return null
+  const point = payload[0].payload
+  return (
+    <div className="max-h-60 max-w-64 overflow-y-auto rounded-lg border border-border bg-card p-3 text-foreground shadow-md">
+      <p className="text-xs font-medium">{point.date}</p>
+      {point.holdings && point.holdings.length > 0 && (
+        <div className="mt-2">
+          <HoldingBreakdownList
+            holdings={point.holdings}
+            baseCurrency={currency}
+            compact
+          />
+        </div>
+      )}
+      <p className="mt-2 text-xs font-medium">
+        {t.dashboard.netWorth}:{' '}
+        {formatAmount(point.total, currency, locale)}
+      </p>
+    </div>
+  )
+}
 
 export function NetWorthChart({
   points,
@@ -22,7 +63,7 @@ export function NetWorthChart({
   onZoomIn,
   onZoomOut,
 }: {
-  points: readonly { date: string; total: number }[]
+  points: readonly NetWorthChartPoint[]
   currency: string
   seriesName?: string
   onZoomIn?: () => void
@@ -73,19 +114,8 @@ export function NetWorthChart({
             tickLine={false}
           />
           <Tooltip
-            formatter={(value) =>
-              formatAmount(
-                typeof value === 'number' ? value : Number(value),
-                currency,
-                locale,
-              )
-            }
-            labelFormatter={(label) => String(label)}
-            contentStyle={{
-              background: 'var(--card)',
-              border: '1px solid var(--border)',
-              borderRadius: 8,
-            }}
+            content={<NetWorthChartTooltip currency={currency} />}
+            wrapperStyle={{ zIndex: 20, pointerEvents: 'auto' }}
           />
           <Line
             type="monotone"

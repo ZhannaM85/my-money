@@ -1,6 +1,7 @@
 export type {
   ClassTotal,
   HoldingConversion,
+  HistoricalPoint,
   MissingRate,
   NetWorthResult,
 } from './netWorth'

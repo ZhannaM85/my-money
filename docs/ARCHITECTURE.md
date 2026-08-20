@@ -164,7 +164,7 @@ Pure, unit-tested domain functions (no storage, no React, no network):
 - `allocation(netWorthBreakdown)` — by class, by currency, by type
 - `periodChange(history, from, to)` — absolute + percent
 - `assetPerformance(snapshots, rates, baseCurrency)` — native vs base, optional FX vs value split
-- `historicalNetWorth(assets, snapshots, rates, dates)` — uses **that date's** FX, not today's; if that day has no quote, carries forward the last earlier rate so the holding is not dropped
+- `historicalNetWorth(assets, snapshots, rates, dates)` — uses **that date's** FX, not today's; if that day has no quote, carries forward the last earlier rate so the holding is not dropped. Each point includes the holding-by-holding breakdown for tooltips and History.
 
 ---
 

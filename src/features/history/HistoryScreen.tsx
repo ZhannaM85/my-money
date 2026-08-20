@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
+import { ChevronDown } from 'lucide-react'
 import { historicalNetWorth, periodChange } from '@/domain/netWorth'
+import { HoldingBreakdownList } from '@/features/dashboard/HoldingBreakdownList'
 import { NetWorthChart } from '@/features/dashboard/NetWorthChart'
 import { useLocale, useTranslation } from '@/i18n'
 import {
@@ -34,6 +36,7 @@ export function HistoryScreen() {
   const quotes = useFxStore((state) => state.quotes)
   const ensureRange = useFxStore((state) => state.ensureRange)
   const [range, setRange] = useState<HistoryRange>('3M')
+  const [openDates, setOpenDates] = useState<ReadonlySet<string>>(new Set())
   const today = todayIsoDate()
 
   useEffect(() => {
@@ -122,26 +125,59 @@ export function HistoryScreen() {
             }
           />
           <ul className="flex flex-col gap-2">
-            {list.map((row) => (
-              <li
-                key={row.date}
-                className="flex items-center justify-between rounded-xl bg-card px-4 py-3 ring-1 ring-foreground/10"
-              >
-                <span className="text-sm text-muted-foreground">
-                  {row.date}
-                </span>
-                <span className="text-right">
-                  <span className="block tabular-nums text-sm">
-                    {formatAmount(row.total, baseCurrency, locale)}
-                  </span>
-                  {row.delta !== null && (
-                    <span className="text-xs text-muted-foreground">
-                      {formatSignedAmount(row.delta, baseCurrency, locale)}
+            {list.map((row) => {
+              const open = openDates.has(row.date)
+              return (
+                <li
+                  key={row.date}
+                  className="rounded-xl bg-card ring-1 ring-foreground/10"
+                >
+                  <button
+                    type="button"
+                    className="flex w-full items-center justify-between gap-3 px-4 py-3 text-left"
+                    aria-expanded={open}
+                    aria-label={t.history.holdingsOn(row.date)}
+                    onClick={() =>
+                      setOpenDates((current) => {
+                        const next = new Set(current)
+                        if (next.has(row.date)) next.delete(row.date)
+                        else next.add(row.date)
+                        return next
+                      })
+                    }
+                  >
+                    <span className="flex items-center gap-1 text-sm text-muted-foreground">
+                      {row.date}
+                      <ChevronDown
+                        className={cn(
+                          'size-4 transition-transform',
+                          open && 'rotate-180',
+                        )}
+                        aria-hidden
+                      />
                     </span>
+                    <span className="text-right">
+                      <span className="block tabular-nums text-sm">
+                        {formatAmount(row.total, baseCurrency, locale)}
+                      </span>
+                      {row.delta !== null && (
+                        <span className="text-xs text-muted-foreground">
+                          {formatSignedAmount(row.delta, baseCurrency, locale)}
+                        </span>
+                      )}
+                    </span>
+                  </button>
+                  {open && row.holdings.length > 0 && (
+                    <div className="border-t border-border px-4 py-3">
+                      <HoldingBreakdownList
+                        holdings={row.holdings}
+                        baseCurrency={baseCurrency}
+                      />
+                    </div>
                   )}
-                </span>
-              </li>
-            ))}
+                </li>
+              )
+            })}
           </ul>
         </>
       )}

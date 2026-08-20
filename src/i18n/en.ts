@@ -186,6 +186,7 @@ export const en: Dictionary = {
     emptyTitle: 'No history yet',
     emptyDescription: 'Snapshots from updates become the history line.',
     overRange: (range) => `over ${range}`,
+    holdingsOn: (date) => `Holdings on ${date}`,
   },
   allocation: {
     title: 'Allocation',

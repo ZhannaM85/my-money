@@ -1,5 +1,6 @@
 import 'fake-indexeddb/auto'
 import { render, screen } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router-dom'
 import { beforeEach, describe, expect, it } from 'vitest'
 import { DEFAULT_SETTINGS } from '@/domain/settings'
@@ -145,5 +146,21 @@ describe('HistoryScreen', () => {
     expect(
       screen.queryByText(`${formatSignedAmount(0, 'EUR')} over 3M`),
     ).not.toBeInTheDocument()
+  })
+
+  it('expands a day to show the holdings behind that total', async () => {
+    const today = todayIsoDate()
+    render(
+      <MemoryRouter>
+        <HistoryScreen />
+      </MemoryRouter>,
+    )
+
+    await screen.findByRole('button', { name: `Holdings on ${today}` })
+    expect(screen.queryByText('Revolut')).not.toBeInTheDocument()
+    await userEvent.click(
+      screen.getByRole('button', { name: `Holdings on ${today}` }),
+    )
+    expect(await screen.findByText('Revolut')).toBeInTheDocument()
   })
 })

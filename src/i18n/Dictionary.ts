@@ -133,6 +133,7 @@ export interface Dictionary {
     emptyTitle: string
     emptyDescription: string
     overRange: (range: HistoryRange) => string
+    holdingsOn: (date: string) => string
   }
   allocation: {
     title: string
