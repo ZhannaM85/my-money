@@ -1,6 +1,11 @@
 import type { Asset, AssetClass } from '@/domain/asset'
 import { contributesToNetWorth, effectiveAmount, isLiability } from '@/domain/asset'
-import { convertAmount, lookupRate, type RateTable } from '@/domain/fx'
+import {
+  convertAmount,
+  lookupRate,
+  lookupRateOnOrBefore,
+  type RateTable,
+} from '@/domain/fx'
 import {
   latestSnapshot,
   snapshotsOnOrBefore,
@@ -41,8 +46,9 @@ function convertedContribution(
   rates: RateTable,
   baseCurrency: string,
   rateDate: string,
+  rateLookup: typeof lookupRate = lookupRate,
 ): { amount: number } | { missing: MissingRate } {
-  const rate = lookupRate(rates, snapshot.currency, baseCurrency, rateDate)
+  const rate = rateLookup(rates, snapshot.currency, baseCurrency, rateDate)
   if (rate === undefined) {
     return {
       missing: {
@@ -206,6 +212,7 @@ export function historicalNetWorth(
         rates,
         baseCurrency,
         date,
+        lookupRateOnOrBefore,
       )
       if ('missing' in result) {
         missingRates.push(result.missing)

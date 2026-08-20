@@ -34,3 +34,22 @@ export function lookupRate(
 
   return undefined
 }
+
+/** Same-day quote when present; otherwise the latest earlier convertible quote. Never a future date. */
+export function lookupRateOnOrBefore(
+  rates: RateTable,
+  from: string,
+  to: string,
+  date: string,
+): number | undefined {
+  const exact = lookupRate(rates, from, to, date)
+  if (exact !== undefined) return exact
+  const earlier = [
+    ...new Set(rates.map((quote) => quote.date).filter((day) => day < date)),
+  ].sort((a, b) => b.localeCompare(a))
+  for (const day of earlier) {
+    const rate = lookupRate(rates, from, to, day)
+    if (rate !== undefined) return rate
+  }
+  return undefined
+}

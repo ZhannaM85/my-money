@@ -164,7 +164,7 @@ Pure, unit-tested domain functions (no storage, no React, no network):
 - `allocation(netWorthBreakdown)` — by class, by currency, by type
 - `periodChange(history, from, to)` — absolute + percent
 - `assetPerformance(snapshots, rates, baseCurrency)` — native vs base, optional FX vs value split
-- `historicalNetWorth(assets, snapshots, rates, dates)` — uses **that date's** FX, not today's
+- `historicalNetWorth(assets, snapshots, rates, dates)` — uses **that date's** FX, not today's; if that day has no quote, carries forward the last earlier rate so the holding is not dropped
 
 ---
 
@@ -250,7 +250,7 @@ Base currency is stored in `Settings`. Changing it re-reads FX and re-renders; i
 - Cache quotes in IndexedDB via `FxRateRepository` so charts work offline after a fetch.
 - Converted values are estimates / reference rates, labeled as such — not executable quotes.
 - Same-currency pairs are rate `1` with no network.
-- Historical net worth **must** use the rate for the snapshot date (weekend/holiday dates reuse the previous ECB business day).
+- Historical net worth **must** use the rate for that history date (weekend/holiday/missing-dataset dates reuse the previous quote via `lookupRateOnOrBefore`). A missing same-day quote must not drop the holding.
 - Only currency codes and dates are sent. User balances, names, and assets never leave the device.
 - `RUB` is supported through Frankfurter v2 as well, so the web app stays on one browser-safe FX provider instead of a separate RUB-only path.
 

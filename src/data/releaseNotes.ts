@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 66,
+    issue: 64,
+    date: '2026-08-20T22:30:00+03:00',
+    en: 'History and Dashboard charts keep converting a holding when that day has no FX quote, using the last earlier rate instead of dropping it from the total.',
+    ru: 'Графики истории и сводки больше не выкидывают актив из суммы, если на этот день нет курса: берётся последний более ранний курс.',
+  },
+  {
     version: 65,
     issue: 56,
     date: '2026-08-19T00:56:00+03:00',

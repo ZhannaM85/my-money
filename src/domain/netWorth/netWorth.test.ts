@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import type { Asset } from '@/domain/asset'
 import type { AssetSnapshot } from '@/domain/snapshot'
-import { convertAmount, lookupRate, type FxRateQuote } from '@/domain/fx'
+import { convertAmount, lookupRate, lookupRateOnOrBefore, type FxRateQuote } from '@/domain/fx'
 import {
   allocation,
   assetPerformance,
@@ -65,6 +65,12 @@ describe('convertAmount / lookupRate', () => {
 
   it('does not use a quote from a different date', () => {
     expect(lookupRate([eurUsd], 'EUR', 'USD', '2026-07-01')).toBeUndefined()
+  })
+
+  it('carries the last earlier quote when the requested day is missing', () => {
+    expect(lookupRateOnOrBefore([eurUsd], 'EUR', 'USD', '2026-08-01')).toBe(1.1)
+    expect(lookupRateOnOrBefore([eurUsd], 'EUR', 'USD', '2026-08-19')).toBe(1.1)
+    expect(lookupRateOnOrBefore([eurUsd], 'EUR', 'USD', '2026-07-01')).toBeUndefined()
   })
 })
 
@@ -178,6 +184,36 @@ describe('allocation / periodChange / history / performance', () => {
     )
     expect(points[0].total).toBeCloseTo(100)
     expect(points[1].total).toBeCloseTo(55)
+  })
+
+  it('does not drop a holding on a day that only lacks a same-day quote', () => {
+    const eur = asset({ id: 'eur', name: 'Test', currency: 'EUR' })
+    const rub = asset({ id: 'rub', name: 'Russian bank', currency: 'RUB' })
+    const points = historicalNetWorth(
+      [eur, rub],
+      [
+        snap({
+          id: 's-eur',
+          assetId: 'eur',
+          amount: 1200,
+          currency: 'EUR',
+          date: '2026-08-18',
+        }),
+        snap({
+          id: 's-rub',
+          assetId: 'rub',
+          amount: 22000,
+          currency: 'RUB',
+          date: '2026-08-18',
+        }),
+      ],
+      [{ date: '2026-08-18', base: 'EUR', quote: 'RUB', rate: 100 }],
+      ['2026-08-18', '2026-08-19'],
+      'EUR',
+    )
+    expect(points[0].total).toBeCloseTo(1420)
+    expect(points[1].total).toBeCloseTo(1420)
+    expect(points[1].missingRates).toEqual([])
   })
 
   it('reports native performance even when FX is missing', () => {
