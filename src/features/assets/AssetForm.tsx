@@ -16,6 +16,7 @@ import {
   type ValuationMethod,
 } from '@/domain/asset'
 import { BASE_CURRENCIES } from '@/domain/settings'
+import { optionalSnapshotNote } from '@/domain/snapshot'
 import { useLocale, useTranslation } from '@/i18n'
 import { formatEditableAmount, parseAmount, todayIsoDate } from '@/shared/lib/money'
 import { isIsoDateOnOrBefore } from '@/shared/lib/dates'
@@ -54,6 +55,7 @@ export interface AssetFormValues {
   asset: Asset
   amount?: number
   snapshotDate?: string
+  note?: string
 }
 
 export function AssetForm({
@@ -111,6 +113,7 @@ export function AssetForm({
       : formatEditableAmount(initialAmount, locale, currency),
   )
   const [snapshotDate, setSnapshotDate] = useState(todayIsoDate())
+  const [note, setNote] = useState('')
   const [ownershipShare, setOwnershipShare] = useState(
     formatOwnershipShare(
       initial
@@ -180,6 +183,7 @@ export function AssetForm({
         },
         amount: parsedAmount,
         snapshotDate: writingSnapshot ? snapshotDate : undefined,
+        note: writingSnapshot ? optionalSnapshotNote(note) : undefined,
       })
     } finally {
       setSaving(false)
@@ -342,6 +346,11 @@ export function AssetForm({
         error={
           error === t.asset.snapshotDateInvalid ? error : undefined
         }
+      />
+      <TextField
+        label={t.asset.snapshotNote}
+        value={note}
+        onChange={(event) => setNote(event.target.value)}
       />
       {error &&
         error !== t.asset.nameRequired &&

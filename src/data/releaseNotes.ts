@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 99,
+    issue: 97,
+    date: '2026-08-22T20:20:00+03:00',
+    en: 'Optional notes on snapshots show on History, asset details, and holdings lists. Empty notes stay hidden.',
+    ru: 'Необязательные комментарии к снимкам видны в Истории, карточке актива и списках позиций. Пустые комментарии не показываются.',
+  },
+  {
     version: 98,
     issue: 96,
     date: '2026-08-22T20:05:00+03:00',

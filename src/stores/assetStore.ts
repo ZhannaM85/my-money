@@ -59,6 +59,7 @@ export const useAssetStore = create<AssetStoreState>((set, get) => ({
         date: snapshot.date,
         amount: snapshot.amount,
         currency: snapshot.currency,
+        ...(snapshot.note ? { note: snapshot.note } : {}),
       })
     }
     await get().load()
@@ -95,6 +96,7 @@ export const useAssetStore = create<AssetStoreState>((set, get) => ({
         date: snapshot.date,
         amount: snapshot.amount,
         currency: snapshot.currency,
+        ...(snapshot.note ? { note: snapshot.note } : {}),
       })
     }
     await get().load()

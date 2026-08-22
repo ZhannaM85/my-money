@@ -113,6 +113,7 @@ export interface HoldingConversion {
   /** Base-currency amount when a rate exists; otherwise null. */
   convertedAmount: number | null
   conversionAvailable: boolean
+  note?: string
 }
 
 export interface HistoricalPoint {
@@ -149,6 +150,7 @@ export function holdingsWithConversion(
         nativeAmount,
         convertedAmount: null,
         conversionAvailable: false,
+        ...(snapshot.note ? { note: snapshot.note } : {}),
       })
       continue
     }
@@ -161,6 +163,7 @@ export function holdingsWithConversion(
       nativeAmount,
       convertedAmount,
       conversionAvailable: true,
+      ...(snapshot.note ? { note: snapshot.note } : {}),
     })
   }
   return rows.sort((a, b) => a.name.localeCompare(b.name))
@@ -233,6 +236,7 @@ export function historicalNetWorth(
           nativeAmount,
           convertedAmount: null,
           conversionAvailable: false,
+          ...(snapshot.note ? { note: snapshot.note } : {}),
         })
         continue
       }
@@ -244,6 +248,7 @@ export function historicalNetWorth(
         nativeAmount,
         convertedAmount: result.amount,
         conversionAvailable: true,
+        ...(snapshot.note ? { note: snapshot.note } : {}),
       })
     }
     holdings.sort((a, b) => a.name.localeCompare(b.name))

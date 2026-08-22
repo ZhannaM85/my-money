@@ -129,6 +129,7 @@ export const en: Dictionary = {
     trackingLabel: 'Tracking',
     currentAmount: 'Current amount',
     snapshotDate: 'As of',
+    snapshotNote: 'Note (optional)',
     snapshotDateInvalid: 'Choose today or a past date',
     newAmountOptional: 'New amount (optional)',
     newAmountOptionalHint:

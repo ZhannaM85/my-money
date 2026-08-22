@@ -82,12 +82,13 @@ export function OnboardingScreen() {
           requireAmount
           defaultCurrency={settings.baseCurrency}
           submitLabel={t.asset.saveAsset}
-          onSubmit={async ({ asset, amount, snapshotDate }) => {
+          onSubmit={async ({ asset, amount, snapshotDate, note }) => {
             await saveAsset(asset, {
               assetId: asset.id,
               date: snapshotDate ?? todayIsoDate(),
               amount: amount ?? 0,
               currency: asset.currency,
+              ...(note ? { note } : {}),
             })
             await completeOnboarding()
             setStep('next')

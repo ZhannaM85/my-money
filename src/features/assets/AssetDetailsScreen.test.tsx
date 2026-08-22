@@ -186,6 +186,34 @@ describe('AssetDetailsScreen', () => {
     })
   })
 
+  it('saves and shows a snapshot note on the history row', async () => {
+    const user = userEvent.setup()
+    render(
+      <MemoryRouter initialEntries={['/assets/a1']}>
+        <Routes>
+          <Route path="/assets/:id" element={<AssetDetailsScreen />} />
+        </Routes>
+      </MemoryRouter>,
+    )
+    await screen.findByRole('heading', { name: 'Revolut' })
+    await user.type(screen.getByLabelText('New amount'), '1100')
+    await user.type(screen.getByLabelText('Note (optional)'), 'Top-up')
+    await user.click(screen.getByRole('button', { name: /^Save$/ }))
+    expect(await screen.findByText('Top-up')).toBeInTheDocument()
+    await waitFor(() => {
+      expect(
+        useAssetStore
+          .getState()
+          .snapshots.some(
+            (row) =>
+              row.assetId === 'a1' &&
+              row.amount === 1100 &&
+              row.note === 'Top-up',
+          ),
+      ).toBe(true)
+    })
+  })
+
   it('adds a past-dated snapshot from Save details', async () => {
     const user = userEvent.setup()
     const past = '2026-01-01'

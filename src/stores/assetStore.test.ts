@@ -176,4 +176,35 @@ describe('assetStore', () => {
     expect(rows[0]?.amount).toBe(850)
     expect(rows[0]?.date).toBe('2026-07-15')
   })
+
+  it('keeps a snapshot note through save and update', async () => {
+    await useAssetStore.getState().saveAsset(
+      {
+        id: 'a1',
+        name: 'Revolut',
+        assetClass: 'money',
+        type: 'bank',
+        currency: 'EUR',
+        trackingStatus: 'included',
+        valuationMethod: 'account_balance',
+        updateFrequency: 'weekly',
+        createdAt: '2026-08-17T00:00:00.000Z',
+        updatedAt: '2026-08-17T00:00:00.000Z',
+      },
+      {
+        assetId: 'a1',
+        date: '2026-08-17',
+        amount: 1000,
+        currency: 'EUR',
+        note: 'Bonus',
+      },
+    )
+    expect(useAssetStore.getState().snapshots[0]?.note).toBe('Bonus')
+    const existing = useAssetStore.getState().snapshots[0]!
+    await useAssetStore.getState().updateSnapshot({
+      ...existing,
+      note: 'Raised',
+    })
+    expect(useAssetStore.getState().snapshots[0]?.note).toBe('Raised')
+  })
 })

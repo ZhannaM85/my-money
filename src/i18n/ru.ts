@@ -133,6 +133,7 @@ export const ru: Dictionary = {
     trackingLabel: 'Учёт',
     currentAmount: 'Текущая сумма',
     snapshotDate: 'На дату',
+    snapshotNote: 'Комментарий (необязательно)',
     snapshotDateInvalid: 'Выберите сегодня или прошедшую дату',
     newAmountOptional: 'Новая сумма (необязательно)',
     newAmountOptionalHint:

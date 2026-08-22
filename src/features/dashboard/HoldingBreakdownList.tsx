@@ -38,6 +38,11 @@ export function HoldingBreakdownList({
                   ? formatAmount(row.nativeAmount, row.currency, locale)
                   : t.dashboard.conversionUnavailable}
             </span>
+            {row.note ? (
+              <span className="text-xs text-muted-foreground whitespace-normal">
+                {row.note}
+              </span>
+            ) : null}
           </span>
           <span className="shrink-0 text-right">
             {nativeOnly ||

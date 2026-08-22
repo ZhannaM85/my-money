@@ -4,7 +4,7 @@ import { Pencil, Trash2 } from 'lucide-react'
 import { convertAmount, lookupRate } from '@/domain/fx'
 import { assetPerformance } from '@/domain/netWorth'
 import { BASE_CURRENCIES } from '@/domain/settings'
-import { latestSnapshot } from '@/domain/snapshot'
+import { latestSnapshot, optionalSnapshotNote } from '@/domain/snapshot'
 import { NetWorthChart } from '@/features/dashboard/NetWorthChart'
 import { formatLastUpdated, useLocale, useTranslation } from '@/i18n'
 import {
@@ -27,6 +27,7 @@ import { InfoHint } from '@/shared/ui/info-hint'
 import { Input } from '@/shared/ui/input'
 import { PageHeader } from '@/shared/ui/page-header'
 import { StatCard } from '@/shared/ui/stat-card'
+import { TextField } from '@/shared/ui/text-field'
 import { useAssetStore } from '@/stores/assetStore'
 import { useFxStore } from '@/stores/fxStore'
 import { useSettingsStore } from '@/stores/settingsStore'
@@ -70,10 +71,12 @@ export function AssetDetailsScreen() {
   const [amountDraft, setAmountDraft] = useState('')
   const [amountError, setAmountError] = useState<string | undefined>()
   const [amountDate, setAmountDate] = useState(todayIsoDate())
+  const [amountNote, setAmountNote] = useState('')
   const [editingId, setEditingId] = useState<string | null>(null)
   const [editAmount, setEditAmount] = useState('')
   const [editDate, setEditDate] = useState('')
   const [editCurrency, setEditCurrency] = useState('')
+  const [editNote, setEditNote] = useState('')
   const [editError, setEditError] = useState<string | undefined>()
   const [editingDetails, setEditingDetails] = useState(false)
   const today = todayIsoDate()
@@ -168,16 +171,19 @@ export function AssetDetailsScreen() {
       return
     }
     setAmountError(undefined)
+    const note = optionalSnapshotNote(amountNote)
     await saveSnapshots([
       {
         assetId: currentAsset.id,
         date: amountDate,
         amount,
         currency: currentAsset.currency,
+        ...(note ? { note } : {}),
       },
     ])
     setAmountDraft('')
     setAmountDate(today)
+    setAmountNote('')
   }
 
   async function saveEditedSnapshot() {
@@ -194,12 +200,19 @@ export function AssetDetailsScreen() {
       return
     }
     setEditError(undefined)
-    await updateSnapshot({
+    const note = optionalSnapshotNote(editNote)
+    const next = {
       ...row,
       amount,
       date: editDate,
       currency: editCurrency,
-    })
+    }
+    if (note) {
+      next.note = note
+    } else {
+      delete next.note
+    }
+    await updateSnapshot(next)
     setEditingId(null)
   }
 
@@ -251,8 +264,8 @@ export function AssetDetailsScreen() {
         description={
           snapshot
             ? `${formatLastUpdated(snapshot.date, today, t)}${
-                hasPartialShare ? ` · ${t.asset.yourShare(shareLabel)}` : ''
-              }`
+                snapshot.note ? ` · ${snapshot.note}` : ''
+              }${hasPartialShare ? ` · ${t.asset.yourShare(shareLabel)}` : ''}`
             : t.asset.noSnapshotsYet
         }
       />
@@ -351,6 +364,11 @@ export function AssetDetailsScreen() {
                     )
                   }
                 />
+                <TextField
+                  label={t.asset.snapshotNote}
+                  value={editNote}
+                  onChange={(event) => setEditNote(event.target.value)}
+                />
                 {editError && editError !== t.asset.snapshotDateInvalid && (
                   <p className="text-sm text-destructive">{editError}</p>
                 )}
@@ -378,10 +396,15 @@ export function AssetDetailsScreen() {
             ) : (
               <li
                 key={row.id}
-                className="flex items-center justify-between gap-2 rounded-xl bg-card px-4 py-3 ring-1 ring-foreground/10"
+                className="flex items-start justify-between gap-2 rounded-xl bg-card px-4 py-3 ring-1 ring-foreground/10"
               >
-                <span className="text-sm text-muted-foreground">
-                  {row.date}
+                <span className="flex min-w-0 flex-col gap-0.5">
+                  <span className="text-sm text-muted-foreground">
+                    {row.date}
+                  </span>
+                  {row.note ? (
+                    <span className="text-sm">{row.note}</span>
+                  ) : null}
                 </span>
                 <span className="flex items-center gap-1">
                   <span className="tabular-nums text-sm">{shown}</span>
@@ -401,6 +424,7 @@ export function AssetDetailsScreen() {
                           row.currency,
                         ),
                       )
+                      setEditNote(row.note ?? '')
                       setEditError(undefined)
                     }}
                   >
@@ -441,6 +465,11 @@ export function AssetDetailsScreen() {
               ? amountError
               : undefined
           }
+        />
+        <TextField
+          label={t.asset.snapshotNote}
+          value={amountNote}
+          onChange={(event) => setAmountNote(event.target.value)}
         />
         <div className="flex min-w-0 flex-col gap-2">
           <div className="relative min-w-0">
@@ -488,7 +517,7 @@ export function AssetDetailsScreen() {
             initial={asset}
             requireAmount={false}
             submitLabel={t.asset.saveDetails}
-            onSubmit={async ({ asset: next, amount, snapshotDate }) => {
+            onSubmit={async ({ asset: next, amount, snapshotDate, note }) => {
               await saveAsset(
                 next,
                 amount === undefined
@@ -498,6 +527,7 @@ export function AssetDetailsScreen() {
                       date: snapshotDate ?? todayIsoDate(),
                       amount,
                       currency: next.currency,
+                      ...(note ? { note } : {}),
                     },
               )
               setEditingDetails(false)

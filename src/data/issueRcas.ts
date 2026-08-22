@@ -29,6 +29,15 @@ export const issueRcas: IssueRca[] = [
     ru: '«Свежее» — синий дизайн-системы (#2878e8). «Нейтральное» брало другой синий (#4c7dff) на том же светлом хроме, поэтому чипы, «В пересчёте» и «+» совпадали. «Нейтральное» задумывалось сланцевым (#57), не вторым синим.',
   },
   {
+    issue: 97,
+    title: {
+      en: 'Add optional comments on asset entries and show them in History',
+      ru: 'Добавить необязательные комментарии к записям активов и показывать их в Истории',
+    },
+    en: 'Snapshots stored only date, amount, and currency. saveAsset / saveSnapshots copied those fields and dropped anything else, so there was no place for a note on History, details, or holdings.',
+    ru: 'Снимки хранили только дату, сумму и валюту. saveAsset / saveSnapshots копировали эти поля и отбрасывали остальное, поэтому комментарию негде было появиться в Истории, карточке и позициях.',
+  },
+  {
     issue: 96,
     title: {
       en: 'History shows EUR when All currencies is selected',

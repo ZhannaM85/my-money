@@ -41,6 +41,7 @@ const snapshotSchema = z.object({
   amount: z.number(),
   currency: z.string().min(1),
   createdAt: z.string().min(1),
+  note: z.string().min(1).optional(),
 })
 
 export const backupBundleSchema = z

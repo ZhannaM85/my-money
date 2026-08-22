@@ -84,6 +84,7 @@ export interface Dictionary {
     trackingLabel: string
     currentAmount: string
     snapshotDate: string
+    snapshotNote: string
     snapshotDateInvalid: string
     newAmountOptional: string
     newAmountOptionalHint: string

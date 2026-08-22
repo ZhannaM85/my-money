@@ -5,6 +5,14 @@ export interface AssetSnapshot {
   amount: number
   currency: string
   createdAt: string
+  note?: string
+}
+
+export function optionalSnapshotNote(
+  value: string | undefined,
+): string | undefined {
+  const trimmed = value?.trim()
+  return trimmed ? trimmed : undefined
 }
 
 export function latestSnapshot(

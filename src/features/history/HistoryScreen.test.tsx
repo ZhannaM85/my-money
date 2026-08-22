@@ -235,6 +235,28 @@ describe('HistoryScreen', () => {
     expect(await screen.findByText('Revolut')).toBeInTheDocument()
   })
 
+  it('shows a snapshot note on the expanded holdings list', async () => {
+    const existing = useAssetStore
+      .getState()
+      .snapshots.find((row) => row.date === '2026-08-17')
+    expect(existing).toBeDefined()
+    await useAssetStore.getState().updateSnapshot({
+      ...existing!,
+      note: 'Salary landed',
+    })
+
+    render(
+      <MemoryRouter>
+        <HistoryScreen />
+      </MemoryRouter>,
+    )
+
+    await userEvent.click(
+      await screen.findByRole('button', { name: 'Holdings on 2026-08-17' }),
+    )
+    expect(await screen.findByText('Salary landed')).toBeInTheDocument()
+  })
+
   it('lists only days the user added a snapshot, not carry-forward calendar days', async () => {
     render(
       <MemoryRouter>

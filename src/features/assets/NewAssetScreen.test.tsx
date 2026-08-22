@@ -55,6 +55,24 @@ describe('NewAssetScreen', () => {
     expect(useAssetStore.getState().snapshots[0]?.amount).toBe(1000)
   })
 
+  it('saves an optional snapshot note', async () => {
+    const user = userEvent.setup()
+    render(
+      <MemoryRouter>
+        <NewAssetScreen />
+      </MemoryRouter>,
+    )
+
+    await user.type(screen.getByLabelText('Name'), 'Noted bank')
+    await user.type(screen.getByLabelText('Current amount'), '1000')
+    await user.type(screen.getByLabelText('Note (optional)'), '  Salary  ')
+    await user.click(screen.getByRole('button', { name: 'Save asset' }))
+
+    await waitFor(() => {
+      expect(useAssetStore.getState().snapshots[0]?.note).toBe('Salary')
+    })
+  })
+
   it('rejects a future first-snapshot date', async () => {
     const user = userEvent.setup()
     render(
