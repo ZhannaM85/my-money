@@ -58,3 +58,4 @@ Closed live-feedback rows from Tier 8 onward. Open / pending items stay in [`../
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
 | [#62](https://github.com/ZhannaM85/my-money/issues/62) | ✅ Done | Pages deploy of #61 failed on a racy Settings currency test | Converted-mode Base currency test now waits until settings have loaded before asserting the dropdown is enabled. Validated on-device 2026-08-22. |
+| [#63](https://github.com/ZhannaM85/my-money/issues/63) | ✅ Done | Pages deploy fails type-check on Colorful CSS test Node imports | Colorful token test moved out of `src/` so app `tsc` does not typecheck Node `fs` imports. Validated on-device 2026-08-22. |

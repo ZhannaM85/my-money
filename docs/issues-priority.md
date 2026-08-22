@@ -32,16 +32,6 @@ _EUR base + RUB assets; iPhone tab bar; appearance; car; joint ownership; decima
 
 ---
 
-## Tier 10 — Live feedback (2026-08-19)
-
-_#61 did not reach the phone because Pages deploy failed._
-
-| # | Status | Issue | Notes |
-|---|--------|-------|-------|
-| [#63](https://github.com/ZhannaM85/my-money/issues/63) | 🔍 Pending validation | Pages deploy fails type-check on Colorful CSS test Node imports | Colorful token test moved out of `src/` so app `tsc` does not typecheck Node `fs` imports. |
-
----
-
 ## Tier 11 — Live feedback (2026-08-20)
 
 _Converted Dashboard: chart dropped while holdings stayed the same. Need a per-day breakdown to see why._
