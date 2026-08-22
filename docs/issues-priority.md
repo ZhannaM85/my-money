@@ -38,7 +38,6 @@ _Existing-asset details: no dated history, and Save is a no-op when viewing._
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
 | [#87](https://github.com/ZhannaM85/my-money/issues/87) | 🔍 Pending validation | All currencies selected but EUR still shown | Converted Dashboard shows the base currency in the filter, not All. Original + All unchanged. |
-| [#89](https://github.com/ZhannaM85/my-money/issues/89) | 🔍 Pending validation | Dashboard and History show different period deltas | History StatCard uses From amounts; From rates is listed separately. Related #81, #86. |
 | [#90](https://github.com/ZhannaM85/my-money/issues/90) | 🔍 Pending validation | History 3M change is last two snapshot days, not three months | 3M uses the 90-day window when data exists; if history is shorter, the label is “since first snapshot”. Related #79, #89. |
 | [#91](https://github.com/ZhannaM85/my-money/issues/91) | 🔍 Pending validation | Tab bar floats mid-screen after bringing the app back from background | Re-reads visualViewport on resume (visibility/pageshow/focus). Related #25, #80. |
 | [#92](https://github.com/ZhannaM85/my-money/issues/92) | 🔍 Pending validation | Chart holdings popover clips the last row and cannot scroll | Taller popover (`70svh` / 32rem) with inner overflow-y-scroll and a visible scrollbar. Related #77. |
