@@ -54,6 +54,7 @@ _Existing-asset details: no dated history, and Save is a no-op when viewing._
 | [#81](https://github.com/ZhannaM85/my-money/issues/81) | 🔲 Open | Dashboard and History show different net worth totals | Same day Converted ₽: Dashboard 2,810,175.64 vs History 2,798,217.19. |
 | [#82](https://github.com/ZhannaM85/my-money/issues/82) | 🔲 Open | Update-this-asset inputs overflow the phone screen | Date field and Save are clipped on the right. History/Details rows fit. |
 | [#83](https://github.com/ZhannaM85/my-money/issues/83) | 🔲 Open | No way to change currency when editing a past snapshot | Pencil editor: date + amount only; EUR is a static label. |
+| [#84](https://github.com/ZhannaM85/my-money/issues/84) | 🔲 Open | Safari date fields overflow the card when editing snapshots | Turtle #47: native date input will not shrink; clamp with overflow-hidden. |
 
 ---
 
