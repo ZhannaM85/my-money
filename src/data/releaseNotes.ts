@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 91,
+    issue: 88,
+    date: '2026-08-22T17:05:00+03:00',
+    en: 'Dashboard Converted now splits this-period change into From amounts and From rates, so a drop in the dollar rate shows before you buy more dollars. Update rates fetches quotes only.',
+    ru: 'На Сводке в пересчёте изменение за период разделено на «Из сумм» и «Из курсов», так что падение курса доллара видно до покупки долларов. «Обновить курсы» только подтягивает котировки.',
+  },
+  {
     version: 90,
     issue: 87,
     date: '2026-08-22T16:55:00+03:00',

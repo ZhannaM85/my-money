@@ -49,6 +49,9 @@ export interface Dictionary {
     currencyFilterDisabledHint: string
     conversionUnavailable: string
     holdings: string
+    amountChange: string
+    rateChange: string
+    updateRates: string
   }
   assets: {
     title: string

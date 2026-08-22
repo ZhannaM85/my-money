@@ -47,6 +47,9 @@ export const en: Dictionary = {
       'Currency filter is inactive in Converted mode. Change the base currency in Settings.',
     conversionUnavailable: 'Conversion not available',
     holdings: 'Holdings',
+    amountChange: 'From amounts',
+    rateChange: 'From rates',
+    updateRates: 'Update rates',
   },
   assets: {
     title: 'Assets',

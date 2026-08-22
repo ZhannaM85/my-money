@@ -6,6 +6,7 @@ import {
   allocation,
   assetPerformance,
   breakdownBy,
+  decomposeConvertedPeriodChange,
   historicalNativeNetWorth,
   historicalNetWorth,
   holdingsWithConversion,
@@ -182,6 +183,49 @@ describe('allocation / periodChange / history / performance', () => {
   it('computes absolute and percent change', () => {
     expect(periodChange(100, 110)).toEqual({ absolute: 10, percent: 10 })
     expect(periodChange(0, 50)).toEqual({ absolute: 50, percent: null })
+  })
+
+  it('splits converted period change into amount updates vs FX on the old pile', () => {
+    const start = [
+      {
+        assetId: 'usd',
+        name: 'Dollars',
+        currency: 'USD',
+        nativeAmount: 10_000,
+        convertedAmount: 900_000,
+        conversionAvailable: true,
+      },
+      {
+        assetId: 'rub',
+        name: 'Rubles',
+        currency: 'RUB',
+        nativeAmount: 360_000,
+        convertedAmount: 360_000,
+        conversionAvailable: true,
+      },
+    ]
+    const end = [
+      {
+        assetId: 'usd',
+        name: 'Dollars',
+        currency: 'USD',
+        nativeAmount: 12_000,
+        convertedAmount: 996_000,
+        conversionAvailable: true,
+      },
+      {
+        assetId: 'rub',
+        name: 'Rubles',
+        currency: 'RUB',
+        nativeAmount: 200_000,
+        convertedAmount: 200_000,
+        conversionAvailable: true,
+      },
+    ]
+    const split = decomposeConvertedPeriodChange(start, end)
+    expect(split.amountChange).toBeCloseTo(6000)
+    expect(split.rateChange).toBeCloseTo(-70_000)
+    expect(split.totalChange).toBeCloseTo(-64_000)
   })
 
   it('uses the snapshot-date FX for historical points, not a later rate', () => {

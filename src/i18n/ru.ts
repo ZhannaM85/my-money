@@ -49,6 +49,9 @@ export const ru: Dictionary = {
       'Фильтр валюты неактивен в режиме «В пересчёте». Базовую валюту меняйте в настройках.',
     conversionUnavailable: 'Конвертация недоступна',
     holdings: 'Позиции',
+    amountChange: 'Из сумм',
+    rateChange: 'Из курсов',
+    updateRates: 'Обновить курсы',
   },
   assets: {
     title: 'Активы',

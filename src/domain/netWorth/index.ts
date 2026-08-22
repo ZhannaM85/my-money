@@ -15,4 +15,5 @@ export {
   breakdownBy,
   periodChange,
   assetPerformance,
+  decomposeConvertedPeriodChange,
 } from './netWorth'

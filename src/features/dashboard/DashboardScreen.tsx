@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ChevronDown } from 'lucide-react'
 import {
+  decomposeConvertedPeriodChange,
   historicalNativeNetWorth,
   historicalNetWorth,
   holdingsWithConversion,
@@ -49,6 +50,7 @@ export function DashboardScreen() {
   )
   const quotes = useFxStore((state) => state.quotes)
   const ensureRange = useFxStore((state) => state.ensureRange)
+  const fxLoading = useFxStore((state) => state.loading)
   const [range, setRange] = useState<HistoryRange>('1M')
   const [currencyFilter, setCurrencyFilter] = useState<string>('all')
   const [holdingsOpen, setHoldingsOpen] = useState(false)
@@ -176,6 +178,16 @@ export function DashboardScreen() {
     convertedTodayPoint?.total ?? convertedResult.total
   const convertedHoldingsToday =
     convertedTodayPoint?.holdings ?? convertedHoldings
+  const convertedBreakdown = useMemo(() => {
+    const startHoldings = convertedSeries[0]?.holdings
+    const endHoldings = convertedTodayPoint?.holdings
+    if (isOriginal || !startHoldings || !endHoldings) return null
+    return decomposeConvertedPeriodChange(startHoldings, endHoldings)
+  }, [convertedSeries, convertedTodayPoint, isOriginal])
+  const fxSymbols = useMemo(
+    () => [...new Set(filteredSnapshots.map((snapshot) => snapshot.currency))],
+    [filteredSnapshots],
+  )
   const singleNativeTotal =
     isOriginal && activeCurrencyFilter !== 'all'
       ? (nativeTotals.find((row) => row.currency === activeCurrencyFilter)
@@ -352,6 +364,46 @@ export function DashboardScreen() {
             />
           )}
           {fxNote && <p className="text-sm text-muted-foreground">{fxNote}</p>}
+          {convertedBreakdown && (
+            <div className="flex flex-col gap-2">
+              <ul className="flex flex-col gap-1 text-sm">
+                <li className="flex justify-between gap-3">
+                  <span className="text-muted-foreground">
+                    {t.dashboard.amountChange}
+                  </span>
+                  <span className="tabular-nums">
+                    {formatSignedAmount(
+                      convertedBreakdown.amountChange,
+                      baseCurrency,
+                      locale,
+                    )}
+                  </span>
+                </li>
+                <li className="flex justify-between gap-3">
+                  <span className="text-muted-foreground">
+                    {t.dashboard.rateChange}
+                  </span>
+                  <span className="tabular-nums">
+                    {formatSignedAmount(
+                      convertedBreakdown.rateChange,
+                      baseCurrency,
+                      locale,
+                    )}
+                  </span>
+                </li>
+              </ul>
+              <Button
+                type="button"
+                variant="outline"
+                disabled={fxLoading}
+                onClick={() =>
+                  void ensureRange(start, today, baseCurrency, fxSymbols)
+                }
+              >
+                {t.dashboard.updateRates}
+              </Button>
+            </div>
+          )}
           {convertedHoldingsToday.length > 0 &&
             !(isOriginal && activeCurrencyFilter === 'all') && (
             <div className="flex flex-col gap-2">

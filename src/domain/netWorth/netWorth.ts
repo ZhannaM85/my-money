@@ -306,6 +306,51 @@ export function periodChange(
   return { absolute, percent: (absolute / Math.abs(from)) * 100 }
 }
 
+/**
+ * Split a Converted period move into amount updates (valued at the end rate)
+ * vs FX on the starting native balances. amountChange + rateChange equals
+ * the converted total change when both points converted fully.
+ */
+export function decomposeConvertedPeriodChange(
+  start: readonly HoldingConversion[],
+  end: readonly HoldingConversion[],
+): { amountChange: number; rateChange: number; totalChange: number } {
+  const startById = new Map(start.map((row) => [row.assetId, row]))
+  const endById = new Map(end.map((row) => [row.assetId, row]))
+  const ids = new Set([...startById.keys(), ...endById.keys()])
+  let amountChange = 0
+  let rateChange = 0
+  for (const id of ids) {
+    const from = startById.get(id)
+    const to = endById.get(id)
+    const startNative = from?.nativeAmount ?? 0
+    const endNative = to?.nativeAmount ?? 0
+    const startConverted =
+      from?.conversionAvailable && from.convertedAmount !== null
+        ? from.convertedAmount
+        : 0
+    const endConverted =
+      to?.conversionAvailable && to.convertedAmount !== null
+        ? to.convertedAmount
+        : 0
+    const endRate =
+      endNative !== 0
+        ? endConverted / endNative
+        : startNative !== 0
+          ? startConverted / startNative
+          : 0
+    const startRate =
+      startNative !== 0 ? startConverted / startNative : endRate
+    amountChange += (endNative - startNative) * endRate
+    rateChange += startNative * (endRate - startRate)
+  }
+  return {
+    amountChange,
+    rateChange,
+    totalChange: amountChange + rateChange,
+  }
+}
+
 export function assetPerformance(
   snapshots: readonly AssetSnapshot[],
   rates: RateTable,
