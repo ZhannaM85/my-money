@@ -5,7 +5,7 @@ import { OfflineBanner } from '@/app/OfflineBanner'
 import { PullToRefreshIndicator } from '@/app/PullToRefreshIndicator'
 import { shouldShowOnboarding } from '@/domain/settings'
 import { useTranslation } from '@/i18n'
-import { useIsTextInputFocused, useVisualViewportShrunk } from '@/shared/hooks'
+import { useIsTextInputFocused } from '@/shared/hooks'
 import { BottomNav } from '@/shared/ui/bottom-nav'
 import { cn } from '@/shared/lib/utils'
 import { useAssetStore } from '@/stores/assetStore'
@@ -32,8 +32,7 @@ export function AppShell() {
   const locale = useSettingsStore((state) => state.settings.locale)
   const onboarding = pathname === '/onboarding'
   const isTextInputFocused = useIsTextInputFocused()
-  const isViewportShrunk = useVisualViewportShrunk()
-  const hideTabBar = onboarding || isTextInputFocused || isViewportShrunk
+  const hideTabBar = onboarding || isTextInputFocused
 
   useEffect(() => {
     document.documentElement.lang = locale

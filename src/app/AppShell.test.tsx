@@ -210,16 +210,15 @@ function mockVisualViewport(initialHeight: number) {
   }
 }
 
-describe('AppShell bottom tab bar visibility, viewport-shrink signal (#25)', () => {
+describe('AppShell tab bar stays visible while scrolling (#80)', () => {
   afterEach(() => {
-    vi.useRealTimers()
     Object.defineProperty(window, 'visualViewport', {
       value: undefined,
       configurable: true,
     })
   })
 
-  it('hides the bottom tab bar once the visual viewport shrinks, with no input focused', async () => {
+  it('keeps the bottom tab bar visible when the visual viewport shrinks with no input focused', async () => {
     const viewport = mockVisualViewport(window.innerHeight)
     renderShellWithInput()
     expect(
@@ -227,47 +226,7 @@ describe('AppShell bottom tab bar visibility, viewport-shrink signal (#25)', () 
     ).toBeInTheDocument()
 
     viewport.resizeTo(window.innerHeight - 300)
-
-    expect(
-      screen.queryByRole('navigation', { name: 'Tabs' }),
-    ).not.toBeInTheDocument()
-  })
-
-  it('shows the bottom tab bar again once the viewport resizes back to full height', async () => {
-    const viewport = mockVisualViewport(window.innerHeight)
-    renderShellWithInput()
-    expect(
-      await screen.findByRole('navigation', { name: 'Tabs' }),
-    ).toBeInTheDocument()
-
-    viewport.resizeTo(window.innerHeight - 300)
-    expect(
-      screen.queryByRole('navigation', { name: 'Tabs' }),
-    ).not.toBeInTheDocument()
-
-    viewport.resizeTo(window.innerHeight)
 
     expect(screen.getByRole('navigation', { name: 'Tabs' })).toBeInTheDocument()
-  })
-
-  it('clears a stuck shrunk viewport when nothing is keyboard-focused', async () => {
-    vi.useFakeTimers({ shouldAdvanceTime: true })
-    const viewport = mockVisualViewport(window.innerHeight)
-    renderShellWithInput()
-    expect(
-      await screen.findByRole('navigation', { name: 'Tabs' }),
-    ).toBeInTheDocument()
-
-    viewport.resizeTo(window.innerHeight - 300)
-    expect(
-      screen.queryByRole('navigation', { name: 'Tabs' }),
-    ).not.toBeInTheDocument()
-
-    act(() => {
-      vi.advanceTimersByTime(700)
-    })
-
-    expect(screen.getByRole('navigation', { name: 'Tabs' })).toBeInTheDocument()
-    vi.useRealTimers()
   })
 })

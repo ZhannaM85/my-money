@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 88,
+    issue: 80,
+    date: '2026-08-22T17:05:00+03:00',
+    en: 'The tab bar stays on screen while you scroll. It still hides when a text field is focused so the keyboard does not cover it.',
+    ru: 'Панель вкладок остаётся на экране при прокрутке. Она по-прежнему скрывается, когда фокус в текстовом поле, чтобы клавиатура её не перекрывала.',
+  },
+  {
     version: 87,
     issue: 78,
     date: '2026-08-22T16:50:00+03:00',
