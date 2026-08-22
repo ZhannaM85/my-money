@@ -37,7 +37,6 @@ _Existing-asset details: no dated history, and Save is a no-op when viewing._
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
-| [#83](https://github.com/ZhannaM85/my-money/issues/83) | 🔍 Pending validation | No way to change currency when editing a past snapshot | Snapshot editor now has a currency select; save persists it on that row. |
 | [#84](https://github.com/ZhannaM85/my-money/issues/84) | 🔍 Pending validation | Safari date fields overflow the card when editing snapshots | Copied Turtle #47: DateField is `h-12 w-36`, not a max-width/overflow clamp. Related #68, #82. |
 | [#85](https://github.com/ZhannaM85/my-money/issues/85) | 🔍 Pending validation | Dashboard month change has no breakdown (cash exchange looks like a 61k loss) | Tappable hint plus expand From amounts / From rates by holding. Magnitude is #86. |
 | [#86](https://github.com/ZhannaM85/my-money/issues/86) | 🔍 Pending validation | Dashboard this-month change includes FX on existing dollars (~61k instead of ~6k) | StatCard “this month” uses From amounts. From rates stays visible (#88). |
