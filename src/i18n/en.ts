@@ -126,9 +126,9 @@ export const en: Dictionary = {
     snapshotDateInvalid: 'Choose today or a past date',
     newAmountOptional: 'New amount (optional)',
     newAmountOptionalHint:
-      'Optional. If you enter an amount, Save details also writes a snapshot for today. Leave empty to change name and settings only.',
+      'Optional. If you enter an amount, Save details also writes a snapshot for the As of date (defaults to today). Leave empty to change name and settings only.',
     updateThisAssetHint:
-      'Saves a new snapshot for today with this amount. It does not change older history rows.',
+      'Saves a new snapshot for the chosen date (defaults to today). It does not change older history rows.',
     nameRequired: 'Name is required',
     enterCurrentAmount: 'Enter a current amount',
     amountMustBeNumber: 'Amount must be a number',

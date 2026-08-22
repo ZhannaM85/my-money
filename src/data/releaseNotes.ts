@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 74,
+    issue: 66,
+    date: '2026-08-22T10:10:00+03:00',
+    en: 'Existing assets can add a snapshot on a past date from Update this asset or Save details, not only today.',
+    ru: 'Для существующего актива можно добавить снимок на прошедшую дату в «Обновить этот актив» и в «Сохранить сведения», не только на сегодня.',
+  },
+  {
     version: 73,
     issue: 72,
     date: '2026-08-22T09:21:00+03:00',

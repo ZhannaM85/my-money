@@ -5,10 +5,21 @@ import { MemoryRouter, Route, Routes } from 'react-router-dom'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { DEFAULT_SETTINGS } from '@/domain/settings'
 import { db } from '@/infrastructure/persistence/indexeddb'
-import { formatAmount } from '@/shared/lib/money'
+import { addDaysIso } from '@/shared/lib/dates'
+import { formatAmount, todayIsoDate } from '@/shared/lib/money'
 import { useAssetStore } from '@/stores/assetStore'
 import { useSettingsStore } from '@/stores/settingsStore'
 import { AssetDetailsScreen } from './AssetDetailsScreen'
+
+function setDateField(input: HTMLElement, value: string) {
+  input.focus()
+  Object.getOwnPropertyDescriptor(
+    window.HTMLInputElement.prototype,
+    'value',
+  )?.set?.call(input, value)
+  input.dispatchEvent(new Event('input', { bubbles: true }))
+  input.dispatchEvent(new Event('change', { bubbles: true }))
+}
 
 const now = '2026-08-17T00:00:00.000Z'
 
@@ -85,7 +96,7 @@ describe('AssetDetailsScreen', () => {
     )
     expect(
       screen.getByText(
-        'Saves a new snapshot for today with this amount. It does not change older history rows.',
+        'Saves a new snapshot for the chosen date (defaults to today). It does not change older history rows.',
       ),
     ).toBeInTheDocument()
     await user.click(
@@ -93,7 +104,7 @@ describe('AssetDetailsScreen', () => {
     )
     expect(
       screen.getByText(
-        'Optional. If you enter an amount, Save details also writes a snapshot for today. Leave empty to change name and settings only.',
+        'Optional. If you enter an amount, Save details also writes a snapshot for the As of date (defaults to today). Leave empty to change name and settings only.',
       ),
     ).toBeInTheDocument()
   })
@@ -116,6 +127,59 @@ describe('AssetDetailsScreen', () => {
           .getState()
           .snapshots.filter((row) => row.assetId === 'a1'),
       ).toHaveLength(3)
+    })
+  })
+
+  it('adds a past-dated snapshot from Update this asset', async () => {
+    const user = userEvent.setup()
+    const past = addDaysIso(todayIsoDate(), -20)
+    render(
+      <MemoryRouter initialEntries={['/assets/a1']}>
+        <Routes>
+          <Route path="/assets/:id" element={<AssetDetailsScreen />} />
+        </Routes>
+      </MemoryRouter>,
+    )
+    await screen.findByRole('heading', { name: 'Revolut' })
+    setDateField(screen.getAllByLabelText('As of')[0]!, past)
+    await user.type(screen.getByLabelText('New amount'), '750')
+    await user.click(screen.getByRole('button', { name: /^Save$/ }))
+    await waitFor(() => {
+      expect(
+        useAssetStore
+          .getState()
+          .snapshots.some(
+            (row) =>
+              row.assetId === 'a1' && row.date === past && row.amount === 750,
+          ),
+      ).toBe(true)
+    })
+  })
+
+  it('adds a past-dated snapshot from Save details', async () => {
+    const user = userEvent.setup()
+    const past = '2026-01-01'
+    render(
+      <MemoryRouter initialEntries={['/assets/a1']}>
+        <Routes>
+          <Route path="/assets/:id" element={<AssetDetailsScreen />} />
+        </Routes>
+      </MemoryRouter>,
+    )
+    await screen.findByRole('heading', { name: 'Revolut' })
+    const asOfFields = screen.getAllByLabelText('As of')
+    setDateField(asOfFields[asOfFields.length - 1]!, past)
+    await user.type(screen.getByLabelText('New amount (optional)'), '500')
+    await user.click(screen.getByRole('button', { name: 'Save details' }))
+    await waitFor(() => {
+      expect(
+        useAssetStore
+          .getState()
+          .snapshots.some(
+            (row) =>
+              row.assetId === 'a1' && row.date === past && row.amount === 500,
+          ),
+      ).toBe(true)
     })
   })
 

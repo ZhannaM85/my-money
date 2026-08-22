@@ -60,6 +60,7 @@ export function AssetDetailsScreen() {
   const [mode, setMode] = useState<DisplayMode>(displayMode)
   const [amountDraft, setAmountDraft] = useState('')
   const [amountError, setAmountError] = useState<string | undefined>()
+  const [amountDate, setAmountDate] = useState(todayIsoDate())
   const [editingId, setEditingId] = useState<string | null>(null)
   const [editAmount, setEditAmount] = useState('')
   const [editDate, setEditDate] = useState('')
@@ -151,16 +152,21 @@ export function AssetDetailsScreen() {
       setAmountError(t.asset.enterCurrentAmount)
       return
     }
+    if (!isIsoDateOnOrBefore(amountDate, today)) {
+      setAmountError(t.asset.snapshotDateInvalid)
+      return
+    }
     setAmountError(undefined)
     await saveSnapshots([
       {
         assetId: currentAsset.id,
-        date: today,
+        date: amountDate,
         amount,
         currency: currentAsset.currency,
       },
     ])
     setAmountDraft('')
+    setAmountDate(today)
   }
 
   async function saveEditedSnapshot() {
@@ -386,6 +392,17 @@ export function AssetDetailsScreen() {
         >
           <h2 className="text-lg font-semibold">{t.asset.updateThisAsset}</h2>
         </InfoHint>
+        <DateField
+          label={t.asset.snapshotDate}
+          value={amountDate}
+          max={today}
+          onChange={(event) => setAmountDate(event.target.value)}
+          error={
+            amountError === t.asset.snapshotDateInvalid
+              ? amountError
+              : undefined
+          }
+        />
         <div className="flex gap-2">
           <div className="relative min-w-0 flex-1">
             <Input
@@ -421,7 +438,7 @@ export function AssetDetailsScreen() {
             {t.common.save}
           </Button>
         </div>
-        {amountError && (
+        {amountError && amountError !== t.asset.snapshotDateInvalid && (
           <p className="text-sm text-destructive">{amountError}</p>
         )}
       </section>
@@ -430,14 +447,14 @@ export function AssetDetailsScreen() {
         initial={asset}
         requireAmount={false}
         submitLabel={t.asset.saveDetails}
-        onSubmit={async ({ asset: next, amount }) => {
+        onSubmit={async ({ asset: next, amount, snapshotDate }) => {
           await saveAsset(
             next,
             amount === undefined
               ? undefined
               : {
                   assetId: next.id,
-                  date: todayIsoDate(),
+                  date: snapshotDate ?? todayIsoDate(),
                   amount,
                   currency: next.currency,
                 },

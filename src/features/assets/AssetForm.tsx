@@ -153,11 +153,8 @@ export function AssetForm({
       return
     }
     const today = todayIsoDate()
-    if (
-      requireAmount &&
-      !initial &&
-      !isIsoDateOnOrBefore(snapshotDate, today)
-    ) {
+    const writingSnapshot = requireAmount || parsedAmount !== undefined
+    if (writingSnapshot && !isIsoDateOnOrBefore(snapshotDate, today)) {
       setError(t.asset.snapshotDateInvalid)
       return
     }
@@ -182,7 +179,7 @@ export function AssetForm({
           updatedAt: now,
         },
         amount: parsedAmount,
-        snapshotDate: requireAmount && !initial ? snapshotDate : undefined,
+        snapshotDate: writingSnapshot ? snapshotDate : undefined,
       })
     } finally {
       setSaving(false)
@@ -337,17 +334,15 @@ export function AssetForm({
             : undefined
         }
       />
-      {requireAmount && !initial && (
-        <DateField
-          label={t.asset.snapshotDate}
-          value={snapshotDate}
-          max={todayIsoDate()}
-          onChange={(event) => setSnapshotDate(event.target.value)}
-          error={
-            error === t.asset.snapshotDateInvalid ? error : undefined
-          }
-        />
-      )}
+      <DateField
+        label={t.asset.snapshotDate}
+        value={snapshotDate}
+        max={todayIsoDate()}
+        onChange={(event) => setSnapshotDate(event.target.value)}
+        error={
+          error === t.asset.snapshotDateInvalid ? error : undefined
+        }
+      />
       {error &&
         error !== t.asset.nameRequired &&
         error !== t.asset.enterCurrentAmount &&
