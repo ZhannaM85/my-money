@@ -16,7 +16,6 @@ _CSV, PWA, i18n, accessibility. Any order after Tier 5, except CSV should not pr
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
-| [#16](https://github.com/ZhannaM85/my-money/issues/16) | 🔍 Pending validation | Epic 15 — PWA installability | Manifest + SW (skipped in Capacitor). FX failures keep cached quotes. |
 | [#17](https://github.com/ZhannaM85/my-money/issues/17) | 🔍 Pending validation | Epic 16 — Localization (English and Russian) | Typed dictionary. Locale in settings (backup field stays `locale`). Switcher on More. |
 | [#18](https://github.com/ZhannaM85/my-money/issues/18) | 🔍 Pending validation | Epic 17 — Accessibility and responsive QA pass | Skip link, chip `aria-pressed`, darker allocation colors, scrollable chip rows. |
 
