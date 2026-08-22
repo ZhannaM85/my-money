@@ -21,16 +21,6 @@ _Once real balances exist (Tier 3), IndexedDB is the only copy — backup and a 
 
 ---
 
-## Tier 5 — Core product (prototype flows 2–4)
-
-_FX, then the remaining three prototype flows, plus allocation and history. Order matters: FX before converted totals and historical series._
-
-| # | Status | Issue | Notes |
-|---|--------|-------|-------|
-| [#12](https://github.com/ZhannaM85/my-money/issues/12) | 🔍 Pending validation | Epic 11 — History: net worth over time | Range chips 1M–All. Historical FX per date. Asset/liability filters left as follow-up. |
-
----
-
 ## Tier 6 — Completeness
 
 _CSV, PWA, i18n, accessibility. Any order after Tier 5, except CSV should not precede JSON (#13)._
