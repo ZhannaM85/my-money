@@ -289,3 +289,17 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Stretch the native date glyph so the whole field opens the picker (iOS PWA / WebKit). */
+@layer components {
+  input[type='date']::-webkit-calendar-picker-indicator {
+    position: absolute;
+    inset: 0;
+    width: auto;
+    height: auto;
+    margin: 0;
+    padding: 0;
+    cursor: pointer;
+    opacity: 0;
+  }
+}
