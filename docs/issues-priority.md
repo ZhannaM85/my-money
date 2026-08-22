@@ -10,16 +10,6 @@ Prototype checkpoint after Tier 5: the four flows in `PROJECT_BRIEF.md` §25 (on
 
 ---
 
-## Tier 1 — Architecture foundation (Phase 1)
-
-_Scaffolding, domain model, and persistence. Everything downstream depends on this._
-
-| # | Status | Issue | Notes |
-|---|--------|-------|-------|
-| [#2](https://github.com/ZhannaM85/my-money/issues/2) | 🔍 Pending validation | Epic 1 — Domain model & persistence layer | Dexie `my-money` DB. Pure `netWorth` / historical FX. 16 tests. |
-
----
-
 ## Tier 2 — Design system & app shell
 
 _Shared primitives and routing skeleton before any real feature screen._
