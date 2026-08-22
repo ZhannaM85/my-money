@@ -27,7 +27,6 @@ _EUR base + RUB assets; iPhone tab bar; appearance; car; joint ownership; decima
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
-| [#40](https://github.com/ZhannaM85/my-money/issues/40) | 🔍 Pending validation | Add spacing between bottom content and sticky footer | Main content now reserves a larger bottom gap above the fixed tab bar, including safe-area space, so the last control no longer crowds the footer. |
 | [#41](https://github.com/ZhannaM85/my-money/issues/41) | 🔍 Pending validation | Add zoom in and zoom out controls for graphs | Dashboard now has zoom-in/zoom-out range controls that widen or narrow the visible history window without leaving the page. |
 | [#42](https://github.com/ZhannaM85/my-money/issues/42) | 🔍 Pending validation | Add a show original currencies mode in Settings | Settings now persist an asset-display mode (`Converted` vs `Original`), and asset-level views honor that preference instead of always preferring converted values. |
 | [#43](https://github.com/ZhannaM85/my-money/issues/43) | 🔍 Pending validation | Add a Dashboard currency filter dropdown | Dashboard now has its own currency dropdown that filters totals and the chart locally, independent from Settings display/conversion mode. |
