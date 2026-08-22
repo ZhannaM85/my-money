@@ -37,7 +37,6 @@ _Existing-asset details: no dated history, and Save is a no-op when viewing._
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
-| [#81](https://github.com/ZhannaM85/my-money/issues/81) | 🔍 Pending validation | Dashboard and History show different net worth totals | Dashboard Converted headline is today’s historicalNetWorth point (same as History). |
 | [#82](https://github.com/ZhannaM85/my-money/issues/82) | 🔍 Pending validation | Update-this-asset inputs overflow the phone screen | Amount and Save stack full-width. Date field width is #84. |
 | [#83](https://github.com/ZhannaM85/my-money/issues/83) | 🔍 Pending validation | No way to change currency when editing a past snapshot | Snapshot editor now has a currency select; save persists it on that row. |
 | [#84](https://github.com/ZhannaM85/my-money/issues/84) | 🔍 Pending validation | Safari date fields overflow the card when editing snapshots | Copied Turtle #47: DateField is `h-12 w-36`, not a max-width/overflow clamp. Related #68, #82. |
