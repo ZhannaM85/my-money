@@ -53,6 +53,7 @@ _Existing-asset details: no dated history, and Save is a no-op when viewing._
 | [#88](https://github.com/ZhannaM85/my-money/issues/88) | 🔍 Pending validation | Show amount change vs rate change on Dashboard (FX drop visible before a cash exchange) | Converted shows From amounts / From rates plus Update rates (fetch only). Related #85, #86. |
 | [#89](https://github.com/ZhannaM85/my-money/issues/89) | 🔲 Open | Dashboard and History show different period deltas | Same total 2,748,283.82 ₽. Dashboard «за этот месяц» −49,933.36 (amounts); History «за 3М» −61,891.82 (amounts+rates). Related #81, #86. |
 | [#90](https://github.com/ZhannaM85/my-money/issues/90) | 🔲 Open | History 3M change is last two snapshot days, not three months | −61,891.82 ₽ за 3М equals 2026-08-22 vs 2026-08-17. Chart axis also 17–22 авг. Related #79, #89. |
+| [#91](https://github.com/ZhannaM85/my-money/issues/91) | 🔲 Open | Tab bar floats mid-screen after bringing the app back from background | iPhone: bar overlaps Dashboard chart after resume. Related #25, #80. |
 
 ---
 
