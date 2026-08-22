@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 86,
+    issue: 81,
+    date: '2026-08-22T16:35:00+03:00',
+    en: 'Dashboard Converted net worth uses today’s rate, same as History, instead of the rate from each snapshot’s own date.',
+    ru: 'На Сводке чистый капитал в пересчёте берёт сегодняшний курс, как в Истории, а не курс на дату каждого снимка.',
+  },
+  {
     version: 85,
     issue: 68,
     date: '2026-08-22T16:20:00+03:00',

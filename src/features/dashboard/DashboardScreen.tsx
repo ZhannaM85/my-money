@@ -171,6 +171,11 @@ export function DashboardScreen() {
   ])
 
   const series = isOriginal ? nativeSeries : convertedSeries
+  const convertedTodayPoint = convertedSeries[convertedSeries.length - 1]
+  const convertedTodayTotal =
+    convertedTodayPoint?.total ?? convertedResult.total
+  const convertedHoldingsToday =
+    convertedTodayPoint?.holdings ?? convertedHoldings
   const singleNativeTotal =
     isOriginal && activeCurrencyFilter !== 'all'
       ? (nativeTotals.find((row) => row.currency === activeCurrencyFilter)
@@ -193,7 +198,11 @@ export function DashboardScreen() {
     (snapshot) => snapshot.currency !== baseCurrency,
   )
   const missingCodes = [
-    ...new Set(convertedResult.missingRates.map((row) => row.from)),
+    ...new Set(
+      (convertedTodayPoint?.missingRates ?? convertedResult.missingRates).map(
+        (row) => row.from,
+      ),
+    ),
   ]
   const fxNote = isOriginal
     ? undefined
@@ -330,7 +339,7 @@ export function DashboardScreen() {
               value={formatAmount(
                 isOriginal
                   ? (singleNativeTotal ?? 0)
-                  : convertedResult.total,
+                  : convertedTodayTotal,
                 isOriginal ? activeCurrencyFilter : baseCurrency,
                 locale,
               )}
@@ -338,7 +347,7 @@ export function DashboardScreen() {
             />
           )}
           {fxNote && <p className="text-sm text-muted-foreground">{fxNote}</p>}
-          {convertedHoldings.length > 0 &&
+          {convertedHoldingsToday.length > 0 &&
             !(isOriginal && activeCurrencyFilter === 'all') && (
             <div className="flex flex-col gap-2">
               <button
@@ -352,7 +361,7 @@ export function DashboardScreen() {
                   {t.dashboard.holdings}
                 </span>
                 <span className="flex items-center gap-1 text-sm text-muted-foreground" aria-hidden>
-                  {convertedHoldings.length}
+                  {convertedHoldingsToday.length}
                   <ChevronDown
                     className={cn(
                       'size-4 transition-transform',
@@ -364,7 +373,7 @@ export function DashboardScreen() {
               </button>
               {holdingsOpen && (
                 <ul className="flex flex-col gap-2">
-                  {convertedHoldings.map((row) => (
+                  {convertedHoldingsToday.map((row) => (
                     <li
                       key={row.assetId}
                       className="flex items-center justify-between gap-3 rounded-xl bg-card px-4 py-3 ring-1 ring-foreground/10"

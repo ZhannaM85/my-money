@@ -109,6 +109,28 @@ describe('netWorth', () => {
     expect(result.total).toBeCloseTo(100)
   })
 
+  it('uses the snapshot date’s rate, unlike today’s historical point', () => {
+    const usd = asset({ id: 'usd', currency: 'USD' })
+    const snapshots = [
+      snap({
+        id: 's',
+        assetId: 'usd',
+        amount: 110,
+        currency: 'USD',
+        date: '2026-08-01',
+      }),
+    ]
+    const rates = [
+      eurUsd,
+      { date: '2026-08-19', base: 'EUR', quote: 'USD', rate: 1 },
+    ]
+    expect(netWorth([usd], snapshots, rates, 'EUR').total).toBeCloseTo(100)
+    expect(
+      historicalNetWorth([usd], snapshots, rates, ['2026-08-19'], 'EUR')[0]
+        ?.total,
+    ).toBeCloseTo(110)
+  })
+
   it('ignores excluded and archived assets', () => {
     const excluded = asset({ id: 'ex', trackingStatus: 'excluded' })
     const archived = asset({ id: 'ar', trackingStatus: 'archived' })

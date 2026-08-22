@@ -10,7 +10,7 @@ import {
   formatSignedAmount,
   todayIsoDate,
 } from '@/shared/lib/money'
-import { monthStartIso } from '@/shared/lib/dates'
+import { addDaysIso, monthStartIso } from '@/shared/lib/dates'
 import { useAssetStore } from '@/stores/assetStore'
 import { useFxStore } from '@/stores/fxStore'
 import { useSettingsStore } from '@/stores/settingsStore'
@@ -481,5 +481,53 @@ describe('DashboardScreen', () => {
     ).toBeGreaterThan(0)
     expect(screen.getAllByText(formatAmount(200, 'EUR')).length).toBeGreaterThan(0)
     expect(screen.getAllByText(formatAmount(1200, 'EUR')).length).toBeGreaterThan(0)
+  })
+
+  it('uses today’s rate for Converted net worth so the headline matches History', async () => {
+    const today = todayIsoDate()
+    const past = addDaysIso(today, -10)
+    const now = `${today}T00:00:00.000Z`
+    await useFxStore.getState().saveManualRates([
+      { date: past, base: 'EUR', quote: 'USD', rate: 1.1 },
+      { date: today, base: 'EUR', quote: 'USD', rate: 1 },
+    ])
+    await useAssetStore.getState().saveAsset(
+      {
+        id: 'usd',
+        name: 'Dollar cash',
+        assetClass: 'money',
+        type: 'cash',
+        currency: 'USD',
+        trackingStatus: 'included',
+        valuationMethod: 'account_balance',
+        updateFrequency: 'weekly',
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        assetId: 'usd',
+        date: past,
+        amount: 110,
+        currency: 'USD',
+      },
+    )
+
+    render(
+      <MemoryRouter>
+        <DashboardScreen />
+      </MemoryRouter>,
+    )
+
+    expect(
+      await screen.findByText(formatAmount(110, 'EUR')),
+    ).toBeInTheDocument()
+    expect(
+      screen.queryByText(
+        (_, node) =>
+          node?.tagName === 'SPAN' &&
+          node.textContent === formatAmount(100, 'EUR') &&
+          node.className.includes('text-4xl'),
+      ),
+    ).not.toBeInTheDocument()
   })
 })
