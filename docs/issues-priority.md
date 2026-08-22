@@ -27,7 +27,7 @@ _EUR base + RUB assets; iPhone tab bar; appearance; car; joint ownership; decima
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
-| [#25](https://github.com/ZhannaM85/my-money/issues/25) | 🔲 Open | Tab bar disconnects from the bottom on iPhone Safari | Still intermittent. Hide-on-viewport-shrink is now itself a problem — see #80 / `IMG_0318.MP4`. |
+| [#25](https://github.com/ZhannaM85/my-money/issues/25) | 🔍 Pending validation | Tab bar disconnects from the bottom on iPhone Safari | Pins `fixed` tab bar to the visual viewport. Keyboard still hides it (#80). |
 
 ---
 

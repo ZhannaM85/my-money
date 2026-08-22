@@ -191,6 +191,7 @@ function mockVisualViewport(initialHeight: number) {
   const listeners: Partial<Record<string, () => void>> = {}
   const viewport = {
     height: initialHeight,
+    offsetTop: 0,
     addEventListener: (event: string, fn: () => void) => {
       listeners[event] = fn
     },

@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 89,
+    issue: 25,
+    date: '2026-08-22T17:15:00+03:00',
+    en: 'The tab bar stays glued to the bottom of the visible screen on iPhone Safari instead of sitting mid-page when the browser chrome moves.',
+    ru: 'Панель вкладок остаётся у нижнего края видимого экрана в Safari на iPhone и не зависает посередине, когда сдвигается системная панель браузера.',
+  },
+  {
     version: 88,
     issue: 80,
     date: '2026-08-22T17:05:00+03:00',
