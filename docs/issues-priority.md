@@ -27,7 +27,7 @@ _EUR base + RUB assets; iPhone tab bar; appearance; car; joint ownership; decima
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
-| [#25](https://github.com/ZhannaM85/my-money/issues/25) | 🔲 Open | Tab bar disconnects from the bottom on iPhone Safari | Still intermittent on device. Previous pass used Turtle #120/#188 visual-viewport hide; footer can still lift off the bottom. Needs more investigation. |
+| [#25](https://github.com/ZhannaM85/my-money/issues/25) | 🔲 Open | Tab bar disconnects from the bottom on iPhone Safari | Still intermittent. Hide-on-viewport-shrink is now itself a problem — see #80 / `IMG_0318.MP4`. |
 | [#42](https://github.com/ZhannaM85/my-money/issues/42) | 🔍 Pending validation | Add a show all currencies display option | Settings base-currency dropdown now starts with Show all currencies. All = Original/native totals; a single code = Converted into that currency. |
 
 ---
@@ -50,6 +50,7 @@ _Existing-asset details: no dated history, and Save is a no-op when viewing._
 | [#77](https://github.com/ZhannaM85/my-money/issues/77) | 🔲 Open | Dashboard chart tooltip stays visible while scrolling | Recharts tooltip from #65 stays after tap; page scroll does not dismiss it. |
 | [#78](https://github.com/ZhannaM85/my-money/issues/78) | 🔲 Open | Adopt the My Money design system as the default UI | Calm navy/blue tokens, cards, nav, charts, category colors. Doc in `docs/`. |
 | [#79](https://github.com/ZhannaM85/my-money/issues/79) | 🔲 Open | History list shows every calendar day, not only days the user added | Daily carry-forward series; user only entered 4 Jul. List should be snapshot days. |
+| [#80](https://github.com/ZhannaM85/my-money/issues/80) | 🔲 Open | Tab bar hides on scroll and can reappear mid-page | iPhone: vanishes while scrolling, returns when scroll stops, sometimes mid-page. Related #25. `IMG_0318.MP4`. |
 
 ---
 
