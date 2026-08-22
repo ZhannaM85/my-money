@@ -38,7 +38,6 @@ _Existing-asset details: no dated history, and Save is a no-op when viewing._
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
 | [#90](https://github.com/ZhannaM85/my-money/issues/90) | 🔍 Pending validation | History 3M change is last two snapshot days, not three months | 3M uses the 90-day window when data exists; if history is shorter, the label is “since first snapshot”. Related #79, #89. |
-| [#96](https://github.com/ZhannaM85/my-money/issues/96) | 🔍 Pending validation | History shows EUR when All currencies is selected | Original / All uses native totals on History, not leftover baseCurrency. Related #87. |
 | [#97](https://github.com/ZhannaM85/my-money/issues/97) | 🔍 Pending validation | Add optional comments on asset entries and show them in History | Optional snapshot note; shown on History holdings, asset details, and chart holdings. Empty notes stay hidden. |
 | [#100](https://github.com/ZhannaM85/my-money/issues/100) | 🔲 Open | Sort Assets by name or amount, and allow drag-and-drop order | List is IndexedDB id order today. Name/amount asc/desc + persisted drag order. |
 | [#101](https://github.com/ZhannaM85/my-money/issues/101) | 🔲 Open | Add regression tests so phone bugs are caught in CI, not only on device | Vitest exists; live-feedback bugs often had no failing test first. Tie RCAs (#94) to regression tests. |
