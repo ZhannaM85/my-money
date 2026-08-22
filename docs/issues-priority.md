@@ -21,16 +21,6 @@ _After the four web flows feel good. Android wraps this app; iOS does not._
 
 ---
 
-## Tier 9 — Live feedback (2026-08-18)
-
-_EUR base + RUB assets; iPhone tab bar; appearance; car; joint ownership; decimals; exclude/hide/delete; input formatting._
-
-| # | Status | Issue | Notes |
-|---|--------|-------|-------|
-| [#25](https://github.com/ZhannaM85/my-money/issues/25) | 🔍 Pending validation | Tab bar disconnects from the bottom on iPhone Safari | Turtle still footer: `fixed inset-x-0 bottom-0`, no visualViewport translateY. Keyboard hide is #80. |
-
----
-
 ## Tier 12 — Live feedback (2026-08-22)
 
 _Existing-asset details: no dated history, and Save is a no-op when viewing._
