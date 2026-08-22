@@ -293,7 +293,7 @@ export function AssetDetailsScreen() {
             return editingId === row.id ? (
               <li
                 key={row.id}
-                className="flex flex-col gap-2 rounded-xl bg-card px-4 py-3 ring-1 ring-foreground/10"
+                className="flex min-w-0 max-w-full flex-col gap-2 overflow-hidden rounded-xl bg-card px-4 py-3 ring-1 ring-foreground/10"
               >
                 <DateField
                   label={t.asset.snapshotDate}

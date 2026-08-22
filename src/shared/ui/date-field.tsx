@@ -26,11 +26,11 @@ export const DateField = React.forwardRef<HTMLInputElement, DateFieldProps>(
     const errorId = error ? `${inputId}-error` : undefined
 
     return (
-      <div className="flex flex-col gap-1.5">
+      <div className="flex min-w-0 max-w-full flex-col gap-1.5">
         <label htmlFor={inputId} className="text-sm font-medium">
           {label}
         </label>
-        <div className="relative">
+        <div className="relative min-w-0 max-w-full">
           <Input
             ref={ref}
             id={inputId}
@@ -38,7 +38,7 @@ export const DateField = React.forwardRef<HTMLInputElement, DateFieldProps>(
             aria-invalid={error ? true : undefined}
             aria-describedby={errorId}
             className={cn(
-              'relative h-12 cursor-pointer bg-background pr-12',
+              'relative h-12 w-full min-w-0 max-w-full cursor-pointer overflow-hidden bg-background pr-12',
               className,
             )}
             onClick={(event) => {

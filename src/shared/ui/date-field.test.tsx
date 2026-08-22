@@ -23,4 +23,14 @@ describe('DateField', () => {
     await user.click(screen.getByLabelText('As of'))
     expect(showPicker).toHaveBeenCalled()
   })
+
+  it('clamps the native date control so Safari cannot overflow the card', () => {
+    render(
+      <DateField label="As of" value="2026-08-21" onChange={() => undefined} />,
+    )
+    const input = screen.getByLabelText('As of')
+    expect(input).toHaveClass('max-w-full')
+    expect(input).toHaveClass('overflow-hidden')
+    expect(input).toHaveClass('min-w-0')
+  })
 })

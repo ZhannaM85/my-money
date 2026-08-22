@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 78,
+    issue: 84,
+    date: '2026-08-22T14:45:00+03:00',
+    en: 'Date fields on asset details stay inside the card on iPhone Safari and PWA instead of overflowing to the right.',
+    ru: 'Поля даты на карточке актива больше не вылезают за край экрана в Safari и PWA на iPhone.',
+  },
+  {
     version: 77,
     issue: 42,
     date: '2026-08-22T10:40:00+03:00',
