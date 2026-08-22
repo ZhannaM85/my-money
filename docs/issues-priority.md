@@ -174,11 +174,12 @@ _Converted Dashboard: chart dropped while holdings stayed the same. Need a per-d
 
 ## Tier 12 — Live feedback (2026-08-22)
 
-_Create-asset already has As of (#61). Existing assets still cannot backfill or correct dated history._
+_Existing-asset details: no dated history, and Save is a no-op when viewing._
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
 | [#66](https://github.com/ZhannaM85/my-money/issues/66) | 📋 Not started | Add and edit past snapshot entries on existing assets | Edit form has New amount with no date. Need amount + date for past days (e.g. 1 Jan, 2 Apr) and edit of existing snapshots. Follow-up to #61. |
+| [#67](https://github.com/ZhannaM85/my-money/issues/67) | 📋 Not started | Existing asset Save does nothing; add a view / read-only mode | Tapping Save information with no changes (empty New amount) does nothing. Prefer a read-only details view instead of an always-edit form. |
 
 ---
 
