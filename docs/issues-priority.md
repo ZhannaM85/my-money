@@ -29,7 +29,6 @@ _EUR base + RUB assets; iPhone tab bar; appearance; car; joint ownership; decima
 |---|--------|-------|-------|
 | [#25](https://github.com/ZhannaM85/my-money/issues/25) | 🔲 Open | Tab bar disconnects from the bottom on iPhone Safari | Still intermittent on device. Previous pass used Turtle #120/#188 visual-viewport hide; footer can still lift off the bottom. Needs more investigation. |
 | [#42](https://github.com/ZhannaM85/my-money/issues/42) | 🔍 Pending validation | Add a show all currencies display option | Settings base-currency dropdown now starts with Show all currencies. All = Original/native totals; a single code = Converted into that currency. |
-| [#58](https://github.com/ZhannaM85/my-money/issues/58) | 🔍 Pending validation | History shows 0,00 ₽ for the selected range while the list and chart moved | History (and Dashboard range line) now use last − first of the visible series, so FX moves on later dates are not shown as 0,00. |
 | [#59](https://github.com/ZhannaM85/my-money/issues/59) | 🔍 Pending validation | Retune Colorful mood so it is not a black UI | Colorful is charcoal dark; violet on buttons/actions. Page is not teal/green. Other moods unchanged. |
 | [#61](https://github.com/ZhannaM85/my-money/issues/61) | 🔍 Pending validation | Allow adding an asset with a past first-snapshot date | New asset and onboarding forms have As of (default today). Past dates save; future dates are rejected. |
 
