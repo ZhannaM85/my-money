@@ -10,16 +10,6 @@ Prototype checkpoint after Tier 5: the four flows in `PROJECT_BRIEF.md` §25 (on
 
 ---
 
-## Tier 2 — Design system & app shell
-
-_Shared primitives and routing skeleton before any real feature screen._
-
-| # | Status | Issue | Notes |
-|---|--------|-------|-------|
-| [#3](https://github.com/ZhannaM85/my-money/issues/3) | 🔍 Pending validation | Epic 2 — Design system & app shell | Primitives + bottom nav + empty route screens. |
-
----
-
 ## Tier 3 — First vertical slice
 
 _Base currency → create assets → first net worth. This is prototype Flow 1. Single-currency is enough; FX can still be identity rates._
