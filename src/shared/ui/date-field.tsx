@@ -26,21 +26,21 @@ export const DateField = React.forwardRef<HTMLInputElement, DateFieldProps>(
     const errorId = error ? `${inputId}-error` : undefined
 
     return (
-      <div className="flex min-w-0 max-w-full flex-col gap-1.5">
+      <div className="flex flex-col gap-1.5">
         <label htmlFor={inputId} className="text-sm font-medium">
           {label}
         </label>
-        <div className="relative min-w-0 max-w-full">
+        {/* Fixed width, not relative sizing (Turtle #47 / #84): Safari
+            date inputs do not shrink with flex / min-w-0 / w-full, and
+            overflow clip made the page as wide as the native control. */}
+        <div className="relative w-36">
           <Input
             ref={ref}
             id={inputId}
             type="date"
             aria-invalid={error ? true : undefined}
             aria-describedby={errorId}
-            className={cn(
-              'relative h-12 w-full min-w-0 max-w-full cursor-pointer overflow-hidden bg-background pr-12',
-              className,
-            )}
+            className={cn('h-12 w-36 cursor-pointer bg-background pr-10', className)}
             onClick={(event) => {
               openDatePicker(event.currentTarget)
               onClick?.(event)

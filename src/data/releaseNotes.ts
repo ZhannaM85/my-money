@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 83,
+    issue: 84,
+    date: '2026-08-22T16:00:00+03:00',
+    en: 'Date fields use a fixed width like Turtle Steps, so they no longer stretch the whole page on iPhone Safari.',
+    ru: 'Поля даты фиксированной ширины, как в Turtle Steps, и больше не растягивают страницу в Safari на iPhone.',
+  },
+  {
     version: 82,
     issue: 69,
     date: '2026-08-22T15:45:00+03:00',

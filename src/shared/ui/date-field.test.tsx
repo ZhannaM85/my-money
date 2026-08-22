@@ -24,13 +24,14 @@ describe('DateField', () => {
     expect(showPicker).toHaveBeenCalled()
   })
 
-  it('clamps the native date control so Safari cannot overflow the card', () => {
+  it('uses a fixed Safari-safe width instead of stretching with the page', () => {
     render(
       <DateField label="As of" value="2026-08-21" onChange={() => undefined} />,
     )
     const input = screen.getByLabelText('As of')
-    expect(input).toHaveClass('max-w-full')
-    expect(input).toHaveClass('overflow-hidden')
-    expect(input).toHaveClass('min-w-0')
+    expect(input).toHaveClass('w-36')
+    expect(input).toHaveClass('h-12')
+    expect(input).not.toHaveClass('w-full')
+    expect(input).not.toHaveClass('max-w-full')
   })
 })

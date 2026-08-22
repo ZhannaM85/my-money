@@ -290,16 +290,10 @@
   }
 }
 
-/* Safari/PWA date inputs ignore flex shrink (Turtle #47). overflow-hidden
-   is what makes WebKit honor the box (#420). Overlay the native glyph so
-   the whole field still opens the picker (#68). */
+/* Overlay the native glyph so the whole field still opens the picker (#68).
+   Do not set max-width / overflow on date inputs — Safari ignores relative
+   shrink and overflow clip widened the page (#84). Width is `w-36` on DateField. */
 @layer components {
-  input[type='date'] {
-    box-sizing: border-box;
-    max-width: 100%;
-    min-width: 0;
-    overflow: hidden;
-  }
   input[type='date']::-webkit-calendar-picker-indicator {
     position: absolute;
     inset: 0;
