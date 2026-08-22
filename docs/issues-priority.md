@@ -10,16 +10,6 @@ Prototype checkpoint after Tier 5: the four flows in `PROJECT_BRIEF.md` §25 (on
 
 ---
 
-## Tier 4 — Data safety & deployment (pulled forward)
-
-_Once real balances exist (Tier 3), IndexedDB is the only copy — backup and a real deployed build should not wait until the end of the queue. Same pull-forward as turtle-steps Epic 8/9._
-
-| # | Status | Issue | Notes |
-|---|--------|-------|-------|
-| [#14](https://github.com/ZhannaM85/my-money/issues/14) | 🔍 Pending validation | Epic 13 — GitHub Pages deployment | CI on push/PR. Deploy workflow on `main`. Live: https://zhannam85.github.io/my-money/ |
-
----
-
 ## Tier 6 — Completeness
 
 _CSV, PWA, i18n, accessibility. Any order after Tier 5, except CSV should not precede JSON (#13)._
