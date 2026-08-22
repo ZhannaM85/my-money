@@ -27,7 +27,6 @@ _FX, then the remaining three prototype flows, plus allocation and history. Orde
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
-| [#9](https://github.com/ZhannaM85/my-money/issues/9) | 🔍 Pending validation | Epic 8 — Quick update flow | Native amounts. No change writes a same-amount snapshot. Yearly/manual shown, not nagged. |
 | [#10](https://github.com/ZhannaM85/my-money/issues/10) | 🔍 Pending validation | Epic 9 — Asset details | Native/base toggle, history chart + list, in-place amount update. FX-vs-value split left for later. |
 | [#11](https://github.com/ZhannaM85/my-money/issues/11) | 🔍 Pending validation | Epic 10 — Allocation screen | Own route `/allocation` from More + Dashboard. Not a 6th tab. Donut uses abs size; legend shows signed amounts. |
 | [#12](https://github.com/ZhannaM85/my-money/issues/12) | 🔍 Pending validation | Epic 11 — History: net worth over time | Range chips 1M–All. Historical FX per date. Asset/liability filters left as follow-up. |
