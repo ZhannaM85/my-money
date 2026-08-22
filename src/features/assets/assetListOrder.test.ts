@@ -11,7 +11,7 @@ const assets = [
   { id: 'c', name: 'Cash' },
 ]
 
-describe('assetListOrder', () => {
+describe('assetListOrder (#100)', () => {
   it('sorts by name and amount and keeps custom order', () => {
     const amountOf = (asset: { id: string }) =>
       ({ a: 10, b: 30, c: 20 })[asset.id] ?? null

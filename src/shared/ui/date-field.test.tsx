@@ -24,7 +24,7 @@ describe('DateField', () => {
     expect(showPicker).toHaveBeenCalled()
   })
 
-  it('uses a fixed Safari-safe width instead of stretching with the page', () => {
+  it('uses a fixed Safari-safe width instead of stretching with the page (#95, #84)', () => {
     render(
       <DateField label="As of" value="2026-08-21" onChange={() => undefined} />,
     )

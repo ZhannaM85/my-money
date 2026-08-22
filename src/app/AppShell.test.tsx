@@ -66,7 +66,7 @@ describe('AppShell', () => {
     )
   })
 
-  it('pins the tab bar in the shell so iOS 26 cannot shift a position:fixed footer', async () => {
+  it('pins the tab bar in the shell so iOS 26 cannot shift a position:fixed footer (#106, #91)', async () => {
     render(
       <MemoryRouter>
         <AppShell />

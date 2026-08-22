@@ -81,7 +81,7 @@ describe('AssetDetailsScreen', () => {
     expect(screen.getByText(/Since first snapshot/)).toBeInTheDocument()
   })
 
-  it('includes the institution in the sub-header when it is set', async () => {
+  it('includes the institution in the sub-header when it is set (#102)', async () => {
     const existing = useAssetStore.getState().assets[0]
     expect(existing).toBeDefined()
     await useAssetStore.getState().saveAsset({
@@ -205,7 +205,7 @@ describe('AssetDetailsScreen', () => {
     })
   })
 
-  it('saves and shows a snapshot note on the history row', async () => {
+  it('saves and shows a muted snapshot note on the history row (#97, #103)', async () => {
     const user = userEvent.setup()
     render(
       <MemoryRouter initialEntries={['/assets/a1']}>

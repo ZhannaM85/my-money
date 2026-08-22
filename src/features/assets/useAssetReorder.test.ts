@@ -2,7 +2,7 @@ import { act, renderHook } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
 import { useAssetReorder } from './useAssetReorder'
 
-describe('useAssetReorder', () => {
+describe('useAssetReorder (#105)', () => {
   it('keeps a drop local until Save, and Cancel restores the persisted order', async () => {
     const persist = vi.fn(async () => {})
     const { result } = renderHook(() =>

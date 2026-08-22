@@ -162,7 +162,7 @@ describe('HistoryScreen', () => {
     ).not.toBeInTheDocument()
   })
 
-  it('measures 3M from ninety days ago, not the previous snapshot day', async () => {
+  it('measures 3M from ninety days ago, not the previous snapshot day (#90)', async () => {
     await db.assets.clear()
     await db.snapshots.clear()
     useAssetStore.setState({ assets: [], snapshots: [], loaded: false })
@@ -235,7 +235,7 @@ describe('HistoryScreen', () => {
     expect(await screen.findByText('Revolut')).toBeInTheDocument()
   })
 
-  it('shows a snapshot note on the expanded holdings list', async () => {
+  it('shows a snapshot note on the expanded holdings list (#97)', async () => {
     const existing = useAssetStore
       .getState()
       .snapshots.find((row) => row.date === '2026-08-17')

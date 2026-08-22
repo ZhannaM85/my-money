@@ -7,7 +7,7 @@ describe('themeStore', () => {
     applyTheme('fresh')
   })
 
-  it('lists Fresh first and can apply it without renaming older moods', () => {
+  it('lists Fresh first and can apply it without renaming older moods (#98)', () => {
     expect(MOODS[0]).toBe('fresh')
     expect(MOODS).toContain('ledger')
     expect(document.documentElement.dataset.mood).toBe('fresh')

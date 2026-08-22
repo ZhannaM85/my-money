@@ -9,7 +9,7 @@ afterEach(() => {
   useSettingsStore.setState({ settings: DEFAULT_SETTINGS })
 })
 
-describe('RcaSection', () => {
+describe('RcaSection (#94)', () => {
   it('lists shipped issues, newest number first', () => {
     render(<RcaSection />)
 
@@ -50,5 +50,6 @@ describe('RcaSection', () => {
     expect(issues).toContain(104)
     expect(issues).toContain(105)
     expect(issues).toContain(106)
+    expect(issues).toContain(101) // #101
   })
 })

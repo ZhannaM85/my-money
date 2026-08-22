@@ -124,7 +124,7 @@ function listedAssetHrefs() {
     )
 }
 
-describe('AssetsScreen sort', () => {
+describe('AssetsScreen sort (#100)', () => {
   it('sorts by name and by the amount shown in Converted mode', async () => {
     const user = userEvent.setup()
     await addNamedAsset('cash', 'Cash', 50, 'EUR')
@@ -179,7 +179,7 @@ describe('AssetsScreen sort', () => {
     })
   })
 
-  it('shows drag grips only after entering reorder mode', async () => {
+  it('shows drag grips only after entering reorder mode (#104)', async () => {
     const user = userEvent.setup()
     await addNamedAsset('cash', 'Cash', 50, 'EUR')
     render(

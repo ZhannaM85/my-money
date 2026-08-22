@@ -47,7 +47,7 @@ describe('NetWorthChartTooltip', () => {
     ).toBeInTheDocument()
   })
 
-  it('keeps six holdings inside a taller scrollable popover', () => {
+  it('keeps six holdings inside a taller scrollable popover (#92)', () => {
     const holdings = [
       'До 8 октября',
       'Доллары',

@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 107,
+    issue: 101,
+    date: '2026-08-22T22:30:00+03:00',
+    en: 'CI now fails if a shipped root cause from #90 onward has no unit test that names that issue. Phone-only bugs should not land without a regression check.',
+    ru: 'CI падает, если у причины с #90 нет юнит-теста, где этот номер назван. Ошибки только с телефона не должны попадать без регрессии.',
+  },
+  {
     version: 106,
     issue: 106,
     date: '2026-08-22T22:20:00+03:00',

@@ -22,7 +22,7 @@ describe('date helpers', () => {
     ])
   })
 
-  it('clamps history ranges to the earliest snapshot', () => {
+  it('clamps history ranges to the earliest snapshot (#90)', () => {
     expect(rangeStartIso('1M', '2026-08-17', '2026-08-01')).toBe('2026-08-01')
     expect(rangeStartIso('All', '2026-08-17', '2026-01-01')).toBe('2026-01-01')
     expect(unclampedRangeStartIso('3M', '2026-08-22')).toBe('2026-05-24')

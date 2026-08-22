@@ -41,7 +41,7 @@ describe('parseAmount', () => {
   })
 })
 
-describe('parseRate', () => {
+describe('parseRate (#93)', () => {
   it('keeps more than two fraction digits (1 RUB in USD)', () => {
     expect(parseRate('0.0119474')).toBeCloseTo(0.0119474)
     expect(parseRate('0,0119474')).toBeCloseTo(0.0119474)

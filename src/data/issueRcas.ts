@@ -56,6 +56,15 @@ export const issueRcas: IssueRca[] = [
     ru: 'Подзаголовок карточки был зашит как тип · валюта. Учреждение уже есть у актива и в списке сведений, но в строке под названием его не было.',
   },
   {
+    issue: 101,
+    title: {
+      en: 'Add regression tests so phone bugs are caught in CI, not only on device',
+      ru: 'Добавить регрессионные тесты, чтобы ошибки с телефона ловил CI',
+    },
+    en: 'Vitest existed, but live-feedback bugs often had no failing test first. Phone sessions were the suite. CI now requires every RCA from #90 onward to be named in a unit test.',
+    ru: 'Vitest был, но ошибки с телефона часто шли без падающего теста. Сессии на устройстве и были набором. CI теперь требует, чтобы каждый RCA с #90 был назван в юнит-тесте.',
+  },
+  {
     issue: 100,
     title: {
       en: 'Sort Assets by name or amount, and allow drag-and-drop order',
