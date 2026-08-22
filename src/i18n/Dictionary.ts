@@ -112,6 +112,9 @@ export interface Dictionary {
     hiddenFromLists: string
     deleteAsset: string
     deleteConfirm: string
+    deleteSnapshot: string
+    deleteSnapshotAria: (date: string) => string
+    deleteSnapshotConfirm: string
     quickAdd: string
     presets: Record<'bank' | 'cash' | 'vehicle' | 'apartment' | 'brokerage', string>
     ownershipShare: string

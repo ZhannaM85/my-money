@@ -159,6 +159,10 @@ export const en: Dictionary = {
     deleteAsset: 'Delete asset',
     deleteConfirm:
       'Delete this asset and all its history from this device? This cannot be undone.',
+    deleteSnapshot: 'Delete entry',
+    deleteSnapshotAria: (date) => `Delete snapshot from ${date}`,
+    deleteSnapshotConfirm:
+      'Delete this history entry? The asset stays. This cannot be undone.',
     quickAdd: 'Quick add',
     presets: {
       bank: 'Bank account',

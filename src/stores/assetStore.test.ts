@@ -100,4 +100,44 @@ describe('assetStore', () => {
     expect(useAssetStore.getState().assets).toHaveLength(0)
     expect(useAssetStore.getState().snapshots).toHaveLength(0)
   })
+
+  it('deletes one snapshot without deleting the asset', async () => {
+    const now = '2026-08-17T00:00:00.000Z'
+    await useAssetStore.getState().saveAsset(
+      {
+        id: 'a1',
+        name: 'Revolut',
+        assetClass: 'money',
+        type: 'bank',
+        currency: 'EUR',
+        trackingStatus: 'included',
+        valuationMethod: 'account_balance',
+        updateFrequency: 'weekly',
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        assetId: 'a1',
+        date: '2026-08-01',
+        amount: 800,
+        currency: 'EUR',
+      },
+    )
+    await useAssetStore.getState().saveSnapshots([
+      {
+        assetId: 'a1',
+        date: '2026-08-17',
+        amount: 1000,
+        currency: 'EUR',
+      },
+    ])
+    const firstId = useAssetStore
+      .getState()
+      .snapshots.find((row) => row.date === '2026-08-01')?.id
+    expect(firstId).toBeDefined()
+    await useAssetStore.getState().deleteSnapshot(firstId!)
+    expect(useAssetStore.getState().assets).toHaveLength(1)
+    expect(useAssetStore.getState().snapshots).toHaveLength(1)
+    expect(useAssetStore.getState().snapshots[0]?.date).toBe('2026-08-17')
+  })
 })

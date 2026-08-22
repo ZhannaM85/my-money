@@ -8,5 +8,6 @@ export interface SnapshotRepository {
     date: string,
   ): Promise<AssetSnapshot | undefined>
   append(snapshot: AssetSnapshot): Promise<void>
+  deleteById(id: string): Promise<void>
   deleteByAsset(assetId: string): Promise<void>
 }

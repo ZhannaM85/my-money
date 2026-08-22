@@ -160,6 +160,33 @@ describe('AssetDetailsScreen', () => {
     })
   })
 
+  it('deletes one history snapshot after confirmation', async () => {
+    const user = userEvent.setup()
+    vi.spyOn(window, 'confirm').mockReturnValue(true)
+    render(
+      <MemoryRouter initialEntries={['/assets/a1']}>
+        <Routes>
+          <Route path="/assets/:id" element={<AssetDetailsScreen />} />
+        </Routes>
+      </MemoryRouter>,
+    )
+    await screen.findByRole('heading', { name: 'Revolut' })
+    await user.click(
+      screen.getByRole('button', { name: 'Delete snapshot from 2026-08-01' }),
+    )
+    await waitFor(() => {
+      expect(
+        useAssetStore
+          .getState()
+          .snapshots.filter((row) => row.assetId === 'a1'),
+      ).toHaveLength(1)
+    })
+    expect(useAssetStore.getState().assets).toHaveLength(1)
+    expect(
+      useAssetStore.getState().snapshots.some((row) => row.date === '2026-08-01'),
+    ).toBe(false)
+  })
+
   it('deletes an asset and its snapshots after confirmation', async () => {
     const user = userEvent.setup()
     vi.spyOn(window, 'confirm').mockReturnValue(true)

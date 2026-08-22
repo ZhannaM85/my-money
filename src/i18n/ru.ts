@@ -163,6 +163,10 @@ export const ru: Dictionary = {
     deleteAsset: 'Удалить актив',
     deleteConfirm:
       'Удалить этот актив и всю его историю с этого устройства? Это нельзя отменить.',
+    deleteSnapshot: 'Удалить запись',
+    deleteSnapshotAria: (date) => `Удалить снимок от ${date}`,
+    deleteSnapshotConfirm:
+      'Удалить эту запись в истории? Актив останется. Это нельзя отменить.',
     quickAdd: 'Быстро добавить',
     presets: {
       bank: 'Банковский счёт',

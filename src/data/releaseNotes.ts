@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 72,
+    issue: 73,
+    date: '2026-08-22T09:18:00+03:00',
+    en: 'You can delete one history row on an asset (with confirmation). The asset itself stays.',
+    ru: 'Можно удалить одну строку истории актива (с подтверждением). Сам актив остаётся.',
+  },
+  {
     version: 71,
     issue: 68,
     date: '2026-08-22T09:16:00+03:00',

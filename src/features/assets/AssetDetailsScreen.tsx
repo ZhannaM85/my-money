@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
+import { Trash2 } from 'lucide-react'
 import { convertAmount, lookupRate } from '@/domain/fx'
 import { assetPerformance } from '@/domain/netWorth'
 import { latestSnapshot } from '@/domain/snapshot'
@@ -41,6 +42,7 @@ export function AssetDetailsScreen() {
   const saveSnapshots = useAssetStore((state) => state.saveSnapshots)
   const setTrackingStatus = useAssetStore((state) => state.setTrackingStatus)
   const deleteAsset = useAssetStore((state) => state.deleteAsset)
+  const deleteSnapshot = useAssetStore((state) => state.deleteSnapshot)
   const asset = useAssetStore((state) =>
     state.assets.find((row) => row.id === id),
   )
@@ -250,12 +252,26 @@ export function AssetDetailsScreen() {
             return (
               <li
                 key={row.id}
-                className="flex items-center justify-between rounded-xl bg-card px-4 py-3 ring-1 ring-foreground/10"
+                className="flex items-center justify-between gap-2 rounded-xl bg-card px-4 py-3 ring-1 ring-foreground/10"
               >
                 <span className="text-sm text-muted-foreground">
                   {row.date}
                 </span>
-                <span className="tabular-nums text-sm">{shown}</span>
+                <span className="flex items-center gap-1">
+                  <span className="tabular-nums text-sm">{shown}</span>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    aria-label={t.asset.deleteSnapshotAria(row.date)}
+                    onClick={() => {
+                      if (!window.confirm(t.asset.deleteSnapshotConfirm)) return
+                      void deleteSnapshot(row.id)
+                    }}
+                  >
+                    <Trash2 />
+                  </Button>
+                </span>
               </li>
             )
           })}
