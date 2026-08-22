@@ -10,16 +10,6 @@ Prototype checkpoint after Tier 5: the four flows in `PROJECT_BRIEF.md` §25 (on
 
 ---
 
-## Tier 6 — Completeness
-
-_CSV, PWA, i18n, accessibility. Any order after Tier 5, except CSV should not precede JSON (#13)._
-
-| # | Status | Issue | Notes |
-|---|--------|-------|-------|
-| [#18](https://github.com/ZhannaM85/my-money/issues/18) | 🔍 Pending validation | Epic 17 — Accessibility and responsive QA pass | Skip link, chip `aria-pressed`, darker allocation colors, scrollable chip rows. |
-
----
-
 ## Tier 7 — Native platforms
 
 _After the four web flows feel good. Android wraps this app; iOS does not._
