@@ -6,7 +6,12 @@ import { beforeEach, describe, expect, it } from 'vitest'
 import { DEFAULT_SETTINGS } from '@/domain/settings'
 import { db } from '@/infrastructure/persistence/indexeddb'
 import { addDaysIso } from '@/shared/lib/dates'
-import { formatAmount, formatSignedAmount, todayIsoDate } from '@/shared/lib/money'
+import {
+  formatAmount,
+  formatChartAxisDate,
+  formatSignedAmount,
+  todayIsoDate,
+} from '@/shared/lib/money'
 import { useAssetStore } from '@/stores/assetStore'
 import { useFxStore } from '@/stores/fxStore'
 import { useSettingsStore } from '@/stores/settingsStore'
@@ -142,7 +147,7 @@ describe('HistoryScreen', () => {
     ).toBeGreaterThan(0)
     expect(
       screen.getByText(
-        `${formatSignedAmount(amountChange, 'EUR')} over 3M`,
+        `${formatSignedAmount(amountChange, 'EUR')} since ${formatChartAxisDate(yesterday, 'en')}`,
       ),
     ).toBeInTheDocument()
     expect(screen.getByText('From amounts')).toBeInTheDocument()
@@ -154,6 +159,64 @@ describe('HistoryScreen', () => {
       screen.queryByText(
         `${formatSignedAmount(endTotal - startTotal, 'EUR')} over 3M`,
       ),
+    ).not.toBeInTheDocument()
+  })
+
+  it('measures 3M from ninety days ago, not the previous snapshot day', async () => {
+    await db.assets.clear()
+    await db.snapshots.clear()
+    useAssetStore.setState({ assets: [], snapshots: [], loaded: false })
+
+    const today = todayIsoDate()
+    const farAgo = addDaysIso(today, -120)
+    const recent = addDaysIso(today, -5)
+    const created = `${farAgo}T00:00:00.000Z`
+    await useAssetStore.getState().saveAsset(
+      {
+        id: 'cash',
+        name: 'Euro cash',
+        assetClass: 'money',
+        type: 'cash',
+        currency: 'EUR',
+        trackingStatus: 'included',
+        valuationMethod: 'account_balance',
+        updateFrequency: 'weekly',
+        createdAt: created,
+        updatedAt: created,
+      },
+      {
+        assetId: 'cash',
+        date: farAgo,
+        amount: 500,
+        currency: 'EUR',
+      },
+    )
+    await useAssetStore.getState().saveSnapshots([
+      {
+        assetId: 'cash',
+        date: recent,
+        amount: 800,
+        currency: 'EUR',
+      },
+      {
+        assetId: 'cash',
+        date: today,
+        amount: 1000,
+        currency: 'EUR',
+      },
+    ])
+
+    render(
+      <MemoryRouter>
+        <HistoryScreen />
+      </MemoryRouter>,
+    )
+
+    expect(
+      await screen.findByText(`${formatSignedAmount(500, 'EUR')} over 3M`),
+    ).toBeInTheDocument()
+    expect(
+      screen.queryByText(`${formatSignedAmount(200, 'EUR')} over 3M`),
     ).not.toBeInTheDocument()
   })
 

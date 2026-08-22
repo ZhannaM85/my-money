@@ -7,12 +7,14 @@ import { useLocale, useTranslation } from '@/i18n'
 import {
   HISTORY_RANGES,
   isoDatesInclusive,
+  isRangeClampedToEarliest,
   rangeStartIso,
   stepHistoryRange,
   type HistoryRange,
 } from '@/shared/lib/dates'
 import {
   formatAmount,
+  formatChartAxisDate,
   formatSignedAmount,
   todayIsoDate,
 } from '@/shared/lib/money'
@@ -53,6 +55,9 @@ export function HistoryScreen() {
   }, [snapshots, today])
 
   const start = rangeStartIso(range, today, earliest)
+  const rangeLabel = isRangeClampedToEarliest(range, today, earliest)
+    ? t.history.sinceDate(formatChartAxisDate(start, locale))
+    : t.history.overRange(range)
   const dates = useMemo(() => isoDatesInclusive(start, today), [start, today])
   const snapshotDays = useMemo(() => {
     return [
@@ -135,7 +140,7 @@ export function HistoryScreen() {
           <StatCard
             label={t.dashboard.netWorth}
             value={formatAmount(latestPoint?.total ?? 0, baseCurrency, locale)}
-            description={`${formatSignedAmount(change.absolute, baseCurrency, locale)} ${t.history.overRange(range)}`}
+            description={`${formatSignedAmount(change.absolute, baseCurrency, locale)} ${rangeLabel}`}
           />
           {breakdown && (
             <ul className="flex flex-col gap-1 text-sm">

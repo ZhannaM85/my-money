@@ -34,9 +34,27 @@ export function rangeStartIso(
   earliest?: string,
 ): string {
   if (range === 'All') return earliest ?? today
-  const start = addDaysIso(today, -RANGE_DAYS[range])
+  const start = unclampedRangeStartIso(range, today)
   if (earliest && start < earliest) return earliest
   return start
+}
+
+/** Range start before clamping to the first snapshot (All is unused). */
+export function unclampedRangeStartIso(
+  range: HistoryRange,
+  today: string,
+): string {
+  if (range === 'All') return today
+  return addDaysIso(today, -RANGE_DAYS[range])
+}
+
+export function isRangeClampedToEarliest(
+  range: HistoryRange,
+  today: string,
+  earliest: string,
+): boolean {
+  if (range === 'All') return false
+  return unclampedRangeStartIso(range, today) < earliest
 }
 
 export function monthStartIso(isoDate: string): string {

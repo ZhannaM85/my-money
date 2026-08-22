@@ -6,6 +6,8 @@ import {
   isIsoDateOnOrBefore,
   monthStartIso,
   rangeStartIso,
+  isRangeClampedToEarliest,
+  unclampedRangeStartIso,
   stepHistoryRange,
 } from './dates'
 
@@ -23,6 +25,13 @@ describe('date helpers', () => {
   it('clamps history ranges to the earliest snapshot', () => {
     expect(rangeStartIso('1M', '2026-08-17', '2026-08-01')).toBe('2026-08-01')
     expect(rangeStartIso('All', '2026-08-17', '2026-01-01')).toBe('2026-01-01')
+    expect(unclampedRangeStartIso('3M', '2026-08-22')).toBe('2026-05-24')
+    expect(isRangeClampedToEarliest('3M', '2026-08-22', '2026-08-17')).toBe(
+      true,
+    )
+    expect(isRangeClampedToEarliest('3M', '2026-08-22', '2026-01-01')).toBe(
+      false,
+    )
   })
 
   it('steps chart ranges the same way as zoom in / zoom out', () => {
