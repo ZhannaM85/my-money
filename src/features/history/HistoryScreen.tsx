@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { ChevronDown } from 'lucide-react'
-import { decomposeConvertedPeriodChange, historicalNetWorth, periodChange } from '@/domain/netWorth'
+import { decomposeConvertedPeriodChange, historicalNetWorth, holdingsWithConversion, nativeTotalsByCurrency, periodChange } from '@/domain/netWorth'
 import { HoldingBreakdownList } from '@/features/dashboard/HoldingBreakdownList'
 import { NetWorthChart } from '@/features/dashboard/NetWorthChart'
 import { useLocale, useTranslation } from '@/i18n'
@@ -35,6 +35,9 @@ export function HistoryScreen() {
   const loaded = useAssetStore((state) => state.loaded)
   const loadSettings = useSettingsStore((state) => state.load)
   const baseCurrency = useSettingsStore((state) => state.settings.baseCurrency)
+  const isOriginal =
+    useSettingsStore((state) => state.settings.currencyDisplayMode) ===
+    'native'
   const quotes = useFxStore((state) => state.quotes)
   const ensureRange = useFxStore((state) => state.ensureRange)
   const [range, setRange] = useState<HistoryRange>('3M')
@@ -74,23 +77,31 @@ export function HistoryScreen() {
     void ensureRange(start, today, baseCurrency, symbols)
   }, [baseCurrency, ensureRange, snapshots, start, today])
 
+  const nativeTotals = useMemo(
+    () => nativeTotalsByCurrency(assets, snapshots),
+    [assets, snapshots],
+  )
   const series = useMemo(
-    () => historicalNetWorth(assets, snapshots, quotes, dates, baseCurrency),
-    [assets, baseCurrency, dates, quotes, snapshots],
+    () =>
+      isOriginal
+        ? []
+        : historicalNetWorth(assets, snapshots, quotes, dates, baseCurrency),
+    [assets, baseCurrency, dates, isOriginal, quotes, snapshots],
   )
   const latestPoint = series[series.length - 1]
   const breakdown = useMemo(() => {
+    if (isOriginal) return null
     const startHoldings = series[0]?.holdings
     const endHoldings = latestPoint?.holdings
     if (!startHoldings || !endHoldings) return null
     return decomposeConvertedPeriodChange(startHoldings, endHoldings)
-  }, [latestPoint, series])
+  }, [isOriginal, latestPoint, series])
   const changeFrom = series[0]?.total ?? 0
   const headlineTo = breakdown
     ? changeFrom + breakdown.amountChange
     : (latestPoint?.total ?? 0)
   const change = periodChange(changeFrom, headlineTo)
-  const list = useMemo(() => {
+  const convertedList = useMemo(() => {
     const byDate = new Map(series.map((point) => [point.date, point]))
     const points = snapshotDays
       .map((date) => byDate.get(date))
@@ -103,6 +114,16 @@ export function HistoryScreen() {
       }
     })
   }, [series, snapshotDays])
+  const originalList = useMemo(() => {
+    return [...snapshotDays].reverse().map((date) => {
+      const asOf = snapshots.filter((snapshot) => snapshot.date <= date)
+      return {
+        date,
+        totals: nativeTotalsByCurrency(assets, asOf),
+        holdings: holdingsWithConversion(assets, asOf, quotes, baseCurrency),
+      }
+    })
+  }, [assets, baseCurrency, quotes, snapshotDays, snapshots])
 
   return (
     <div className="flex flex-col gap-6">
@@ -137,11 +158,32 @@ export function HistoryScreen() {
         />
       ) : (
         <>
-          <StatCard
-            label={t.dashboard.netWorth}
-            value={formatAmount(latestPoint?.total ?? 0, baseCurrency, locale)}
-            description={`${formatSignedAmount(change.absolute, baseCurrency, locale)} ${rangeLabel}`}
-          />
+          {isOriginal ? (
+            <div className="flex flex-col gap-2">
+              <span className="text-sm text-muted-foreground">
+                {t.dashboard.nativeHoldings}
+              </span>
+              <ul className="flex flex-col gap-2">
+                {nativeTotals.map((row) => (
+                  <li
+                    key={row.currency}
+                    className="flex items-center justify-between gap-3 rounded-xl bg-card px-4 py-3 ring-1 ring-foreground/10"
+                  >
+                    <span className="text-sm font-medium">{row.currency}</span>
+                    <span className="tabular-nums text-base font-semibold">
+                      {formatAmount(row.amount, row.currency, locale)}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ) : (
+            <StatCard
+              label={t.dashboard.netWorth}
+              value={formatAmount(latestPoint?.total ?? 0, baseCurrency, locale)}
+              description={`${formatSignedAmount(change.absolute, baseCurrency, locale)} ${rangeLabel}`}
+            />
+          )}
           {breakdown && (
             <ul className="flex flex-col gap-1 text-sm">
               <li className="flex items-center justify-between gap-3">
@@ -170,18 +212,24 @@ export function HistoryScreen() {
               </li>
             </ul>
           )}
-          <NetWorthChart
-            points={series}
-            currency={baseCurrency}
-            onZoomIn={() =>
-              setRange((current) => stepHistoryRange(current, 'in'))
-            }
-            onZoomOut={() =>
-              setRange((current) => stepHistoryRange(current, 'out'))
-            }
-          />
+          {isOriginal ? (
+            <p className="text-sm text-muted-foreground">
+              {t.dashboard.originalChartHint}
+            </p>
+          ) : (
+            <NetWorthChart
+              points={series}
+              currency={baseCurrency}
+              onZoomIn={() =>
+                setRange((current) => stepHistoryRange(current, 'in'))
+              }
+              onZoomOut={() =>
+                setRange((current) => stepHistoryRange(current, 'out'))
+              }
+            />
+          )}
           <ul className="flex flex-col gap-2">
-            {list.map((row) => {
+            {(isOriginal ? originalList : convertedList).map((row) => {
               const open = openDates.has(row.date)
               return (
                 <li
@@ -213,13 +261,34 @@ export function HistoryScreen() {
                       />
                     </span>
                     <span className="text-right">
-                      <span className="block tabular-nums text-sm">
-                        {formatAmount(row.total, baseCurrency, locale)}
-                      </span>
-                      {row.delta !== null && (
-                        <span className="text-xs text-muted-foreground">
-                          {formatSignedAmount(row.delta, baseCurrency, locale)}
-                        </span>
+                      {isOriginal && 'totals' in row ? (
+                        row.totals.map((total) => (
+                          <span
+                            key={total.currency}
+                            className="block tabular-nums text-sm"
+                          >
+                            {formatAmount(total.amount, total.currency, locale)}
+                          </span>
+                        ))
+                      ) : (
+                        <>
+                          <span className="block tabular-nums text-sm">
+                            {formatAmount(
+                              'total' in row ? row.total : 0,
+                              baseCurrency,
+                              locale,
+                            )}
+                          </span>
+                          {'delta' in row && row.delta !== null && (
+                            <span className="text-xs text-muted-foreground">
+                              {formatSignedAmount(
+                                row.delta,
+                                baseCurrency,
+                                locale,
+                              )}
+                            </span>
+                          )}
+                        </>
                       )}
                     </span>
                   </button>
@@ -228,6 +297,7 @@ export function HistoryScreen() {
                       <HoldingBreakdownList
                         holdings={row.holdings}
                         baseCurrency={baseCurrency}
+                        nativeOnly={isOriginal}
                       />
                     </div>
                   )}

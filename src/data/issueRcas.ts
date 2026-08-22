@@ -29,6 +29,15 @@ export const issueRcas: IssueRca[] = [
     ru: '«Свежее» — синий дизайн-системы (#2878e8). «Нейтральное» брало другой синий (#4c7dff) на том же светлом хроме, поэтому чипы, «В пересчёте» и «+» совпадали. «Нейтральное» задумывалось сланцевым (#57), не вторым синим.',
   },
   {
+    issue: 96,
+    title: {
+      en: 'History shows EUR when All currencies is selected',
+      ru: 'В Истории EUR, хотя выбраны все валюты',
+    },
+    en: 'Show all currencies only switches display mode to Original and leaves settings.baseCurrency as the last choice (often EUR). History always formatted with baseCurrency, so it kept showing a converted EUR total.',
+    ru: '«Показать все валюты» только включает оригинал и оставляет settings.baseCurrency как прошлый выбор (часто EUR). История всегда форматировала в baseCurrency, поэтому оставался пересчитанный евро.',
+  },
+  {
     issue: 95,
     title: {
       en: 'Date field is too narrow; expand width by 1.5',

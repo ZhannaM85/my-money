@@ -255,4 +255,51 @@ describe('HistoryScreen', () => {
       ).not.toBeInTheDocument()
     }
   })
+
+  it('does not format History in leftover EUR when All / Original is selected (#96)', async () => {
+    await db.assets.clear()
+    await db.snapshots.clear()
+    useAssetStore.setState({ assets: [], snapshots: [], loaded: false })
+    const originalSettings = {
+      ...DEFAULT_SETTINGS,
+      baseCurrency: 'EUR',
+      currencyDisplayMode: 'native' as const,
+    }
+    await db.settings.put(originalSettings)
+    useSettingsStore.setState({
+      settings: originalSettings,
+      loaded: false,
+    })
+    await useAssetStore.getState().saveAsset(
+      {
+        id: 'rub',
+        name: 'Ruble cash',
+        assetClass: 'money',
+        type: 'cash',
+        currency: 'RUB',
+        trackingStatus: 'included',
+        valuationMethod: 'account_balance',
+        updateFrequency: 'weekly',
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        assetId: 'rub',
+        date: '2026-08-17',
+        amount: 20000,
+        currency: 'RUB',
+      },
+    )
+
+    render(
+      <MemoryRouter>
+        <HistoryScreen />
+      </MemoryRouter>,
+    )
+
+    expect(await screen.findByText('Holdings by currency')).toBeInTheDocument()
+    expect(screen.getByText('RUB')).toBeInTheDocument()
+    expect(screen.getAllByText(/20,000/).length).toBeGreaterThan(0)
+    expect(screen.queryByText(/€/)).not.toBeInTheDocument()
+  })
 })

@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 98,
+    issue: 96,
+    date: '2026-08-22T20:05:00+03:00',
+    en: 'History in Show all currencies / Original lists native amounts by currency instead of leftover EUR.',
+    ru: 'История при «Показать все валюты» / «В оригинале» показывает нативные суммы по валютам, а не оставшийся EUR.',
+  },
+  {
     version: 97,
     issue: 98,
     date: '2026-08-22T19:55:00+03:00',

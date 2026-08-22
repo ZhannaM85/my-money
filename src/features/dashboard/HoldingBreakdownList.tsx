@@ -7,10 +7,12 @@ export function HoldingBreakdownList({
   holdings,
   baseCurrency,
   compact = false,
+  nativeOnly = false,
 }: {
   holdings: readonly HoldingConversion[]
   baseCurrency: string
   compact?: boolean
+  nativeOnly?: boolean
 }) {
   const t = useTranslation()
   const locale = useLocale()
@@ -30,13 +32,26 @@ export function HoldingBreakdownList({
               {row.name}
             </span>
             <span className="text-xs text-muted-foreground">
-              {row.conversionAvailable
-                ? formatAmount(row.nativeAmount, row.currency, locale)
-                : t.dashboard.conversionUnavailable}
+              {nativeOnly
+                ? row.currency
+                : row.conversionAvailable
+                  ? formatAmount(row.nativeAmount, row.currency, locale)
+                  : t.dashboard.conversionUnavailable}
             </span>
           </span>
           <span className="shrink-0 text-right">
-            {row.conversionAvailable && row.convertedAmount !== null ? (
+            {nativeOnly ||
+            !row.conversionAvailable ||
+            row.convertedAmount === null ? (
+              <span
+                className={cn(
+                  'block tabular-nums',
+                  compact ? 'text-xs' : 'text-sm',
+                )}
+              >
+                {formatAmount(row.nativeAmount, row.currency, locale)}
+              </span>
+            ) : (
               <span
                 className={cn(
                   'block tabular-nums font-medium',
@@ -44,10 +59,6 @@ export function HoldingBreakdownList({
                 )}
               >
                 {formatAmount(row.convertedAmount, baseCurrency, locale)}
-              </span>
-            ) : (
-              <span className={cn('block tabular-nums', compact ? 'text-xs' : 'text-sm')}>
-                {formatAmount(row.nativeAmount, row.currency, locale)}
               </span>
             )}
           </span>
