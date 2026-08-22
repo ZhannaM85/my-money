@@ -184,6 +184,7 @@ _Existing-asset details: no dated history, and Save is a no-op when viewing._
 | [#69](https://github.com/ZhannaM85/my-money/issues/69) | 📋 Not started | Show assets distribution on Dashboard when currency is All | Allocation is only on Dashboard when a single/base currency is selected. All (Все) shows a Distribution button, not the breakdown. |
 | [#70](https://github.com/ZhannaM85/my-money/issues/70) | 📋 Not started | Original mode still shows a EUR conversion on one asset | Base currency is disabled in Original, but Russian bank still shows оценка 222,69 € while another RUB account does not. |
 | [#71](https://github.com/ZhannaM85/my-money/issues/71) | 📋 Not started | Explain the two amount inputs with an info tooltip | Details “Update this asset” vs edit form “New amount (optional)” look the same. Info icon + tappable tooltip on each, EN/RU. |
+| [#72](https://github.com/ZhannaM85/my-money/issues/72) | 📋 Not started | Allow editing previous snapshot rows on asset details | History list is read-only; Update this asset only writes current. Edit an existing row (amount/date) without appending today. Related to #66. |
 
 ---
 
