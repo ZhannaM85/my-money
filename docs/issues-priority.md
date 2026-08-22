@@ -27,7 +27,6 @@ _EUR base + RUB assets; iPhone tab bar; appearance; car; joint ownership; decima
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
-| [#33](https://github.com/ZhannaM85/my-money/issues/33) | 🔍 Pending validation | Format money inputs with locale grouping and decimals | Current amount shows `116420`. Lists use `formatAmount`; inputs do not. Share a parser with #29. |
 | [#34](https://github.com/ZhannaM85/my-money/issues/34) | 🔍 Pending validation | Show banner when a new deploy is available | Turtle `AppUpdateBanner` pattern: poll `version.json` vs baked `__APP_VERSION__`, Reload in `AppShell`. No signal today after Pages deploy. |
 | [#35](https://github.com/ZhannaM85/my-money/issues/35) | 🔍 Pending validation | Offline banner and resilient refresh via service worker | Turtle #163: Workbox precache so offline refresh loads the SPA; `OfflineBanner` + `useOnlineStatus`. Builds on #16 SW scaffold. Data stays on IndexedDB. |
 | [#36](https://github.com/ZhannaM85/my-money/issues/36) | 🔍 Pending validation | Show changelog and app version on Settings | Turtle `releaseNotes.ts`: incrementing `vN`, EN/RU notes, badge on Settings. No way today to tell which build the phone is on. |
