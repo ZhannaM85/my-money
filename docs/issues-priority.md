@@ -186,6 +186,7 @@ _Existing-asset details: no dated history, and Save is a no-op when viewing._
 | [#71](https://github.com/ZhannaM85/my-money/issues/71) | 📋 Not started | Explain the two amount inputs with an info tooltip | Details “Update this asset” vs edit form “New amount (optional)” look the same. Info icon + tappable tooltip on each, EN/RU. |
 | [#72](https://github.com/ZhannaM85/my-money/issues/72) | 📋 Not started | Allow editing previous snapshot rows on asset details | History list is read-only; Update this asset only writes current. Edit an existing row (amount/date) without appending today. Related to #66. |
 | [#73](https://github.com/ZhannaM85/my-money/issues/73) | 📋 Not started | Allow deleting previous snapshot rows on asset details | History rows have no delete. Remove one snapshot (confirm), not the whole asset (#32). Related to #72. |
+| [#74](https://github.com/ZhannaM85/my-money/issues/74) | 📋 Not started | Chart X-axis repeats the same date; label snapshot days | Asset chart ticks all show `18`. Show unique add/update dates (day + month), not duplicate day-of-month. Sibling of #56 (Y-axis). |
 
 ---
 
