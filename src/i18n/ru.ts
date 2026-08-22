@@ -78,6 +78,7 @@ export const ru: Dictionary = {
       savings: 'Накопления',
       cash: 'Наличные',
       deposit: 'Вклад',
+      debit_card: 'Дебетовая карта',
       brokerage: 'Брокерский счёт',
       stocks: 'Акции',
       etf: 'ETF',

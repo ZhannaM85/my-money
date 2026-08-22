@@ -1,7 +1,7 @@
 import type { AssetClass, AssetType } from './Asset'
 
 export const TYPES_BY_CLASS: Record<AssetClass, readonly AssetType[]> = {
-  money: ['bank', 'savings', 'cash', 'deposit'],
+  money: ['bank', 'savings', 'cash', 'deposit', 'debit_card'],
   investments: [
     'brokerage',
     'stocks',
@@ -34,6 +34,7 @@ export const TYPE_LABELS: Record<AssetType, string> = {
   savings: 'Savings',
   cash: 'Cash',
   deposit: 'Deposit',
+  debit_card: 'Debit card',
   brokerage: 'Brokerage',
   stocks: 'Stocks',
   etf: 'ETF',

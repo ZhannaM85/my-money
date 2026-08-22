@@ -33,6 +33,7 @@ export const ASSET_TYPES = [
   'savings',
   'cash',
   'deposit',
+  'debit_card',
   'brokerage',
   'stocks',
   'etf',

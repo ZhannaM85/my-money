@@ -75,6 +75,7 @@ export const en: Dictionary = {
       savings: 'Savings',
       cash: 'Cash',
       deposit: 'Deposit',
+      debit_card: 'Debit card',
       brokerage: 'Brokerage',
       stocks: 'Stocks',
       etf: 'ETF',

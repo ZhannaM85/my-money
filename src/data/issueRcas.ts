@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 99,
+    title: {
+      en: 'Add bank card / debit card as a Money type',
+      ru: 'Добавить тип «банковская / дебетовая карта» для денег',
+    },
+    en: 'Money types were only bank, savings, cash, and deposit. A Mir debit card had to be saved as Bank account. credit_card already exists under Liabilities as debt, so this is a separate Money type.',
+    ru: 'У денег были только счёт, накопления, наличные и вклад. Дебетовую карту Мир приходилось сохранять как банковский счёт. credit_card уже есть в обязательствах как долг, поэтому это отдельный тип денег.',
+  },
+  {
     issue: 95,
     title: {
       en: 'Date field is too narrow; expand width by 1.5',

@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 96,
+    issue: 99,
+    date: '2026-08-22T19:50:00+03:00',
+    en: 'Money assets can be typed as a debit card, separate from a bank account and from credit-card debt.',
+    ru: 'Денежным активам можно задать тип «Дебетовая карта», отдельно от банковского счёта и от кредитной карты как долга.',
+  },
+  {
     version: 95,
     issue: 95,
     date: '2026-08-22T19:45:00+03:00',
