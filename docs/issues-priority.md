@@ -21,16 +21,6 @@ _After the four web flows feel good. Android wraps this app; iOS does not._
 
 ---
 
-## Tier 8 — Branding (2026-08-17)
-
-_User supplied light and dark logo marks. Blocked on #1 (no `public/` yet). Tiny favicons should crop to the circular **M**; full lockup is for larger icons._
-
-| # | Status | Issue | Notes |
-|---|--------|-------|-------|
-| [#22](https://github.com/ZhannaM85/my-money/issues/22) | 🔍 Pending validation | Tab favicon is clipped; generate tiny sizes from the 192px marks | 64px tab icons from `icon-*-192.png` with padding, same pattern as turtle-steps `favicon-64.png`. |
-
----
-
 ## Tier 9 — Live feedback (2026-08-18)
 
 _EUR base + RUB assets; iPhone tab bar; appearance; car; joint ownership; decimals; exclude/hide/delete; input formatting._
