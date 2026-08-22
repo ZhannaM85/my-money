@@ -24,49 +24,62 @@ export function HoldingBreakdownList({
           className={
             compact
               ? 'flex items-start justify-between gap-3 py-0.5'
-              : 'flex items-center justify-between gap-3 rounded-xl bg-card px-4 py-3 ring-1 ring-foreground/10'
+              : 'flex flex-col gap-1 rounded-xl bg-card px-4 py-3 ring-1 ring-foreground/10'
           }
         >
-          <span className="flex min-w-0 flex-col">
-            <span className={cn('truncate font-medium', compact ? 'text-xs' : 'text-sm')}>
-              {row.name}
+          <span
+            className={
+              compact
+                ? 'flex min-w-0 flex-1 items-start justify-between gap-3'
+                : 'flex items-center justify-between gap-3'
+            }
+          >
+            <span className="flex min-w-0 flex-col">
+              <span className={cn('truncate font-medium', compact ? 'text-xs' : 'text-sm')}>
+                {row.name}
+              </span>
+              <span className="text-xs text-muted-foreground">
+                {nativeOnly
+                  ? row.currency
+                  : row.conversionAvailable
+                    ? formatAmount(row.nativeAmount, row.currency, locale)
+                    : t.dashboard.conversionUnavailable}
+              </span>
+              {compact && row.note ? (
+                <span className="text-xs text-muted-foreground whitespace-normal">
+                  {row.note}
+                </span>
+              ) : null}
             </span>
-            <span className="text-xs text-muted-foreground">
-              {nativeOnly
-                ? row.currency
-                : row.conversionAvailable
-                  ? formatAmount(row.nativeAmount, row.currency, locale)
-                  : t.dashboard.conversionUnavailable}
+            <span className="shrink-0 text-right">
+              {nativeOnly ||
+              !row.conversionAvailable ||
+              row.convertedAmount === null ? (
+                <span
+                  className={cn(
+                    'block tabular-nums',
+                    compact ? 'text-xs' : 'text-sm',
+                  )}
+                >
+                  {formatAmount(row.nativeAmount, row.currency, locale)}
+                </span>
+              ) : (
+                <span
+                  className={cn(
+                    'block tabular-nums font-medium',
+                    compact ? 'text-xs' : 'text-sm',
+                  )}
+                >
+                  {formatAmount(row.convertedAmount, baseCurrency, locale)}
+                </span>
+              )}
             </span>
-            {row.note ? (
-              <span className="text-xs text-muted-foreground whitespace-normal">
-                {row.note}
-              </span>
-            ) : null}
           </span>
-          <span className="shrink-0 text-right">
-            {nativeOnly ||
-            !row.conversionAvailable ||
-            row.convertedAmount === null ? (
-              <span
-                className={cn(
-                  'block tabular-nums',
-                  compact ? 'text-xs' : 'text-sm',
-                )}
-              >
-                {formatAmount(row.nativeAmount, row.currency, locale)}
-              </span>
-            ) : (
-              <span
-                className={cn(
-                  'block tabular-nums font-medium',
-                  compact ? 'text-xs' : 'text-sm',
-                )}
-              >
-                {formatAmount(row.convertedAmount, baseCurrency, locale)}
-              </span>
-            )}
-          </span>
+          {!compact && row.note ? (
+            <span className="text-xs text-muted-foreground whitespace-normal">
+              {row.note}
+            </span>
+          ) : null}
         </li>
       ))}
     </ul>

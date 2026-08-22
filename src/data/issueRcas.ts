@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 103,
+    title: {
+      en: 'Show snapshot comments in a lighter color and give them more width',
+      ru: 'Показывать комментарии к снимкам более светлым цветом и шире',
+    },
+    en: 'After #97 the note sat in the left column next to the amount and icons, in the same black text-sm as the amount, so a two-line comment wrapped early with empty space to the right.',
+    ru: 'После #97 комментарий стоял в левой колонке рядом с суммой и иконками, тем же чёрным text-sm, что и сумма, поэтому двухстрочный текст рано переносился, справа оставалась пустота.',
+  },
+  {
     issue: 102,
     title: {
       en: 'Show institution name in the asset details sub-header next to currency',

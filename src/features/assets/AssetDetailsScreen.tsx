@@ -400,53 +400,55 @@ export function AssetDetailsScreen() {
             ) : (
               <li
                 key={row.id}
-                className="flex items-start justify-between gap-2 rounded-xl bg-card px-4 py-3 ring-1 ring-foreground/10"
+                className="flex flex-col gap-1 rounded-xl bg-card px-4 py-3 ring-1 ring-foreground/10"
               >
-                <span className="flex min-w-0 flex-col gap-0.5">
+                <span className="flex items-start justify-between gap-2">
                   <span className="text-sm text-muted-foreground">
                     {row.date}
                   </span>
-                  {row.note ? (
-                    <span className="text-sm">{row.note}</span>
-                  ) : null}
+                  <span className="flex items-center gap-1">
+                    <span className="tabular-nums text-sm">{shown}</span>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon"
+                      aria-label={t.asset.editSnapshotAria(row.date)}
+                      onClick={() => {
+                        setEditingId(row.id)
+                        setEditDate(row.date)
+                        setEditCurrency(row.currency)
+                        setEditAmount(
+                          formatEditableAmount(
+                            row.amount,
+                            locale,
+                            row.currency,
+                          ),
+                        )
+                        setEditNote(row.note ?? '')
+                        setEditError(undefined)
+                      }}
+                    >
+                      <Pencil />
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon"
+                      aria-label={t.asset.deleteSnapshotAria(row.date)}
+                      onClick={() => {
+                        if (!window.confirm(t.asset.deleteSnapshotConfirm)) return
+                        void deleteSnapshot(row.id)
+                      }}
+                    >
+                      <Trash2 />
+                    </Button>
+                  </span>
                 </span>
-                <span className="flex items-center gap-1">
-                  <span className="tabular-nums text-sm">{shown}</span>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="icon"
-                    aria-label={t.asset.editSnapshotAria(row.date)}
-                    onClick={() => {
-                      setEditingId(row.id)
-                      setEditDate(row.date)
-                      setEditCurrency(row.currency)
-                      setEditAmount(
-                        formatEditableAmount(
-                          row.amount,
-                          locale,
-                          row.currency,
-                        ),
-                      )
-                      setEditNote(row.note ?? '')
-                      setEditError(undefined)
-                    }}
-                  >
-                    <Pencil />
-                  </Button>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="icon"
-                    aria-label={t.asset.deleteSnapshotAria(row.date)}
-                    onClick={() => {
-                      if (!window.confirm(t.asset.deleteSnapshotConfirm)) return
-                      void deleteSnapshot(row.id)
-                    }}
-                  >
-                    <Trash2 />
-                  </Button>
-                </span>
+                {row.note ? (
+                  <span className="text-sm text-muted-foreground">
+                    {row.note}
+                  </span>
+                ) : null}
               </li>
             )
           })}

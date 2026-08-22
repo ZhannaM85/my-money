@@ -218,7 +218,9 @@ describe('AssetDetailsScreen', () => {
     await user.type(screen.getByLabelText('New amount'), '1100')
     await user.type(screen.getByLabelText('Note (optional)'), 'Top-up')
     await user.click(screen.getByRole('button', { name: /^Save$/ }))
-    expect(await screen.findByText('Top-up')).toBeInTheDocument()
+    expect(await screen.findByText('Top-up')).toHaveClass(
+      'text-muted-foreground',
+    )
     await waitFor(() => {
       expect(
         useAssetStore

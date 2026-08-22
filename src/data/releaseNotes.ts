@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 102,
+    issue: 103,
+    date: '2026-08-22T21:25:00+03:00',
+    en: 'Snapshot comments on asset details are muted and use the full card width under the date and amount.',
+    ru: 'Комментарии к снимкам в карточке актива приглушённые и занимают всю ширину карточки под датой и суммой.',
+  },
+  {
     version: 101,
     issue: 100,
     date: '2026-08-22T20:45:00+03:00',
