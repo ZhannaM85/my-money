@@ -5,7 +5,7 @@ import { beforeEach, describe, expect, it } from 'vitest'
 import { lookupRate } from '@/domain/fx'
 import { DEFAULT_SETTINGS } from '@/domain/settings'
 import { db } from '@/infrastructure/persistence/indexeddb'
-import { todayIsoDate } from '@/shared/lib/money'
+import { formatEditableRate, todayIsoDate } from '@/shared/lib/money'
 import { useAssetStore } from '@/stores/assetStore'
 import { useFxStore } from '@/stores/fxStore'
 import { useSettingsStore } from '@/stores/settingsStore'
@@ -80,5 +80,32 @@ describe('ManualRatesSection', () => {
     const quotes = useFxStore.getState().quotes
     expect(lookupRate(quotes, 'EUR', 'RUB', today)).toBe(100)
     expect(lookupRate(quotes, 'RUB', 'EUR', today)).toBeCloseTo(0.01)
+  })
+
+  it('does not turn a small RUB→USD quote into 119474 on blur', async () => {
+    const user = userEvent.setup()
+    const today = todayIsoDate()
+    useSettingsStore.setState({
+      settings: { ...DEFAULT_SETTINGS, baseCurrency: 'RUB' },
+      loaded: true,
+    })
+    await db.fxRates.put({
+      date: today,
+      base: 'RUB',
+      quote: 'USD',
+      rate: 0.0119474,
+    })
+    await useFxStore.getState().loadCached()
+
+    render(<ManualRatesSection />)
+    await user.click(
+      await screen.findByRole('button', { name: "Edit today's rates" }),
+    )
+    const input = await screen.findByLabelText('1 RUB = … USD')
+    expect(input).toHaveValue(formatEditableRate(0.0119474, 'en'))
+    await user.click(input)
+    await user.tab()
+    expect(input).toHaveValue(formatEditableRate(0.0119474, 'en'))
+    expect(input).not.toHaveValue('119474')
   })
 })

@@ -5,7 +5,9 @@ import {
   formatChartAxisDate,
   formatCompactNumber,
   formatEditableAmount,
+  formatEditableRate,
   parseAmount,
+  parseRate,
   reformatAmountInput,
   uniqueChartAxisDates,
 } from './money'
@@ -27,11 +29,29 @@ describe('parseAmount', () => {
     expect(parseAmount('   ')).toBeUndefined()
   })
 
+  it('treats more than two fraction digits as grouping (money, not FX)', () => {
+    expect(parseAmount('0.0119474')).toBe(119474)
+  })
+
   it('round-trips locale-formatted editable amounts', () => {
     expect(parseAmount(formatEditableAmount(116420, 'en', 'EUR'))).toBe(116420)
     expect(parseAmount(formatEditableAmount(116420.11, 'ru', 'RUB'))).toBe(
       116420.11,
     )
+  })
+})
+
+describe('parseRate', () => {
+  it('keeps more than two fraction digits (1 RUB in USD)', () => {
+    expect(parseRate('0.0119474')).toBeCloseTo(0.0119474)
+    expect(parseRate('0,0119474')).toBeCloseTo(0.0119474)
+    expect(parseRate('0.0119474')).not.toBe(119474)
+  })
+
+  it('round-trips through the rate editor format', () => {
+    const rate = 0.0119474
+    expect(parseRate(formatEditableRate(rate, 'en'))).toBeCloseTo(rate)
+    expect(parseRate(formatEditableRate(rate, 'ru'))).toBeCloseTo(rate)
   })
 })
 

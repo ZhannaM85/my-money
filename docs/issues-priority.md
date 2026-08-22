@@ -55,7 +55,7 @@ _Existing-asset details: no dated history, and Save is a no-op when viewing._
 | [#90](https://github.com/ZhannaM85/my-money/issues/90) | 🔲 Open | History 3M change is last two snapshot days, not three months | −61,891.82 ₽ за 3М equals 2026-08-22 vs 2026-08-17. Chart axis also 17–22 авг. Related #79, #89. |
 | [#91](https://github.com/ZhannaM85/my-money/issues/91) | 🔲 Open | Tab bar floats mid-screen after bringing the app back from background | iPhone: bar overlaps Dashboard chart after resume. Related #25, #80. |
 | [#92](https://github.com/ZhannaM85/my-money/issues/92) | 🔍 Pending validation | Chart holdings popover clips the last row and cannot scroll | Taller popover (`70svh` / 32rem) with inner overflow-y-scroll and a visible scrollbar. Related #77. |
-| [#93](https://github.com/ZhannaM85/my-money/issues/93) | 🔲 Open | Rate editor shows 1 RUB = 119474 USD | Ещё: USD field is a six-digit integer; 1 RUB→USD should be ~0.01. Related #45. |
+| [#93](https://github.com/ZhannaM85/my-money/issues/93) | 🔍 Pending validation | Rate editor shows 1 RUB = 119474 USD | Rate fields use parseRate (many decimals), not money parseAmount. Related #45. |
 
 ---
 

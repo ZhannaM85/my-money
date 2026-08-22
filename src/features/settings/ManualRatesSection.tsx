@@ -2,9 +2,13 @@ import { useEffect, useMemo, useState } from 'react'
 import { BASE_CURRENCIES } from '@/domain/settings'
 import { lookupRate } from '@/domain/fx'
 import { useLocale, useTranslation } from '@/i18n'
-import { formatAmount, parseAmount, todayIsoDate } from '@/shared/lib/money'
+import {
+  formatEditableRate,
+  parseRate,
+  todayIsoDate,
+} from '@/shared/lib/money'
 import { Button } from '@/shared/ui/button'
-import { MoneyInput } from '@/shared/ui/money-input'
+import { RateInput } from '@/shared/ui/rate-input'
 import { useAssetStore } from '@/stores/assetStore'
 import { useFxStore } from '@/stores/fxStore'
 import { useSettingsStore } from '@/stores/settingsStore'
@@ -62,7 +66,7 @@ export function ManualRatesSection() {
       const manual = lookupRate(manualQuotes, baseCurrency, code, today)
       const system = lookupRate(quotes, baseCurrency, code, today)
       const rate = manual ?? system
-      next[code] = rate !== undefined ? String(rate) : ''
+      next[code] = rate !== undefined ? formatEditableRate(rate, locale) : ''
     }
     setDrafts(next)
     setJustSaved(false)
@@ -70,7 +74,7 @@ export function ManualRatesSection() {
 
   async function handleSave() {
     const quotesToSave = foreignCodes.flatMap((code) => {
-      const parsed = parseAmount(drafts[code] ?? '')
+      const parsed = parseRate(drafts[code] ?? '')
       if (parsed === undefined || parsed <= 0) return []
       return [
         {
@@ -114,7 +118,7 @@ export function ManualRatesSection() {
                 {t.settings.manualRatesPair(quote.base, quote.quote)}
               </span>
               <span className="tabular-nums font-medium">
-                {formatAmount(quote.rate, quote.quote, locale)}
+                {formatEditableRate(quote.rate, locale)} {quote.quote}
               </span>
             </li>
           ))}
@@ -162,10 +166,10 @@ export function ManualRatesSection() {
           <ul className="flex flex-col gap-3">
             {foreignCodes.map((code) => (
               <li key={code}>
-                <MoneyInput
+                <RateInput
                   label={t.settings.manualRatesPair(baseCurrency, code)}
                   locale={locale}
-                  currency={code}
+                  unit={code}
                   value={drafts[code] ?? ''}
                   onValueChange={(value) =>
                     setDrafts((current) => ({ ...current, [code]: value }))

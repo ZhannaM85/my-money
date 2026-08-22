@@ -33,6 +33,61 @@ export function parseAmount(raw: string): number | undefined {
   return Number.isFinite(amount) ? amount : undefined
 }
 
+const RATE_FRACTION_DIGITS = 8
+
+/**
+ * Parse a typed FX rate. Unlike {@link parseAmount}, a single `.` or `,`
+ * is always the decimal — even with more than two fraction digits.
+ * `parseAmount('0.0119474')` is 119474 (money grouping); rates must keep 0.0119474.
+ */
+export function parseRate(raw: string): number | undefined {
+  const trimmed = raw.trim().replace(/\s/g, '')
+  if (trimmed === '') return undefined
+
+  const lastComma = trimmed.lastIndexOf(',')
+  const lastDot = trimmed.lastIndexOf('.')
+  const lastSep = Math.max(lastComma, lastDot)
+
+  let normalized: string
+  if (lastSep === -1) {
+    normalized = trimmed
+  } else {
+    const sep = trimmed[lastSep]
+    const other = sep === '.' ? ',' : '.'
+    const asDecimal = trimmed.includes(other) || trimmed.split(sep).length === 2
+    const integer = (asDecimal ? trimmed.slice(0, lastSep) : trimmed).replace(
+      /[.,]/g,
+      '',
+    )
+    const fraction = trimmed.slice(lastSep + 1).replace(/[.,]/g, '')
+    normalized = asDecimal ? `${integer}.${fraction}` : integer
+  }
+
+  const rate = Number(normalized)
+  return Number.isFinite(rate) ? rate : undefined
+}
+
+/** FX quote for an editable field — many fraction digits, no grouping, no currency. */
+export function formatEditableRate(
+  rate: number,
+  locale: Locale = 'en',
+): string {
+  return new Intl.NumberFormat(localeTag(locale), {
+    useGrouping: false,
+    minimumFractionDigits: 2,
+    maximumFractionDigits: RATE_FRACTION_DIGITS,
+  }).format(rate)
+}
+
+export function reformatRateInput(
+  raw: string,
+  locale: Locale = 'en',
+): string {
+  const parsed = parseRate(raw)
+  if (parsed === undefined) return raw
+  return formatEditableRate(parsed, locale)
+}
+
 function localeTag(locale: Locale): string {
   return locale === 'ru' ? 'ru-RU' : 'en-US'
 }
