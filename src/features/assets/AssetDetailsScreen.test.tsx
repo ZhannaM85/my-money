@@ -147,6 +147,19 @@ describe('AssetDetailsScreen', () => {
     })
   })
 
+  it('stacks Update this asset amount and Save so the row cannot clip on a phone', async () => {
+    render(
+      <MemoryRouter initialEntries={['/assets/a1']}>
+        <Routes>
+          <Route path="/assets/:id" element={<AssetDetailsScreen />} />
+        </Routes>
+      </MemoryRouter>,
+    )
+    await screen.findByRole('heading', { name: 'Revolut' })
+    expect(screen.getByLabelText('New amount')).toHaveClass('min-w-0')
+    expect(screen.getByRole('button', { name: /^Save$/ })).toHaveClass('w-full')
+  })
+
   it('adds a past-dated snapshot from Update this asset', async () => {
     const user = userEvent.setup()
     const past = addDaysIso(todayIsoDate(), -20)

@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 84,
+    issue: 82,
+    date: '2026-08-22T16:10:00+03:00',
+    en: 'Update this asset stacks the amount and Save on a phone so neither is cut off.',
+    ru: 'В «Обновить этот актив» сумма и «Сохранить» стоят друг под другом, ничего не обрезается на телефоне.',
+  },
+  {
     version: 83,
     issue: 84,
     date: '2026-08-22T16:00:00+03:00',

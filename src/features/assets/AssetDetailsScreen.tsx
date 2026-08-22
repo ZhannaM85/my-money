@@ -30,7 +30,6 @@ import { StatCard } from '@/shared/ui/stat-card'
 import { useAssetStore } from '@/stores/assetStore'
 import { useFxStore } from '@/stores/fxStore'
 import { useSettingsStore } from '@/stores/settingsStore'
-import { cn } from '@/shared/lib/utils'
 import { AssetForm } from './AssetForm'
 
 type DisplayMode = 'native' | 'base'
@@ -443,8 +442,8 @@ export function AssetDetailsScreen() {
               : undefined
           }
         />
-        <div className="flex gap-2">
-          <div className="relative min-w-0 flex-1">
+        <div className="flex min-w-0 flex-col gap-2">
+          <div className="relative min-w-0">
             <Input
               aria-label={t.asset.newAmount}
               inputMode="decimal"
@@ -458,7 +457,7 @@ export function AssetDetailsScreen() {
                     )
                   : t.asset.amountPlaceholder
               }
-              className="h-12 pr-12"
+              className="h-12 min-w-0 pr-12"
               onChange={(event) => setAmountDraft(event.target.value)}
               onBlur={() =>
                 setAmountDraft((current) =>
@@ -472,7 +471,7 @@ export function AssetDetailsScreen() {
           </div>
           <Button
             type="button"
-            className={cn('h-12 shrink-0')}
+            className="h-12 w-full"
             onClick={() => void saveAmount()}
           >
             {t.common.save}
