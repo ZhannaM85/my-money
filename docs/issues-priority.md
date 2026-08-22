@@ -27,7 +27,6 @@ _EUR base + RUB assets; iPhone tab bar; appearance; car; joint ownership; decima
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
-| [#23](https://github.com/ZhannaM85/my-money/issues/23) | 🔍 Pending validation | RUB assets show €0 when base currency is EUR | `RUB` pairs no longer go through Frankfurter. They now use the app-hosted static ruble dataset path so one selected base currency can produce one converted mixed-currency total. |
 | [#24](https://github.com/ZhannaM85/my-money/issues/24) | 🔍 Pending validation | Tab bar sits flush on the iPhone home indicator | Turtle: `viewport-fit=cover` so `pb-[env(safe-area-inset-bottom)]` is not 0. Tab links `min-h-20`. |
 | [#25](https://github.com/ZhannaM85/my-money/issues/25) | 🔍 Pending validation | Tab bar disconnects from the bottom on iPhone Safari | CSS is already `fixed bottom-0`. Same WebKit visual-viewport class as Turtle #120/#188 — hide bar while keyboard/viewport shrunk. |
 | [#26](https://github.com/ZhannaM85/my-money/issues/26) | 🔍 Pending validation | Add a colorful appearance mood matching the design mockups | Keep current green as one mood. Second mood: neutral chrome + category colors (blue/teal, green, amber, purple, coral). Turtle `data-mood` pattern. |

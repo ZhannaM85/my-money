@@ -15,5 +15,6 @@ Closed live-feedback rows from Tier 8 onward. Open / pending items stay in [`../
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
+| [#23](https://github.com/ZhannaM85/my-money/issues/23) | ✅ Done | RUB assets show €0 when base currency is EUR | `RUB` pairs no longer go through Frankfurter. They now use the app-hosted static ruble dataset path so one selected base currency can produce one converted mixed-currency total. Validated on-device 2026-08-22. |
 | [#57](https://github.com/ZhannaM85/my-money/issues/57) | ✅ Done | Add Soft Finance, Neutral, and Pastel appearance moods | Colorful and Green stay. Extra moods: Soft Finance, Neutral (slate, not black-black), Pastel. Validated on-device 2026-08-19. |
 | [#60](https://github.com/ZhannaM85/my-money/issues/60) | ✅ Done | Collapse Dashboard holdings behind an accordion | Converted Holdings start collapsed; tap the header to expand. Original + All native totals stay visible (they are the main figures). Validated on-device 2026-08-19. |
