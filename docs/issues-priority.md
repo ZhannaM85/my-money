@@ -16,7 +16,6 @@ _Scaffolding, domain model, and persistence. Everything downstream depends on th
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
-| [#1](https://github.com/ZhannaM85/my-money/issues/1) | 🔍 Pending validation | Epic 0 — Project scaffolding & tooling | Vite + React 19 + TS strict + Tailwind/shadcn + Vitest. Empty shell only. `npm test` / `lint` / `build` clean. |
 | [#2](https://github.com/ZhannaM85/my-money/issues/2) | 🔍 Pending validation | Epic 1 — Domain model & persistence layer | Dexie `my-money` DB. Pure `netWorth` / historical FX. 16 tests. |
 
 ---

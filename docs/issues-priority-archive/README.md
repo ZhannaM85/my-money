@@ -6,6 +6,7 @@ Closed and cancelled rows from the historical backlog, split into smaller files 
 
 ## Parts
 
+- [Tiers 1–7](./tiers-001-007.md)
 - [Tiers 8+](./tiers-008-plus.md)
 
 ## Notes
