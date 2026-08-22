@@ -37,8 +37,6 @@ _Existing-asset details: no dated history, and Save is a no-op when viewing._
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
-| [#85](https://github.com/ZhannaM85/my-money/issues/85) | 🔍 Pending validation | Dashboard month change has no breakdown (cash exchange looks like a 61k loss) | Tappable hint plus expand From amounts / From rates by holding. Magnitude is #86. |
-| [#86](https://github.com/ZhannaM85/my-money/issues/86) | 🔍 Pending validation | Dashboard this-month change includes FX on existing dollars (~61k instead of ~6k) | StatCard “this month” uses From amounts. From rates stays visible (#88). |
 | [#87](https://github.com/ZhannaM85/my-money/issues/87) | 🔍 Pending validation | All currencies selected but EUR still shown | Converted Dashboard shows the base currency in the filter, not All. Original + All unchanged. |
 | [#88](https://github.com/ZhannaM85/my-money/issues/88) | 🔍 Pending validation | Show amount change vs rate change on Dashboard (FX drop visible before a cash exchange) | Converted shows From amounts / From rates plus Update rates (fetch only). Related #85, #86. |
 | [#89](https://github.com/ZhannaM85/my-money/issues/89) | 🔍 Pending validation | Dashboard and History show different period deltas | History StatCard uses From amounts; From rates is listed separately. Related #81, #86. |
