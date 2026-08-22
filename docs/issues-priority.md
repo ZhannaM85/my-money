@@ -21,16 +21,6 @@ _After the four web flows feel good. Android wraps this app; iOS does not._
 
 ---
 
-## Tier 12 — Live feedback (2026-08-22)
-
-_Existing-asset details: no dated history, and Save is a no-op when viewing._
-
-| # | Status | Issue | Notes |
-|---|--------|-------|-------|
-| [#106](https://github.com/ZhannaM85/my-money/issues/106) | 🔍 Pending validation | Tab bar still disconnects from the bottom on iPhone 17 Pro Max | In-flow dvh shell, not position:fixed. Safari 26 shifts fixed footers. Follow-up to #25. |
-
----
-
 ## Explicitly not filed
 
 Out of scope for the MVP (`PROJECT_BRIEF.md` §20) — do not implement from chat:
