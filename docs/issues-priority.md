@@ -29,6 +29,7 @@ _Existing-asset details: no dated history, and Save is a no-op when viewing._
 |---|--------|-------|-------|
 | [#101](https://github.com/ZhannaM85/my-money/issues/101) | 🔲 Open | Add regression tests so phone bugs are caught in CI, not only on device | Vitest exists; live-feedback bugs often had no failing test first. Tie RCAs (#94) to regression tests. |
 | [#105](https://github.com/ZhannaM85/my-money/issues/105) | 🔲 Open | Do not auto-save Assets order on drop; add a Save control | Persist only on Save, not on drop. Cancel restores previous order. Follow-up to #100, #104. |
+| [#106](https://github.com/ZhannaM85/my-money/issues/106) | 🔲 Open | Tab bar still disconnects from the bottom on iPhone 17 Pro Max | Reproduces on 17 Pro Max, not 14 Pro. Video IMG_0540. Follow-up to #25. |
 
 ---
 
