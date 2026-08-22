@@ -179,6 +179,7 @@ export interface Dictionary {
     skipWelcome: string
     allocation: string
     appearance: string
+    moodFresh: string
     moodLedger: string
     moodGreen: string
     moodSoft: string

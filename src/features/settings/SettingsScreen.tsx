@@ -37,6 +37,7 @@ export function SettingsScreen() {
   const mood = useThemeStore((state) => state.mood)
   const setMood = useThemeStore((state) => state.setMood)
   const moodLabels: Record<Mood, string> = {
+    fresh: t.settings.moodFresh,
     ledger: t.settings.moodLedger,
     green: t.settings.moodGreen,
     soft: t.settings.moodSoft,

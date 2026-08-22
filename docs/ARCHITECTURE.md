@@ -2,7 +2,7 @@
 
 This document is updated after each issue is completed. It explains what every file does, why it exists, and how the pieces connect.
 
-Product context lives in `PROJECT_BRIEF.md`; the active work queue lives in `docs/issues-priority.md` (closed history: `docs/issues-priority-archive/`); the public-facing overview lives in `README.md`.
+Product context lives in `PROJECT_BRIEF.md`; the visual language lives in `docs/DESIGN_SYSTEM.md`; the active work queue lives in `docs/issues-priority.md` (closed history: `docs/issues-priority-archive/`); the public-facing overview lives in `README.md`.
 
 **Status (2026-08-17):** Epics 0–17 (#1–#18) plus GitHub Pages landed. Deployed at `https://zhannam85.github.io/my-money/`. Native platforms (#19–#20) wait until the web flows feel good.
 

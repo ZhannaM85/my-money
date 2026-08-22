@@ -5,6 +5,34 @@
 @custom-variant dark (&:is(.dark *));
 
 :root,
+:root[data-mood='fresh'] {
+  color-scheme: light;
+  --radius: 1rem;
+  --background: #f8f9fb;
+  --foreground: #17243a;
+  --card: #ffffff;
+  --card-foreground: #17243a;
+  --popover: #ffffff;
+  --popover-foreground: #17243a;
+  --primary: #2878e8;
+  --primary-foreground: #ffffff;
+  --secondary: #eaf2ff;
+  --secondary-foreground: #142b4a;
+  --muted: #eef1f5;
+  --muted-foreground: #667085;
+  --accent: #eaf2ff;
+  --accent-foreground: #142b4a;
+  --destructive: #e05252;
+  --border: #e4e8ee;
+  --input: #667085;
+  --ring: #2878e8;
+  --chart-money: #2878e8;
+  --chart-investments: #16a878;
+  --chart-property: #7656d6;
+  --chart-valuables: #a45bc7;
+  --chart-liabilities: #e05252;
+}
+
 :root[data-mood='ledger'] {
   color-scheme: dark;
   --radius: 0.625rem;
@@ -83,6 +111,33 @@
   --chart-property: #a78bfa;
   --chart-valuables: #fbbf24;
   --chart-liabilities: #fb7185;
+}
+
+:root[data-mood='fresh'].dark {
+  color-scheme: dark;
+  --background: #0b1422;
+  --foreground: #f4f7fb;
+  --card: #142235;
+  --card-foreground: #f4f7fb;
+  --popover: #1b2c43;
+  --popover-foreground: #f4f7fb;
+  --primary: #4b91f5;
+  --primary-foreground: #0b1422;
+  --secondary: #1b2c43;
+  --secondary-foreground: #f4f7fb;
+  --muted: #1b2c43;
+  --muted-foreground: #a9b5c5;
+  --accent: #1b2c43;
+  --accent-foreground: #f4f7fb;
+  --destructive: #f06a6a;
+  --border: #29394e;
+  --input: #a9b5c5;
+  --ring: #4b91f5;
+  --chart-money: #4b91f5;
+  --chart-investments: #35c79a;
+  --chart-property: #9277e8;
+  --chart-valuables: #a45bc7;
+  --chart-liabilities: #f06a6a;
 }
 
 :root[data-mood='green'].dark {

@@ -119,5 +119,7 @@ describe('SettingsScreen', () => {
     expect(document.documentElement.dataset.mood).toBe('neutral')
     await user.click(screen.getByRole('button', { name: 'Pastel' }))
     expect(document.documentElement.dataset.mood).toBe('pastel')
+    await user.click(screen.getByRole('button', { name: 'Fresh' }))
+    expect(document.documentElement.dataset.mood).toBe('fresh')
   })
 })

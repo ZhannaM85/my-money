@@ -27,11 +27,13 @@
       ;(() => {
         try {
           const raw = localStorage.getItem('my-money-theme')
-          const mood = raw ? JSON.parse(raw)?.state?.mood : 'ledger'
-          document.documentElement.dataset.mood =
-            mood === 'green' ? 'green' : 'ledger'
+          const ALLOWED = ['fresh', 'ledger', 'green', 'soft', 'neutral', 'pastel']
+          const mood = raw ? JSON.parse(raw)?.state?.mood : 'fresh'
+          document.documentElement.dataset.mood = ALLOWED.includes(mood)
+            ? mood
+            : 'fresh'
         } catch {
-          document.documentElement.dataset.mood = 'ledger'
+          document.documentElement.dataset.mood = 'fresh'
         }
         if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
           document.documentElement.classList.add('dark')

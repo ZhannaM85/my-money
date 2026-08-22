@@ -1,9 +1,16 @@
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
 
-export type Mood = 'ledger' | 'green' | 'soft' | 'neutral' | 'pastel'
+export type Mood = 'fresh' | 'ledger' | 'green' | 'soft' | 'neutral' | 'pastel'
 
-export const MOODS: Mood[] = ['ledger', 'green', 'soft', 'neutral', 'pastel']
+export const MOODS: Mood[] = [
+  'fresh',
+  'ledger',
+  'green',
+  'soft',
+  'neutral',
+  'pastel',
+]
 
 export function applyTheme(mood: Mood) {
   if (typeof document === 'undefined') return
@@ -18,7 +25,7 @@ interface ThemeStoreState {
 export const useThemeStore = create<ThemeStoreState>()(
   persist(
     (set) => ({
-      mood: 'ledger',
+      mood: 'fresh',
       setMood: (mood) => {
         set({ mood })
         applyTheme(mood)

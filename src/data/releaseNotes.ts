@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 87,
+    issue: 78,
+    date: '2026-08-22T16:50:00+03:00',
+    en: 'Appearance adds Fresh (navy and blue from the design system) and uses it for new installs. Colorful, Green, Soft, Neutral, and Pastel are unchanged.',
+    ru: 'В оформлении появилось «Свежее» (тёмно-синий и голубой из дизайн-системы) — оно стоит по умолчанию для новых установок. Цветное, Зелёное, Спокойное, Нейтральное и Пастель не менялись.',
+  },
+  {
     version: 86,
     issue: 81,
     date: '2026-08-22T16:35:00+03:00',

@@ -239,6 +239,7 @@ export const en: Dictionary = {
     skipWelcome: 'Skip welcome',
     allocation: 'Allocation',
     appearance: 'Appearance',
+    moodFresh: 'Fresh',
     moodLedger: 'Colorful',
     moodGreen: 'Green',
     moodSoft: 'Soft Finance',

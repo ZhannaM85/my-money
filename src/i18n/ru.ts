@@ -245,6 +245,7 @@ export const ru: Dictionary = {
     skipWelcome: 'Пропустить приветствие',
     allocation: 'Распределение',
     appearance: 'Оформление',
+    moodFresh: 'Свежее',
     moodLedger: 'Цветное',
     moodGreen: 'Зелёное',
     moodSoft: 'Спокойное',
