@@ -37,7 +37,6 @@ _Existing-asset details: no dated history, and Save is a no-op when viewing._
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
-| [#80](https://github.com/ZhannaM85/my-money/issues/80) | 🔍 Pending validation | Tab bar hides on scroll and can reappear mid-page | No longer hides when the visual viewport shrinks. Keyboard focus still hides it. Pin-to-bottom is #25. |
 | [#81](https://github.com/ZhannaM85/my-money/issues/81) | 🔍 Pending validation | Dashboard and History show different net worth totals | Dashboard Converted headline is today’s historicalNetWorth point (same as History). |
 | [#82](https://github.com/ZhannaM85/my-money/issues/82) | 🔍 Pending validation | Update-this-asset inputs overflow the phone screen | Amount and Save stack full-width. Date field width is #84. |
 | [#83](https://github.com/ZhannaM85/my-money/issues/83) | 🔍 Pending validation | No way to change currency when editing a past snapshot | Snapshot editor now has a currency select; save persists it on that row. |
@@ -56,7 +55,7 @@ _Existing-asset details: no dated history, and Save is a no-op when viewing._
 | [#96](https://github.com/ZhannaM85/my-money/issues/96) | 🔲 Open | History shows EUR when All currencies is selected | All + Original in Settings; History still formats with leftover base (EUR). Related #87. |
 | [#97](https://github.com/ZhannaM85/my-money/issues/97) | 🔲 Open | Add optional comments on asset entries and show them in History | Note on snapshots; show on History, asset details, and other applicable surfaces. |
 | [#98](https://github.com/ZhannaM85/my-money/issues/98) | 🔲 Open | Fresh and Neutral appearance moods look the same | Both light chrome + blue primary. Make them visibly different. Related #78, #57. |
-| [#99](https://github.com/ZhannaM85/my-money/issues/99) | 🔲 Open | Add bank card / debit card as a Money type | Type dropdown: bank/savings/cash/deposit only. Distinct from liability credit card. |
+| [#99](https://github.com/ZhannaM85/my-money/issues/99) | 🔍 Pending validation | Add bank card / debit card as a Money type | Money type `debit_card` (EN/RU). Distinct from liability credit card. |
 | [#100](https://github.com/ZhannaM85/my-money/issues/100) | 🔲 Open | Sort Assets by name or amount, and allow drag-and-drop order | List is IndexedDB id order today. Name/amount asc/desc + persisted drag order. |
 | [#101](https://github.com/ZhannaM85/my-money/issues/101) | 🔲 Open | Add regression tests so phone bugs are caught in CI, not only on device | Vitest exists; live-feedback bugs often had no failing test first. Tie RCAs (#94) to regression tests. |
 
