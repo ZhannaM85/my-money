@@ -2,7 +2,6 @@ import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ChevronDown } from 'lucide-react'
 import {
-  breakdownBy,
   historicalNativeNetWorth,
   historicalNetWorth,
   holdingsWithConversion,
@@ -33,7 +32,6 @@ import { cn } from '@/shared/lib/utils'
 import { useAssetStore } from '@/stores/assetStore'
 import { useFxStore } from '@/stores/fxStore'
 import { useSettingsStore } from '@/stores/settingsStore'
-import { AllocationChart } from '@/features/allocation/AllocationChart'
 import { NetWorthChart } from './NetWorthChart'
 
 export function DashboardScreen() {
@@ -54,6 +52,9 @@ export function DashboardScreen() {
   const [range, setRange] = useState<HistoryRange>('1M')
   const [currencyFilter, setCurrencyFilter] = useState<string>('all')
   const [holdingsOpen, setHoldingsOpen] = useState(false)
+  const [openNativeCurrency, setOpenNativeCurrency] = useState<string | null>(
+    null,
+  )
 
   const today = todayIsoDate()
   const isOriginal = currencyDisplayMode === 'native'
@@ -187,20 +188,6 @@ export function DashboardScreen() {
   const canZoomIn = rangeIndex > 0
   const canZoomOut = rangeIndex < HISTORY_RANGES.length - 1
 
-  const allocationRows = useMemo(
-    () =>
-      breakdownBy(
-        filteredAssets,
-        filteredSnapshots,
-        quotes,
-        baseCurrency,
-        (asset) => asset.assetClass,
-      ).map((row) => ({
-        ...row,
-        name: t.asset.classes[row.id as keyof typeof t.asset.classes] ?? row.id,
-      })),
-    [baseCurrency, filteredAssets, filteredSnapshots, quotes, t],
-  )
   const loaded = assetsLoaded && settingsLoaded
   const converted = filteredSnapshots.some(
     (snapshot) => snapshot.currency !== baseCurrency,
@@ -283,17 +270,58 @@ export function DashboardScreen() {
                 {t.dashboard.nativeHoldings}
               </span>
               <ul className="flex flex-col gap-2">
-                {nativeTotals.map((row) => (
-                  <li
-                    key={row.currency}
-                    className="flex items-center justify-between rounded-xl bg-card px-4 py-3 ring-1 ring-foreground/10"
-                  >
-                    <span className="text-sm font-medium">{row.currency}</span>
-                    <span className="tabular-nums text-base font-semibold">
-                      {formatAmount(row.amount, row.currency, locale)}
-                    </span>
-                  </li>
-                ))}
+                {nativeTotals.map((row) => {
+                  const open = openNativeCurrency === row.currency
+                  const holdings = convertedHoldings.filter(
+                    (holding) => holding.currency === row.currency,
+                  )
+                  return (
+                    <li
+                      key={row.currency}
+                      className="flex flex-col gap-2 rounded-xl bg-card px-4 py-3 ring-1 ring-foreground/10"
+                    >
+                      <button
+                        type="button"
+                        className="flex w-full items-center justify-between gap-3 text-left"
+                        aria-expanded={open}
+                        aria-label={`${row.currency} · ${t.dashboard.holdings}`}
+                        onClick={() =>
+                          setOpenNativeCurrency((current) =>
+                            current === row.currency ? null : row.currency,
+                          )
+                        }
+                      >
+                        <span className="text-sm font-medium">{row.currency}</span>
+                        <span className="flex items-center gap-1 tabular-nums text-base font-semibold">
+                          {formatAmount(row.amount, row.currency, locale)}
+                          <ChevronDown
+                            className={cn(
+                              'size-4 text-muted-foreground transition-transform',
+                              open && 'rotate-180',
+                            )}
+                            aria-hidden
+                          />
+                        </span>
+                      </button>
+                      {open &&
+                        holdings.map((holding) => (
+                          <div
+                            key={holding.assetId}
+                            className="flex items-center justify-between gap-3 border-t border-border pt-2"
+                          >
+                            <span className="truncate text-sm">{holding.name}</span>
+                            <span className="shrink-0 tabular-nums text-sm">
+                              {formatAmount(
+                                holding.nativeAmount,
+                                holding.currency,
+                                locale,
+                              )}
+                            </span>
+                          </div>
+                        ))}
+                    </li>
+                  )
+                })}
               </ul>
             </div>
           ) : (
@@ -310,7 +338,8 @@ export function DashboardScreen() {
             />
           )}
           {fxNote && <p className="text-sm text-muted-foreground">{fxNote}</p>}
-          {!isOriginal && convertedHoldings.length > 0 && (
+          {convertedHoldings.length > 0 &&
+            !(isOriginal && activeCurrencyFilter === 'all') && (
             <div className="flex flex-col gap-2">
               <button
                 type="button"
@@ -344,31 +373,34 @@ export function DashboardScreen() {
                         <span className="truncate text-sm font-medium">
                           {row.name}
                         </span>
-                        <span className="text-xs text-muted-foreground">
-                          {row.conversionAvailable
-                            ? formatAmount(
-                                row.nativeAmount,
-                                row.currency,
-                                locale,
-                              )
-                            : t.dashboard.conversionUnavailable}
-                        </span>
+                        {!isOriginal && (
+                          <span className="text-xs text-muted-foreground">
+                            {row.conversionAvailable
+                              ? formatAmount(
+                                  row.nativeAmount,
+                                  row.currency,
+                                  locale,
+                                )
+                              : t.dashboard.conversionUnavailable}
+                          </span>
+                        )}
                       </span>
                       <span className="shrink-0 text-right">
-                        {row.conversionAvailable &&
-                        row.convertedAmount !== null ? (
-                          <span className="block tabular-nums text-sm font-medium">
-                            {formatAmount(
-                              row.convertedAmount,
-                              baseCurrency,
-                              locale,
-                            )}
-                          </span>
-                        ) : (
+                        {isOriginal ||
+                        !row.conversionAvailable ||
+                        row.convertedAmount === null ? (
                           <span className="block tabular-nums text-sm">
                             {formatAmount(
                               row.nativeAmount,
                               row.currency,
+                              locale,
+                            )}
+                          </span>
+                        ) : (
+                          <span className="block tabular-nums text-sm font-medium">
+                            {formatAmount(
+                              row.convertedAmount,
+                              baseCurrency,
                               locale,
                             )}
                           </span>
@@ -436,13 +468,6 @@ export function DashboardScreen() {
                 }
               />
             </>
-          )}
-          {allocationRows.length > 0 && (
-            <AllocationChart
-              rows={allocationRows}
-              currency={baseCurrency}
-              oweLabel={t.common.owe}
-            />
           )}
           <Button asChild variant="outline">
             <Link to="/allocation">{t.dashboard.allocation}</Link>

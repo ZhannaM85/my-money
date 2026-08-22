@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 82,
+    issue: 69,
+    date: '2026-08-22T15:45:00+03:00',
+    en: 'Dashboard no longer shows the allocation donut. Tap a currency total (or Holdings under net worth) to see the assets behind it. Allocation stays on its own page.',
+    ru: 'На Сводке больше нет кольцевой диаграммы. Нажмите итог по валюте (или «Позиции» под суммой), чтобы увидеть активы. Распределение остаётся на своей странице.',
+  },
+  {
     version: 81,
     issue: 83,
     date: '2026-08-22T15:30:00+03:00',

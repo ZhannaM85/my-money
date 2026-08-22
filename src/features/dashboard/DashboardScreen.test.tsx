@@ -68,7 +68,7 @@ describe('DashboardScreen', () => {
     expect(
       screen.getAllByText(formatAmount(1000, 'EUR')).length,
     ).toBeGreaterThan(0)
-    expect(screen.getByText('Money')).toBeInTheDocument()
+    expect(screen.queryByTestId('allocation-chart')).not.toBeInTheDocument()
   })
 
   it('shows this-month change from the month-start snapshot', async () => {
@@ -276,8 +276,12 @@ describe('DashboardScreen', () => {
       screen.getByText((_, node) => node?.textContent === formatAmount(20000, 'RUB')),
     ).toBeInTheDocument()
     expect(screen.getByLabelText('Currency')).not.toBeDisabled()
-    expect(screen.getByTestId('allocation-chart')).toBeInTheDocument()
-    expect(screen.getByText('Money')).toBeInTheDocument()
+    expect(screen.queryByTestId('allocation-chart')).not.toBeInTheDocument()
+    expect(screen.queryByText('Euro cash')).not.toBeInTheDocument()
+    await userEvent.click(screen.getByRole('button', { name: 'EUR · Holdings' }))
+    expect(await screen.findByText('Euro cash')).toBeInTheDocument()
+    await userEvent.click(screen.getByRole('button', { name: 'RUB · Holdings' }))
+    expect(screen.getByText('Ruble cash')).toBeInTheDocument()
   })
 
   it('filters Original mode to one native currency', async () => {
@@ -346,7 +350,7 @@ describe('DashboardScreen', () => {
     expect(
       screen.queryByText((_, node) => node?.textContent === formatAmount(20000, 'RUB')),
     ).not.toBeInTheDocument()
-    expect(screen.getByTestId('allocation-chart')).toBeInTheDocument()
+    expect(screen.queryByTestId('allocation-chart')).not.toBeInTheDocument()
   })
 
   it('lists unconvertible holdings instead of hiding them', async () => {
