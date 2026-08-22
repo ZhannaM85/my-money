@@ -169,7 +169,7 @@ describe('AssetsScreen sort', () => {
         <AssetsScreen />
       </MemoryRouter>,
     )
-    await screen.findByRole('button', { name: 'Reorder Cash' })
+    await screen.findByLabelText('Sort assets')
     await waitFor(() => {
       expect(listedAssetHrefs()).toEqual([
         '/assets/cash',
@@ -177,5 +177,45 @@ describe('AssetsScreen sort', () => {
         '/assets/alpha',
       ])
     })
+  })
+
+  it('shows drag grips only after entering reorder mode', async () => {
+    const user = userEvent.setup()
+    await addNamedAsset('cash', 'Cash', 50, 'EUR')
+    render(
+      <MemoryRouter>
+        <AssetsScreen />
+      </MemoryRouter>,
+    )
+    await screen.findByRole('button', { name: 'Reorder' })
+    expect(
+      screen.queryByRole('button', { name: 'Reorder Broker' }),
+    ).not.toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Reorder' }))
+    expect(
+      await screen.findByRole('button', { name: 'Reorder Broker' }),
+    ).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Done' }))
+    expect(
+      screen.queryByRole('button', { name: 'Reorder Broker' }),
+    ).not.toBeInTheDocument()
+  })
+
+  it('leaves reorder mode when a named sort is chosen', async () => {
+    const user = userEvent.setup()
+    await addNamedAsset('cash', 'Cash', 50, 'EUR')
+    render(
+      <MemoryRouter>
+        <AssetsScreen />
+      </MemoryRouter>,
+    )
+    await user.click(await screen.findByRole('button', { name: 'Reorder' }))
+    expect(
+      await screen.findByRole('button', { name: 'Reorder Broker' }),
+    ).toBeInTheDocument()
+    await user.selectOptions(screen.getByLabelText('Sort assets'), 'name_asc')
+    expect(
+      screen.queryByRole('button', { name: 'Reorder Broker' }),
+    ).not.toBeInTheDocument()
   })
 })

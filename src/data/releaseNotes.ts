@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 103,
+    issue: 104,
+    date: '2026-08-22T21:35:00+03:00',
+    en: 'Assets drag-and-drop is off until you tap Reorder. Done (or picking a named sort) returns to normal browsing.',
+    ru: 'Перетаскивание активов выключено, пока не нажать «Порядок». «Готово» (или выбор сортировки по имени/сумме) возвращает обычный просмотр.',
+  },
+  {
     version: 102,
     issue: 103,
     date: '2026-08-22T21:25:00+03:00',

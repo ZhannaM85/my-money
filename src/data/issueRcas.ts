@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 104,
+    title: {
+      en: 'Only enable Assets drag-and-drop in an explicit reorder mode',
+      ru: 'Включать перетаскивание активов только в режиме изменения порядка',
+    },
+    en: '#100 put a grip on every Assets row. On a phone that competed with opening an asset and made the list feel permanently in edit mode.',
+    ru: 'После #100 у каждой строки активов была ручка. На телефоне она мешала открыть актив и список казался постоянно в режиме правки.',
+  },
+  {
     issue: 103,
     title: {
       en: 'Show snapshot comments in a lighter color and give them more width',

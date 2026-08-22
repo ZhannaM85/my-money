@@ -68,6 +68,8 @@ export const en: Dictionary = {
     sortAmountAsc: 'Amount: low to high',
     sortAmountDesc: 'Amount: high to low',
     reorderAria: (name) => `Reorder ${name}`,
+    enterReorderMode: 'Reorder',
+    doneReordering: 'Done',
   },
   asset: {
     classes: {

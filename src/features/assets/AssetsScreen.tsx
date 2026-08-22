@@ -132,6 +132,7 @@ export function AssetsScreen() {
   )
   const quotes = useFxStore((state) => state.quotes)
   const [filter, setFilter] = useState<Filter>('all')
+  const [reordering, setReordering] = useState(false)
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 6 } }),
   )
@@ -228,20 +229,34 @@ export function AssetsScreen() {
         ))}
       </div>
       {loaded && assets.length > 0 && (
-        <select
-          aria-label={t.assets.sortLabel}
-          className="h-12 rounded-lg border border-input bg-background px-2.5 text-base"
-          value={assetListSort}
-          onChange={(event) =>
-            void setAssetListSort(event.target.value as AssetListSort)
-          }
-        >
-          {ASSET_LIST_SORTS.map((id) => (
-            <option key={id} value={id}>
-              {sortLabels[id]}
-            </option>
-          ))}
-        </select>
+        <div className="flex gap-2">
+          <select
+            aria-label={t.assets.sortLabel}
+            className="h-12 min-w-0 flex-1 rounded-lg border border-input bg-background px-2.5 text-base"
+            value={assetListSort}
+            onChange={(event) => {
+              const next = event.target.value as AssetListSort
+              if (next !== 'custom') setReordering(false)
+              void setAssetListSort(next)
+            }}
+          >
+            {ASSET_LIST_SORTS.map((id) => (
+              <option key={id} value={id}>
+                {sortLabels[id]}
+              </option>
+            ))}
+          </select>
+          {visible.length > 1 && (
+            <Button
+              type="button"
+              variant={reordering ? 'default' : 'outline'}
+              className="h-12 shrink-0"
+              onClick={() => setReordering((current) => !current)}
+            >
+              {reordering ? t.assets.doneReordering : t.assets.enterReorderMode}
+            </Button>
+          )}
+        </div>
       )}
       {!loaded ? (
         <p className="text-sm text-muted-foreground">{t.common.loading}</p>
@@ -260,15 +275,8 @@ export function AssetsScreen() {
           }
         />
       ) : (
-        <DndContext
-          sensors={sensors}
-          collisionDetection={closestCenter}
-          onDragEnd={(event) => void onDragEnd(event)}
-        >
-          <SortableContext
-            items={visible.map((asset) => asset.id)}
-            strategy={verticalListSortingStrategy}
-          >
+        (() => {
+          const list = (
             <ul className="flex flex-col gap-2">
               {visible.map((asset) => {
                 const snapshot = latestSnapshot(snapshots, asset.id)
@@ -296,51 +304,76 @@ export function AssetsScreen() {
                 const secondaryLabel = sameCurrency
                   ? (snapshot?.currency ?? asset.currency)
                   : t.common.native(snapshot?.currency ?? asset.currency)
-                return (
+                const inner = (
+                  <Link
+                    to={`/assets/${asset.id}`}
+                    className={cn(
+                      'flex min-w-0 items-center justify-between gap-3',
+                      reordering
+                        ? 'flex-1 py-3 pr-4'
+                        : 'rounded-xl bg-card px-4 py-3 ring-1 ring-foreground/10',
+                    )}
+                  >
+                    <span className="flex min-w-0 flex-col">
+                      <span className="truncate font-medium">{asset.name}</span>
+                      <span className="text-sm text-muted-foreground">
+                        {t.asset.types[asset.type]}
+                        {asset.trackingStatus === 'excluded'
+                          ? ` · ${t.asset.notCountedInNetWorth}`
+                          : ''}
+                        {estimated
+                          ? ` · ${t.asset.valuation[asset.valuationMethod]}`
+                          : ''}
+                      </span>
+                    </span>
+                    <span className="shrink-0 text-right">
+                      {snapshot ? (
+                        <>
+                          <span className="block tabular-nums">
+                            {primaryAmount}
+                          </span>
+                          <span className="text-xs text-muted-foreground">
+                            {secondaryLabel}
+                          </span>
+                        </>
+                      ) : (
+                        <span className="text-sm text-muted-foreground">
+                          {t.assets.noValue}
+                        </span>
+                      )}
+                    </span>
+                  </Link>
+                )
+                return reordering ? (
                   <SortableAssetRow
                     key={asset.id}
                     id={asset.id}
                     reorderLabel={t.assets.reorderAria(asset.name)}
                   >
-                    <Link
-                      to={`/assets/${asset.id}`}
-                      className="flex min-w-0 flex-1 items-center justify-between gap-3 py-3 pr-4"
-                    >
-                      <span className="flex min-w-0 flex-col">
-                        <span className="truncate font-medium">{asset.name}</span>
-                        <span className="text-sm text-muted-foreground">
-                          {t.asset.types[asset.type]}
-                          {asset.trackingStatus === 'excluded'
-                            ? ` · ${t.asset.notCountedInNetWorth}`
-                            : ''}
-                          {estimated
-                            ? ` · ${t.asset.valuation[asset.valuationMethod]}`
-                            : ''}
-                        </span>
-                      </span>
-                      <span className="shrink-0 text-right">
-                        {snapshot ? (
-                          <>
-                            <span className="block tabular-nums">
-                              {primaryAmount}
-                            </span>
-                            <span className="text-xs text-muted-foreground">
-                              {secondaryLabel}
-                            </span>
-                          </>
-                        ) : (
-                          <span className="text-sm text-muted-foreground">
-                            {t.assets.noValue}
-                          </span>
-                        )}
-                      </span>
-                    </Link>
+                    {inner}
                   </SortableAssetRow>
+                ) : (
+                  <li key={asset.id}>{inner}</li>
                 )
               })}
             </ul>
-          </SortableContext>
-        </DndContext>
+          )
+          if (!reordering) return list
+          return (
+            <DndContext
+              sensors={sensors}
+              collisionDetection={closestCenter}
+              onDragEnd={(event) => void onDragEnd(event)}
+            >
+              <SortableContext
+                items={visible.map((asset) => asset.id)}
+                strategy={verticalListSortingStrategy}
+              >
+                {list}
+              </SortableContext>
+            </DndContext>
+          )
+        })()
       )}
     </div>
   )
