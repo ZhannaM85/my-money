@@ -27,7 +27,6 @@ _EUR base + RUB assets; iPhone tab bar; appearance; car; joint ownership; decima
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
-| [#27](https://github.com/ZhannaM85/my-money/issues/27) | 🔍 Pending validation | Make car a first-class, obvious asset | Brief already includes cars. Model has Property → Vehicle. Forks: own class vs keep under Property; Car vs Vehicle; included vs excluded by default. |
 | [#28](https://github.com/ZhannaM85/my-money/issues/28) | 🔍 Pending validation | Record ownership share for jointly owned assets | Lake house 1/2 with spouse. Store full value + share; net worth uses share × value. Forks: share on asset vs snapshot; % vs fraction. |
 | [#29](https://github.com/ZhannaM85/my-money/issues/29) | 🔍 Pending validation | Cannot enter kopecks/cents: comma decimals fail validation | `16155,11` → “Enter a current amount”. Forms use `Number()`; CSV `parseAmount` already accepts comma decimals. |
 | [#30](https://github.com/ZhannaM85/my-money/issues/30) | 🔍 Pending validation | Exclude an asset from net worth without hiding it | Domain already has `excluded`. Only a buried Tracking select on edit. Surface a clear Exclude control. |
