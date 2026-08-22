@@ -302,6 +302,32 @@ describe('AssetDetailsScreen', () => {
     })
   })
 
+  it('lets the user change currency when editing a snapshot', async () => {
+    const user = userEvent.setup()
+    render(
+      <MemoryRouter initialEntries={['/assets/a1']}>
+        <Routes>
+          <Route path="/assets/:id" element={<AssetDetailsScreen />} />
+        </Routes>
+      </MemoryRouter>,
+    )
+    await screen.findByRole('heading', { name: 'Revolut' })
+    const originalId = useAssetStore
+      .getState()
+      .snapshots.find((row) => row.date === '2026-08-01')?.id
+    await user.click(
+      screen.getByRole('button', { name: 'Edit snapshot from 2026-08-01' }),
+    )
+    await user.selectOptions(screen.getByLabelText('Currency'), 'RUB')
+    await user.click(screen.getAllByRole('button', { name: 'Save' })[0])
+    await waitFor(() => {
+      expect(
+        useAssetStore.getState().snapshots.find((row) => row.id === originalId)
+          ?.currency,
+      ).toBe('RUB')
+    })
+  })
+
   it('deletes an asset and its snapshots after confirmation', async () => {
     const user = userEvent.setup()
     vi.spyOn(window, 'confirm').mockReturnValue(true)

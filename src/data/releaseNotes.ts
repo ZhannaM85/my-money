@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 81,
+    issue: 83,
+    date: '2026-08-22T15:30:00+03:00',
+    en: 'When you edit a past snapshot, you can change its currency, not only the date and amount.',
+    ru: 'При правке прошлого снимка можно сменить валюту, не только дату и сумму.',
+  },
+  {
     version: 80,
     issue: 77,
     date: '2026-08-22T15:20:00+03:00',

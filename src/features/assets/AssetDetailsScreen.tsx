@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 import { Pencil, Trash2 } from 'lucide-react'
 import { convertAmount, lookupRate } from '@/domain/fx'
 import { assetPerformance } from '@/domain/netWorth'
+import { BASE_CURRENCIES } from '@/domain/settings'
 import { latestSnapshot } from '@/domain/snapshot'
 import { NetWorthChart } from '@/features/dashboard/NetWorthChart'
 import { formatLastUpdated, useLocale, useTranslation } from '@/i18n'
@@ -73,6 +74,7 @@ export function AssetDetailsScreen() {
   const [editingId, setEditingId] = useState<string | null>(null)
   const [editAmount, setEditAmount] = useState('')
   const [editDate, setEditDate] = useState('')
+  const [editCurrency, setEditCurrency] = useState('')
   const [editError, setEditError] = useState<string | undefined>()
   const [editingDetails, setEditingDetails] = useState(false)
   const today = todayIsoDate()
@@ -193,7 +195,12 @@ export function AssetDetailsScreen() {
       return
     }
     setEditError(undefined)
-    await updateSnapshot({ ...row, amount, date: editDate })
+    await updateSnapshot({
+      ...row,
+      amount,
+      date: editDate,
+      currency: editCurrency,
+    })
     setEditingId(null)
   }
 
@@ -306,23 +313,45 @@ export function AssetDetailsScreen() {
                       : undefined
                   }
                 />
-                <div className="relative">
-                  <Input
-                    aria-label={t.asset.editSnapshotAmount}
-                    inputMode="decimal"
-                    value={editAmount}
-                    className="h-12 pr-12"
-                    onChange={(event) => setEditAmount(event.target.value)}
-                    onBlur={() =>
+                <label className="flex min-w-0 flex-col gap-1.5">
+                  <span className="text-sm font-medium">{t.asset.currency}</span>
+                  <select
+                    className="h-12 min-w-0 rounded-lg border border-input bg-background px-2.5 text-base"
+                    value={editCurrency}
+                    aria-label={t.asset.currency}
+                    onChange={(event) => {
+                      const next = event.target.value
+                      setEditCurrency(next)
                       setEditAmount((current) =>
-                        reformatAmountInput(current, locale, row.currency),
+                        reformatAmountInput(current, locale, next),
                       )
-                    }
-                  />
-                  <span className="pointer-events-none absolute inset-y-0 right-2.5 flex items-center text-sm text-muted-foreground">
-                    {row.currency}
-                  </span>
-                </div>
+                    }}
+                  >
+                    {(
+                      (BASE_CURRENCIES as readonly string[]).includes(
+                        editCurrency,
+                      )
+                        ? BASE_CURRENCIES
+                        : [editCurrency, ...BASE_CURRENCIES]
+                    ).map((code) => (
+                      <option key={code} value={code}>
+                        {code}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                <Input
+                  aria-label={t.asset.editSnapshotAmount}
+                  inputMode="decimal"
+                  value={editAmount}
+                  className="h-12"
+                  onChange={(event) => setEditAmount(event.target.value)}
+                  onBlur={() =>
+                    setEditAmount((current) =>
+                      reformatAmountInput(current, locale, editCurrency),
+                    )
+                  }
+                />
                 {editError && editError !== t.asset.snapshotDateInvalid && (
                   <p className="text-sm text-destructive">{editError}</p>
                 )}
@@ -365,6 +394,7 @@ export function AssetDetailsScreen() {
                     onClick={() => {
                       setEditingId(row.id)
                       setEditDate(row.date)
+                      setEditCurrency(row.currency)
                       setEditAmount(
                         formatEditableAmount(
                           row.amount,
