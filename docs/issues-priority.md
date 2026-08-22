@@ -78,7 +78,7 @@ _Existing-asset details: no dated history, and Save is a no-op when viewing._
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
 | [#66](https://github.com/ZhannaM85/my-money/issues/66) | 🔍 Pending validation | Add and edit past snapshot entries on existing assets | As of on Update this asset and on the edit form. Past dates save a new snapshot; future dates rejected. Edit of existing rows is #72. |
-| [#67](https://github.com/ZhannaM85/my-money/issues/67) | 📋 Not started | Existing asset Save does nothing; add a view / read-only mode | Tapping Save information with no changes (empty New amount) does nothing. Prefer a read-only details view instead of an always-edit form. |
+| [#67](https://github.com/ZhannaM85/my-money/issues/67) | 🔍 Pending validation | Existing asset Save does nothing; add a view / read-only mode | Details open read-only. Edit details reveals the form. No no-op Save on view. |
 | [#68](https://github.com/ZhannaM85/my-money/issues/68) | 🔍 Pending validation | Date input is broken in the PWA | DateField: visible calendar, full-field picker indicator, `showPicker()` on tap. |
 | [#69](https://github.com/ZhannaM85/my-money/issues/69) | 📋 Not started | Show assets distribution on Dashboard when currency is All | Allocation is only on Dashboard when a single/base currency is selected. All (Все) shows a Distribution button, not the breakdown. |
 | [#70](https://github.com/ZhannaM85/my-money/issues/70) | 🔍 Pending validation | Original mode still shows a EUR conversion on one asset | Native list (and details native view) no longer appends `est. €`. Secondary line is native currency only. |

@@ -34,6 +34,15 @@ import { AssetForm } from './AssetForm'
 
 type DisplayMode = 'native' | 'base'
 
+function DetailRow({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="flex justify-between gap-3 py-2.5">
+      <dt className="text-sm text-muted-foreground">{label}</dt>
+      <dd className="text-right text-sm font-medium">{value}</dd>
+    </div>
+  )
+}
+
 export function AssetDetailsScreen() {
   const t = useTranslation()
   const locale = useLocale()
@@ -65,6 +74,7 @@ export function AssetDetailsScreen() {
   const [editAmount, setEditAmount] = useState('')
   const [editDate, setEditDate] = useState('')
   const [editError, setEditError] = useState<string | undefined>()
+  const [editingDetails, setEditingDetails] = useState(false)
   const today = todayIsoDate()
 
   useEffect(() => {
@@ -443,24 +453,81 @@ export function AssetDetailsScreen() {
         )}
       </section>
       <h2 className="text-lg font-semibold">{t.asset.details}</h2>
-      <AssetForm
-        initial={asset}
-        requireAmount={false}
-        submitLabel={t.asset.saveDetails}
-        onSubmit={async ({ asset: next, amount, snapshotDate }) => {
-          await saveAsset(
-            next,
-            amount === undefined
-              ? undefined
-              : {
-                  assetId: next.id,
-                  date: snapshotDate ?? todayIsoDate(),
-                  amount,
-                  currency: next.currency,
-                },
-          )
-        }}
-      />
+      {editingDetails ? (
+        <>
+          <AssetForm
+            initial={asset}
+            requireAmount={false}
+            submitLabel={t.asset.saveDetails}
+            onSubmit={async ({ asset: next, amount, snapshotDate }) => {
+              await saveAsset(
+                next,
+                amount === undefined
+                  ? undefined
+                  : {
+                      assetId: next.id,
+                      date: snapshotDate ?? todayIsoDate(),
+                      amount,
+                      currency: next.currency,
+                    },
+              )
+              setEditingDetails(false)
+            }}
+          />
+          <Button
+            type="button"
+            variant="outline"
+            size="xl"
+            className="w-full"
+            onClick={() => setEditingDetails(false)}
+          >
+            {t.common.cancel}
+          </Button>
+        </>
+      ) : (
+        <>
+          <dl className="divide-y divide-border rounded-xl bg-card px-4 ring-1 ring-foreground/10">
+            <DetailRow label={t.asset.name} value={asset.name} />
+            <DetailRow
+              label={t.asset.class}
+              value={t.asset.classes[asset.assetClass]}
+            />
+            <DetailRow
+              label={t.asset.type}
+              value={t.asset.types[asset.type]}
+            />
+            <DetailRow label={t.asset.currency} value={asset.currency} />
+            {asset.institution ? (
+              <DetailRow
+                label={t.asset.institutionOptional}
+                value={asset.institution}
+              />
+            ) : null}
+            <DetailRow
+              label={t.asset.valuationLabel}
+              value={t.asset.valuation[asset.valuationMethod]}
+            />
+            <DetailRow
+              label={t.asset.updateFrequency}
+              value={t.asset.frequency[asset.updateFrequency]}
+            />
+            <DetailRow label={t.asset.ownershipShare} value={shareLabel} />
+            <DetailRow
+              label={t.asset.trackingLabel}
+              value={t.asset.tracking[asset.trackingStatus]}
+            />
+          </dl>
+          <Button
+            type="button"
+            variant="outline"
+            size="xl"
+            className="w-full"
+            onClick={() => setEditingDetails(true)}
+          >
+            {t.asset.editDetails}
+          </Button>
+        </>
+      )}
       {asset.trackingStatus === 'included' && (
         <Button
           type="button"

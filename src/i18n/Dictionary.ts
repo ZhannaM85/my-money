@@ -91,6 +91,7 @@ export interface Dictionary {
     addTitle: string
     saveAsset: string
     saveDetails: string
+    editDetails: string
     notFound: string
     backToAssets: string
     native: string

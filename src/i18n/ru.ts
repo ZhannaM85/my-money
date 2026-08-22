@@ -140,6 +140,7 @@ export const ru: Dictionary = {
     addTitle: 'Добавить актив',
     saveAsset: 'Сохранить актив',
     saveDetails: 'Сохранить сведения',
+    editDetails: 'Изменить сведения',
     notFound: 'Актив не найден',
     backToAssets: 'К списку активов',
     native: 'В валюте актива',

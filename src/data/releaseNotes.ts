@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 75,
+    issue: 67,
+    date: '2026-08-22T10:12:00+03:00',
+    en: 'Opening an existing asset is now a read-only details view. Tap Edit details when you want to change name, class, or other settings.',
+    ru: 'Существующий актив открывается как просмотр сведений. Нажмите «Изменить сведения», чтобы поменять название, класс и другие настройки.',
+  },
+  {
     version: 74,
     issue: 66,
     date: '2026-08-22T10:10:00+03:00',

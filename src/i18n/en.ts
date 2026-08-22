@@ -136,6 +136,7 @@ export const en: Dictionary = {
     addTitle: 'Add asset',
     saveAsset: 'Save asset',
     saveDetails: 'Save details',
+    editDetails: 'Edit details',
     notFound: 'Asset not found',
     backToAssets: 'Back to assets',
     native: 'Native',

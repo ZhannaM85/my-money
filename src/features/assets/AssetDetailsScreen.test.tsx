@@ -81,6 +81,22 @@ describe('AssetDetailsScreen', () => {
     expect(screen.getByText(/Since first snapshot/)).toBeInTheDocument()
   })
 
+  it('opens existing assets in a read-only details view', async () => {
+    render(
+      <MemoryRouter initialEntries={['/assets/a1']}>
+        <Routes>
+          <Route path="/assets/:id" element={<AssetDetailsScreen />} />
+        </Routes>
+      </MemoryRouter>,
+    )
+    await screen.findByRole('heading', { name: 'Revolut' })
+    expect(
+      screen.queryByRole('button', { name: 'Save details' }),
+    ).not.toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Edit details' })).toBeInTheDocument()
+    expect(screen.getByText('Account balance')).toBeInTheDocument()
+  })
+
   it('explains the two amount fields with tappable info hints', async () => {
     const user = userEvent.setup()
     render(
@@ -99,6 +115,7 @@ describe('AssetDetailsScreen', () => {
         'Saves a new snapshot for the chosen date (defaults to today). It does not change older history rows.',
       ),
     ).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Edit details' }))
     await user.click(
       screen.getByRole('button', { name: 'About New amount (optional)' }),
     )
@@ -167,6 +184,10 @@ describe('AssetDetailsScreen', () => {
       </MemoryRouter>,
     )
     await screen.findByRole('heading', { name: 'Revolut' })
+    expect(
+      screen.queryByRole('button', { name: 'Save details' }),
+    ).not.toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Edit details' }))
     const asOfFields = screen.getAllByLabelText('As of')
     setDateField(asOfFields[asOfFields.length - 1]!, past)
     await user.type(screen.getByLabelText('New amount (optional)'), '500')
