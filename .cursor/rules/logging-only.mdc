@@ -1,0 +1,42 @@
+---
+description: Live-feedback chats are log/reopen only. Never write product code. If a message looks like a fix request, ask first.
+alwaysApply: true
+---
+
+# Logging / reopen only — do not implement
+
+This project’s live-feedback conversations are **issue logging**, not a build session.
+
+Once the user is reporting bugs, sending screenshots, or saying “log issues”, the **only** allowed work is:
+
+1. `gh issue create` / `comment` / `reopen` / `edit` (with labels)
+2. A row or note in `docs/issues-priority.md`
+3. Commit **that doc** (and this rule, if they asked for it)
+
+**Forbidden until the user clearly starts a new, separate implement pass:** any `src/` edit, CSS, i18n product copy, design-system application, new themes, “match Turtle”, tests, commits of app code, push of app code.
+
+These phrases are **not** permission to implement. Log or comment on the issue instead:
+
+- “fix it” / “fix it like Turtle”
+- “apply” / “update the design”
+- “create a theme and apply”
+- “check how X was done and do it here”
+
+If there is **any** doubt, **stop and ask**: “Log only, or implement?” Wait. Do not code.
+
+```
+# ❌ BAD
+User: “Date input is broken. Turtle fixed this. Fix it here.”
+Agent: edits DateField
+
+# ✅ GOOD
+User: same
+Agent: files or comments the issue; asks whether to implement
+
+# ❌ BAD
+User: “For #78 don’t change existing themes, add Fresh and apply.”
+Agent: writes CSS
+
+# ✅ GOOD
+Agent: comments on #78 with that constraint; does not touch src/
+```

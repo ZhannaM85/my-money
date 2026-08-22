@@ -9,6 +9,6 @@ Do not write product code without, in this order:
 
 1. `gh issue create` with `--label` and `--body-file` (never unlabeled; never elevate allowlisted `gh`).
 2. A row in `docs/issues-priority.md`.
-3. Only then implement — unless the user is in a live reporting burst, in which case stop at step 2.
+3. Only then implement — unless the user is in a live reporting burst, in which case **stop at step 2**. See `.cursor/rules/logging-only.mdc`. “Fix it”, “apply”, or “like Turtle” during a reporting burst still means **log**, not implement. If unsure, ask.
 
 See `docs/AGENT_WORKFLOW.md`.
