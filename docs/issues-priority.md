@@ -37,7 +37,6 @@ _Existing-asset details: no dated history, and Save is a no-op when viewing._
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
-| [#78](https://github.com/ZhannaM85/my-money/issues/78) | 🔍 Pending validation | Adopt the My Money design system as the default UI | New **Fresh** mood from `docs/DESIGN_SYSTEM.md`; default for new installs. Existing moods untouched. |
 | [#79](https://github.com/ZhannaM85/my-money/issues/79) | 🔍 Pending validation | History list shows every calendar day, not only days the user added | List is snapshot days only. Chart still uses the daily series. |
 | [#80](https://github.com/ZhannaM85/my-money/issues/80) | 🔍 Pending validation | Tab bar hides on scroll and can reappear mid-page | No longer hides when the visual viewport shrinks. Keyboard focus still hides it. Pin-to-bottom is #25. |
 | [#81](https://github.com/ZhannaM85/my-money/issues/81) | 🔍 Pending validation | Dashboard and History show different net worth totals | Dashboard Converted headline is today’s historicalNetWorth point (same as History). |
