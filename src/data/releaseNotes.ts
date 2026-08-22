@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 97,
+    issue: 98,
+    date: '2026-08-22T19:55:00+03:00',
+    en: 'Neutral is slate (charcoal buttons) so it no longer looks like Fresh’s blue.',
+    ru: '«Нейтральное» стало сланцевым (угольные кнопки) и больше не похоже на голубое «Свежее».',
+  },
+  {
     version: 96,
     issue: 99,
     date: '2026-08-22T19:50:00+03:00',

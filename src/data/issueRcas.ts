@@ -20,6 +20,15 @@ export const issueRcas: IssueRca[] = [
     ru: 'У денег были только счёт, накопления, наличные и вклад. Дебетовую карту Мир приходилось сохранять как банковский счёт. credit_card уже есть в обязательствах как долг, поэтому это отдельный тип денег.',
   },
   {
+    issue: 98,
+    title: {
+      en: 'Fresh and Neutral appearance moods look the same',
+      ru: 'Темы «Свежее» и «Нейтральное» выглядят одинаково',
+    },
+    en: 'Fresh is design-system blue (#2878e8). Neutral used another blue (#4c7dff) on the same light chrome, so Settings chips, Converted, and the + tab looked identical. Neutral was meant to be slate (#57), not a second blue.',
+    ru: '«Свежее» — синий дизайн-системы (#2878e8). «Нейтральное» брало другой синий (#4c7dff) на том же светлом хроме, поэтому чипы, «В пересчёте» и «+» совпадали. «Нейтральное» задумывалось сланцевым (#57), не вторым синим.',
+  },
+  {
     issue: 95,
     title: {
       en: 'Date field is too narrow; expand width by 1.5',
