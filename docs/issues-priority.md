@@ -49,6 +49,7 @@ _Existing-asset details: no dated history, and Save is a no-op when viewing._
 | [#84](https://github.com/ZhannaM85/my-money/issues/84) | 🔍 Pending validation | Safari date fields overflow the card when editing snapshots | Copied Turtle #47: DateField is `h-12 w-36`, not a max-width/overflow clamp. Related #68, #82. |
 | [#85](https://github.com/ZhannaM85/my-money/issues/85) | 🔲 Open | Dashboard month change has no breakdown (cash exchange looks like a 61k loss) | Tappable “what changed”. The **wrong −61k vs ~6k** is #86. |
 | [#86](https://github.com/ZhannaM85/my-money/issues/86) | 🔲 Open | Dashboard this-month change includes FX on existing dollars (~61k instead of ~6k) | After $2,000 for 160,000 ₽, headline should be ~±6k (deal vs reference on that trade), not −61,891.82. Not solved by #85. |
+| [#87](https://github.com/ZhannaM85/my-money/issues/87) | 🔲 Open | All currencies selected but EUR still shown | Possible #70 regression (Original EUR estimate) or Dashboard All while Converted still totals in EUR. |
 
 ---
 
