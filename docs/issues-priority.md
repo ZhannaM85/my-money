@@ -27,7 +27,6 @@ _EUR base + RUB assets; iPhone tab bar; appearance; car; joint ownership; decima
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
-| [#29](https://github.com/ZhannaM85/my-money/issues/29) | 🔍 Pending validation | Cannot enter kopecks/cents: comma decimals fail validation | `16155,11` → “Enter a current amount”. Forms use `Number()`; CSV `parseAmount` already accepts comma decimals. |
 | [#30](https://github.com/ZhannaM85/my-money/issues/30) | 🔍 Pending validation | Exclude an asset from net worth without hiding it | Domain already has `excluded`. Only a buried Tracking select on edit. Surface a clear Exclude control. |
 | [#31](https://github.com/ZhannaM85/my-money/issues/31) | 🔍 Pending validation | Hide an asset from the active list | Archive already hides from All. Make hide/restore obvious (not only “Archive asset”). |
 | [#32](https://github.com/ZhannaM85/my-money/issues/32) | 🔍 Pending validation | Permanently delete an asset and its history | No UI/store delete. Must cascade snapshots. Confirm. Archive stays the default. |
