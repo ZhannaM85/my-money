@@ -27,7 +27,6 @@ _EUR base + RUB assets; iPhone tab bar; appearance; car; joint ownership; decima
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
-| [#38](https://github.com/ZhannaM85/my-money/issues/38) | 🔍 Pending validation | Offline banner does not show in Safari (including Dashboard) | Airplane mode, browser Dashboard: app works, no banner. Not page-specific — `AppShell` should show it everywhere. Follow-up to #35. |
 | [#39](https://github.com/ZhannaM85/my-money/issues/39) | 🔍 Pending validation | Show pull-to-refresh loading indicator in the PWA | Turtle `PullToRefreshIndicator`: floating `RefreshCw` badge while dragging down, spinner once refresh starts. My Money has no visible pull feedback today. |
 | [#40](https://github.com/ZhannaM85/my-money/issues/40) | 🔍 Pending validation | Add spacing between bottom content and sticky footer | Main content now reserves a larger bottom gap above the fixed tab bar, including safe-area space, so the last control no longer crowds the footer. |
 | [#41](https://github.com/ZhannaM85/my-money/issues/41) | 🔍 Pending validation | Add zoom in and zoom out controls for graphs | Dashboard now has zoom-in/zoom-out range controls that widen or narrow the visible history window without leaving the page. |
