@@ -27,7 +27,6 @@ _EUR base + RUB assets; iPhone tab bar; appearance; car; joint ownership; decima
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
-| [#28](https://github.com/ZhannaM85/my-money/issues/28) | 🔍 Pending validation | Record ownership share for jointly owned assets | Lake house 1/2 with spouse. Store full value + share; net worth uses share × value. Forks: share on asset vs snapshot; % vs fraction. |
 | [#29](https://github.com/ZhannaM85/my-money/issues/29) | 🔍 Pending validation | Cannot enter kopecks/cents: comma decimals fail validation | `16155,11` → “Enter a current amount”. Forms use `Number()`; CSV `parseAmount` already accepts comma decimals. |
 | [#30](https://github.com/ZhannaM85/my-money/issues/30) | 🔍 Pending validation | Exclude an asset from net worth without hiding it | Domain already has `excluded`. Only a buried Tracking select on edit. Surface a clear Exclude control. |
 | [#31](https://github.com/ZhannaM85/my-money/issues/31) | 🔍 Pending validation | Hide an asset from the active list | Archive already hides from All. Make hide/restore obvious (not only “Archive asset”). |
