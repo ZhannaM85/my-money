@@ -27,7 +27,6 @@ _FX, then the remaining three prototype flows, plus allocation and history. Orde
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
-| [#7](https://github.com/ZhannaM85/my-money/issues/7) | 🔍 Pending validation | Epic 6 — FX rates via Frankfurter | Cached historical quotes. RUB is not in the ECB set. Converted figures labeled as estimates. |
 | [#8](https://github.com/ZhannaM85/my-money/issues/8) | 🔍 Pending validation | Epic 7 — Dashboard | Net worth, this-month change, line chart, class totals. |
 | [#9](https://github.com/ZhannaM85/my-money/issues/9) | 🔍 Pending validation | Epic 8 — Quick update flow | Native amounts. No change writes a same-amount snapshot. Yearly/manual shown, not nagged. |
 | [#10](https://github.com/ZhannaM85/my-money/issues/10) | 🔍 Pending validation | Epic 9 — Asset details | Native/base toggle, history chart + list, in-place amount update. FX-vs-value split left for later. |
