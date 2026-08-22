@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 90,
+    issue: 87,
+    date: '2026-08-22T16:55:00+03:00',
+    en: 'In Converted mode the Dashboard currency control shows the real base currency (for example EUR), not All.',
+    ru: 'В режиме «В пересчёте» на Сводке в выборе валюты видна базовая валюта (например EUR), а не «Все».',
+  },
+  {
     version: 89,
     issue: 25,
     date: '2026-08-22T17:15:00+03:00',

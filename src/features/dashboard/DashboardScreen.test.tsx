@@ -208,7 +208,10 @@ describe('DashboardScreen', () => {
     )
 
     expect(await screen.findAllByText(formatAmount(1100, 'EUR'))).not.toHaveLength(0)
-    expect(screen.getByLabelText('Currency')).toBeDisabled()
+    const currency = screen.getByLabelText('Currency')
+    expect(currency).toBeDisabled()
+    expect(currency).toHaveValue('EUR')
+    expect(screen.queryByRole('option', { name: 'All' })).not.toBeInTheDocument()
   })
 
   it('shows every native holding in Original + All', async () => {

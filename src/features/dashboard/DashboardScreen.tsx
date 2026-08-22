@@ -255,12 +255,17 @@ export function DashboardScreen() {
                   'h-12 rounded-lg border border-input bg-background px-2.5 text-base',
                   !isOriginal && 'text-muted-foreground opacity-60',
                 )}
-                value={activeCurrencyFilter}
+                value={isOriginal ? activeCurrencyFilter : baseCurrency}
                 disabled={!isOriginal}
                 onChange={(event) => setCurrencyFilter(event.target.value)}
               >
-                <option value="all">{t.assets.filterAll}</option>
-                {availableCurrencies.map((code) => (
+                {isOriginal && (
+                  <option value="all">{t.assets.filterAll}</option>
+                )}
+                {(isOriginal
+                  ? availableCurrencies
+                  : [baseCurrency]
+                ).map((code) => (
                   <option key={code} value={code}>
                     {code}
                   </option>
