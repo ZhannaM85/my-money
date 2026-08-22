@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ChevronDown } from 'lucide-react'
 import {
+  breakdownBy,
   historicalNativeNetWorth,
   historicalNetWorth,
   holdingsWithConversion,
@@ -32,6 +33,7 @@ import { cn } from '@/shared/lib/utils'
 import { useAssetStore } from '@/stores/assetStore'
 import { useFxStore } from '@/stores/fxStore'
 import { useSettingsStore } from '@/stores/settingsStore'
+import { AllocationChart } from '@/features/allocation/AllocationChart'
 import { NetWorthChart } from './NetWorthChart'
 
 export function DashboardScreen() {
@@ -91,19 +93,11 @@ export function DashboardScreen() {
   }, [activeCurrencyFilter, filteredAssetIds, snapshots])
 
   useEffect(() => {
-    if (isOriginal) return
     const symbols = [
       ...new Set(filteredSnapshots.map((snapshot) => snapshot.currency)),
     ]
     void ensureRange(start, today, baseCurrency, symbols)
-  }, [
-    baseCurrency,
-    ensureRange,
-    filteredSnapshots,
-    isOriginal,
-    start,
-    today,
-  ])
+  }, [baseCurrency, ensureRange, filteredSnapshots, start, today])
 
   const convertedResult = useMemo(
     () => netWorth(filteredAssets, filteredSnapshots, quotes, baseCurrency),
@@ -193,7 +187,20 @@ export function DashboardScreen() {
   const canZoomIn = rangeIndex > 0
   const canZoomOut = rangeIndex < HISTORY_RANGES.length - 1
 
-  const classRows = convertedResult.byClass.filter((row) => row.amount !== 0)
+  const allocationRows = useMemo(
+    () =>
+      breakdownBy(
+        filteredAssets,
+        filteredSnapshots,
+        quotes,
+        baseCurrency,
+        (asset) => asset.assetClass,
+      ).map((row) => ({
+        ...row,
+        name: t.asset.classes[row.id as keyof typeof t.asset.classes] ?? row.id,
+      })),
+    [baseCurrency, filteredAssets, filteredSnapshots, quotes, t],
+  )
   const loaded = assetsLoaded && settingsLoaded
   const converted = filteredSnapshots.some(
     (snapshot) => snapshot.currency !== baseCurrency,
@@ -430,22 +437,12 @@ export function DashboardScreen() {
               />
             </>
           )}
-          {!isOriginal && classRows.length > 0 && (
-            <ul className="flex flex-col gap-2">
-              {classRows.map((row) => (
-                <li
-                  key={row.assetClass}
-                  className="flex items-center justify-between rounded-xl bg-card px-4 py-3 ring-1 ring-foreground/10"
-                >
-                  <span className="text-sm">
-                    {t.asset.classes[row.assetClass]}
-                  </span>
-                  <span className="tabular-nums text-sm">
-                    {formatAmount(row.amount, baseCurrency, locale)}
-                  </span>
-                </li>
-              ))}
-            </ul>
+          {allocationRows.length > 0 && (
+            <AllocationChart
+              rows={allocationRows}
+              currency={baseCurrency}
+              oweLabel={t.common.owe}
+            />
           )}
           <Button asChild variant="outline">
             <Link to="/allocation">{t.dashboard.allocation}</Link>

@@ -1,28 +1,18 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts'
 import { breakdownBy } from '@/domain/netWorth'
-import { useLocale, useTranslation } from '@/i18n'
-import { formatAmount } from '@/shared/lib/money'
+import { useTranslation } from '@/i18n'
 import { EmptyState } from '@/shared/ui/empty-state'
 import { PageHeader } from '@/shared/ui/page-header'
 import { useAssetStore } from '@/stores/assetStore'
 import { useFxStore } from '@/stores/fxStore'
 import { useSettingsStore } from '@/stores/settingsStore'
 import { cn } from '@/shared/lib/utils'
+import { AllocationChart } from './AllocationChart'
 
 type View = 'class' | 'currency' | 'type'
 
-const SLICE_COLORS = [
-  'var(--chart-money)',
-  'var(--chart-investments)',
-  'var(--chart-property)',
-  'var(--chart-valuables)',
-  'var(--chart-liabilities)',
-]
-
 export function AllocationScreen() {
   const t = useTranslation()
-  const locale = useLocale()
   const loadAssets = useAssetStore((state) => state.load)
   const assets = useAssetStore((state) => state.assets)
   const snapshots = useAssetStore((state) => state.snapshots)
@@ -63,7 +53,6 @@ export function AllocationScreen() {
 
   const pieData = rows.map((row) => ({
     ...row,
-    slice: Math.abs(row.amount),
     name: labelFor(row.id),
   }))
 
@@ -99,65 +88,11 @@ export function AllocationScreen() {
           description={t.allocation.emptyDescription}
         />
       ) : (
-        <>
-          <div className="h-56 w-full">
-            <ResponsiveContainer width="100%" height="100%">
-              <PieChart>
-                <Pie
-                  data={pieData}
-                  dataKey="slice"
-                  nameKey="name"
-                  innerRadius={55}
-                  outerRadius={85}
-                  paddingAngle={2}
-                >
-                  {pieData.map((row, index) => (
-                    <Cell
-                      key={row.id}
-                      fill={SLICE_COLORS[index % SLICE_COLORS.length]}
-                    />
-                  ))}
-                </Pie>
-                <Tooltip
-                  formatter={(value, _name, item) => {
-                    const amount =
-                      typeof item?.payload?.amount === 'number'
-                        ? item.payload.amount
-                        : Number(value)
-                    return formatAmount(amount, baseCurrency, locale)
-                  }}
-                />
-              </PieChart>
-            </ResponsiveContainer>
-          </div>
-          <ul className="flex flex-col gap-2">
-            {pieData.map((row, index) => (
-              <li
-                key={row.id}
-                className="flex items-center justify-between gap-3 rounded-xl bg-card px-4 py-3 ring-1 ring-foreground/10"
-              >
-                <span className="flex items-center gap-2 text-sm">
-                  <span
-                    className="size-2.5 rounded-full"
-                    style={{
-                      background: SLICE_COLORS[index % SLICE_COLORS.length],
-                    }}
-                  />
-                  {row.name}
-                  {row.amount < 0 ? t.common.owe : ''}
-                </span>
-                <span className="text-right text-sm">
-                  <span className="block tabular-nums">
-                    {formatAmount(row.amount, baseCurrency, locale)}
-                  </span>
-                  <span className="text-xs text-muted-foreground">
-                    {row.percent.toFixed(0)}%
-                  </span>
-                </span>
-              </li>
-            ))}
-          </ul>
-        </>
+        <AllocationChart
+          rows={pieData}
+          currency={baseCurrency}
+          oweLabel={t.common.owe}
+        />
       )}
     </div>
   )

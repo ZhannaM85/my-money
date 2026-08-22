@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 76,
+    issue: 69,
+    date: '2026-08-22T10:15:00+03:00',
+    en: 'Dashboard now shows the assets distribution donut when currency is All, including Original mode. The Allocation page is still there for class, currency, and type views.',
+    ru: 'На Сводке теперь есть диаграмма распределения активов при валюте «Все», в том числе в режиме «В оригинале». Страница «Распределение» по-прежнему есть для видов по классу, валюте и типу.',
+  },
+  {
     version: 75,
     issue: 67,
     date: '2026-08-22T10:12:00+03:00',

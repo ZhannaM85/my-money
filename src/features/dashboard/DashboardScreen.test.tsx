@@ -269,11 +269,15 @@ describe('DashboardScreen', () => {
     )
 
     expect(await screen.findByText('Holdings by currency')).toBeInTheDocument()
-    expect(screen.getByText(formatAmount(1000, 'EUR'))).toBeInTheDocument()
+    expect(
+      screen.getAllByText(formatAmount(1000, 'EUR')).length,
+    ).toBeGreaterThan(0)
     expect(
       screen.getByText((_, node) => node?.textContent === formatAmount(20000, 'RUB')),
     ).toBeInTheDocument()
     expect(screen.getByLabelText('Currency')).not.toBeDisabled()
+    expect(screen.getByTestId('allocation-chart')).toBeInTheDocument()
+    expect(screen.getByText('Money')).toBeInTheDocument()
   })
 
   it('filters Original mode to one native currency', async () => {
@@ -336,10 +340,13 @@ describe('DashboardScreen', () => {
 
     expect(await screen.findByText('Holdings by currency')).toBeInTheDocument()
     await user.selectOptions(screen.getByLabelText('Currency'), 'EUR')
-    expect(screen.getByText(formatAmount(1000, 'EUR'))).toBeInTheDocument()
+    expect(
+      screen.getAllByText(formatAmount(1000, 'EUR')).length,
+    ).toBeGreaterThan(0)
     expect(
       screen.queryByText((_, node) => node?.textContent === formatAmount(20000, 'RUB')),
     ).not.toBeInTheDocument()
+    expect(screen.getByTestId('allocation-chart')).toBeInTheDocument()
   })
 
   it('lists unconvertible holdings instead of hiding them', async () => {
