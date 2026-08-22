@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 92,
+    issue: 85,
+    date: '2026-08-22T17:15:00+03:00',
+    en: 'Tap the month-change help or From amounts / From rates to see which holdings moved vs which were only revalued.',
+    ru: 'Нажмите подсказку у изменения за месяц или строки «Из сумм» / «Из курсов», чтобы увидеть, какие позиции менялись, а какие только переоценились.',
+  },
+  {
     version: 91,
     issue: 88,
     date: '2026-08-22T17:05:00+03:00',

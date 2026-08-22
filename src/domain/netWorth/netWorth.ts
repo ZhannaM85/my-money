@@ -314,12 +314,34 @@ export function periodChange(
 export function decomposeConvertedPeriodChange(
   start: readonly HoldingConversion[],
   end: readonly HoldingConversion[],
-): { amountChange: number; rateChange: number; totalChange: number } {
+): {
+  amountChange: number
+  rateChange: number
+  totalChange: number
+  holdings: {
+    assetId: string
+    name: string
+    amountChange: number
+    rateChange: number
+  }[]
+} {
   const startById = new Map(start.map((row) => [row.assetId, row]))
   const endById = new Map(end.map((row) => [row.assetId, row]))
-  const ids = new Set([...startById.keys(), ...endById.keys()])
+  const ids = [...new Set([...startById.keys(), ...endById.keys()])].sort(
+    (a, b) => {
+      const left = startById.get(a)?.name ?? endById.get(a)?.name ?? a
+      const right = startById.get(b)?.name ?? endById.get(b)?.name ?? b
+      return left.localeCompare(right)
+    },
+  )
   let amountChange = 0
   let rateChange = 0
+  const holdings: {
+    assetId: string
+    name: string
+    amountChange: number
+    rateChange: number
+  }[] = []
   for (const id of ids) {
     const from = startById.get(id)
     const to = endById.get(id)
@@ -341,13 +363,22 @@ export function decomposeConvertedPeriodChange(
           : 0
     const startRate =
       startNative !== 0 ? startConverted / startNative : endRate
-    amountChange += (endNative - startNative) * endRate
-    rateChange += startNative * (endRate - startRate)
+    const holdingAmount = (endNative - startNative) * endRate
+    const holdingRate = startNative * (endRate - startRate)
+    amountChange += holdingAmount
+    rateChange += holdingRate
+    holdings.push({
+      assetId: id,
+      name: to?.name ?? from?.name ?? id,
+      amountChange: holdingAmount,
+      rateChange: holdingRate,
+    })
   }
   return {
     amountChange,
     rateChange,
     totalChange: amountChange + rateChange,
+    holdings,
   }
 }
 

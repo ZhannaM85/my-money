@@ -27,6 +27,7 @@ import {
 } from '@/shared/lib/dates'
 import { Button } from '@/shared/ui/button'
 import { EmptyState } from '@/shared/ui/empty-state'
+import { InfoHint } from '@/shared/ui/info-hint'
 import { PageHeader } from '@/shared/ui/page-header'
 import { StatCard } from '@/shared/ui/stat-card'
 import { cn } from '@/shared/lib/utils'
@@ -57,6 +58,7 @@ export function DashboardScreen() {
   const [openNativeCurrency, setOpenNativeCurrency] = useState<string | null>(
     null,
   )
+  const [periodOpen, setPeriodOpen] = useState<'amount' | 'rate' | null>(null)
 
   const today = todayIsoDate()
   const isOriginal = currencyDisplayMode === 'native'
@@ -366,32 +368,113 @@ export function DashboardScreen() {
           {fxNote && <p className="text-sm text-muted-foreground">{fxNote}</p>}
           {convertedBreakdown && (
             <div className="flex flex-col gap-2">
-              <ul className="flex flex-col gap-1 text-sm">
-                <li className="flex justify-between gap-3">
-                  <span className="text-muted-foreground">
-                    {t.dashboard.amountChange}
-                  </span>
-                  <span className="tabular-nums">
-                    {formatSignedAmount(
-                      convertedBreakdown.amountChange,
-                      baseCurrency,
-                      locale,
-                    )}
-                  </span>
-                </li>
-                <li className="flex justify-between gap-3">
-                  <span className="text-muted-foreground">
-                    {t.dashboard.rateChange}
-                  </span>
-                  <span className="tabular-nums">
-                    {formatSignedAmount(
-                      convertedBreakdown.rateChange,
-                      baseCurrency,
-                      locale,
-                    )}
-                  </span>
-                </li>
-              </ul>
+              <InfoHint
+                hint={t.dashboard.periodChangeHint}
+                label={t.common.aboutField(t.dashboard.thisMonth)}
+              >
+                <ul className="flex flex-col gap-1 text-sm">
+                  <li>
+                    <button
+                      type="button"
+                      className="flex w-full items-center justify-between gap-3 text-left"
+                      aria-expanded={periodOpen === 'amount'}
+                      onClick={() =>
+                        setPeriodOpen((current) =>
+                          current === 'amount' ? null : 'amount',
+                        )
+                      }
+                    >
+                      <span className="text-muted-foreground">
+                        {t.dashboard.amountChange}
+                      </span>
+                      <span className="flex items-center gap-1 tabular-nums">
+                        {formatSignedAmount(
+                          convertedBreakdown.amountChange,
+                          baseCurrency,
+                          locale,
+                        )}
+                        <ChevronDown
+                          className={cn(
+                            'size-4 text-muted-foreground transition-transform',
+                            periodOpen === 'amount' && 'rotate-180',
+                          )}
+                          aria-hidden
+                        />
+                      </span>
+                    </button>
+                    {periodOpen === 'amount' &&
+                      convertedBreakdown.holdings
+                        .filter((row) => row.amountChange !== 0)
+                        .map((row) => (
+                          <div
+                            key={`amount-${row.assetId}`}
+                            className="flex justify-between gap-3 pt-1 text-xs"
+                          >
+                            <span className="truncate text-muted-foreground">
+                              {row.name}
+                            </span>
+                            <span className="tabular-nums">
+                              {formatSignedAmount(
+                                row.amountChange,
+                                baseCurrency,
+                                locale,
+                              )}
+                            </span>
+                          </div>
+                        ))}
+                  </li>
+                  <li>
+                    <button
+                      type="button"
+                      className="flex w-full items-center justify-between gap-3 text-left"
+                      aria-expanded={periodOpen === 'rate'}
+                      onClick={() =>
+                        setPeriodOpen((current) =>
+                          current === 'rate' ? null : 'rate',
+                        )
+                      }
+                    >
+                      <span className="text-muted-foreground">
+                        {t.dashboard.rateChange}
+                      </span>
+                      <span className="flex items-center gap-1 tabular-nums">
+                        {formatSignedAmount(
+                          convertedBreakdown.rateChange,
+                          baseCurrency,
+                          locale,
+                        )}
+                        <ChevronDown
+                          className={cn(
+                            'size-4 text-muted-foreground transition-transform',
+                            periodOpen === 'rate' && 'rotate-180',
+                          )}
+                          aria-hidden
+                        />
+                      </span>
+                    </button>
+                    {periodOpen === 'rate' &&
+                      convertedBreakdown.holdings
+                        .filter((row) => row.rateChange !== 0)
+                        .map((row) => (
+                          <div
+                            key={`rate-${row.assetId}`}
+                            className="flex justify-between gap-3 pt-1 text-xs"
+                          >
+                            <span className="truncate text-muted-foreground">
+                              {row.name}
+                            </span>
+                            <span className="tabular-nums">
+                              {formatSignedAmount(
+                                row.rateChange,
+                                baseCurrency,
+                                locale,
+                              )}
+                            </span>
+                          </div>
+                        ))}
+                  </li>
+                </ul>
+              </InfoHint>
               <Button
                 type="button"
                 variant="outline"

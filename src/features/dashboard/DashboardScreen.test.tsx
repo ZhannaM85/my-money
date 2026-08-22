@@ -74,6 +74,12 @@ describe('DashboardScreen', () => {
     expect(
       screen.getByRole('button', { name: 'Update rates' }),
     ).toBeInTheDocument()
+    await userEvent.click(
+      screen.getByRole('button', { name: 'About this month' }),
+    )
+    expect(
+      screen.getByText(/From amounts is what you added or reduced/),
+    ).toBeInTheDocument()
   })
 
   it('shows this-month change from the month-start snapshot', async () => {

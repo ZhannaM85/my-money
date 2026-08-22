@@ -226,6 +226,12 @@ describe('allocation / periodChange / history / performance', () => {
     expect(split.amountChange).toBeCloseTo(6000)
     expect(split.rateChange).toBeCloseTo(-70_000)
     expect(split.totalChange).toBeCloseTo(-64_000)
+    expect(split.holdings.find((row) => row.assetId === 'usd')?.amountChange).toBeCloseTo(
+      166_000,
+    )
+    expect(split.holdings.find((row) => row.assetId === 'usd')?.rateChange).toBeCloseTo(
+      -70_000,
+    )
   })
 
   it('uses the snapshot-date FX for historical points, not a later rate', () => {
