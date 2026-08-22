@@ -187,6 +187,36 @@ describe('AssetDetailsScreen', () => {
     ).toBe(false)
   })
 
+  it('edits an existing snapshot without adding a new row', async () => {
+    const user = userEvent.setup()
+    render(
+      <MemoryRouter initialEntries={['/assets/a1']}>
+        <Routes>
+          <Route path="/assets/:id" element={<AssetDetailsScreen />} />
+        </Routes>
+      </MemoryRouter>,
+    )
+    await screen.findByRole('heading', { name: 'Revolut' })
+    const before = useAssetStore
+      .getState()
+      .snapshots.filter((row) => row.assetId === 'a1')
+    const originalId = before.find((row) => row.date === '2026-08-01')?.id
+    await user.click(
+      screen.getByRole('button', { name: 'Edit snapshot from 2026-08-01' }),
+    )
+    const amountInput = screen.getByLabelText('Snapshot amount')
+    await user.clear(amountInput)
+    await user.type(amountInput, '900')
+    await user.click(screen.getAllByRole('button', { name: 'Save' })[0])
+    await waitFor(() => {
+      const rows = useAssetStore
+        .getState()
+        .snapshots.filter((row) => row.assetId === 'a1')
+      expect(rows).toHaveLength(before.length)
+      expect(rows.find((row) => row.id === originalId)?.amount).toBe(900)
+    })
+  })
+
   it('deletes an asset and its snapshots after confirmation', async () => {
     const user = userEvent.setup()
     vi.spyOn(window, 'confirm').mockReturnValue(true)

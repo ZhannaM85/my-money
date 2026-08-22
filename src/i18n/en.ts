@@ -163,6 +163,8 @@ export const en: Dictionary = {
     deleteSnapshotAria: (date) => `Delete snapshot from ${date}`,
     deleteSnapshotConfirm:
       'Delete this history entry? The asset stays. This cannot be undone.',
+    editSnapshotAria: (date) => `Edit snapshot from ${date}`,
+    editSnapshotAmount: 'Snapshot amount',
     quickAdd: 'Quick add',
     presets: {
       bank: 'Bank account',

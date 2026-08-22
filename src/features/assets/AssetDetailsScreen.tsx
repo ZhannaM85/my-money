@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import { Trash2 } from 'lucide-react'
+import { Pencil, Trash2 } from 'lucide-react'
 import { convertAmount, lookupRate } from '@/domain/fx'
 import { assetPerformance } from '@/domain/netWorth'
 import { latestSnapshot } from '@/domain/snapshot'
@@ -19,7 +19,9 @@ import {
   reformatAmountInput,
   todayIsoDate,
 } from '@/shared/lib/money'
+import { isIsoDateOnOrBefore } from '@/shared/lib/dates'
 import { Button } from '@/shared/ui/button'
+import { DateField } from '@/shared/ui/date-field'
 import { InfoHint } from '@/shared/ui/info-hint'
 import { Input } from '@/shared/ui/input'
 import { PageHeader } from '@/shared/ui/page-header'
@@ -43,6 +45,7 @@ export function AssetDetailsScreen() {
   const setTrackingStatus = useAssetStore((state) => state.setTrackingStatus)
   const deleteAsset = useAssetStore((state) => state.deleteAsset)
   const deleteSnapshot = useAssetStore((state) => state.deleteSnapshot)
+  const updateSnapshot = useAssetStore((state) => state.updateSnapshot)
   const asset = useAssetStore((state) =>
     state.assets.find((row) => row.id === id),
   )
@@ -57,6 +60,10 @@ export function AssetDetailsScreen() {
   const [mode, setMode] = useState<DisplayMode>(displayMode)
   const [amountDraft, setAmountDraft] = useState('')
   const [amountError, setAmountError] = useState<string | undefined>()
+  const [editingId, setEditingId] = useState<string | null>(null)
+  const [editAmount, setEditAmount] = useState('')
+  const [editDate, setEditDate] = useState('')
+  const [editError, setEditError] = useState<string | undefined>()
   const today = todayIsoDate()
 
   useEffect(() => {
@@ -156,6 +163,24 @@ export function AssetDetailsScreen() {
     setAmountDraft('')
   }
 
+  async function saveEditedSnapshot() {
+    if (!editingId) return
+    const row = snapshots.find((snapshot) => snapshot.id === editingId)
+    if (!row) return
+    const amount = parseAmount(editAmount)
+    if (amount === undefined) {
+      setEditError(t.asset.amountMustBeNumber)
+      return
+    }
+    if (!isIsoDateOnOrBefore(editDate, today)) {
+      setEditError(t.asset.snapshotDateInvalid)
+      return
+    }
+    setEditError(undefined)
+    await updateSnapshot({ ...row, amount, date: editDate })
+    setEditingId(null)
+  }
+
   return (
     <div className="flex flex-col gap-6">
       <PageHeader
@@ -249,7 +274,64 @@ export function AssetDetailsScreen() {
                     baseCurrency,
                     locale,
                   )
-            return (
+            return editingId === row.id ? (
+              <li
+                key={row.id}
+                className="flex flex-col gap-2 rounded-xl bg-card px-4 py-3 ring-1 ring-foreground/10"
+              >
+                <DateField
+                  label={t.asset.snapshotDate}
+                  value={editDate}
+                  max={today}
+                  onChange={(event) => setEditDate(event.target.value)}
+                  error={
+                    editError === t.asset.snapshotDateInvalid
+                      ? editError
+                      : undefined
+                  }
+                />
+                <div className="relative">
+                  <Input
+                    aria-label={t.asset.editSnapshotAmount}
+                    inputMode="decimal"
+                    value={editAmount}
+                    className="h-12 pr-12"
+                    onChange={(event) => setEditAmount(event.target.value)}
+                    onBlur={() =>
+                      setEditAmount((current) =>
+                        reformatAmountInput(current, locale, row.currency),
+                      )
+                    }
+                  />
+                  <span className="pointer-events-none absolute inset-y-0 right-2.5 flex items-center text-sm text-muted-foreground">
+                    {row.currency}
+                  </span>
+                </div>
+                {editError && editError !== t.asset.snapshotDateInvalid && (
+                  <p className="text-sm text-destructive">{editError}</p>
+                )}
+                <div className="flex gap-2">
+                  <Button
+                    type="button"
+                    className="h-12 flex-1"
+                    onClick={() => void saveEditedSnapshot()}
+                  >
+                    {t.common.save}
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="h-12 flex-1"
+                    onClick={() => {
+                      setEditingId(null)
+                      setEditError(undefined)
+                    }}
+                  >
+                    {t.common.cancel}
+                  </Button>
+                </div>
+              </li>
+            ) : (
               <li
                 key={row.id}
                 className="flex items-center justify-between gap-2 rounded-xl bg-card px-4 py-3 ring-1 ring-foreground/10"
@@ -259,6 +341,26 @@ export function AssetDetailsScreen() {
                 </span>
                 <span className="flex items-center gap-1">
                   <span className="tabular-nums text-sm">{shown}</span>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    aria-label={t.asset.editSnapshotAria(row.date)}
+                    onClick={() => {
+                      setEditingId(row.id)
+                      setEditDate(row.date)
+                      setEditAmount(
+                        formatEditableAmount(
+                          row.amount,
+                          locale,
+                          row.currency,
+                        ),
+                      )
+                      setEditError(undefined)
+                    }}
+                  >
+                    <Pencil />
+                  </Button>
                   <Button
                     type="button"
                     variant="ghost"

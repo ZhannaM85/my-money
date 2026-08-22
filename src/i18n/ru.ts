@@ -167,6 +167,8 @@ export const ru: Dictionary = {
     deleteSnapshotAria: (date) => `Удалить снимок от ${date}`,
     deleteSnapshotConfirm:
       'Удалить эту запись в истории? Актив останется. Это нельзя отменить.',
+    editSnapshotAria: (date) => `Изменить снимок от ${date}`,
+    editSnapshotAmount: 'Сумма снимка',
     quickAdd: 'Быстро добавить',
     presets: {
       bank: 'Банковский счёт',

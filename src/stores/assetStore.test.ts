@@ -140,4 +140,40 @@ describe('assetStore', () => {
     expect(useAssetStore.getState().snapshots).toHaveLength(1)
     expect(useAssetStore.getState().snapshots[0]?.date).toBe('2026-08-17')
   })
+
+  it('updates an existing snapshot in place', async () => {
+    const now = '2026-08-17T00:00:00.000Z'
+    await useAssetStore.getState().saveAsset(
+      {
+        id: 'a1',
+        name: 'Revolut',
+        assetClass: 'money',
+        type: 'bank',
+        currency: 'EUR',
+        trackingStatus: 'included',
+        valuationMethod: 'account_balance',
+        updateFrequency: 'weekly',
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        assetId: 'a1',
+        date: '2026-08-01',
+        amount: 800,
+        currency: 'EUR',
+      },
+    )
+    const existing = useAssetStore.getState().snapshots[0]
+    expect(existing).toBeDefined()
+    await useAssetStore.getState().updateSnapshot({
+      ...existing!,
+      amount: 850,
+      date: '2026-07-15',
+    })
+    const rows = useAssetStore.getState().snapshots
+    expect(rows).toHaveLength(1)
+    expect(rows[0]?.id).toBe(existing!.id)
+    expect(rows[0]?.amount).toBe(850)
+    expect(rows[0]?.date).toBe('2026-07-15')
+  })
 })

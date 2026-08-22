@@ -115,6 +115,8 @@ export interface Dictionary {
     deleteSnapshot: string
     deleteSnapshotAria: (date: string) => string
     deleteSnapshotConfirm: string
+    editSnapshotAria: (date: string) => string
+    editSnapshotAmount: string
     quickAdd: string
     presets: Record<'bank' | 'cash' | 'vehicle' | 'apartment' | 'brokerage', string>
     ownershipShare: string
