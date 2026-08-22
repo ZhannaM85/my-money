@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 85,
+    issue: 68,
+    date: '2026-08-22T16:20:00+03:00',
+    en: 'The As of date when adding an asset uses the same fixed-width control as elsewhere, so it no longer stretches wider than the form.',
+    ru: 'Поле «На дату» при добавлении актива той же фиксированной ширины, что и остальные, и больше не шире формы.',
+  },
+  {
     version: 84,
     issue: 82,
     date: '2026-08-22T16:10:00+03:00',

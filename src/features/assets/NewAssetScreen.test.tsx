@@ -74,4 +74,15 @@ describe('NewAssetScreen', () => {
     ).toBeInTheDocument()
     expect(useAssetStore.getState().snapshots).toHaveLength(0)
   })
+
+  it('keeps the As of date field at Turtle’s fixed width on the add-asset form', () => {
+    render(
+      <MemoryRouter>
+        <NewAssetScreen />
+      </MemoryRouter>,
+    )
+    const asOf = screen.getByLabelText('As of')
+    expect(asOf).toHaveClass('w-36')
+    expect(asOf).not.toHaveClass('w-full')
+  })
 })
