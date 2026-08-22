@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 102,
+    title: {
+      en: 'Show institution name in the asset details sub-header next to currency',
+      ru: 'Показывать учреждение в подзаголовке карточки актива рядом с валютой',
+    },
+    en: 'The details sub-header was hardcoded to type · currency. Institution already exists on the asset and in the details list, but the line under the name never included it.',
+    ru: 'Подзаголовок карточки был зашит как тип · валюта. Учреждение уже есть у актива и в списке сведений, но в строке под названием его не было.',
+  },
+  {
     issue: 99,
     title: {
       en: 'Add bank card / debit card as a Money type',

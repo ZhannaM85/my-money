@@ -46,7 +46,7 @@ _Existing-asset details: no dated history, and Save is a no-op when viewing._
 | [#97](https://github.com/ZhannaM85/my-money/issues/97) | 🔍 Pending validation | Add optional comments on asset entries and show them in History | Optional snapshot note; shown on History holdings, asset details, and chart holdings. Empty notes stay hidden. |
 | [#100](https://github.com/ZhannaM85/my-money/issues/100) | 🔲 Open | Sort Assets by name or amount, and allow drag-and-drop order | List is IndexedDB id order today. Name/amount asc/desc + persisted drag order. |
 | [#101](https://github.com/ZhannaM85/my-money/issues/101) | 🔲 Open | Add regression tests so phone bugs are caught in CI, not only on device | Vitest exists; live-feedback bugs often had no failing test first. Tie RCAs (#94) to regression tests. |
-| [#102](https://github.com/ZhannaM85/my-money/issues/102) | 🔲 Open | Show institution name in the asset details sub-header next to currency | Today: type · RUB. Include optional institution before or after currency. |
+| [#102](https://github.com/ZhannaM85/my-money/issues/102) | 🔍 Pending validation | Show institution name in the asset details sub-header next to currency | Sub-header is type · institution · currency when institution is set; otherwise type · currency. |
 
 ---
 

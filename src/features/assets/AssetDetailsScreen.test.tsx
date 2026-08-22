@@ -81,6 +81,25 @@ describe('AssetDetailsScreen', () => {
     expect(screen.getByText(/Since first snapshot/)).toBeInTheDocument()
   })
 
+  it('includes the institution in the sub-header when it is set', async () => {
+    const existing = useAssetStore.getState().assets[0]
+    expect(existing).toBeDefined()
+    await useAssetStore.getState().saveAsset({
+      ...existing!,
+      institution: 'Sber',
+    })
+    render(
+      <MemoryRouter initialEntries={['/assets/a1']}>
+        <Routes>
+          <Route path="/assets/:id" element={<AssetDetailsScreen />} />
+        </Routes>
+      </MemoryRouter>,
+    )
+    expect(
+      await screen.findByText('Bank account · Sber · EUR'),
+    ).toBeInTheDocument()
+  })
+
   it('opens existing assets in a read-only details view', async () => {
     render(
       <MemoryRouter initialEntries={['/assets/a1']}>

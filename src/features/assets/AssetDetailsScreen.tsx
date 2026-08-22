@@ -220,7 +220,11 @@ export function AssetDetailsScreen() {
     <div className="flex flex-col gap-6">
       <PageHeader
         title={asset.name}
-        description={`${t.asset.types[asset.type]} · ${asset.currency}`}
+        description={
+          asset.institution?.trim()
+            ? `${t.asset.types[asset.type]} · ${asset.institution.trim()} · ${asset.currency}`
+            : `${t.asset.types[asset.type]} · ${asset.currency}`
+        }
       />
       {asset.trackingStatus === 'excluded' && (
         <p className="text-sm font-medium text-muted-foreground">
