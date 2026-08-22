@@ -2,10 +2,12 @@ import { describe, expect, it } from 'vitest'
 import {
   chartAxisScale,
   compactAxisFractionDigits,
+  formatChartAxisDate,
   formatCompactNumber,
   formatEditableAmount,
   parseAmount,
   reformatAmountInput,
+  uniqueChartAxisDates,
 } from './money'
 
 describe('parseAmount', () => {
@@ -71,6 +73,34 @@ describe('compact chart axis labels', () => {
     const { ticks, digits } = chartAxisScale(1_969_089, 1_969_089, 'ru')
     const labels = ticks.map((tick) => formatCompactNumber(tick, 'ru', digits))
     expect(labels.length).toBeGreaterThan(1)
+    expect(new Set(labels).size).toBe(labels.length)
+  })
+})
+
+describe('chart X-axis dates', () => {
+  it('keeps one tick per snapshot day', () => {
+    expect(
+      uniqueChartAxisDates(['2026-08-18', '2026-08-18', '2026-08-21']),
+    ).toEqual(['2026-08-18', '2026-08-21'])
+  })
+
+  it('labels ticks with day and month, not the day number alone', () => {
+    const en = formatChartAxisDate('2026-08-18', 'en')
+    const ru = formatChartAxisDate('2026-08-18', 'ru')
+    expect(en).toMatch(/18/)
+    expect(en).toMatch(/Aug/i)
+    expect(en).not.toBe('18')
+    expect(ru).toMatch(/18/)
+    expect(ru.toLowerCase()).toMatch(/авг/)
+    expect(ru).not.toBe('18')
+  })
+
+  it('gives distinct labels for different snapshot days', () => {
+    const labels = uniqueChartAxisDates([
+      '2026-08-18',
+      '2026-08-18',
+      '2026-08-21',
+    ]).map((date) => formatChartAxisDate(date, 'en'))
     expect(new Set(labels).size).toBe(labels.length)
   })
 })

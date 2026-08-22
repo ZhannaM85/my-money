@@ -10,8 +10,10 @@ import {
 import type { HoldingConversion } from '@/domain/netWorth'
 import {
   formatAmount,
+  formatChartAxisDate,
   formatCompactNumber,
   chartAxisScale,
+  uniqueChartAxisDates,
 } from '@/shared/lib/money'
 import { usePinchZoom } from '@/shared/hooks/usePinchZoom'
 import { useLocale, useTranslation } from '@/i18n'
@@ -80,6 +82,7 @@ export function NetWorthChart({
     Math.max(...totals),
     locale,
   )
+  const xTicks = uniqueChartAxisDates(points.map((point) => point.date))
 
   return (
     <div
@@ -95,8 +98,9 @@ export function NetWorthChart({
           <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
           <XAxis
             dataKey="date"
+            ticks={xTicks}
             tick={{ fontSize: 11, fill: 'var(--muted-foreground)' }}
-            tickFormatter={(date: string) => date.slice(8)}
+            tickFormatter={(date: string) => formatChartAxisDate(date, locale)}
             axisLine={{ stroke: 'var(--border)' }}
             tickLine={false}
             minTickGap={24}

@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 68,
+    issue: 74,
+    date: '2026-08-22T09:10:00+03:00',
+    en: 'Chart X-axis now labels unique snapshot days with day and month (18 Aug), instead of repeating the same day number.',
+    ru: 'Ось X графика теперь подписывает уникальные дни снимков днём и месяцем (18 авг.), а не повторяет одно и то же число.',
+  },
+  {
     version: 67,
     issue: 65,
     date: '2026-08-20T22:40:00+03:00',

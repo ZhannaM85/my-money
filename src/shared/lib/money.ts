@@ -123,6 +123,28 @@ export function formatCompactNumber(
   }).format(value)
 }
 
+/** Unique ISO days for chart X ticks (same-day snapshots share one label). */
+export function uniqueChartAxisDates(dates: readonly string[]): string[] {
+  return [...new Set(dates)]
+}
+
+/** Day + month, UTC, so `2026-08-18` is not just `18`. */
+export function formatChartAxisDate(
+  isoDate: string,
+  locale: Locale = 'en',
+): string {
+  const match = /^(\d{4})-(\d{2})-(\d{2})/.exec(isoDate)
+  if (!match) return isoDate
+  const date = new Date(
+    Date.UTC(Number(match[1]), Number(match[2]) - 1, Number(match[3])),
+  )
+  return new Intl.DateTimeFormat(locale === 'ru' ? 'ru-RU' : 'en-GB', {
+    day: 'numeric',
+    month: 'short',
+    timeZone: 'UTC',
+  }).format(date)
+}
+
 /**
  * Compact Y-axis digits so nearby million-scale ticks stay distinct
  * (1,97 млн vs 2 млн) instead of all rounding to the same label.
