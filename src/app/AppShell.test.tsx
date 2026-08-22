@@ -66,20 +66,23 @@ describe('AppShell', () => {
     )
   })
 
-  it('pins the tab bar like Turtle: fixed to the bottom with no visualViewport translate', async () => {
+  it('pins the tab bar in the shell so iOS 26 cannot shift a position:fixed footer', async () => {
     render(
       <MemoryRouter>
         <AppShell />
       </MemoryRouter>,
     )
     const nav = await screen.findByRole('navigation', { name: 'Tabs' })
-    expect(nav.className).toContain('fixed')
-    expect(nav.className).toContain('inset-x-0')
-    expect(nav.className).toContain('bottom-0')
+    expect(nav.className).toContain('shrink-0')
+    expect(nav.className).not.toContain('fixed')
     expect(nav.getAttribute('style')).toBeNull()
+    const main = screen.getByRole('main')
+    expect(main.className).toContain('flex-1')
+    expect(main.className).toContain('overflow-y-auto')
+    expect(main.compareDocumentPosition(nav) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
   })
 
-  it('reserves extra bottom space above the sticky tab bar', async () => {
+  it('lets main scroll instead of overlaying the tab bar with extra padding', async () => {
     render(
       <MemoryRouter>
         <AppShell />
@@ -87,7 +90,8 @@ describe('AppShell', () => {
     )
 
     const main = await screen.findByRole('main')
-    expect(main.className).toContain('pb-[calc(env(safe-area-inset-bottom)+9rem)]')
+    expect(main.className).toContain('overflow-y-auto')
+    expect(main.className).not.toContain('pb-[calc(env(safe-area-inset-bottom)+9rem)]')
   })
 
   it('keeps the shell usable and shows cached FX copy when rates cannot refresh', async () => {

@@ -16,7 +16,7 @@ export function BottomNav() {
   return (
     <nav
       aria-label={t.nav.tabs}
-      className="fixed inset-x-0 bottom-0 z-10 border-t border-border bg-background pr-[env(safe-area-inset-right)] pb-[env(safe-area-inset-bottom)] pl-[env(safe-area-inset-left)]"
+      className="shrink-0 border-t border-border bg-background pr-[env(safe-area-inset-right)] pb-[env(safe-area-inset-bottom)] pl-[env(safe-area-inset-left)]"
     >
       <ul className="mx-auto flex max-w-3xl px-4">
         {tabs.map((item) => {

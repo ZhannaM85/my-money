@@ -19,8 +19,13 @@ export function usePullToRefresh(): {
   const currentPull = useRef(0)
 
   useEffect(() => {
+    function scrollTop() {
+      const main = document.getElementById('main-content')
+      return main ? main.scrollTop : window.scrollY
+    }
+
     function onTouchStart(event: TouchEvent) {
-      if (window.scrollY > 0) return
+      if (scrollTop() > 0) return
       startY.current = event.touches[0].clientY
       pulling.current = true
     }
@@ -28,7 +33,7 @@ export function usePullToRefresh(): {
     function onTouchMove(event: TouchEvent) {
       if (!pulling.current || startY.current === null) return
       const delta = event.touches[0].clientY - startY.current
-      if (delta <= 0 || window.scrollY > 0) {
+      if (delta <= 0 || scrollTop() > 0) {
         pulling.current = false
         currentPull.current = 0
         setPullDistance(0)

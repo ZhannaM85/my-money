@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { AppUpdateBanner } from '@/app/AppUpdateBanner'
 import { OfflineBanner } from '@/app/OfflineBanner'
@@ -7,7 +7,6 @@ import { shouldShowOnboarding } from '@/domain/settings'
 import { useTranslation } from '@/i18n'
 import { useIsTextInputFocused } from '@/shared/hooks'
 import { BottomNav } from '@/shared/ui/bottom-nav'
-import { cn } from '@/shared/lib/utils'
 import { useAssetStore } from '@/stores/assetStore'
 import { useFxStore } from '@/stores/fxStore'
 import { useSettingsStore } from '@/stores/settingsStore'
@@ -33,12 +32,15 @@ export function AppShell() {
   const onboarding = pathname === '/onboarding'
   const isTextInputFocused = useIsTextInputFocused()
   const hideTabBar = onboarding || isTextInputFocused
+  const mainRef = useRef<HTMLElement>(null)
 
   useEffect(() => {
     document.documentElement.lang = locale
   }, [locale])
 
   useEffect(() => {
+    const main = mainRef.current
+    if (main) main.scrollTop = 0
     window.scrollTo(0, 0)
   }, [pathname])
 
@@ -74,7 +76,7 @@ export function AppShell() {
   ])
 
   return (
-    <div className="min-h-svh bg-background">
+    <div className="flex h-dvh flex-col overflow-hidden bg-background">
       <PullToRefreshIndicator />
       <a
         href="#main-content"
@@ -84,7 +86,7 @@ export function AppShell() {
       </a>
       <OfflineBanner />
       <AppUpdateBanner />
-      <header className="sticky top-0 z-10 border-b border-border bg-background">
+      <header className="shrink-0 border-b border-border bg-background">
         <div className="mx-auto flex max-w-3xl items-center px-4 pt-[calc(env(safe-area-inset-top)+0.75rem)] pb-3">
           <span className="text-sm font-semibold text-foreground">
             {t.appName}
@@ -92,11 +94,9 @@ export function AppShell() {
         </div>
       </header>
       <main
+        ref={mainRef}
         id="main-content"
-        className={cn(
-          'mx-auto w-full max-w-3xl min-w-0 px-4 py-6',
-          onboarding ? 'pb-6' : 'pb-[calc(env(safe-area-inset-bottom)+9rem)]',
-        )}
+        className="mx-auto w-full max-w-3xl min-h-0 min-w-0 flex-1 overflow-y-auto px-4 py-6"
       >
         {fxError && (
           <p className="mb-4 text-sm text-muted-foreground">

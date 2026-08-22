@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 106,
+    title: {
+      en: 'Tab bar still disconnects from the bottom on iPhone 17 Pro Max',
+      ru: 'Панель вкладок всё ещё отрывается от низа на iPhone 17 Pro Max',
+    },
+    en: '#25 used position:fixed bottom:0 like Turtle. That stays put on iPhone 14 Pro. Safari 26 on 17 Pro Max shifts fixed/sticky footers when the URL bar shrinks, leaving a gap. The bar is now in the layout (dvh flex column, main scrolls) instead of fixed.',
+    ru: '#25 держала панель position:fixed bottom:0 как Turtle. На iPhone 14 Pro это работает. Safari 26 на 17 Pro Max сдвигает fixed/sticky футер при сжатии адресной строки и оставляет щель. Панель теперь в вёрстке (колонка dvh, скролл в main), а не fixed.',
+  },
+  {
     issue: 105,
     title: {
       en: 'Do not auto-save Assets order on drop; add a Save control',

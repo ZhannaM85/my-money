@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 106,
+    issue: 106,
+    date: '2026-08-22T22:20:00+03:00',
+    en: 'The tab bar sits in the page layout at the bottom of the screen instead of position:fixed, so it stays glued on iPhone 17 Pro Max (Safari 26) as well as iPhone 14 Pro.',
+    ru: 'Панель вкладок стоит в вёрстке у низа экрана, а не position:fixed, поэтому остаётся на месте и на iPhone 17 Pro Max (Safari 26), и на iPhone 14 Pro.',
+  },
+  {
     version: 105,
     issue: 105,
     date: '2026-08-22T22:15:00+03:00',

@@ -11,8 +11,10 @@ export function useDismissOnScroll() {
     const dismiss = () => setDismissed(true)
     const options: AddEventListenerOptions = { capture: true, passive: true }
     window.addEventListener('scroll', dismiss, options)
+    document.addEventListener('scroll', dismiss, options)
     return () => {
       window.removeEventListener('scroll', dismiss, options)
+      document.removeEventListener('scroll', dismiss, options)
     }
   }, [])
 
