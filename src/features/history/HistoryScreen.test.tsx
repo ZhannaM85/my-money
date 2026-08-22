@@ -135,16 +135,25 @@ describe('HistoryScreen', () => {
 
     const startTotal = 1000 + 200
     const endTotal = 1000 + 20000 / 90
+    const amountChange = 0
+    const rateChange = endTotal - startTotal
     expect(
       (await screen.findAllByText(formatAmount(endTotal, 'EUR'))).length,
     ).toBeGreaterThan(0)
     expect(
       screen.getByText(
-        `${formatSignedAmount(endTotal - startTotal, 'EUR')} over 3M`,
+        `${formatSignedAmount(amountChange, 'EUR')} over 3M`,
       ),
     ).toBeInTheDocument()
+    expect(screen.getByText('From amounts')).toBeInTheDocument()
+    expect(screen.getByText('From rates')).toBeInTheDocument()
     expect(
-      screen.queryByText(`${formatSignedAmount(0, 'EUR')} over 3M`),
+      screen.getByText(formatSignedAmount(rateChange, 'EUR')),
+    ).toBeInTheDocument()
+    expect(
+      screen.queryByText(
+        `${formatSignedAmount(endTotal - startTotal, 'EUR')} over 3M`,
+      ),
     ).not.toBeInTheDocument()
   })
 

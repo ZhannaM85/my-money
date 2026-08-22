@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { ChevronDown } from 'lucide-react'
-import { historicalNetWorth, periodChange } from '@/domain/netWorth'
+import { decomposeConvertedPeriodChange, historicalNetWorth, periodChange } from '@/domain/netWorth'
 import { HoldingBreakdownList } from '@/features/dashboard/HoldingBreakdownList'
 import { NetWorthChart } from '@/features/dashboard/NetWorthChart'
 import { useLocale, useTranslation } from '@/i18n'
@@ -74,7 +74,17 @@ export function HistoryScreen() {
     [assets, baseCurrency, dates, quotes, snapshots],
   )
   const latestPoint = series[series.length - 1]
-  const change = periodChange(series[0]?.total ?? 0, latestPoint?.total ?? 0)
+  const breakdown = useMemo(() => {
+    const startHoldings = series[0]?.holdings
+    const endHoldings = latestPoint?.holdings
+    if (!startHoldings || !endHoldings) return null
+    return decomposeConvertedPeriodChange(startHoldings, endHoldings)
+  }, [latestPoint, series])
+  const changeFrom = series[0]?.total ?? 0
+  const headlineTo = breakdown
+    ? changeFrom + breakdown.amountChange
+    : (latestPoint?.total ?? 0)
+  const change = periodChange(changeFrom, headlineTo)
   const list = useMemo(() => {
     const byDate = new Map(series.map((point) => [point.date, point]))
     const points = snapshotDays
@@ -127,6 +137,34 @@ export function HistoryScreen() {
             value={formatAmount(latestPoint?.total ?? 0, baseCurrency, locale)}
             description={`${formatSignedAmount(change.absolute, baseCurrency, locale)} ${t.history.overRange(range)}`}
           />
+          {breakdown && (
+            <ul className="flex flex-col gap-1 text-sm">
+              <li className="flex items-center justify-between gap-3">
+                <span className="text-muted-foreground">
+                  {t.dashboard.amountChange}
+                </span>
+                <span className="tabular-nums">
+                  {formatSignedAmount(
+                    breakdown.amountChange,
+                    baseCurrency,
+                    locale,
+                  )}
+                </span>
+              </li>
+              <li className="flex items-center justify-between gap-3">
+                <span className="text-muted-foreground">
+                  {t.dashboard.rateChange}
+                </span>
+                <span className="tabular-nums">
+                  {formatSignedAmount(
+                    breakdown.rateChange,
+                    baseCurrency,
+                    locale,
+                  )}
+                </span>
+              </li>
+            </ul>
+          )}
           <NetWorthChart
             points={series}
             currency={baseCurrency}
