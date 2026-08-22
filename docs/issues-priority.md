@@ -38,7 +38,6 @@ _Converted Dashboard: chart dropped while holdings stayed the same. Need a per-d
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
-| [#64](https://github.com/ZhannaM85/my-money/issues/64) | 🔍 Pending validation | Dashboard chart shows a decrease when holdings did not change | Historical series carries forward the last earlier FX quote so a missing same-day rate does not drop the holding. |
 | [#65](https://github.com/ZhannaM85/my-money/issues/65) | 🔍 Pending validation | Show what each day's total is made of (chart tooltip + History accordion) | Chart tooltip lists that date’s holdings. History day rows expand. Unconverted holdings stay visible. |
 
 ---
