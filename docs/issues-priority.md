@@ -60,6 +60,7 @@ _Existing-asset details: no dated history, and Save is a no-op when viewing._
 | [#96](https://github.com/ZhannaM85/my-money/issues/96) | 🔲 Open | History shows EUR when All currencies is selected | All + Original in Settings; History still formats with leftover base (EUR). Related #87. |
 | [#97](https://github.com/ZhannaM85/my-money/issues/97) | 🔲 Open | Add optional comments on asset entries and show them in History | Note on snapshots; show on History, asset details, and other applicable surfaces. |
 | [#98](https://github.com/ZhannaM85/my-money/issues/98) | 🔲 Open | Fresh and Neutral appearance moods look the same | Both light chrome + blue primary. Make them visibly different. Related #78, #57. |
+| [#99](https://github.com/ZhannaM85/my-money/issues/99) | 🔲 Open | Add bank card / debit card as a Money type | Type dropdown: bank/savings/cash/deposit only. Distinct from liability credit card. |
 
 ---
 
