@@ -37,7 +37,6 @@ _Existing-asset details: no dated history, and Save is a no-op when viewing._
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
-| [#69](https://github.com/ZhannaM85/my-money/issues/69) | 🔍 Pending validation | Show assets distribution on Dashboard when currency is All | Reverted dashboard donut. Currency totals expand to holdings. Allocation page unchanged. |
 | [#77](https://github.com/ZhannaM85/my-money/issues/77) | 🔍 Pending validation | Dashboard chart tooltip stays visible while scrolling | Scroll and touchmove dismiss the Recharts tooltip; tap the chart again to show it. |
 | [#78](https://github.com/ZhannaM85/my-money/issues/78) | 🔍 Pending validation | Adopt the My Money design system as the default UI | New **Fresh** mood from `docs/DESIGN_SYSTEM.md`; default for new installs. Existing moods untouched. |
 | [#79](https://github.com/ZhannaM85/my-money/issues/79) | 🔍 Pending validation | History list shows every calendar day, not only days the user added | List is snapshot days only. Chart still uses the daily series. |
