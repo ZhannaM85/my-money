@@ -14,6 +14,10 @@ const settingsSchema = z.object({
   currencyDisplayMode: z.enum(['base', 'native']).default('base'),
   locale: z.enum(['en', 'ru']),
   onboardingCompleted: z.boolean().default(false),
+  assetListSort: z
+    .enum(['custom', 'name_asc', 'name_desc', 'amount_asc', 'amount_desc'])
+    .default('custom'),
+  assetListOrder: z.array(z.string().min(1)).default([]),
   updatedAt: z.string().min(1),
 })
 

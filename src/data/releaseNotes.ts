@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 101,
+    issue: 100,
+    date: '2026-08-22T20:45:00+03:00',
+    en: 'Assets can be sorted by name or amount, or dragged into a custom order. The choice stays on this device.',
+    ru: 'Активы можно сортировать по имени или сумме или перетаскивать в свой порядок. Выбор остаётся на этом устройстве.',
+  },
+  {
     version: 100,
     issue: 102,
     date: '2026-08-22T20:30:00+03:00',

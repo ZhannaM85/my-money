@@ -1,19 +1,13 @@
 import 'fake-indexeddb/auto'
 import { beforeEach, describe, expect, it } from 'vitest'
 import { db } from '@/infrastructure/persistence/indexeddb'
+import { DEFAULT_SETTINGS } from '@/domain/settings'
 import { useSettingsStore } from './settingsStore'
 
 beforeEach(async () => {
   await db.settings.clear()
   useSettingsStore.setState({
-    settings: {
-      id: 'singleton',
-      baseCurrency: 'EUR',
-      currencyDisplayMode: 'base',
-      locale: 'en',
-      onboardingCompleted: false,
-      updatedAt: '1970-01-01T00:00:00.000Z',
-    },
+    settings: DEFAULT_SETTINGS,
     loaded: false,
   })
 })
@@ -55,5 +49,20 @@ describe('settingsStore', () => {
     expect(useSettingsStore.getState().settings.currencyDisplayMode).toBe(
       'native',
     )
+  })
+
+  it('persists a custom asset list order', async () => {
+    await useSettingsStore.getState().load()
+    await useSettingsStore.getState().persistCustomAssetOrder(['b', 'a'])
+    expect(useSettingsStore.getState().settings.assetListSort).toBe('custom')
+    expect(useSettingsStore.getState().settings.assetListOrder).toEqual([
+      'b',
+      'a',
+    ])
+    await useSettingsStore.getState().load()
+    expect(useSettingsStore.getState().settings.assetListOrder).toEqual([
+      'b',
+      'a',
+    ])
   })
 })

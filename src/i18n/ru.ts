@@ -64,6 +64,13 @@ export const ru: Dictionary = {
     emptyDescription:
       'Добавьте то, чем владеете или что должны. Данные остаются на этом устройстве.',
     noValue: 'Нет суммы',
+    sortLabel: 'Сортировка активов',
+    sortCustom: 'Свой порядок',
+    sortNameAsc: 'Имя А–Я',
+    sortNameDesc: 'Имя Я–А',
+    sortAmountAsc: 'Сумма: по возрастанию',
+    sortAmountDesc: 'Сумма: по убыванию',
+    reorderAria: (name) => `Изменить порядок: ${name}`,
   },
   asset: {
     classes: {

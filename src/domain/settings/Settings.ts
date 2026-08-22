@@ -2,6 +2,14 @@ import type { Locale } from './detectLocale'
 
 export const SETTINGS_ID = 'singleton' as const
 export type CurrencyDisplayMode = 'base' | 'native'
+export const ASSET_LIST_SORTS = [
+  'custom',
+  'name_asc',
+  'name_desc',
+  'amount_asc',
+  'amount_desc',
+] as const
+export type AssetListSort = (typeof ASSET_LIST_SORTS)[number]
 
 export interface Settings {
   id: typeof SETTINGS_ID
@@ -9,6 +17,8 @@ export interface Settings {
   currencyDisplayMode: CurrencyDisplayMode
   locale: Locale
   onboardingCompleted: boolean
+  assetListSort: AssetListSort
+  assetListOrder: string[]
   updatedAt: string
 }
 
@@ -18,6 +28,8 @@ export const DEFAULT_SETTINGS: Settings = {
   currencyDisplayMode: 'base',
   locale: 'en',
   onboardingCompleted: false,
+  assetListSort: 'custom',
+  assetListOrder: [],
   updatedAt: '1970-01-01T00:00:00.000Z',
 }
 

@@ -62,6 +62,13 @@ export interface Dictionary {
     emptyArchivedTitle: string
     emptyDescription: string
     noValue: string
+    sortLabel: string
+    sortCustom: string
+    sortNameAsc: string
+    sortNameDesc: string
+    sortAmountAsc: string
+    sortAmountDesc: string
+    reorderAria: (name: string) => string
   }
   asset: {
     classes: Record<AssetClass, string>

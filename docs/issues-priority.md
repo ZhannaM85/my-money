@@ -39,7 +39,7 @@ _Existing-asset details: no dated history, and Save is a no-op when viewing._
 |---|--------|-------|-------|
 | [#90](https://github.com/ZhannaM85/my-money/issues/90) | 🔍 Pending validation | History 3M change is last two snapshot days, not three months | 3M uses the 90-day window when data exists; if history is shorter, the label is “since first snapshot”. Related #79, #89. |
 | [#97](https://github.com/ZhannaM85/my-money/issues/97) | 🔍 Pending validation | Add optional comments on asset entries and show them in History | Optional snapshot note; shown on History holdings, asset details, and chart holdings. Empty notes stay hidden. |
-| [#100](https://github.com/ZhannaM85/my-money/issues/100) | 🔲 Open | Sort Assets by name or amount, and allow drag-and-drop order | List is IndexedDB id order today. Name/amount asc/desc + persisted drag order. |
+| [#100](https://github.com/ZhannaM85/my-money/issues/100) | 🔍 Pending validation | Sort Assets by name or amount, and allow drag-and-drop order | Name/amount asc/desc + persisted drag order (custom after a drag). Amount uses the shown Original/Converted value. |
 | [#101](https://github.com/ZhannaM85/my-money/issues/101) | 🔲 Open | Add regression tests so phone bugs are caught in CI, not only on device | Vitest exists; live-feedback bugs often had no failing test first. Tie RCAs (#94) to regression tests. |
 | [#102](https://github.com/ZhannaM85/my-money/issues/102) | 🔍 Pending validation | Show institution name in the asset details sub-header next to currency | Sub-header is type · institution · currency when institution is set; otherwise type · currency. |
 

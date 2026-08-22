@@ -20,6 +20,15 @@ export const issueRcas: IssueRca[] = [
     ru: 'Подзаголовок карточки был зашит как тип · валюта. Учреждение уже есть у актива и в списке сведений, но в строке под названием его не было.',
   },
   {
+    issue: 100,
+    title: {
+      en: 'Sort Assets by name or amount, and allow drag-and-drop order',
+      ru: 'Сортировка активов по имени или сумме и порядок перетаскиванием',
+    },
+    en: 'The Assets list used IndexedDB primary-key order with no sort control. There was no persisted custom order, so cash, deposits, and cards appeared in insert order.',
+    ru: 'Список активов шёл в порядке ключей IndexedDB без сортировки. Своего сохранённого порядка не было, поэтому кэш, вклады и карты шли как добавлялись.',
+  },
+  {
     issue: 99,
     title: {
       en: 'Add bank card / debit card as a Money type',

@@ -61,6 +61,13 @@ export const en: Dictionary = {
     emptyArchivedTitle: 'No hidden assets',
     emptyDescription: 'Add what you own or owe. Updates stay on this device.',
     noValue: 'No value',
+    sortLabel: 'Sort assets',
+    sortCustom: 'Custom order',
+    sortNameAsc: 'Name A–Z',
+    sortNameDesc: 'Name Z–A',
+    sortAmountAsc: 'Amount: low to high',
+    sortAmountDesc: 'Amount: high to low',
+    reorderAria: (name) => `Reorder ${name}`,
   },
   asset: {
     classes: {

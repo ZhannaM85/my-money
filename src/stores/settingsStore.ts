@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import {
+  type AssetListSort,
   type CurrencyDisplayMode,
   DEFAULT_SETTINGS,
   type Locale,
@@ -16,50 +17,46 @@ interface SettingsStoreState {
   setBaseCurrency: (baseCurrency: string) => Promise<void>
   setCurrencyDisplayMode: (mode: CurrencyDisplayMode) => Promise<void>
   setLocale: (locale: Locale) => Promise<void>
+  setAssetListSort: (assetListSort: AssetListSort) => Promise<void>
+  persistCustomAssetOrder: (assetListOrder: string[]) => Promise<void>
   completeOnboarding: () => Promise<void>
 }
 
-export const useSettingsStore = create<SettingsStoreState>((set, get) => ({
-  settings: DEFAULT_SETTINGS,
-  loaded: false,
-  load: async () => {
-    const settings = await settingsRepository.get()
-    set({ settings, loaded: true })
-  },
-  setBaseCurrency: async (baseCurrency) => {
+export const useSettingsStore = create<SettingsStoreState>((set, get) => {
+  async function save(patch: Partial<Settings>) {
     const next: Settings = {
       ...get().settings,
-      baseCurrency,
+      ...patch,
       updatedAt: new Date().toISOString(),
     }
     await settingsRepository.save(next)
     set({ settings: next })
-  },
-  setCurrencyDisplayMode: async (currencyDisplayMode) => {
-    const next: Settings = {
-      ...get().settings,
-      currencyDisplayMode,
-      updatedAt: new Date().toISOString(),
-    }
-    await settingsRepository.save(next)
-    set({ settings: next })
-  },
-  setLocale: async (locale) => {
-    const next: Settings = {
-      ...get().settings,
-      locale,
-      updatedAt: new Date().toISOString(),
-    }
-    await settingsRepository.save(next)
-    set({ settings: next })
-  },
-  completeOnboarding: async () => {
-    const next: Settings = {
-      ...get().settings,
-      onboardingCompleted: true,
-      updatedAt: new Date().toISOString(),
-    }
-    await settingsRepository.save(next)
-    set({ settings: next })
-  },
-}))
+  }
+
+  return {
+    settings: DEFAULT_SETTINGS,
+    loaded: false,
+    load: async () => {
+      const settings = await settingsRepository.get()
+      set({ settings, loaded: true })
+    },
+    setBaseCurrency: async (baseCurrency) => {
+      await save({ baseCurrency })
+    },
+    setCurrencyDisplayMode: async (currencyDisplayMode) => {
+      await save({ currencyDisplayMode })
+    },
+    setLocale: async (locale) => {
+      await save({ locale })
+    },
+    setAssetListSort: async (assetListSort) => {
+      await save({ assetListSort })
+    },
+    persistCustomAssetOrder: async (assetListOrder) => {
+      await save({ assetListSort: 'custom', assetListOrder })
+    },
+    completeOnboarding: async () => {
+      await save({ onboardingCompleted: true })
+    },
+  }
+})
