@@ -37,7 +37,6 @@ _Existing-asset details: no dated history, and Save is a no-op when viewing._
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
-| [#82](https://github.com/ZhannaM85/my-money/issues/82) | 🔍 Pending validation | Update-this-asset inputs overflow the phone screen | Amount and Save stack full-width. Date field width is #84. |
 | [#83](https://github.com/ZhannaM85/my-money/issues/83) | 🔍 Pending validation | No way to change currency when editing a past snapshot | Snapshot editor now has a currency select; save persists it on that row. |
 | [#84](https://github.com/ZhannaM85/my-money/issues/84) | 🔍 Pending validation | Safari date fields overflow the card when editing snapshots | Copied Turtle #47: DateField is `h-12 w-36`, not a max-width/overflow clamp. Related #68, #82. |
 | [#85](https://github.com/ZhannaM85/my-money/issues/85) | 🔍 Pending validation | Dashboard month change has no breakdown (cash exchange looks like a 61k loss) | Tappable hint plus expand From amounts / From rates by holding. Magnitude is #86. |
@@ -53,7 +52,7 @@ _Existing-asset details: no dated history, and Save is a no-op when viewing._
 | [#95](https://github.com/ZhannaM85/my-money/issues/95) | 🔍 Pending validation | Date field is too narrow; expand width by 1.5 | DateField is 1.5× Turtle `w-36` (`w-[13.5rem]`). Related #84. |
 | [#96](https://github.com/ZhannaM85/my-money/issues/96) | 🔲 Open | History shows EUR when All currencies is selected | All + Original in Settings; History still formats with leftover base (EUR). Related #87. |
 | [#97](https://github.com/ZhannaM85/my-money/issues/97) | 🔲 Open | Add optional comments on asset entries and show them in History | Note on snapshots; show on History, asset details, and other applicable surfaces. |
-| [#98](https://github.com/ZhannaM85/my-money/issues/98) | 🔲 Open | Fresh and Neutral appearance moods look the same | Both light chrome + blue primary. Make them visibly different. Related #78, #57. |
+| [#98](https://github.com/ZhannaM85/my-money/issues/98) | 🔍 Pending validation | Fresh and Neutral appearance moods look the same | Neutral is slate charcoal primary; Fresh stays design-system blue. Related #78, #57. |
 | [#99](https://github.com/ZhannaM85/my-money/issues/99) | 🔍 Pending validation | Add bank card / debit card as a Money type | Money type `debit_card` (EN/RU). Distinct from liability credit card. |
 | [#100](https://github.com/ZhannaM85/my-money/issues/100) | 🔲 Open | Sort Assets by name or amount, and allow drag-and-drop order | List is IndexedDB id order today. Name/amount asc/desc + persisted drag order. |
 | [#101](https://github.com/ZhannaM85/my-money/issues/101) | 🔲 Open | Add regression tests so phone bugs are caught in CI, not only on device | Vitest exists; live-feedback bugs often had no failing test first. Tie RCAs (#94) to regression tests. |
