@@ -28,7 +28,6 @@ _EUR base + RUB assets; iPhone tab bar; appearance; car; joint ownership; decima
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
 | [#25](https://github.com/ZhannaM85/my-money/issues/25) | 🔲 Open | Tab bar disconnects from the bottom on iPhone Safari | Still intermittent. Hide-on-viewport-shrink is now itself a problem — see #80 / `IMG_0318.MP4`. |
-| [#42](https://github.com/ZhannaM85/my-money/issues/42) | 🔍 Pending validation | Add a show all currencies display option | Settings base-currency dropdown now starts with Show all currencies. All = Original/native totals; a single code = Converted into that currency. |
 
 ---
 
