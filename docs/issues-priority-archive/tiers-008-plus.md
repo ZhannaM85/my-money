@@ -67,3 +67,10 @@ Closed live-feedback rows from Tier 8 onward. Open / pending items stay in [`../
 |---|--------|-------|-------|
 | [#64](https://github.com/ZhannaM85/my-money/issues/64) | ✅ Done | Dashboard chart shows a decrease when holdings did not change | Historical series carries forward the last earlier FX quote so a missing same-day rate does not drop the holding. Validated on-device 2026-08-22. |
 | [#65](https://github.com/ZhannaM85/my-money/issues/65) | ✅ Done | Show what each day's total is made of (chart tooltip + History accordion) | Chart tooltip lists that date’s holdings. History day rows expand. Unconverted holdings stay visible. Validated on-device 2026-08-22. |
+
+## Tier 12 — Live feedback (2026-08-22)
+
+| # | Status | Issue | Notes |
+|---|--------|-------|-------|
+| [#66](https://github.com/ZhannaM85/my-money/issues/66) | ✅ Done | Add and edit past snapshot entries on existing assets | As of on Update this asset and on the edit form. Past dates save a new snapshot; future dates rejected. Edit of existing rows is #72. Validated on-device 2026-08-22. |
+| [#67](https://github.com/ZhannaM85/my-money/issues/67) | ✅ Done | Existing asset Save does nothing; add a view / read-only mode | Details open read-only. Edit details reveals the form. No no-op Save on view. Validated on-device 2026-08-22. |
