@@ -107,12 +107,12 @@ _Existing-asset details: no dated history, and Save is a no-op when viewing._
 |---|--------|-------|-------|
 | [#66](https://github.com/ZhannaM85/my-money/issues/66) | 📋 Not started | Add and edit past snapshot entries on existing assets | Edit form has New amount with no date. Need amount + date for past days (e.g. 1 Jan, 2 Apr) and edit of existing snapshots. Follow-up to #61. |
 | [#67](https://github.com/ZhannaM85/my-money/issues/67) | 📋 Not started | Existing asset Save does nothing; add a view / read-only mode | Tapping Save information with no changes (empty New amount) does nothing. Prefer a read-only details view instead of an always-edit form. |
-| [#68](https://github.com/ZhannaM85/my-money/issues/68) | 📋 Not started | Date input is broken in the PWA | New-asset As of / На дату picker (from #61) does not work in the iPhone PWA — cannot reliably choose a date. |
+| [#68](https://github.com/ZhannaM85/my-money/issues/68) | 🔍 Pending validation | Date input is broken in the PWA | DateField: visible calendar, full-field picker indicator, `showPicker()` on tap. |
 | [#69](https://github.com/ZhannaM85/my-money/issues/69) | 📋 Not started | Show assets distribution on Dashboard when currency is All | Allocation is only on Dashboard when a single/base currency is selected. All (Все) shows a Distribution button, not the breakdown. |
-| [#70](https://github.com/ZhannaM85/my-money/issues/70) | 📋 Not started | Original mode still shows a EUR conversion on one asset | Base currency is disabled in Original, but Russian bank still shows оценка 222,69 € while another RUB account does not. |
-| [#71](https://github.com/ZhannaM85/my-money/issues/71) | 📋 Not started | Explain the two amount inputs with an info tooltip | Details “Update this asset” vs edit form “New amount (optional)” look the same. Info icon + tappable tooltip on each, EN/RU. |
-| [#72](https://github.com/ZhannaM85/my-money/issues/72) | 📋 Not started | Allow editing previous snapshot rows on asset details | History list is read-only; Update this asset only writes current. Edit an existing row (amount/date) without appending today. Related to #66. |
-| [#73](https://github.com/ZhannaM85/my-money/issues/73) | 📋 Not started | Allow deleting previous snapshot rows on asset details | History rows have no delete. Remove one snapshot (confirm), not the whole asset (#32). Related to #72. |
+| [#70](https://github.com/ZhannaM85/my-money/issues/70) | 🔍 Pending validation | Original mode still shows a EUR conversion on one asset | Native list (and details native view) no longer appends `est. €`. Secondary line is native currency only. |
+| [#71](https://github.com/ZhannaM85/my-money/issues/71) | 🔍 Pending validation | Explain the two amount inputs with an info tooltip | Tappable CircleHelp on Update this asset and New amount (optional); not hover-only. |
+| [#72](https://github.com/ZhannaM85/my-money/issues/72) | 🔍 Pending validation | Allow editing previous snapshot rows on asset details | Pencil on a history row edits amount + date in place (`updateSnapshot`). Does not append today. |
+| [#73](https://github.com/ZhannaM85/my-money/issues/73) | 🔍 Pending validation | Allow deleting previous snapshot rows on asset details | Trash on each history row; confirm; `deleteSnapshot` by id. Asset remains. |
 | [#74](https://github.com/ZhannaM85/my-money/issues/74) | 🔍 Pending validation | Chart X-axis repeats the same date; label snapshot days | Unique snapshot days with day + month (`18 Aug`), not `date.slice(8)` repeating `18`. |
 
 ---

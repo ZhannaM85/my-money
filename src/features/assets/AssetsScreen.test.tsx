@@ -78,8 +78,9 @@ describe('AssetsScreen', () => {
 
     expect(await screen.findByText('Broker')).toBeInTheDocument()
     expect(screen.getByText(formatAmount(110, 'USD'))).toBeInTheDocument()
+    expect(screen.getByText('native USD')).toBeInTheDocument()
     expect(
-      screen.getByText(`est. ${formatAmount(100, 'EUR')}`),
-    ).toBeInTheDocument()
+      screen.queryByText(`est. ${formatAmount(100, 'EUR')}`),
+    ).not.toBeInTheDocument()
   })
 })

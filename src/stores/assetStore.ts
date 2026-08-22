@@ -26,6 +26,8 @@ interface AssetStoreState {
     trackingStatus: TrackingStatus,
   ) => Promise<void>
   deleteAsset: (id: string) => Promise<void>
+  deleteSnapshot: (id: string) => Promise<void>
+  updateSnapshot: (snapshot: AssetSnapshot) => Promise<void>
   saveSnapshots: (
     snapshots: readonly (Omit<AssetSnapshot, 'id' | 'createdAt'> & {
       id?: string
@@ -74,6 +76,14 @@ export const useAssetStore = create<AssetStoreState>((set, get) => ({
   deleteAsset: async (id) => {
     await snapshotRepository.deleteByAsset(id)
     await assetRepository.delete(id)
+    await get().load()
+  },
+  deleteSnapshot: async (id) => {
+    await snapshotRepository.deleteById(id)
+    await get().load()
+  },
+  updateSnapshot: async (snapshot) => {
+    await snapshotRepository.upsert(snapshot)
     await get().load()
   },
   saveSnapshots: async (snapshots) => {

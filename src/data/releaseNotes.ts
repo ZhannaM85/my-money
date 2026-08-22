@@ -10,6 +10,41 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 73,
+    issue: 72,
+    date: '2026-08-22T09:21:00+03:00',
+    en: 'Asset history rows can be edited (amount and date). Saving updates that snapshot instead of adding a new today row.',
+    ru: 'Строки истории актива можно править (сумма и дата). Сохранение обновляет этот снимок, а не добавляет новый на сегодня.',
+  },
+  {
+    version: 72,
+    issue: 73,
+    date: '2026-08-22T09:18:00+03:00',
+    en: 'You can delete one history row on an asset (with confirmation). The asset itself stays.',
+    ru: 'Можно удалить одну строку истории актива (с подтверждением). Сам актив остаётся.',
+  },
+  {
+    version: 71,
+    issue: 68,
+    date: '2026-08-22T09:16:00+03:00',
+    en: 'The As of date field now has a visible calendar control and opens the native picker when tapped, including in the iPhone PWA.',
+    ru: 'У поля «На дату» теперь видна иконка календаря, и нажатие открывает системный выбор даты, в том числе в PWA на iPhone.',
+  },
+  {
+    version: 70,
+    issue: 71,
+    date: '2026-08-22T09:14:00+03:00',
+    en: 'Info icons next to Update this asset and New amount (optional) explain the difference. Tap to read — works on the phone, not hover-only.',
+    ru: 'У «Обновить этот актив» и «Новая сумма (необязательно)» есть иконки с пояснением. Нажмите, чтобы прочитать — на телефоне, не только при наведении.',
+  },
+  {
+    version: 69,
+    issue: 70,
+    date: '2026-08-22T09:12:00+03:00',
+    en: 'Original mode no longer shows a converted euro estimate under asset amounts. Cards stay in the holding’s own currency.',
+    ru: 'В режиме «В оригинале» под суммой актива больше нет пересчёта в евро. Карточки остаются в валюте самой позиции.',
+  },
+  {
     version: 68,
     issue: 74,
     date: '2026-08-22T09:10:00+03:00',

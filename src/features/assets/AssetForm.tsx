@@ -20,6 +20,7 @@ import { useLocale, useTranslation } from '@/i18n'
 import { formatEditableAmount, parseAmount, todayIsoDate } from '@/shared/lib/money'
 import { isIsoDateOnOrBefore } from '@/shared/lib/dates'
 import { Button } from '@/shared/ui/button'
+import { DateField } from '@/shared/ui/date-field'
 import { MoneyInput } from '@/shared/ui/money-input'
 import { TextField } from '@/shared/ui/text-field'
 import { cn } from '@/shared/lib/utils'
@@ -321,6 +322,14 @@ export function AssetForm({
         currency={currency}
         value={amount}
         onValueChange={setAmount}
+        hint={
+          requireAmount ? undefined : t.asset.newAmountOptionalHint
+        }
+        aboutLabel={
+          requireAmount
+            ? undefined
+            : t.common.aboutField(t.asset.newAmountOptional)
+        }
         error={
           error === t.asset.enterCurrentAmount ||
           error === t.asset.amountMustBeNumber
@@ -329,9 +338,8 @@ export function AssetForm({
         }
       />
       {requireAmount && !initial && (
-        <TextField
+        <DateField
           label={t.asset.snapshotDate}
-          type="date"
           value={snapshotDate}
           max={todayIsoDate()}
           onChange={(event) => setSnapshotDate(event.target.value)}

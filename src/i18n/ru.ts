@@ -15,6 +15,7 @@ export const ru: Dictionary = {
     estimated: (amount) => `оценка ${amount}`,
     native: (currency) => `в ${currency}`,
     owe: ' (долг)',
+    aboutField: (name) => `О поле «${name}»`,
   },
   nav: {
     tabs: 'Разделы',
@@ -128,6 +129,10 @@ export const ru: Dictionary = {
     snapshotDate: 'На дату',
     snapshotDateInvalid: 'Выберите сегодня или прошедшую дату',
     newAmountOptional: 'Новая сумма (необязательно)',
+    newAmountOptionalHint:
+      'Необязательно. Если ввести сумму, «Сохранить сведения» также запишет снимок на сегодня. Оставьте пустым, чтобы изменить только название и настройки.',
+    updateThisAssetHint:
+      'Сохраняет новый снимок на сегодня с этой суммой. Старые строки истории не меняются.',
     nameRequired: 'Нужно название',
     enterCurrentAmount: 'Введите текущую сумму',
     amountMustBeNumber: 'Сумма должна быть числом',
@@ -158,6 +163,12 @@ export const ru: Dictionary = {
     deleteAsset: 'Удалить актив',
     deleteConfirm:
       'Удалить этот актив и всю его историю с этого устройства? Это нельзя отменить.',
+    deleteSnapshot: 'Удалить запись',
+    deleteSnapshotAria: (date) => `Удалить снимок от ${date}`,
+    deleteSnapshotConfirm:
+      'Удалить эту запись в истории? Актив останется. Это нельзя отменить.',
+    editSnapshotAria: (date) => `Изменить снимок от ${date}`,
+    editSnapshotAmount: 'Сумма снимка',
     quickAdd: 'Быстро добавить',
     presets: {
       bank: 'Банковский счёт',

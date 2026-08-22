@@ -37,6 +37,14 @@ export class IndexedDbSnapshotRepository implements SnapshotRepository {
     await db.snapshots.add(snapshot)
   }
 
+  async upsert(snapshot: AssetSnapshot): Promise<void> {
+    await db.snapshots.put(snapshot)
+  }
+
+  async deleteById(id: string): Promise<void> {
+    await db.snapshots.delete(id)
+  }
+
   async deleteByAsset(assetId: string): Promise<void> {
     await db.snapshots.where('assetId').equals(assetId).delete()
   }
