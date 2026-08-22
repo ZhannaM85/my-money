@@ -39,7 +39,6 @@ _Existing-asset details: no dated history, and Save is a no-op when viewing._
 |---|--------|-------|-------|
 | [#68](https://github.com/ZhannaM85/my-money/issues/68) | 🔲 Open | Date input is broken in the PWA | Reopened: date field still wider than the card when adding an asset (Safari/PWA). Picker overlay did not fix width. Related #82, #84. |
 | [#69](https://github.com/ZhannaM85/my-money/issues/69) | 🔲 Open | Show assets distribution on Dashboard when currency is All | Reopened: **no donut**. Expand the total sum to show what is behind it. Revert the graph. |
-| [#70](https://github.com/ZhannaM85/my-money/issues/70) | 🔍 Pending validation | Original mode still shows a EUR conversion on one asset | Native list (and details native view) no longer appends `est. €`. Secondary line is native currency only. |
 | [#71](https://github.com/ZhannaM85/my-money/issues/71) | 🔍 Pending validation | Explain the two amount inputs with an info tooltip | Tappable CircleHelp on Update this asset and New amount (optional); not hover-only. |
 | [#72](https://github.com/ZhannaM85/my-money/issues/72) | 🔍 Pending validation | Allow editing previous snapshot rows on asset details | Pencil on a history row edits amount + date in place (`updateSnapshot`). Does not append today. |
 | [#73](https://github.com/ZhannaM85/my-money/issues/73) | 🔍 Pending validation | Allow deleting previous snapshot rows on asset details | Trash on each history row; confirm; `deleteSnapshot` by id. Asset remains. |
