@@ -52,6 +52,7 @@ _Existing-asset details: no dated history, and Save is a no-op when viewing._
 | [#79](https://github.com/ZhannaM85/my-money/issues/79) | 🔲 Open | History list shows every calendar day, not only days the user added | Daily carry-forward series; user only entered 4 Jul. List should be snapshot days. |
 | [#80](https://github.com/ZhannaM85/my-money/issues/80) | 🔲 Open | Tab bar hides on scroll and can reappear mid-page | iPhone: vanishes while scrolling, returns when scroll stops, sometimes mid-page. Related #25. `IMG_0318.MP4`. |
 | [#81](https://github.com/ZhannaM85/my-money/issues/81) | 🔲 Open | Dashboard and History show different net worth totals | Same day Converted ₽: Dashboard 2,810,175.64 vs History 2,798,217.19. |
+| [#82](https://github.com/ZhannaM85/my-money/issues/82) | 🔲 Open | Update-this-asset inputs overflow the phone screen | Date field and Save are clipped on the right. History/Details rows fit. |
 
 ---
 
