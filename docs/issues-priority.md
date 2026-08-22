@@ -50,7 +50,7 @@ _Existing-asset details: no dated history, and Save is a no-op when viewing._
 | [#77](https://github.com/ZhannaM85/my-money/issues/77) | 🔲 Open | Dashboard chart tooltip stays visible while scrolling | Recharts tooltip from #65 stays after tap; page scroll does not dismiss it. |
 | [#78](https://github.com/ZhannaM85/my-money/issues/78) | 🔲 Open | Adopt the My Money design system as the default UI | Calm navy/blue tokens, cards, nav, charts, category colors. Doc in `docs/`. |
 | [#79](https://github.com/ZhannaM85/my-money/issues/79) | 🔲 Open | History list shows every calendar day, not only days the user added | Daily carry-forward series; user only entered 4 Jul. List should be snapshot days. |
-| [#80](https://github.com/ZhannaM85/my-money/issues/80) | 🔲 Open | Tab bar hides on scroll and can reappear mid-page | iPhone: vanishes while scrolling, returns when scroll stops, sometimes mid-page. Related #25. `IMG_0318.MP4`. |
+| [#80](https://github.com/ZhannaM85/my-money/issues/80) | 🔲 Open | Tab bar hides on scroll and can reappear mid-page | Also on asset details: bar sits mid-page over history; Update this asset is below it. Related #25. |
 | [#81](https://github.com/ZhannaM85/my-money/issues/81) | 🔲 Open | Dashboard and History show different net worth totals | Same day Converted ₽: Dashboard 2,810,175.64 vs History 2,798,217.19. |
 | [#82](https://github.com/ZhannaM85/my-money/issues/82) | 🔲 Open | Update-this-asset inputs overflow the phone screen | Date field and Save are clipped on the right. History/Details rows fit. |
 
