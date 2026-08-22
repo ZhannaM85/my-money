@@ -35,11 +35,8 @@ import { useAssetStore } from '@/stores/assetStore'
 import { useFxStore } from '@/stores/fxStore'
 import { useSettingsStore } from '@/stores/settingsStore'
 import { cn } from '@/shared/lib/utils'
-import {
-  ensureAssetOrder,
-  sortAssets,
-  spliceVisibleOrder,
-} from './assetListOrder'
+import { sortAssets } from './assetListOrder'
+import { useAssetReorder } from './useAssetReorder'
 
 type Filter = 'all' | AssetClass | 'archived'
 
@@ -132,7 +129,7 @@ export function AssetsScreen() {
   )
   const quotes = useFxStore((state) => state.quotes)
   const [filter, setFilter] = useState<Filter>('all')
-  const [reordering, setReordering] = useState(false)
+  const reorder = useAssetReorder(assetListOrder)
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 6 } }),
   )
@@ -163,8 +160,8 @@ export function AssetsScreen() {
       return asset.assetClass === filter
     })
     return sortAssets(filtered, {
-      sort: assetListSort,
-      order: assetListOrder,
+      sort: reorder.usingDraft ? 'custom' : assetListSort,
+      order: reorder.order,
       locale,
       amountOf: (asset) =>
         shownAmount(
@@ -175,8 +172,9 @@ export function AssetsScreen() {
         ),
     })
   }, [
-    assetListOrder,
     assetListSort,
+    reorder.order,
+    reorder.usingDraft,
     assets,
     baseCurrency,
     displayMode,
@@ -186,18 +184,19 @@ export function AssetsScreen() {
     snapshots,
   ])
 
-  async function onDragEnd(event: DragEndEvent) {
+  function onDragEnd(event: DragEndEvent) {
     const { active, over } = event
     if (!over || active.id === over.id) return
     const visibleIds = visible.map((asset) => asset.id)
     const from = visibleIds.indexOf(String(active.id))
     const to = visibleIds.indexOf(String(over.id))
     if (from < 0 || to < 0) return
-    const full = ensureAssetOrder(
-      assetListOrder,
+    reorder.drop(
+      visibleIds,
       assets.map((asset) => asset.id),
+      from,
+      to,
     )
-    await persistCustomAssetOrder(spliceVisibleOrder(full, visibleIds, from, to))
   }
 
   return (
@@ -236,7 +235,7 @@ export function AssetsScreen() {
             value={assetListSort}
             onChange={(event) => {
               const next = event.target.value as AssetListSort
-              if (next !== 'custom') setReordering(false)
+              if (next !== 'custom') reorder.cancel()
               void setAssetListSort(next)
             }}
           >
@@ -246,16 +245,45 @@ export function AssetsScreen() {
               </option>
             ))}
           </select>
-          {visible.length > 1 && (
+          {visible.length > 1 && !reorder.reordering ? (
             <Button
               type="button"
-              variant={reordering ? 'default' : 'outline'}
+              variant="outline"
               className="h-12 shrink-0"
-              onClick={() => setReordering((current) => !current)}
+              onClick={() =>
+                reorder.enter(
+                  visible.map((asset) => asset.id),
+                  assets.map((asset) => asset.id),
+                )
+              }
             >
-              {reordering ? t.assets.doneReordering : t.assets.enterReorderMode}
+              {t.assets.enterReorderMode}
             </Button>
-          )}
+          ) : null}
+          {reorder.reordering ? (
+            <>
+              <Button
+                type="button"
+                variant="outline"
+                className="h-12 shrink-0"
+                onClick={() => reorder.cancel()}
+              >
+                {t.common.cancel}
+              </Button>
+              <Button
+                type="button"
+                className="h-12 shrink-0"
+                onClick={() =>
+                  void reorder.save(
+                    persistCustomAssetOrder,
+                    assets.map((asset) => asset.id),
+                  )
+                }
+              >
+                {t.common.save}
+              </Button>
+            </>
+          ) : null}
         </div>
       )}
       {!loaded ? (
@@ -309,7 +337,7 @@ export function AssetsScreen() {
                     to={`/assets/${asset.id}`}
                     className={cn(
                       'flex min-w-0 items-center justify-between gap-3',
-                      reordering
+                      reorder.reordering
                         ? 'flex-1 py-3 pr-4'
                         : 'rounded-xl bg-card px-4 py-3 ring-1 ring-foreground/10',
                     )}
@@ -344,7 +372,7 @@ export function AssetsScreen() {
                     </span>
                   </Link>
                 )
-                return reordering ? (
+                return reorder.reordering ? (
                   <SortableAssetRow
                     key={asset.id}
                     id={asset.id}
@@ -358,12 +386,12 @@ export function AssetsScreen() {
               })}
             </ul>
           )
-          if (!reordering) return list
+          if (!reorder.reordering) return list
           return (
             <DndContext
               sensors={sensors}
               collisionDetection={closestCenter}
-              onDragEnd={(event) => void onDragEnd(event)}
+              onDragEnd={onDragEnd}
             >
               <SortableContext
                 items={visible.map((asset) => asset.id)}

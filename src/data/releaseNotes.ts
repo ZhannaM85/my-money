@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 105,
+    issue: 105,
+    date: '2026-08-22T22:15:00+03:00',
+    en: 'In Assets reorder, dropping a row no longer saves. Save writes the custom order; Cancel restores the previous one.',
+    ru: 'В режиме порядка активов отпускание строки больше не сохраняет. «Сохранить» записывает свой порядок; «Отмена» возвращает прежний.',
+  },
+  {
     version: 104,
     issue: 25,
     date: '2026-08-22T21:45:00+03:00',

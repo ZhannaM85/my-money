@@ -195,7 +195,7 @@ describe('AssetsScreen sort', () => {
     expect(
       await screen.findByRole('button', { name: 'Reorder Broker' }),
     ).toBeInTheDocument()
-    await user.click(screen.getByRole('button', { name: 'Done' }))
+    await user.click(screen.getByRole('button', { name: 'Cancel' }))
     expect(
       screen.queryByRole('button', { name: 'Reorder Broker' }),
     ).not.toBeInTheDocument()
@@ -217,5 +217,44 @@ describe('AssetsScreen sort', () => {
     expect(
       screen.queryByRole('button', { name: 'Reorder Broker' }),
     ).not.toBeInTheDocument()
+  })
+
+  it('persists custom order only on Save, not when leaving without Save', async () => {
+    const user = userEvent.setup()
+    await addNamedAsset('cash', 'Cash', 50, 'EUR')
+    await addNamedAsset('alpha', 'Alpha', 300, 'EUR')
+    await useSettingsStore.getState().persistCustomAssetOrder([
+      'cash',
+      'a1',
+      'alpha',
+    ])
+    render(
+      <MemoryRouter>
+        <AssetsScreen />
+      </MemoryRouter>,
+    )
+    await user.click(await screen.findByRole('button', { name: 'Reorder' }))
+    expect(await screen.findByRole('button', { name: 'Save' })).toBeInTheDocument()
+    expect(useSettingsStore.getState().settings.assetListOrder).toEqual([
+      'cash',
+      'a1',
+      'alpha',
+    ])
+    await user.click(screen.getByRole('button', { name: 'Cancel' }))
+    expect(useSettingsStore.getState().settings.assetListOrder).toEqual([
+      'cash',
+      'a1',
+      'alpha',
+    ])
+    await user.click(screen.getByRole('button', { name: 'Reorder' }))
+    await user.click(screen.getByRole('button', { name: 'Save' }))
+    await waitFor(() => {
+      expect(useSettingsStore.getState().settings.assetListSort).toBe('custom')
+      expect(useSettingsStore.getState().settings.assetListOrder).toEqual([
+        'cash',
+        'a1',
+        'alpha',
+      ])
+    })
   })
 })

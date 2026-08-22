@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 105,
+    title: {
+      en: 'Do not auto-save Assets order on drop; add a Save control',
+      ru: 'Не сохранять порядок активов при отпускании; добавить Сохранить',
+    },
+    en: 'After #104, dropping a row called persist immediately. Done only left reorder mode. There was no way to try an order and confirm or discard it.',
+    ru: 'После #104 отпускание строки сразу писало порядок. «Готово» только выходило из режима. Нельзя было примерить порядок и подтвердить или отменить.',
+  },
+  {
     issue: 104,
     title: {
       en: 'Only enable Assets drag-and-drop in an explicit reorder mode',
