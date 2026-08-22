@@ -39,7 +39,6 @@ _Existing-asset details: no dated history, and Save is a no-op when viewing._
 |---|--------|-------|-------|
 | [#90](https://github.com/ZhannaM85/my-money/issues/90) | 🔍 Pending validation | History 3M change is last two snapshot days, not three months | 3M uses the 90-day window when data exists; if history is shorter, the label is “since first snapshot”. Related #79, #89. |
 | [#101](https://github.com/ZhannaM85/my-money/issues/101) | 🔲 Open | Add regression tests so phone bugs are caught in CI, not only on device | Vitest exists; live-feedback bugs often had no failing test first. Tie RCAs (#94) to regression tests. |
-| [#103](https://github.com/ZhannaM85/my-money/issues/103) | 🔍 Pending validation | Show snapshot comments in a lighter color and give them more width | Muted full-width note under date/amount on details (and History holdings). Related #97. |
 | [#105](https://github.com/ZhannaM85/my-money/issues/105) | 🔲 Open | Do not auto-save Assets order on drop; add a Save control | Persist only on Save, not on drop. Cancel restores previous order. Follow-up to #100, #104. |
 
 ---
