@@ -53,6 +53,7 @@ _Existing-asset details: no dated history, and Save is a no-op when viewing._
 | [#80](https://github.com/ZhannaM85/my-money/issues/80) | 🔲 Open | Tab bar hides on scroll and can reappear mid-page | Also on asset details: bar sits mid-page over history; Update this asset is below it. Related #25. |
 | [#81](https://github.com/ZhannaM85/my-money/issues/81) | 🔲 Open | Dashboard and History show different net worth totals | Same day Converted ₽: Dashboard 2,810,175.64 vs History 2,798,217.19. |
 | [#82](https://github.com/ZhannaM85/my-money/issues/82) | 🔲 Open | Update-this-asset inputs overflow the phone screen | Date field and Save are clipped on the right. History/Details rows fit. |
+| [#83](https://github.com/ZhannaM85/my-money/issues/83) | 🔲 Open | No way to change currency when editing a past snapshot | Pencil editor: date + amount only; EUR is a static label. |
 
 ---
 
