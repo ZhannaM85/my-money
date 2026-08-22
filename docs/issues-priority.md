@@ -32,16 +32,6 @@ _EUR base + RUB assets; iPhone tab bar; appearance; car; joint ownership; decima
 
 ---
 
-## Tier 11 — Live feedback (2026-08-20)
-
-_Converted Dashboard: chart dropped while holdings stayed the same. Need a per-day breakdown to see why._
-
-| # | Status | Issue | Notes |
-|---|--------|-------|-------|
-| [#65](https://github.com/ZhannaM85/my-money/issues/65) | 🔍 Pending validation | Show what each day's total is made of (chart tooltip + History accordion) | Chart tooltip lists that date’s holdings. History day rows expand. Unconverted holdings stay visible. |
-
----
-
 ## Tier 12 — Live feedback (2026-08-22)
 
 _Existing-asset details: no dated history, and Save is a no-op when viewing._

@@ -65,3 +65,4 @@ Closed live-feedback rows from Tier 8 onward. Open / pending items stay in [`../
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
 | [#64](https://github.com/ZhannaM85/my-money/issues/64) | ✅ Done | Dashboard chart shows a decrease when holdings did not change | Historical series carries forward the last earlier FX quote so a missing same-day rate does not drop the holding. Validated on-device 2026-08-22. |
+| [#65](https://github.com/ZhannaM85/my-money/issues/65) | ✅ Done | Show what each day's total is made of (chart tooltip + History accordion) | Chart tooltip lists that date’s holdings. History day rows expand. Unconverted holdings stay visible. Validated on-device 2026-08-22. |
