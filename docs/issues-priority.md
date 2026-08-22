@@ -58,6 +58,7 @@ _Existing-asset details: no dated history, and Save is a no-op when viewing._
 | [#98](https://github.com/ZhannaM85/my-money/issues/98) | 🔲 Open | Fresh and Neutral appearance moods look the same | Both light chrome + blue primary. Make them visibly different. Related #78, #57. |
 | [#99](https://github.com/ZhannaM85/my-money/issues/99) | 🔲 Open | Add bank card / debit card as a Money type | Type dropdown: bank/savings/cash/deposit only. Distinct from liability credit card. |
 | [#100](https://github.com/ZhannaM85/my-money/issues/100) | 🔲 Open | Sort Assets by name or amount, and allow drag-and-drop order | List is IndexedDB id order today. Name/amount asc/desc + persisted drag order. |
+| [#101](https://github.com/ZhannaM85/my-money/issues/101) | 🔲 Open | Add regression tests so phone bugs are caught in CI, not only on device | Vitest exists; live-feedback bugs often had no failing test first. Tie RCAs (#94) to regression tests. |
 
 ---
 
