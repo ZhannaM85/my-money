@@ -70,6 +70,34 @@ describe('AssetDetailsScreen', () => {
     expect(screen.getByText(/Since first snapshot/)).toBeInTheDocument()
   })
 
+  it('explains the two amount fields with tappable info hints', async () => {
+    const user = userEvent.setup()
+    render(
+      <MemoryRouter initialEntries={['/assets/a1']}>
+        <Routes>
+          <Route path="/assets/:id" element={<AssetDetailsScreen />} />
+        </Routes>
+      </MemoryRouter>,
+    )
+    await screen.findByRole('heading', { name: 'Revolut' })
+    await user.click(
+      screen.getByRole('button', { name: 'About Update this asset' }),
+    )
+    expect(
+      screen.getByText(
+        'Saves a new snapshot for today with this amount. It does not change older history rows.',
+      ),
+    ).toBeInTheDocument()
+    await user.click(
+      screen.getByRole('button', { name: 'About New amount (optional)' }),
+    )
+    expect(
+      screen.getByText(
+        'Optional. If you enter an amount, Save details also writes a snapshot for today. Leave empty to change name and settings only.',
+      ),
+    ).toBeInTheDocument()
+  })
+
   it('appends a snapshot from the update field', async () => {
     const user = userEvent.setup()
     render(

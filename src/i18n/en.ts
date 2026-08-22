@@ -14,6 +14,7 @@ export const en: Dictionary = {
     estimated: (amount) => `est. ${amount}`,
     native: (currency) => `native ${currency}`,
     owe: ' (owe)',
+    aboutField: (name) => `About ${name}`,
   },
   nav: {
     tabs: 'Tabs',
@@ -124,6 +125,10 @@ export const en: Dictionary = {
     snapshotDate: 'As of',
     snapshotDateInvalid: 'Choose today or a past date',
     newAmountOptional: 'New amount (optional)',
+    newAmountOptionalHint:
+      'Optional. If you enter an amount, Save details also writes a snapshot for today. Leave empty to change name and settings only.',
+    updateThisAssetHint:
+      'Saves a new snapshot for today with this amount. It does not change older history rows.',
     nameRequired: 'Name is required',
     enterCurrentAmount: 'Enter a current amount',
     amountMustBeNumber: 'Amount must be a number',

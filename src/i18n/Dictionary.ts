@@ -21,6 +21,7 @@ export interface Dictionary {
     estimated: (amount: string) => string
     native: (currency: string) => string
     owe: string
+    aboutField: (name: string) => string
   }
   nav: {
     tabs: string
@@ -81,6 +82,8 @@ export interface Dictionary {
     snapshotDate: string
     snapshotDateInvalid: string
     newAmountOptional: string
+    newAmountOptionalHint: string
+    updateThisAssetHint: string
     nameRequired: string
     enterCurrentAmount: string
     amountMustBeNumber: string

@@ -321,6 +321,14 @@ export function AssetForm({
         currency={currency}
         value={amount}
         onValueChange={setAmount}
+        hint={
+          requireAmount ? undefined : t.asset.newAmountOptionalHint
+        }
+        aboutLabel={
+          requireAmount
+            ? undefined
+            : t.common.aboutField(t.asset.newAmountOptional)
+        }
         error={
           error === t.asset.enterCurrentAmount ||
           error === t.asset.amountMustBeNumber

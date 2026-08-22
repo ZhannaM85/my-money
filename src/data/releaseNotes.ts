@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 70,
+    issue: 71,
+    date: '2026-08-22T09:14:00+03:00',
+    en: 'Info icons next to Update this asset and New amount (optional) explain the difference. Tap to read — works on the phone, not hover-only.',
+    ru: 'У «Обновить этот актив» и «Новая сумма (необязательно)» есть иконки с пояснением. Нажмите, чтобы прочитать — на телефоне, не только при наведении.',
+  },
+  {
     version: 69,
     issue: 70,
     date: '2026-08-22T09:12:00+03:00',

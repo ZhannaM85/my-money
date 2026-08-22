@@ -19,6 +19,7 @@ import {
   todayIsoDate,
 } from '@/shared/lib/money'
 import { Button } from '@/shared/ui/button'
+import { InfoHint } from '@/shared/ui/info-hint'
 import { Input } from '@/shared/ui/input'
 import { PageHeader } from '@/shared/ui/page-header'
 import { StatCard } from '@/shared/ui/stat-card'
@@ -261,7 +262,12 @@ export function AssetDetailsScreen() {
         </ul>
       )}
       <section className="flex flex-col gap-3">
-        <h2 className="text-lg font-semibold">{t.asset.updateThisAsset}</h2>
+        <InfoHint
+          hint={t.asset.updateThisAssetHint}
+          label={t.common.aboutField(t.asset.updateThisAsset)}
+        >
+          <h2 className="text-lg font-semibold">{t.asset.updateThisAsset}</h2>
+        </InfoHint>
         <div className="flex gap-2">
           <div className="relative min-w-0 flex-1">
             <Input
