@@ -10,16 +10,6 @@ Prototype checkpoint after Tier 5: the four flows in `PROJECT_BRIEF.md` §25 (on
 
 ---
 
-## Tier 3 — First vertical slice
-
-_Base currency → create assets → first net worth. This is prototype Flow 1. Single-currency is enough; FX can still be identity rates._
-
-| # | Status | Issue | Notes |
-|---|--------|-------|-------|
-| [#6](https://github.com/ZhannaM85/my-money/issues/6) | 🔍 Pending validation | Epic 5 — Onboarding: first assets to first net worth | Currency → first asset → Dashboard net worth. Skip via welcome or Settings. Does not reappear once a book exists. |
-
----
-
 ## Tier 4 — Data safety & deployment (pulled forward)
 
 _Once real balances exist (Tier 3), IndexedDB is the only copy — backup and a real deployed build should not wait until the end of the queue. Same pull-forward as turtle-steps Epic 8/9._
