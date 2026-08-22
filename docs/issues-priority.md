@@ -40,7 +40,7 @@ _Existing-asset details: no dated history, and Save is a no-op when viewing._
 |---|--------|-------|-------|
 | [#66](https://github.com/ZhannaM85/my-money/issues/66) | 🔍 Pending validation | Add and edit past snapshot entries on existing assets | As of on Update this asset and on the edit form. Past dates save a new snapshot; future dates rejected. Edit of existing rows is #72. |
 | [#67](https://github.com/ZhannaM85/my-money/issues/67) | 🔍 Pending validation | Existing asset Save does nothing; add a view / read-only mode | Details open read-only. Edit details reveals the form. No no-op Save on view. |
-| [#68](https://github.com/ZhannaM85/my-money/issues/68) | 🔍 Pending validation | Date input is broken in the PWA | DateField: visible calendar, full-field picker indicator, `showPicker()` on tap. |
+| [#68](https://github.com/ZhannaM85/my-money/issues/68) | 🔲 Open | Date input is broken in the PWA | Reopened: date field still wider than the card when adding an asset (Safari/PWA). Picker overlay did not fix width. Related #82, #84. |
 | [#69](https://github.com/ZhannaM85/my-money/issues/69) | 🔍 Pending validation | Show assets distribution on Dashboard when currency is All | Allocation donut on Dashboard for All (and Original). Uses converted class breakdown; Allocation route unchanged. |
 | [#70](https://github.com/ZhannaM85/my-money/issues/70) | 🔍 Pending validation | Original mode still shows a EUR conversion on one asset | Native list (and details native view) no longer appends `est. €`. Secondary line is native currency only. |
 | [#71](https://github.com/ZhannaM85/my-money/issues/71) | 🔍 Pending validation | Explain the two amount inputs with an info tooltip | Tappable CircleHelp on Update this asset and New amount (optional); not hover-only. |
