@@ -32,15 +32,19 @@ export const DateField = React.forwardRef<HTMLInputElement, DateFieldProps>(
         </label>
         {/* Fixed width, not relative sizing (Turtle #47 / #84): Safari
             date inputs do not shrink with flex / min-w-0 / w-full, and
-            overflow clip made the page as wide as the native control. */}
-        <div className="relative w-36">
+            overflow clip made the page as wide as the native control.
+            #95: 1.5× Turtle w-36 so locale dates stay on one line. */}
+        <div className="relative w-[13.5rem]">
           <Input
             ref={ref}
             id={inputId}
             type="date"
             aria-invalid={error ? true : undefined}
             aria-describedby={errorId}
-            className={cn('h-12 w-36 cursor-pointer bg-background pr-10', className)}
+            className={cn(
+              'h-12 w-[13.5rem] cursor-pointer bg-background pr-10',
+              className,
+            )}
             onClick={(event) => {
               openDatePicker(event.currentTarget)
               onClick?.(event)

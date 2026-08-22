@@ -29,7 +29,7 @@ describe('DateField', () => {
       <DateField label="As of" value="2026-08-21" onChange={() => undefined} />,
     )
     const input = screen.getByLabelText('As of')
-    expect(input).toHaveClass('w-36')
+    expect(input).toHaveClass('w-[13.5rem]')
     expect(input).toHaveClass('h-12')
     expect(input).not.toHaveClass('w-full')
     expect(input).not.toHaveClass('max-w-full')

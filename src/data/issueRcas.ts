@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 95,
+    title: {
+      en: 'Date field is too narrow; expand width by 1.5',
+      ru: 'Поле даты слишком узкое; расширить в 1,5 раза',
+    },
+    en: 'After #84 copied Turtle’s fixed w-36, locale dates like “22 Aug 2026” plus the calendar icon wrapped onto two lines. The field needed 1.5× that width, not another overflow clamp.',
+    ru: 'После #84 скопировали фиксированные w-36 из Turtle, и даты вроде «22 Aug 2026» вместе со значком календаря переносились на две строки. Нужна ширина в 1,5 раза больше, а не очередной clamp overflow.',
+  },
+  {
     issue: 94,
     title: {
       en: 'Settings: root-cause log for shipped issues',

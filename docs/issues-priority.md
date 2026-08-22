@@ -52,7 +52,7 @@ _Existing-asset details: no dated history, and Save is a no-op when viewing._
 | [#92](https://github.com/ZhannaM85/my-money/issues/92) | 🔍 Pending validation | Chart holdings popover clips the last row and cannot scroll | Taller popover (`70svh` / 32rem) with inner overflow-y-scroll and a visible scrollbar. Related #77. |
 | [#93](https://github.com/ZhannaM85/my-money/issues/93) | 🔍 Pending validation | Rate editor shows 1 RUB = 119474 USD | Rate fields use parseRate (many decimals), not money parseAmount. Related #45. |
 | [#94](https://github.com/ZhannaM85/my-money/issues/94) | 🔍 Pending validation | Settings: root-cause log for shipped issues, like the changelog | Sibling of Release notes. Skip #19/#20 until they ship. |
-| [#95](https://github.com/ZhannaM85/my-money/issues/95) | 🔲 Open | Date field is too narrow; expand width by 1.5 | Follow-up to #68. `w-36` wraps `22 Aug 2026` on Update this asset. Related #84. |
+| [#95](https://github.com/ZhannaM85/my-money/issues/95) | 🔍 Pending validation | Date field is too narrow; expand width by 1.5 | DateField is 1.5× Turtle `w-36` (`w-[13.5rem]`). Related #84. |
 | [#96](https://github.com/ZhannaM85/my-money/issues/96) | 🔲 Open | History shows EUR when All currencies is selected | All + Original in Settings; History still formats with leftover base (EUR). Related #87. |
 | [#97](https://github.com/ZhannaM85/my-money/issues/97) | 🔲 Open | Add optional comments on asset entries and show them in History | Note on snapshots; show on History, asset details, and other applicable surfaces. |
 | [#98](https://github.com/ZhannaM85/my-money/issues/98) | 🔲 Open | Fresh and Neutral appearance moods look the same | Both light chrome + blue primary. Make them visibly different. Related #78, #57. |

@@ -82,7 +82,7 @@ describe('NewAssetScreen', () => {
       </MemoryRouter>,
     )
     const asOf = screen.getByLabelText('As of')
-    expect(asOf).toHaveClass('w-36')
+    expect(asOf).toHaveClass('w-[13.5rem]')
     expect(asOf).not.toHaveClass('w-full')
   })
 })

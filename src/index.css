@@ -347,7 +347,8 @@
 
 /* Overlay the native glyph so the whole field still opens the picker (#68).
    Do not set max-width / overflow on date inputs — Safari ignores relative
-   shrink and overflow clip widened the page (#84). Width is `w-36` on DateField. */
+   shrink and overflow clip widened the page (#84). Width is 1.5× Turtle
+   `w-36` (`w-[13.5rem]`) on DateField (#95). */
 @layer components {
   input[type='date']::-webkit-calendar-picker-indicator {
     position: absolute;
