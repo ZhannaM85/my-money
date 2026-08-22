@@ -60,9 +60,23 @@ describe('AppShell', () => {
     ).toBeInTheDocument()
     expect(screen.getByRole('link', { name: 'Dashboard' })).toBeInTheDocument()
     expect(screen.getByRole('link', { name: 'Update' })).toBeInTheDocument()
-    expect(
-      screen.getByRole('link', { name: 'Skip to content' }),
-    ).toHaveAttribute('href', '#main-content')
+    expect(screen.getByRole('link', { name: 'Skip to content' })).toHaveAttribute(
+      'href',
+      '#main-content',
+    )
+  })
+
+  it('pins the tab bar like Turtle: fixed to the bottom with no visualViewport translate', async () => {
+    render(
+      <MemoryRouter>
+        <AppShell />
+      </MemoryRouter>,
+    )
+    const nav = await screen.findByRole('navigation', { name: 'Tabs' })
+    expect(nav.className).toContain('fixed')
+    expect(nav.className).toContain('inset-x-0')
+    expect(nav.className).toContain('bottom-0')
+    expect(nav.getAttribute('style')).toBeNull()
   })
 
   it('reserves extra bottom space above the sticky tab bar', async () => {

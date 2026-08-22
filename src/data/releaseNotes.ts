@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 104,
+    issue: 25,
+    date: '2026-08-22T21:45:00+03:00',
+    en: 'The tab bar matches Turtle: fixed to the bottom of the screen with no visual-viewport jump while you scroll History. It still hides when a text field is focused.',
+    ru: 'Панель вкладок как у Turtle: зафиксирована у низа экрана и не прыгает от visual viewport при прокрутке Истории. По-прежнему скрывается, когда фокус в текстовом поле.',
+  },
+  {
     version: 103,
     issue: 104,
     date: '2026-08-22T21:35:00+03:00',

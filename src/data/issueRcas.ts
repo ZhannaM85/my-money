@@ -700,8 +700,8 @@ export const issueRcas: IssueRca[] = [
       en: 'Tab bar disconnects from the bottom on iPhone Safari',
       ru: 'Панель вкладок отрывается от низа в Safari на iPhone',
     },
-    en: 'position:fixed is relative to the layout viewport. When iOS resizes the visual viewport (chrome, rubber-band), the bar stays glued to the layout bottom and floats mid-content. It needs a visualViewport translate; keyboard hide is #80.',
-    ru: 'position:fixed считается от layout viewport. Когда iOS меняет visual viewport (хром, резинка), панель остаётся у низа layout и висит на контенте. Нужен сдвиг от visualViewport; скрытие с клавиатурой — #80.',
+    en: 'A visualViewport translateY pin jumped on History scroll (IMG_0348). Turtle’s still fixed inset-x-0 bottom-0 footer does not translate (IMG_0349). Keyboard hide stays #80.',
+    ru: 'Сдвиг translateY от visualViewport прыгал при прокрутке Истории (IMG_0348). Неподвижный футер Turtle fixed inset-x-0 bottom-0 не сдвигается (IMG_0349). Скрытие с клавиатуры — #80.',
   },
   {
     issue: 24,

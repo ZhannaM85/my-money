@@ -27,7 +27,7 @@ _EUR base + RUB assets; iPhone tab bar; appearance; car; joint ownership; decima
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
-| [#25](https://github.com/ZhannaM85/my-money/issues/25) | 🔲 Open | Tab bar disconnects from the bottom on iPhone Safari | Still jumps on History scroll vs Turtle (IMG_0348 vs IMG_0349). Visual-viewport pin is not Turtle’s still footer. Keyboard hide is #80. |
+| [#25](https://github.com/ZhannaM85/my-money/issues/25) | 🔍 Pending validation | Tab bar disconnects from the bottom on iPhone Safari | Turtle still footer: `fixed inset-x-0 bottom-0`, no visualViewport translateY. Keyboard hide is #80. |
 
 ---
 

@@ -1,12 +1,10 @@
 import { History, LayoutDashboard, Plus, Settings, Wallet } from 'lucide-react'
 import { NavLink } from 'react-router-dom'
 import { useTranslation } from '@/i18n'
-import { useVisualViewportBottomShift } from '@/shared/hooks/useVisualViewportBottomShift'
 import { cn } from '@/shared/lib/utils'
 
 export function BottomNav() {
   const t = useTranslation()
-  const viewportShift = useVisualViewportBottomShift()
   const tabs = [
     { to: '/', label: t.nav.dashboard, end: true, icon: LayoutDashboard },
     { to: '/assets', label: t.nav.assets, icon: Wallet },
@@ -18,7 +16,6 @@ export function BottomNav() {
   return (
     <nav
       aria-label={t.nav.tabs}
-      style={{ transform: `translateY(${viewportShift}px)` }}
       className="fixed inset-x-0 bottom-0 z-10 border-t border-border bg-background pr-[env(safe-area-inset-right)] pb-[env(safe-area-inset-bottom)] pl-[env(safe-area-inset-left)]"
     >
       <ul className="mx-auto flex max-w-3xl px-4">
