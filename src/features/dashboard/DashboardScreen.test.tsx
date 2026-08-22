@@ -536,6 +536,10 @@ describe('DashboardScreen', () => {
     expect(
       await screen.findByText(formatAmount(110, 'EUR')),
     ).toBeInTheDocument()
+    expect(screen.getByText('From rates')).toBeInTheDocument()
+    expect(screen.getByText(/this month/)).not.toHaveTextContent(
+      formatSignedAmount(10, 'EUR'),
+    )
     expect(
       screen.queryByText(
         (_, node) =>

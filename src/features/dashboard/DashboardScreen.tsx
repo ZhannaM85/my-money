@@ -202,7 +202,11 @@ export function DashboardScreen() {
       : isOriginal
         ? (singleNativeTotal ?? 0)
         : convertedResult.total
-  const change = periodChange(changeFrom, changeTo)
+  const headlineTo =
+    !isOriginal && convertedBreakdown
+      ? changeFrom + convertedBreakdown.amountChange
+      : changeTo
+  const change = periodChange(changeFrom, headlineTo)
   const rangeIndex = HISTORY_RANGES.indexOf(range)
   const canZoomIn = rangeIndex > 0
   const canZoomOut = rangeIndex < HISTORY_RANGES.length - 1

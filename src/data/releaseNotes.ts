@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 93,
+    issue: 86,
+    date: '2026-08-22T17:25:00+03:00',
+    en: 'Converted “this month” on Dashboard is the change from amounts, not the FX revaluation of dollars you already held. From rates still shows that FX move.',
+    ru: '«За этот месяц» на Сводке в пересчёте — изменение из сумм, а не переоценка долларов, которые уже были. «Из курсов» по-прежнему показывает движение курса.',
+  },
+  {
     version: 92,
     issue: 85,
     date: '2026-08-22T17:15:00+03:00',
