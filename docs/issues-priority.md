@@ -27,7 +27,6 @@ _FX, then the remaining three prototype flows, plus allocation and history. Orde
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
-| [#11](https://github.com/ZhannaM85/my-money/issues/11) | 🔍 Pending validation | Epic 10 — Allocation screen | Own route `/allocation` from More + Dashboard. Not a 6th tab. Donut uses abs size; legend shows signed amounts. |
 | [#12](https://github.com/ZhannaM85/my-money/issues/12) | 🔍 Pending validation | Epic 11 — History: net worth over time | Range chips 1M–All. Historical FX per date. Asset/liability filters left as follow-up. |
 
 ---
