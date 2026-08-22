@@ -149,18 +149,38 @@ describe('HistoryScreen', () => {
   })
 
   it('expands a day to show the holdings behind that total', async () => {
-    const today = todayIsoDate()
     render(
       <MemoryRouter>
         <HistoryScreen />
       </MemoryRouter>,
     )
 
-    await screen.findByRole('button', { name: `Holdings on ${today}` })
+    await screen.findByRole('button', { name: 'Holdings on 2026-08-17' })
     expect(screen.queryByText('Revolut')).not.toBeInTheDocument()
     await userEvent.click(
-      screen.getByRole('button', { name: `Holdings on ${today}` }),
+      screen.getByRole('button', { name: 'Holdings on 2026-08-17' }),
     )
     expect(await screen.findByText('Revolut')).toBeInTheDocument()
+  })
+
+  it('lists only days the user added a snapshot, not carry-forward calendar days', async () => {
+    render(
+      <MemoryRouter>
+        <HistoryScreen />
+      </MemoryRouter>,
+    )
+
+    expect(
+      await screen.findByRole('button', { name: 'Holdings on 2026-08-17' }),
+    ).toBeInTheDocument()
+    expect(
+      screen.getByRole('button', { name: 'Holdings on 2026-08-01' }),
+    ).toBeInTheDocument()
+    const today = todayIsoDate()
+    if (today !== '2026-08-17' && today !== '2026-08-01') {
+      expect(
+        screen.queryByRole('button', { name: `Holdings on ${today}` }),
+      ).not.toBeInTheDocument()
+    }
   })
 })

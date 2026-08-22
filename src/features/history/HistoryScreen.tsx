@@ -54,6 +54,15 @@ export function HistoryScreen() {
 
   const start = rangeStartIso(range, today, earliest)
   const dates = useMemo(() => isoDatesInclusive(start, today), [start, today])
+  const snapshotDays = useMemo(() => {
+    return [
+      ...new Set(
+        snapshots
+          .map((snapshot) => snapshot.date)
+          .filter((date) => date >= start && date <= today),
+      ),
+    ].sort()
+  }, [snapshots, start, today])
 
   useEffect(() => {
     const symbols = [...new Set(snapshots.map((snapshot) => snapshot.currency))]
@@ -67,14 +76,18 @@ export function HistoryScreen() {
   const latestPoint = series[series.length - 1]
   const change = periodChange(series[0]?.total ?? 0, latestPoint?.total ?? 0)
   const list = useMemo(() => {
-    return [...series].reverse().map((point, index, rows) => {
+    const byDate = new Map(series.map((point) => [point.date, point]))
+    const points = snapshotDays
+      .map((date) => byDate.get(date))
+      .filter((point): point is NonNullable<typeof point> => point !== undefined)
+    return [...points].reverse().map((point, index, rows) => {
       const older = rows[index + 1]
       return {
         ...point,
         delta: older ? point.total - older.total : null,
       }
     })
-  }, [series])
+  }, [series, snapshotDays])
 
   return (
     <div className="flex flex-col gap-6">

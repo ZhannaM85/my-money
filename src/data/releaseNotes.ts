@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 79,
+    issue: 79,
+    date: '2026-08-22T15:10:00+03:00',
+    en: 'History lists only days you added or updated an amount. The chart still fills the days in between.',
+    ru: 'В Истории только дни, когда вы добавляли или обновляли сумму. График по-прежнему заполняет дни между ними.',
+  },
+  {
     version: 78,
     issue: 84,
     date: '2026-08-22T14:45:00+03:00',
