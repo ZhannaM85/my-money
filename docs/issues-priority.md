@@ -39,7 +39,6 @@ _Existing-asset details: no dated history, and Save is a no-op when viewing._
 |---|--------|-------|-------|
 | [#68](https://github.com/ZhannaM85/my-money/issues/68) | 🔲 Open | Date input is broken in the PWA | Reopened: date field still wider than the card when adding an asset (Safari/PWA). Picker overlay did not fix width. Related #82, #84. |
 | [#69](https://github.com/ZhannaM85/my-money/issues/69) | 🔲 Open | Show assets distribution on Dashboard when currency is All | Reopened: **no donut**. Expand the total sum to show what is behind it. Revert the graph. |
-| [#74](https://github.com/ZhannaM85/my-money/issues/74) | 🔍 Pending validation | Chart X-axis repeats the same date; label snapshot days | Unique snapshot days with day + month (`18 Aug`), not `date.slice(8)` repeating `18`. |
 | [#77](https://github.com/ZhannaM85/my-money/issues/77) | 🔲 Open | Dashboard chart tooltip stays visible while scrolling | Recharts tooltip from #65 stays after tap; page scroll does not dismiss it. |
 | [#78](https://github.com/ZhannaM85/my-money/issues/78) | 🔲 Open | Adopt the My Money design system as the default UI | **Do not change existing moods.** Add a new mood named Fresh or Trendy from `docs/DESIGN_SYSTEM.md`, then make that the applied default. |
 | [#79](https://github.com/ZhannaM85/my-money/issues/79) | 🔲 Open | History list shows every calendar day, not only days the user added | Daily carry-forward series; user only entered 4 Jul. List should be snapshot days. |
