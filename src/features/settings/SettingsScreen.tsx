@@ -17,6 +17,7 @@ import { useThemeStore, MOODS, type Mood } from '@/stores/themeStore'
 import { cn } from '@/shared/lib/utils'
 import { ManualRatesSection } from './ManualRatesSection'
 import { FxDebugSection } from './FxDebugSection'
+import { RcaSection } from './RcaSection'
 import { ReleaseNotesSection } from './ReleaseNotesSection'
 
 export function SettingsScreen() {
@@ -201,6 +202,15 @@ export function SettingsScreen() {
       <section id="release-notes" className="flex flex-col gap-3">
         <h2 className="text-lg font-semibold">{t.settings.releaseNotesLabel}</h2>
         <ReleaseNotesSection />
+      </section>
+      <section id="root-causes" className="flex flex-col gap-3">
+        <div className="flex flex-col gap-1">
+          <h2 className="text-lg font-semibold">{t.settings.rcaLabel}</h2>
+          <p className="text-sm text-muted-foreground">
+            {t.settings.rcaDescription}
+          </p>
+        </div>
+        <RcaSection />
       </section>
     </div>
   )

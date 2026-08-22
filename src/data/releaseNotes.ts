@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 94,
+    issue: 94,
+    date: '2026-08-22T19:30:00+03:00',
+    en: 'Settings now has a Root causes section next to Release notes: why each shipped issue happened, in English and Russian.',
+    ru: 'В «Ещё» рядом с «Что нового» появился раздел «Корневые причины»: почему случилась каждая выпущенная задача, на английском и русском.',
+  },
+  {
     version: 93,
     issue: 86,
     date: '2026-08-22T17:25:00+03:00',

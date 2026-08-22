@@ -37,7 +37,6 @@ _Existing-asset details: no dated history, and Save is a no-op when viewing._
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
-| [#68](https://github.com/ZhannaM85/my-money/issues/68) | 🔍 Pending validation | Date input is broken in the PWA | Add-asset As of uses Turtle `w-36` DateField (#84). Picker overlay kept. |
 | [#69](https://github.com/ZhannaM85/my-money/issues/69) | 🔍 Pending validation | Show assets distribution on Dashboard when currency is All | Reverted dashboard donut. Currency totals expand to holdings. Allocation page unchanged. |
 | [#77](https://github.com/ZhannaM85/my-money/issues/77) | 🔍 Pending validation | Dashboard chart tooltip stays visible while scrolling | Scroll and touchmove dismiss the Recharts tooltip; tap the chart again to show it. |
 | [#78](https://github.com/ZhannaM85/my-money/issues/78) | 🔍 Pending validation | Adopt the My Money design system as the default UI | New **Fresh** mood from `docs/DESIGN_SYSTEM.md`; default for new installs. Existing moods untouched. |
@@ -56,6 +55,8 @@ _Existing-asset details: no dated history, and Save is a no-op when viewing._
 | [#91](https://github.com/ZhannaM85/my-money/issues/91) | 🔍 Pending validation | Tab bar floats mid-screen after bringing the app back from background | Re-reads visualViewport on resume (visibility/pageshow/focus). Related #25, #80. |
 | [#92](https://github.com/ZhannaM85/my-money/issues/92) | 🔍 Pending validation | Chart holdings popover clips the last row and cannot scroll | Taller popover (`70svh` / 32rem) with inner overflow-y-scroll and a visible scrollbar. Related #77. |
 | [#93](https://github.com/ZhannaM85/my-money/issues/93) | 🔍 Pending validation | Rate editor shows 1 RUB = 119474 USD | Rate fields use parseRate (many decimals), not money parseAmount. Related #45. |
+| [#94](https://github.com/ZhannaM85/my-money/issues/94) | 🔍 Pending validation | Settings: root-cause log for shipped issues, like the changelog | Sibling of Release notes. Skip #19/#20 until they ship. |
+| [#95](https://github.com/ZhannaM85/my-money/issues/95) | 🔲 Open | Date field is too narrow; expand width by 1.5 | Follow-up to #68. `w-36` wraps `22 Aug 2026` on Update this asset. Related #84. |
 
 ---
 

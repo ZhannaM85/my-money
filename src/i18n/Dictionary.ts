@@ -192,6 +192,8 @@ export interface Dictionary {
     moodPastel: string
     versionBadgeLabel: (version: number) => string
     releaseNotesLabel: string
+    rcaLabel: string
+    rcaDescription: string
     manualRatesTitle: string
     manualRatesDescription: string
     manualRatesEdit: string

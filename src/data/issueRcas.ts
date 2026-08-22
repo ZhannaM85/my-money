@@ -1,0 +1,823 @@
+export interface IssueRca {
+  issue: number
+  title: { en: string; ru: string }
+  en: string
+  ru: string
+}
+
+/**
+ * One RCA per shipped issue, newest number first. Skip open epics with no
+ * code yet (#19, #20). Add a row when an issue ships, like releaseNotes.
+ */
+export const issueRcas: IssueRca[] = [
+  {
+    issue: 94,
+    title: {
+      en: 'Settings: root-cause log for shipped issues',
+      ru: 'Ещё: журнал корневых причин по выпущенным задачам',
+    },
+    en: 'Not a defect. Release notes say what shipped, not why it was wrong. RCAs lived only in chat. This list is the in-app log, same card pattern as the changelog.',
+    ru: 'Не дефект. «Что нового» говорит, что вышло, а не почему было неправильно. RCA оставались в чате. Этот список — журнал в приложении, в том же виде, что и список изменений.',
+  },
+  {
+    issue: 93,
+    title: {
+      en: 'Rate editor shows 1 RUB = 119474 USD',
+      ru: 'Редактор курсов показывает 1 RUB = 119474 USD',
+    },
+    en: 'Rate fields reused money parsing. parseAmount treats a dot or comma as a decimal only when the fraction has one or two digits. A real 1 RUB→USD quote like 0.0119474 has more digits, so the separator was stripped (0.0119474 → 119474). Blur then formatted that as a USD amount.',
+    ru: 'Поля курса использовали разбор денег. parseAmount считает точку или запятую десятичной только при 1–2 знаках после неё. Реальная котировка 1 RUB→USD вроде 0.0119474 длиннее, разделитель выкидывался (0.0119474 → 119474). По потере фокуса это форматировалось как сумма в долларах.',
+  },
+  {
+    issue: 92,
+    title: {
+      en: 'Chart holdings popover clips the last row',
+      ru: 'Подсказка по позициям на графике обрезает последнюю строку',
+    },
+    en: 'The tooltip was capped at 15rem with overflow-y-auto. Six two-line holdings plus date and total need more space, so the last row clipped. iOS hides overlay scrollbars, and touches bubbled to the chart, so the overflow was not usable.',
+    ru: 'Подсказка была ограничена 15rem с overflow-y-auto. Шесть двухстрочных позиций плюс дата и итог не влезают, последняя строка обрезалась. iOS прячет оверлейные скроллбары, касания уходили в график — прокрутка не работала.',
+  },
+  {
+    issue: 91,
+    title: {
+      en: 'Tab bar floats mid-screen after resume from background',
+      ru: 'Панель вкладок посередине экрана после возврата из фона',
+    },
+    en: 'The bar is position:fixed plus translateY(visualViewport offsetTop + height − innerHeight). Listeners were only resize/scroll. After iOS PWA resume, Safari often keeps a stale short visualViewport height, so the shift stays largely negative and the bar sits over the chart.',
+    ru: 'Панель — position:fixed плюс translateY(offsetTop + height − innerHeight у visualViewport). Слушались только resize/scroll. После возврата PWA iOS часто оставляет устаревшую короткую высоту visualViewport, сдвиг остаётся сильно отрицательным, панель висит на графике.',
+  },
+  {
+    issue: 90,
+    title: {
+      en: 'History 3M change is last two snapshot days',
+      ru: 'Изменение за 3М в Истории — это два последних снимка',
+    },
+    en: 'The 3M chip still meant 90 days, but rangeStartIso clamps to the first snapshot. With data only from 17 Aug, the window was 17–22 Aug while copy still said “over 3M”. List deltas are vs the previous snapshot day, so two snapshots made that equal the whole window. The chart axis followed the clamped series.',
+    ru: 'Чип 3М по-прежнему значил 90 дней, но rangeStartIso обрезает к первому снимку. При данных только с 17 авг. окно было 17–22 авг., а подпись всё ещё «за 3М». Дельта в списке — к предыдущему дню снимка, при двух снимках она совпадала со всем окном. Ось графика шла за обрезанным рядом.',
+  },
+  {
+    issue: 89,
+    title: {
+      en: 'Dashboard and History show different period deltas',
+      ru: 'Сводка и История показывают разную дельту за период',
+    },
+    en: 'Totals already matched. Definitions did not. Dashboard “this month” is From amounts (#86). History used last − first of the converted series (amounts + FX). On device that was −49,933.36 vs −61,891.82; the gap is exactly From rates.',
+    ru: 'Итоги уже совпадали, определения — нет. «За этот месяц» на Сводке — «Из сумм» (#86). История брала последнюю минус первую точку пересчитанного ряда (суммы + FX). На устройстве это −49 933,36 против −61 891,82; разница ровно «Из курсов».',
+  },
+  {
+    issue: 88,
+    title: {
+      en: 'Show amount change vs rate change on Dashboard',
+      ru: 'Показать изменение из сумм и из курсов на Сводке',
+    },
+    en: 'Not a defect in isolation. Converted period change was one number, so an FX drop on dollars already held looked like a cash loss. There was no split and no “update rates” that only fetches quotes.',
+    ru: 'Само по себе не дефект. Изменение за период в пересчёте было одним числом, поэтому падение курса уже имевшихся долларов выглядело как потеря кэша. Не было разбиения и кнопки «обновить курсы», которая только подтягивает котировки.',
+  },
+  {
+    issue: 87,
+    title: {
+      en: 'All currencies selected but EUR still shown',
+      ru: 'Выбраны все валюты, но показан EUR',
+    },
+    en: 'In Converted mode the Dashboard filter still showed All, while totals were in the base currency. The control was leftover from Original + All; Converted has no “all currencies” total, only the base.',
+    ru: 'В режиме пересчёта фильтр Сводки всё ещё показывал «Все», хотя итоги были в базовой валюте. Контрол остался от «В оригинале + Все»; у пересчёта нет итога «все валюты», только база.',
+  },
+  {
+    issue: 86,
+    title: {
+      en: 'Dashboard this-month change includes FX on existing dollars',
+      ru: 'Изменение за месяц на Сводке включает FX по уже имеющимся долларам',
+    },
+    en: '“This month” used full converted start→end. Marking existing USD to a weaker RUB rate dominated the headline (~61k), not the cash exchange (~6k). Amount updates and FX on starting balances were not separated in the StatCard.',
+    ru: '«За этот месяц» брало полный пересчёт начало→конец. Переоценка уже имевшихся USD более слабым курсом рубля доминировала в заголовке (~61k), а не обмен кэша (~6k). В карточке не разделялись изменения сумм и FX на стартовых остатках.',
+  },
+  {
+    issue: 85,
+    title: {
+      en: 'Dashboard month change has no breakdown',
+      ru: 'У изменения за месяц на Сводке нет расшифровки',
+    },
+    en: 'After a cash USD purchase the headline looked like a large loss with no way to see amounts vs rates. The split existed in domain later (#88); the UI had no hint or expandable lines.',
+    ru: 'После покупки долларов за кэш заголовок выглядел как большая потеря, без сумм против курсов. Разбиение позже появилось в домене (#88); в UI не было подсказки и раскрываемых строк.',
+  },
+  {
+    issue: 84,
+    title: {
+      en: 'Safari date fields overflow the card',
+      ru: 'Поля даты в Safari вылезают за карточку',
+    },
+    en: 'Safari ignores max-width/overflow on input[type=date] and lays the native control out at intrinsic width, stretching the page. Turtle #47 uses a fixed h-12 w-36 field instead of clipping.',
+    ru: 'Safari игнорирует max-width/overflow у input[type=date] и рисует нативный контрол по собственной ширине, растягивая страницу. Turtle #47 задаёт поле h-12 w-36, а не обрезает overflow.',
+  },
+  {
+    issue: 83,
+    title: {
+      en: 'No way to change currency when editing a past snapshot',
+      ru: 'Нельзя сменить валюту при правке прошлого снимка',
+    },
+    en: 'The snapshot editor exposed date and amount only. Currency lived on the row in IndexedDB but had no control, so a wrong-currency snapshot could not be corrected in place.',
+    ru: 'Редактор снимка показывал только дату и сумму. Валюта уже была в IndexedDB, но без контрола ошибочную валюту нельзя было исправить на месте.',
+  },
+  {
+    issue: 82,
+    title: {
+      en: 'Update-this-asset inputs overflow the phone screen',
+      ru: 'Поля «Обновить этот актив» не влезают в экран телефона',
+    },
+    en: 'Amount and Save sat on one row with the date field. On a narrow phone the flex row overflowed. Date width is a separate Safari issue (#84).',
+    ru: 'Сумма и «Сохранить» стояли в одном ряду с датой. На узком телефоне flex-ряд вылезал. Ширина даты — отдельный баг Safari (#84).',
+  },
+  {
+    issue: 81,
+    title: {
+      en: 'Dashboard and History show different net worth totals',
+      ru: 'Сводка и История показывают разный чистый капитал',
+    },
+    en: 'History values each day at that day’s FX. Dashboard Converted used each holding’s snapshot date rate (or a mixed path), so “today’s” headline was not today’s historicalNetWorth point. Deltas are #89.',
+    ru: 'История оценивает каждый день курсом той даты. Сводка в пересчёте брала курс на дату снимка позиции (или смешанный путь), поэтому «сегодняшний» заголовок не был точкой historicalNetWorth на сегодня. Дельты — #89.',
+  },
+  {
+    issue: 80,
+    title: {
+      en: 'Tab bar hides on scroll and can reappear mid-page',
+      ru: 'Панель вкладок прячется при скролле и всплывает посередине',
+    },
+    en: 'A visual-viewport shrink (URL bar, dynamic chrome) was treated like the keyboard, so the bar hid or translated with a stale offset while scrolling. Keyboard focus should still hide it; pin-to-bottom is #25.',
+    ru: 'Сжатие visual viewport (адресная строка, хром) считалось клавиатурой, панель пряталась или ехала со старым сдвигом при скролле. При фокусе в поле её по-прежнему нужно скрывать; прижатие к низу — #25.',
+  },
+  {
+    issue: 79,
+    title: {
+      en: 'History list shows every calendar day',
+      ru: 'Список Истории показывает каждый календарный день',
+    },
+    en: 'The list reused the daily carry-forward series built for the chart. Days the user never edited appeared as rows. The chart still needs those interpolated days to draw a line.',
+    ru: 'Список брал дневной ряд с переносом, построенный для графика. Дни без правок пользователя становились строками. Графику эти дни всё ещё нужны, чтобы нарисовать линию.',
+  },
+  {
+    issue: 78,
+    title: {
+      en: 'Adopt the My Money design system as the default UI',
+      ru: 'Взять дизайн-систему My Money как UI по умолчанию',
+    },
+    en: 'Not a defect. Product default was still an older mood. Fresh was added from the design system for new installs; existing moods were left alone so on-device themes did not jump.',
+    ru: 'Не дефект. По умолчанию стояла старая тема. «Свежее» добавлено из дизайн-системы для новых установок; старые темы не трогали, чтобы оформление на телефоне не прыгнуло.',
+  },
+  {
+    issue: 77,
+    title: {
+      en: 'Dashboard chart tooltip stays visible while scrolling',
+      ru: 'Подсказка графика Сводки остаётся при прокрутке',
+    },
+    en: 'Recharts keeps the tooltip active after a tap on iOS; page scroll does not clear it. There was no listener to dismiss on scroll.',
+    ru: 'Recharts на iOS оставляет подсказку активной после тапа; скролл страницы её не сбрасывает. Не было слушателя, который закрывает её при прокрутке.',
+  },
+  {
+    issue: 74,
+    title: {
+      en: 'Chart X-axis repeats the same date',
+      ru: 'Ось X графика повторяет одну и ту же дату',
+    },
+    en: 'Ticks used date.slice(8) (day-of-month only). Several August days all labeled “18”, and same-day snapshots duplicated ticks.',
+    ru: 'Подписи брали date.slice(8) (только число). Несколько августовских дней подписывались «18», снимки одного дня дублировали риски.',
+  },
+  {
+    issue: 73,
+    title: {
+      en: 'Allow deleting previous snapshot rows',
+      ru: 'Разрешить удаление прошлых строк снимков',
+    },
+    en: 'Not a defect. History rows could not be removed without deleting the whole asset. There was no per-row delete or confirmation.',
+    ru: 'Не дефект. Строку истории нельзя было убрать, не удалив актив. Не было удаления по строке и подтверждения.',
+  },
+  {
+    issue: 72,
+    title: {
+      en: 'Allow editing previous snapshot rows',
+      ru: 'Разрешить правку прошлых строк снимков',
+    },
+    en: 'Not a defect. Saving from a history row appended today instead of updating that snapshot. There was no in-place edit of amount/date.',
+    ru: 'Не дефект. Сохранение из строки истории добавляло сегодня, а не обновляло снимок. Не было правки суммы/даты на месте.',
+  },
+  {
+    issue: 71,
+    title: {
+      en: 'Explain the two amount inputs with an info tooltip',
+      ru: 'Пояснить два поля суммы подсказкой',
+    },
+    en: 'Not a defect. “Update this asset” vs “New amount (optional)” looked like duplicates. Hover-only tooltips do not work on the phone.',
+    ru: 'Не дефект. «Обновить этот актив» и «Новая сумма (необязательно)» выглядели как дубли. Подсказки только по hover на телефоне не работают.',
+  },
+  {
+    issue: 70,
+    title: {
+      en: 'Original mode still shows a EUR conversion on one asset',
+      ru: 'В режиме «В оригинале» у актива всё ещё пересчёт в EUR',
+    },
+    en: 'Native lists still appended an estimated euro line from the converted path. Original mode is supposed to show only the holding’s currency.',
+    ru: 'Списки в оригинале всё ещё добавляли оценку в евро из пути пересчёта. Режим «В оригинале» должен показывать только валюту позиции.',
+  },
+  {
+    issue: 69,
+    title: {
+      en: 'Show assets distribution on Dashboard when currency is All',
+      ru: 'Показать распределение активов на Сводке при валюте «Все»',
+    },
+    en: 'Original + All had no on-Dashboard breakdown of what made the totals (a donut was tried, then reverted). Currency totals now expand to holdings; Allocation stays its own page.',
+    ru: 'В «В оригинале + Все» на Сводке не было расшифровки итогов (кольцо пробовали, потом убрали). Итоги по валюте раскрываются в позиции; Распределение остаётся отдельной страницей.',
+  },
+  {
+    issue: 68,
+    title: {
+      en: 'Date input is broken in the PWA',
+      ru: 'Поле даты сломано в PWA',
+    },
+    en: 'iPhone PWA date inputs had no reliable calendar affordance; the native picker often did not open. Overlaying the indicator so the whole field opens the picker (and later a fixed width, #84) was required.',
+    ru: 'В PWA на iPhone у даты не было понятной иконки календаря; системный picker часто не открывался. Нужен оверлей индикатора на всё поле (и позже фиксированная ширина, #84).',
+  },
+  {
+    issue: 67,
+    title: {
+      en: 'Existing asset Save does nothing; add a read-only mode',
+      ru: 'Сохранить у существующего актива ничего не делает',
+    },
+    en: 'Opening an asset showed the edit form with Save. With no dirty fields, Save was a no-op. There was no view vs edit split.',
+    ru: 'Открытие актива показывало форму с «Сохранить». Без изменений Save ничего не делал. Не было разделения просмотр / правка.',
+  },
+  {
+    issue: 66,
+    title: {
+      en: 'Add and edit past snapshot entries on existing assets',
+      ru: 'Добавлять и править прошлые снимки у существующих активов',
+    },
+    en: 'Not a defect. Updates were today-only, so backfill of history was impossible from Update this asset / Save details. Edit of an existing row is #72.',
+    ru: 'Не дефект. Обновления были только на сегодня, историю нельзя было дописать из «Обновить этот актив» / «Сохранить сведения». Правка существующей строки — #72.',
+  },
+  {
+    issue: 65,
+    title: {
+      en: 'Show what each day’s total is made of',
+      ru: 'Показать, из чего складывается сумма дня',
+    },
+    en: 'Not a defect. The chart and History showed only a combined total. There was no per-day holdings breakdown in the tooltip or list.',
+    ru: 'Не дефект. График и История показывали только общий итог. Не было расшифровки позиций за день в подсказке или списке.',
+  },
+  {
+    issue: 64,
+    title: {
+      en: 'Dashboard chart shows a decrease when holdings did not change',
+      ru: 'График Сводки падает, хотя позиции не менялись',
+    },
+    en: 'A day without an FX quote treated the holding as unconvertible (dropped from the total). The series did not carry forward the last earlier rate, so the line dipped with no amount change.',
+    ru: 'День без котировки считал позицию неконвертируемой (выбрасывал из суммы). Ряд не переносил последний более ранний курс, линия проседала без изменения сумм.',
+  },
+  {
+    issue: 63,
+    title: {
+      en: 'Pages deploy fails type-check on Colorful CSS test Node imports',
+      ru: 'Деплой Pages падает на typecheck теста Colorful с Node-импортами',
+    },
+    en: 'A test that imported Node fs lived under src/, so app tsc -b typechecked it during Pages deploy and failed.',
+    ru: 'Тест с импортом Node fs лежал в src/, поэтому tsc -b приложения на деплое Pages его проверял и падал.',
+  },
+  {
+    issue: 62,
+    title: {
+      en: 'Pages deploy of #61 failed on a racy Settings currency test',
+      ru: 'Деплой Pages для #61 упал на гонке в тесте валюты настроек',
+    },
+    en: 'The Converted-mode test asserted the base-currency dropdown was enabled before settings finished loading from IndexedDB, so CI was flaky.',
+    ru: 'Тест режима пересчёта проверял, что селект базовой валюты включён, до загрузки настроек из IndexedDB — CI был флаки.',
+  },
+  {
+    issue: 61,
+    title: {
+      en: 'Allow adding an asset with a past first-snapshot date',
+      ru: 'Разрешить завести актив с первой датой в прошлом',
+    },
+    en: 'Not a defect. New assets always snapshotted today, so history could not start on a past As of date. Future dates were not rejected either.',
+    ru: 'Не дефект. Новый актив всегда снимался на сегодня, историю нельзя было начать с прошедшей «На дату». Будущие даты тоже не отклонялись.',
+  },
+  {
+    issue: 60,
+    title: {
+      en: 'Collapse Dashboard holdings behind an accordion',
+      ru: 'Свернуть позиции Сводки в аккордеон',
+    },
+    en: 'Not a defect. Holdings always expanded and pushed the chart far below net worth on a phone.',
+    ru: 'Не дефект. Позиции всегда были развёрнуты и на телефоне уезжали график далеко от чистого капитала.',
+  },
+  {
+    issue: 59,
+    title: {
+      en: 'Retune Colorful mood so it is not a black UI',
+      ru: 'Перенастроить «Цветное», чтобы UI не был чёрным',
+    },
+    en: 'Colorful was either too black or later too teal/green versus the intended charcoal + violet actions. Tokens did not match the agreed mock.',
+    ru: '«Цветное» было либо слишком чёрным, либо слишком бирюзово-зелёным вместо угля и фиолетовых действий. Токены не совпадали с макетом.',
+  },
+  {
+    issue: 58,
+    title: {
+      en: 'History shows 0,00 for the selected range while the list moved',
+      ru: 'История показывает 0,00 за диапазон, хотя список двигался',
+    },
+    en: 'Period change compared “current net worth” to a point that used a different FX date, so a pure rate move printed 0,00. It needed last − first of the visible series.',
+    ru: 'Изменение за период сравнивало «текущий капитал» с точкой на другой дате курса, чистое движение курса давало 0,00. Нужно last − first видимого ряда.',
+  },
+  {
+    issue: 57,
+    title: {
+      en: 'Add Soft Finance, Neutral, and Pastel moods',
+      ru: 'Добавить темы Спокойное, Нейтральное и Пастель',
+    },
+    en: 'Not a defect. Only Colorful and Green existed; Colorful was the only non-green look.',
+    ru: 'Не дефект. Были только Цветное и Зелёное; Цветное — единственный не-зелёный вид.',
+  },
+  {
+    issue: 56,
+    title: {
+      en: 'Chart Y-axis repeats the same compact label',
+      ru: 'Ось Y графика повторяет одну компактную подпись',
+    },
+    en: 'Compact formatting rounded a tight ~2M range to the same “2M” on every tick. Domain was not padded and ticks were not forced unique.',
+    ru: 'Компактный формат округлял узкий диапазон ~2 млн к одному «2 млн» на каждой риске. Домен не расширяли, уникальные тики не задавали.',
+  },
+  {
+    issue: 55,
+    title: {
+      en: 'Safari unbinds fetch — static RUB rates never load',
+      ru: 'Safari отвязывает fetch — статические курсы RUB не грузятся',
+    },
+    en: 'Passing window.fetch as a callback made Safari throw “Can only call Window.fetch on instances of Window”. FX clients must call globalThis.fetch as a method.',
+    ru: 'Передача window.fetch колбэком в Safari даёт «Can only call Window.fetch on instances of Window». FX-клиенты должны вызывать globalThis.fetch как метод.',
+  },
+  {
+    issue: 54,
+    title: {
+      en: 'Pinch to zoom charts',
+      ru: 'Масштаб графиков щипком',
+    },
+    en: 'Not a defect. Zoom existed only as buttons; there was no pinch, unlike Turtle Steps.',
+    ru: 'Не дефект. Зум был только кнопками, без щипка, в отличие от Turtle Steps.',
+  },
+  {
+    issue: 53,
+    title: {
+      en: 'In-app FX debug panel for iPhone Safari / PWA',
+      ru: 'Панель отладки FX в приложении для Safari / PWA',
+    },
+    en: 'Converted totals failed on device with no Mac console. localStorage debug (#49) was not reachable from iPhone. Settings needed an on-screen log and copy.',
+    ru: 'Пересчёт на устройстве ломался без консоли Mac. localStorage-отладка (#49) с iPhone недоступна. В настройках нужен был лог на экране и копирование.',
+  },
+  {
+    issue: 52,
+    title: {
+      en: 'Show unconvertible holdings instead of hiding them',
+      ru: 'Показывать неконвертируемые позиции, а не скрывать',
+    },
+    en: 'Missing FX dropped holdings from Converted lists, so the book looked smaller with no explanation. Native amount + “conversion not available” had to stay visible.',
+    ru: 'Без курса позиции выпадали из списков пересчёта — книга казалась меньше без объяснения. Нужно оставлять сумму в оригинале и пометку «конвертация недоступна».',
+  },
+  {
+    issue: 51,
+    title: {
+      en: 'Converted Dashboard should list each item with original and converted amounts',
+      ru: 'Сводка в пересчёте должна показывать оригинал и пересчёт по каждой позиции',
+    },
+    en: 'Not a defect. Converted showed only a combined total. There was no per-holding native + base pair under it.',
+    ru: 'Не дефект. В пересчёте был только общий итог. Не было пар оригинал + база по каждой позиции.',
+  },
+  {
+    issue: 50,
+    title: {
+      en: 'Manual FX save gives no feedback',
+      ru: 'Сохранение ручных курсов без обратной связи',
+    },
+    en: 'After save the editor stayed open with no confirmation, so it was unclear whether overrides applied. It needed to collapse and show a read-only list.',
+    ru: 'После сохранения редактор оставался открытым без подтверждения — непонятно, применились ли курсы. Нужно сворачивать и показывать список только для чтения.',
+  },
+  {
+    issue: 49,
+    title: {
+      en: 'Converted totals still fail on device — add FX diagnostic loggers',
+      ru: 'Пересчёт на устройстве всё ещё падает — добавить логи FX',
+    },
+    en: 'On-device Converted stayed zero/missing with no trace of static RUB fetch or ensureRange. There was no opt-in logger for iPhone.',
+    ru: 'На устройстве пересчёт оставался нулём без следа загрузки RUB или ensureRange. Не было opt-in логгера для iPhone.',
+  },
+  {
+    issue: 48,
+    title: {
+      en: 'Static CBR RUB dataset deploys empty',
+      ru: 'Статический набор CBR RUB деплоится пустым',
+    },
+    en: 'The CBR XML parser required attributes the feed did not put on Record (Date/Id). The generate step produced empty series and still deployed. Copy also blamed ECB.',
+    ru: 'Парсер XML CBR требовал атрибуты, которых нет на Record (Date/Id). Генерация давала пустые серии и всё равно деплоилась. Тексты винили ЕЦБ.',
+  },
+  {
+    issue: 47,
+    title: {
+      en: 'Use National Bank of Georgia rates for RUB conversion',
+      ru: 'Курсы НБ Грузии для конвертации RUB',
+    },
+    en: 'CBR/static paths were empty or blocked. NBG JSON (GEL cross, quantity applied) is a same-origin static source that actually has RUB.',
+    ru: 'Пути CBR/static были пустыми или заблокированы. JSON НБГ (кросс через GEL, с quantity) — same-origin источник, в котором RUB есть.',
+  },
+  {
+    issue: 46,
+    title: {
+      en: 'Original + All should show every native holding; disable inactive currency dropdown',
+      ru: '«В оригинале + Все» — все нативные позиции; выключить неактивный селект валюты',
+    },
+    en: 'Original + All still mixed converted totals or left both Settings and Dashboard currency controls active, which contradicted the mode.',
+    ru: '«В оригинале + Все» смешивало пересчёт или оставляло активными оба выбора валюты (настройки и Сводка), что противоречило режиму.',
+  },
+  {
+    issue: 45,
+    title: {
+      en: 'Allow manual entry of today’s FX rates as a fallback',
+      ru: 'Ручной ввод курсов на сегодня как запасной путь',
+    },
+    en: 'Not a defect. When reference rates were missing, Converted had no same-day override. There was no Settings editor merged above system quotes.',
+    ru: 'Не дефект. Без справочных курсов в пересчёте не было переопределения на сегодня. Не было редактора в настройках поверх системных котировок.',
+  },
+  {
+    issue: 44,
+    title: {
+      en: 'Own a static RUB FX dataset for the PWA',
+      ru: 'Свой статический набор курсов RUB для PWA',
+    },
+    en: 'Browser-side live fetches for RUB failed on the phone (CORS, Safari, blocked APIs). The PWA needed same-origin files generated at deploy.',
+    ru: 'Живые запросы RUB в браузере на телефоне падали (CORS, Safari, закрытые API). PWA нужны same-origin файлы, собранные на деплое.',
+  },
+  {
+    issue: 43,
+    title: {
+      en: 'Add a Dashboard currency filter dropdown',
+      ru: 'Добавить фильтр валюты на Сводке',
+    },
+    en: 'Not a defect. Filtering the chart/totals required changing global Settings display mode.',
+    ru: 'Не дефект. Фильтр графика/итогов требовал менять глобальный режим в настройках.',
+  },
+  {
+    issue: 42,
+    title: {
+      en: 'Add a show-all-currencies display option',
+      ru: 'Опция «показать все валюты»',
+    },
+    en: 'Not a defect. Settings only had a single base currency, so native mixed books always converted.',
+    ru: 'Не дефект. В настройках была только одна базовая валюта, смешанная книга всегда пересчитывалась.',
+  },
+  {
+    issue: 41,
+    title: {
+      en: 'Add zoom in and zoom out controls for graphs',
+      ru: 'Кнопки увеличения и уменьшения графиков',
+    },
+    en: 'Not a defect. History range chips existed on History; Dashboard had no in-place zoom.',
+    ru: 'Не дефект. Чипы диапазона были в Истории; на Сводке не было зума на месте.',
+  },
+  {
+    issue: 40,
+    title: {
+      en: 'Add spacing between bottom content and sticky footer',
+      ru: 'Отступ между контентом и липким футером',
+    },
+    en: 'Main scroll area did not reserve enough padding for the fixed tab bar plus iOS safe area, so the last control sat under the footer.',
+    ru: 'У основной прокрутки не хватало padding под фиксированную панель и safe area iOS — последний контрол оказывался под футером.',
+  },
+  {
+    issue: 39,
+    title: {
+      en: 'Show pull-to-refresh loading indicator in the PWA',
+      ru: 'Индикатор pull-to-refresh в PWA',
+    },
+    en: 'Not a defect. Pull-to-refresh had no visible badge/spinner (Turtle has PullToRefreshIndicator).',
+    ru: 'Не дефект. У pull-to-refresh не было бейджа/спиннера (в Turtle есть PullToRefreshIndicator).',
+  },
+  {
+    issue: 38,
+    title: {
+      en: 'Offline banner does not show in Safari',
+      ru: 'Баннер офлайна не показывается в Safari',
+    },
+    en: 'navigator.onLine stays true in iPhone Safari airplane mode. The banner only listened to the browser offline flag, not a connectivity check that Safari actually fails.',
+    ru: 'navigator.onLine в Safari на iPhone в авиарежиме остаётся true. Баннер слушал только флаг браузера, а не проверку сети, которая в Safari реально падает.',
+  },
+  {
+    issue: 37,
+    title: {
+      en: 'Installed PWA does not pick up new deploys',
+      ru: 'Установленное PWA не подхватывает новые деплои',
+    },
+    en: 'The old service worker never loaded the update-banner code (#34 chicken-and-egg). version.json could be current while the shell stayed cached. Polling and cache bypass were required.',
+    ru: 'Старый service worker не загружал код баннера обновления (#34 — порочный круг). version.json мог быть новым при старой оболочке. Нужны опрос и обход кэша.',
+  },
+  {
+    issue: 36,
+    title: {
+      en: 'Show changelog and app version on Settings',
+      ru: 'Показать список изменений и версию в настройках',
+    },
+    en: 'Not a defect. There was no way to see which build the phone was on. Turtle’s incrementing vN notes were copied.',
+    ru: 'Не дефект. Нельзя было понять, какая сборка на телефоне. Взят подход Turtle с нарастающим vN.',
+  },
+  {
+    issue: 35,
+    title: {
+      en: 'Offline banner and resilient refresh via service worker',
+      ru: 'Баннер офлайна и обновление через service worker',
+    },
+    en: 'PWA refresh while offline dumped the SPA; #16 only scaffolded the worker. There was no precache or offline banner.',
+    ru: 'Обновление PWA без сети сбрасывало SPA; #16 только набросал worker. Не было precache и баннера офлайна.',
+  },
+  {
+    issue: 34,
+    title: {
+      en: 'Show banner when a new deploy is available',
+      ru: 'Баннер, когда вышел новый деплой',
+    },
+    en: 'Not a defect at first, then a gap: Pages deploys did not signal the open tab. No poll of version.json vs baked app version, no Reload in the shell.',
+    ru: 'Сначала не дефект, потом пробел: деплой Pages не сигналил открытой вкладке. Не было опроса version.json против зашитой версии и Reload в оболочке.',
+  },
+  {
+    issue: 33,
+    title: {
+      en: 'Format money inputs with locale grouping and decimals',
+      ru: 'Форматировать ввод денег с разрядами и копейками',
+    },
+    en: 'Lists used formatAmount; inputs showed raw 116420. There was no shared editable formatter with the #29 parser.',
+    ru: 'Списки шли через formatAmount; в полях было голое 116420. Не было общего форматтера ввода с парсером #29.',
+  },
+  {
+    issue: 32,
+    title: {
+      en: 'Permanently delete an asset and its history',
+      ru: 'Навсегда удалить актив и его историю',
+    },
+    en: 'Not a defect. Archive hid assets; there was no cascade delete of snapshots and no confirm UI.',
+    ru: 'Не дефект. Архив скрывал активы; не было каскадного удаления снимков и UI подтверждения.',
+  },
+  {
+    issue: 31,
+    title: {
+      en: 'Hide an asset from the active list',
+      ru: 'Скрыть актив из рабочего списка',
+    },
+    en: 'Archive existed in the domain but the only control was a buried “Archive asset” label. Hide/restore was not obvious.',
+    ru: 'Архив в домене был, но единственный контрол — спрятанная подпись «Архивировать». Скрыть/вернуть было неочевидно.',
+  },
+  {
+    issue: 30,
+    title: {
+      en: 'Exclude an asset from net worth without hiding it',
+      ru: 'Исключить актив из капитала, не скрывая его',
+    },
+    en: 'trackingStatus excluded already existed but only as a buried Tracking select. There was no clear Exclude control on the asset.',
+    ru: 'trackingStatus excluded уже был, но только как спрятанный селект Tracking. Явного «Не учитывать» на активе не было.',
+  },
+  {
+    issue: 29,
+    title: {
+      en: 'Cannot enter kopecks/cents: comma decimals fail validation',
+      ru: 'Нельзя ввести копейки: запятая не проходит валидацию',
+    },
+    en: 'Forms used Number() which rejects 16155,11. CSV parseAmount already accepted comma decimals; the inputs did not share it.',
+    ru: 'Формы вызывали Number(), который отвергает 16155,11. CSV parseAmount уже принимал запятую; поля ввода его не использовали.',
+  },
+  {
+    issue: 28,
+    title: {
+      en: 'Record ownership share for jointly owned assets',
+      ru: 'Доля владения для совместных активов',
+    },
+    en: 'Not a defect. Net worth always used 100% of the recorded value. There was no share on the asset applied to the total.',
+    ru: 'Не дефект. В капитал всегда шла 100% записанной суммы. Доли на активе, которая умножает итог, не было.',
+  },
+  {
+    issue: 27,
+    title: {
+      en: 'Make car a first-class, obvious asset',
+      ru: 'Сделать машину очевидным активом',
+    },
+    en: 'Not a defect. Vehicle existed under Property in the model but was easy to miss in the add flow. Quick-add chips needed to surface it.',
+    ru: 'Не дефект. Транспорт был в модели под Property, но его было легко не увидеть при добавлении. Нужны быстрые чипы.',
+  },
+  {
+    issue: 26,
+    title: {
+      en: 'Add a colorful appearance mood matching the mockups',
+      ru: 'Цветная тема по макетам',
+    },
+    en: 'Not a defect. Only the green mood existed. A second data-mood (neutral chrome + category colors) was missing.',
+    ru: 'Не дефект. Была только зелёная тема. Второго data-mood (нейтральный хром + цвета категорий) не было.',
+  },
+  {
+    issue: 25,
+    title: {
+      en: 'Tab bar disconnects from the bottom on iPhone Safari',
+      ru: 'Панель вкладок отрывается от низа в Safari на iPhone',
+    },
+    en: 'position:fixed is relative to the layout viewport. When iOS resizes the visual viewport (chrome, rubber-band), the bar stays glued to the layout bottom and floats mid-content. It needs a visualViewport translate; keyboard hide is #80.',
+    ru: 'position:fixed считается от layout viewport. Когда iOS меняет visual viewport (хром, резинка), панель остаётся у низа layout и висит на контенте. Нужен сдвиг от visualViewport; скрытие с клавиатурой — #80.',
+  },
+  {
+    issue: 24,
+    title: {
+      en: 'Tab bar sits flush on the iPhone home indicator',
+      ru: 'Панель вкладок прилипает к индикатору Home',
+    },
+    en: 'viewport-fit=cover was missing, so env(safe-area-inset-bottom) was 0. Tab links were also shorter than a comfortable tap target.',
+    ru: 'Не было viewport-fit=cover, поэтому env(safe-area-inset-bottom) был 0. Ссылки вкладок были ниже удобной зоны нажатия.',
+  },
+  {
+    issue: 23,
+    title: {
+      en: 'RUB assets show €0 when base currency is EUR',
+      ru: 'Активы в RUB показывают €0 при базе EUR',
+    },
+    en: 'Frankfurter/ECB has no RUB. Converted RUB→EUR went through a missing pair and became 0. The app needed a hosted RUB dataset (later NBG static files), not a live ECB lookup.',
+    ru: 'У Frankfurter/ЕЦБ нет RUB. Пересчёт RUB→EUR шёл через отсутствующую пару и давал 0. Нужен свой набор RUB (позже статика НБГ), а не живой ЕЦБ.',
+  },
+  {
+    issue: 22,
+    title: {
+      en: 'Tab favicon is clipped',
+      ru: 'Фавикон во вкладке обрезан',
+    },
+    en: 'Tiny sizes were a center crop of the full mark, so the M was clipped. 64px icons needed padding like Turtle favicon-64.',
+    ru: 'Маленькие размеры — центральный кроп полной марки, буква M обрезалась. Для 64px нужен отступ, как у Turtle favicon-64.',
+  },
+  {
+    issue: 21,
+    title: {
+      en: 'Use light and dark My Money marks as favicons',
+      ru: 'Светлый и тёмный знаки My Money как фавиконы',
+    },
+    en: 'Not a defect. The tab used a generic/Vite icon. Light/dark PNG marks and prefers-color-scheme were not wired.',
+    ru: 'Не дефект. Во вкладке была иконка Vite/заглушка. Светлый/тёмный PNG и prefers-color-scheme не были подключены.',
+  },
+  {
+    issue: 18,
+    title: {
+      en: 'Epic 17 — Accessibility and responsive QA pass',
+      ru: 'Эпик 17 — доступность и адаптив',
+    },
+    en: 'Not a defect. Planned QA: skip link, chip aria-pressed, contrast, scrollable chip rows were not in the first shell.',
+    ru: 'Не дефект. Запланированный QA: skip link, aria-pressed у чипов, контраст, прокрутка рядов чипов не входили в первый каркас.',
+  },
+  {
+    issue: 17,
+    title: {
+      en: 'Epic 16 — Localization (English and Russian)',
+      ru: 'Эпик 16 — локализация (EN и RU)',
+    },
+    en: 'Not a defect. Planned work. UI strings were English-only until a typed dictionary and Settings locale existed.',
+    ru: 'Не дефект. Запланировано. Строки UI были только на английском, пока не появились типизированный словарь и locale в настройках.',
+  },
+  {
+    issue: 16,
+    title: {
+      en: 'Epic 15 — PWA installability',
+      ru: 'Эпик 15 — установка PWA',
+    },
+    en: 'Not a defect. Planned work. There was no manifest/service worker (later skipped in Capacitor). FX failures had no cache policy yet.',
+    ru: 'Не дефект. Запланировано. Не было манифеста/service worker (в Capacitor позже пропускается). У падений FX ещё не было политики кэша.',
+  },
+  {
+    issue: 15,
+    title: {
+      en: 'Epic 14 — CSV export and import',
+      ru: 'Эпик 14 — CSV экспорт и импорт',
+    },
+    en: 'Not a defect. Planned work. JSON backup existed; there was no CSV mapping flow on More.',
+    ru: 'Не дефект. Запланировано. JSON-бэкап был; на «Ещё» не было сценария сопоставления CSV.',
+  },
+  {
+    issue: 14,
+    title: {
+      en: 'Epic 13 — GitHub Pages deployment',
+      ru: 'Эпик 13 — деплой GitHub Pages',
+    },
+    en: 'Not a defect. Planned work. The app was local-only until CI deploy to Pages.',
+    ru: 'Не дефект. Запланировано. Приложение было только локальным, пока не появился CI-деплой на Pages.',
+  },
+  {
+    issue: 13,
+    title: {
+      en: 'Epic 12 — JSON export and import',
+      ru: 'Эпик 12 — JSON экспорт и импорт',
+    },
+    en: 'Not a defect. Planned work. There was no versioned bundle restore into an empty book from Settings.',
+    ru: 'Не дефект. Запланировано. Не было версионированного бандла и восстановления в пустую книгу из настроек.',
+  },
+  {
+    issue: 12,
+    title: {
+      en: 'Epic 11 — History: net worth over time',
+      ru: 'Эпик 11 — История: капитал во времени',
+    },
+    en: 'Not a defect. Planned work. Dashboard was a snapshot; there was no dated series with per-day FX.',
+    ru: 'Не дефект. Запланировано. Сводка была срезом; не было ряда по датам с курсом на каждый день.',
+  },
+  {
+    issue: 11,
+    title: {
+      en: 'Epic 10 — Allocation screen',
+      ru: 'Эпик 10 — экран распределения',
+    },
+    en: 'Not a defect. Planned work. No /allocation route, donut, or signed legend.',
+    ru: 'Не дефект. Запланировано. Не было маршрута /allocation, кольца и легенды со знаком.',
+  },
+  {
+    issue: 10,
+    title: {
+      en: 'Epic 9 — Asset details',
+      ru: 'Эпик 9 — карточка актива',
+    },
+    en: 'Not a defect. Planned work. No native/base toggle, per-asset chart, or in-place amount update.',
+    ru: 'Не дефект. Запланировано. Не было переключения оригинал/база, графика по активу и обновления суммы на месте.',
+  },
+  {
+    issue: 9,
+    title: {
+      en: 'Epic 8 — Quick update flow',
+      ru: 'Эпик 8 — быстрое обновление',
+    },
+    en: 'Not a defect. Planned work. No native-amount update flow; unchanged rows would have rewritten snapshots without a dedicated screen.',
+    ru: 'Не дефект. Запланировано. Не было потока обновления нативных сумм; без отдельного экрана неизменённые строки перезаписывали бы снимки.',
+  },
+  {
+    issue: 8,
+    title: {
+      en: 'Epic 7 — Dashboard',
+      ru: 'Эпик 7 — Сводка',
+    },
+    en: 'Not a defect. Planned work. Empty shell had no net worth, this-month change, chart, or class totals.',
+    ru: 'Не дефект. Запланировано. В пустом каркасе не было капитала, изменения за месяц, графика и итогов по классам.',
+  },
+  {
+    issue: 7,
+    title: {
+      en: 'Epic 6 — FX rates via Frankfurter',
+      ru: 'Эпик 6 — курсы через Frankfurter',
+    },
+    en: 'Not a defect. Planned work. Converted totals had no cached historical quotes. RUB is outside the ECB set (later #23/#44).',
+    ru: 'Не дефект. Запланировано. У пересчёта не было кэша исторических котировок. RUB нет в наборе ЕЦБ (позже #23/#44).',
+  },
+  {
+    issue: 6,
+    title: {
+      en: 'Epic 5 — Onboarding: first assets to first net worth',
+      ru: 'Эпик 5 — онбординг: первые активы к первому капиталу',
+    },
+    en: 'Not a defect. Planned work. No currency → first asset → Dashboard path, and no skip once a book exists.',
+    ru: 'Не дефект. Запланировано. Не было пути валюта → первый актив → Сводка и пропуска, когда книга уже есть.',
+  },
+  {
+    issue: 5,
+    title: {
+      en: 'Epic 4 — Assets: create, edit, archive, tracking',
+      ru: 'Эпик 4 — активы: создание, правка, архив, учёт',
+    },
+    en: 'Not a defect. Planned work. No asset list, form, or archive that keeps snapshots.',
+    ru: 'Не дефект. Запланировано. Не было списка активов, формы и архива с сохранением снимков.',
+  },
+  {
+    issue: 4,
+    title: {
+      en: 'Epic 3 — Settings: base currency and preferences',
+      ru: 'Эпик 3 — настройки: базовая валюта и предпочтения',
+    },
+    en: 'Not a defect. Planned work. Base currency was not persisted; changing it must not rewrite snapshots.',
+    ru: 'Не дефект. Запланировано. Базовая валюта не хранилась; её смена не должна переписывать снимки.',
+  },
+  {
+    issue: 3,
+    title: {
+      en: 'Epic 2 — Design system and app shell',
+      ru: 'Эпик 2 — дизайн-система и каркас',
+    },
+    en: 'Not a defect. Planned work. No primitives, bottom nav, or empty section routes.',
+    ru: 'Не дефект. Запланировано. Не было примитивов, нижней навигации и пустых маршрутов разделов.',
+  },
+  {
+    issue: 2,
+    title: {
+      en: 'Epic 1 — Domain model and persistence',
+      ru: 'Эпик 1 — домен и хранение',
+    },
+    en: 'Not a defect. Planned work. No Dexie book, snapshots, or pure netWorth/FX functions.',
+    ru: 'Не дефект. Запланировано. Не было книги Dexie, снимков и чистых функций netWorth/FX.',
+  },
+  {
+    issue: 1,
+    title: {
+      en: 'Epic 0 — Project scaffolding and tooling',
+      ru: 'Эпик 0 — каркас проекта и инструменты',
+    },
+    en: 'Not a defect. Planned work. Empty Vite/React/TS/Tailwind/Vitest shell so later issues had a place to land.',
+    ru: 'Не дефект. Запланировано. Пустой каркас Vite/React/TS/Tailwind/Vitest, чтобы следующие задачи было куда класть.',
+  },
+]

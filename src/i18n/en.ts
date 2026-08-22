@@ -253,6 +253,9 @@ export const en: Dictionary = {
     moodPastel: 'Pastel',
     versionBadgeLabel: (version) => `v${version}`,
     releaseNotesLabel: 'Release notes',
+    rcaLabel: 'Root causes',
+    rcaDescription:
+      'Why each shipped issue happened. Planned epics say so. Open native apps (#19, #20) are not listed yet.',
     manualRatesTitle: "Today's exchange rates",
     manualRatesDescription:
       'Enter manual rates for today when a reference rate is missing. These are overrides and estimates, not bank quotes.',
