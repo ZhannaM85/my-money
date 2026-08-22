@@ -57,6 +57,7 @@ _Existing-asset details: no dated history, and Save is a no-op when viewing._
 | [#93](https://github.com/ZhannaM85/my-money/issues/93) | 🔍 Pending validation | Rate editor shows 1 RUB = 119474 USD | Rate fields use parseRate (many decimals), not money parseAmount. Related #45. |
 | [#94](https://github.com/ZhannaM85/my-money/issues/94) | 🔍 Pending validation | Settings: root-cause log for shipped issues, like the changelog | Sibling of Release notes. Skip #19/#20 until they ship. |
 | [#95](https://github.com/ZhannaM85/my-money/issues/95) | 🔲 Open | Date field is too narrow; expand width by 1.5 | Follow-up to #68. `w-36` wraps `22 Aug 2026` on Update this asset. Related #84. |
+| [#96](https://github.com/ZhannaM85/my-money/issues/96) | 🔲 Open | History shows EUR when All currencies is selected | All + Original in Settings; History still formats with leftover base (EUR). Related #87. |
 
 ---
 
