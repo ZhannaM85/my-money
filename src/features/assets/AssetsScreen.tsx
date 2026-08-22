@@ -118,12 +118,8 @@ export function AssetsScreen() {
                   ? formatAmount(snapshot.amount, snapshot.currency, locale)
                   : null
             const secondaryLabel = sameCurrency
-              ? baseCurrency
-              : showConverted
-                ? t.common.native(snapshot?.currency ?? asset.currency)
-                : converted !== undefined
-                  ? t.common.estimated(formatAmount(converted, baseCurrency, locale))
-                  : t.common.native(snapshot?.currency ?? asset.currency)
+              ? (snapshot?.currency ?? asset.currency)
+              : t.common.native(snapshot?.currency ?? asset.currency)
             return (
               <li key={asset.id}>
                 <Link

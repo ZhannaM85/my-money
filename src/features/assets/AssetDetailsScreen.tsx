@@ -202,10 +202,6 @@ export function AssetDetailsScreen() {
           snapshot
             ? `${formatLastUpdated(snapshot.date, today, t)}${
                 hasPartialShare ? ` · ${t.asset.yourShare(shareLabel)}` : ''
-              }${
-                mode === 'native' && convertedAmount !== undefined
-                  ? ` · ${t.common.estimated(formatAmount(convertedAmount, baseCurrency, locale))}`
-                  : ''
               }`
             : t.asset.noSnapshotsYet
         }

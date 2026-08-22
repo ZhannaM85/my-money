@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 69,
+    issue: 70,
+    date: '2026-08-22T09:12:00+03:00',
+    en: 'Original mode no longer shows a converted euro estimate under asset amounts. Cards stay in the holding’s own currency.',
+    ru: 'В режиме «В оригинале» под суммой актива больше нет пересчёта в евро. Карточки остаются в валюте самой позиции.',
+  },
+  {
     version: 68,
     issue: 74,
     date: '2026-08-22T09:10:00+03:00',
