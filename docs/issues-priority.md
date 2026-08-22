@@ -38,7 +38,6 @@ _Existing-asset details: no dated history, and Save is a no-op when viewing._
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
 | [#87](https://github.com/ZhannaM85/my-money/issues/87) | 🔍 Pending validation | All currencies selected but EUR still shown | Converted Dashboard shows the base currency in the filter, not All. Original + All unchanged. |
-| [#88](https://github.com/ZhannaM85/my-money/issues/88) | 🔍 Pending validation | Show amount change vs rate change on Dashboard (FX drop visible before a cash exchange) | Converted shows From amounts / From rates plus Update rates (fetch only). Related #85, #86. |
 | [#89](https://github.com/ZhannaM85/my-money/issues/89) | 🔍 Pending validation | Dashboard and History show different period deltas | History StatCard uses From amounts; From rates is listed separately. Related #81, #86. |
 | [#90](https://github.com/ZhannaM85/my-money/issues/90) | 🔍 Pending validation | History 3M change is last two snapshot days, not three months | 3M uses the 90-day window when data exists; if history is shorter, the label is “since first snapshot”. Related #79, #89. |
 | [#91](https://github.com/ZhannaM85/my-money/issues/91) | 🔍 Pending validation | Tab bar floats mid-screen after bringing the app back from background | Re-reads visualViewport on resume (visibility/pageshow/focus). Related #25, #80. |
@@ -46,7 +45,7 @@ _Existing-asset details: no dated history, and Save is a no-op when viewing._
 | [#93](https://github.com/ZhannaM85/my-money/issues/93) | 🔍 Pending validation | Rate editor shows 1 RUB = 119474 USD | Rate fields use parseRate (many decimals), not money parseAmount. Related #45. |
 | [#94](https://github.com/ZhannaM85/my-money/issues/94) | 🔍 Pending validation | Settings: root-cause log for shipped issues, like the changelog | Sibling of Release notes. Skip #19/#20 until they ship. |
 | [#95](https://github.com/ZhannaM85/my-money/issues/95) | 🔍 Pending validation | Date field is too narrow; expand width by 1.5 | DateField is 1.5× Turtle `w-36` (`w-[13.5rem]`). Related #84. |
-| [#96](https://github.com/ZhannaM85/my-money/issues/96) | 🔲 Open | History shows EUR when All currencies is selected | All + Original in Settings; History still formats with leftover base (EUR). Related #87. |
+| [#96](https://github.com/ZhannaM85/my-money/issues/96) | 🔍 Pending validation | History shows EUR when All currencies is selected | Original / All uses native totals on History, not leftover baseCurrency. Related #87. |
 | [#97](https://github.com/ZhannaM85/my-money/issues/97) | 🔲 Open | Add optional comments on asset entries and show them in History | Note on snapshots; show on History, asset details, and other applicable surfaces. |
 | [#98](https://github.com/ZhannaM85/my-money/issues/98) | 🔍 Pending validation | Fresh and Neutral appearance moods look the same | Neutral is slate charcoal primary; Fresh stays design-system blue. Related #78, #57. |
 | [#99](https://github.com/ZhannaM85/my-money/issues/99) | 🔍 Pending validation | Add bank card / debit card as a Money type | Money type `debit_card` (EN/RU). Distinct from liability credit card. |
