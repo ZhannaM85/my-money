@@ -48,6 +48,7 @@ _Existing-asset details: no dated history, and Save is a no-op when viewing._
 | [#73](https://github.com/ZhannaM85/my-money/issues/73) | 🔍 Pending validation | Allow deleting previous snapshot rows on asset details | Trash on each history row; confirm; `deleteSnapshot` by id. Asset remains. |
 | [#74](https://github.com/ZhannaM85/my-money/issues/74) | 🔍 Pending validation | Chart X-axis repeats the same date; label snapshot days | Unique snapshot days with day + month (`18 Aug`), not `date.slice(8)` repeating `18`. |
 | [#77](https://github.com/ZhannaM85/my-money/issues/77) | 🔲 Open | Dashboard chart tooltip stays visible while scrolling | Recharts tooltip from #65 stays after tap; page scroll does not dismiss it. |
+| [#78](https://github.com/ZhannaM85/my-money/issues/78) | 🔲 Open | Adopt the My Money design system as the default UI | Calm navy/blue tokens, cards, nav, charts, category colors. Doc in `docs/`. |
 
 ---
 
