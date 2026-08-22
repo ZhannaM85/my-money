@@ -40,7 +40,13 @@ export function NetWorthChartTooltip({
   if (!active || payload?.[0]?.payload === undefined) return null
   const point = payload[0].payload
   return (
-    <div className="max-h-60 max-w-64 overflow-y-auto rounded-lg border border-border bg-card p-3 text-foreground shadow-md">
+    <div
+      data-testid="chart-holdings-tooltip"
+      className="chart-tooltip-scroll max-h-[min(32rem,70svh)] max-w-64 overflow-y-scroll overscroll-contain rounded-lg border border-border bg-card p-3 text-foreground shadow-md touch-pan-y"
+      onTouchStart={(event) => event.stopPropagation()}
+      onTouchMove={(event) => event.stopPropagation()}
+      onWheel={(event) => event.stopPropagation()}
+    >
       <p className="text-xs font-medium">{point.date}</p>
       {point.holdings && point.holdings.length > 0 && (
         <div className="mt-2">

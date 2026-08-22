@@ -46,4 +46,37 @@ describe('NetWorthChartTooltip', () => {
       screen.getByText(`Net worth: ${formatAmount(1200, 'EUR')}`),
     ).toBeInTheDocument()
   })
+
+  it('keeps six holdings inside a taller scrollable popover', () => {
+    const holdings = [
+      'До 8 октября',
+      'Доллары',
+      'Инвестиции',
+      'На отпуск',
+      'Накопительный счёт',
+      'Рубли',
+    ].map((name, index) => ({
+      assetId: `a${index}`,
+      name,
+      currency: 'RUB',
+      nativeAmount: 200_000,
+      convertedAmount: 200_000,
+      conversionAvailable: true,
+    }))
+
+    render(
+      <NetWorthChartTooltip
+        active
+        currency="RUB"
+        payload={[{ payload: { date: '2026-08-20', total: 1, holdings } }]}
+      />,
+    )
+
+    const popover = screen.getByTestId('chart-holdings-tooltip')
+    expect(popover).toHaveClass('overflow-y-scroll')
+    expect(popover).toHaveClass('chart-tooltip-scroll')
+    for (const name of holdings.map((row) => row.name)) {
+      expect(screen.getByText(name)).toBeInTheDocument()
+    }
+  })
 })
