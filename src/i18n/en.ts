@@ -224,13 +224,14 @@ export const en: Dictionary = {
   settings: {
     title: 'More',
     description:
-      'Base currency is a display setting. Changing it does not rewrite past balances.',
+      'Pick one base currency to convert totals, or Show all currencies to keep native amounts. Changing this does not rewrite past balances.',
     baseCurrency: 'Base currency',
+    showAllCurrencies: 'Show all currencies',
     currencyDisplay: 'Asset display',
     currencyDisplayBase: 'Converted',
     currencyDisplayNative: 'Original',
-    baseCurrencyDisabledHint:
-      'Base currency is inactive in Original mode. Switch to Converted to use it.',
+    showAllCurrenciesHint:
+      'Totals stay in each asset’s own currency. Pick a single currency to convert everything into one total.',
     language: 'Language',
     languageEn: 'English',
     languageRu: 'Русский',

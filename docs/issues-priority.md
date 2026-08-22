@@ -28,7 +28,7 @@ _EUR base + RUB assets; iPhone tab bar; appearance; car; joint ownership; decima
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
 | [#25](https://github.com/ZhannaM85/my-money/issues/25) | 🔲 Open | Tab bar disconnects from the bottom on iPhone Safari | Still intermittent on device. Previous pass used Turtle #120/#188 visual-viewport hide; footer can still lift off the bottom. Needs more investigation. |
-| [#42](https://github.com/ZhannaM85/my-money/issues/42) | 🔲 Open | Add a show all currencies display option | Converted vs Original shipped, but Settings still has no show-all-currencies control. Base-currency dropdown is a single-code list only. Reopened after on-device check 2026-08-22. |
+| [#42](https://github.com/ZhannaM85/my-money/issues/42) | 🔍 Pending validation | Add a show all currencies display option | Settings base-currency dropdown now starts with Show all currencies. All = Original/native totals; a single code = Converted into that currency. |
 | [#49](https://github.com/ZhannaM85/my-money/issues/49) | 🔍 Pending validation | Converted totals still fail on device — add FX diagnostic loggers | Opt-in `localStorage my-money:fx-debug=1` logs static RUB fetch, ensureRange, and Converted holdings. |
 | [#53](https://github.com/ZhannaM85/my-money/issues/53) | 🔍 Pending validation | In-app FX debug panel for iPhone Safari / PWA | Settings FX debug toggle + on-screen log + Copy, so iPhone does not need a Mac console. |
 | [#54](https://github.com/ZhannaM85/my-money/issues/54) | 🔍 Pending validation | Pinch to zoom charts like Turtle Steps | Pinch out zooms in (narrower range), pinch in zooms out. Same steps as the zoom buttons; History chips still work. |

@@ -85,7 +85,7 @@ sequenceDiagram
     NW-->>DS: total, by class, period delta
 ```
 
-Display unit / base currency is a **settings** concern. Stored snapshot amounts stay in the asset's own currency. Conversion happens at read time in `domain/netWorth` / `domain/fx`.
+Display unit / base currency is a **settings** concern. Stored snapshot amounts stay in the asset's own currency. Conversion happens at read time in `domain/netWorth` / `domain/fx`. Settings can also choose **Show all currencies**, which keeps native amounts (same as Original display mode) instead of converting into one total.
 
 ---
 

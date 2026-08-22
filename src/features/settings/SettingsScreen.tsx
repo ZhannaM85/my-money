@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import {
   BASE_CURRENCIES,
+  SHOW_ALL_CURRENCIES,
   type CurrencyDisplayMode,
   type Locale,
 } from '@/domain/settings'
@@ -82,17 +83,30 @@ export function SettingsScreen() {
           <span className="text-sm font-medium">{t.settings.baseCurrency}</span>
           <select
             id="settings-base-currency"
-            className={cn(
-              'h-12 rounded-lg border border-input bg-background px-2.5 text-base',
-              settings.currencyDisplayMode === 'native' &&
-                'text-muted-foreground opacity-60',
-            )}
-            value={settings.baseCurrency}
-            disabled={!loaded || settings.currencyDisplayMode === 'native'}
+            className="h-12 rounded-lg border border-input bg-background px-2.5 text-base"
+            value={
+              settings.currencyDisplayMode === 'native'
+                ? SHOW_ALL_CURRENCIES
+                : settings.baseCurrency
+            }
+            disabled={!loaded}
             onChange={(event) => {
-              void setBaseCurrency(event.target.value)
+              const value = event.target.value
+              void (async () => {
+                if (value === SHOW_ALL_CURRENCIES) {
+                  await setCurrencyDisplayMode('native')
+                  return
+                }
+                await setBaseCurrency(value)
+                if (settings.currencyDisplayMode === 'native') {
+                  await setCurrencyDisplayMode('base')
+                }
+              })()
             }}
           >
+            <option value={SHOW_ALL_CURRENCIES}>
+              {t.settings.showAllCurrencies}
+            </option>
             {BASE_CURRENCIES.map((code) => (
               <option key={code} value={code}>
                 {code}
@@ -102,7 +116,7 @@ export function SettingsScreen() {
         </label>
         {settings.currencyDisplayMode === 'native' && (
           <span className="text-xs text-muted-foreground">
-            {t.settings.baseCurrencyDisabledHint}
+            {t.settings.showAllCurrenciesHint}
           </span>
         )}
       </div>

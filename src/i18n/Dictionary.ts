@@ -167,10 +167,11 @@ export interface Dictionary {
     title: string
     description: string
     baseCurrency: string
+    showAllCurrencies: string
     currencyDisplay: string
     currencyDisplayBase: string
     currencyDisplayNative: string
-    baseCurrencyDisabledHint: string
+    showAllCurrenciesHint: string
     language: string
     languageEn: string
     languageRu: string

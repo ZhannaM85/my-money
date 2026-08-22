@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 77,
+    issue: 42,
+    date: '2026-08-22T10:40:00+03:00',
+    en: 'Settings base currency now includes Show all currencies. That keeps native amounts instead of converting everything into one total.',
+    ru: 'В базовой валюте на Экране «Ещё» появилось «Показать все валюты». Суммы остаются в оригинале, без пересчёта в одну валюту.',
+  },
+  {
     version: 76,
     issue: 69,
     date: '2026-08-22T10:15:00+03:00',

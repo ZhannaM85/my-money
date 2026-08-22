@@ -24,7 +24,7 @@ beforeEach(async () => {
 })
 
 describe('SettingsScreen', () => {
-  it('disables base currency while Original mode is selected', async () => {
+  it('offers Show all currencies and selects it in Original mode', async () => {
     await db.settings.put({
       ...DEFAULT_SETTINGS,
       currencyDisplayMode: 'native',
@@ -34,12 +34,63 @@ describe('SettingsScreen', () => {
         <SettingsScreen />
       </MemoryRouter>,
     )
+    const select = await screen.findByLabelText('Base currency')
+    await waitFor(() => {
+      expect(select).toHaveValue('all')
+    })
+    expect(select).not.toBeDisabled()
     expect(
-      await screen.findByText(
-        'Base currency is inactive in Original mode. Switch to Converted to use it.',
+      screen.getByRole('option', { name: 'Show all currencies' }),
+    ).toBeInTheDocument()
+    expect(
+      screen.getByText(
+        'Totals stay in each asset’s own currency. Pick a single currency to convert everything into one total.',
       ),
     ).toBeInTheDocument()
-    expect(screen.getByLabelText('Base currency')).toBeDisabled()
+  })
+
+  it('switches to Original when Show all currencies is chosen', async () => {
+    const user = userEvent.setup()
+    await db.settings.put(DEFAULT_SETTINGS)
+    render(
+      <MemoryRouter>
+        <SettingsScreen />
+      </MemoryRouter>,
+    )
+    const select = await screen.findByLabelText('Base currency')
+    await waitFor(() => {
+      expect(select).not.toBeDisabled()
+    })
+    await user.selectOptions(select, 'all')
+    await waitFor(() => {
+      expect(select).toHaveValue('all')
+    })
+    expect(useSettingsStore.getState().settings.currencyDisplayMode).toBe(
+      'native',
+    )
+    expect(useSettingsStore.getState().settings.baseCurrency).toBe('EUR')
+  })
+
+  it('switches to Converted when a single currency is chosen from All', async () => {
+    const user = userEvent.setup()
+    await db.settings.put({
+      ...DEFAULT_SETTINGS,
+      currencyDisplayMode: 'native',
+    })
+    render(
+      <MemoryRouter>
+        <SettingsScreen />
+      </MemoryRouter>,
+    )
+    const select = await screen.findByLabelText('Base currency')
+    await user.selectOptions(select, 'RUB')
+    await waitFor(() => {
+      expect(select).toHaveValue('RUB')
+    })
+    expect(useSettingsStore.getState().settings.currencyDisplayMode).toBe(
+      'base',
+    )
+    expect(useSettingsStore.getState().settings.baseCurrency).toBe('RUB')
   })
 
   it('keeps base currency enabled in Converted mode', async () => {
