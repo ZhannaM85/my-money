@@ -52,3 +52,9 @@ Closed live-feedback rows from Tier 8 onward. Open / pending items stay in [`../
 | [#59](https://github.com/ZhannaM85/my-money/issues/59) | ✅ Done | Retune Colorful mood so it is not a black UI | Colorful is charcoal dark; violet on buttons/actions. Page is not teal/green. Other moods unchanged. Validated on-device 2026-08-22. |
 | [#60](https://github.com/ZhannaM85/my-money/issues/60) | ✅ Done | Collapse Dashboard holdings behind an accordion | Converted Holdings start collapsed; tap the header to expand. Original + All native totals stay visible (they are the main figures). Validated on-device 2026-08-19. |
 | [#61](https://github.com/ZhannaM85/my-money/issues/61) | ✅ Done | Allow adding an asset with a past first-snapshot date | New asset and onboarding forms have As of (default today). Past dates save; future dates are rejected. Validated on-device 2026-08-22. |
+
+## Tier 10 — Live feedback (2026-08-19)
+
+| # | Status | Issue | Notes |
+|---|--------|-------|-------|
+| [#62](https://github.com/ZhannaM85/my-money/issues/62) | ✅ Done | Pages deploy of #61 failed on a racy Settings currency test | Converted-mode Base currency test now waits until settings have loaded before asserting the dropdown is enabled. Validated on-device 2026-08-22. |
