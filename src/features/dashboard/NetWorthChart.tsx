@@ -15,6 +15,7 @@ import {
   chartAxisScale,
   uniqueChartAxisDates,
 } from '@/shared/lib/money'
+import { useDismissOnScroll } from '@/shared/hooks/useDismissOnScroll'
 import { usePinchZoom } from '@/shared/hooks/usePinchZoom'
 import { useLocale, useTranslation } from '@/i18n'
 import { HoldingBreakdownList } from './HoldingBreakdownList'
@@ -74,6 +75,7 @@ export function NetWorthChart({
   const t = useTranslation()
   const locale = useLocale()
   const pinchRef = usePinchZoom(onZoomIn, onZoomOut)
+  const { tooltipActive, allowTooltip } = useDismissOnScroll()
   const name = seriesName ?? t.dashboard.netWorth
   if (points.length === 0) return null
   const totals = points.map((point) => point.total)
@@ -89,6 +91,7 @@ export function NetWorthChart({
       ref={pinchRef}
       className="h-48 w-full touch-pan-y"
       data-testid="net-worth-chart"
+      onPointerDown={allowTooltip}
     >
       <ResponsiveContainer width="100%" height="100%">
         <LineChart
@@ -118,6 +121,7 @@ export function NetWorthChart({
             tickLine={false}
           />
           <Tooltip
+            active={tooltipActive}
             content={<NetWorthChartTooltip currency={currency} />}
             wrapperStyle={{ zIndex: 20, pointerEvents: 'auto' }}
           />
