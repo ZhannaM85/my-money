@@ -28,7 +28,6 @@ _EUR base + RUB assets; iPhone tab bar; appearance; car; joint ownership; decima
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
 | [#25](https://github.com/ZhannaM85/my-money/issues/25) | 🔲 Open | Tab bar disconnects from the bottom on iPhone Safari | Still intermittent on device. Previous pass used Turtle #120/#188 visual-viewport hide; footer can still lift off the bottom. Needs more investigation. |
-| [#41](https://github.com/ZhannaM85/my-money/issues/41) | 🔍 Pending validation | Add zoom in and zoom out controls for graphs | Dashboard now has zoom-in/zoom-out range controls that widen or narrow the visible history window without leaving the page. |
 | [#42](https://github.com/ZhannaM85/my-money/issues/42) | 🔍 Pending validation | Add a show original currencies mode in Settings | Settings now persist an asset-display mode (`Converted` vs `Original`), and asset-level views honor that preference instead of always preferring converted values. |
 | [#43](https://github.com/ZhannaM85/my-money/issues/43) | 🔍 Pending validation | Add a Dashboard currency filter dropdown | Dashboard now has its own currency dropdown that filters totals and the chart locally, independent from Settings display/conversion mode. |
 | [#44](https://github.com/ZhannaM85/my-money/issues/44) | 🔍 Pending validation | Own a static RUB FX dataset for the PWA | Static `RUB` history is now generated during deploy and loaded from same-origin files into the FX cache instead of relying on fragile browser-side runtime fetches. |
