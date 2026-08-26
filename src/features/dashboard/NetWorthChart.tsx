@@ -73,13 +73,16 @@ export function NetWorthChartTooltip({
 }) {
   const t = useTranslation()
   const locale = useLocale()
-  if (!active || payload?.[0]?.payload === undefined) return null
-  const point = payload[0].payload
 
   /** Single-finger scroll stays in the tooltip; two-finger pinch must reach the chart (#116). */
   const stopSingleFinger = useCallback((event: ReactTouchEvent) => {
     if (event.touches.length < 2) event.stopPropagation()
   }, [])
+
+  const point =
+    active && payload?.[0]?.payload !== undefined
+      ? payload[0].payload
+      : undefined
 
   return (
     <>
@@ -88,28 +91,30 @@ export function NetWorthChartTooltip({
         payload={payload}
         onSelectDate={onSelectDate}
       />
-      <div
-        data-testid="chart-holdings-tooltip"
-        className="chart-tooltip-scroll max-h-[min(32rem,70svh)] max-w-64 overflow-y-scroll overscroll-contain rounded-lg border border-border bg-card p-3 text-foreground shadow-md touch-pan-y"
-        onTouchStart={stopSingleFinger}
-        onTouchMove={stopSingleFinger}
-        onWheel={(event) => event.stopPropagation()}
-      >
-        <p className="text-xs font-medium">{point.date}</p>
-        {point.holdings && point.holdings.length > 0 && (
-          <div className="mt-2">
-            <HoldingBreakdownList
-              holdings={point.holdings}
-              baseCurrency={currency}
-              compact
-            />
-          </div>
-        )}
-        <p className="mt-2 text-xs font-medium">
-          {t.dashboard.netWorth}:{' '}
-          {formatAmount(point.total, currency, locale)}
-        </p>
-      </div>
+      {point ? (
+        <div
+          data-testid="chart-holdings-tooltip"
+          className="chart-tooltip-scroll max-h-[min(32rem,70svh)] max-w-64 overflow-y-scroll overscroll-contain rounded-lg border border-border bg-card p-3 text-foreground shadow-md touch-pan-y"
+          onTouchStart={stopSingleFinger}
+          onTouchMove={stopSingleFinger}
+          onWheel={(event) => event.stopPropagation()}
+        >
+          <p className="text-xs font-medium">{point.date}</p>
+          {point.holdings && point.holdings.length > 0 && (
+            <div className="mt-2">
+              <HoldingBreakdownList
+                holdings={point.holdings}
+                baseCurrency={currency}
+                compact
+              />
+            </div>
+          )}
+          <p className="mt-2 text-xs font-medium">
+            {t.dashboard.netWorth}:{' '}
+            {formatAmount(point.total, currency, locale)}
+          </p>
+        </div>
+      ) : null}
     </>
   )
 }
