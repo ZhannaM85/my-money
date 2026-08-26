@@ -59,6 +59,8 @@ history lives in `docs/issues-priority-archive/`.
    - Typecheck (`npx tsc -b` or `npm run build`).
    - `npm run lint`.
    - Run the **affected** test file(s) only.
+   - For UI surfaces: capture + attach Playwright screenshots before
+     `validation` (see `docs/VALIDATION_SCREENSHOTS.md` / #118).
    - After the user confirms: GitHub comment + close, move the row from
      `docs/issues-priority.md` into the archive. Update `ARCHITECTURE.md`
      when the product shape actually changed.

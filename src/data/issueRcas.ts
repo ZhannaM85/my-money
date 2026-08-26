@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 118,
+    title: {
+      en: 'Attach Playwright screenshots to GitHub issues as proof before validation',
+      ru: 'Прикреплять скриншоты Playwright к issues как доказательство перед validation',
+    },
+    en: 'Unit tests alone missed phone UI gaps. Added Playwright smoke captures plus npm run screenshots:capture / screenshots:attach so agents attach visual proof before validation.',
+    ru: 'Юнит-тестов не хватало для UI на телефоне. Добавлены Playwright-снимки и npm run screenshots:capture / screenshots:attach, чтобы перед validation прикреплять визуальное доказательство.',
+  },
+  {
     issue: 117,
     title: {
       en: 'Dashboard date input to choose which day Positions show',

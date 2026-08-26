@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 123,
+    issue: 118,
+    date: '2026-08-26T18:50:00+03:00',
+    en: 'Agents can capture Playwright screenshots of Dashboard and Allocation and attach them to a GitHub issue before asking for on-device validation.',
+    ru: 'Агенты могут снимать Playwright-скриншоты Сводки и Распределения и прикреплять их к issue перед проверкой на устройстве.',
+  },
+  {
     version: 122,
     issue: 108,
     date: '2026-08-26T18:35:00+03:00',
