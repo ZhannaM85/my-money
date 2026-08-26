@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react'
 import {
   CartesianGrid,
   Line,
@@ -71,17 +72,30 @@ export function NetWorthChart({
   seriesName,
   onZoomIn,
   onZoomOut,
+  onSelectDate,
 }: {
   points: readonly NetWorthChartPoint[]
   currency: string
   seriesName?: string
   onZoomIn?: () => void
   onZoomOut?: () => void
+  /** Called with the tapped chart day, or null when the tooltip is dismissed (#112). */
+  onSelectDate?: (date: string | null) => void
 }) {
   const t = useTranslation()
   const locale = useLocale()
   const pinchRef = usePinchZoom(onZoomIn, onZoomOut)
   const { tooltipActive, allowTooltip } = useDismissOnScroll()
+  const onSelectDateRef = useRef(onSelectDate)
+
+  useEffect(() => {
+    onSelectDateRef.current = onSelectDate
+  }, [onSelectDate])
+
+  useEffect(() => {
+    if (tooltipActive === false) onSelectDateRef.current?.(null)
+  }, [tooltipActive])
+
   const name = seriesName ?? t.dashboard.netWorth
   if (points.length === 0) return null
   const totals = points.map((point) => point.total)
@@ -103,6 +117,13 @@ export function NetWorthChart({
         <LineChart
           data={[...points]}
           margin={{ top: 8, right: 8, left: 0, bottom: 0 }}
+          onClick={(state) => {
+            const payload = (
+              state as { activePayload?: ReadonlyArray<{ payload?: { date?: string } }> }
+            )?.activePayload?.[0]?.payload
+            const date = payload?.date
+            if (typeof date === 'string') onSelectDateRef.current?.(date)
+          }}
         >
           <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
           <XAxis
@@ -138,6 +159,21 @@ export function NetWorthChart({
             strokeWidth={2}
             dot={false}
             name={name}
+            activeDot={{
+              r: 4,
+              onClick: (_event, payload) => {
+                const date =
+                  payload &&
+                  typeof payload === 'object' &&
+                  'payload' in payload &&
+                  payload.payload &&
+                  typeof payload.payload === 'object' &&
+                  'date' in payload.payload
+                    ? (payload.payload as { date?: string }).date
+                    : undefined
+                if (typeof date === 'string') onSelectDateRef.current?.(date)
+              },
+            }}
           />
         </LineChart>
       </ResponsiveContainer>

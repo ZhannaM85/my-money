@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 112,
+    title: {
+      en: 'Dashboard Positions should follow the selected chart day',
+      ru: 'Позиции на Сводке должны следовать за выбранным днём на графике',
+    },
+    en: 'Chart tooltip showed a historical total while Positions always used today’s holdings. Selecting a chart day now drives the headline total and holdings list from that series point.',
+    ru: 'Подсказка графика показывала исторический итог, а Позиции всегда брали сегодняшние. Выбор дня на графике теперь ведёт заголовок и список позиций из этой точки серии.',
+  },
+  {
     issue: 108,
     title: {
       en: 'Allocation ignores All / Original and shows everything in EUR',

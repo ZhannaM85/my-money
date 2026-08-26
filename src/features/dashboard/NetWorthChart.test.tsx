@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { formatAmount } from '@/shared/lib/money'
-import { NetWorthChartTooltip } from './NetWorthChart'
+import { NetWorthChart, NetWorthChartTooltip } from './NetWorthChart'
 
 describe('NetWorthChartTooltip', () => {
   it('lists holdings for the active chart point', () => {
@@ -78,5 +78,38 @@ describe('NetWorthChartTooltip', () => {
     for (const name of holdings.map((row) => row.name)) {
       expect(screen.getByText(name)).toBeInTheDocument()
     }
+  })
+})
+
+describe('NetWorthChart selected day (#112)', () => {
+  it('wires onSelectDate and renders the chart for day selection', () => {
+    const onSelectDate = vi.fn()
+    render(
+      <div style={{ width: 400, height: 200 }}>
+        <NetWorthChart
+          points={[
+            {
+              date: '2026-01-13',
+              total: 1_074_255,
+              holdings: [
+                {
+                  assetId: 'a1',
+                  name: 'Cash',
+                  currency: 'RUB',
+                  nativeAmount: 100_000,
+                  convertedAmount: 100_000,
+                  conversionAvailable: true,
+                },
+              ],
+            },
+            { date: '2026-08-25', total: 1_609_451 },
+          ]}
+          currency="RUB"
+          onSelectDate={onSelectDate}
+        />
+      </div>,
+    )
+    expect(screen.getByTestId('net-worth-chart')).toBeInTheDocument()
+    expect(onSelectDate).not.toHaveBeenCalled()
   })
 })

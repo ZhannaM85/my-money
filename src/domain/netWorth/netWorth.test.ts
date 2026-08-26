@@ -476,7 +476,7 @@ describe('nativeTotalsByCurrency', () => {
 
 describe('historicalNativeNetWorth', () => {
   it('sums only the selected native currency over time', () => {
-    const eur = asset({ id: 'eur', currency: 'EUR' })
+    const eur = asset({ id: 'eur', name: 'Euro cash', currency: 'EUR' })
     const rub = asset({ id: 'rub', currency: 'RUB' })
     expect(
       historicalNativeNetWorth(
@@ -508,8 +508,65 @@ describe('historicalNativeNetWorth', () => {
         'EUR',
       ),
     ).toEqual([
-      { date: '2026-08-01', total: 900 },
-      { date: '2026-08-02', total: 1000 },
+      {
+        date: '2026-08-01',
+        total: 900,
+        missingRates: [],
+        holdings: [
+          {
+            assetId: 'eur',
+            name: 'Euro cash',
+            currency: 'EUR',
+            nativeAmount: 900,
+            convertedAmount: 900,
+            conversionAvailable: true,
+          },
+        ],
+      },
+      {
+        date: '2026-08-02',
+        total: 1000,
+        missingRates: [],
+        holdings: [
+          {
+            assetId: 'eur',
+            name: 'Euro cash',
+            currency: 'EUR',
+            nativeAmount: 1000,
+            convertedAmount: 1000,
+            conversionAvailable: true,
+          },
+        ],
+      },
     ])
+  })
+
+  it('includes holdings for each day so Positions can follow a chart pick (#112)', () => {
+    const cash = asset({ id: 'cash', name: 'Cash', currency: 'EUR' })
+    const points = historicalNativeNetWorth(
+      [cash],
+      [
+        snap({
+          id: 's1',
+          assetId: 'cash',
+          date: '2026-01-13',
+          amount: 500,
+          currency: 'EUR',
+        }),
+        snap({
+          id: 's2',
+          assetId: 'cash',
+          date: '2026-08-25',
+          amount: 900,
+          currency: 'EUR',
+        }),
+      ],
+      ['2026-01-13', '2026-08-25'],
+      'EUR',
+    )
+    expect(points[0]?.holdings[0]?.nativeAmount).toBe(500)
+    expect(points[1]?.holdings[0]?.nativeAmount).toBe(900)
+    expect(points[0]?.total).toBe(500)
+    expect(points[1]?.total).toBe(900)
   })
 })

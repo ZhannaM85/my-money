@@ -91,17 +91,32 @@ export function historicalNativeNetWorth(
   snapshots: readonly AssetSnapshot[],
   dates: readonly string[],
   currency: string,
-): { date: string; total: number }[] {
+): HistoricalPoint[] {
   return dates.map((date) => {
+    const holdings: HoldingConversion[] = []
     let total = 0
     for (const asset of assets) {
       if (!contributesToNetWorth(asset)) continue
       const snapshot = snapshotsOnOrBefore(snapshots, asset.id, date)
       if (!snapshot || snapshot.currency !== currency) continue
       const native = effectiveAmount(snapshot.amount, asset)
-      total += isLiability(asset) ? -native : native
+      const signed = isLiability(asset) ? -native : native
+      total += signed
+      holdings.push({
+        assetId: asset.id,
+        name: asset.name,
+        currency: snapshot.currency,
+        nativeAmount: signed,
+        convertedAmount: signed,
+        conversionAvailable: true,
+        ...(snapshot.note ? { note: snapshot.note } : {}),
+        ...(asset.institution?.trim()
+          ? { institution: asset.institution.trim() }
+          : {}),
+      })
     }
-    return { date, total }
+    holdings.sort((a, b) => a.name.localeCompare(b.name))
+    return { date, total, missingRates: [], holdings }
   })
 }
 

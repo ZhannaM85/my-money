@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 114,
+    issue: 112,
+    date: '2026-08-26T15:50:00+03:00',
+    en: 'Tapping a day on the Dashboard chart updates net worth and Positions to that date’s holdings so they match the tooltip.',
+    ru: 'Нажатие дня на графике Сводки обновляет чистый капитал и Позиции до снимков этой даты, чтобы они совпадали с подсказкой.',
+  },
+  {
     version: 113,
     issue: 108,
     date: '2026-08-26T15:40:00+03:00',

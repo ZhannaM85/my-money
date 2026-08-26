@@ -55,6 +55,9 @@ export function DashboardScreen() {
   const [range, setRange] = useState<HistoryRange>('1M')
   const [currencyFilter, setCurrencyFilter] = useState<string>('all')
   const [holdingsOpen, setHoldingsOpen] = useState(false)
+  const [selectedChartDate, setSelectedChartDate] = useState<string | null>(
+    null,
+  )
   const [openNativeCurrency, setOpenNativeCurrency] = useState<string | null>(
     null,
   )
@@ -175,11 +178,17 @@ export function DashboardScreen() {
   ])
 
   const series = isOriginal ? nativeSeries : convertedSeries
+  const selectedChartPoint =
+    selectedChartDate === null
+      ? undefined
+      : series.find((point) => point.date === selectedChartDate)
   const convertedTodayPoint = convertedSeries[convertedSeries.length - 1]
   const convertedTodayTotal =
     convertedTodayPoint?.total ?? convertedResult.total
   const convertedHoldingsToday =
-    convertedTodayPoint?.holdings ?? convertedHoldings
+    selectedChartPoint?.holdings ??
+    convertedTodayPoint?.holdings ??
+    convertedHoldings
   const convertedBreakdown = useMemo(() => {
     const startHoldings = convertedSeries[0]?.holdings
     const endHoldings = convertedTodayPoint?.holdings
@@ -195,6 +204,11 @@ export function DashboardScreen() {
       ? (nativeTotals.find((row) => row.currency === activeCurrencyFilter)
           ?.amount ?? 0)
       : null
+  const displayHeadlineTotal = selectedChartPoint
+    ? selectedChartPoint.total
+    : isOriginal
+      ? (singleNativeTotal ?? 0)
+      : convertedTodayTotal
   const changeFrom = series[0]?.total ?? 0
   const changeTo =
     series.length > 0
@@ -275,7 +289,10 @@ export function DashboardScreen() {
                 )}
                 value={isOriginal ? activeCurrencyFilter : baseCurrency}
                 disabled={!isOriginal}
-                onChange={(event) => setCurrencyFilter(event.target.value)}
+                onChange={(event) => {
+                  setSelectedChartDate(null)
+                  setCurrencyFilter(event.target.value)
+                }}
               >
                 {isOriginal && (
                   <option value="all">{t.assets.filterAll}</option>
@@ -369,13 +386,15 @@ export function DashboardScreen() {
             <StatCard
               label={t.dashboard.netWorth}
               value={formatAmount(
-                isOriginal
-                  ? (singleNativeTotal ?? 0)
-                  : convertedTodayTotal,
+                displayHeadlineTotal,
                 isOriginal ? activeCurrencyFilter : baseCurrency,
                 locale,
               )}
-              description={changeLabel}
+              description={
+                selectedChartPoint
+                  ? t.history.holdingsOn(selectedChartPoint.date)
+                  : changeLabel
+              }
             />
           )}
           {fxNote && <p className="text-sm text-muted-foreground">{fxNote}</p>}
@@ -511,7 +530,9 @@ export function DashboardScreen() {
                 onClick={() => setHoldingsOpen((open) => !open)}
               >
                 <span className="text-sm text-muted-foreground">
-                  {t.dashboard.holdings}
+                  {selectedChartPoint
+                    ? t.history.holdingsOn(selectedChartPoint.date)
+                    : t.dashboard.holdings}
                 </span>
                 <span className="flex items-center gap-1 text-sm text-muted-foreground" aria-hidden>
                   {convertedHoldingsToday.length}
@@ -595,7 +616,10 @@ export function DashboardScreen() {
                     )}
                     disabled={!canZoomIn}
                     onClick={() => {
-                      if (canZoomIn) setRange((current) => stepHistoryRange(current, 'in'))
+                      if (canZoomIn) {
+                        setSelectedChartDate(null)
+                        setRange((current) => stepHistoryRange(current, 'in'))
+                      }
                     }}
                   >
                     {t.dashboard.zoomIn}
@@ -610,7 +634,10 @@ export function DashboardScreen() {
                     )}
                     disabled={!canZoomOut}
                     onClick={() => {
-                      if (canZoomOut) setRange((current) => stepHistoryRange(current, 'out'))
+                      if (canZoomOut) {
+                        setSelectedChartDate(null)
+                        setRange((current) => stepHistoryRange(current, 'out'))
+                      }
                     }}
                   >
                     {t.dashboard.zoomOut}
@@ -622,12 +649,18 @@ export function DashboardScreen() {
                 currency={
                   isOriginal ? activeCurrencyFilter : baseCurrency
                 }
-                onZoomIn={() =>
+                onZoomIn={() => {
+                  setSelectedChartDate(null)
                   setRange((current) => stepHistoryRange(current, 'in'))
-                }
-                onZoomOut={() =>
+                }}
+                onZoomOut={() => {
+                  setSelectedChartDate(null)
                   setRange((current) => stepHistoryRange(current, 'out'))
-                }
+                }}
+                onSelectDate={(date) => {
+                  setSelectedChartDate(date)
+                  if (date) setHoldingsOpen(true)
+                }}
               />
             </>
           )}
