@@ -80,8 +80,8 @@ export function NetWorthChart({
   points: readonly NetWorthChartPoint[]
   currency: string
   seriesName?: string
-  onZoomIn?: () => void
-  onZoomOut?: () => void
+  onZoomIn: () => void
+  onZoomOut: () => void
   /** Called with the tapped chart day, or null when the tooltip is dismissed (#112). */
   onSelectDate?: (date: string | null) => void
   /** Horizontal drag right → earlier history (#111). */

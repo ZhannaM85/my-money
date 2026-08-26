@@ -43,6 +43,8 @@ export function HistoryScreen() {
   const [range, setRange] = useState<HistoryRange>('3M')
   const [openDates, setOpenDates] = useState<ReadonlySet<string>>(new Set())
   const today = todayIsoDate()
+  const canZoomIn = range !== '1M'
+  const canZoomOut = range !== 'All'
 
   useEffect(() => {
     void loadAssets()
@@ -217,16 +219,57 @@ export function HistoryScreen() {
               {t.dashboard.originalChartHint}
             </p>
           ) : (
-            <NetWorthChart
-              points={series}
-              currency={baseCurrency}
-              onZoomIn={() =>
-                setRange((current) => stepHistoryRange(current, 'in'))
-              }
-              onZoomOut={() =>
-                setRange((current) => stepHistoryRange(current, 'out'))
-              }
-            />
+            <>
+              <div className="flex items-center justify-between gap-2">
+                <span className="text-sm text-muted-foreground">
+                  {t.dashboard.zoomRange}: {range}
+                </span>
+                <div className="flex gap-2">
+                  <button
+                    type="button"
+                    className={cn(
+                      'rounded-full px-3 py-1.5 text-sm font-medium',
+                      canZoomIn
+                        ? 'bg-muted text-foreground'
+                        : 'bg-muted text-muted-foreground',
+                    )}
+                    disabled={!canZoomIn}
+                    onClick={() => {
+                      if (canZoomIn)
+                        setRange((current) => stepHistoryRange(current, 'in'))
+                    }}
+                  >
+                    {t.dashboard.zoomIn}
+                  </button>
+                  <button
+                    type="button"
+                    className={cn(
+                      'rounded-full px-3 py-1.5 text-sm font-medium',
+                      canZoomOut
+                        ? 'bg-muted text-foreground'
+                        : 'bg-muted text-muted-foreground',
+                    )}
+                    disabled={!canZoomOut}
+                    onClick={() => {
+                      if (canZoomOut)
+                        setRange((current) => stepHistoryRange(current, 'out'))
+                    }}
+                  >
+                    {t.dashboard.zoomOut}
+                  </button>
+                </div>
+              </div>
+              <NetWorthChart
+                points={series}
+                currency={baseCurrency}
+                onZoomIn={() =>
+                  setRange((current) => stepHistoryRange(current, 'in'))
+                }
+                onZoomOut={() =>
+                  setRange((current) => stepHistoryRange(current, 'out'))
+                }
+              />
+            </>
           )}
           <ul className="flex flex-col gap-2">
             {(isOriginal ? originalList : convertedList).map((row) => {

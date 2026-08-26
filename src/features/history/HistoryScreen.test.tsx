@@ -64,7 +64,7 @@ beforeEach(async () => {
 })
 
 describe('HistoryScreen', () => {
-  it('shows range chips and current net worth', async () => {
+  it('shows range chips, zoom buttons, and current net worth (#116)', async () => {
     render(
       <MemoryRouter>
         <HistoryScreen />
@@ -74,6 +74,8 @@ describe('HistoryScreen', () => {
       await screen.findByRole('button', { name: '3M' }),
     ).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'All' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Zoom in' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Zoom out' })).toBeInTheDocument()
     expect(
       screen.getAllByText(formatAmount(1000, 'EUR')).length,
     ).toBeGreaterThan(0)

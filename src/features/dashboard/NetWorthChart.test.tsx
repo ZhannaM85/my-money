@@ -105,6 +105,8 @@ describe('NetWorthChart selected day (#112)', () => {
             { date: '2026-08-25', total: 1_609_451 },
           ]}
           currency="RUB"
+          onZoomIn={() => undefined}
+          onZoomOut={() => undefined}
           onSelectDate={onSelectDate}
         />
       </div>,

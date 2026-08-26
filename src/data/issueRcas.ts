@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 116,
+    title: {
+      en: 'Pinch zoom in/out on every chart',
+      ru: 'Масштаб щипком на каждом графике',
+    },
+    en: 'Dashboard and asset details already pinched; History had handlers but no Zoom in/out chrome, and NetWorthChart allowed omitting pinch. Handlers are required; History matches Dashboard zoom controls; a screen call-site test guards regressions.',
+    ru: 'На Сводке и в карточке актива щипок уже был; в Истории были колбэки, но без кнопок «Увеличить»/«Уменьшить», а NetWorthChart позволял опустить щипок. Колбэки обязательны; История как на Сводке; тест call-site на экранах ловит регрессии.',
+  },
+  {
     issue: 119,
     title: {
       en: 'Show soft warnings (e.g. duplicate snapshot) in light orange',
