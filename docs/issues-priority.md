@@ -31,6 +31,7 @@ _After the four web flows feel good. Android wraps this app; iOS does not._
 | [#110](https://github.com/ZhannaM85/my-money/issues/110) | 🔲 Open | Do not allow negative Y-axis when chart values are non-negative | Asset details chart pads below 0 (−7 тыс.) though snapshots are positive. Clamp floor to 0 when data ≥ 0. |
 | [#111](https://github.com/ZhannaM85/my-money/issues/111) | 🔲 Open | Allow user to navigate the chart timeline (pan) | Zoom exists (#41/#54); add horizontal pan to shift the visible date window. Clamp to available history. |
 | [#112](https://github.com/ZhannaM85/my-money/issues/112) | 🔲 Open | Dashboard Positions should follow the selected chart day | Chart tooltip is historical; Positions stay on latest and do not match the tooltip total. Sync list to selected day. |
+| [#113](https://github.com/ZhannaM85/my-money/issues/113) | 🔲 Open | Loading Dashboard takes a long time | Slow open on device (seen offline / Original+All). Prefer local-first; skip unused FX work; avoid offline timeouts. |
 
 ---
 
