@@ -100,6 +100,31 @@ describe('AssetDetailsScreen', () => {
     ).toBeInTheDocument()
   })
 
+  it('zooms the asset chart range with buttons and pinch handlers (#114)', async () => {
+    const user = userEvent.setup()
+    await useAssetStore.getState().saveSnapshots([
+      {
+        assetId: 'a1',
+        date: '2025-01-15',
+        amount: 100,
+        currency: 'EUR',
+      },
+    ])
+    render(
+      <MemoryRouter initialEntries={['/assets/a1']}>
+        <Routes>
+          <Route path="/assets/:id" element={<AssetDetailsScreen />} />
+        </Routes>
+      </MemoryRouter>,
+    )
+    expect(await screen.findByText(/Chart range: All/)).toBeInTheDocument()
+    expect(screen.getByTestId('net-worth-chart')).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Zoom in' }))
+    expect(screen.getByText(/Chart range: 1Y/)).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Zoom in' }))
+    expect(screen.getByText(/Chart range: 6M/)).toBeInTheDocument()
+  })
+
   it('opens existing assets in a read-only details view', async () => {
     render(
       <MemoryRouter initialEntries={['/assets/a1']}>

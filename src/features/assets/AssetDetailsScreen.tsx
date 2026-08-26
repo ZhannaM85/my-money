@@ -20,7 +20,14 @@ import {
   reformatAmountInput,
   todayIsoDate,
 } from '@/shared/lib/money'
-import { isIsoDateOnOrBefore } from '@/shared/lib/dates'
+import {
+  HISTORY_RANGES,
+  type HistoryRange,
+  isIsoDateOnOrBefore,
+  rangeStartIso,
+  stepHistoryRange,
+} from '@/shared/lib/dates'
+import { cn } from '@/shared/lib/utils'
 import { Button } from '@/shared/ui/button'
 import { DateField } from '@/shared/ui/date-field'
 import { InfoHint } from '@/shared/ui/info-hint'
@@ -79,6 +86,7 @@ export function AssetDetailsScreen() {
   const [editNote, setEditNote] = useState('')
   const [editError, setEditError] = useState<string | undefined>()
   const [editingDetails, setEditingDetails] = useState(false)
+  const [range, setRange] = useState<HistoryRange>('All')
   const today = todayIsoDate()
 
   useEffect(() => {
@@ -104,9 +112,15 @@ export function AssetDetailsScreen() {
     ? assetPerformance(ordered, quotes, baseCurrency)
     : null
   const displayCurrency = mode === 'native' ? asset?.currency : baseCurrency
+  const earliest = ordered[0]?.date ?? today
+  const chartStart = rangeStartIso(range, today, earliest)
+  const rangeIndex = HISTORY_RANGES.indexOf(range)
+  const canZoomIn = rangeIndex > 0
+  const canZoomOut = rangeIndex >= 0 && rangeIndex < HISTORY_RANGES.length - 1
 
   const points = ordered.flatMap((row) => {
     if (!asset || !displayCurrency) return []
+    if (row.date < chartStart) return []
     if (mode === 'native') {
       return [{ date: row.date, total: row.amount }]
     }
@@ -291,10 +305,54 @@ export function AssetDetailsScreen() {
           {t.asset.noRateOnDate(snapshot.currency, snapshot.date)}
         </p>
       )}
+      <div className="flex items-center justify-between gap-2">
+        <span className="text-sm text-muted-foreground">
+          {t.dashboard.zoomRange}: {range}
+        </span>
+        <div className="flex gap-2">
+          <button
+            type="button"
+            className={cn(
+              'rounded-full px-3 py-1.5 text-sm font-medium',
+              canZoomIn
+                ? 'bg-muted text-foreground'
+                : 'bg-muted text-muted-foreground',
+            )}
+            disabled={!canZoomIn}
+            onClick={() => {
+              if (canZoomIn) setRange((current) => stepHistoryRange(current, 'in'))
+            }}
+          >
+            {t.dashboard.zoomIn}
+          </button>
+          <button
+            type="button"
+            className={cn(
+              'rounded-full px-3 py-1.5 text-sm font-medium',
+              canZoomOut
+                ? 'bg-muted text-foreground'
+                : 'bg-muted text-muted-foreground',
+            )}
+            disabled={!canZoomOut}
+            onClick={() => {
+              if (canZoomOut)
+                setRange((current) => stepHistoryRange(current, 'out'))
+            }}
+          >
+            {t.dashboard.zoomOut}
+          </button>
+        </div>
+      </div>
       <NetWorthChart
         points={points}
         currency={displayCurrency ?? asset.currency}
         seriesName={asset.name}
+        onZoomIn={() =>
+          setRange((current) => stepHistoryRange(current, 'in'))
+        }
+        onZoomOut={() =>
+          setRange((current) => stepHistoryRange(current, 'out'))
+        }
       />
       {history.length > 0 && (
         <ul className="flex flex-col gap-2">

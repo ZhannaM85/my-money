@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 114,
+    title: {
+      en: 'Pinch zoom does not work on asset details chart',
+      ru: 'Масштаб щипком не работает на графике карточки актива',
+    },
+    en: 'NetWorthChart only pinched when onZoomIn/onZoomOut were passed. Dashboard wired them via HistoryRange; asset details rendered the chart with no handlers and no range filter, so pinch was a no-op.',
+    ru: 'NetWorthChart реагировал на щипок только при onZoomIn/onZoomOut. На Сводке они шли через HistoryRange; в карточке актива график был без колбэков и без фильтра диапазона, поэтому щипок ничего не делал.',
+  },
+  {
     issue: 110,
     title: {
       en: 'Do not allow negative Y-axis when chart values are non-negative',

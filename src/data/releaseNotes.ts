@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 109,
+    issue: 114,
+    date: '2026-08-26T14:55:00+03:00',
+    en: 'Asset details charts zoom with pinch (and Zoom in / Zoom out), the same range steps as the Dashboard.',
+    ru: 'График в карточке актива масштабируется щипком (и кнопками «Увеличить» / «Уменьшить»), теми же шагами диапазона, что и на Сводке.',
+  },
+  {
     version: 108,
     issue: 110,
     date: '2026-08-26T14:45:00+03:00',
