@@ -33,14 +33,43 @@ export interface NetWorthChartPoint {
   holdings?: readonly HoldingConversion[]
 }
 
+/** Sync Positions / As of when the tooltip becomes active (incl. iOS tap). #112 */
+function TooltipDateBridge({
+  active,
+  payload,
+  onSelectDate,
+}: {
+  active?: boolean
+  payload?: ReadonlyArray<{ payload?: NetWorthChartPoint }>
+  onSelectDate?: (date: string | null) => void
+}) {
+  const onSelectDateRef = useRef(onSelectDate)
+  useEffect(() => {
+    onSelectDateRef.current = onSelectDate
+  }, [onSelectDate])
+
+  const date =
+    active && typeof payload?.[0]?.payload?.date === 'string'
+      ? payload[0].payload.date
+      : null
+
+  useEffect(() => {
+    if (date) onSelectDateRef.current?.(date)
+  }, [date])
+
+  return null
+}
+
 export function NetWorthChartTooltip({
   active,
   payload,
   currency,
+  onSelectDate,
 }: {
   active?: boolean
   payload?: ReadonlyArray<{ payload?: NetWorthChartPoint }>
   currency: string
+  onSelectDate?: (date: string | null) => void
 }) {
   const t = useTranslation()
   const locale = useLocale()
@@ -53,28 +82,35 @@ export function NetWorthChartTooltip({
   }, [])
 
   return (
-    <div
-      data-testid="chart-holdings-tooltip"
-      className="chart-tooltip-scroll max-h-[min(32rem,70svh)] max-w-64 overflow-y-scroll overscroll-contain rounded-lg border border-border bg-card p-3 text-foreground shadow-md touch-pan-y"
-      onTouchStart={stopSingleFinger}
-      onTouchMove={stopSingleFinger}
-      onWheel={(event) => event.stopPropagation()}
-    >
-      <p className="text-xs font-medium">{point.date}</p>
-      {point.holdings && point.holdings.length > 0 && (
-        <div className="mt-2">
-          <HoldingBreakdownList
-            holdings={point.holdings}
-            baseCurrency={currency}
-            compact
-          />
-        </div>
-      )}
-      <p className="mt-2 text-xs font-medium">
-        {t.dashboard.netWorth}:{' '}
-        {formatAmount(point.total, currency, locale)}
-      </p>
-    </div>
+    <>
+      <TooltipDateBridge
+        active={active}
+        payload={payload}
+        onSelectDate={onSelectDate}
+      />
+      <div
+        data-testid="chart-holdings-tooltip"
+        className="chart-tooltip-scroll max-h-[min(32rem,70svh)] max-w-64 overflow-y-scroll overscroll-contain rounded-lg border border-border bg-card p-3 text-foreground shadow-md touch-pan-y"
+        onTouchStart={stopSingleFinger}
+        onTouchMove={stopSingleFinger}
+        onWheel={(event) => event.stopPropagation()}
+      >
+        <p className="text-xs font-medium">{point.date}</p>
+        {point.holdings && point.holdings.length > 0 && (
+          <div className="mt-2">
+            <HoldingBreakdownList
+              holdings={point.holdings}
+              baseCurrency={currency}
+              compact
+            />
+          </div>
+        )}
+        <p className="mt-2 text-xs font-medium">
+          {t.dashboard.netWorth}:{' '}
+          {formatAmount(point.total, currency, locale)}
+        </p>
+      </div>
+    </>
   )
 }
 
@@ -179,7 +215,12 @@ export function NetWorthChart({
           />
           <Tooltip
             active={tooltipActive}
-            content={<NetWorthChartTooltip currency={currency} />}
+            content={
+              <NetWorthChartTooltip
+                currency={currency}
+                onSelectDate={onSelectDate}
+              />
+            }
             wrapperStyle={{ zIndex: 20, pointerEvents: 'auto' }}
           />
           <Line

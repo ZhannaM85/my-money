@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 126,
+    issue: 112,
+    date: '2026-08-26T19:45:00+03:00',
+    en: 'Tapping a chart day updates Positions and As of even when only the tooltip shows the date (common on iOS).',
+    ru: 'Нажатие дня на графике обновляет Позиции и «На дату», даже если дату видно только в подсказке (часто на iOS).',
+  },
+  {
     version: 125,
     issue: 116,
     date: '2026-08-26T19:40:00+03:00',

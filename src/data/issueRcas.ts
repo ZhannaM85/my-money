@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 112,
+    title: {
+      en: 'Dashboard Positions should follow the selected chart day',
+      ru: 'Позиции на Сводке должны следовать за выбранным днём на графике',
+    },
+    en: 'On iOS the tooltip could show a historical day while mouseMove/click never fired, so Positions stayed on As of / today. Tooltip active payload now drives onSelectDate (and As of).',
+    ru: 'На iOS подсказка могла показать исторический день без mouseMove/click, поэтому Позиции оставались на «На дату» / сегодня. Активный payload подсказки теперь задаёт onSelectDate (и «На дату»).',
+  },
+  {
     issue: 116,
     title: {
       en: 'Pinch zoom in/out on every chart',
@@ -72,15 +81,6 @@ export const issueRcas: IssueRca[] = [
     },
     en: 'Zoom changed window width but the end was always today. Drag alone was not discoverable on-device. Visible ← → arrows (and drag) now shift rangeEnd within earliest…today; All keeps arrows disabled (full span).',
     ru: 'Масштаб менял ширину окна, но конец всегда был «сегодня». Одного жеста было мало — на устройстве не находили. Видимые ← → (и жест) сдвигают rangeEnd в пределах earliest…today; в «All» стрелки выключены (весь диапазон).',
-  },
-  {
-    issue: 112,
-    title: {
-      en: 'Dashboard Positions should follow the selected chart day',
-      ru: 'Позиции на Сводке должны следовать за выбранным днём на графике',
-    },
-    en: 'Chart tooltip showed a historical total while Positions stayed on today because selection cleared when the tooltip dismissed on scroll (opening Positions). Selection now stays until pan/zoom; mouse/touch active payload also sets the day; header shows Holdings on {date}.',
-    ru: 'Подсказка графика показывала исторический итог, а Позиции оставались на сегодня: выбор сбрасывался при скрытии подсказки при скролле (открытие Позиций). Выбор держится до pan/zoom; активная точка мыши/касания тоже задаёт день; в заголовке — Позиции на {date}.',
   },
   {
     issue: 108,
