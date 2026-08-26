@@ -31,7 +31,6 @@ _After the four web flows feel good. Android wraps this app; iOS does not._
 | [#116](https://github.com/ZhannaM85/my-money/issues/116) | 🔍 Pending validation | Pinch zoom in/out on every chart | Required `onZoomIn`/`onZoomOut`; History zoom buttons + pinch; call-site guard. |
 | [#117](https://github.com/ZhannaM85/my-money/issues/117) | 🔍 Pending validation | Dashboard date input to choose which day Positions show | As of DateField drives selected day + Positions header; syncs with chart. |
 | [#118](https://github.com/ZhannaM85/my-money/issues/118) | 🔍 Pending validation | Attach Playwright screenshots to GitHub issues as proof before validation | `npm run screenshots:capture` + `screenshots:attach -- N`. See `docs/VALIDATION_SCREENSHOTS.md`. |
-| [#119](https://github.com/ZhannaM85/my-money/issues/119) | 🔍 Pending validation | Show soft warnings (e.g. duplicate snapshot) in light orange | Follow-up to #115: `text-warning` / `--warning` token instead of muted gray. |
 
 ---
 
