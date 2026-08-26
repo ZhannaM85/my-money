@@ -31,7 +31,7 @@ _After the four web flows feel good. Android wraps this app; iOS does not._
 | [#110](https://github.com/ZhannaM85/my-money/issues/110) | 🔍 Pending validation | Do not allow negative Y-axis when chart values are non-negative | `chartAxisScale` clamps floor to 0 when data min ≥ 0; real negatives still pad below. |
 | [#111](https://github.com/ZhannaM85/my-money/issues/111) | 🔍 Pending validation | Allow user to navigate the chart timeline (pan) | Horizontal drag shifts `rangeEnd`; zoom width unchanged; All = full span. |
 | [#112](https://github.com/ZhannaM85/my-money/issues/112) | 🔍 Pending validation | Dashboard Positions should follow the selected chart day | Chart day selection drives StatCard + holdings; clears on dismiss/range change. |
-| [#113](https://github.com/ZhannaM85/my-money/issues/113) | 🔲 Open | Loading Dashboard takes a long time | Slow open on device (seen offline / Original+All). Prefer local-first; skip unused FX work; avoid offline timeouts. |
+| [#113](https://github.com/ZhannaM85/my-money/issues/113) | 🔍 Pending validation | Loading Dashboard takes a long time | Original skips ensureRange; offline skips Frankfurter; no Converted series in Original. |
 | [#114](https://github.com/ZhannaM85/my-money/issues/114) | 🔍 Pending validation | Pinch zoom does not work on asset details chart | Asset details now has HistoryRange + pinch/button zoom like Dashboard (#54). |
 | [#115](https://github.com/ZhannaM85/my-money/issues/115) | 🔍 Pending validation | Warn on duplicate snapshot (same date and amount) without blocking | Soft muted hint via `hasDuplicateSnapshot`; Save still works. |
 

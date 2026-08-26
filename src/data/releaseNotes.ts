@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 116,
+    issue: 113,
+    date: '2026-08-26T16:20:00+03:00',
+    en: 'Dashboard opens faster in Original mode and offline: it no longer waits on FX network calls you do not need for native totals.',
+    ru: 'Сводка открывается быстрее в режиме «В оригинале» и офлайн: больше не ждёт сетевые курсы, которые не нужны для нативных сумм.',
+  },
+  {
     version: 115,
     issue: 111,
     date: '2026-08-26T16:10:00+03:00',

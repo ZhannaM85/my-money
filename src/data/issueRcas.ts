@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 113,
+    title: {
+      en: 'Loading Dashboard takes a long time',
+      ru: 'Загрузка Сводки занимает много времени',
+    },
+    en: 'Dashboard always called ensureRange (Frankfurter) even in Original + All, so offline opens waited on a network timeout. Original now skips remote FX; offline skips Frankfurter and uses cache/static RUB only. Converted history series is not built in Original.',
+    ru: 'Сводка всегда вызывала ensureRange (Frankfurter) даже в «В оригинале» + Все, поэтому офлайн ждал таймаут сети. В оригинале удалённый FX не вызывается; офлайн пропускает Frankfurter и берёт кэш/static RUB. Исторический Converted-ряд в Original не строится.',
+  },
+  {
     issue: 111,
     title: {
       en: 'Allow user to navigate the chart timeline (pan)',

@@ -36,6 +36,7 @@ import { useAssetStore } from '@/stores/assetStore'
 import { useFxStore } from '@/stores/fxStore'
 import { useSettingsStore } from '@/stores/settingsStore'
 import { NetWorthChart } from './NetWorthChart'
+import { dashboardNeedsRemoteFx } from './dashboardFx'
 
 export function DashboardScreen() {
   const t = useTranslation()
@@ -106,11 +107,19 @@ export function DashboardScreen() {
   }, [activeCurrencyFilter, filteredAssetIds, snapshots])
 
   useEffect(() => {
+    if (!dashboardNeedsRemoteFx(isOriginal)) return
     const symbols = [
       ...new Set(filteredSnapshots.map((snapshot) => snapshot.currency)),
     ]
     void ensureRange(start, chartEnd, baseCurrency, symbols)
-  }, [baseCurrency, chartEnd, ensureRange, filteredSnapshots, start])
+  }, [
+    baseCurrency,
+    chartEnd,
+    ensureRange,
+    filteredSnapshots,
+    isOriginal,
+    start,
+  ])
 
   const convertedResult = useMemo(
     () => netWorth(filteredAssets, filteredSnapshots, quotes, baseCurrency),
@@ -155,17 +164,23 @@ export function DashboardScreen() {
     () => nativeTotalsByCurrency(filteredAssets, filteredSnapshots),
     [filteredAssets, filteredSnapshots],
   )
-  const convertedSeries = useMemo(
-    () =>
-      historicalNetWorth(
-        filteredAssets,
-        filteredSnapshots,
-        quotes,
-        dates,
-        baseCurrency,
-      ),
-    [baseCurrency, dates, filteredAssets, filteredSnapshots, quotes],
-  )
+  const convertedSeries = useMemo(() => {
+    if (isOriginal) return []
+    return historicalNetWorth(
+      filteredAssets,
+      filteredSnapshots,
+      quotes,
+      dates,
+      baseCurrency,
+    )
+  }, [
+    baseCurrency,
+    dates,
+    filteredAssets,
+    filteredSnapshots,
+    isOriginal,
+    quotes,
+  ])
   const nativeSeries = useMemo(() => {
     if (!isOriginal || activeCurrencyFilter === 'all') return []
     return historicalNativeNetWorth(

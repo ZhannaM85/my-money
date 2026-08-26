@@ -12,6 +12,7 @@ import {
   type RateRequest,
 } from '@/infrastructure/fx/frankfurter'
 import { fxDebug } from '@/infrastructure/fx/fxDebug'
+import { shouldFetchFrankfurter } from '@/features/dashboard/dashboardFx'
 import {
   ensureStaticRubRates,
   ensureStaticRubRange,
@@ -70,11 +71,17 @@ export const useFxStore = create<FxStoreState>((set) => ({
     set({ loading: true, error: undefined })
     let failed = false
     fxDebug('ensureRates start', { requests: [...requests] })
-    try {
-      await ensureFxRates(requests, fxRepository, frankfurter)
-    } catch (error) {
-      failed = true
-      fxDebug('ensureRates frankfurter failed', { error: String(error) })
+    const online =
+      typeof navigator === 'undefined' ? true : navigator.onLine
+    if (shouldFetchFrankfurter(online)) {
+      try {
+        await ensureFxRates(requests, fxRepository, frankfurter)
+      } catch (error) {
+        failed = true
+        fxDebug('ensureRates frankfurter failed', { error: String(error) })
+      }
+    } else {
+      fxDebug('ensureRates skipped frankfurter while offline')
     }
     try {
       await ensureStaticRubRates(requests, fxRepository, staticRub)
@@ -99,11 +106,17 @@ export const useFxStore = create<FxStoreState>((set) => ({
     set({ loading: true, error: undefined })
     let failed = false
     fxDebug('ensureRange start', { start, end, base, symbols: [...symbols] })
-    try {
-      await ensureFxRange(start, end, base, symbols, fxRepository, frankfurter)
-    } catch (error) {
-      failed = true
-      fxDebug('ensureRange frankfurter failed', { error: String(error) })
+    const online =
+      typeof navigator === 'undefined' ? true : navigator.onLine
+    if (shouldFetchFrankfurter(online)) {
+      try {
+        await ensureFxRange(start, end, base, symbols, fxRepository, frankfurter)
+      } catch (error) {
+        failed = true
+        fxDebug('ensureRange frankfurter failed', { error: String(error) })
+      }
+    } else {
+      fxDebug('ensureRange skipped frankfurter while offline')
     }
     try {
       await ensureStaticRubRange(
