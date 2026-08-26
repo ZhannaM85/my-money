@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 112,
+    issue: 107,
+    date: '2026-08-26T15:25:00+03:00',
+    en: 'Georgian Lari (GEL) is available in currency pickers and as a base currency. Converted totals use manual FX rates when automatic quotes are unavailable.',
+    ru: 'Грузинский лари (GEL) доступен в выборе валюты и как базовая. В режиме пересчёта при отсутствии автоматических курсов используются ручные.',
+  },
+  {
     version: 111,
     issue: 115,
     date: '2026-08-26T15:15:00+03:00',

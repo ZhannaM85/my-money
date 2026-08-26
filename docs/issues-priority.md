@@ -25,7 +25,7 @@ _After the four web flows feel good. Android wraps this app; iOS does not._
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
-| [#107](https://github.com/ZhannaM85/my-money/issues/107) | 🔲 Open | Add support for GEL (Georgian Lari) | Currency picker (Add asset) has no GEL. Include in `BASE_CURRENCIES` + FX for Converted. NBG already used via GEL for RUB (#47). |
+| [#107](https://github.com/ZhannaM85/my-money/issues/107) | 🔍 Pending validation | Add support for GEL (Georgian Lari) | GEL in `BASE_CURRENCIES`; Frankfurter skips it. Converted via manual FX until static GEL series. |
 | [#108](https://github.com/ZhannaM85/my-money/issues/108) | 🔲 Open | Allocation ignores All / Original and shows everything in EUR | Settings All + Original; Allocation Class/Currency/Type still € (RUB/USD rows labeled native, amounts in €). Sibling of #42/#46/#96 for Allocation. |
 | [#109](https://github.com/ZhannaM85/my-money/issues/109) | 🔍 Pending validation | Show institution on Assets subtitle and Dashboard holdings second row | Assets: type · institution. Dashboard/HoldingBreakdown: muted institution under name when set. |
 | [#110](https://github.com/ZhannaM85/my-money/issues/110) | 🔍 Pending validation | Do not allow negative Y-axis when chart values are non-negative | `chartAxisScale` clamps floor to 0 when data min ≥ 0; real negatives still pad below. |

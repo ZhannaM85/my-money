@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 107,
+    title: {
+      en: 'Add support for GEL (Georgian Lari)',
+      ru: 'Добавить поддержку GEL (грузинский лари)',
+    },
+    en: 'BASE_CURRENCIES omitted GEL even though NBG is already used for RUB via GEL. GEL is now in every shared picker; Frankfurter skips it (not on ECB). Converted mode uses manual FX when needed until a dedicated GEL static series exists.',
+    ru: 'В BASE_CURRENCIES не было GEL, хотя НБГ уже используется для RUB через GEL. GEL теперь во всех общих списках; Frankfurter его пропускает (нет в ECB). В режиме «В пересчёте» при необходимости — ручные курсы, пока нет отдельного статического ряда GEL.',
+  },
+  {
     issue: 115,
     title: {
       en: 'Warn on duplicate snapshot (same date and amount) without blocking',

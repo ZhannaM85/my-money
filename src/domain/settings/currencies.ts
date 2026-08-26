@@ -6,6 +6,7 @@ export const BASE_CURRENCIES = [
   'USD',
   'GBP',
   'RUB',
+  'GEL',
   'CHF',
   'JPY',
   'CAD',
