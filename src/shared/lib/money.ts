@@ -222,7 +222,9 @@ export function chartAxisScale(
   const hi = Math.max(min, max)
   const magnitude = Math.max(Math.abs(lo), Math.abs(hi), 1)
   const pad = Math.max((hi - lo) * 0.1, magnitude * 0.05, 1)
-  const domain: [number, number] = [lo - pad, hi + pad]
+  // Non-negative series: do not pad the floor below 0 (#110).
+  const floor = lo >= 0 ? Math.max(0, lo - pad) : lo - pad
+  const domain: [number, number] = [floor, hi + pad]
   const span = domain[1] - domain[0]
   const steps = Math.max(tickCount, 2)
   const ticks = Array.from(

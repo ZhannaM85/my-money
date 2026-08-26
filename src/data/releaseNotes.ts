@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 108,
+    issue: 110,
+    date: '2026-08-26T14:45:00+03:00',
+    en: 'Charts with only non-negative values no longer pad the Y-axis below zero (no more −7 тыс. ticks on a positive series).',
+    ru: 'Графики только с неотрицательными значениями больше не уводят ось Y ниже нуля (нет подписей вроде −7 тыс. на положительной серии).',
+  },
+  {
     version: 107,
     issue: 101,
     date: '2026-08-22T22:30:00+03:00',

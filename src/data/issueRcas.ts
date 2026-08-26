@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 110,
+    title: {
+      en: 'Do not allow negative Y-axis when chart values are non-negative',
+      ru: 'Не допускать отрицательную ось Y, если значения графика неотрицательные',
+    },
+    en: 'chartAxisScale always padded min − pad, so a positive asset series got a floor like −7 тыс. even though every snapshot was ≥ 0. Floor is now clamped to 0 when the data min is ≥ 0; real negatives still pad below zero.',
+    ru: 'chartAxisScale всегда делал min − pad, поэтому у положительной серии активов пол уходил в −7 тыс., хотя все снимки ≥ 0. Теперь пол не ниже 0, если минимум данных ≥ 0; реальные отрицательные значения по-прежнему уходят ниже нуля.',
+  },
+  {
     issue: 106,
     title: {
       en: 'Tab bar still disconnects from the bottom on iPhone 17 Pro Max',

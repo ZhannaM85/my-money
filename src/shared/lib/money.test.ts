@@ -95,6 +95,17 @@ describe('compact chart axis labels', () => {
     expect(labels.length).toBeGreaterThan(1)
     expect(new Set(labels).size).toBe(labels.length)
   })
+
+  it('does not pad the Y domain below zero when values are non-negative (#110)', () => {
+    const { domain, ticks } = chartAxisScale(5_000, 80_000, 'ru')
+    expect(domain[0]).toBeGreaterThanOrEqual(0)
+    expect(Math.min(...ticks)).toBeGreaterThanOrEqual(0)
+  })
+
+  it('still allows a negative Y domain when the series has negatives (#110)', () => {
+    const { domain } = chartAxisScale(-20_000, 80_000, 'ru')
+    expect(domain[0]).toBeLessThan(0)
+  })
 })
 
 describe('chart X-axis dates', () => {
