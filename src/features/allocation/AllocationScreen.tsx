@@ -1,8 +1,11 @@
 import { useEffect, useMemo, useState } from 'react'
+import { contributesToNetWorth } from '@/domain/asset'
 import {
   breakdownBy,
+  nativeBreakdownBy,
   nativeTotalsByCurrency,
 } from '@/domain/netWorth'
+import { latestSnapshot } from '@/domain/snapshot'
 import { useTranslation } from '@/i18n'
 import { EmptyState } from '@/shared/ui/empty-state'
 import { PageHeader } from '@/shared/ui/page-header'
@@ -58,6 +61,22 @@ export function AllocationScreen() {
     void loadSettings()
   }, [loadAssets, loadSettings])
 
+  const includedCurrencies = useMemo(() => {
+    const codes = new Set<string>()
+    for (const asset of assets) {
+      if (!contributesToNetWorth(asset)) continue
+      const snapshot = latestSnapshot(snapshots, asset.id)
+      if (!snapshot) continue
+      codes.add(snapshot.currency)
+    }
+    return [...codes].sort()
+  }, [assets, snapshots])
+
+  const originalClassTypeBlocked =
+    isOriginal &&
+    (view === 'class' || view === 'type') &&
+    includedCurrencies.length > 1
+
   const rows = useMemo(() => {
     if (isOriginal && view === 'currency') {
       return withPercents(
@@ -74,8 +93,20 @@ export function AllocationScreen() {
         : view === 'currency'
           ? (asset: (typeof assets)[number]) => asset.currency
           : (asset: (typeof assets)[number]) => asset.type
+    if (isOriginal && (view === 'class' || view === 'type')) {
+      if (includedCurrencies.length !== 1) return []
+      return nativeBreakdownBy(assets, snapshots, keyOf)
+    }
     return breakdownBy(assets, snapshots, quotes, baseCurrency, keyOf)
-  }, [assets, baseCurrency, isOriginal, quotes, snapshots, view])
+  }, [
+    assets,
+    baseCurrency,
+    includedCurrencies.length,
+    isOriginal,
+    quotes,
+    snapshots,
+    view,
+  ])
 
   const pieData = rows.map((row) => ({
     ...row,
@@ -86,12 +117,19 @@ export function AllocationScreen() {
         : undefined,
   }))
 
+  const chartCurrency =
+    isOriginal && includedCurrencies.length === 1
+      ? includedCurrencies[0]!
+      : baseCurrency
+
   const description =
     isOriginal && view === 'currency'
       ? t.allocation.descriptionOriginalCurrency
-      : isOriginal
-        ? t.allocation.descriptionOriginalCompared(baseCurrency)
-        : t.allocation.description
+      : originalClassTypeBlocked
+        ? t.allocation.descriptionOriginalClassType
+        : isOriginal
+          ? t.allocation.descriptionOriginalSingle(chartCurrency)
+          : t.allocation.description
 
   return (
     <div className="flex flex-col gap-6">
@@ -116,6 +154,11 @@ export function AllocationScreen() {
       </div>
       {!loaded ? (
         <p className="text-sm text-muted-foreground">{t.common.loading}</p>
+      ) : originalClassTypeBlocked ? (
+        <EmptyState
+          title={t.allocation.originalClassTypeTitle}
+          description={t.allocation.descriptionOriginalClassType}
+        />
       ) : pieData.length === 0 ? (
         <EmptyState
           title={t.allocation.emptyTitle}
@@ -124,7 +167,7 @@ export function AllocationScreen() {
       ) : (
         <AllocationChart
           rows={pieData}
-          currency={baseCurrency}
+          currency={chartCurrency}
           oweLabel={t.common.owe}
         />
       )}

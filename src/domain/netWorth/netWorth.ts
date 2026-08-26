@@ -330,6 +330,44 @@ export function breakdownBy(
     .sort((a, b) => Math.abs(b.amount) - Math.abs(a.amount))
 }
 
+/** Native (unconverted) totals by a key — Original mode Class/Type (#108). */
+export function nativeBreakdownBy(
+  assets: readonly Asset[],
+  snapshots: readonly AssetSnapshot[],
+  keyOf: (asset: Asset) => string,
+): { id: string; amount: number; percent: number; currency: string }[] {
+  const buckets = new Map<string, { amount: number; currency: string }>()
+  for (const asset of assets) {
+    if (!contributesToNetWorth(asset)) continue
+    const snapshot = latestSnapshot(snapshots, asset.id)
+    if (!snapshot) continue
+    const native = effectiveAmount(snapshot.amount, asset)
+    const signed = isLiability(asset) ? -native : native
+    const key = keyOf(asset)
+    const existing = buckets.get(key)
+    if (existing && existing.currency !== snapshot.currency) {
+      // Mixed currencies under one key — caller should avoid this path.
+      continue
+    }
+    buckets.set(key, {
+      amount: (existing?.amount ?? 0) + signed,
+      currency: snapshot.currency,
+    })
+  }
+  const rows = [...buckets.entries()].map(([id, row]) => ({
+    id,
+    amount: row.amount,
+    currency: row.currency,
+  }))
+  const absSum = rows.reduce((sum, row) => sum + Math.abs(row.amount), 0)
+  return rows
+    .map((row) => ({
+      ...row,
+      percent: absSum === 0 ? 0 : (Math.abs(row.amount) / absSum) * 100,
+    }))
+    .sort((a, b) => Math.abs(b.amount) - Math.abs(a.amount))
+}
+
 export function periodChange(
   from: number,
   to: number,

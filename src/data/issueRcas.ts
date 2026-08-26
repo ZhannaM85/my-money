@@ -70,8 +70,8 @@ export const issueRcas: IssueRca[] = [
       en: 'Allocation ignores All / Original and shows everything in EUR',
       ru: 'Распределение игнорирует «Все» / «В оригинале» и показывает всё в EUR',
     },
-    en: 'Allocation always called breakdownBy with settings.baseCurrency, even in Original where the UI shows All. Currency leftovers (often EUR) labeled native codes with converted € amounts. Currency view now uses nativeTotalsByCurrency; Class/Type still compare in the saved base with an explicit blurb.',
-    ru: 'Распределение всегда вызывало breakdownBy с settings.baseCurrency, даже в «В оригинале», где UI показывает «Все». Остаток базы (часто EUR) подписывал нативные коды суммами в €. Вкладка «Валюта» теперь nativeTotalsByCurrency; Класс/Тип по-прежнему сравнивают в сохранённой базе с явным текстом.',
+    en: 'Allocation always called breakdownBy with settings.baseCurrency in Original, so Class/Type showed leftover €. Multi-currency Original now blocks Class/Type with an explicit empty state (Currency tab stays native); single-currency Original uses nativeBreakdownBy.',
+    ru: 'Распределение в Original всегда звало breakdownBy с baseCurrency, поэтому Класс/Тип показывали оставшийся €. При нескольких валютах Класс/Тип теперь явный empty state (вкладка Валюта — нативно); одна валюта — nativeBreakdownBy.',
   },
   {
     issue: 107,

@@ -13,6 +13,7 @@ export {
   historicalNetWorth,
   allocation,
   breakdownBy,
+  nativeBreakdownBy,
   periodChange,
   assetPerformance,
   decomposeConvertedPeriodChange,

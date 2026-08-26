@@ -168,6 +168,9 @@ export interface Dictionary {
     description: string
     descriptionOriginalCurrency: string
     descriptionOriginalCompared: (currency: string) => string
+    descriptionOriginalClassType: string
+    descriptionOriginalSingle: (currency: string) => string
+    originalClassTypeTitle: string
     byClass: string
     byCurrency: string
     byType: string

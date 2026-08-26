@@ -10,6 +10,7 @@ import {
   historicalNativeNetWorth,
   historicalNetWorth,
   holdingsWithConversion,
+  nativeBreakdownBy,
   nativeTotalsByCurrency,
   netWorth,
   periodChange,
@@ -375,6 +376,25 @@ describe('breakdownBy', () => {
     expect(rows).toEqual([
       { id: 'money', amount: 100, percent: 80 },
       { id: 'liabilities', amount: -25, percent: 20 },
+    ])
+  })
+})
+
+describe('nativeBreakdownBy (#108)', () => {
+  it('sums native amounts without converting to a leftover base', () => {
+    const cash = asset({
+      id: 'cash',
+      name: 'Cash',
+      type: 'cash',
+      currency: 'USD',
+    })
+    const rows = nativeBreakdownBy(
+      [cash],
+      [snap({ id: 's1', assetId: 'cash', amount: 8000, currency: 'USD' })],
+      (row) => row.assetClass,
+    )
+    expect(rows).toEqual([
+      { id: 'money', amount: 8000, percent: 100, currency: 'USD' },
     ])
   })
 })

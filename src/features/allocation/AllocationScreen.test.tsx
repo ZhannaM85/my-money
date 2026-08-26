@@ -87,7 +87,13 @@ describe('AllocationScreen', () => {
         <AllocationScreen />
       </MemoryRouter>,
     )
-    await screen.findByText(/compared in EUR/)
+    expect(
+      await screen.findByText('Pick Currency or Converted'),
+    ).toBeInTheDocument()
+    expect(screen.queryByTestId('allocation-chart')).not.toBeInTheDocument()
+    expect(
+      screen.queryByText(formatAmount(8000, 'EUR')),
+    ).not.toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: 'Currency' }))
     expect(
       await screen.findByText(/Native amounts by currency/),

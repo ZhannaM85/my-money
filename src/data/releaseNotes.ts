@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 122,
+    issue: 108,
+    date: '2026-08-26T18:35:00+03:00',
+    en: 'Allocation in Original with several currencies no longer shows Class/Type totals in leftover euros. Use the Currency tab for native amounts, or Converted for one total.',
+    ru: 'Распределение в «В оригинале» при нескольких валютах больше не показывает Класс/Тип в оставшихся евро. Для нативных сумм — вкладка «Валюта», для одного итога — «В пересчёте».',
+  },
+  {
     version: 121,
     issue: 117,
     date: '2026-08-26T18:25:00+03:00',
