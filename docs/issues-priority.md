@@ -25,7 +25,6 @@ _After the four web flows feel good. Android wraps this app; iOS does not._
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
-| [#107](https://github.com/ZhannaM85/my-money/issues/107) | 🔍 Pending validation | Add support for GEL (Georgian Lari) | GEL in `BASE_CURRENCIES`; Frankfurter skips it. Converted via manual FX until static GEL series. |
 | [#108](https://github.com/ZhannaM85/my-money/issues/108) | 🔲 Open | Allocation ignores All / Original and shows everything in EUR | Device 2026-08-26: Class/Type still show leftover € in Original+All. Currency alone is not enough. Screenshot proof process → #118. |
 | [#111](https://github.com/ZhannaM85/my-money/issues/111) | 🔲 Open | Allow user to navigate the chart timeline (pan) | Device 2026-08-26: need visible ← → arrows (not drag-only). All currently disables pan. |
 | [#112](https://github.com/ZhannaM85/my-money/issues/112) | 🔲 Open | Dashboard Positions should follow the selected chart day | Device 2026-08-26: Positions stay on latest while tooltip is historical. Must match tooltip amounts; show selected date in Positions header. Date field → #117. |
