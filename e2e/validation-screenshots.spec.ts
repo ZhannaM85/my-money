@@ -15,7 +15,10 @@ test('capture Allocation Original Class/Currency (#108, #118)', async ({
   await seedValidationFixture(page)
   await page.goto('/allocation')
   await expect(page.getByRole('heading', { name: 'Allocation' })).toBeVisible()
-  await expect(page.getByText('Pick Currency or Converted')).toBeVisible()
+  await expect(
+    page.getByText(/Native amounts by class or type/),
+  ).toBeVisible()
+  await expect(page.getByTestId('allocation-chart')).toBeVisible()
   await page.screenshot({
     path: join(outDir, '108-allocation-original-class.png'),
     fullPage: true,

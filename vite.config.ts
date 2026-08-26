@@ -33,6 +33,8 @@ export default defineConfig(({ mode }) => ({
   test: {
     environment: 'jsdom',
     setupFiles: ['./test/setup.ts'],
+    // Playwright specs live under e2e/; vitest must not load them (#118).
+    exclude: ['**/node_modules/**', '**/dist/**', '**/e2e/**'],
   },
   define: {
     __APP_VERSION__: JSON.stringify(process.env.GITHUB_SHA ?? 'dev'),
