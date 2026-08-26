@@ -27,7 +27,7 @@ _After the four web flows feel good. Android wraps this app; iOS does not._
 |---|--------|-------|-------|
 | [#107](https://github.com/ZhannaM85/my-money/issues/107) | 🔍 Pending validation | Add support for GEL (Georgian Lari) | GEL in `BASE_CURRENCIES`; Frankfurter skips it. Converted via manual FX until static GEL series. |
 | [#108](https://github.com/ZhannaM85/my-money/issues/108) | 🔍 Pending validation | Allocation ignores All / Original and shows everything in EUR | Original + Currency = native amounts. Class/Type compared in saved base with explicit blurb. |
-| [#111](https://github.com/ZhannaM85/my-money/issues/111) | 🔍 Pending validation | Allow user to navigate the chart timeline (pan) | Horizontal drag shifts `rangeEnd`; zoom width unchanged; All = full span. |
+| [#111](https://github.com/ZhannaM85/my-money/issues/111) | 🔍 Pending validation | Allow user to navigate the chart timeline (pan) | Device 2026-08-26: still no left/right arrows (only Zoom in/out); range All. Drag pan not discoverable; All disables pan. Needs visible ← → controls. |
 | [#112](https://github.com/ZhannaM85/my-money/issues/112) | 🔍 Pending validation | Dashboard Positions should follow the selected chart day | Chart day selection drives StatCard + holdings; clears on dismiss/range change. |
 | [#113](https://github.com/ZhannaM85/my-money/issues/113) | 🔍 Pending validation | Loading Dashboard takes a long time | Original skips ensureRange; offline skips Frankfurter; no Converted series in Original. |
 | [#114](https://github.com/ZhannaM85/my-money/issues/114) | 🔍 Pending validation | Pinch zoom does not work on asset details chart | Asset details now has HistoryRange + pinch/button zoom like Dashboard (#54). |
