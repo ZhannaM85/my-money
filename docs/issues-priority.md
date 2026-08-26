@@ -27,6 +27,7 @@ _After the four web flows feel good. Android wraps this app; iOS does not._
 |---|--------|-------|-------|
 | [#107](https://github.com/ZhannaM85/my-money/issues/107) | 🔲 Open | Add support for GEL (Georgian Lari) | Currency picker (Add asset) has no GEL. Include in `BASE_CURRENCIES` + FX for Converted. NBG already used via GEL for RUB (#47). |
 | [#108](https://github.com/ZhannaM85/my-money/issues/108) | 🔲 Open | Allocation ignores All / Original and shows everything in EUR | Settings All + Original; Allocation Class/Currency/Type still € (RUB/USD rows labeled native, amounts in €). Sibling of #42/#46/#96 for Allocation. |
+| [#109](https://github.com/ZhannaM85/my-money/issues/109) | 🔲 Open | Show institution on Assets subtitle and Dashboard holdings second row | Assets: type · institution on muted second row. Dashboard holdings: institution under name, muted; omit if empty. Follow-up to #102. |
 
 ---
 
