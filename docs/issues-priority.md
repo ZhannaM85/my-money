@@ -25,7 +25,7 @@ _After the four web flows feel good. Android wraps this app; iOS does not._
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
-| [#108](https://github.com/ZhannaM85/my-money/issues/108) | 🔍 Pending validation | Allocation ignores All / Original and shows everything in EUR | Original multi-currency: Class/Type blocked (no leftover €); Currency native; single-currency native Class/Type. |
+| [#108](https://github.com/ZhannaM85/my-money/issues/108) | 🔲 Open | Allocation ignores All / Original and shows everything in EUR | Device 2026-08-26: Class/Type still show € (blurb “compared in EUR”). Prior Playwright proof was wrong (empty Class, no Type). Export offered. |
 | [#112](https://github.com/ZhannaM85/my-money/issues/112) | 🔲 Open | Dashboard Positions should follow the selected chart day | Device 2026-08-26: tooltip 2026-08-13 vs Positions on 2026-08-22. Chart selection must drive Positions (+ sync As of). |
 | [#116](https://github.com/ZhannaM85/my-money/issues/116) | 🔍 Pending validation | Pinch zoom in/out on every chart | Required `onZoomIn`/`onZoomOut`; History zoom buttons + pinch; call-site guard. |
 | [#120](https://github.com/ZhannaM85/my-money/issues/120) | 🔲 Open | Place chart range / pan / zoom controls under each graph | Follow-up to #111: move controls strip below the chart (not above). |
