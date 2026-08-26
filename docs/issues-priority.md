@@ -21,6 +21,14 @@ _After the four web flows feel good. Android wraps this app; iOS does not._
 
 ---
 
+## Tier 13 — Live feedback (2026-08-26)
+
+| # | Status | Issue | Notes |
+|---|--------|-------|-------|
+| [#107](https://github.com/ZhannaM85/my-money/issues/107) | 🔲 Open | Add support for GEL (Georgian Lari) | Currency picker (Add asset) has no GEL. Include in `BASE_CURRENCIES` + FX for Converted. NBG already used via GEL for RUB (#47). |
+
+---
+
 ## Explicitly not filed
 
 Out of scope for the MVP (`PROJECT_BRIEF.md` §20) — do not implement from chat:
