@@ -27,7 +27,6 @@ _After the four web flows feel good. Android wraps this app; iOS does not._
 |---|--------|-------|-------|
 | [#107](https://github.com/ZhannaM85/my-money/issues/107) | 🔍 Pending validation | Add support for GEL (Georgian Lari) | GEL in `BASE_CURRENCIES`; Frankfurter skips it. Converted via manual FX until static GEL series. |
 | [#108](https://github.com/ZhannaM85/my-money/issues/108) | 🔍 Pending validation | Allocation ignores All / Original and shows everything in EUR | Original + Currency = native amounts. Class/Type compared in saved base with explicit blurb. |
-| [#110](https://github.com/ZhannaM85/my-money/issues/110) | 🔍 Pending validation | Do not allow negative Y-axis when chart values are non-negative | `chartAxisScale` clamps floor to 0 when data min ≥ 0; real negatives still pad below. |
 | [#111](https://github.com/ZhannaM85/my-money/issues/111) | 🔍 Pending validation | Allow user to navigate the chart timeline (pan) | Horizontal drag shifts `rangeEnd`; zoom width unchanged; All = full span. |
 | [#112](https://github.com/ZhannaM85/my-money/issues/112) | 🔍 Pending validation | Dashboard Positions should follow the selected chart day | Chart day selection drives StatCard + holdings; clears on dismiss/range change. |
 | [#113](https://github.com/ZhannaM85/my-money/issues/113) | 🔍 Pending validation | Loading Dashboard takes a long time | Original skips ensureRange; offline skips Frankfurter; no Converted series in Original. |
