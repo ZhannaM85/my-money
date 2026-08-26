@@ -19,9 +19,11 @@ export function useDismissOnScroll() {
   }, [])
 
   const allowTooltip = useCallback(() => setDismissed(false), [])
+  const dismissTooltip = useCallback(() => setDismissed(true), [])
 
   return {
     tooltipActive: dismissed ? false : undefined,
     allowTooltip,
+    dismissTooltip,
   }
 }

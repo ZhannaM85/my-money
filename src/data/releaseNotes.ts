@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 125,
+    issue: 116,
+    date: '2026-08-26T19:40:00+03:00',
+    en: 'Pinch zoom works even when the chart tooltip is open: two-finger pinches dismiss the tooltip and are no longer trapped by it.',
+    ru: 'Масштаб щипком работает даже при открытой подсказке графика: щипок двумя пальцами скрывает подсказку и больше ею не перехватывается.',
+  },
+  {
     version: 124,
     issue: 120,
     date: '2026-08-26T19:30:00+03:00',

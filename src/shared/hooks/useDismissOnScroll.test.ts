@@ -16,5 +16,10 @@ describe('useDismissOnScroll', () => {
       result.current.allowTooltip()
     })
     expect(result.current.tooltipActive).toBeUndefined()
+
+    act(() => {
+      result.current.dismissTooltip()
+    })
+    expect(result.current.tooltipActive).toBe(false)
   })
 })

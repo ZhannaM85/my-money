@@ -6,11 +6,13 @@ import { usePinchZoom } from './usePinchZoom'
 function PinchHost({
   onZoomIn,
   onZoomOut,
+  onPinchStart,
 }: {
   onZoomIn: () => void
   onZoomOut: () => void
+  onPinchStart?: () => void
 }): ReactElement {
-  const ref = usePinchZoom(onZoomIn, onZoomOut)
+  const ref = usePinchZoom(onZoomIn, onZoomOut, onPinchStart)
   return <div ref={ref} data-testid="pinch-target" />
 }
 
@@ -54,5 +56,19 @@ describe('usePinchZoom', () => {
 
     expect(onZoomOut).toHaveBeenCalledTimes(1)
     expect(onZoomIn).toHaveBeenCalledTimes(1)
+  })
+
+  it('notifies onPinchStart when a second finger lands (#116)', () => {
+    const onPinchStart = vi.fn()
+    render(
+      <PinchHost
+        onZoomIn={vi.fn()}
+        onZoomOut={vi.fn()}
+        onPinchStart={onPinchStart}
+      />,
+    )
+    const target = screen.getByTestId('pinch-target')
+    dispatchPinch(target, 'touchstart', 100, 160)
+    expect(onPinchStart).toHaveBeenCalledTimes(1)
   })
 })

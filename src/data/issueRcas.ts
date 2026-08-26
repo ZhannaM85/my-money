@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 116,
+    title: {
+      en: 'Pinch zoom in/out on every chart',
+      ru: 'Масштаб щипком на каждом графике',
+    },
+    en: 'Tooltip covered the plot and stopped multi-touch from reaching pinch handlers. Two-finger pinches now dismiss the tooltip and are not stopPropagated; single-finger scroll in the tooltip still works.',
+    ru: 'Подсказка закрывала график и не давала multi-touch дойти до щипка. Щипок двумя пальцами скрывает подсказку и не stopPropagate; прокрутка одним пальцем в подсказке по-прежнему работает.',
+  },
+  {
     issue: 120,
     title: {
       en: 'Place chart range / pan / zoom controls under each graph',
@@ -36,15 +45,6 @@ export const issueRcas: IssueRca[] = [
     },
     en: 'Positions only changed via chart tap. An As of DateField now sets the same selected day (and can resolve holdings outside the visible series window).',
     ru: 'Позиции менялись только нажатием на график. Поле «На дату» задаёт тот же выбранный день (и может взять позиции вне видимого окна серии).',
-  },
-  {
-    issue: 116,
-    title: {
-      en: 'Pinch zoom in/out on every chart',
-      ru: 'Масштаб щипком на каждом графике',
-    },
-    en: 'Dashboard and asset details already pinched; History had handlers but no Zoom in/out chrome, and NetWorthChart allowed omitting pinch. Handlers are required; History matches Dashboard zoom controls; a screen call-site test guards regressions.',
-    ru: 'На Сводке и в карточке актива щипок уже был; в Истории были колбэки, но без кнопок «Увеличить»/«Уменьшить», а NetWorthChart позволял опустить щипок. Колбэки обязательны; История как на Сводке; тест call-site на экранах ловит регрессии.',
   },
   {
     issue: 119,

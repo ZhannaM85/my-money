@@ -4,17 +4,20 @@ import { pinchZoomDirection, touchDistance } from '@/shared/lib/pinchZoom'
 export function usePinchZoom(
   onZoomIn: (() => void) | undefined,
   onZoomOut: (() => void) | undefined,
+  onPinchStart?: (() => void) | undefined,
 ) {
   const ref = useRef<HTMLDivElement>(null)
   const startDistance = useRef<number | null>(null)
   const stepped = useRef(false)
   const onZoomInRef = useRef(onZoomIn)
   const onZoomOutRef = useRef(onZoomOut)
+  const onPinchStartRef = useRef(onPinchStart)
 
   useEffect(() => {
     onZoomInRef.current = onZoomIn
     onZoomOutRef.current = onZoomOut
-  }, [onZoomIn, onZoomOut])
+    onPinchStartRef.current = onPinchStart
+  }, [onZoomIn, onZoomOut, onPinchStart])
 
   useEffect(() => {
     const element = ref.current
@@ -28,6 +31,7 @@ export function usePinchZoom(
     function onStart(event: TouchEvent) {
       startDistance.current = twoFingerDistance(event.touches)
       stepped.current = false
+      if (event.touches.length >= 2) onPinchStartRef.current?.()
     }
 
     function onMove(event: TouchEvent) {
