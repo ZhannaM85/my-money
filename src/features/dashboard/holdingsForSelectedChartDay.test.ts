@@ -5,6 +5,7 @@ describe('holdingsForSelectedChartDay (#112)', () => {
   const series = [
     {
       date: '2026-08-06',
+      total: 116_420,
       holdings: [
         {
           assetId: 'cash',
@@ -18,6 +19,7 @@ describe('holdingsForSelectedChartDay (#112)', () => {
     },
     {
       date: '2026-08-25',
+      total: 101_100,
       holdings: [
         {
           assetId: 'cash',
@@ -59,5 +61,30 @@ describe('holdingsForSelectedChartDay (#112)', () => {
     )
     expect(point).toBeUndefined()
     expect(holdings[0]?.nativeAmount).toBe(101_100)
+  })
+
+  it('uses an outside-series point from the date field (#117)', () => {
+    const outside = {
+      date: '2026-01-13',
+      total: 50,
+      holdings: [
+        {
+          assetId: 'cash',
+          name: 'Cash',
+          currency: 'RUB',
+          nativeAmount: 50,
+          convertedAmount: 50,
+          conversionAvailable: true,
+        },
+      ],
+    }
+    const { point, holdings } = holdingsForSelectedChartDay(
+      series,
+      '2026-01-13',
+      fallback,
+      outside,
+    )
+    expect(point?.date).toBe('2026-01-13')
+    expect(holdings[0]?.nativeAmount).toBe(50)
   })
 })

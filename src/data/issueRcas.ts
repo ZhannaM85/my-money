@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 117,
+    title: {
+      en: 'Dashboard date input to choose which day Positions show',
+      ru: 'Поле даты на Сводке для выбора дня Позиций',
+    },
+    en: 'Positions only changed via chart tap. An As of DateField now sets the same selected day (and can resolve holdings outside the visible series window).',
+    ru: 'Позиции менялись только нажатием на график. Поле «На дату» задаёт тот же выбранный день (и может взять позиции вне видимого окна серии).',
+  },
+  {
     issue: 116,
     title: {
       en: 'Pinch zoom in/out on every chart',

@@ -29,6 +29,7 @@ import {
   type HistoryRange,
 } from '@/shared/lib/dates'
 import { Button } from '@/shared/ui/button'
+import { DateField } from '@/shared/ui/date-field'
 import { EmptyState } from '@/shared/ui/empty-state'
 import { InfoHint } from '@/shared/ui/info-hint'
 import { PageHeader } from '@/shared/ui/page-header'
@@ -64,6 +65,7 @@ export function DashboardScreen() {
   const [selectedChartDate, setSelectedChartDate] = useState<string | null>(
     null,
   )
+  const [asOfError, setAsOfError] = useState<string | undefined>()
   const [openNativeCurrency, setOpenNativeCurrency] = useState<string | null>(
     null,
   )
@@ -201,11 +203,45 @@ export function DashboardScreen() {
   ])
 
   const series = isOriginal ? nativeSeries : convertedSeries
+  const outsideSelectedPoint = useMemo(() => {
+    if (!selectedChartDate) return undefined
+    if (series.some((point) => point.date === selectedChartDate)) {
+      return undefined
+    }
+    if (isOriginal && activeCurrencyFilter !== 'all') {
+      return historicalNativeNetWorth(
+        filteredAssets,
+        filteredSnapshots,
+        [selectedChartDate],
+        activeCurrencyFilter,
+      )[0]
+    }
+    if (!isOriginal) {
+      return historicalNetWorth(
+        filteredAssets,
+        filteredSnapshots,
+        quotes,
+        [selectedChartDate],
+        baseCurrency,
+      )[0]
+    }
+    return undefined
+  }, [
+    activeCurrencyFilter,
+    baseCurrency,
+    filteredAssets,
+    filteredSnapshots,
+    isOriginal,
+    quotes,
+    selectedChartDate,
+    series,
+  ])
   const { point: selectedChartPoint, holdings: convertedHoldingsToday } =
     holdingsForSelectedChartDay(
       series,
       selectedChartDate,
       series[series.length - 1]?.holdings ?? convertedHoldings,
+      outsideSelectedPoint,
     )
   const convertedTodayPoint = convertedSeries[convertedSeries.length - 1]
   const convertedTodayTotal =
@@ -251,6 +287,7 @@ export function DashboardScreen() {
   const panEarlier = () => {
     if (!canPanEarlier) return
     setSelectedChartDate(null)
+    setAsOfError(undefined)
     setRangeEnd((end) =>
       shiftHistoryRangeEnd(end, range, 'earlier', today, earliest),
     )
@@ -258,6 +295,7 @@ export function DashboardScreen() {
   const panLater = () => {
     if (!canPanLater) return
     setSelectedChartDate(null)
+    setAsOfError(undefined)
     setRangeEnd((end) =>
       shiftHistoryRangeEnd(end, range, 'later', today, earliest),
     )
@@ -560,6 +598,27 @@ export function DashboardScreen() {
           {convertedHoldingsToday.length > 0 &&
             !(isOriginal && activeCurrencyFilter === 'all') && (
             <div className="flex flex-col gap-2">
+              <DateField
+                label={t.dashboard.asOfDate}
+                value={selectedChartDate ?? today}
+                min={earliest}
+                max={today}
+                onChange={(event) => {
+                  const next = event.target.value
+                  if (!next || next > today) {
+                    setAsOfError(t.dashboard.asOfDateInvalid)
+                    return
+                  }
+                  setAsOfError(undefined)
+                  if (next >= today) {
+                    setSelectedChartDate(null)
+                    return
+                  }
+                  setSelectedChartDate(next)
+                  setHoldingsOpen(true)
+                }}
+                error={asOfError}
+              />
               <button
                 type="button"
                 className="flex items-center justify-between gap-2 text-left"
@@ -688,6 +747,7 @@ export function DashboardScreen() {
                     onClick={() => {
                       if (!canZoomIn) return
                       setSelectedChartDate(null)
+                      setAsOfError(undefined)
                       const next = stepHistoryRange(range, 'in')
                       setRange(next)
                       if (next === 'All') setRangeEnd(today)
@@ -707,6 +767,7 @@ export function DashboardScreen() {
                     onClick={() => {
                       if (!canZoomOut) return
                       setSelectedChartDate(null)
+                      setAsOfError(undefined)
                       const next = stepHistoryRange(range, 'out')
                       setRange(next)
                       if (next === 'All') setRangeEnd(today)
@@ -723,12 +784,14 @@ export function DashboardScreen() {
                 }
                 onZoomIn={() => {
                   setSelectedChartDate(null)
+                  setAsOfError(undefined)
                   const next = stepHistoryRange(range, 'in')
                   setRange(next)
                   if (next === 'All') setRangeEnd(today)
                 }}
                 onZoomOut={() => {
                   setSelectedChartDate(null)
+                  setAsOfError(undefined)
                   const next = stepHistoryRange(range, 'out')
                   setRange(next)
                   if (next === 'All') setRangeEnd(today)
@@ -736,6 +799,7 @@ export function DashboardScreen() {
                 onPanEarlier={panEarlier}
                 onPanLater={panLater}
                 onSelectDate={(date) => {
+                  setAsOfError(undefined)
                   setSelectedChartDate(date)
                   if (date) setHoldingsOpen(true)
                 }}

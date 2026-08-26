@@ -36,6 +36,8 @@ export const ru: Dictionary = {
     zoomOut: 'Уменьшить',
     panEarlier: 'Раньше',
     panLater: 'Позже',
+    asOfDate: 'На дату',
+    asOfDateInvalid: 'Выберите сегодня или прошедшую дату',
     emptyTitle: 'Пока нет активов',
     emptyDescription:
       'Добавьте то, чем владеете или что должны, чтобы увидеть первый чистый капитал.',

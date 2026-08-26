@@ -41,6 +41,8 @@ export interface Dictionary {
     zoomOut: string
     panEarlier: string
     panLater: string
+    asOfDate: string
+    asOfDateInvalid: string
     emptyTitle: string
     emptyDescription: string
     fxMissing: (codes: string) => string
