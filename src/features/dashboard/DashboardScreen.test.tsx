@@ -604,7 +604,7 @@ describe('DashboardScreen', () => {
     ).toBeGreaterThan(0)
   })
 
-  it('shows earlier/later arrow controls to pan the chart window (#111)', async () => {
+  it('shows earlier/later arrow controls to pan the chart window (#111, #120)', async () => {
     const today = todayIsoDate()
     const past = addDaysIso(today, -60)
     const now = `${today}T00:00:00.000Z`
@@ -643,9 +643,14 @@ describe('DashboardScreen', () => {
       </MemoryRouter>,
     )
     expect(await screen.findByText('Net worth')).toBeInTheDocument()
+    const chart = screen.getByTestId('net-worth-chart')
     const earlier = screen.getByRole('button', { name: 'Earlier dates' })
-    const later = screen.getByRole('button', { name: 'Later dates' })
+    expect(
+      chart.compareDocumentPosition(earlier) &
+        Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy()
     expect(earlier).toBeEnabled()
+    const later = screen.getByRole('button', { name: 'Later dates' })
     expect(later).toBeDisabled()
     await user.click(earlier)
     expect(screen.getByRole('button', { name: 'Later dates' })).toBeEnabled()

@@ -702,6 +702,33 @@ export function DashboardScreen() {
             </p>
           ) : (
             <>
+              <NetWorthChart
+                points={series}
+                currency={
+                  isOriginal ? activeCurrencyFilter : baseCurrency
+                }
+                onZoomIn={() => {
+                  setSelectedChartDate(null)
+                  setAsOfError(undefined)
+                  const next = stepHistoryRange(range, 'in')
+                  setRange(next)
+                  if (next === 'All') setRangeEnd(today)
+                }}
+                onZoomOut={() => {
+                  setSelectedChartDate(null)
+                  setAsOfError(undefined)
+                  const next = stepHistoryRange(range, 'out')
+                  setRange(next)
+                  if (next === 'All') setRangeEnd(today)
+                }}
+                onPanEarlier={panEarlier}
+                onPanLater={panLater}
+                onSelectDate={(date) => {
+                  setAsOfError(undefined)
+                  setSelectedChartDate(date)
+                  if (date) setHoldingsOpen(true)
+                }}
+              />
               <div className="flex items-center justify-between gap-2">
                 <span className="text-sm text-muted-foreground">
                   {t.dashboard.zoomRange}: {range}
@@ -777,33 +804,6 @@ export function DashboardScreen() {
                   </button>
                 </div>
               </div>
-              <NetWorthChart
-                points={series}
-                currency={
-                  isOriginal ? activeCurrencyFilter : baseCurrency
-                }
-                onZoomIn={() => {
-                  setSelectedChartDate(null)
-                  setAsOfError(undefined)
-                  const next = stepHistoryRange(range, 'in')
-                  setRange(next)
-                  if (next === 'All') setRangeEnd(today)
-                }}
-                onZoomOut={() => {
-                  setSelectedChartDate(null)
-                  setAsOfError(undefined)
-                  const next = stepHistoryRange(range, 'out')
-                  setRange(next)
-                  if (next === 'All') setRangeEnd(today)
-                }}
-                onPanEarlier={panEarlier}
-                onPanLater={panLater}
-                onSelectDate={(date) => {
-                  setAsOfError(undefined)
-                  setSelectedChartDate(date)
-                  if (date) setHoldingsOpen(true)
-                }}
-              />
             </>
           )}
           <Button asChild variant="outline">

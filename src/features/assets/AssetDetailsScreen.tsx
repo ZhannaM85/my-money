@@ -325,6 +325,17 @@ export function AssetDetailsScreen() {
           {t.asset.noRateOnDate(snapshot.currency, snapshot.date)}
         </p>
       )}
+      <NetWorthChart
+        points={points}
+        currency={displayCurrency ?? asset.currency}
+        seriesName={asset.name}
+        onZoomIn={() =>
+          setRange((current) => stepHistoryRange(current, 'in'))
+        }
+        onZoomOut={() =>
+          setRange((current) => stepHistoryRange(current, 'out'))
+        }
+      />
       <div className="flex items-center justify-between gap-2">
         <span className="text-sm text-muted-foreground">
           {t.dashboard.zoomRange}: {range}
@@ -363,17 +374,6 @@ export function AssetDetailsScreen() {
           </button>
         </div>
       </div>
-      <NetWorthChart
-        points={points}
-        currency={displayCurrency ?? asset.currency}
-        seriesName={asset.name}
-        onZoomIn={() =>
-          setRange((current) => stepHistoryRange(current, 'in'))
-        }
-        onZoomOut={() =>
-          setRange((current) => stepHistoryRange(current, 'out'))
-        }
-      />
       {history.length > 0 && (
         <ul className="flex flex-col gap-2">
           {history.map((row) => {

@@ -220,6 +220,16 @@ export function HistoryScreen() {
             </p>
           ) : (
             <>
+              <NetWorthChart
+                points={series}
+                currency={baseCurrency}
+                onZoomIn={() =>
+                  setRange((current) => stepHistoryRange(current, 'in'))
+                }
+                onZoomOut={() =>
+                  setRange((current) => stepHistoryRange(current, 'out'))
+                }
+              />
               <div className="flex items-center justify-between gap-2">
                 <span className="text-sm text-muted-foreground">
                   {t.dashboard.zoomRange}: {range}
@@ -259,16 +269,6 @@ export function HistoryScreen() {
                   </button>
                 </div>
               </div>
-              <NetWorthChart
-                points={series}
-                currency={baseCurrency}
-                onZoomIn={() =>
-                  setRange((current) => stepHistoryRange(current, 'in'))
-                }
-                onZoomOut={() =>
-                  setRange((current) => stepHistoryRange(current, 'out'))
-                }
-              />
             </>
           )}
           <ul className="flex flex-col gap-2">

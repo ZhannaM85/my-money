@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 120,
+    title: {
+      en: 'Place chart range / pan / zoom controls under each graph',
+      ru: 'Разместить диапазон / pan / масштаб графика под каждым графиком',
+    },
+    en: 'Controls sat above the chart. Moved the range / arrows / zoom strip below NetWorthChart on Dashboard, History, and asset details.',
+    ru: 'Элементы управления были над графиком. Полоса диапазона / стрелок / масштаба перенесена под NetWorthChart на Сводке, в Истории и в карточке актива.',
+  },
+  {
     issue: 118,
     title: {
       en: 'Attach Playwright screenshots to GitHub issues as proof before validation',

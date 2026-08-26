@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 124,
+    issue: 120,
+    date: '2026-08-26T19:30:00+03:00',
+    en: 'Chart range, pan arrows, and zoom controls sit under each graph instead of above it.',
+    ru: 'Диапазон графика, стрелки и кнопки масштаба теперь под каждым графиком, а не над ним.',
+  },
+  {
     version: 123,
     issue: 118,
     date: '2026-08-26T18:50:00+03:00',
