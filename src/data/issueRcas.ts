@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 111,
+    title: {
+      en: 'Allow user to navigate the chart timeline (pan)',
+      ru: 'Позволить листать шкалу времени на графике (pan)',
+    },
+    en: 'Zoom changed window width but the end was always today, so there was no way to slide along history. Horizontal drag now shifts rangeEnd within earliest…today; All stays full-span.',
+    ru: 'Масштаб менял ширину окна, но конец всегда был «сегодня», поэтому листать историю было нельзя. Горизонтальный жест сдвигает rangeEnd в пределах earliest…today; «All» остаётся на всём диапазоне.',
+  },
+  {
     issue: 112,
     title: {
       en: 'Dashboard Positions should follow the selected chart day',

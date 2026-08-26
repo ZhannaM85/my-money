@@ -57,6 +57,52 @@ export function isRangeClampedToEarliest(
   return unclampedRangeStartIso(range, today) < earliest
 }
 
+export function historyRangeDayCount(range: HistoryRange): number | null {
+  if (range === 'All') return null
+  return RANGE_DAYS[range]
+}
+
+/** One pan gesture shifts by about a quarter of the visible window (#111). */
+export function historyPanStepDays(range: HistoryRange): number {
+  const days = historyRangeDayCount(range)
+  if (days === null) return 0
+  return Math.max(1, Math.floor(days / 4))
+}
+
+export function shiftHistoryRangeEnd(
+  rangeEnd: string,
+  range: HistoryRange,
+  direction: 'earlier' | 'later',
+  today: string,
+  earliest: string,
+): string {
+  if (range === 'All') return today
+  const step = historyPanStepDays(range)
+  const delta = direction === 'earlier' ? -step : step
+  let next = addDaysIso(rangeEnd, delta)
+  if (next > today) next = today
+  if (next < earliest) next = earliest
+  return next
+}
+
+export function canPanHistoryEarlier(
+  rangeEnd: string,
+  range: HistoryRange,
+  earliest: string,
+): boolean {
+  if (range === 'All') return false
+  return rangeEnd > earliest
+}
+
+export function canPanHistoryLater(
+  rangeEnd: string,
+  range: HistoryRange,
+  today: string,
+): boolean {
+  if (range === 'All') return false
+  return rangeEnd < today
+}
+
 export function monthStartIso(isoDate: string): string {
   return `${isoDate.slice(0, 8)}01`
 }

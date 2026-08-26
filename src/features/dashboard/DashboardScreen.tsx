@@ -22,6 +22,7 @@ import {
   HISTORY_RANGES,
   isoDatesInclusive,
   rangeStartIso,
+  shiftHistoryRangeEnd,
   stepHistoryRange,
   type HistoryRange,
 } from '@/shared/lib/dates'
@@ -53,6 +54,7 @@ export function DashboardScreen() {
   const ensureRange = useFxStore((state) => state.ensureRange)
   const fxLoading = useFxStore((state) => state.loading)
   const [range, setRange] = useState<HistoryRange>('1M')
+  const [rangeEnd, setRangeEnd] = useState(todayIsoDate)
   const [currencyFilter, setCurrencyFilter] = useState<string>('all')
   const [holdingsOpen, setHoldingsOpen] = useState(false)
   const [selectedChartDate, setSelectedChartDate] = useState<string | null>(
@@ -64,6 +66,7 @@ export function DashboardScreen() {
   const [periodOpen, setPeriodOpen] = useState<'amount' | 'rate' | null>(null)
 
   const today = todayIsoDate()
+  const chartEnd = range === 'All' ? today : rangeEnd > today ? today : rangeEnd
   const isOriginal = currencyDisplayMode === 'native'
   const activeCurrencyFilter = isOriginal ? currencyFilter : 'all'
 
@@ -80,9 +83,11 @@ export function DashboardScreen() {
     )
   }, [snapshots, today])
 
-  const start = rangeStartIso(range, today, earliest)
-  const dates = useMemo(() => isoDatesInclusive(start, today), [start, today])
-
+  const start = rangeStartIso(range, chartEnd, earliest)
+  const dates = useMemo(
+    () => isoDatesInclusive(start, chartEnd),
+    [start, chartEnd],
+  )
   const availableCurrencies = useMemo(
     () => [...new Set(snapshots.map((snapshot) => snapshot.currency))].sort(),
     [snapshots],
@@ -104,8 +109,8 @@ export function DashboardScreen() {
     const symbols = [
       ...new Set(filteredSnapshots.map((snapshot) => snapshot.currency)),
     ]
-    void ensureRange(start, today, baseCurrency, symbols)
-  }, [baseCurrency, ensureRange, filteredSnapshots, start, today])
+    void ensureRange(start, chartEnd, baseCurrency, symbols)
+  }, [baseCurrency, chartEnd, ensureRange, filteredSnapshots, start])
 
   const convertedResult = useMemo(
     () => netWorth(filteredAssets, filteredSnapshots, quotes, baseCurrency),
@@ -512,7 +517,7 @@ export function DashboardScreen() {
                 variant="outline"
                 disabled={fxLoading}
                 onClick={() =>
-                  void ensureRange(start, today, baseCurrency, fxSymbols)
+                  void ensureRange(start, chartEnd, baseCurrency, fxSymbols)
                 }
               >
                 {t.dashboard.updateRates}
@@ -616,10 +621,11 @@ export function DashboardScreen() {
                     )}
                     disabled={!canZoomIn}
                     onClick={() => {
-                      if (canZoomIn) {
-                        setSelectedChartDate(null)
-                        setRange((current) => stepHistoryRange(current, 'in'))
-                      }
+                      if (!canZoomIn) return
+                      setSelectedChartDate(null)
+                      const next = stepHistoryRange(range, 'in')
+                      setRange(next)
+                      if (next === 'All') setRangeEnd(today)
                     }}
                   >
                     {t.dashboard.zoomIn}
@@ -634,10 +640,11 @@ export function DashboardScreen() {
                     )}
                     disabled={!canZoomOut}
                     onClick={() => {
-                      if (canZoomOut) {
-                        setSelectedChartDate(null)
-                        setRange((current) => stepHistoryRange(current, 'out'))
-                      }
+                      if (!canZoomOut) return
+                      setSelectedChartDate(null)
+                      const next = stepHistoryRange(range, 'out')
+                      setRange(next)
+                      if (next === 'All') setRangeEnd(today)
                     }}
                   >
                     {t.dashboard.zoomOut}
@@ -651,11 +658,35 @@ export function DashboardScreen() {
                 }
                 onZoomIn={() => {
                   setSelectedChartDate(null)
-                  setRange((current) => stepHistoryRange(current, 'in'))
+                  const next = stepHistoryRange(range, 'in')
+                  setRange(next)
+                  if (next === 'All') setRangeEnd(today)
                 }}
                 onZoomOut={() => {
                   setSelectedChartDate(null)
-                  setRange((current) => stepHistoryRange(current, 'out'))
+                  const next = stepHistoryRange(range, 'out')
+                  setRange(next)
+                  if (next === 'All') setRangeEnd(today)
+                }}
+                onPanEarlier={() => {
+                  if (range === 'All') return
+                  setSelectedChartDate(null)
+                  setRangeEnd((end) =>
+                    shiftHistoryRangeEnd(
+                      end,
+                      range,
+                      'earlier',
+                      today,
+                      earliest,
+                    ),
+                  )
+                }}
+                onPanLater={() => {
+                  if (range === 'All') return
+                  setSelectedChartDate(null)
+                  setRangeEnd((end) =>
+                    shiftHistoryRangeEnd(end, range, 'later', today, earliest),
+                  )
                 }}
                 onSelectDate={(date) => {
                   setSelectedChartDate(date)

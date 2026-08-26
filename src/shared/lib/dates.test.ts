@@ -1,12 +1,15 @@
 import { describe, expect, it } from 'vitest'
 import {
   addDaysIso,
+  canPanHistoryEarlier,
+  canPanHistoryLater,
   isoDatesInclusive,
   isIsoDate,
   isIsoDateOnOrBefore,
   monthStartIso,
   rangeStartIso,
   isRangeClampedToEarliest,
+  shiftHistoryRangeEnd,
   unclampedRangeStartIso,
   stepHistoryRange,
 } from './dates'
@@ -39,6 +42,48 @@ describe('date helpers', () => {
     expect(stepHistoryRange('1M', 'out')).toBe('3M')
     expect(stepHistoryRange('All', 'out')).toBe('All')
     expect(stepHistoryRange('All', 'in')).toBe('1Y')
+  })
+
+  it('shifts the visible window end for timeline pan (#111)', () => {
+    expect(
+      shiftHistoryRangeEnd(
+        '2026-08-25',
+        '1M',
+        'earlier',
+        '2026-08-25',
+        '2026-01-01',
+      ),
+    ).toBe('2026-08-18')
+    expect(
+      shiftHistoryRangeEnd(
+        '2026-08-18',
+        '1M',
+        'later',
+        '2026-08-25',
+        '2026-01-01',
+      ),
+    ).toBe('2026-08-25')
+    expect(
+      shiftHistoryRangeEnd(
+        '2026-08-25',
+        '1M',
+        'later',
+        '2026-08-25',
+        '2026-01-01',
+      ),
+    ).toBe('2026-08-25')
+    expect(
+      shiftHistoryRangeEnd(
+        '2026-01-01',
+        '1M',
+        'earlier',
+        '2026-08-25',
+        '2026-01-01',
+      ),
+    ).toBe('2026-01-01')
+    expect(canPanHistoryEarlier('2026-08-25', '1M', '2026-01-01')).toBe(true)
+    expect(canPanHistoryLater('2026-08-25', '1M', '2026-08-25')).toBe(false)
+    expect(canPanHistoryEarlier('2026-08-25', 'All', '2026-01-01')).toBe(false)
   })
 
   it('accepts calendar ISO dates on or before today', () => {

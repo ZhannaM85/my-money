@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 115,
+    issue: 111,
+    date: '2026-08-26T16:10:00+03:00',
+    en: 'Drag the Dashboard chart sideways to pan along the timeline without changing zoom. All still shows the full history.',
+    ru: 'Тяните график Сводки вбок, чтобы листать шкалу времени без смены масштаба. «All» по-прежнему показывает всю историю.',
+  },
+  {
     version: 114,
     issue: 112,
     date: '2026-08-26T15:50:00+03:00',

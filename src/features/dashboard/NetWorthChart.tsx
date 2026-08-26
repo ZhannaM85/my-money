@@ -17,6 +17,7 @@ import {
   uniqueChartAxisDates,
 } from '@/shared/lib/money'
 import { useDismissOnScroll } from '@/shared/hooks/useDismissOnScroll'
+import { useChartPan } from '@/shared/hooks/useChartPan'
 import { usePinchZoom } from '@/shared/hooks/usePinchZoom'
 import { useLocale, useTranslation } from '@/i18n'
 import { HoldingBreakdownList } from './HoldingBreakdownList'
@@ -73,6 +74,8 @@ export function NetWorthChart({
   onZoomIn,
   onZoomOut,
   onSelectDate,
+  onPanEarlier,
+  onPanLater,
 }: {
   points: readonly NetWorthChartPoint[]
   currency: string
@@ -81,10 +84,15 @@ export function NetWorthChart({
   onZoomOut?: () => void
   /** Called with the tapped chart day, or null when the tooltip is dismissed (#112). */
   onSelectDate?: (date: string | null) => void
+  /** Horizontal drag right → earlier history (#111). */
+  onPanEarlier?: () => void
+  /** Horizontal drag left → later history (#111). */
+  onPanLater?: () => void
 }) {
   const t = useTranslation()
   const locale = useLocale()
   const pinchRef = usePinchZoom(onZoomIn, onZoomOut)
+  const panRef = useChartPan(onPanEarlier, onPanLater)
   const { tooltipActive, allowTooltip } = useDismissOnScroll()
   const onSelectDateRef = useRef(onSelectDate)
 
@@ -108,7 +116,10 @@ export function NetWorthChart({
 
   return (
     <div
-      ref={pinchRef}
+      ref={(node) => {
+        pinchRef.current = node
+        panRef.current = node
+      }}
       className="h-48 w-full touch-pan-y"
       data-testid="net-worth-chart"
       onPointerDown={allowTooltip}
