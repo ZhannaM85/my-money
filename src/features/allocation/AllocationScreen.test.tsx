@@ -50,7 +50,7 @@ describe('AllocationScreen', () => {
     expect(screen.getByText('100%')).toBeInTheDocument()
   })
 
-  it('shows native currency amounts in Original mode (#108)', async () => {
+  it('shows native Class/Type rows per currency in Original mode (#108)', async () => {
     const user = userEvent.setup()
     await useAssetStore.getState().saveAsset(
       {
@@ -88,24 +88,28 @@ describe('AllocationScreen', () => {
       </MemoryRouter>,
     )
     expect(
-      await screen.findByText('Pick Currency or Converted'),
+      await screen.findByText(/Native amounts by class or type/),
     ).toBeInTheDocument()
-    expect(screen.queryByTestId('allocation-chart')).not.toBeInTheDocument()
+    expect(screen.getByTestId('allocation-chart')).toBeInTheDocument()
+    expect(screen.getByText('Money · USD')).toBeInTheDocument()
+    expect(screen.getByText('Money · EUR')).toBeInTheDocument()
+    expect(screen.getByText(formatAmount(8000, 'USD'))).toBeInTheDocument()
+    expect(screen.getByText(formatAmount(1000, 'EUR'))).toBeInTheDocument()
     expect(
       screen.queryByText(formatAmount(8000, 'EUR')),
     ).not.toBeInTheDocument()
+
+    await user.click(screen.getByRole('button', { name: 'Type' }))
+    expect(await screen.findByText('Cash · USD')).toBeInTheDocument()
+    expect(screen.getByText('Bank account · EUR')).toBeInTheDocument()
+    expect(screen.getByText(formatAmount(8000, 'USD'))).toBeInTheDocument()
+    expect(screen.getByText(formatAmount(1000, 'EUR'))).toBeInTheDocument()
+
     await user.click(screen.getByRole('button', { name: 'Currency' }))
     expect(
       await screen.findByText(/Native amounts by currency/),
     ).toBeInTheDocument()
-    expect(
-      screen.getByText(formatAmount(8000, 'USD')),
-    ).toBeInTheDocument()
-    expect(
-      screen.getByText(formatAmount(1000, 'EUR')),
-    ).toBeInTheDocument()
-    expect(
-      screen.queryByText(formatAmount(8000, 'EUR')),
-    ).not.toBeInTheDocument()
+    expect(screen.getByText(formatAmount(8000, 'USD'))).toBeInTheDocument()
+    expect(screen.getByText(formatAmount(1000, 'EUR'))).toBeInTheDocument()
   })
 })

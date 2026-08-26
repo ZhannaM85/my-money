@@ -231,7 +231,7 @@ export const en: Dictionary = {
     descriptionOriginalCompared: (currency) =>
       `Class and type shares are compared in ${currency}. Open Currency for native amounts, or switch to Converted for one total.`,
     descriptionOriginalClassType:
-      'Class and Type need one currency to compare. Open Currency for native amounts, or switch to Converted for a single total.',
+      'Native amounts by class or type, each row in its own currency. Shares use size only — mixed currencies are not converted into one total.',
     descriptionOriginalSingle: (currency) =>
       `Native amounts in ${currency}. Switch to Converted to compare mixed currencies in one total.`,
     originalClassTypeTitle: 'Pick Currency or Converted',

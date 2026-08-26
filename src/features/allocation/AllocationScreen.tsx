@@ -5,7 +5,6 @@ import {
   nativeBreakdownBy,
   nativeTotalsByCurrency,
 } from '@/domain/netWorth'
-import { latestSnapshot } from '@/domain/snapshot'
 import { useTranslation } from '@/i18n'
 import { EmptyState } from '@/shared/ui/empty-state'
 import { PageHeader } from '@/shared/ui/page-header'
@@ -29,6 +28,12 @@ function withPercents(
     .sort((a, b) => Math.abs(b.amount) - Math.abs(a.amount))
 }
 
+/** `money::USD` → base key for i18n labels (#108). */
+function nativeRowLabelKey(id: string): string {
+  const sep = id.indexOf('::')
+  return sep === -1 ? id : id.slice(0, sep)
+}
+
 export function AllocationScreen() {
   const t = useTranslation()
   const loadAssets = useAssetStore((state) => state.load)
@@ -49,10 +54,13 @@ export function AllocationScreen() {
   ]
 
   function labelFor(id: string): string {
+    const key = isOriginal && (view === 'class' || view === 'type')
+      ? nativeRowLabelKey(id)
+      : id
     if (view === 'class')
-      return t.asset.classes[id as keyof typeof t.asset.classes] ?? id
+      return t.asset.classes[key as keyof typeof t.asset.classes] ?? key
     if (view === 'type')
-      return t.asset.types[id as keyof typeof t.asset.types] ?? id
+      return t.asset.types[key as keyof typeof t.asset.types] ?? key
     return id
   }
 
@@ -60,22 +68,6 @@ export function AllocationScreen() {
     void loadAssets()
     void loadSettings()
   }, [loadAssets, loadSettings])
-
-  const includedCurrencies = useMemo(() => {
-    const codes = new Set<string>()
-    for (const asset of assets) {
-      if (!contributesToNetWorth(asset)) continue
-      const snapshot = latestSnapshot(snapshots, asset.id)
-      if (!snapshot) continue
-      codes.add(snapshot.currency)
-    }
-    return [...codes].sort()
-  }, [assets, snapshots])
-
-  const originalClassTypeBlocked =
-    isOriginal &&
-    (view === 'class' || view === 'type') &&
-    includedCurrencies.length > 1
 
   const rows = useMemo(() => {
     if (isOriginal && view === 'currency') {
@@ -94,42 +86,39 @@ export function AllocationScreen() {
           ? (asset: (typeof assets)[number]) => asset.currency
           : (asset: (typeof assets)[number]) => asset.type
     if (isOriginal && (view === 'class' || view === 'type')) {
-      if (includedCurrencies.length !== 1) return []
       return nativeBreakdownBy(assets, snapshots, keyOf)
     }
     return breakdownBy(assets, snapshots, quotes, baseCurrency, keyOf)
-  }, [
-    assets,
-    baseCurrency,
-    includedCurrencies.length,
-    isOriginal,
-    quotes,
-    snapshots,
-    view,
-  ])
+  }, [assets, baseCurrency, isOriginal, quotes, snapshots, view])
 
-  const pieData = rows.map((row) => ({
-    ...row,
-    name: labelFor(row.id),
-    currency:
+  const pieData = rows.map((row) => {
+    const baseLabel = labelFor(row.id)
+    const currency =
       'currency' in row && typeof row.currency === 'string'
         ? row.currency
-        : undefined,
-  }))
+        : undefined
+    const name =
+      isOriginal &&
+      (view === 'class' || view === 'type') &&
+      currency &&
+      !baseLabel.includes(currency)
+        ? `${baseLabel} · ${currency}`
+        : baseLabel
+    return {
+      ...row,
+      name,
+      currency,
+    }
+  })
 
-  const chartCurrency =
-    isOriginal && includedCurrencies.length === 1
-      ? includedCurrencies[0]!
-      : baseCurrency
+  const chartCurrency = baseCurrency
 
   const description =
     isOriginal && view === 'currency'
       ? t.allocation.descriptionOriginalCurrency
-      : originalClassTypeBlocked
+      : isOriginal && (view === 'class' || view === 'type')
         ? t.allocation.descriptionOriginalClassType
-        : isOriginal
-          ? t.allocation.descriptionOriginalSingle(chartCurrency)
-          : t.allocation.description
+        : t.allocation.description
 
   return (
     <div className="flex flex-col gap-6">
@@ -154,11 +143,6 @@ export function AllocationScreen() {
       </div>
       {!loaded ? (
         <p className="text-sm text-muted-foreground">{t.common.loading}</p>
-      ) : originalClassTypeBlocked ? (
-        <EmptyState
-          title={t.allocation.originalClassTypeTitle}
-          description={t.allocation.descriptionOriginalClassType}
-        />
       ) : pieData.length === 0 ? (
         <EmptyState
           title={t.allocation.emptyTitle}

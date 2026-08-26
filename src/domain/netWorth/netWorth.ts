@@ -330,7 +330,7 @@ export function breakdownBy(
     .sort((a, b) => Math.abs(b.amount) - Math.abs(a.amount))
 }
 
-/** Native (unconverted) totals by a key — Original mode Class/Type (#108). */
+/** Native (unconverted) totals by key·currency — Original Class/Type (#108). */
 export function nativeBreakdownBy(
   assets: readonly Asset[],
   snapshots: readonly AssetSnapshot[],
@@ -343,13 +343,10 @@ export function nativeBreakdownBy(
     if (!snapshot) continue
     const native = effectiveAmount(snapshot.amount, asset)
     const signed = isLiability(asset) ? -native : native
-    const key = keyOf(asset)
-    const existing = buckets.get(key)
-    if (existing && existing.currency !== snapshot.currency) {
-      // Mixed currencies under one key — caller should avoid this path.
-      continue
-    }
-    buckets.set(key, {
+    const labelKey = keyOf(asset)
+    const id = `${labelKey}::${snapshot.currency}`
+    const existing = buckets.get(id)
+    buckets.set(id, {
       amount: (existing?.amount ?? 0) + signed,
       currency: snapshot.currency,
     })

@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 108,
+    title: {
+      en: 'Allocation ignores All / Original and shows everything in EUR',
+      ru: 'Распределение игнорирует «Все» / «В оригинале» и показывает всё в EUR',
+    },
+    en: 'Original Class/Type used leftover base conversion (or an empty “pick Currency” block). They now use nativeBreakdownBy with one row per class/type·currency (Money · RUB), formatted in that currency; Converted still compares in the base.',
+    ru: 'Класс/Тип в Original шли через leftover base (или пустой блок «выберите Валюта»). Теперь nativeBreakdownBy — строка на класс/тип·валюту (Деньги · RUB) в этой валюте; «В пересчёте» по-прежнему сравнивает в базе.',
+  },
+  {
     issue: 112,
     title: {
       en: 'Dashboard Positions should follow the selected chart day',
@@ -81,15 +90,6 @@ export const issueRcas: IssueRca[] = [
     },
     en: 'Zoom changed window width but the end was always today. Drag alone was not discoverable on-device. Visible ← → arrows (and drag) now shift rangeEnd within earliest…today; All keeps arrows disabled (full span).',
     ru: 'Масштаб менял ширину окна, но конец всегда был «сегодня». Одного жеста было мало — на устройстве не находили. Видимые ← → (и жест) сдвигают rangeEnd в пределах earliest…today; в «All» стрелки выключены (весь диапазон).',
-  },
-  {
-    issue: 108,
-    title: {
-      en: 'Allocation ignores All / Original and shows everything in EUR',
-      ru: 'Распределение игнорирует «Все» / «В оригинале» и показывает всё в EUR',
-    },
-    en: 'Allocation always called breakdownBy with settings.baseCurrency in Original, so Class/Type showed leftover €. Multi-currency Original now blocks Class/Type with an explicit empty state (Currency tab stays native); single-currency Original uses nativeBreakdownBy.',
-    ru: 'Распределение в Original всегда звало breakdownBy с baseCurrency, поэтому Класс/Тип показывали оставшийся €. При нескольких валютах Класс/Тип теперь явный empty state (вкладка Валюта — нативно); одна валюта — nativeBreakdownBy.',
   },
   {
     issue: 107,

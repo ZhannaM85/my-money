@@ -394,8 +394,44 @@ describe('nativeBreakdownBy (#108)', () => {
       (row) => row.assetClass,
     )
     expect(rows).toEqual([
-      { id: 'money', amount: 8000, percent: 100, currency: 'USD' },
+      { id: 'money::USD', amount: 8000, percent: 100, currency: 'USD' },
     ])
+  })
+
+  it('keeps separate native rows when one class has several currencies', () => {
+    const eur = asset({
+      id: 'eur',
+      name: 'Euro',
+      type: 'cash',
+      currency: 'EUR',
+    })
+    const usd = asset({
+      id: 'usd',
+      name: 'Dollar',
+      type: 'cash',
+      currency: 'USD',
+    })
+    const rows = nativeBreakdownBy(
+      [eur, usd],
+      [
+        snap({ id: 's1', assetId: 'eur', amount: 1000, currency: 'EUR' }),
+        snap({ id: 's2', assetId: 'usd', amount: 8000, currency: 'USD' }),
+      ],
+      (row) => row.assetClass,
+    )
+    expect(rows).toHaveLength(2)
+    expect(rows[0]).toMatchObject({
+      id: 'money::USD',
+      amount: 8000,
+      currency: 'USD',
+    })
+    expect(rows[0]!.percent).toBeCloseTo((8000 / 9000) * 100, 5)
+    expect(rows[1]).toMatchObject({
+      id: 'money::EUR',
+      amount: 1000,
+      currency: 'EUR',
+    })
+    expect(rows[1]!.percent).toBeCloseTo((1000 / 9000) * 100, 5)
   })
 })
 
