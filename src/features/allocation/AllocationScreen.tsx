@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useState } from 'react'
-import { contributesToNetWorth } from '@/domain/asset'
 import {
   breakdownBy,
   nativeBreakdownBy,
