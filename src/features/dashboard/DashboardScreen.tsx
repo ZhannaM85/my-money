@@ -39,6 +39,7 @@ import { useFxStore } from '@/stores/fxStore'
 import { useSettingsStore } from '@/stores/settingsStore'
 import { NetWorthChart } from './NetWorthChart'
 import { dashboardNeedsRemoteFx } from './dashboardFx'
+import { holdingsForSelectedChartDay } from './holdingsForSelectedChartDay'
 
 export function DashboardScreen() {
   const t = useTranslation()
@@ -200,17 +201,15 @@ export function DashboardScreen() {
   ])
 
   const series = isOriginal ? nativeSeries : convertedSeries
-  const selectedChartPoint =
-    selectedChartDate === null
-      ? undefined
-      : series.find((point) => point.date === selectedChartDate)
+  const { point: selectedChartPoint, holdings: convertedHoldingsToday } =
+    holdingsForSelectedChartDay(
+      series,
+      selectedChartDate,
+      series[series.length - 1]?.holdings ?? convertedHoldings,
+    )
   const convertedTodayPoint = convertedSeries[convertedSeries.length - 1]
   const convertedTodayTotal =
     convertedTodayPoint?.total ?? convertedResult.total
-  const convertedHoldingsToday =
-    selectedChartPoint?.holdings ??
-    convertedTodayPoint?.holdings ??
-    convertedHoldings
   const convertedBreakdown = useMemo(() => {
     const startHoldings = convertedSeries[0]?.holdings
     const endHoldings = convertedTodayPoint?.holdings
@@ -565,7 +564,11 @@ export function DashboardScreen() {
                 type="button"
                 className="flex items-center justify-between gap-2 text-left"
                 aria-expanded={holdingsOpen}
-                aria-label={t.dashboard.holdings}
+                aria-label={
+                  selectedChartPoint
+                    ? t.history.holdingsOn(selectedChartPoint.date)
+                    : t.dashboard.holdings
+                }
                 onClick={() => setHoldingsOpen((open) => !open)}
               >
                 <span className="text-sm text-muted-foreground">

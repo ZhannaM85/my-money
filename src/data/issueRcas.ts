@@ -52,8 +52,8 @@ export const issueRcas: IssueRca[] = [
       en: 'Dashboard Positions should follow the selected chart day',
       ru: 'Позиции на Сводке должны следовать за выбранным днём на графике',
     },
-    en: 'Chart tooltip showed a historical total while Positions always used today’s holdings. Selecting a chart day now drives the headline total and holdings list from that series point.',
-    ru: 'Подсказка графика показывала исторический итог, а Позиции всегда брали сегодняшние. Выбор дня на графике теперь ведёт заголовок и список позиций из этой точки серии.',
+    en: 'Chart tooltip showed a historical total while Positions stayed on today because selection cleared when the tooltip dismissed on scroll (opening Positions). Selection now stays until pan/zoom; mouse/touch active payload also sets the day; header shows Holdings on {date}.',
+    ru: 'Подсказка графика показывала исторический итог, а Позиции оставались на сегодня: выбор сбрасывался при скрытии подсказки при скролле (открытие Позиций). Выбор держится до pan/zoom; активная точка мыши/касания тоже задаёт день; в заголовке — Позиции на {date}.',
   },
   {
     issue: 108,

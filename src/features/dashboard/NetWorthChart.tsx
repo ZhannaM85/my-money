@@ -100,9 +100,8 @@ export function NetWorthChart({
     onSelectDateRef.current = onSelectDate
   }, [onSelectDate])
 
-  useEffect(() => {
-    if (tooltipActive === false) onSelectDateRef.current?.(null)
-  }, [tooltipActive])
+  // Do not clear onSelectDate when the tooltip dismisses on scroll (#112).
+  // Positions must keep the tapped day; only pan/zoom (parent) clears selection.
 
   const name = seriesName ?? t.dashboard.netWorth
   if (points.length === 0) return null
@@ -128,6 +127,15 @@ export function NetWorthChart({
         <LineChart
           data={[...points]}
           margin={{ top: 8, right: 8, left: 0, bottom: 0 }}
+          onMouseMove={(state) => {
+            const payload = (
+              state as {
+                activePayload?: ReadonlyArray<{ payload?: { date?: string } }>
+              }
+            )?.activePayload?.[0]?.payload
+            const date = payload?.date
+            if (typeof date === 'string') onSelectDateRef.current?.(date)
+          }}
           onClick={(state) => {
             const payload = (
               state as { activePayload?: ReadonlyArray<{ payload?: { date?: string } }> }

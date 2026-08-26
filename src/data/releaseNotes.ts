@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 120,
+    issue: 112,
+    date: '2026-08-26T18:15:00+03:00',
+    en: 'Tapping a Dashboard chart day keeps Positions on that date (header shows the date) so amounts match the tooltip. Selection no longer clears when the tooltip hides.',
+    ru: 'Нажатие дня на графике Сводки оставляет Позиции на этой дате (дата в заголовке), чтобы суммы совпадали с подсказкой. Выбор больше не сбрасывается при скрытии подсказки.',
+  },
+  {
     version: 119,
     issue: 111,
     date: '2026-08-26T18:05:00+03:00',
