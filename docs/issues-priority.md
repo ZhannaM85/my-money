@@ -27,7 +27,7 @@ _After the four web flows feel good. Android wraps this app; iOS does not._
 |---|--------|-------|-------|
 | [#108](https://github.com/ZhannaM85/my-money/issues/108) | 🔍 Pending validation | Allocation ignores All / Original and shows everything in EUR | Original multi-currency: Class/Type blocked (no leftover €); Currency native; single-currency native Class/Type. |
 | [#111](https://github.com/ZhannaM85/my-money/issues/111) | 🔍 Pending validation | Allow user to navigate the chart timeline (pan) | Visible ← → arrows + drag; All disables pan. |
-| [#112](https://github.com/ZhannaM85/my-money/issues/112) | 🔍 Pending validation | Dashboard Positions should follow the selected chart day | Keep selection when tooltip dismisses; header shows date; amounts from series point. Date field → #117. |
+| [#112](https://github.com/ZhannaM85/my-money/issues/112) | 🔲 Open | Dashboard Positions should follow the selected chart day | Device 2026-08-26: tooltip 2026-08-13 vs Positions on 2026-08-22. Chart selection must drive Positions (+ sync As of). |
 | [#116](https://github.com/ZhannaM85/my-money/issues/116) | 🔍 Pending validation | Pinch zoom in/out on every chart | Required `onZoomIn`/`onZoomOut`; History zoom buttons + pinch; call-site guard. |
 
 ---
