@@ -114,6 +114,7 @@ export interface HoldingConversion {
   convertedAmount: number | null
   conversionAvailable: boolean
   note?: string
+  institution?: string
 }
 
 export interface HistoricalPoint {
@@ -151,6 +152,9 @@ export function holdingsWithConversion(
         convertedAmount: null,
         conversionAvailable: false,
         ...(snapshot.note ? { note: snapshot.note } : {}),
+        ...(asset.institution?.trim()
+          ? { institution: asset.institution.trim() }
+          : {}),
       })
       continue
     }
@@ -164,6 +168,9 @@ export function holdingsWithConversion(
       convertedAmount,
       conversionAvailable: true,
       ...(snapshot.note ? { note: snapshot.note } : {}),
+      ...(asset.institution?.trim()
+        ? { institution: asset.institution.trim() }
+        : {}),
     })
   }
   return rows.sort((a, b) => a.name.localeCompare(b.name))
@@ -237,6 +244,9 @@ export function historicalNetWorth(
           convertedAmount: null,
           conversionAvailable: false,
           ...(snapshot.note ? { note: snapshot.note } : {}),
+          ...(asset.institution?.trim()
+            ? { institution: asset.institution.trim() }
+            : {}),
         })
         continue
       }
@@ -249,6 +259,9 @@ export function historicalNetWorth(
         convertedAmount: result.amount,
         conversionAvailable: true,
         ...(snapshot.note ? { note: snapshot.note } : {}),
+        ...(asset.institution?.trim()
+          ? { institution: asset.institution.trim() }
+          : {}),
       })
     }
     holdings.sort((a, b) => a.name.localeCompare(b.name))

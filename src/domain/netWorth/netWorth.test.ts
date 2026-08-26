@@ -432,6 +432,22 @@ describe('holdingsWithConversion', () => {
     expect(rows[0]?.convertedAmount).toBeCloseTo(200)
     expect(rows[0]?.conversionAvailable).toBe(true)
   })
+
+  it('includes institution on holdings when set (#109)', () => {
+    const cash = asset({
+      id: 'usd',
+      name: 'USD Deposit',
+      currency: 'USD',
+      institution: 'BOG',
+    })
+    const rows = holdingsWithConversion(
+      [cash],
+      [snap({ id: 's1', assetId: 'usd', amount: 8000, currency: 'USD' })],
+      [{ date: '2026-08-01', base: 'EUR', quote: 'USD', rate: 1.1 }],
+      'EUR',
+    )
+    expect(rows[0]?.institution).toBe('BOG')
+  })
 })
 
 describe('nativeTotalsByCurrency', () => {

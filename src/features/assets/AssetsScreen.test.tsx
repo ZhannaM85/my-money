@@ -84,6 +84,20 @@ describe('AssetsScreen', () => {
       screen.queryByText(`est. ${formatAmount(100, 'EUR')}`),
     ).not.toBeInTheDocument()
   })
+
+  it('shows type and institution on the muted Assets subtitle (#109)', async () => {
+    const existing = useAssetStore.getState().assets[0]
+    await useAssetStore.getState().saveAsset({
+      ...existing!,
+      institution: 'BOG',
+    })
+    render(
+      <MemoryRouter>
+        <AssetsScreen />
+      </MemoryRouter>,
+    )
+    expect(await screen.findByText('Brokerage · BOG')).toBeInTheDocument()
+  })
 })
 
 async function addNamedAsset(

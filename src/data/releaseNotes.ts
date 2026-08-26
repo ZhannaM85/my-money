@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 110,
+    issue: 109,
+    date: '2026-08-26T15:05:00+03:00',
+    en: 'Assets list shows type · institution when set. Dashboard holdings show the institution on a muted second row under the name.',
+    ru: 'В списке активов подпись — тип · учреждение, если задано. В позициях Сводки учреждение — приглушённой второй строкой под названием.',
+  },
+  {
     version: 109,
     issue: 114,
     date: '2026-08-26T14:55:00+03:00',

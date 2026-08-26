@@ -345,7 +345,12 @@ export function AssetsScreen() {
                     <span className="flex min-w-0 flex-col">
                       <span className="truncate font-medium">{asset.name}</span>
                       <span className="text-sm text-muted-foreground">
-                        {t.asset.types[asset.type]}
+                        {[
+                          t.asset.types[asset.type],
+                          asset.institution?.trim(),
+                        ]
+                          .filter(Boolean)
+                          .join(' · ')}
                         {asset.trackingStatus === 'excluded'
                           ? ` · ${t.asset.notCountedInNetWorth}`
                           : ''}

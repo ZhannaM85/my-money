@@ -341,7 +341,16 @@ export function DashboardScreen() {
                             key={holding.assetId}
                             className="flex items-center justify-between gap-3 border-t border-border pt-2"
                           >
-                            <span className="truncate text-sm">{holding.name}</span>
+                            <span className="flex min-w-0 flex-col">
+                              <span className="truncate text-sm">
+                                {holding.name}
+                              </span>
+                              {holding.institution ? (
+                                <span className="truncate text-xs text-muted-foreground">
+                                  {holding.institution}
+                                </span>
+                              ) : null}
+                            </span>
                             <span className="shrink-0 tabular-nums text-sm">
                               {formatAmount(
                                 holding.nativeAmount,

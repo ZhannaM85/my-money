@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 109,
+    title: {
+      en: 'Show institution on Assets subtitle and Dashboard holdings second row',
+      ru: 'Показывать учреждение в подписи активов и второй строкой в позициях Сводки',
+    },
+    en: 'Institution was only on asset details (#102). Assets list showed type alone; Dashboard currency accordion holdings were a single name line. Both now surface institution when set.',
+    ru: 'Учреждение было только в карточке актива (#102). В списке активов был один тип; в аккордеоне валют на Сводке — одна строка с именем. Теперь учреждение показывается, если задано.',
+  },
+  {
     issue: 114,
     title: {
       en: 'Pinch zoom does not work on asset details chart',

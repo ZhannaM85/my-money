@@ -38,6 +38,11 @@ export function HoldingBreakdownList({
               <span className={cn('truncate font-medium', compact ? 'text-xs' : 'text-sm')}>
                 {row.name}
               </span>
+              {!compact && row.institution ? (
+                <span className="truncate text-xs text-muted-foreground">
+                  {row.institution}
+                </span>
+              ) : null}
               <span className="text-xs text-muted-foreground">
                 {nativeOnly
                   ? row.currency
