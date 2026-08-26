@@ -15,6 +15,8 @@ export interface AllocationChartRow {
   name: string
   amount: number
   percent: number
+  /** When set (Original + Currency view), format this row in its native code (#108). */
+  currency?: string
 }
 
 export function AllocationChart({
@@ -32,6 +34,10 @@ export function AllocationChart({
     slice: Math.abs(row.amount),
   }))
   if (pieData.length === 0) return null
+
+  function amountCurrency(row: { currency?: string }): string {
+    return row.currency ?? currency
+  }
 
   return (
     <div className="flex flex-col gap-4">
@@ -59,7 +65,11 @@ export function AllocationChart({
                   typeof item?.payload?.amount === 'number'
                     ? item.payload.amount
                     : Number(value)
-                return formatAmount(amount, currency, locale)
+                const code =
+                  typeof item?.payload?.currency === 'string'
+                    ? item.payload.currency
+                    : currency
+                return formatAmount(amount, code, locale)
               }}
             />
           </PieChart>
@@ -83,7 +93,7 @@ export function AllocationChart({
             </span>
             <span className="text-right text-sm">
               <span className="block tabular-nums">
-                {formatAmount(row.amount, currency, locale)}
+                {formatAmount(row.amount, amountCurrency(row), locale)}
               </span>
               <span className="text-xs text-muted-foreground">
                 {row.percent.toFixed(0)}%

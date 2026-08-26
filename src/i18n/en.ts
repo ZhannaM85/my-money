@@ -222,6 +222,10 @@ export const en: Dictionary = {
     title: 'Allocation',
     description:
       'Share of the picture in your base currency. Liabilities are a negative slice — the chart uses size, the list shows the sign.',
+    descriptionOriginalCurrency:
+      'Native amounts by currency. Shares use size only — currencies are not converted into one total.',
+    descriptionOriginalCompared: (currency) =>
+      `Class and type shares are compared in ${currency}. Open Currency for native amounts, or switch to Converted for one total.`,
     byClass: 'Class',
     byCurrency: 'Currency',
     byType: 'Type',

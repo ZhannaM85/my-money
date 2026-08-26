@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 113,
+    issue: 108,
+    date: '2026-08-26T15:40:00+03:00',
+    en: 'Allocation in Original mode shows native amounts on the Currency tab (RUB as ₽, not leftover €). Class and Type still compare in your saved base currency and say so.',
+    ru: 'Распределение в режиме «В оригинале» на вкладке «Валюта» показывает нативные суммы (RUB как ₽, не оставшийся €). Класс и Тип по-прежнему сравнивают в сохранённой базовой валюте и говорят об этом.',
+  },
+  {
     version: 112,
     issue: 107,
     date: '2026-08-26T15:25:00+03:00',

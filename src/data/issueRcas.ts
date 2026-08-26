@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 108,
+    title: {
+      en: 'Allocation ignores All / Original and shows everything in EUR',
+      ru: 'Распределение игнорирует «Все» / «В оригинале» и показывает всё в EUR',
+    },
+    en: 'Allocation always called breakdownBy with settings.baseCurrency, even in Original where the UI shows All. Currency leftovers (often EUR) labeled native codes with converted € amounts. Currency view now uses nativeTotalsByCurrency; Class/Type still compare in the saved base with an explicit blurb.',
+    ru: 'Распределение всегда вызывало breakdownBy с settings.baseCurrency, даже в «В оригинале», где UI показывает «Все». Остаток базы (часто EUR) подписывал нативные коды суммами в €. Вкладка «Валюта» теперь nativeTotalsByCurrency; Класс/Тип по-прежнему сравнивают в сохранённой базе с явным текстом.',
+  },
+  {
     issue: 107,
     title: {
       en: 'Add support for GEL (Georgian Lari)',

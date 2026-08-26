@@ -1,9 +1,11 @@
 import 'fake-indexeddb/auto'
 import { render, screen } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router-dom'
 import { beforeEach, describe, expect, it } from 'vitest'
 import { DEFAULT_SETTINGS } from '@/domain/settings'
 import { db } from '@/infrastructure/persistence/indexeddb'
+import { formatAmount } from '@/shared/lib/money'
 import { useAssetStore } from '@/stores/assetStore'
 import { useSettingsStore } from '@/stores/settingsStore'
 import { AllocationScreen } from './AllocationScreen'
@@ -46,5 +48,58 @@ describe('AllocationScreen', () => {
     )
     expect(await screen.findByText('Money')).toBeInTheDocument()
     expect(screen.getByText('100%')).toBeInTheDocument()
+  })
+
+  it('shows native currency amounts in Original mode (#108)', async () => {
+    const user = userEvent.setup()
+    await useAssetStore.getState().saveAsset(
+      {
+        id: 'usd',
+        name: 'USD cash',
+        assetClass: 'money',
+        type: 'cash',
+        currency: 'USD',
+        trackingStatus: 'included',
+        valuationMethod: 'account_balance',
+        updateFrequency: 'weekly',
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        assetId: 'usd',
+        date: '2026-08-17',
+        amount: 8000,
+        currency: 'USD',
+      },
+    )
+    const settings = {
+      ...DEFAULT_SETTINGS,
+      currencyDisplayMode: 'native' as const,
+      baseCurrency: 'EUR',
+    }
+    await db.settings.put(settings)
+    useSettingsStore.setState({
+      settings,
+      loaded: true,
+    })
+    render(
+      <MemoryRouter>
+        <AllocationScreen />
+      </MemoryRouter>,
+    )
+    await screen.findByText(/compared in EUR/)
+    await user.click(screen.getByRole('button', { name: 'Currency' }))
+    expect(
+      await screen.findByText(/Native amounts by currency/),
+    ).toBeInTheDocument()
+    expect(
+      screen.getByText(formatAmount(8000, 'USD')),
+    ).toBeInTheDocument()
+    expect(
+      screen.getByText(formatAmount(1000, 'EUR')),
+    ).toBeInTheDocument()
+    expect(
+      screen.queryByText(formatAmount(8000, 'EUR')),
+    ).not.toBeInTheDocument()
   })
 })

@@ -162,6 +162,8 @@ export interface Dictionary {
   allocation: {
     title: string
     description: string
+    descriptionOriginalCurrency: string
+    descriptionOriginalCompared: (currency: string) => string
     byClass: string
     byCurrency: string
     byType: string
