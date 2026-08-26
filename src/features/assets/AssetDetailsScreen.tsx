@@ -452,7 +452,7 @@ export function AssetDetailsScreen() {
                   onChange={(event) => setEditNote(event.target.value)}
                 />
                 {duplicateEditHint && (
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-sm text-warning" role="status">
                     {t.asset.duplicateSnapshotHint}
                   </p>
                 )}
@@ -596,7 +596,7 @@ export function AssetDetailsScreen() {
           </Button>
         </div>
         {duplicateAmountHint && (
-          <p className="text-sm text-muted-foreground">
+          <p className="text-sm text-warning" role="status">
             {t.asset.duplicateSnapshotHint}
           </p>
         )}

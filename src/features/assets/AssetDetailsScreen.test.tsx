@@ -230,7 +230,7 @@ describe('AssetDetailsScreen', () => {
     })
   })
 
-  it('warns on duplicate date and amount but still allows save (#115)', async () => {
+  it('warns on duplicate date and amount but still allows save (#115, #119)', async () => {
     const user = userEvent.setup()
     render(
       <MemoryRouter initialEntries={['/assets/a1']}>
@@ -242,11 +242,10 @@ describe('AssetDetailsScreen', () => {
     await screen.findByRole('heading', { name: 'Revolut' })
     setDateField(screen.getAllByLabelText('As of')[0]!, '2026-08-17')
     await user.type(screen.getByLabelText('New amount'), '1000')
-    expect(
-      await screen.findByText(
-        /A snapshot with this date and amount already exists/,
-      ),
-    ).toBeInTheDocument()
+    const hint = await screen.findByText(
+      /A snapshot with this date and amount already exists/,
+    )
+    expect(hint).toHaveClass('text-warning')
     await user.click(screen.getByRole('button', { name: /^Save$/ }))
     await waitFor(() => {
       expect(

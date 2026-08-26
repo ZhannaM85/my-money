@@ -31,7 +31,7 @@ _After the four web flows feel good. Android wraps this app; iOS does not._
 | [#116](https://github.com/ZhannaM85/my-money/issues/116) | 🔲 Open | Pinch zoom in/out on every chart | Follow-up to #54/#114: audit all line charts so none omit shared pinch zoom. |
 | [#117](https://github.com/ZhannaM85/my-money/issues/117) | 🔲 Open | Dashboard date input to choose which day Positions show | Separate from #112: As of date field drives Positions / header; sync with chart selection. |
 | [#118](https://github.com/ZhannaM85/my-money/issues/118) | 🔲 Open | Attach Playwright screenshots to GitHub issues as proof before validation | Capture key screens after a fix; attach to the issue before `validation`. Reduce reopen churn. |
-| [#119](https://github.com/ZhannaM85/my-money/issues/119) | 🔲 Open | Show soft warnings (e.g. duplicate snapshot) in light orange | Follow-up to #115: muted gray reads as helper text; use warning token / light orange. |
+| [#119](https://github.com/ZhannaM85/my-money/issues/119) | 🔍 Pending validation | Show soft warnings (e.g. duplicate snapshot) in light orange | Follow-up to #115: `text-warning` / `--warning` token instead of muted gray. |
 
 ---
 

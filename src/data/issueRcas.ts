@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 119,
+    title: {
+      en: 'Show soft warnings (e.g. duplicate snapshot) in light orange',
+      ru: 'Показывать мягкие предупреждения (напр. дубликат снимка) светло-оранжевым',
+    },
+    en: 'Duplicate soft hints used text-muted-foreground, so they looked like helper copy. They now use a design-system --warning token (text-warning / light orange).',
+    ru: 'Мягкие подсказки о дубликате использовали text-muted-foreground и выглядели как обычная подсказка. Теперь — токен --warning (text-warning / светло-оранжевый).',
+  },
+  {
     issue: 113,
     title: {
       en: 'Loading Dashboard takes a long time',

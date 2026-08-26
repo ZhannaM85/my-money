@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 117,
+    issue: 119,
+    date: '2026-08-26T17:50:00+03:00',
+    en: 'Soft warnings (like a duplicate snapshot date and amount) show in light orange so they read as attention, not muted helper text.',
+    ru: 'Мягкие предупреждения (например, дубликат даты и суммы снимка) показываются светло-оранжевым, чтобы их было видно как внимание, а не серую подсказку.',
+  },
+  {
     version: 116,
     issue: 113,
     date: '2026-08-26T16:20:00+03:00',
