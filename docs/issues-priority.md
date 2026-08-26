@@ -33,7 +33,7 @@ _After the four web flows feel good. Android wraps this app; iOS does not._
 | [#112](https://github.com/ZhannaM85/my-money/issues/112) | 🔲 Open | Dashboard Positions should follow the selected chart day | Chart tooltip is historical; Positions stay on latest and do not match the tooltip total. Sync list to selected day. |
 | [#113](https://github.com/ZhannaM85/my-money/issues/113) | 🔲 Open | Loading Dashboard takes a long time | Slow open on device (seen offline / Original+All). Prefer local-first; skip unused FX work; avoid offline timeouts. |
 | [#114](https://github.com/ZhannaM85/my-money/issues/114) | 🔍 Pending validation | Pinch zoom does not work on asset details chart | Asset details now has HistoryRange + pinch/button zoom like Dashboard (#54). |
-| [#115](https://github.com/ZhannaM85/my-money/issues/115) | 🔲 Open | Warn on duplicate snapshot (same date and amount) without blocking | Soft warn when date+sum match an existing row; allow save anyway. |
+| [#115](https://github.com/ZhannaM85/my-money/issues/115) | 🔍 Pending validation | Warn on duplicate snapshot (same date and amount) without blocking | Soft muted hint via `hasDuplicateSnapshot`; Save still works. |
 
 ---
 

@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 115,
+    title: {
+      en: 'Warn on duplicate snapshot (same date and amount) without blocking',
+      ru: 'Предупреждать о дубликате снимка (та же дата и сумма), не блокируя',
+    },
+    en: 'Nothing warned when saving another snapshot with the same date and amount, so accidental doubles were easy. Soft hint only; Save still works.',
+    ru: 'При сохранении ещё одного снимка с той же датой и суммой не было предупреждения, поэтому случайные дубликаты были лёгкими. Только мягкая подсказка; Сохранить по-прежнему работает.',
+  },
+  {
     issue: 109,
     title: {
       en: 'Show institution on Assets subtitle and Dashboard holdings second row',

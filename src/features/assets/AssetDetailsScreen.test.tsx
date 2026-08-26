@@ -230,6 +230,38 @@ describe('AssetDetailsScreen', () => {
     })
   })
 
+  it('warns on duplicate date and amount but still allows save (#115)', async () => {
+    const user = userEvent.setup()
+    render(
+      <MemoryRouter initialEntries={['/assets/a1']}>
+        <Routes>
+          <Route path="/assets/:id" element={<AssetDetailsScreen />} />
+        </Routes>
+      </MemoryRouter>,
+    )
+    await screen.findByRole('heading', { name: 'Revolut' })
+    setDateField(screen.getAllByLabelText('As of')[0]!, '2026-08-17')
+    await user.type(screen.getByLabelText('New amount'), '1000')
+    expect(
+      await screen.findByText(
+        /A snapshot with this date and amount already exists/,
+      ),
+    ).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: /^Save$/ }))
+    await waitFor(() => {
+      expect(
+        useAssetStore
+          .getState()
+          .snapshots.filter(
+            (row) =>
+              row.assetId === 'a1' &&
+              row.date === '2026-08-17' &&
+              row.amount === 1000,
+          ),
+      ).toHaveLength(2)
+    })
+  })
+
   it('saves and shows a muted snapshot note on the history row (#97, #103)', async () => {
     const user = userEvent.setup()
     render(

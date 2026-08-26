@@ -4,7 +4,7 @@ import { Pencil, Trash2 } from 'lucide-react'
 import { convertAmount, lookupRate } from '@/domain/fx'
 import { assetPerformance } from '@/domain/netWorth'
 import { BASE_CURRENCIES } from '@/domain/settings'
-import { latestSnapshot, optionalSnapshotNote } from '@/domain/snapshot'
+import { latestSnapshot, optionalSnapshotNote, hasDuplicateSnapshot } from '@/domain/snapshot'
 import { NetWorthChart } from '@/features/dashboard/NetWorthChart'
 import { formatLastUpdated, useLocale, useTranslation } from '@/i18n'
 import {
@@ -153,6 +153,26 @@ export function AssetDetailsScreen() {
   }
 
   const currentAsset = asset
+  const parsedAmountDraft = parseAmount(amountDraft)
+  const duplicateAmountHint =
+    parsedAmountDraft !== undefined &&
+    hasDuplicateSnapshot(snapshots, {
+      assetId: currentAsset.id,
+      date: amountDate,
+      amount: parsedAmountDraft,
+      currency: currentAsset.currency,
+    })
+  const parsedEditAmount = parseAmount(editAmount)
+  const duplicateEditHint =
+    editingId !== null &&
+    parsedEditAmount !== undefined &&
+    hasDuplicateSnapshot(snapshots, {
+      assetId: currentAsset.id,
+      date: editDate,
+      amount: parsedEditAmount,
+      currency: editCurrency,
+      excludeId: editingId,
+    })
   const shareLabel = formatOwnershipShare({
     numerator: asset.ownershipShareNumerator ?? 1,
     denominator: asset.ownershipShareDenominator ?? 1,
@@ -431,6 +451,11 @@ export function AssetDetailsScreen() {
                   value={editNote}
                   onChange={(event) => setEditNote(event.target.value)}
                 />
+                {duplicateEditHint && (
+                  <p className="text-sm text-muted-foreground">
+                    {t.asset.duplicateSnapshotHint}
+                  </p>
+                )}
                 {editError && editError !== t.asset.snapshotDateInvalid && (
                   <p className="text-sm text-destructive">{editError}</p>
                 )}
@@ -570,6 +595,11 @@ export function AssetDetailsScreen() {
             {t.common.save}
           </Button>
         </div>
+        {duplicateAmountHint && (
+          <p className="text-sm text-muted-foreground">
+            {t.asset.duplicateSnapshotHint}
+          </p>
+        )}
         {amountError && amountError !== t.asset.snapshotDateInvalid && (
           <p className="text-sm text-destructive">{amountError}</p>
         )}

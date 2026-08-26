@@ -37,3 +37,24 @@ export function snapshotsOnOrBefore(
     return current.createdAt > best.createdAt ? current : best
   })
 }
+
+/** Same date + amount (+ currency) as another row on this asset (#115). */
+export function hasDuplicateSnapshot(
+  snapshots: readonly AssetSnapshot[],
+  candidate: {
+    assetId: string
+    date: string
+    amount: number
+    currency: string
+    excludeId?: string
+  },
+): boolean {
+  return snapshots.some(
+    (row) =>
+      row.assetId === candidate.assetId &&
+      row.id !== candidate.excludeId &&
+      row.date === candidate.date &&
+      row.amount === candidate.amount &&
+      row.currency === candidate.currency,
+  )
+}

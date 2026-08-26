@@ -94,6 +94,7 @@ export interface Dictionary {
     snapshotDate: string
     snapshotNote: string
     snapshotDateInvalid: string
+    duplicateSnapshotHint: string
     newAmountOptional: string
     newAmountOptionalHint: string
     updateThisAssetHint: string

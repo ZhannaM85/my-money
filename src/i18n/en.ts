@@ -139,6 +139,8 @@ export const en: Dictionary = {
     snapshotDate: 'As of',
     snapshotNote: 'Note (optional)',
     snapshotDateInvalid: 'Choose today or a past date',
+    duplicateSnapshotHint:
+      'A snapshot with this date and amount already exists. You can still save another.',
     newAmountOptional: 'New amount (optional)',
     newAmountOptionalHint:
       'Optional. If you enter an amount, Save details also writes a snapshot for the As of date (defaults to today). Leave empty to change name and settings only.',

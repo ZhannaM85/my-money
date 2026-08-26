@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 111,
+    issue: 115,
+    date: '2026-08-26T15:15:00+03:00',
+    en: 'Updating an asset warns if the date and amount already exist as a snapshot, without blocking Save.',
+    ru: 'При обновлении актива показывается предупреждение, если дата и сумма уже есть в снимке, без блокировки «Сохранить».',
+  },
+  {
     version: 110,
     issue: 109,
     date: '2026-08-26T15:05:00+03:00',
