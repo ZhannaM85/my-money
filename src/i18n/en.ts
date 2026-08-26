@@ -33,6 +33,8 @@ export const en: Dictionary = {
     zoomRange: 'Chart range',
     zoomIn: 'Zoom in',
     zoomOut: 'Zoom out',
+    panEarlier: 'Earlier dates',
+    panLater: 'Later dates',
     emptyTitle: 'No assets yet',
     emptyDescription: 'Add what you own or owe to see your first net worth.',
     fxMissing: (codes) =>

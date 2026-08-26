@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { ChevronDown } from 'lucide-react'
+import { ChevronDown, ChevronLeft, ChevronRight } from 'lucide-react'
 import {
   decomposeConvertedPeriodChange,
   historicalNativeNetWorth,
@@ -20,6 +20,8 @@ import {
 } from '@/shared/lib/money'
 import {
   HISTORY_RANGES,
+  canPanHistoryEarlier,
+  canPanHistoryLater,
   isoDatesInclusive,
   rangeStartIso,
   shiftHistoryRangeEnd,
@@ -244,6 +246,23 @@ export function DashboardScreen() {
   const rangeIndex = HISTORY_RANGES.indexOf(range)
   const canZoomIn = rangeIndex > 0
   const canZoomOut = rangeIndex < HISTORY_RANGES.length - 1
+  const canPanEarlier = canPanHistoryEarlier(chartEnd, range, earliest)
+  const canPanLater = canPanHistoryLater(chartEnd, range, today)
+
+  const panEarlier = () => {
+    if (!canPanEarlier) return
+    setSelectedChartDate(null)
+    setRangeEnd((end) =>
+      shiftHistoryRangeEnd(end, range, 'earlier', today, earliest),
+    )
+  }
+  const panLater = () => {
+    if (!canPanLater) return
+    setSelectedChartDate(null)
+    setRangeEnd((end) =>
+      shiftHistoryRangeEnd(end, range, 'later', today, earliest),
+    )
+  }
 
   const loaded = assetsLoaded && settingsLoaded
   const converted = filteredSnapshots.some(
@@ -629,6 +648,34 @@ export function DashboardScreen() {
                   <button
                     type="button"
                     className={cn(
+                      'inline-flex size-9 items-center justify-center rounded-full',
+                      canPanEarlier
+                        ? 'bg-muted text-foreground'
+                        : 'bg-muted text-muted-foreground',
+                    )}
+                    disabled={!canPanEarlier}
+                    aria-label={t.dashboard.panEarlier}
+                    onClick={panEarlier}
+                  >
+                    <ChevronLeft className="size-5" aria-hidden />
+                  </button>
+                  <button
+                    type="button"
+                    className={cn(
+                      'inline-flex size-9 items-center justify-center rounded-full',
+                      canPanLater
+                        ? 'bg-muted text-foreground'
+                        : 'bg-muted text-muted-foreground',
+                    )}
+                    disabled={!canPanLater}
+                    aria-label={t.dashboard.panLater}
+                    onClick={panLater}
+                  >
+                    <ChevronRight className="size-5" aria-hidden />
+                  </button>
+                  <button
+                    type="button"
+                    className={cn(
                       'rounded-full px-3 py-1.5 text-sm font-medium',
                       canZoomIn
                         ? 'bg-muted text-foreground'
@@ -683,26 +730,8 @@ export function DashboardScreen() {
                   setRange(next)
                   if (next === 'All') setRangeEnd(today)
                 }}
-                onPanEarlier={() => {
-                  if (range === 'All') return
-                  setSelectedChartDate(null)
-                  setRangeEnd((end) =>
-                    shiftHistoryRangeEnd(
-                      end,
-                      range,
-                      'earlier',
-                      today,
-                      earliest,
-                    ),
-                  )
-                }}
-                onPanLater={() => {
-                  if (range === 'All') return
-                  setSelectedChartDate(null)
-                  setRangeEnd((end) =>
-                    shiftHistoryRangeEnd(end, range, 'later', today, earliest),
-                  )
-                }}
+                onPanEarlier={panEarlier}
+                onPanLater={panLater}
                 onSelectDate={(date) => {
                   setSelectedChartDate(date)
                   if (date) setHoldingsOpen(true)

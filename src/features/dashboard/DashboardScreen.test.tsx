@@ -549,4 +549,60 @@ describe('DashboardScreen', () => {
       ),
     ).not.toBeInTheDocument()
   })
+
+  it('shows earlier/later arrow controls to pan the chart window (#111)', async () => {
+    const today = todayIsoDate()
+    const past = addDaysIso(today, -60)
+    const now = `${today}T00:00:00.000Z`
+    await useAssetStore.getState().saveAsset(
+      {
+        id: 'a1',
+        name: 'Revolut',
+        assetClass: 'money',
+        type: 'bank',
+        currency: 'EUR',
+        trackingStatus: 'included',
+        valuationMethod: 'account_balance',
+        updateFrequency: 'weekly',
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        assetId: 'a1',
+        date: past,
+        amount: 800,
+        currency: 'EUR',
+      },
+    )
+    await useAssetStore.getState().saveSnapshots([
+      {
+        assetId: 'a1',
+        date: today,
+        amount: 1000,
+        currency: 'EUR',
+      },
+    ])
+    const user = userEvent.setup()
+    render(
+      <MemoryRouter>
+        <DashboardScreen />
+      </MemoryRouter>,
+    )
+    expect(await screen.findByText('Net worth')).toBeInTheDocument()
+    const earlier = screen.getByRole('button', { name: 'Earlier dates' })
+    const later = screen.getByRole('button', { name: 'Later dates' })
+    expect(earlier).toBeEnabled()
+    expect(later).toBeDisabled()
+    await user.click(earlier)
+    expect(screen.getByRole('button', { name: 'Later dates' })).toBeEnabled()
+    // Zoom out to All — full span disables pan arrows.
+    for (let i = 0; i < 4; i += 1) {
+      const zoomOut = screen.getByRole('button', { name: 'Zoom out' })
+      if (zoomOut.hasAttribute('disabled')) break
+      await user.click(zoomOut)
+    }
+    expect(screen.getByText(/Chart range: All/)).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Earlier dates' })).toBeDisabled()
+    expect(screen.getByRole('button', { name: 'Later dates' })).toBeDisabled()
+  })
 })

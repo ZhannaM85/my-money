@@ -34,6 +34,8 @@ export const ru: Dictionary = {
     zoomRange: 'Диапазон графика',
     zoomIn: 'Увеличить',
     zoomOut: 'Уменьшить',
+    panEarlier: 'Раньше',
+    panLater: 'Позже',
     emptyTitle: 'Пока нет активов',
     emptyDescription:
       'Добавьте то, чем владеете или что должны, чтобы увидеть первый чистый капитал.',

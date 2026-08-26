@@ -43,8 +43,8 @@ export const issueRcas: IssueRca[] = [
       en: 'Allow user to navigate the chart timeline (pan)',
       ru: 'Позволить листать шкалу времени на графике (pan)',
     },
-    en: 'Zoom changed window width but the end was always today, so there was no way to slide along history. Horizontal drag now shifts rangeEnd within earliest…today; All stays full-span.',
-    ru: 'Масштаб менял ширину окна, но конец всегда был «сегодня», поэтому листать историю было нельзя. Горизонтальный жест сдвигает rangeEnd в пределах earliest…today; «All» остаётся на всём диапазоне.',
+    en: 'Zoom changed window width but the end was always today. Drag alone was not discoverable on-device. Visible ← → arrows (and drag) now shift rangeEnd within earliest…today; All keeps arrows disabled (full span).',
+    ru: 'Масштаб менял ширину окна, но конец всегда был «сегодня». Одного жеста было мало — на устройстве не находили. Видимые ← → (и жест) сдвигают rangeEnd в пределах earliest…today; в «All» стрелки выключены (весь диапазон).',
   },
   {
     issue: 112,

@@ -39,6 +39,8 @@ export interface Dictionary {
     zoomRange: string
     zoomIn: string
     zoomOut: string
+    panEarlier: string
+    panLater: string
     emptyTitle: string
     emptyDescription: string
     fxMissing: (codes: string) => string

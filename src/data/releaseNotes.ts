@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 119,
+    issue: 111,
+    date: '2026-08-26T18:05:00+03:00',
+    en: 'Dashboard chart has Earlier / Later arrows to move the visible window along time without changing zoom. Drag still works; All keeps the full history.',
+    ru: 'На графике Сводки есть стрелки «Раньше» / «Позже», чтобы сдвигать окно по времени без смены масштаба. Жест по-прежнему работает; «All» показывает всю историю.',
+  },
+  {
     version: 118,
     issue: 116,
     date: '2026-08-26T17:55:00+03:00',
