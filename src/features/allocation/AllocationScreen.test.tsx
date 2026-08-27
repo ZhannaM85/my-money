@@ -201,4 +201,58 @@ describe('AllocationScreen', () => {
     expect(screen.queryByText('1%')).not.toBeInTheDocument()
     expect(screen.queryByText('99%')).not.toBeInTheDocument()
   })
+
+  it('expands Class and Currency rows to list assets (#122)', async () => {
+    const user = userEvent.setup()
+    await useAssetStore.getState().saveAsset(
+      {
+        id: 'usd',
+        name: 'USD cash',
+        assetClass: 'money',
+        type: 'cash',
+        currency: 'USD',
+        trackingStatus: 'included',
+        valuationMethod: 'account_balance',
+        updateFrequency: 'weekly',
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        assetId: 'usd',
+        date: '2026-08-17',
+        amount: 8000,
+        currency: 'USD',
+      },
+    )
+    const settings = {
+      ...DEFAULT_SETTINGS,
+      currencyDisplayMode: 'native' as const,
+      baseCurrency: 'EUR',
+    }
+    await db.settings.put(settings)
+    useSettingsStore.setState({ settings, loaded: true })
+    render(
+      <MemoryRouter>
+        <AllocationScreen />
+      </MemoryRouter>,
+    )
+    expect(await screen.findByText('Money · USD')).toBeInTheDocument()
+    expect(screen.queryByText('USD cash')).not.toBeInTheDocument()
+    await user.click(
+      screen.getByRole('button', { name: 'Money · USD · Holdings' }),
+    )
+    expect(await screen.findByText('USD cash')).toBeInTheDocument()
+
+    await user.click(screen.getByRole('button', { name: 'Currency' }))
+    expect(await screen.findByText('USD')).toBeInTheDocument()
+    expect(screen.queryByText('USD cash')).not.toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'USD · Holdings' }))
+    expect(await screen.findByText('USD cash')).toBeInTheDocument()
+
+    await user.click(screen.getByRole('button', { name: 'Type' }))
+    expect(await screen.findByText('Cash · USD')).toBeInTheDocument()
+    expect(
+      screen.queryByRole('button', { name: /Holdings/ }),
+    ).not.toBeInTheDocument()
+  })
 })

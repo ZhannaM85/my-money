@@ -39,6 +39,28 @@ test('capture Allocation Original Class/Currency (#108, #118, #121)', async ({
   })
 })
 
+test('capture Allocation Class/Currency expanded holdings (#122)', async ({
+  page,
+}) => {
+  await seedValidationFixture(page)
+  await page.goto('/allocation')
+  await expect(page.getByRole('heading', { name: 'Allocation' })).toBeVisible()
+  await page.getByRole('button', { name: 'Money · USD · Holdings' }).click()
+  await expect(page.getByText('USD cash')).toBeVisible()
+  await page.screenshot({
+    path: join(outDir, '122-allocation-class-expanded.png'),
+    fullPage: true,
+  })
+  await page.getByRole('button', { name: 'Currency' }).click()
+  await expect(page.getByText(/Native amounts by currency/)).toBeVisible()
+  await page.getByRole('button', { name: 'USD · Holdings' }).click()
+  await expect(page.getByText('USD cash')).toBeVisible()
+  await page.screenshot({
+    path: join(outDir, '122-allocation-currency-expanded.png'),
+    fullPage: true,
+  })
+})
+
 test('capture Dashboard chart controls and As of (#111, #112, #116, #117)', async ({
   page,
 }) => {

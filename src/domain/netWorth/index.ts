@@ -1,4 +1,5 @@
 export type {
+  AllocationHolding,
   ClassTotal,
   HoldingConversion,
   HistoricalPoint,
@@ -15,6 +16,7 @@ export {
   breakdownBy,
   nativeBreakdownBy,
   attachConvertedSharePercents,
+  allocationSliceHoldings,
   periodChange,
   assetPerformance,
   decomposeConvertedPeriodChange,

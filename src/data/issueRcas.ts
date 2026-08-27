@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 122,
+    title: {
+      en: 'Allocation Class and Currency rows should expand to show assets',
+      ru: 'Строки Класса и Валюты в Распределении должны раскрываться до активов',
+    },
+    en: 'Class and Currency lists were totals only. Rows now expand like Dashboard currency holdings to show the assets in that slice. Type stays a static total.',
+    ru: 'Списки Класса и Валюты были только итогами. Строки раскрываются, как позиции по валюте на Сводке, и показывают активы среза. Тип остаётся статическим итогом.',
+  },
+  {
     issue: 121,
     title: {
       en: 'Allocation share percentages should convert to one base, not compare raw native amounts',

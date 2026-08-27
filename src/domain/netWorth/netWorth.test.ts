@@ -14,6 +14,7 @@ import {
   nativeTotalsByCurrency,
   netWorth,
   periodChange,
+  allocationSliceHoldings,
 } from '@/domain/netWorth'
 
 function asset(overrides: Partial<Asset>): Asset {
@@ -498,6 +499,30 @@ describe('nativeBreakdownBy (#108)', () => {
     expect(rows[0]!.percent).toBeCloseTo((1_000_000 / convertedTotal) * 100, 5)
     expect(rows[1]!.percent).toBeCloseTo((800_000 / convertedTotal) * 100, 5)
     expect(rows[1]!.percent).not.toBeCloseTo((10_000 / 1_010_000) * 100, 0)
+  })
+})
+
+describe('allocationSliceHoldings (#122)', () => {
+  it('lists assets in a class·currency slice', () => {
+    const eur = asset({ id: 'eur', name: 'Euro cash', currency: 'EUR' })
+    const usd = asset({ id: 'usd', name: 'USD cash', currency: 'USD' })
+    const rows = allocationSliceHoldings(
+      [eur, usd],
+      [
+        snap({ id: 's1', assetId: 'eur', amount: 1000, currency: 'EUR' }),
+        snap({ id: 's2', assetId: 'usd', amount: 8000, currency: 'USD' }),
+      ],
+      (row, snapshot) =>
+        row.assetClass === 'money' && snapshot.currency === 'USD',
+    )
+    expect(rows).toEqual([
+      {
+        assetId: 'usd',
+        name: 'USD cash',
+        amount: 8000,
+        currency: 'USD',
+      },
+    ])
   })
 })
 

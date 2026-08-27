@@ -85,6 +85,39 @@ export function nativeTotalsByCurrency(
     .sort((a, b) => a.currency.localeCompare(b.currency))
 }
 
+export type AllocationHolding = {
+  assetId: string
+  name: string
+  institution?: string
+  amount: number
+  currency: string
+}
+
+/** Assets that belong in one Allocation Class or Currency slice (#122). */
+export function allocationSliceHoldings(
+  assets: readonly Asset[],
+  snapshots: readonly AssetSnapshot[],
+  match: (asset: Asset, snapshot: AssetSnapshot) => boolean,
+): AllocationHolding[] {
+  const rows: AllocationHolding[] = []
+  for (const asset of assets) {
+    if (!contributesToNetWorth(asset)) continue
+    const snapshot = latestSnapshot(snapshots, asset.id)
+    if (!snapshot) continue
+    if (!match(asset, snapshot)) continue
+    const native = effectiveAmount(snapshot.amount, asset)
+    const signed = isLiability(asset) ? -native : native
+    rows.push({
+      assetId: asset.id,
+      name: asset.name,
+      ...(asset.institution ? { institution: asset.institution } : {}),
+      amount: signed,
+      currency: snapshot.currency,
+    })
+  }
+  return rows.sort((a, b) => a.name.localeCompare(b.name))
+}
+
 /** Native (unconverted) historical series for one currency filter. */
 export function historicalNativeNetWorth(
   assets: readonly Asset[],

@@ -4,6 +4,7 @@ import {
   nativeBreakdownBy,
   nativeTotalsByCurrency,
   attachConvertedSharePercents,
+  allocationSliceHoldings,
 } from '@/domain/netWorth'
 import { ALLOCATION_ALL_SHARE_BASE } from '@/domain/settings'
 import { useTranslation } from '@/i18n'
@@ -123,10 +124,24 @@ export function AllocationScreen() {
       !baseLabel.includes(currency)
         ? `${baseLabel} · ${currency}`
         : baseLabel
+    const holdings =
+      view === 'type'
+        ? []
+        : allocationSliceHoldings(assets, snapshots, (asset, snapshot) => {
+            if (view === 'currency') return snapshot.currency === row.id
+            if (isOriginal && currency) {
+              return (
+                asset.assetClass === nativeRowLabelKey(row.id) &&
+                snapshot.currency === currency
+              )
+            }
+            return asset.assetClass === row.id
+          })
     return {
       ...row,
       name,
       currency,
+      holdings,
     }
   })
 
@@ -173,6 +188,7 @@ export function AllocationScreen() {
           currency={chartCurrency}
           oweLabel={t.common.owe}
           conversionUnavailableLabel={t.dashboard.conversionUnavailable}
+          holdingsLabel={t.dashboard.holdings}
         />
       )}
     </div>
