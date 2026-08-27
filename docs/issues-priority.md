@@ -21,6 +21,15 @@ _After the four web flows feel good. Android wraps this app; iOS does not._
 
 ---
 
+## Tier 14 — Live feedback (2026-08-27)
+
+| # | Status | Issue | Notes |
+|---|--------|-------|-------|
+| [#124](https://github.com/ZhannaM85/my-money/issues/124) | 🔲 Open | Show Positions total for the selected As of date | Positions list has no sum; user must add rows by hand. |
+| [#125](https://github.com/ZhannaM85/my-money/issues/125) | 🔲 Open | Add a Today button next to Dashboard As of | Turtle-style Today beside the date field to jump back from a past day. |
+
+---
+
 ## Explicitly not filed
 
 Out of scope for the MVP (`PROJECT_BRIEF.md` §20) — do not implement from chat:
