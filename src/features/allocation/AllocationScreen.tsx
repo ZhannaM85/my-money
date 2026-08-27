@@ -124,19 +124,19 @@ export function AllocationScreen() {
       !baseLabel.includes(currency)
         ? `${baseLabel} · ${currency}`
         : baseLabel
-    const holdings =
-      view === 'type'
-        ? []
-        : allocationSliceHoldings(assets, snapshots, (asset, snapshot) => {
-            if (view === 'currency') return snapshot.currency === row.id
-            if (isOriginal && currency) {
-              return (
-                asset.assetClass === nativeRowLabelKey(row.id) &&
-                snapshot.currency === currency
-              )
-            }
-            return asset.assetClass === row.id
-          })
+    const holdings = allocationSliceHoldings(
+      assets,
+      snapshots,
+      (asset, snapshot) => {
+        if (view === 'currency') return snapshot.currency === row.id
+        const key = nativeRowLabelKey(row.id)
+        const field = view === 'type' ? asset.type : asset.assetClass
+        if (isOriginal && currency) {
+          return field === key && snapshot.currency === currency
+        }
+        return field === row.id
+      },
+    )
     return {
       ...row,
       name,

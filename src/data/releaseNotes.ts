@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 130,
+    issue: 123,
+    date: '2026-08-27T13:25:00+03:00',
+    en: 'On Allocation, Type rows also expand to show the assets in that slice.',
+    ru: 'В Распределении строки Типа тоже раскрываются и показывают активы среза.',
+  },
+  {
     version: 129,
     issue: 122,
     date: '2026-08-27T12:25:00+03:00',

@@ -37,6 +37,7 @@ gh issue edit 108 --add-label validation
 | `121-allocation-original-currency.png` | Allocation · Original · Currency share % (#121) |
 | `122-allocation-class-expanded.png` | Allocation · Class row expanded to assets (#122) |
 | `122-allocation-currency-expanded.png` | Allocation · Currency row expanded to assets (#122) |
+| `123-allocation-type-expanded.png` | Allocation · Type row expanded to assets (#123) |
 | `dashboard-chart-and-asof.png` | Dashboard · arrows + As of (#111/#112/#116/#117) |
 | `119-duplicate-soft-warning.png` | Asset details duplicate soft warning (#119) |
 

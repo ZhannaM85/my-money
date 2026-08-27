@@ -93,7 +93,7 @@ export type AllocationHolding = {
   currency: string
 }
 
-/** Assets that belong in one Allocation Class or Currency slice (#122). */
+/** Assets that belong in one Allocation Class, Currency, or Type slice (#122, #123). */
 export function allocationSliceHoldings(
   assets: readonly Asset[],
   snapshots: readonly AssetSnapshot[],

@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 123,
+    title: {
+      en: 'Allocation Type rows should expand to show assets',
+      ru: 'Строки Типа в Распределении должны раскрываться до активов',
+    },
+    en: '#122 left Type as a static total. Type rows now expand the same way as Class and Currency (including Original per-currency rows like Cash · USD).',
+    ru: '#122 оставлял Тип статическим итогом. Строки Типа раскрываются так же, как Класс и Валюта (включая Original-строки по валюте, например Cash · USD).',
+  },
+  {
     issue: 122,
     title: {
       en: 'Allocation Class and Currency rows should expand to show assets',

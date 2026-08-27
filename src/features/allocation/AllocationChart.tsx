@@ -24,7 +24,7 @@ export interface AllocationChartRow {
   /** Converted abs size for the donut when Original + All (#121). */
   shareWeight?: number
   conversionAvailable?: boolean
-  /** Class/Currency rows expand to these assets (#122). Empty on Type. */
+  /** Class / Currency / Type rows expand to these assets (#122, #123). */
   holdings?: readonly AllocationHolding[]
 }
 

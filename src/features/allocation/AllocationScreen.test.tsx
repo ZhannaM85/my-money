@@ -251,8 +251,33 @@ describe('AllocationScreen', () => {
 
     await user.click(screen.getByRole('button', { name: 'Type' }))
     expect(await screen.findByText('Cash · USD')).toBeInTheDocument()
-    expect(
-      screen.queryByRole('button', { name: /Holdings/ }),
-    ).not.toBeInTheDocument()
+    expect(screen.queryByText('USD cash')).not.toBeInTheDocument()
+    await user.click(
+      screen.getByRole('button', { name: 'Cash · USD · Holdings' }),
+    )
+    expect(await screen.findByText('USD cash')).toBeInTheDocument()
+  })
+
+  it('expands Type rows to list assets (#123)', async () => {
+    const user = userEvent.setup()
+    const settings = {
+      ...DEFAULT_SETTINGS,
+      currencyDisplayMode: 'native' as const,
+      baseCurrency: 'EUR',
+    }
+    await db.settings.put(settings)
+    useSettingsStore.setState({ settings, loaded: true })
+    render(
+      <MemoryRouter>
+        <AllocationScreen />
+      </MemoryRouter>,
+    )
+    await user.click(await screen.findByRole('button', { name: 'Type' }))
+    expect(await screen.findByText('Bank account · EUR')).toBeInTheDocument()
+    expect(screen.queryByText('Revolut')).not.toBeInTheDocument()
+    await user.click(
+      screen.getByRole('button', { name: 'Bank account · EUR · Holdings' }),
+    )
+    expect(await screen.findByText('Revolut')).toBeInTheDocument()
   })
 })
