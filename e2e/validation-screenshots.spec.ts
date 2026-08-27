@@ -90,6 +90,21 @@ test('capture Dashboard chart controls and As of (#111, #112, #116, #117)', asyn
   })
 })
 
+test('capture Dashboard Positions total for As of (#124)', async ({ page }) => {
+  await seedValidationFixture(page, { currencyDisplayMode: 'base' })
+  await page.goto('/')
+  await expect(page.getByRole('heading', { name: 'Dashboard' })).toBeVisible()
+  await page.getByLabel('As of').fill('2026-08-17')
+  await expect(
+    page.getByRole('button', { name: 'Holdings on 2026-08-17' }),
+  ).toBeVisible()
+  await expect(page.getByTestId('positions-total')).toBeVisible()
+  await page.screenshot({
+    path: join(outDir, '124-dashboard-positions-total.png'),
+    fullPage: true,
+  })
+})
+
 test('capture duplicate soft warning orange (#119)', async ({ page }) => {
   await seedValidationFixture(page)
   await page.goto('/assets/eur-cash')

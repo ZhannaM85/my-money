@@ -646,6 +646,21 @@ export function DashboardScreen() {
                   />
                 </span>
               </button>
+              <p
+                className="flex items-baseline justify-between gap-3 text-sm"
+                data-testid="positions-total"
+              >
+                <span className="text-muted-foreground">
+                  {t.dashboard.positionsTotal}
+                </span>
+                <span className="tabular-nums text-base font-semibold text-foreground">
+                  {formatAmount(
+                    displayHeadlineTotal,
+                    isOriginal ? activeCurrencyFilter : baseCurrency,
+                    locale,
+                  )}
+                </span>
+              </p>
               {holdingsOpen && (
                 <ul className="flex flex-col gap-2">
                   {convertedHoldingsToday.map((row) => (

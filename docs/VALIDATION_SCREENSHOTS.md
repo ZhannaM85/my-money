@@ -39,6 +39,7 @@ gh issue edit 108 --add-label validation
 | `122-allocation-currency-expanded.png` | Allocation · Currency row expanded to assets (#122) |
 | `123-allocation-type-expanded.png` | Allocation · Type row expanded to assets (#123) |
 | `dashboard-chart-and-asof.png` | Dashboard · arrows + As of (#111/#112/#116/#117) |
+| `124-dashboard-positions-total.png` | Dashboard · Positions Total for As of (#124) |
 | `119-duplicate-soft-warning.png` | Asset details duplicate soft warning (#119) |
 
 Fixtures are seeded in IndexedDB (`e2e/seed.ts`). Local only — no user balances leave the device.

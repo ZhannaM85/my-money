@@ -534,8 +534,11 @@ describe('DashboardScreen', () => {
     )
 
     expect(
-      await screen.findByText(formatAmount(110, 'EUR')),
-    ).toBeInTheDocument()
+      (await screen.findAllByText(formatAmount(110, 'EUR'))).length,
+    ).toBeGreaterThan(0)
+    expect(screen.getByTestId('positions-total')).toHaveTextContent(
+      formatAmount(110, 'EUR'),
+    )
     expect(screen.getByText('From rates')).toBeInTheDocument()
     expect(screen.getByText(/this month/)).not.toHaveTextContent(
       formatSignedAmount(10, 'EUR'),
@@ -602,6 +605,60 @@ describe('DashboardScreen', () => {
     expect(
       screen.getAllByText(formatAmount(500, 'EUR')).length,
     ).toBeGreaterThan(0)
+  })
+
+  it('shows Positions total for the selected As of date (#124)', async () => {
+    const today = todayIsoDate()
+    const past = addDaysIso(today, -20)
+    const now = `${today}T00:00:00.000Z`
+    await useAssetStore.getState().saveAsset(
+      {
+        id: 'a1',
+        name: 'Cash',
+        assetClass: 'money',
+        type: 'cash',
+        currency: 'EUR',
+        trackingStatus: 'included',
+        valuationMethod: 'account_balance',
+        updateFrequency: 'weekly',
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        assetId: 'a1',
+        date: past,
+        amount: 500,
+        currency: 'EUR',
+      },
+    )
+    await useAssetStore.getState().saveSnapshots([
+      {
+        assetId: 'a1',
+        date: today,
+        amount: 900,
+        currency: 'EUR',
+      },
+    ])
+    render(
+      <MemoryRouter>
+        <DashboardScreen />
+      </MemoryRouter>,
+    )
+    expect(await screen.findByText('Net worth')).toBeInTheDocument()
+    const asOf = screen.getByLabelText('As of')
+    asOf.focus()
+    Object.getOwnPropertyDescriptor(
+      window.HTMLInputElement.prototype,
+      'value',
+    )?.set?.call(asOf, past)
+    asOf.dispatchEvent(new Event('input', { bubbles: true }))
+    asOf.dispatchEvent(new Event('change', { bubbles: true }))
+    expect(
+      await screen.findByRole('button', { name: `Holdings on ${past}` }),
+    ).toBeInTheDocument()
+    const total = await screen.findByTestId('positions-total')
+    expect(total).toHaveTextContent('Total')
+    expect(total).toHaveTextContent(formatAmount(500, 'EUR'))
   })
 
   it('shows earlier/later arrow controls to pan the chart window (#111, #120)', async () => {

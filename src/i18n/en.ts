@@ -37,6 +37,7 @@ export const en: Dictionary = {
     panLater: 'Later dates',
     asOfDate: 'As of',
     asOfDateInvalid: 'Choose today or a past date',
+    positionsTotal: 'Total',
     emptyTitle: 'No assets yet',
     emptyDescription: 'Add what you own or owe to see your first net worth.',
     fxMissing: (codes) =>

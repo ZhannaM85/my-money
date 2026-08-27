@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 131,
+    issue: 124,
+    date: '2026-08-27T15:30:00+03:00',
+    en: 'Dashboard Positions show a Total for the selected As of date, so you do not have to add the rows by hand.',
+    ru: 'На Сводке у Позиций есть Итого на выбранную дату — не нужно складывать строки вручную.',
+  },
+  {
     version: 130,
     issue: 123,
     date: '2026-08-27T13:25:00+03:00',

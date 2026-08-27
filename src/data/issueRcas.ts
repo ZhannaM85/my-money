@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 124,
+    title: {
+      en: 'Show Positions total for the selected As of date',
+      ru: 'Показывать итог Позиций на выбранную дату',
+    },
+    en: 'Positions listed holdings for As of without a sum. A Total line under the Positions header now shows the same day total as the net-worth headline.',
+    ru: 'Позиции на дату перечисляли активы без суммы. Строка «Итого» под заголовком Позиций показывает тот же итог дня, что и карточка чистого капитала.',
+  },
+  {
     issue: 123,
     title: {
       en: 'Allocation Type rows should expand to show assets',
