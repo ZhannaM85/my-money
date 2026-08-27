@@ -26,7 +26,6 @@ _After the four web flows feel good. Android wraps this app; iOS does not._
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
 | [#108](https://github.com/ZhannaM85/my-money/issues/108) | 🔍 Pending validation | Allocation ignores All / Original and shows everything in EUR | Device 2026-08-26: Class/Type still show €. Now native Class/Type rows per currency (e.g. Money · RUB), not leftover € / empty block. |
-| [#112](https://github.com/ZhannaM85/my-money/issues/112) | 🔍 Pending validation | Dashboard Positions should follow the selected chart day | Device 2026-08-26: tooltip 2026-08-13 vs Positions on 2026-08-22. Chart selection must drive Positions (+ sync As of). |
 | [#116](https://github.com/ZhannaM85/my-money/issues/116) | 🔍 Pending validation | Pinch zoom in/out on every chart | Device 2026-08-26: cannot validate — tooltip covers the graph when trying to pinch zoom in. |
 
 ---
