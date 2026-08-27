@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 128,
+    issue: 121,
+    date: '2026-08-27T12:15:00+03:00',
+    en: 'Allocation shares in Show all currencies convert to rubles behind the scenes. Row amounts stay native, so $8,500 is no longer 1% of 1.6M ₽.',
+    ru: 'Доли в Распределении при «Показать все валюты» считаются скрытым пересчётом в рубли. Суммы в строках остаются нативными — $8 500 больше не 1% от 1,6 млн ₽.',
+  },
+  {
     version: 127,
     issue: 108,
     date: '2026-08-26T19:50:00+03:00',

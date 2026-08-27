@@ -33,6 +33,8 @@ gh issue edit 108 --add-label validation
 |------|---------|
 | `108-allocation-original-class.png` | Allocation · Original · Class |
 | `108-allocation-original-currency.png` | Allocation · Original · Currency |
+| `121-allocation-original-class.png` | Allocation · Original · Class share % (#121) |
+| `121-allocation-original-currency.png` | Allocation · Original · Currency share % (#121) |
 | `dashboard-chart-and-asof.png` | Dashboard · arrows + As of (#111/#112/#116/#117) |
 | `119-duplicate-soft-warning.png` | Asset details duplicate soft warning (#119) |
 

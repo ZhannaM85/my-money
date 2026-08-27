@@ -9,7 +9,7 @@ test.beforeAll(() => {
   mkdirSync(outDir, { recursive: true })
 })
 
-test('capture Allocation Original Class/Currency (#108, #118)', async ({
+test('capture Allocation Original Class/Currency (#108, #118, #121)', async ({
   page,
 }) => {
   await seedValidationFixture(page)
@@ -23,10 +23,18 @@ test('capture Allocation Original Class/Currency (#108, #118)', async ({
     path: join(outDir, '108-allocation-original-class.png'),
     fullPage: true,
   })
+  await page.screenshot({
+    path: join(outDir, '121-allocation-original-class.png'),
+    fullPage: true,
+  })
   await page.getByRole('button', { name: 'Currency' }).click()
   await expect(page.getByText(/Native amounts by currency/)).toBeVisible()
   await page.screenshot({
     path: join(outDir, '108-allocation-original-currency.png'),
+    fullPage: true,
+  })
+  await page.screenshot({
+    path: join(outDir, '121-allocation-original-currency.png'),
     fullPage: true,
   })
 })

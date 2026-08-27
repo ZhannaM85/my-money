@@ -227,11 +227,11 @@ export const en: Dictionary = {
     description:
       'Share of the picture in your base currency. Liabilities are a negative slice — the chart uses size, the list shows the sign.',
     descriptionOriginalCurrency:
-      'Native amounts by currency. Shares use size only — currencies are not converted into one total.',
+      'Native amounts by currency. Shares convert to rubles behind the scenes.',
     descriptionOriginalCompared: (currency) =>
       `Class and type shares are compared in ${currency}. Open Currency for native amounts, or switch to Converted for one total.`,
     descriptionOriginalClassType:
-      'Native amounts by class or type, each row in its own currency. Shares use size only — mixed currencies are not converted into one total.',
+      'Native amounts by class or type — each row in its own currency. Shares convert to rubles behind the scenes.',
     descriptionOriginalSingle: (currency) =>
       `Native amounts in ${currency}. Switch to Converted to compare mixed currencies in one total.`,
     originalClassTypeTitle: 'Pick Currency or Converted',

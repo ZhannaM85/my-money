@@ -14,6 +14,7 @@ export {
   allocation,
   breakdownBy,
   nativeBreakdownBy,
+  attachConvertedSharePercents,
   periodChange,
   assetPerformance,
   decomposeConvertedPeriodChange,

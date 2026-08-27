@@ -17,21 +17,26 @@ export interface AllocationChartRow {
   percent: number
   /** When set (Original + Currency view), format this row in its native code (#108). */
   currency?: string
+  /** Converted abs size for the donut when Original + All (#121). */
+  shareWeight?: number
+  conversionAvailable?: boolean
 }
 
 export function AllocationChart({
   rows,
   currency,
   oweLabel,
+  conversionUnavailableLabel,
 }: {
   rows: readonly AllocationChartRow[]
   currency: string
   oweLabel: string
+  conversionUnavailableLabel: string
 }) {
   const locale = useLocale()
   const pieData = rows.map((row) => ({
     ...row,
-    slice: Math.abs(row.amount),
+    slice: row.shareWeight ?? Math.abs(row.amount),
   }))
   if (pieData.length === 0) return null
 
@@ -96,7 +101,9 @@ export function AllocationChart({
                 {formatAmount(row.amount, amountCurrency(row), locale)}
               </span>
               <span className="text-xs text-muted-foreground">
-                {row.percent.toFixed(0)}%
+                {row.conversionAvailable === false
+                  ? conversionUnavailableLabel
+                  : `${row.percent.toFixed(0)}%`}
               </span>
             </span>
           </li>

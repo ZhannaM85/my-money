@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 121,
+    title: {
+      en: 'Allocation share percentages should convert to one base, not compare raw native amounts',
+      ru: 'Доли в Распределении должны считаться через одну базу, а не по сырым нативным суммам',
+    },
+    en: 'Original + All used abs(native amounts) for donut/%. $8,500 looked like 1% of 1.6M ₽. Share math now converts behind the scenes to a hidden RUB default (not leftover Settings EUR); row amounts stay native.',
+    ru: 'В Original + Все кольцо и % брали abs нативных сумм. $8 500 выглядели как 1% от 1,6 млн ₽. Доли теперь считаются скрытым пересчётом в RUB (не leftover EUR из настроек); суммы в строках остаются нативными.',
+  },
+  {
     issue: 108,
     title: {
       en: 'Allocation ignores All / Original and shows everything in EUR',

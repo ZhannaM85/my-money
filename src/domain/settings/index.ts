@@ -3,5 +3,9 @@ export type { CurrencyDisplayMode, Settings, AssetListSort } from './Settings'
 export type { Locale } from './detectLocale'
 export { detectDefaultLocale } from './detectLocale'
 export type { SettingsRepository } from './SettingsRepository'
-export { BASE_CURRENCIES, SHOW_ALL_CURRENCIES } from './currencies'
+export {
+  ALLOCATION_ALL_SHARE_BASE,
+  BASE_CURRENCIES,
+  SHOW_ALL_CURRENCIES,
+} from './currencies'
 export type { BaseCurrency } from './currencies'

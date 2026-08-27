@@ -394,7 +394,14 @@ describe('nativeBreakdownBy (#108)', () => {
       (row) => row.assetClass,
     )
     expect(rows).toEqual([
-      { id: 'money::USD', amount: 8000, percent: 100, currency: 'USD' },
+      {
+        id: 'money::USD',
+        amount: 8000,
+        percent: 100,
+        currency: 'USD',
+        shareWeight: 8000,
+        conversionAvailable: true,
+      },
     ])
   })
 
@@ -432,6 +439,65 @@ describe('nativeBreakdownBy (#108)', () => {
       currency: 'EUR',
     })
     expect(rows[1]!.percent).toBeCloseTo((1000 / 9000) * 100, 5)
+  })
+
+  it('uses a hidden RUB base for share % instead of raw native size (#121)', () => {
+    const rub = asset({
+      id: 'rub',
+      name: 'Ruble',
+      type: 'cash',
+      currency: 'RUB',
+    })
+    const usd = asset({
+      id: 'usd',
+      name: 'Dollar',
+      type: 'cash',
+      currency: 'USD',
+    })
+    const rates = [
+      {
+        date: '2026-08-01',
+        base: 'USD',
+        quote: 'RUB',
+        rate: 80,
+      },
+    ]
+    const rows = nativeBreakdownBy(
+      [rub, usd],
+      [
+        snap({
+          id: 's1',
+          assetId: 'rub',
+          amount: 1_000_000,
+          currency: 'RUB',
+        }),
+        snap({
+          id: 's2',
+          assetId: 'usd',
+          amount: 10_000,
+          currency: 'USD',
+        }),
+      ],
+      (row) => row.assetClass,
+      rates,
+      'RUB',
+    )
+    expect(rows[0]).toMatchObject({
+      id: 'money::RUB',
+      amount: 1_000_000,
+      currency: 'RUB',
+      conversionAvailable: true,
+    })
+    expect(rows[1]).toMatchObject({
+      id: 'money::USD',
+      amount: 10_000,
+      currency: 'USD',
+      conversionAvailable: true,
+    })
+    const convertedTotal = 1_000_000 + 10_000 * 80
+    expect(rows[0]!.percent).toBeCloseTo((1_000_000 / convertedTotal) * 100, 5)
+    expect(rows[1]!.percent).toBeCloseTo((800_000 / convertedTotal) * 100, 5)
+    expect(rows[1]!.percent).not.toBeCloseTo((10_000 / 1_010_000) * 100, 0)
   })
 })
 

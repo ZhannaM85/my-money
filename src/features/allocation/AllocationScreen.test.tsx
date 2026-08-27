@@ -7,15 +7,26 @@ import { DEFAULT_SETTINGS } from '@/domain/settings'
 import { db } from '@/infrastructure/persistence/indexeddb'
 import { formatAmount } from '@/shared/lib/money'
 import { useAssetStore } from '@/stores/assetStore'
+import { useFxStore } from '@/stores/fxStore'
 import { useSettingsStore } from '@/stores/settingsStore'
 import { AllocationScreen } from './AllocationScreen'
 
 const now = '2026-08-17T00:00:00.000Z'
+const fxEnsureRange = useFxStore.getState().ensureRange
+const fxLoadCached = useFxStore.getState().loadCached
 
 beforeEach(async () => {
   await db.assets.clear()
   await db.snapshots.clear()
   useAssetStore.setState({ assets: [], snapshots: [], loaded: false })
+  useFxStore.setState({
+    quotes: [],
+    manualQuotes: [],
+    loading: false,
+    error: undefined,
+    ensureRange: fxEnsureRange,
+    loadCached: fxLoadCached,
+  })
   useSettingsStore.setState({ settings: DEFAULT_SETTINGS, loaded: true })
   await useAssetStore.getState().saveAsset(
     {
@@ -111,5 +122,83 @@ describe('AllocationScreen', () => {
     ).toBeInTheDocument()
     expect(screen.getByText(formatAmount(8000, 'USD'))).toBeInTheDocument()
     expect(screen.getByText(formatAmount(1000, 'EUR'))).toBeInTheDocument()
+  })
+
+  it('uses hidden RUB for Original share % not leftover Settings EUR (#121)', async () => {
+    await db.assets.clear()
+    await db.snapshots.clear()
+    useAssetStore.setState({ assets: [], snapshots: [], loaded: false })
+    await useAssetStore.getState().saveAsset(
+      {
+        id: 'rub',
+        name: 'RUB cash',
+        assetClass: 'money',
+        type: 'cash',
+        currency: 'RUB',
+        trackingStatus: 'included',
+        valuationMethod: 'account_balance',
+        updateFrequency: 'weekly',
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        assetId: 'rub',
+        date: '2026-08-17',
+        amount: 1_000_000,
+        currency: 'RUB',
+      },
+    )
+    await useAssetStore.getState().saveAsset(
+      {
+        id: 'usd',
+        name: 'USD cash',
+        assetClass: 'money',
+        type: 'cash',
+        currency: 'USD',
+        trackingStatus: 'included',
+        valuationMethod: 'account_balance',
+        updateFrequency: 'weekly',
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        assetId: 'usd',
+        date: '2026-08-17',
+        amount: 10_000,
+        currency: 'USD',
+      },
+    )
+    const settings = {
+      ...DEFAULT_SETTINGS,
+      currencyDisplayMode: 'native' as const,
+      baseCurrency: 'EUR',
+    }
+    await db.settings.put(settings)
+    useSettingsStore.setState({ settings, loaded: true })
+    useFxStore.setState({
+      quotes: [
+        {
+          date: '2026-08-17',
+          base: 'USD',
+          quote: 'RUB',
+          rate: 80,
+        },
+      ],
+      ensureRange: async () => {},
+      loadCached: async () => {},
+    })
+    render(
+      <MemoryRouter>
+        <AllocationScreen />
+      </MemoryRouter>,
+    )
+    expect(await screen.findByText('Money · RUB')).toBeInTheDocument()
+    expect(screen.getByText('Money · USD')).toBeInTheDocument()
+    expect(screen.getByText(/1,000,000/)).toBeInTheDocument()
+    expect(screen.getByText(/10,000/)).toBeInTheDocument()
+    expect(screen.getByText('56%')).toBeInTheDocument()
+    expect(screen.getByText('44%')).toBeInTheDocument()
+    expect(screen.queryByText('1%')).not.toBeInTheDocument()
+    expect(screen.queryByText('99%')).not.toBeInTheDocument()
   })
 })

@@ -330,13 +330,89 @@ export function breakdownBy(
     .sort((a, b) => Math.abs(b.amount) - Math.abs(a.amount))
 }
 
+export type NativeAllocationRow = {
+  id: string
+  amount: number
+  percent: number
+  currency: string
+  shareWeight: number
+  conversionAvailable: boolean
+}
+
+function shareWeightFor(
+  amount: number,
+  from: string,
+  date: string,
+  rates: RateTable | undefined,
+  shareBase: string | undefined,
+): { shareWeight: number; conversionAvailable: boolean } {
+  if (!rates || !shareBase) {
+    return { shareWeight: Math.abs(amount), conversionAvailable: true }
+  }
+  const rate = lookupRateOnOrBefore(rates, from, shareBase, date)
+  if (rate === undefined) {
+    return { shareWeight: 0, conversionAvailable: false }
+  }
+  return {
+    shareWeight: Math.abs(convertAmount(amount, rate)),
+    conversionAvailable: true,
+  }
+}
+
+/** Native amounts with share % from a hidden converted base (#121). */
+export function attachConvertedSharePercents<
+  T extends { amount: number; currency: string },
+>(
+  rows: readonly T[],
+  rates: RateTable,
+  shareBase: string,
+  asOf: string,
+): (T & {
+  percent: number
+  shareWeight: number
+  conversionAvailable: boolean
+})[] {
+  const enriched = rows.map((row) => {
+    const share = shareWeightFor(
+      row.amount,
+      row.currency,
+      asOf,
+      rates,
+      shareBase,
+    )
+    return { ...row, ...share }
+  })
+  const absSum = enriched
+    .filter((row) => row.conversionAvailable)
+    .reduce((sum, row) => sum + row.shareWeight, 0)
+  return enriched
+    .map((row) => ({
+      ...row,
+      percent:
+        !row.conversionAvailable || absSum === 0
+          ? 0
+          : (row.shareWeight / absSum) * 100,
+    }))
+    .sort((a, b) => b.shareWeight - a.shareWeight)
+}
+
 /** Native (unconverted) totals by key·currency — Original Class/Type (#108). */
 export function nativeBreakdownBy(
   assets: readonly Asset[],
   snapshots: readonly AssetSnapshot[],
   keyOf: (asset: Asset) => string,
-): { id: string; amount: number; percent: number; currency: string }[] {
-  const buckets = new Map<string, { amount: number; currency: string }>()
+  rates?: RateTable,
+  shareBase?: string,
+): NativeAllocationRow[] {
+  const buckets = new Map<
+    string,
+    {
+      amount: number
+      currency: string
+      shareWeight: number
+      conversionAvailable: boolean
+    }
+  >()
   for (const asset of assets) {
     if (!contributesToNetWorth(asset)) continue
     const snapshot = latestSnapshot(snapshots, asset.id)
@@ -345,24 +421,49 @@ export function nativeBreakdownBy(
     const signed = isLiability(asset) ? -native : native
     const labelKey = keyOf(asset)
     const id = `${labelKey}::${snapshot.currency}`
+    const share = shareWeightFor(
+      signed,
+      snapshot.currency,
+      snapshot.date,
+      rates,
+      shareBase,
+    )
     const existing = buckets.get(id)
     buckets.set(id, {
       amount: (existing?.amount ?? 0) + signed,
       currency: snapshot.currency,
+      shareWeight: (existing?.shareWeight ?? 0) + share.shareWeight,
+      conversionAvailable:
+        (existing?.conversionAvailable ?? true) && share.conversionAvailable,
     })
   }
   const rows = [...buckets.entries()].map(([id, row]) => ({
     id,
     amount: row.amount,
     currency: row.currency,
+    shareWeight: row.shareWeight,
+    conversionAvailable: row.conversionAvailable,
   }))
-  const absSum = rows.reduce((sum, row) => sum + Math.abs(row.amount), 0)
+  const useConverted = Boolean(rates && shareBase)
+  const absSum = useConverted
+    ? rows
+        .filter((row) => row.conversionAvailable)
+        .reduce((sum, row) => sum + row.shareWeight, 0)
+    : rows.reduce((sum, row) => sum + Math.abs(row.amount), 0)
   return rows
     .map((row) => ({
       ...row,
-      percent: absSum === 0 ? 0 : (Math.abs(row.amount) / absSum) * 100,
+      percent:
+        (useConverted && !row.conversionAvailable) || absSum === 0
+          ? 0
+          : ((useConverted ? row.shareWeight : Math.abs(row.amount)) / absSum) *
+            100,
     }))
-    .sort((a, b) => Math.abs(b.amount) - Math.abs(a.amount))
+    .sort((a, b) =>
+      useConverted
+        ? b.shareWeight - a.shareWeight
+        : Math.abs(b.amount) - Math.abs(a.amount),
+    )
 }
 
 export function periodChange(
