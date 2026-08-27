@@ -25,7 +25,7 @@ _After the four web flows feel good. Android wraps this app; iOS does not._
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
-| [#122](https://github.com/ZhannaM85/my-money/issues/122) | 🔍 Pending validation | Allocation Class and Currency rows should expand to show assets | Tap a Class or Currency slice to list the assets inside it. Type tab not requested. |
+| [#123](https://github.com/ZhannaM85/my-money/issues/123) | 🔲 Open | Allocation Type rows should expand to show assets | Follow-up to #122: same expand-to-assets on Type (Cash · USD, etc.). |
 
 ---
 

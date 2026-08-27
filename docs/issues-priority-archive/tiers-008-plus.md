@@ -137,3 +137,4 @@ Closed live-feedback rows from Tier 8 onward. Open / pending items stay in [`../
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
 | [#121](https://github.com/ZhannaM85/my-money/issues/121) | ✅ Done | Allocation share percentages should convert to one base, not compare raw native amounts | Native row amounts; All-mode share % uses hidden RUB (not leftover Settings EUR). Validated on-device 2026-08-27. |
+| [#122](https://github.com/ZhannaM85/my-money/issues/122) | ✅ Done | Allocation Class and Currency rows should expand to show assets | Tap a Class or Currency slice to list assets. Validated on-device 2026-08-27. Type expand → #123. |
