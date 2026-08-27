@@ -21,11 +21,11 @@ _After the four web flows feel good. Android wraps this app; iOS does not._
 
 ---
 
-## Tier 13 — Live feedback (2026-08-26)
+## Tier 14 — Live feedback (2026-08-27)
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
-| [#108](https://github.com/ZhannaM85/my-money/issues/108) | 🔍 Pending validation | Allocation ignores All / Original and shows everything in EUR | Device 2026-08-26: Class/Type still show €. Now native Class/Type rows per currency (e.g. Money · RUB), not leftover € / empty block. |
+| [#121](https://github.com/ZhannaM85/my-money/issues/121) | 🔲 Open | Allocation share percentages should convert to one base, not compare raw native amounts | Follow-up to #108: keep native row amounts; convert behind the scenes for donut / % (e.g. $8,500 is not 1% of 1.6M ₽). |
 
 ---
 
