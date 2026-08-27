@@ -140,3 +140,4 @@ Closed live-feedback rows from Tier 8 onward. Open / pending items stay in [`../
 | [#122](https://github.com/ZhannaM85/my-money/issues/122) | ✅ Done | Allocation Class and Currency rows should expand to show assets | Tap a Class or Currency slice to list assets. Validated on-device 2026-08-27. Type expand → #123. |
 | [#123](https://github.com/ZhannaM85/my-money/issues/123) | ✅ Done | Allocation Type rows should expand to show assets | Follow-up to #122: Type rows expand to assets (e.g. Cash · USD). Validated on-device 2026-08-27. |
 | [#124](https://github.com/ZhannaM85/my-money/issues/124) | ✅ Done | Show Positions total for the selected As of date | Total under Positions for As of day. Validated on-device 2026-08-27. |
+| [#125](https://github.com/ZhannaM85/my-money/issues/125) | ✅ Done | Add a Today button next to Dashboard As of | Turtle-style Today beside As of. Validated on-device 2026-08-27. |
