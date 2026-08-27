@@ -21,6 +21,14 @@ _After the four web flows feel good. Android wraps this app; iOS does not._
 
 ---
 
+## Tier 14 — Live feedback (2026-08-27)
+
+| # | Status | Issue | Notes |
+|---|--------|-------|-------|
+| [#126](https://github.com/ZhannaM85/my-money/issues/126) | 🔲 Open | Let user pick chart range: week, month, year, all, custom | Today only Zoom in/out steps 1M→…→All; need explicit Week / Month / Year / All / Custom. |
+
+---
+
 ## Explicitly not filed
 
 Out of scope for the MVP (`PROJECT_BRIEF.md` §20) — do not implement from chat:
