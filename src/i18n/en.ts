@@ -220,9 +220,21 @@ export const en: Dictionary = {
       'Net worth over time. Each day uses that date’s reference rate, not today’s.',
     emptyTitle: 'No history yet',
     emptyDescription: 'Snapshots from updates become the history line.',
-    overRange: (range) => `over ${range}`,
+    overRange: (range) =>
+      range === 'Custom'
+        ? 'over custom range'
+        : range === 'All'
+          ? 'over all time'
+          : `over ${range}`,
     sinceDate: (date) => `since ${date}`,
     holdingsOn: (date) => `Holdings on ${date}`,
+    rangeWeek: 'Week',
+    rangeMonth: 'Month',
+    rangeYear: 'Year',
+    rangeAll: 'All',
+    rangeCustom: 'Custom',
+    rangeFrom: 'From',
+    rangeTo: 'To',
   },
   allocation: {
     title: 'Allocation',

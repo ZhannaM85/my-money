@@ -117,6 +117,26 @@ test('capture Dashboard As of Today button (#125)', async ({ page }) => {
   })
 })
 
+test('capture Dashboard chart range picker (#126)', async ({ page }) => {
+  await seedValidationFixture(page, { currencyDisplayMode: 'base' })
+  await page.goto('/')
+  await expect(page.getByRole('heading', { name: 'Dashboard' })).toBeVisible()
+  const rangeGroup = page.getByRole('group', { name: 'Chart range' })
+  await expect(rangeGroup.getByRole('button', { name: 'Week' })).toBeVisible()
+  await expect(rangeGroup.getByRole('button', { name: 'Custom' })).toBeVisible()
+  await page.screenshot({
+    path: join(outDir, '126-dashboard-range-picker.png'),
+    fullPage: true,
+  })
+  await rangeGroup.getByRole('button', { name: 'Custom' }).click()
+  await expect(page.getByRole('textbox', { name: 'From' })).toBeVisible()
+  await expect(page.getByRole('textbox', { name: 'To' })).toBeVisible()
+  await page.screenshot({
+    path: join(outDir, '126-dashboard-range-custom.png'),
+    fullPage: true,
+  })
+})
+
 test('capture duplicate soft warning orange (#119)', async ({ page }) => {
   await seedValidationFixture(page)
   await page.goto('/assets/eur-cash')

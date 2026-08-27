@@ -120,9 +120,9 @@ describe('AssetDetailsScreen', () => {
     expect(await screen.findByText(/Chart range: All/)).toBeInTheDocument()
     expect(screen.getByTestId('net-worth-chart')).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: 'Zoom in' }))
-    expect(screen.getByText(/Chart range: 1Y/)).toBeInTheDocument()
+    expect(screen.getByText(/Chart range: Year/)).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: 'Zoom in' }))
-    expect(screen.getByText(/Chart range: 6M/)).toBeInTheDocument()
+    expect(screen.getByText(/Chart range: Month/)).toBeInTheDocument()
   })
 
   it('opens existing assets in a read-only details view', async () => {

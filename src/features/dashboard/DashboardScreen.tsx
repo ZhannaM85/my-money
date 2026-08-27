@@ -19,9 +19,10 @@ import {
   todayIsoDate,
 } from '@/shared/lib/money'
 import {
-  HISTORY_RANGES,
   canPanHistoryEarlier,
   canPanHistoryLater,
+  canZoomHistoryIn,
+  canZoomHistoryOut,
   isoDatesInclusive,
   rangeStartIso,
   shiftHistoryRangeEnd,
@@ -39,6 +40,7 @@ import { useAssetStore } from '@/stores/assetStore'
 import { useFxStore } from '@/stores/fxStore'
 import { useSettingsStore } from '@/stores/settingsStore'
 import { NetWorthChart } from './NetWorthChart'
+import { ChartRangePicker } from './ChartRangePicker'
 import { dashboardNeedsRemoteFx } from './dashboardFx'
 import { holdingsForSelectedChartDay } from './holdingsForSelectedChartDay'
 
@@ -60,6 +62,8 @@ export function DashboardScreen() {
   const fxLoading = useFxStore((state) => state.loading)
   const [range, setRange] = useState<HistoryRange>('1M')
   const [rangeEnd, setRangeEnd] = useState(todayIsoDate)
+  const [customStart, setCustomStart] = useState(todayIsoDate)
+  const [customEnd, setCustomEnd] = useState(todayIsoDate)
   const [currencyFilter, setCurrencyFilter] = useState<string>('all')
   const [holdingsOpen, setHoldingsOpen] = useState(false)
   const [selectedChartDate, setSelectedChartDate] = useState<string | null>(
@@ -72,7 +76,16 @@ export function DashboardScreen() {
   const [periodOpen, setPeriodOpen] = useState<'amount' | 'rate' | null>(null)
 
   const today = todayIsoDate()
-  const chartEnd = range === 'All' ? today : rangeEnd > today ? today : rangeEnd
+  const chartEnd =
+    range === 'Custom'
+      ? customEnd > today
+        ? today
+        : customEnd
+      : range === 'All'
+        ? today
+        : rangeEnd > today
+          ? today
+          : rangeEnd
   const isOriginal = currencyDisplayMode === 'native'
   const activeCurrencyFilter = isOriginal ? currencyFilter : 'all'
 
@@ -89,7 +102,7 @@ export function DashboardScreen() {
     )
   }, [snapshots, today])
 
-  const start = rangeStartIso(range, chartEnd, earliest)
+  const start = rangeStartIso(range, chartEnd, earliest, customStart)
   const dates = useMemo(
     () => isoDatesInclusive(start, chartEnd),
     [start, chartEnd],
@@ -278,11 +291,21 @@ export function DashboardScreen() {
       ? changeFrom + convertedBreakdown.amountChange
       : changeTo
   const change = periodChange(changeFrom, headlineTo)
-  const rangeIndex = HISTORY_RANGES.indexOf(range)
-  const canZoomIn = rangeIndex > 0
-  const canZoomOut = rangeIndex < HISTORY_RANGES.length - 1
+  const canZoomIn = canZoomHistoryIn(range)
+  const canZoomOut = canZoomHistoryOut(range)
   const canPanEarlier = canPanHistoryEarlier(chartEnd, range, earliest)
   const canPanLater = canPanHistoryLater(chartEnd, range, today)
+
+  const selectRange = (next: HistoryRange) => {
+    setSelectedChartDate(null)
+    setAsOfError(undefined)
+    if (next === 'Custom' && range !== 'Custom') {
+      setCustomStart(start)
+      setCustomEnd(chartEnd)
+    }
+    setRange(next)
+    if (next === 'All' || next === 'Custom') setRangeEnd(today)
+  }
 
   const panEarlier = () => {
     if (!canPanEarlier) return
@@ -733,6 +756,24 @@ export function DashboardScreen() {
             </p>
           ) : (
             <>
+              <ChartRangePicker
+                range={range}
+                onRangeChange={selectRange}
+                customStart={customStart}
+                customEnd={customEnd}
+                onCustomStartChange={(value) => {
+                  setSelectedChartDate(null)
+                  setAsOfError(undefined)
+                  setCustomStart(value > customEnd ? customEnd : value)
+                }}
+                onCustomEndChange={(value) => {
+                  setSelectedChartDate(null)
+                  setAsOfError(undefined)
+                  setCustomEnd(value < customStart ? customStart : value)
+                }}
+                earliest={earliest}
+                latest={today}
+              />
               <NetWorthChart
                 points={series}
                 currency={
@@ -762,7 +803,16 @@ export function DashboardScreen() {
               />
               <div className="flex items-center justify-between gap-2">
                 <span className="text-sm text-muted-foreground">
-                  {t.dashboard.zoomRange}: {range}
+                  {t.dashboard.zoomRange}:{' '}
+                  {range === '1W'
+                    ? t.history.rangeWeek
+                    : range === '1M'
+                      ? t.history.rangeMonth
+                      : range === '1Y'
+                        ? t.history.rangeYear
+                        : range === 'All'
+                          ? t.history.rangeAll
+                          : t.history.rangeCustom}
                 </span>
                 <div className="flex gap-2">
                   <button

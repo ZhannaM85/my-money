@@ -25,7 +25,7 @@ _After the four web flows feel good. Android wraps this app; iOS does not._
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
-| [#126](https://github.com/ZhannaM85/my-money/issues/126) | 🔲 Open | Let user pick chart range: week, month, year, all, custom | Today only Zoom in/out steps 1M→…→All; need explicit Week / Month / Year / All / Custom. |
+| [#126](https://github.com/ZhannaM85/my-money/issues/126) | 🔍 Pending validation | Let user pick chart range: week, month, year, all, custom | Week / Month / Year / All / Custom chips on Dashboard, History, asset details; Custom From/To; zoom ladder skips Custom. |
 
 ---
 

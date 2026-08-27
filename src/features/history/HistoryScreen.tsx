@@ -2,10 +2,12 @@ import { useEffect, useMemo, useState } from 'react'
 import { ChevronDown } from 'lucide-react'
 import { decomposeConvertedPeriodChange, historicalNetWorth, holdingsWithConversion, nativeTotalsByCurrency, periodChange } from '@/domain/netWorth'
 import { HoldingBreakdownList } from '@/features/dashboard/HoldingBreakdownList'
+import { ChartRangePicker } from '@/features/dashboard/ChartRangePicker'
 import { NetWorthChart } from '@/features/dashboard/NetWorthChart'
 import { useLocale, useTranslation } from '@/i18n'
 import {
-  HISTORY_RANGES,
+  canZoomHistoryIn,
+  canZoomHistoryOut,
   isoDatesInclusive,
   isRangeClampedToEarliest,
   rangeStartIso,
@@ -40,11 +42,13 @@ export function HistoryScreen() {
     'native'
   const quotes = useFxStore((state) => state.quotes)
   const ensureRange = useFxStore((state) => state.ensureRange)
-  const [range, setRange] = useState<HistoryRange>('3M')
+  const [range, setRange] = useState<HistoryRange>('1M')
+  const [customStart, setCustomStart] = useState(todayIsoDate)
+  const [customEnd, setCustomEnd] = useState(todayIsoDate)
   const [openDates, setOpenDates] = useState<ReadonlySet<string>>(new Set())
   const today = todayIsoDate()
-  const canZoomIn = range !== '1M'
-  const canZoomOut = range !== 'All'
+  const canZoomIn = canZoomHistoryIn(range)
+  const canZoomOut = canZoomHistoryOut(range)
 
   useEffect(() => {
     void loadAssets()
@@ -59,25 +63,37 @@ export function HistoryScreen() {
     )
   }, [snapshots, today])
 
-  const start = rangeStartIso(range, today, earliest)
-  const rangeLabel = isRangeClampedToEarliest(range, today, earliest)
+  const chartEnd = range === 'Custom' ? customEnd : today
+  const start = rangeStartIso(range, chartEnd, earliest, customStart)
+  const rangeLabel = isRangeClampedToEarliest(range, chartEnd, earliest)
     ? t.history.sinceDate(formatChartAxisDate(start, locale))
     : t.history.overRange(range)
-  const dates = useMemo(() => isoDatesInclusive(start, today), [start, today])
+  const dates = useMemo(
+    () => isoDatesInclusive(start, chartEnd),
+    [start, chartEnd],
+  )
   const snapshotDays = useMemo(() => {
     return [
       ...new Set(
         snapshots
           .map((snapshot) => snapshot.date)
-          .filter((date) => date >= start && date <= today),
+          .filter((date) => date >= start && date <= chartEnd),
       ),
     ].sort()
-  }, [snapshots, start, today])
+  }, [snapshots, start, chartEnd])
 
   useEffect(() => {
     const symbols = [...new Set(snapshots.map((snapshot) => snapshot.currency))]
-    void ensureRange(start, today, baseCurrency, symbols)
-  }, [baseCurrency, ensureRange, snapshots, start, today])
+    void ensureRange(start, chartEnd, baseCurrency, symbols)
+  }, [baseCurrency, chartEnd, ensureRange, snapshots, start])
+
+  const selectRange = (next: HistoryRange) => {
+    if (next === 'Custom' && range !== 'Custom') {
+      setCustomStart(start)
+      setCustomEnd(chartEnd)
+    }
+    setRange(next)
+  }
 
   const nativeTotals = useMemo(
     () => nativeTotalsByCurrency(assets, snapshots),
@@ -133,24 +149,20 @@ export function HistoryScreen() {
         title={t.history.title}
         description={t.history.description}
       />
-      <div className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1">
-        {HISTORY_RANGES.map((item) => (
-          <button
-            key={item}
-            type="button"
-            onClick={() => setRange(item)}
-            className={cn(
-              'shrink-0 rounded-full px-3 py-1.5 text-sm font-medium',
-              range === item
-                ? 'bg-primary text-primary-foreground'
-                : 'bg-muted text-muted-foreground',
-            )}
-            aria-pressed={range === item}
-          >
-            {item}
-          </button>
-        ))}
-      </div>
+      <ChartRangePicker
+        range={range}
+        onRangeChange={selectRange}
+        customStart={customStart}
+        customEnd={customEnd}
+        onCustomStartChange={(value) =>
+          setCustomStart(value > customEnd ? customEnd : value)
+        }
+        onCustomEndChange={(value) =>
+          setCustomEnd(value < customStart ? customStart : value)
+        }
+        earliest={earliest}
+        latest={today}
+      />
       {!loaded ? (
         <p className="text-sm text-muted-foreground">{t.common.loading}</p>
       ) : assets.length === 0 ? (
@@ -232,7 +244,16 @@ export function HistoryScreen() {
               />
               <div className="flex items-center justify-between gap-2">
                 <span className="text-sm text-muted-foreground">
-                  {t.dashboard.zoomRange}: {range}
+                  {t.dashboard.zoomRange}:{' '}
+                  {range === '1W'
+                    ? t.history.rangeWeek
+                    : range === '1M'
+                      ? t.history.rangeMonth
+                      : range === '1Y'
+                        ? t.history.rangeYear
+                        : range === 'All'
+                          ? t.history.rangeAll
+                          : t.history.rangeCustom}
                 </span>
                 <div className="flex gap-2">
                   <button

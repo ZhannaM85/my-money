@@ -6,6 +6,7 @@ import { assetPerformance } from '@/domain/netWorth'
 import { BASE_CURRENCIES } from '@/domain/settings'
 import { latestSnapshot, optionalSnapshotNote, hasDuplicateSnapshot } from '@/domain/snapshot'
 import { NetWorthChart } from '@/features/dashboard/NetWorthChart'
+import { ChartRangePicker } from '@/features/dashboard/ChartRangePicker'
 import { formatLastUpdated, useLocale, useTranslation } from '@/i18n'
 import {
   formatOwnershipShare,
@@ -21,7 +22,8 @@ import {
   todayIsoDate,
 } from '@/shared/lib/money'
 import {
-  HISTORY_RANGES,
+  canZoomHistoryIn,
+  canZoomHistoryOut,
   type HistoryRange,
   isIsoDateOnOrBefore,
   rangeStartIso,
@@ -87,6 +89,8 @@ export function AssetDetailsScreen() {
   const [editError, setEditError] = useState<string | undefined>()
   const [editingDetails, setEditingDetails] = useState(false)
   const [range, setRange] = useState<HistoryRange>('All')
+  const [customStart, setCustomStart] = useState(todayIsoDate)
+  const [customEnd, setCustomEnd] = useState(todayIsoDate)
   const today = todayIsoDate()
 
   useEffect(() => {
@@ -113,14 +117,22 @@ export function AssetDetailsScreen() {
     : null
   const displayCurrency = mode === 'native' ? asset?.currency : baseCurrency
   const earliest = ordered[0]?.date ?? today
-  const chartStart = rangeStartIso(range, today, earliest)
-  const rangeIndex = HISTORY_RANGES.indexOf(range)
-  const canZoomIn = rangeIndex > 0
-  const canZoomOut = rangeIndex >= 0 && rangeIndex < HISTORY_RANGES.length - 1
+  const chartEnd = range === 'Custom' ? customEnd : today
+  const chartStart = rangeStartIso(range, chartEnd, earliest, customStart)
+  const canZoomIn = canZoomHistoryIn(range)
+  const canZoomOut = canZoomHistoryOut(range)
+
+  const selectRange = (next: HistoryRange) => {
+    if (next === 'Custom' && range !== 'Custom') {
+      setCustomStart(chartStart)
+      setCustomEnd(chartEnd)
+    }
+    setRange(next)
+  }
 
   const points = ordered.flatMap((row) => {
     if (!asset || !displayCurrency) return []
-    if (row.date < chartStart) return []
+    if (row.date < chartStart || row.date > chartEnd) return []
     if (mode === 'native') {
       return [{ date: row.date, total: row.amount }]
     }
@@ -325,6 +337,20 @@ export function AssetDetailsScreen() {
           {t.asset.noRateOnDate(snapshot.currency, snapshot.date)}
         </p>
       )}
+      <ChartRangePicker
+        range={range}
+        onRangeChange={selectRange}
+        customStart={customStart}
+        customEnd={customEnd}
+        onCustomStartChange={(value) =>
+          setCustomStart(value > customEnd ? customEnd : value)
+        }
+        onCustomEndChange={(value) =>
+          setCustomEnd(value < customStart ? customStart : value)
+        }
+        earliest={earliest}
+        latest={today}
+      />
       <NetWorthChart
         points={points}
         currency={displayCurrency ?? asset.currency}
@@ -338,7 +364,16 @@ export function AssetDetailsScreen() {
       />
       <div className="flex items-center justify-between gap-2">
         <span className="text-sm text-muted-foreground">
-          {t.dashboard.zoomRange}: {range}
+          {t.dashboard.zoomRange}:{' '}
+          {range === '1W'
+            ? t.history.rangeWeek
+            : range === '1M'
+              ? t.history.rangeMonth
+              : range === '1Y'
+                ? t.history.rangeYear
+                : range === 'All'
+                  ? t.history.rangeAll
+                  : t.history.rangeCustom}
         </span>
         <div className="flex gap-2">
           <button

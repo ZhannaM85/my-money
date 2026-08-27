@@ -41,6 +41,8 @@ gh issue edit 108 --add-label validation
 | `dashboard-chart-and-asof.png` | Dashboard · arrows + As of (#111/#112/#116/#117) |
 | `124-dashboard-positions-total.png` | Dashboard · Positions Total for As of (#124) |
 | `125-dashboard-asof-today.png` | Dashboard · Today button next to As of (#125) |
+| `126-dashboard-range-picker.png` | Dashboard · Week/Month/Year/All/Custom chips (#126) |
+| `126-dashboard-range-custom.png` | Dashboard · Custom From/To dates (#126) |
 | `119-duplicate-soft-warning.png` | Asset details duplicate soft warning (#119) |
 
 Fixtures are seeded in IndexedDB (`e2e/seed.ts`). Local only — no user balances leave the device.

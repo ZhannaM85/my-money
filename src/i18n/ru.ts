@@ -225,9 +225,21 @@ export const ru: Dictionary = {
       'Чистый капитал во времени. Каждый день использует курс той даты, а не сегодняшний.',
     emptyTitle: 'Истории пока нет',
     emptyDescription: 'Снимки из обновлений становятся линией истории.',
-    overRange: (range) => `за ${range}`,
+    overRange: (range) =>
+      range === 'Custom'
+        ? 'за свой период'
+        : range === 'All'
+          ? 'за всё время'
+          : `за ${range}`,
     sinceDate: (date) => `с ${date}`,
     holdingsOn: (date) => `Позиции на ${date}`,
+    rangeWeek: 'Неделя',
+    rangeMonth: 'Месяц',
+    rangeYear: 'Год',
+    rangeAll: 'Все',
+    rangeCustom: 'Свой',
+    rangeFrom: 'С',
+    rangeTo: 'По',
   },
   allocation: {
     title: 'Распределение',

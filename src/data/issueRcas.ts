@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 126,
+    title: {
+      en: 'Let user pick chart range: week, month, year, all, custom',
+      ru: 'Выбор диапазона графика: неделя, месяц, год, всё, свой',
+    },
+    en: 'Charts only offered Zoom in/out on a 1M→3M→6M→1Y→All ladder. Shared Week / Month / Year / All / Custom chips (with From/To dates) now sit on Dashboard, History, and asset details; zoom stays on the preset ladder and skips Custom.',
+    ru: 'Графики давали только Zoom по лестнице 1M→3M→6M→1Y→All. Общие чипы Неделя / Месяц / Год / Всё / Свой (с датами С/По) на Сводке, Истории и карточке актива; масштаб остаётся на пресетах и не заходит в Custom.',
+  },
+  {
     issue: 125,
     title: {
       en: 'Add a Today button next to Dashboard As of',

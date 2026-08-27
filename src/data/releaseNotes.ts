@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 133,
+    issue: 126,
+    date: '2026-08-27T17:55:00+03:00',
+    en: 'Pick chart range with Week, Month, Year, All, or Custom dates — on Dashboard, History, and asset details.',
+    ru: 'Выбирайте диапазон графика: Неделя, Месяц, Год, Всё или свои даты — на Сводке, в Истории и на карточке актива.',
+  },
+  {
     version: 132,
     issue: 125,
     date: '2026-08-27T15:40:00+03:00',

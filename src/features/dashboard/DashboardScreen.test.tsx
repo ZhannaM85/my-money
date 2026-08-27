@@ -161,9 +161,9 @@ describe('DashboardScreen', () => {
       </MemoryRouter>,
     )
 
-    expect(await screen.findByText(/Chart range: 1M/)).toBeInTheDocument()
+    expect(await screen.findByText(/Chart range: Month/)).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: 'Zoom out' }))
-    expect(screen.getByText(/Chart range: 3M/)).toBeInTheDocument()
+    expect(screen.getByText(/Chart range: Year/)).toBeInTheDocument()
   })
 
   it('disables the currency filter in Converted mode', async () => {

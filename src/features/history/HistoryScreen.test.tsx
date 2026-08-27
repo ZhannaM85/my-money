@@ -71,9 +71,10 @@ describe('HistoryScreen', () => {
       </MemoryRouter>,
     )
     expect(
-      await screen.findByRole('button', { name: '3M' }),
+      await screen.findByRole('button', { name: 'Month' }),
     ).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'All' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Custom' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Zoom in' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Zoom out' })).toBeInTheDocument()
     expect(
@@ -159,12 +160,12 @@ describe('HistoryScreen', () => {
     ).toBeInTheDocument()
     expect(
       screen.queryByText(
-        `${formatSignedAmount(endTotal - startTotal, 'EUR')} over 3M`,
+        `${formatSignedAmount(endTotal - startTotal, 'EUR')} over 1M`,
       ),
     ).not.toBeInTheDocument()
   })
 
-  it('measures 3M from ninety days ago, not the previous snapshot day (#90)', async () => {
+  it('measures 1M from thirty days ago, not the previous snapshot day (#90)', async () => {
     await db.assets.clear()
     await db.snapshots.clear()
     useAssetStore.setState({ assets: [], snapshots: [], loaded: false })
@@ -215,10 +216,10 @@ describe('HistoryScreen', () => {
     )
 
     expect(
-      await screen.findByText(`${formatSignedAmount(500, 'EUR')} over 3M`),
+      await screen.findByText(`${formatSignedAmount(500, 'EUR')} over 1M`),
     ).toBeInTheDocument()
     expect(
-      screen.queryByText(`${formatSignedAmount(200, 'EUR')} over 3M`),
+      screen.queryByText(`${formatSignedAmount(200, 'EUR')} over 1M`),
     ).not.toBeInTheDocument()
   })
 

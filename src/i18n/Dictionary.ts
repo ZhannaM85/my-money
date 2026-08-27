@@ -164,6 +164,13 @@ export interface Dictionary {
     overRange: (range: HistoryRange) => string
     sinceDate: (date: string) => string
     holdingsOn: (date: string) => string
+    rangeWeek: string
+    rangeMonth: string
+    rangeYear: string
+    rangeAll: string
+    rangeCustom: string
+    rangeFrom: string
+    rangeTo: string
   }
   allocation: {
     title: string

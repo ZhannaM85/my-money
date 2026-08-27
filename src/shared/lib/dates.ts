@@ -4,14 +4,28 @@ export function addDaysIso(isoDate: string, days: number): string {
   return date.toISOString().slice(0, 10)
 }
 
-export type HistoryRange = '1M' | '3M' | '6M' | '1Y' | 'All'
+/** Chart / History window presets (#126). */
+export type HistoryRange = '1W' | '1M' | '1Y' | 'All' | 'Custom'
 
-export const HISTORY_RANGES: HistoryRange[] = ['1M', '3M', '6M', '1Y', 'All']
+export const HISTORY_RANGES: HistoryRange[] = [
+  '1W',
+  '1M',
+  '1Y',
+  'All',
+  'Custom',
+]
 
-const RANGE_DAYS: Record<Exclude<HistoryRange, 'All'>, number> = {
+/** Zoom in/out ladder — Custom is pick-only (#126). */
+export const ZOOM_HISTORY_RANGES: Exclude<HistoryRange, 'Custom'>[] = [
+  '1W',
+  '1M',
+  '1Y',
+  'All',
+]
+
+const RANGE_DAYS: Record<Exclude<HistoryRange, 'All' | 'Custom'>, number> = {
+  '1W': 7,
   '1M': 30,
-  '3M': 90,
-  '6M': 180,
   '1Y': 365,
 }
 
@@ -20,45 +34,55 @@ export function stepHistoryRange(
   current: HistoryRange,
   direction: 'in' | 'out',
 ): HistoryRange {
-  const index = HISTORY_RANGES.indexOf(current)
+  if (current === 'Custom') return current
+  const index = ZOOM_HISTORY_RANGES.indexOf(current)
   if (index < 0) return current
   if (direction === 'in') {
-    return HISTORY_RANGES[Math.max(0, index - 1)]
+    return ZOOM_HISTORY_RANGES[Math.max(0, index - 1)]!
   }
-  return HISTORY_RANGES[Math.min(HISTORY_RANGES.length - 1, index + 1)]
+  return ZOOM_HISTORY_RANGES[
+    Math.min(ZOOM_HISTORY_RANGES.length - 1, index + 1)
+  ]!
 }
 
 export function rangeStartIso(
   range: HistoryRange,
-  today: string,
+  end: string,
   earliest?: string,
+  customStart?: string,
 ): string {
-  if (range === 'All') return earliest ?? today
-  const start = unclampedRangeStartIso(range, today)
+  if (range === 'Custom') {
+    const start = customStart ?? earliest ?? end
+    if (earliest && start < earliest) return earliest
+    if (start > end) return end
+    return start
+  }
+  if (range === 'All') return earliest ?? end
+  const start = unclampedRangeStartIso(range, end)
   if (earliest && start < earliest) return earliest
   return start
 }
 
-/** Range start before clamping to the first snapshot (All is unused). */
+/** Range start before clamping to the first snapshot (All/Custom unused). */
 export function unclampedRangeStartIso(
   range: HistoryRange,
-  today: string,
+  end: string,
 ): string {
-  if (range === 'All') return today
-  return addDaysIso(today, -RANGE_DAYS[range])
+  if (range === 'All' || range === 'Custom') return end
+  return addDaysIso(end, -RANGE_DAYS[range])
 }
 
 export function isRangeClampedToEarliest(
   range: HistoryRange,
-  today: string,
+  end: string,
   earliest: string,
 ): boolean {
-  if (range === 'All') return false
-  return unclampedRangeStartIso(range, today) < earliest
+  if (range === 'All' || range === 'Custom') return false
+  return unclampedRangeStartIso(range, end) < earliest
 }
 
 export function historyRangeDayCount(range: HistoryRange): number | null {
-  if (range === 'All') return null
+  if (range === 'All' || range === 'Custom') return null
   return RANGE_DAYS[range]
 }
 
@@ -76,7 +100,7 @@ export function shiftHistoryRangeEnd(
   today: string,
   earliest: string,
 ): string {
-  if (range === 'All') return today
+  if (range === 'All' || range === 'Custom') return today
   const step = historyPanStepDays(range)
   const delta = direction === 'earlier' ? -step : step
   let next = addDaysIso(rangeEnd, delta)
@@ -90,7 +114,7 @@ export function canPanHistoryEarlier(
   range: HistoryRange,
   earliest: string,
 ): boolean {
-  if (range === 'All') return false
+  if (range === 'All' || range === 'Custom') return false
   return rangeEnd > earliest
 }
 
@@ -99,8 +123,19 @@ export function canPanHistoryLater(
   range: HistoryRange,
   today: string,
 ): boolean {
-  if (range === 'All') return false
+  if (range === 'All' || range === 'Custom') return false
   return rangeEnd < today
+}
+
+export function canZoomHistoryIn(range: HistoryRange): boolean {
+  if (range === 'Custom') return false
+  return ZOOM_HISTORY_RANGES.indexOf(range) > 0
+}
+
+export function canZoomHistoryOut(range: HistoryRange): boolean {
+  if (range === 'Custom') return false
+  const index = ZOOM_HISTORY_RANGES.indexOf(range)
+  return index >= 0 && index < ZOOM_HISTORY_RANGES.length - 1
 }
 
 export function monthStartIso(isoDate: string): string {
