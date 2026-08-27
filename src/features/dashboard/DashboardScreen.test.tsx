@@ -661,6 +661,65 @@ describe('DashboardScreen', () => {
     expect(total).toHaveTextContent(formatAmount(500, 'EUR'))
   })
 
+  it('shows a Today button next to As of that jumps back to today (#125)', async () => {
+    const user = userEvent.setup()
+    const today = todayIsoDate()
+    const past = addDaysIso(today, -20)
+    const now = `${today}T00:00:00.000Z`
+    await useAssetStore.getState().saveAsset(
+      {
+        id: 'a1',
+        name: 'Cash',
+        assetClass: 'money',
+        type: 'cash',
+        currency: 'EUR',
+        trackingStatus: 'included',
+        valuationMethod: 'account_balance',
+        updateFrequency: 'weekly',
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        assetId: 'a1',
+        date: past,
+        amount: 500,
+        currency: 'EUR',
+      },
+    )
+    await useAssetStore.getState().saveSnapshots([
+      {
+        assetId: 'a1',
+        date: today,
+        amount: 900,
+        currency: 'EUR',
+      },
+    ])
+    render(
+      <MemoryRouter>
+        <DashboardScreen />
+      </MemoryRouter>,
+    )
+    expect(await screen.findByText('Net worth')).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'Today' })).not.toBeInTheDocument()
+    const asOf = screen.getByLabelText('As of')
+    asOf.focus()
+    Object.getOwnPropertyDescriptor(
+      window.HTMLInputElement.prototype,
+      'value',
+    )?.set?.call(asOf, past)
+    asOf.dispatchEvent(new Event('input', { bubbles: true }))
+    asOf.dispatchEvent(new Event('change', { bubbles: true }))
+    expect(
+      await screen.findByRole('button', { name: `Holdings on ${past}` }),
+    ).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Today' }))
+    expect(
+      await screen.findByRole('button', { name: 'Holdings' }),
+    ).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'Today' })).not.toBeInTheDocument()
+    expect(screen.getByLabelText('As of')).toHaveValue(today)
+  })
+
   it('shows earlier/later arrow controls to pan the chart window (#111, #120)', async () => {
     const today = todayIsoDate()
     const past = addDaysIso(today, -60)

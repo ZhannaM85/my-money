@@ -43,6 +43,7 @@ export interface Dictionary {
     panLater: string
     asOfDate: string
     asOfDateInvalid: string
+    jumpToToday: string
     positionsTotal: string
     emptyTitle: string
     emptyDescription: string

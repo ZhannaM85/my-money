@@ -105,6 +105,18 @@ test('capture Dashboard Positions total for As of (#124)', async ({ page }) => {
   })
 })
 
+test('capture Dashboard As of Today button (#125)', async ({ page }) => {
+  await seedValidationFixture(page, { currencyDisplayMode: 'base' })
+  await page.goto('/')
+  await expect(page.getByRole('heading', { name: 'Dashboard' })).toBeVisible()
+  await page.getByLabel('As of').fill('2026-08-17')
+  await expect(page.getByRole('button', { name: 'Today' })).toBeVisible()
+  await page.screenshot({
+    path: join(outDir, '125-dashboard-asof-today.png'),
+    fullPage: true,
+  })
+})
+
 test('capture duplicate soft warning orange (#119)', async ({ page }) => {
   await seedValidationFixture(page)
   await page.goto('/assets/eur-cash')

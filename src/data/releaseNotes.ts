@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 132,
+    issue: 125,
+    date: '2026-08-27T15:40:00+03:00',
+    en: 'Dashboard As of has a Today button to jump back from a past day in one tap.',
+    ru: 'У «На дату» на Сводке есть кнопка «Сегодня», чтобы одним нажатием вернуться с прошедшего дня.',
+  },
+  {
     version: 131,
     issue: 124,
     date: '2026-08-27T15:30:00+03:00',

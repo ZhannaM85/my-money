@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 125,
+    title: {
+      en: 'Add a Today button next to Dashboard As of',
+      ru: 'Кнопка «Сегодня» рядом с «На дату» на Сводке',
+    },
+    en: 'After picking a past As of day there was no one-tap return to today. A Turtle-style Today button now sits beside As of and clears the selection.',
+    ru: 'После выбора прошедшей даты «На дату» не было быстрого возврата к сегодня. Кнопка «Сегодня» (как в Turtle) рядом с полем сбрасывает выбор.',
+  },
+  {
     issue: 124,
     title: {
       en: 'Show Positions total for the selected As of date',

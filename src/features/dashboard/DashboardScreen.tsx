@@ -598,27 +598,43 @@ export function DashboardScreen() {
           {convertedHoldingsToday.length > 0 &&
             !(isOriginal && activeCurrencyFilter === 'all') && (
             <div className="flex flex-col gap-2">
-              <DateField
-                label={t.dashboard.asOfDate}
-                value={selectedChartDate ?? today}
-                min={earliest}
-                max={today}
-                onChange={(event) => {
-                  const next = event.target.value
-                  if (!next || next > today) {
-                    setAsOfError(t.dashboard.asOfDateInvalid)
-                    return
-                  }
-                  setAsOfError(undefined)
-                  if (next >= today) {
-                    setSelectedChartDate(null)
-                    return
-                  }
-                  setSelectedChartDate(next)
-                  setHoldingsOpen(true)
-                }}
-                error={asOfError}
-              />
+              <div className="flex items-end gap-2">
+                <DateField
+                  label={t.dashboard.asOfDate}
+                  value={selectedChartDate ?? today}
+                  min={earliest}
+                  max={today}
+                  onChange={(event) => {
+                    const next = event.target.value
+                    if (!next || next > today) {
+                      setAsOfError(t.dashboard.asOfDateInvalid)
+                      return
+                    }
+                    setAsOfError(undefined)
+                    if (next >= today) {
+                      setSelectedChartDate(null)
+                      return
+                    }
+                    setSelectedChartDate(next)
+                    setHoldingsOpen(true)
+                  }}
+                  error={asOfError}
+                />
+                {selectedChartDate !== null && selectedChartDate < today ? (
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="xl"
+                    className="mb-0 shrink-0"
+                    onClick={() => {
+                      setAsOfError(undefined)
+                      setSelectedChartDate(null)
+                    }}
+                  >
+                    {t.dashboard.jumpToToday}
+                  </Button>
+                ) : null}
+              </div>
               <button
                 type="button"
                 className="flex items-center justify-between gap-2 text-left"

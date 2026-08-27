@@ -38,6 +38,7 @@ export const ru: Dictionary = {
     panLater: 'Позже',
     asOfDate: 'На дату',
     asOfDateInvalid: 'Выберите сегодня или прошедшую дату',
+    jumpToToday: 'Сегодня',
     positionsTotal: 'Итого',
     emptyTitle: 'Пока нет активов',
     emptyDescription:
