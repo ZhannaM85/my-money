@@ -26,6 +26,7 @@ _After the four web flows feel good. Android wraps this app; iOS does not._
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
 | [#121](https://github.com/ZhannaM85/my-money/issues/121) | 🔲 Open | Allocation share percentages should convert to one base, not compare raw native amounts | Follow-up to #108: keep native row amounts; convert behind the scenes for donut / % (e.g. $8,500 is not 1% of 1.6M ₽). |
+| [#122](https://github.com/ZhannaM85/my-money/issues/122) | 🔲 Open | Allocation Class and Currency rows should expand to show assets | Tap a Class or Currency slice to list the assets inside it. Type tab not requested. |
 
 ---
 
