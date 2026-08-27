@@ -21,14 +21,6 @@ _After the four web flows feel good. Android wraps this app; iOS does not._
 
 ---
 
-## Tier 14 — Live feedback (2026-08-27)
-
-| # | Status | Issue | Notes |
-|---|--------|-------|-------|
-| [#123](https://github.com/ZhannaM85/my-money/issues/123) | 🔍 Pending validation | Allocation Type rows should expand to show assets | Follow-up to #122: same expand-to-assets on Type (Cash · USD, etc.). |
-
----
-
 ## Explicitly not filed
 
 Out of scope for the MVP (`PROJECT_BRIEF.md` §20) — do not implement from chat:
