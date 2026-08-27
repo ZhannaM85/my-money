@@ -131,3 +131,9 @@ Closed live-feedback rows from Tier 8 onward. Open / pending items stay in [`../
 | [#112](https://github.com/ZhannaM85/my-money/issues/112) | ✅ Done | Dashboard Positions should follow the selected chart day | Chart selection drives Positions and As of. Validated on-device 2026-08-27. |
 | [#116](https://github.com/ZhannaM85/my-money/issues/116) | ✅ Done | Pinch zoom in/out on every chart | Follow-up to #54/#114: pinch on all line charts; tooltip dismiss so pinch can zoom. Validated on-device 2026-08-27. |
 | [#108](https://github.com/ZhannaM85/my-money/issues/108) | ✅ Done | Allocation ignores All / Original and shows everything in EUR | Native Class/Type rows per currency (e.g. Money · RUB). Validated on-device 2026-08-27. Share % from converted base → #121. |
+
+## Tier 14 — Live feedback (2026-08-27)
+
+| # | Status | Issue | Notes |
+|---|--------|-------|-------|
+| [#121](https://github.com/ZhannaM85/my-money/issues/121) | ✅ Done | Allocation share percentages should convert to one base, not compare raw native amounts | Native row amounts; All-mode share % uses hidden RUB (not leftover Settings EUR). Validated on-device 2026-08-27. |
