@@ -149,6 +149,7 @@ Closed live-feedback rows from Tier 8 onward. Open / pending items stay in [`../
 |---|--------|-------|-------|
 | [#127](https://github.com/ZhannaM85/my-money/issues/127) | ✅ Done | No automatic GEL→RUB conversion despite NBG rates | NBG already used for RUB via GEL (#47); GEL pickers from #107; GEL→RUB = invert of RUB row (quantity applied). Validated on-device 2026-08-29. |
 | [#128](https://github.com/ZhannaM85/my-money/issues/128) | ✅ Done | Chart tooltip closes when scrolling its holdings list | Page scroll should still dismiss (#77); inner tooltip scroll should not. Follow-ups #130–#132. Validated on-device 2026-08-29. |
+| [#129](https://github.com/ZhannaM85/my-money/issues/129) | ✅ Done | Show original amount in muted text under converted values on asset details | Dashboard Positions already show native under converted; asset history does not. Validated on-device 2026-08-29. |
 | [#130](https://github.com/ZhannaM85/my-money/issues/130) | ❌ Won't fix | Chart tooltip does not close when tapping away | Canceled 2026-08-29; overlay dropped in favor of #133. |
 | [#131](https://github.com/ZhannaM85/my-money/issues/131) | ❌ Won't fix | Chart tooltip is hidden behind the tab bar | Canceled 2026-08-29; overlay dropped in favor of #133. |
 | [#132](https://github.com/ZhannaM85/my-money/issues/132) | ❌ Won't fix | Chart tooltip flickers open then closed on tap | Canceled 2026-08-29; overlay dropped in favor of #133. |

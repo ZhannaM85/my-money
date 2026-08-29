@@ -25,7 +25,6 @@ _After the four web flows feel good. Android wraps this app; iOS does not._
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
-| [#129](https://github.com/ZhannaM85/my-money/issues/129) | 🔍 Pending validation | Show original amount in muted text under converted values on asset details | Dashboard Positions already show native under converted; asset history does not. |
 | [#133](https://github.com/ZhannaM85/my-money/issues/133) | 🔍 Pending validation | Remove chart holdings tooltip; it duplicates the list above the graph | Supersedes #130–#132. Tap a day still drives Positions / As of. |
 
 ---
