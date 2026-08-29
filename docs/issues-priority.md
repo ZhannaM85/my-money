@@ -26,7 +26,7 @@ _After the four web flows feel good. Android wraps this app; iOS does not._
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
 | [#133](https://github.com/ZhannaM85/my-money/issues/133) | 🔍 Pending validation | Remove chart holdings tooltip; it duplicates the list above the graph | **Dashboard only.** History and asset details keep the popover. Supersedes #130–#132. |
-| [#134](https://github.com/ZhannaM85/my-money/issues/134) | 🔲 Open | Move Dashboard Positions below the net-worth chart | List currently sits above the graph and can push it off-screen. As of stays with the chart. |
+| [#134](https://github.com/ZhannaM85/my-money/issues/134) | 🔍 Pending validation | Move Dashboard Positions below the net-worth chart | List currently sits above the graph and can push it off-screen. As of stays with the chart. |
 
 ---
 

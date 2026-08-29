@@ -780,4 +780,44 @@ describe('DashboardScreen', () => {
     expect(screen.getByRole('button', { name: 'Earlier dates' })).toBeDisabled()
     expect(screen.getByRole('button', { name: 'Later dates' })).toBeDisabled()
   })
+
+  it('renders Positions below the net-worth chart (#134)', async () => {
+    const today = todayIsoDate()
+    const now = `${today}T00:00:00.000Z`
+    await useAssetStore.getState().saveAsset(
+      {
+        id: 'a1',
+        name: 'Cash',
+        assetClass: 'money',
+        type: 'cash',
+        currency: 'EUR',
+        trackingStatus: 'included',
+        valuationMethod: 'account_balance',
+        updateFrequency: 'weekly',
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        assetId: 'a1',
+        date: today,
+        amount: 1000,
+        currency: 'EUR',
+      },
+    )
+    render(
+      <MemoryRouter>
+        <DashboardScreen />
+      </MemoryRouter>,
+    )
+    const chart = await screen.findByTestId('net-worth-chart')
+    const positions = screen.getByTestId('dashboard-positions')
+    expect(
+      chart.compareDocumentPosition(positions) &
+        Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy()
+    const asOf = screen.getByLabelText('As of')
+    expect(
+      asOf.compareDocumentPosition(chart) & Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy()
+  })
 })

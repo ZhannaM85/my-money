@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 134,
+    title: {
+      en: 'Move Dashboard Positions below the net-worth chart',
+      ru: 'Перенести Позиции на Сводке под график',
+    },
+    en: 'Positions sat between As of and the chart, so a long list hid the graph. The list (heading, total, cards) now follows the chart and zoom strip; As of stays above.',
+    ru: 'Позиции стояли между «На дату» и графиком, длинный список прятал график. Список (заголовок, итого, карточки) теперь под графиком и полосой масштаба; «На дату» остаётся сверху.',
+  },
+  {
     issue: 133,
     title: {
       en: 'Remove chart holdings tooltip; it duplicates the list above the graph',

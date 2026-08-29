@@ -620,134 +620,42 @@ export function DashboardScreen() {
           )}
           {convertedHoldingsToday.length > 0 &&
             !(isOriginal && activeCurrencyFilter === 'all') && (
-            <div className="flex flex-col gap-2">
-              <div className="flex items-end gap-2">
-                <DateField
-                  label={t.dashboard.asOfDate}
-                  value={selectedChartDate ?? today}
-                  min={earliest}
-                  max={today}
-                  onChange={(event) => {
-                    const next = event.target.value
-                    if (!next || next > today) {
-                      setAsOfError(t.dashboard.asOfDateInvalid)
-                      return
-                    }
+            <div className="flex items-end gap-2">
+              <DateField
+                label={t.dashboard.asOfDate}
+                value={selectedChartDate ?? today}
+                min={earliest}
+                max={today}
+                onChange={(event) => {
+                  const next = event.target.value
+                  if (!next || next > today) {
+                    setAsOfError(t.dashboard.asOfDateInvalid)
+                    return
+                  }
+                  setAsOfError(undefined)
+                  if (next >= today) {
+                    setSelectedChartDate(null)
+                    return
+                  }
+                  setSelectedChartDate(next)
+                  setHoldingsOpen(true)
+                }}
+                error={asOfError}
+              />
+              {selectedChartDate !== null && selectedChartDate < today ? (
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="xl"
+                  className="mb-0 shrink-0"
+                  onClick={() => {
                     setAsOfError(undefined)
-                    if (next >= today) {
-                      setSelectedChartDate(null)
-                      return
-                    }
-                    setSelectedChartDate(next)
-                    setHoldingsOpen(true)
+                    setSelectedChartDate(null)
                   }}
-                  error={asOfError}
-                />
-                {selectedChartDate !== null && selectedChartDate < today ? (
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="xl"
-                    className="mb-0 shrink-0"
-                    onClick={() => {
-                      setAsOfError(undefined)
-                      setSelectedChartDate(null)
-                    }}
-                  >
-                    {t.dashboard.jumpToToday}
-                  </Button>
-                ) : null}
-              </div>
-              <button
-                type="button"
-                className="flex items-center justify-between gap-2 text-left"
-                aria-expanded={holdingsOpen}
-                aria-label={
-                  selectedChartPoint
-                    ? t.history.holdingsOn(selectedChartPoint.date)
-                    : t.dashboard.holdings
-                }
-                onClick={() => setHoldingsOpen((open) => !open)}
-              >
-                <span className="text-sm text-muted-foreground">
-                  {selectedChartPoint
-                    ? t.history.holdingsOn(selectedChartPoint.date)
-                    : t.dashboard.holdings}
-                </span>
-                <span className="flex items-center gap-1 text-sm text-muted-foreground" aria-hidden>
-                  {convertedHoldingsToday.length}
-                  <ChevronDown
-                    className={cn(
-                      'size-4 transition-transform',
-                      holdingsOpen && 'rotate-180',
-                    )}
-                    aria-hidden
-                  />
-                </span>
-              </button>
-              <p
-                className="flex items-baseline justify-between gap-3 text-sm"
-                data-testid="positions-total"
-              >
-                <span className="text-muted-foreground">
-                  {t.dashboard.positionsTotal}
-                </span>
-                <span className="tabular-nums text-base font-semibold text-foreground">
-                  {formatAmount(
-                    displayHeadlineTotal,
-                    isOriginal ? activeCurrencyFilter : baseCurrency,
-                    locale,
-                  )}
-                </span>
-              </p>
-              {holdingsOpen && (
-                <ul className="flex flex-col gap-2">
-                  {convertedHoldingsToday.map((row) => (
-                    <li
-                      key={row.assetId}
-                      className="flex items-center justify-between gap-3 rounded-xl bg-card px-4 py-3 ring-1 ring-foreground/10"
-                    >
-                      <span className="flex min-w-0 flex-col">
-                        <span className="truncate text-sm font-medium">
-                          {row.name}
-                        </span>
-                        {!isOriginal && (
-                          <span className="text-xs text-muted-foreground">
-                            {row.conversionAvailable
-                              ? formatAmount(
-                                  row.nativeAmount,
-                                  row.currency,
-                                  locale,
-                                )
-                              : t.dashboard.conversionUnavailable}
-                          </span>
-                        )}
-                      </span>
-                      <span className="shrink-0 text-right">
-                        {isOriginal ||
-                        !row.conversionAvailable ||
-                        row.convertedAmount === null ? (
-                          <span className="block tabular-nums text-sm">
-                            {formatAmount(
-                              row.nativeAmount,
-                              row.currency,
-                              locale,
-                            )}
-                          </span>
-                        ) : (
-                          <span className="block tabular-nums text-sm font-medium">
-                            {formatAmount(
-                              row.convertedAmount,
-                              baseCurrency,
-                              locale,
-                            )}
-                          </span>
-                        )}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              )}
+                >
+                  {t.dashboard.jumpToToday}
+                </Button>
+              ) : null}
             </div>
           )}
           {isOriginal && activeCurrencyFilter === 'all' ? (
@@ -887,6 +795,101 @@ export function DashboardScreen() {
                 </div>
               </div>
             </>
+          )}
+          {convertedHoldingsToday.length > 0 &&
+            !(isOriginal && activeCurrencyFilter === 'all') && (
+            <div className="flex flex-col gap-2" data-testid="dashboard-positions">
+              <button
+                type="button"
+                className="flex items-center justify-between gap-2 text-left"
+                aria-expanded={holdingsOpen}
+                aria-label={
+                  selectedChartPoint
+                    ? t.history.holdingsOn(selectedChartPoint.date)
+                    : t.dashboard.holdings
+                }
+                onClick={() => setHoldingsOpen((open) => !open)}
+              >
+                <span className="text-sm text-muted-foreground">
+                  {selectedChartPoint
+                    ? t.history.holdingsOn(selectedChartPoint.date)
+                    : t.dashboard.holdings}
+                </span>
+                <span className="flex items-center gap-1 text-sm text-muted-foreground" aria-hidden>
+                  {convertedHoldingsToday.length}
+                  <ChevronDown
+                    className={cn(
+                      'size-4 transition-transform',
+                      holdingsOpen && 'rotate-180',
+                    )}
+                    aria-hidden
+                  />
+                </span>
+              </button>
+              <p
+                className="flex items-baseline justify-between gap-3 text-sm"
+                data-testid="positions-total"
+              >
+                <span className="text-muted-foreground">
+                  {t.dashboard.positionsTotal}
+                </span>
+                <span className="tabular-nums text-base font-semibold text-foreground">
+                  {formatAmount(
+                    displayHeadlineTotal,
+                    isOriginal ? activeCurrencyFilter : baseCurrency,
+                    locale,
+                  )}
+                </span>
+              </p>
+              {holdingsOpen && (
+                <ul className="flex flex-col gap-2">
+                  {convertedHoldingsToday.map((row) => (
+                    <li
+                      key={row.assetId}
+                      className="flex items-center justify-between gap-3 rounded-xl bg-card px-4 py-3 ring-1 ring-foreground/10"
+                    >
+                      <span className="flex min-w-0 flex-col">
+                        <span className="truncate text-sm font-medium">
+                          {row.name}
+                        </span>
+                        {!isOriginal && (
+                          <span className="text-xs text-muted-foreground">
+                            {row.conversionAvailable
+                              ? formatAmount(
+                                  row.nativeAmount,
+                                  row.currency,
+                                  locale,
+                                )
+                              : t.dashboard.conversionUnavailable}
+                          </span>
+                        )}
+                      </span>
+                      <span className="shrink-0 text-right">
+                        {isOriginal ||
+                        !row.conversionAvailable ||
+                        row.convertedAmount === null ? (
+                          <span className="block tabular-nums text-sm">
+                            {formatAmount(
+                              row.nativeAmount,
+                              row.currency,
+                              locale,
+                            )}
+                          </span>
+                        ) : (
+                          <span className="block tabular-nums text-sm font-medium">
+                            {formatAmount(
+                              row.convertedAmount,
+                              baseCurrency,
+                              locale,
+                            )}
+                          </span>
+                        )}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
           )}
           <Button asChild variant="outline">
             <Link to="/allocation">{t.dashboard.allocation}</Link>

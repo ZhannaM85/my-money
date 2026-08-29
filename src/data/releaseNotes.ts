@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 142,
+    issue: 134,
+    date: '2026-08-29T13:15:00+03:00',
+    en: 'Positions on Dashboard now sit under the chart so the graph stays on screen.',
+    ru: 'На Сводке Позиции теперь под графиком, чтобы график оставался на экране.',
+  },
+  {
     version: 141,
     issue: 133,
     date: '2026-08-29T13:05:00+03:00',
