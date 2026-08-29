@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 141,
+    issue: 133,
+    date: '2026-08-29T13:05:00+03:00',
+    en: 'Holdings popover is hidden only on Dashboard. History and asset details still show it when you tap a day.',
+    ru: 'Карточка с активами скрыта только на Сводке. В Истории и в карточке актива она по-прежнему открывается по нажатию на день.',
+  },
+  {
     version: 140,
     issue: 133,
     date: '2026-08-29T12:55:00+03:00',

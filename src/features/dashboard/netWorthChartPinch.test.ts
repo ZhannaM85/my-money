@@ -22,3 +22,22 @@ describe('NetWorthChart pinch wiring (#116)', () => {
     expect(missing).toEqual([])
   })
 })
+
+describe('NetWorthChart holdings tooltip (#133)', () => {
+  it('Dashboard is the only screen that opts out of the holdings popover', () => {
+    // #128 / #130 / #132 were tooltip overlay fixes; superseded by Dashboard-only hide.
+    const optedOut: string[] = []
+    const missingDashboardOptOut: string[] = []
+    for (const [path, source] of Object.entries(screenSources)) {
+      if (!source.includes('<NetWorthChart')) continue
+      const hidesTooltip = source.includes('holdingsTooltip={false}')
+      if (path.includes('DashboardScreen')) {
+        if (!hidesTooltip) missingDashboardOptOut.push(path)
+      } else if (hidesTooltip) {
+        optedOut.push(path)
+      }
+    }
+    expect(missingDashboardOptOut).toEqual([])
+    expect(optedOut).toEqual([])
+  })
+})

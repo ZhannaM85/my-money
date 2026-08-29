@@ -779,6 +779,7 @@ export function DashboardScreen() {
                 currency={
                   isOriginal ? activeCurrencyFilter : baseCurrency
                 }
+                holdingsTooltip={false}
                 onZoomIn={() => {
                   setSelectedChartDate(null)
                   setAsOfError(undefined)

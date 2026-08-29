@@ -16,8 +16,8 @@ export const issueRcas: IssueRca[] = [
       en: 'Remove chart holdings tooltip; it duplicates the list above the graph',
       ru: 'Убрать подсказку графика: она дублирует список над графиком',
     },
-    en: 'The overlay repeated Positions (and history / asset lists) and caused jump, stacking, and flicker. The popover is gone; tapping a day still selects it via a hidden Recharts tooltip for iOS (#112). Pinch no longer needs dismiss-on-scroll.',
-    ru: 'Оверлей повторял Позиции (и списки в Истории / на активе) и давал прыжки, слой под таббаром и мигание. Карточки нет; тап по дню по-прежнему выбирает его скрытым tooltip Recharts для iOS (#112). Для щипка больше не нужен dismiss-on-scroll.',
+    en: 'The overlay repeated Positions on Dashboard. The popover is gone there; tapping a day still selects it via a hidden Recharts tooltip (#112). History and asset details keep the holdings popover — they have no Positions list above the graph.',
+    ru: 'Оверлей дублировал Позиции на Сводке. Там карточки нет; тап по дню по-прежнему выбирает его скрытым tooltip Recharts (#112). В Истории и в карточке актива подсказка с активами остаётся — над графиком нет списка Позиций.',
   },
   {
     issue: 132,

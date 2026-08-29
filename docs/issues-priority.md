@@ -25,7 +25,7 @@ _After the four web flows feel good. Android wraps this app; iOS does not._
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
-| [#133](https://github.com/ZhannaM85/my-money/issues/133) | 🔍 Pending validation | Remove chart holdings tooltip; it duplicates the list above the graph | Supersedes #130–#132. Tap a day still drives Positions / As of. |
+| [#133](https://github.com/ZhannaM85/my-money/issues/133) | 🔍 Pending validation | Remove chart holdings tooltip; it duplicates the list above the graph | **Dashboard only.** History and asset details keep the popover. Supersedes #130–#132. |
 
 ---
 

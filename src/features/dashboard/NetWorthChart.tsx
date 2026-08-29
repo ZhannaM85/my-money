@@ -1,4 +1,9 @@
-import { useEffect, useRef } from 'react'
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  type TouchEvent as ReactTouchEvent,
+} from 'react'
 import {
   CartesianGrid,
   Line,
@@ -10,6 +15,7 @@ import {
 } from 'recharts'
 import type { HoldingConversion } from '@/domain/netWorth'
 import {
+  formatAmount,
   formatChartAxisDate,
   formatCompactNumber,
   chartAxisScale,
@@ -18,8 +24,10 @@ import {
 import { useChartPan } from '@/shared/hooks/useChartPan'
 import { usePinchZoom } from '@/shared/hooks/usePinchZoom'
 import { useLocale, useTranslation } from '@/i18n'
+import { HoldingBreakdownList } from './HoldingBreakdownList'
 
 export const NET_WORTH_CHART_TESTID = 'net-worth-chart'
+export const CHART_TOOLTIP_SCROLL_CLASS = 'chart-tooltip-scroll'
 
 export interface NetWorthChartPoint {
   date: string
@@ -54,6 +62,66 @@ function ChartDaySelect({
   return null
 }
 
+export function NetWorthChartTooltip({
+  active,
+  payload,
+  currency,
+  onSelectDate,
+}: {
+  active?: boolean
+  payload?: ReadonlyArray<{ payload?: NetWorthChartPoint }>
+  currency: string
+  onSelectDate?: (date: string | null) => void
+}) {
+  const t = useTranslation()
+  const locale = useLocale()
+
+  /** Single-finger scroll stays in the tooltip; two-finger pinch must reach the chart (#116). */
+  const stopSingleFinger = useCallback((event: ReactTouchEvent) => {
+    if (event.touches.length < 2) event.stopPropagation()
+  }, [])
+
+  const point =
+    active && payload?.[0]?.payload !== undefined
+      ? payload[0].payload
+      : undefined
+
+  return (
+    <>
+      <ChartDaySelect
+        active={active}
+        payload={payload}
+        onSelectDate={onSelectDate}
+      />
+      {point ? (
+        <div
+          data-testid="chart-holdings-tooltip"
+          className={`${CHART_TOOLTIP_SCROLL_CLASS} max-h-[min(20rem,calc(100dvh-8rem-env(safe-area-inset-bottom)))] max-w-64 overflow-y-scroll overscroll-contain rounded-lg border border-border bg-card p-3 text-foreground shadow-md touch-pan-y`}
+          onPointerDown={(event) => event.stopPropagation()}
+          onTouchStart={stopSingleFinger}
+          onTouchMove={stopSingleFinger}
+          onWheel={(event) => event.stopPropagation()}
+        >
+          <p className="text-xs font-medium">{point.date}</p>
+          {point.holdings && point.holdings.length > 0 && (
+            <div className="mt-2">
+              <HoldingBreakdownList
+                holdings={point.holdings}
+                baseCurrency={currency}
+                compact
+              />
+            </div>
+          )}
+          <p className="mt-2 text-xs font-medium">
+            {t.dashboard.netWorth}:{' '}
+            {formatAmount(point.total, currency, locale)}
+          </p>
+        </div>
+      ) : null}
+    </>
+  )
+}
+
 function selectDateFromChartState(
   state: unknown,
   onSelectDate: ((date: string | null) => void) | undefined,
@@ -69,15 +137,16 @@ function selectDateFromChartState(
 
 export function NetWorthChart({
   points,
+  currency,
   seriesName,
   onZoomIn,
   onZoomOut,
   onSelectDate,
   onPanEarlier,
   onPanLater,
+  holdingsTooltip = true,
 }: {
   points: readonly NetWorthChartPoint[]
-  /** Kept so call sites stay unchanged; totals are already in `points`. */
   currency: string
   seriesName?: string
   onZoomIn: () => void
@@ -88,6 +157,11 @@ export function NetWorthChart({
   onPanEarlier?: () => void
   /** Horizontal drag left → later history (#111). */
   onPanLater?: () => void
+  /**
+   * Holdings popover on tap. Dashboard sets false — Positions above the graph
+   * already shows the same list (#133). History and asset details keep the default.
+   */
+  holdingsTooltip?: boolean
 }) {
   const t = useTranslation()
   const locale = useLocale()
@@ -151,11 +225,23 @@ export function NetWorthChart({
             axisLine={false}
             tickLine={false}
           />
-          <Tooltip
-            content={<ChartDaySelect onSelectDate={onSelectDate} />}
-            cursor={false}
-            wrapperStyle={{ display: 'none' }}
-          />
+          {holdingsTooltip ? (
+            <Tooltip
+              content={
+                <NetWorthChartTooltip
+                  currency={currency}
+                  onSelectDate={onSelectDate}
+                />
+              }
+              wrapperStyle={{ zIndex: 50, pointerEvents: 'auto' }}
+            />
+          ) : (
+            <Tooltip
+              content={<ChartDaySelect onSelectDate={onSelectDate} />}
+              cursor={false}
+              wrapperStyle={{ display: 'none' }}
+            />
+          )}
           <Line
             type="monotone"
             dataKey="total"
