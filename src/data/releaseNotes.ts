@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 152,
+    issue: 139,
+    date: '2026-08-29T18:55:00+03:00',
+    en: 'On Comparison, asset names stay put. Only the date columns scroll sideways — the page does not.',
+    ru: 'В сравнении имена активов остаются на месте. Вбок едут только столбцы дат — страница не двигается.',
+  },
+  {
     version: 151,
     issue: 142,
     date: '2026-08-29T18:50:00+03:00',

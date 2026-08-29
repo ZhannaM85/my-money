@@ -43,8 +43,8 @@ export const issueRcas: IssueRca[] = [
       en: 'Comparison: only date columns scroll horizontally; name column stays fixed',
       ru: 'Сравнение: горизонтально скроллятся только столбцы дат; имена зафиксированы',
     },
-    en: 'Four date columns still panned the page on iOS (overflow-x hidden + overflow-y auto becomes a 2D scroller). Main uses overflow-x clip; a 1fr grid cell bounds the table; only that inner box scrolls sideways.',
-    ru: 'Четыре столбца дат на iOS всё ещё двигали страницу (overflow-x hidden + overflow-y auto становится двумерным скроллом). У main overflow-x clip; ячейка сетки 1fr ограничивает таблицу; вбок едет только эта внутренняя область.',
+    en: 'A wide table still panned the iOS page even with overflow clip. Names are outside the scroller; only date columns live in the sideways box. Sticky was not enough.',
+    ru: 'Широкая таблица на iOS всё ещё двигала страницу даже с overflow clip. Имена вне скролла; вбок едут только столбцы дат. Sticky не хватило.',
   },
   {
     issue: 138,

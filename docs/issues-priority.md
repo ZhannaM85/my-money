@@ -25,7 +25,7 @@ _After the four web flows feel good. Android wraps this app; iOS does not._
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
-| [#139](https://github.com/ZhannaM85/my-money/issues/139) | 🔍 Pending validation | Comparison: only date columns scroll horizontally; name column stays fixed | Still panned with 4 columns (`IMG_0908.MP4`). Grid-bounded inner scroller + `overflow-x: clip` on main. Related #138, #84. |
+| [#139](https://github.com/ZhannaM85/my-money/issues/139) | 🔍 Pending validation | Comparison: only date columns scroll horizontally; name column stays fixed | Still panned (`IMG_0910.MP4`). Names outside the scroller; only date columns scroll. Related #138, #84. |
 | [#142](https://github.com/ZhannaM85/my-money/issues/142) | 🔍 Pending validation | Comparison dates disappear on page refresh | `IMG_0909.MP4`. Store is session-only today (#137). Persist on device. |
 
 ---

@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react'
+import { useEffect, useLayoutEffect, useMemo, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { X } from 'lucide-react'
 import { historicalNetWorth } from '@/domain/netWorth'
@@ -19,6 +19,30 @@ export const COMPARISON_NAME_COL_CLASS =
   'w-24 max-w-24 min-w-24 whitespace-normal break-words [overflow-wrap:anywhere]'
 export const COMPARISON_DATE_COL_CLASS =
   'min-w-[8.25rem] w-[8.25rem] max-w-[8.25rem]'
+
+/** Match name-column row heights to date-column rows (#139). */
+function syncComparisonRowHeights(
+  nameTable: HTMLTableElement | null,
+  dateTable: HTMLTableElement | null,
+) {
+  if (!nameTable || !dateTable) return
+  const nameRows = nameTable.querySelectorAll('tr')
+  const dateRows = dateTable.querySelectorAll('tr')
+  const count = Math.min(nameRows.length, dateRows.length)
+  for (let i = 0; i < count; i += 1) {
+    const nameRow = nameRows[i]
+    const dateRow = dateRows[i]
+    if (!nameRow || !dateRow) continue
+    nameRow.style.height = ''
+    dateRow.style.height = ''
+    const height = Math.max(
+      nameRow.getBoundingClientRect().height,
+      dateRow.getBoundingClientRect().height,
+    )
+    nameRow.style.height = `${height}px`
+    dateRow.style.height = `${height}px`
+  }
+}
 
 function ComparisonCell({
   holding,
@@ -122,6 +146,16 @@ export function ComparisonScreen() {
     }
     return byDate
   }, [points])
+  const nameTableRef = useRef<HTMLTableElement>(null)
+  const dateTableRef = useRef<HTMLTableElement>(null)
+
+  useLayoutEffect(() => {
+    const sync = () =>
+      syncComparisonRowHeights(nameTableRef.current, dateTableRef.current)
+    sync()
+    window.addEventListener('resize', sync)
+    return () => window.removeEventListener('resize', sync)
+  }, [dates, locale, rows, totals])
 
   if (!loaded || !settingsLoaded) {
     return <p className="text-sm text-muted-foreground">{t.common.loading}</p>
@@ -147,93 +181,116 @@ export function ComparisonScreen() {
   }
 
   return (
-    <div className="grid w-full min-w-0 grid-cols-[minmax(0,1fr)] gap-6 overflow-x-clip">
+    <div className="flex w-full min-w-0 flex-col gap-6 overflow-x-hidden">
       <PageHeader
         title={t.dashboard.comparisonTitle}
         description={t.dashboard.comparisonDescription}
       />
       <div
-        data-testid="comparison-h-scroll"
-        className="comparison-h-scroll min-w-0 w-full max-w-full overflow-x-auto overflow-y-hidden overscroll-x-contain"
+        className="flex w-full min-w-0"
+        data-testid="comparison-table"
       >
         <table
-          className="w-max table-fixed border-separate border-spacing-0 text-sm"
-          data-testid="comparison-table"
+          ref={nameTableRef}
+          className="w-24 max-w-24 shrink-0 table-fixed border-separate border-spacing-0 text-sm"
         >
-          <colgroup>
-            <col className="w-24" />
-            {dates.map((date) => (
-              <col key={date} className="w-[8.25rem]" />
-            ))}
-          </colgroup>
           <thead>
             <tr>
               <th
                 data-testid="comparison-name-col"
-                className={`sticky left-0 z-10 bg-background py-2 pr-2 text-left font-medium text-muted-foreground ${COMPARISON_NAME_COL_CLASS}`}
+                className={`py-2 pr-2 text-left font-medium text-muted-foreground ${COMPARISON_NAME_COL_CLASS}`}
               >
                 {t.dashboard.holdings}
               </th>
-              {dates.map((date) => (
-                <th
-                  key={date}
-                  className={`px-2 py-2 text-right font-medium text-foreground ${COMPARISON_DATE_COL_CLASS}`}
-                >
-                  <span className="inline-flex items-center justify-end gap-1">
-                    {formatChartAxisDate(date, locale)}
-                    <button
-                      type="button"
-                      className="inline-flex size-8 items-center justify-center rounded-full text-muted-foreground hover:bg-muted hover:text-foreground"
-                      aria-label={t.dashboard.removeFromComparison(date)}
-                      onClick={() => confirmRemoveDate(date)}
-                    >
-                      <X className="size-4" aria-hidden />
-                    </button>
-                  </span>
-                </th>
-              ))}
             </tr>
           </thead>
           <tbody>
             {rows.map((row) => (
               <tr key={row.assetId}>
                 <th
-                  className={`sticky left-0 z-10 bg-background py-3 pr-2 text-left font-medium ${COMPARISON_NAME_COL_CLASS}`}
+                  className={`py-3 pr-2 text-left font-medium ${COMPARISON_NAME_COL_CLASS}`}
                 >
                   {row.name}
                 </th>
-                {dates.map((date) => (
-                  <td
-                    key={date}
-                    className={`px-2 py-3 text-right align-top ${COMPARISON_DATE_COL_CLASS}`}
-                  >
-                    <ComparisonCell
-                      holding={row.byDate[date]}
-                      baseCurrency={baseCurrency}
-                    />
-                  </td>
-                ))}
               </tr>
             ))}
           </tbody>
           <tfoot>
             <tr>
               <th
-                className={`sticky left-0 z-10 bg-background py-3 pr-2 text-left font-semibold ${COMPARISON_NAME_COL_CLASS}`}
+                className={`py-3 pr-2 text-left font-semibold ${COMPARISON_NAME_COL_CLASS}`}
               >
                 {t.dashboard.positionsTotal}
               </th>
-              {dates.map((date) => (
-                <td
-                  key={date}
-                  className={`px-2 py-3 text-right font-semibold tabular-nums ${COMPARISON_DATE_COL_CLASS}`}
-                >
-                  {formatAmount(totals[date] ?? 0, baseCurrency, locale)}
-                </td>
-              ))}
             </tr>
           </tfoot>
         </table>
+        <div
+          data-testid="comparison-h-scroll"
+          className="comparison-h-scroll min-w-0 flex-1 overflow-x-auto overflow-y-hidden overscroll-x-contain"
+        >
+          <table
+            ref={dateTableRef}
+            className="w-max table-fixed border-separate border-spacing-0 text-sm"
+          >
+            <colgroup>
+              {dates.map((date) => (
+                <col key={date} className="w-[8.25rem]" />
+              ))}
+            </colgroup>
+            <thead>
+              <tr>
+                {dates.map((date) => (
+                  <th
+                    key={date}
+                    className={`px-2 py-2 text-right font-medium text-foreground ${COMPARISON_DATE_COL_CLASS}`}
+                  >
+                    <span className="inline-flex items-center justify-end gap-1">
+                      {formatChartAxisDate(date, locale)}
+                      <button
+                        type="button"
+                        className="inline-flex size-8 items-center justify-center rounded-full text-muted-foreground hover:bg-muted hover:text-foreground"
+                        aria-label={t.dashboard.removeFromComparison(date)}
+                        onClick={() => confirmRemoveDate(date)}
+                      >
+                        <X className="size-4" aria-hidden />
+                      </button>
+                    </span>
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {rows.map((row) => (
+                <tr key={row.assetId}>
+                  {dates.map((date) => (
+                    <td
+                      key={date}
+                      className={`px-2 py-3 text-right align-top ${COMPARISON_DATE_COL_CLASS}`}
+                    >
+                      <ComparisonCell
+                        holding={row.byDate[date]}
+                        baseCurrency={baseCurrency}
+                      />
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+            <tfoot>
+              <tr>
+                {dates.map((date) => (
+                  <td
+                    key={date}
+                    className={`px-2 py-3 text-right font-semibold tabular-nums ${COMPARISON_DATE_COL_CLASS}`}
+                  >
+                    {formatAmount(totals[date] ?? 0, baseCurrency, locale)}
+                  </td>
+                ))}
+              </tr>
+            </tfoot>
+          </table>
+        </div>
       </div>
     </div>
   )

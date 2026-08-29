@@ -214,13 +214,11 @@ describe('ComparisonScreen (#137)', () => {
     expect(scroller.className).toContain('overflow-x-auto')
     expect(scroller.className).toContain('overflow-y-hidden')
     expect(scroller.className).toContain('comparison-h-scroll')
-    expect(scroller.className).toContain('max-w-full')
+    expect(scroller.className).toContain('flex-1')
     expect(scroller.className).toContain('min-w-0')
-    expect(scroller.parentElement?.className).toContain('grid-cols-[minmax(0,1fr)]')
-    expect(scroller.parentElement?.className).toContain('overflow-x-clip')
     const nameCol = screen.getByTestId('comparison-name-col')
-    expect(nameCol.className).toContain('sticky')
-    expect(nameCol.className).toContain('left-0')
+    expect(scroller.contains(nameCol)).toBe(false)
+    expect(nameCol.className).not.toContain('sticky')
     expect(
       screen.getAllByRole('button', { name: /Remove / }),
     ).toHaveLength(4)
