@@ -25,7 +25,6 @@ _After the four web flows feel good. Android wraps this app; iOS does not._
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
-| [#127](https://github.com/ZhannaM85/my-money/issues/127) | 🔍 Pending validation | No automatic GEL→RUB conversion despite NBG rates | NBG already used for RUB via GEL (#47); GEL pickers from #107; GEL→RUB quote never emitted (GEL is NBG numeraire). |
 | [#128](https://github.com/ZhannaM85/my-money/issues/128) | 🔍 Pending validation | Chart tooltip closes when scrolling its holdings list | Page scroll should still dismiss (#77); inner tooltip scroll should not. |
 
 ---

@@ -142,3 +142,9 @@ Closed live-feedback rows from Tier 8 onward. Open / pending items stay in [`../
 | [#124](https://github.com/ZhannaM85/my-money/issues/124) | ✅ Done | Show Positions total for the selected As of date | Total under Positions for As of day. Validated on-device 2026-08-27. |
 | [#125](https://github.com/ZhannaM85/my-money/issues/125) | ✅ Done | Add a Today button next to Dashboard As of | Turtle-style Today beside As of. Validated on-device 2026-08-27. |
 | [#126](https://github.com/ZhannaM85/my-money/issues/126) | ✅ Done | Let user pick chart range: week, month, year, all, custom | Week / Month / Year / All / Custom chips; Custom From/To; zoom skips Custom. Validated on-device 2026-08-27. |
+
+## Tier 15 — Live feedback (2026-08-29)
+
+| # | Status | Issue | Notes |
+|---|--------|-------|-------|
+| [#127](https://github.com/ZhannaM85/my-money/issues/127) | ✅ Done | No automatic GEL→RUB conversion despite NBG rates | NBG already used for RUB via GEL (#47); GEL pickers from #107; GEL→RUB = invert of RUB row (quantity applied). Validated on-device 2026-08-29. |
