@@ -153,3 +153,4 @@ Closed live-feedback rows from Tier 8 onward. Open / pending items stay in [`../
 | [#130](https://github.com/ZhannaM85/my-money/issues/130) | ❌ Won't fix | Chart tooltip does not close when tapping away | Canceled 2026-08-29; overlay dropped in favor of #133. |
 | [#131](https://github.com/ZhannaM85/my-money/issues/131) | ❌ Won't fix | Chart tooltip is hidden behind the tab bar | Canceled 2026-08-29; overlay dropped in favor of #133. |
 | [#132](https://github.com/ZhannaM85/my-money/issues/132) | ❌ Won't fix | Chart tooltip flickers open then closed on tap | Canceled 2026-08-29; overlay dropped in favor of #133. |
+| [#133](https://github.com/ZhannaM85/my-money/issues/133) | ❌ Won't fix | Remove chart holdings tooltip; it duplicates the list above the graph | Closed 2026-08-29 as won't fix. Positions moved below the chart (#134); tooltip restored (#135). |
