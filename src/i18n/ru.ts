@@ -39,6 +39,13 @@ export const ru: Dictionary = {
     asOfDate: 'На дату',
     asOfDateInvalid: 'Выберите сегодня или прошедшую дату',
     jumpToToday: 'Сегодня',
+    addToComparison: 'Добавить к сравнению',
+    navigateToComparison: 'Перейти к сравнению',
+    comparisonTitle: 'Сравнение',
+    comparisonDescription:
+      'Позиции на даты, которые вы добавили со Сводки.',
+    comparisonNeedTwoDates: 'Добавьте хотя бы две даты со Сводки.',
+    removeFromComparison: (date) => `Убрать ${date}`,
     positionsTotal: 'Итого',
     emptyTitle: 'Пока нет активов',
     emptyDescription:

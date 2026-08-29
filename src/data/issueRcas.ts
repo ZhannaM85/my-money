@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 137,
+    title: {
+      en: 'Compare holdings across selected dates (table page)',
+      ru: 'Сравнить позиции на выбранных датах (таблица)',
+    },
+    en: 'Screenshots were the only way to diff two days. Add to comparison next to As of collects dates; a banner opens a table page (rows = assets, columns = dates) where days can be removed. More than two dates allowed. Session-only.',
+    ru: 'Раньше сравнение дней было только скриншотами. «Добавить к сравнению» рядом с «На дату» собирает даты; баннер открывает таблицу (строки — активы, столбцы — дни), дни можно убрать. Больше двух дат можно. Только на сессию.',
+  },
+  {
     issue: 136,
     title: {
       en: 'Asset details chart tooltip: show original amount in muted grey under converted',

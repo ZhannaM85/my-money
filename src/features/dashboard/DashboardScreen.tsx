@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { ChevronDown, ChevronLeft, ChevronRight } from 'lucide-react'
+import { ChevronDown, ChevronLeft, ChevronRight, Plus } from 'lucide-react'
 import {
   decomposeConvertedPeriodChange,
   historicalNativeNetWorth,
@@ -37,6 +37,7 @@ import { PageHeader } from '@/shared/ui/page-header'
 import { StatCard } from '@/shared/ui/stat-card'
 import { cn } from '@/shared/lib/utils'
 import { useAssetStore } from '@/stores/assetStore'
+import { useComparisonStore } from '@/stores/comparisonStore'
 import { useFxStore } from '@/stores/fxStore'
 import { useSettingsStore } from '@/stores/settingsStore'
 import { NetWorthChart } from './NetWorthChart'
@@ -74,6 +75,8 @@ export function DashboardScreen() {
     null,
   )
   const [periodOpen, setPeriodOpen] = useState<'amount' | 'rate' | null>(null)
+  const comparisonDates = useComparisonStore((state) => state.dates)
+  const addComparisonDate = useComparisonStore((state) => state.addDate)
 
   const today = todayIsoDate()
   const chartEnd =
@@ -642,6 +645,17 @@ export function DashboardScreen() {
                 }}
                 error={asOfError}
               />
+              <Button
+                type="button"
+                variant="outline"
+                size="icon-xl"
+                className="mb-0 shrink-0"
+                aria-label={t.dashboard.addToComparison}
+                disabled={comparisonDates.includes(selectedChartDate ?? today)}
+                onClick={() => addComparisonDate(selectedChartDate ?? today)}
+              >
+                <Plus className="size-5" aria-hidden />
+              </Button>
               {selectedChartDate !== null && selectedChartDate < today ? (
                 <Button
                   type="button"
@@ -658,6 +672,14 @@ export function DashboardScreen() {
               ) : null}
             </div>
           )}
+          {comparisonDates.length >= 2 ? (
+            <Link
+              to="/compare"
+              className="flex items-center justify-center rounded-xl bg-muted px-4 py-3 text-sm font-medium text-foreground"
+            >
+              {t.dashboard.navigateToComparison}
+            </Link>
+          ) : null}
           {isOriginal && activeCurrencyFilter === 'all' ? (
             <p className="text-sm text-muted-foreground">
               {t.dashboard.originalChartHint}

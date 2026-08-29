@@ -14,6 +14,7 @@ import { addDaysIso, monthStartIso } from '@/shared/lib/dates'
 import { useAssetStore } from '@/stores/assetStore'
 import { useFxStore } from '@/stores/fxStore'
 import { useSettingsStore } from '@/stores/settingsStore'
+import { useComparisonStore } from '@/stores/comparisonStore'
 import { DashboardScreen } from './DashboardScreen'
 
 beforeEach(async () => {
@@ -34,6 +35,7 @@ beforeEach(async () => {
     settings: DEFAULT_SETTINGS,
     loaded: false,
   })
+  useComparisonStore.setState({ dates: [] })
 })
 
 describe('DashboardScreen', () => {
@@ -819,5 +821,70 @@ describe('DashboardScreen', () => {
     expect(
       asOf.compareDocumentPosition(chart) & Node.DOCUMENT_POSITION_FOLLOWING,
     ).toBeTruthy()
+  })
+
+  it('adds As of dates to comparison and shows a banner after two (#137)', async () => {
+    const today = todayIsoDate()
+    const past = addDaysIso(today, -4)
+    const now = `${today}T00:00:00.000Z`
+    await useAssetStore.getState().saveAsset(
+      {
+        id: 'a1',
+        name: 'Cash',
+        assetClass: 'money',
+        type: 'cash',
+        currency: 'EUR',
+        trackingStatus: 'included',
+        valuationMethod: 'account_balance',
+        updateFrequency: 'weekly',
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        assetId: 'a1',
+        date: past,
+        amount: 500,
+        currency: 'EUR',
+      },
+    )
+    await useAssetStore.getState().saveSnapshots([
+      {
+        assetId: 'a1',
+        date: today,
+        amount: 900,
+        currency: 'EUR',
+      },
+    ])
+    const user = userEvent.setup()
+    render(
+      <MemoryRouter>
+        <DashboardScreen />
+      </MemoryRouter>,
+    )
+    expect(await screen.findByText('Net worth')).toBeInTheDocument()
+    expect(
+      screen.queryByRole('link', { name: 'Go to comparison' }),
+    ).not.toBeInTheDocument()
+    await user.click(
+      screen.getByRole('button', { name: 'Add to comparison' }),
+    )
+    expect(
+      screen.queryByRole('link', { name: 'Go to comparison' }),
+    ).not.toBeInTheDocument()
+    const asOf = screen.getByLabelText('As of')
+    asOf.focus()
+    Object.getOwnPropertyDescriptor(
+      window.HTMLInputElement.prototype,
+      'value',
+    )?.set?.call(asOf, past)
+    asOf.dispatchEvent(new Event('input', { bubbles: true }))
+    asOf.dispatchEvent(new Event('change', { bubbles: true }))
+    await user.click(
+      screen.getByRole('button', { name: 'Add to comparison' }),
+    )
+    expect(screen.getByRole('link', { name: 'Go to comparison' })).toHaveAttribute(
+      'href',
+      '/compare',
+    )
   })
 })

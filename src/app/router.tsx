@@ -1,7 +1,7 @@
 import type { RouteObject } from 'react-router-dom'
 import { createBrowserRouter } from 'react-router-dom'
 import { AppShell } from '@/app/AppShell'
-import { DashboardScreen } from '@/features/dashboard'
+import { DashboardScreen, ComparisonScreen } from '@/features/dashboard'
 import {
   AssetDetailsScreen,
   AssetsScreen,
@@ -18,6 +18,7 @@ export const routes: RouteObject[] = [
     element: <AppShell />,
     children: [
       { path: '/', element: <DashboardScreen /> },
+      { path: '/compare', element: <ComparisonScreen /> },
       { path: '/assets', element: <AssetsScreen /> },
       { path: '/assets/new', element: <NewAssetScreen /> },
       { path: '/assets/:id', element: <AssetDetailsScreen /> },

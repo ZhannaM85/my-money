@@ -44,6 +44,12 @@ export interface Dictionary {
     asOfDate: string
     asOfDateInvalid: string
     jumpToToday: string
+    addToComparison: string
+    navigateToComparison: string
+    comparisonTitle: string
+    comparisonDescription: string
+    comparisonNeedTwoDates: string
+    removeFromComparison: (date: string) => string
     positionsTotal: string
     emptyTitle: string
     emptyDescription: string

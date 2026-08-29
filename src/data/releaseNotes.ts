@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 145,
+    issue: 137,
+    date: '2026-08-29T18:10:00+03:00',
+    en: 'Add days to comparison from Dashboard (plus next to As of). After two dates, open the comparison table. You can add more days and remove them there.',
+    ru: 'Добавляйте дни к сравнению со Сводки (плюс рядом с «На дату»). После двух дат откройте таблицу. Можно добавить больше дней и убрать их там.',
+  },
+  {
     version: 144,
     issue: 136,
     date: '2026-08-29T18:00:00+03:00',

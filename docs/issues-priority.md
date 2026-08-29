@@ -26,7 +26,7 @@ _After the four web flows feel good. Android wraps this app; iOS does not._
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
 | [#136](https://github.com/ZhannaM85/my-money/issues/136) | 🔍 Pending validation | Asset details chart tooltip: show original amount in muted grey under converted | Same idea as #129 history rows. Converted mode only; skip when native is already base. |
-| [#137](https://github.com/ZhannaM85/my-money/issues/137) | 🔲 Open | Compare holdings across selected dates (table page) | Add to comparison beside As of; banner after 2+ dates; table page; can remove days; more than two dates OK. |
+| [#137](https://github.com/ZhannaM85/my-money/issues/137) | 🔍 Pending validation | Compare holdings across selected dates (table page) | Add to comparison beside As of; banner after 2+ dates; table page; can remove days; more than two dates OK. |
 
 ---
 
