@@ -21,6 +21,14 @@ _After the four web flows feel good. Android wraps this app; iOS does not._
 
 ---
 
+## Tier 15 — Live feedback (2026-08-29)
+
+| # | Status | Issue | Notes |
+|---|--------|-------|-------|
+| [#136](https://github.com/ZhannaM85/my-money/issues/136) | 🔲 Open | Asset details chart tooltip: show original amount in muted grey under converted | Same idea as #129 history rows. Converted mode only; skip when native is already base. |
+
+---
+
 ## Explicitly not filed
 
 Out of scope for the MVP (`PROJECT_BRIEF.md` §20) — do not implement from chat:
