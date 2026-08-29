@@ -21,6 +21,14 @@ _After the four web flows feel good. Android wraps this app; iOS does not._
 
 ---
 
+## Tier 15 — Live feedback (2026-08-29)
+
+| # | Status | Issue | Notes |
+|---|--------|-------|-------|
+| [#127](https://github.com/ZhannaM85/my-money/issues/127) | ⬜ Open | No automatic GEL→RUB conversion despite NBG rates | NBG already used for RUB via GEL (#47); GEL pickers from #107; GEL→RUB quote never emitted (GEL is NBG numeraire). |
+
+---
+
 ## Explicitly not filed
 
 Out of scope for the MVP (`PROJECT_BRIEF.md` §20) — do not implement from chat:
