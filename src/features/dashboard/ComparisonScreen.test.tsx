@@ -179,4 +179,44 @@ describe('ComparisonScreen (#137)', () => {
     expect(dateHeader.className).toContain('min-w-[8.25rem]')
     expect(dateHeader.className).toContain('w-[8.25rem]')
   })
+
+  it('scrolls date columns inside the table, not the page; names stay sticky (#139)', async () => {
+    const now = '2026-08-17T00:00:00.000Z'
+    await useAssetStore.getState().saveAsset(
+      {
+        id: 'a1',
+        name: 'Cash',
+        assetClass: 'money',
+        type: 'cash',
+        currency: 'EUR',
+        trackingStatus: 'included',
+        valuationMethod: 'account_balance',
+        updateFrequency: 'weekly',
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        assetId: 'a1',
+        date: '2026-08-25',
+        amount: 100,
+        currency: 'EUR',
+      },
+    )
+    useComparisonStore.setState({
+      dates: ['2026-08-25', '2026-08-26', '2026-08-29'],
+    })
+    render(
+      <MemoryRouter>
+        <ComparisonScreen />
+      </MemoryRouter>,
+    )
+    const scroller = await screen.findByTestId('comparison-h-scroll')
+    expect(scroller.className).toContain('overflow-x-auto')
+    expect(scroller.className).toContain('max-w-full')
+    expect(scroller.className).toContain('min-w-0')
+    expect(scroller.parentElement?.className).toContain('overflow-x-hidden')
+    const nameCol = screen.getByTestId('comparison-name-col')
+    expect(nameCol.className).toContain('sticky')
+    expect(nameCol.className).toContain('left-0')
+  })
 })

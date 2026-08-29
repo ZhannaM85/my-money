@@ -79,6 +79,7 @@ describe('AppShell', () => {
     const main = screen.getByRole('main')
     expect(main.className).toContain('flex-1')
     expect(main.className).toContain('overflow-y-auto')
+    expect(main.className).toContain('overflow-x-hidden')
     expect(main.compareDocumentPosition(nav) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
   })
 

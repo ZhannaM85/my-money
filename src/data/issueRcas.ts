@@ -20,6 +20,15 @@ export const issueRcas: IssueRca[] = [
     ru: 'Крестик на столбце даты сразу убирал день. Тот же window.confirm, что при удалении актива; Отмена оставляет день.',
   },
   {
+    issue: 139,
+    title: {
+      en: 'Comparison: only date columns scroll horizontally; name column stays fixed',
+      ru: 'Сравнение: горизонтально скроллятся только столбцы дат; имена зафиксированы',
+    },
+    en: 'The table widened main, so the page panned and sticky names failed. Main cannot overflow-x; an inner scroller pans dates; names stay sticky left.',
+    ru: 'Таблица расширяла main, страница ехала вбок, sticky имён не работал. Main без overflow-x; внутренний скролл двигает даты; имена прилипают слева.',
+  },
+  {
     issue: 138,
     title: {
       en: 'Comparison table: narrow name column, wrap titles, show two date columns',
