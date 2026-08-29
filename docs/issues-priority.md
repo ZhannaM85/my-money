@@ -21,15 +21,6 @@ _After the four web flows feel good. Android wraps this app; iOS does not._
 
 ---
 
-## Tier 15 — Live feedback (2026-08-29)
-
-| # | Status | Issue | Notes |
-|---|--------|-------|-------|
-| [#134](https://github.com/ZhannaM85/my-money/issues/134) | 🔍 Pending validation | Move Dashboard Positions below the net-worth chart | List currently sits above the graph and can push it off-screen. As of stays with the chart. |
-| [#135](https://github.com/ZhannaM85/my-money/issues/135) | 🔍 Pending validation | Restore Dashboard chart holdings tooltip now that Positions are below the graph | Same simple popover as History. No pin / dismiss-on-scroll. |
-
----
-
 ## Explicitly not filed
 
 Out of scope for the MVP (`PROJECT_BRIEF.md` §20) — do not implement from chat:
