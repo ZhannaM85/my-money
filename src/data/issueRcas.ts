@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 129,
+    title: {
+      en: 'Show original amount in muted text under converted values on asset details',
+      ru: 'Показывать оригинальную сумму серым под пересчётом на карточке актива',
+    },
+    en: 'Converted history rows showed only the base amount, so checking native meant scrolling up to Original. Same pattern as Dashboard Positions: converted primary, muted native under it when currencies differ.',
+    ru: 'В пересчёте строки истории показывали только сумму в базовой валюте — оригинал был только через переключение. Как на Позициях Сводки: пересчёт сверху, приглушённый оригинал под ним, если валюты разные.',
+  },
+  {
     issue: 128,
     title: {
       en: 'Chart tooltip closes when scrolling its holdings list',

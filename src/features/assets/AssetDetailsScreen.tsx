@@ -426,6 +426,10 @@ export function AssetDetailsScreen() {
                     baseCurrency,
                     locale,
                   )
+            const showNativeUnder =
+              mode === 'base' &&
+              rate !== undefined &&
+              row.currency !== baseCurrency
             return editingId === row.id ? (
               <li
                 key={row.id}
@@ -524,8 +528,15 @@ export function AssetDetailsScreen() {
                   <span className="text-sm text-muted-foreground">
                     {row.date}
                   </span>
-                  <span className="flex items-center gap-1">
-                    <span className="tabular-nums text-sm">{shown}</span>
+                  <span className="flex items-start gap-1">
+                    <span className="flex flex-col items-end">
+                      <span className="tabular-nums text-sm">{shown}</span>
+                      {showNativeUnder ? (
+                        <span className="tabular-nums text-xs text-muted-foreground">
+                          {formatAmount(row.amount, row.currency, locale)}
+                        </span>
+                      ) : null}
+                    </span>
                     <Button
                       type="button"
                       variant="ghost"

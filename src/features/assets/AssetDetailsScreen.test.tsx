@@ -8,6 +8,7 @@ import { db } from '@/infrastructure/persistence/indexeddb'
 import { addDaysIso } from '@/shared/lib/dates'
 import { formatAmount, todayIsoDate } from '@/shared/lib/money'
 import { useAssetStore } from '@/stores/assetStore'
+import { useFxStore } from '@/stores/fxStore'
 import { useSettingsStore } from '@/stores/settingsStore'
 import { AssetDetailsScreen } from './AssetDetailsScreen'
 
@@ -27,6 +28,11 @@ beforeEach(async () => {
   await db.assets.clear()
   await db.snapshots.clear()
   useAssetStore.setState({ assets: [], snapshots: [], loaded: false })
+  useFxStore.setState({
+    ...useFxStore.getState(),
+    quotes: [],
+    manualQuotes: [],
+  })
   useSettingsStore.setState({
     settings: DEFAULT_SETTINGS,
     loaded: true,
@@ -462,5 +468,39 @@ describe('AssetDetailsScreen', () => {
       expect(useAssetStore.getState().assets).toHaveLength(0)
       expect(useAssetStore.getState().snapshots).toHaveLength(0)
     })
+  })
+
+  it('shows muted native amount under converted history rows (#129)', async () => {
+    await useSettingsStore.getState().setBaseCurrency('RUB')
+    useFxStore.setState({
+      ...useFxStore.getState(),
+      quotes: [
+        { date: '2026-08-17', base: 'EUR', quote: 'RUB', rate: 100 },
+        { date: '2026-08-01', base: 'EUR', quote: 'RUB', rate: 100 },
+      ],
+    })
+    render(
+      <MemoryRouter initialEntries={['/assets/a1']}>
+        <Routes>
+          <Route path="/assets/:id" element={<AssetDetailsScreen />} />
+        </Routes>
+      </MemoryRouter>,
+    )
+    await screen.findByRole('heading', { name: 'Revolut' })
+    expect(await screen.findByRole('button', { name: 'RUB' })).toBeInTheDocument()
+    expect(
+      screen.getAllByText(
+        (_, node) =>
+          node?.children.length === 0 &&
+          node.textContent === formatAmount(100_000, 'RUB'),
+      ).length,
+    ).toBeGreaterThan(0)
+    const native = screen.getByText(
+      (_, node) =>
+        node?.children.length === 0 &&
+        node.textContent === formatAmount(1000, 'EUR') &&
+        node.className.includes('text-muted-foreground'),
+    )
+    expect(native).toBeInTheDocument()
   })
 })
