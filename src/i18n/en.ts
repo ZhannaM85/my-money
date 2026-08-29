@@ -72,6 +72,9 @@ export const en: Dictionary = {
     chartTooltip: 'Chart tooltip',
     chartTooltipShow: 'Show',
     chartTooltipHide: 'Hide',
+    noHoldingsOnDateTitle: 'No holdings on this date',
+    noHoldingsOnDateDescription:
+      'Nothing was logged on or before this day. Pick a later As of date, or jump to today.',
   },
   assets: {
     title: 'Assets',

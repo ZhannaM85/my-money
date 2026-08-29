@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 145,
+    title: {
+      en: 'Show no-data warning instead of the chart when As of has no holdings',
+      ru: 'Показывать предупреждение вместо графика, если на дату нет позиций',
+    },
+    en: 'As of before the first snapshot still plotted later history. The line hides and a warning shows until As of is on or after the first snapshot.',
+    ru: 'Дата раньше первого снимка всё равно рисовала позднюю историю. Линия скрывается и показывается предупреждение, пока дата не на первом снимке или позже.',
+  },
+  {
     issue: 144,
     title: {
       en: 'Asset chart X-axis spaces snapshot dates evenly, not by calendar time',

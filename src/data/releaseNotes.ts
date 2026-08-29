@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 155,
+    issue: 145,
+    date: '2026-08-29T19:50:00+03:00',
+    en: 'As of a day before any holdings, the chart is replaced with a no-data warning.',
+    ru: 'Если на выбранную дату ещё нет позиций, график заменяется предупреждением.',
+  },
+  {
     version: 154,
     issue: 144,
     date: '2026-08-29T19:30:00+03:00',

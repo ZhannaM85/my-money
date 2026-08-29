@@ -74,6 +74,9 @@ export const ru: Dictionary = {
     chartTooltip: 'Подсказка графика',
     chartTooltipShow: 'Показать',
     chartTooltipHide: 'Скрыть',
+    noHoldingsOnDateTitle: 'На эту дату нет позиций',
+    noHoldingsOnDateDescription:
+      'На этот день и раньше ничего не записано. Выберите более позднюю дату или перейдите к сегодня.',
   },
   assets: {
     title: 'Активы',

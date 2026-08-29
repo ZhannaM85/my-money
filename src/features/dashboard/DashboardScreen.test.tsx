@@ -926,4 +926,62 @@ describe('DashboardScreen', () => {
     })
     expect(useSettingsStore.getState().settings.showChartTooltip).toBe(false)
   })
+
+  it('replaces the chart with a warning when As of is before any snapshot (#145)', async () => {
+    const today = todayIsoDate()
+    const firstSnapshot = addDaysIso(today, -10)
+    const beforeAny = addDaysIso(firstSnapshot, -5)
+    const now = `${today}T00:00:00.000Z`
+    await useAssetStore.getState().saveAsset(
+      {
+        id: 'a1',
+        name: 'Cash',
+        assetClass: 'money',
+        type: 'cash',
+        currency: 'EUR',
+        trackingStatus: 'included',
+        valuationMethod: 'account_balance',
+        updateFrequency: 'weekly',
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        assetId: 'a1',
+        date: firstSnapshot,
+        amount: 900,
+        currency: 'EUR',
+      },
+    )
+    const user = userEvent.setup()
+    render(
+      <MemoryRouter>
+        <DashboardScreen />
+      </MemoryRouter>,
+    )
+    expect(await screen.findByTestId('net-worth-chart')).toBeInTheDocument()
+    const asOf = screen.getByLabelText('As of')
+    asOf.focus()
+    Object.getOwnPropertyDescriptor(
+      window.HTMLInputElement.prototype,
+      'value',
+    )?.set?.call(asOf, beforeAny)
+    asOf.dispatchEvent(new Event('input', { bubbles: true }))
+    asOf.dispatchEvent(new Event('change', { bubbles: true }))
+    expect(screen.queryByTestId('net-worth-chart')).not.toBeInTheDocument()
+    expect(screen.getByText('No holdings on this date')).toBeInTheDocument()
+    expect(
+      screen.getByText(
+        'Nothing was logged on or before this day. Pick a later As of date, or jump to today.',
+      ),
+    ).toBeInTheDocument()
+    expect(
+      screen.getByRole('group', { name: 'Chart range' }),
+    ).toBeInTheDocument()
+    expect(screen.getByLabelText('As of')).toHaveValue(beforeAny)
+    await user.click(screen.getByRole('button', { name: 'Today' }))
+    expect(await screen.findByTestId('net-worth-chart')).toBeInTheDocument()
+    expect(
+      screen.queryByText('No holdings on this date'),
+    ).not.toBeInTheDocument()
+  })
 })

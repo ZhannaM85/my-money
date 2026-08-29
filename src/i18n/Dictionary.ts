@@ -71,6 +71,8 @@ export interface Dictionary {
     chartTooltip: string
     chartTooltipShow: string
     chartTooltipHide: string
+    noHoldingsOnDateTitle: string
+    noHoldingsOnDateDescription: string
   }
   assets: {
     title: string

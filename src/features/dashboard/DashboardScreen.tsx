@@ -43,6 +43,7 @@ import { useSettingsStore } from '@/stores/settingsStore'
 import { NetWorthChart } from './NetWorthChart'
 import { ChartRangePicker } from './ChartRangePicker'
 import { dashboardNeedsRemoteFx } from './dashboardFx'
+import { asOfHasLoggedData } from './asOfHasLoggedData'
 import { holdingsForSelectedChartDay } from './holdingsForSelectedChartDay'
 
 export function DashboardScreen() {
@@ -259,6 +260,7 @@ export function DashboardScreen() {
       series[series.length - 1]?.holdings ?? convertedHoldings,
       outsideSelectedPoint,
     )
+  const asOfHasData = asOfHasLoggedData(selectedChartDate, earliest)
   const convertedTodayPoint = convertedSeries[convertedSeries.length - 1]
   const convertedTodayTotal =
     convertedTodayPoint?.total ?? convertedResult.total
@@ -621,7 +623,8 @@ export function DashboardScreen() {
               </Button>
             </div>
           )}
-          {convertedHoldingsToday.length > 0 &&
+          {(convertedHoldingsToday.length > 0 ||
+            selectedChartDate !== null) &&
             !(isOriginal && activeCurrencyFilter === 'all') && (
             <div className="flex items-end gap-2">
               <DateField
@@ -704,117 +707,126 @@ export function DashboardScreen() {
                 earliest={earliest}
                 latest={today}
               />
-              <NetWorthChart
-                points={series}
-                currency={
-                  isOriginal ? activeCurrencyFilter : baseCurrency
-                }
-                onZoomIn={() => {
-                  setSelectedChartDate(null)
-                  setAsOfError(undefined)
-                  const next = stepHistoryRange(range, 'in')
-                  setRange(next)
-                  if (next === 'All') setRangeEnd(today)
-                }}
-                onZoomOut={() => {
-                  setSelectedChartDate(null)
-                  setAsOfError(undefined)
-                  const next = stepHistoryRange(range, 'out')
-                  setRange(next)
-                  if (next === 'All') setRangeEnd(today)
-                }}
-                onPanEarlier={panEarlier}
-                onPanLater={panLater}
-                onSelectDate={(date) => {
-                  setAsOfError(undefined)
-                  setSelectedChartDate(date)
-                  if (date) setHoldingsOpen(true)
-                }}
-              />
-              <div className="flex items-center justify-between gap-2">
-                <span className="text-sm text-muted-foreground">
-                  {t.dashboard.zoomRange}:{' '}
-                  {range === '1W'
-                    ? t.history.rangeWeek
-                    : range === '1M'
-                      ? t.history.rangeMonth
-                      : range === '1Y'
-                        ? t.history.rangeYear
-                        : range === 'All'
-                          ? t.history.rangeAll
-                          : t.history.rangeCustom}
-                </span>
-                <div className="flex gap-2">
-                  <button
-                    type="button"
-                    className={cn(
-                      'inline-flex size-9 items-center justify-center rounded-full',
-                      canPanEarlier
-                        ? 'bg-muted text-foreground'
-                        : 'bg-muted text-muted-foreground',
-                    )}
-                    disabled={!canPanEarlier}
-                    aria-label={t.dashboard.panEarlier}
-                    onClick={panEarlier}
-                  >
-                    <ChevronLeft className="size-5" aria-hidden />
-                  </button>
-                  <button
-                    type="button"
-                    className={cn(
-                      'inline-flex size-9 items-center justify-center rounded-full',
-                      canPanLater
-                        ? 'bg-muted text-foreground'
-                        : 'bg-muted text-muted-foreground',
-                    )}
-                    disabled={!canPanLater}
-                    aria-label={t.dashboard.panLater}
-                    onClick={panLater}
-                  >
-                    <ChevronRight className="size-5" aria-hidden />
-                  </button>
-                  <button
-                    type="button"
-                    className={cn(
-                      'rounded-full px-3 py-1.5 text-sm font-medium',
-                      canZoomIn
-                        ? 'bg-muted text-foreground'
-                        : 'bg-muted text-muted-foreground',
-                    )}
-                    disabled={!canZoomIn}
-                    onClick={() => {
-                      if (!canZoomIn) return
+              {asOfHasData ? (
+                <>
+                  <NetWorthChart
+                    points={series}
+                    currency={
+                      isOriginal ? activeCurrencyFilter : baseCurrency
+                    }
+                    onZoomIn={() => {
                       setSelectedChartDate(null)
                       setAsOfError(undefined)
                       const next = stepHistoryRange(range, 'in')
                       setRange(next)
                       if (next === 'All') setRangeEnd(today)
                     }}
-                  >
-                    {t.dashboard.zoomIn}
-                  </button>
-                  <button
-                    type="button"
-                    className={cn(
-                      'rounded-full px-3 py-1.5 text-sm font-medium',
-                      canZoomOut
-                        ? 'bg-muted text-foreground'
-                        : 'bg-muted text-muted-foreground',
-                    )}
-                    disabled={!canZoomOut}
-                    onClick={() => {
-                      if (!canZoomOut) return
+                    onZoomOut={() => {
                       setSelectedChartDate(null)
                       setAsOfError(undefined)
                       const next = stepHistoryRange(range, 'out')
                       setRange(next)
                       if (next === 'All') setRangeEnd(today)
                     }}
-                  >
-                    {t.dashboard.zoomOut}
-                  </button>
-                </div>
-              </div>
+                    onPanEarlier={panEarlier}
+                    onPanLater={panLater}
+                    onSelectDate={(date) => {
+                      setAsOfError(undefined)
+                      setSelectedChartDate(date)
+                      if (date) setHoldingsOpen(true)
+                    }}
+                  />
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="text-sm text-muted-foreground">
+                      {t.dashboard.zoomRange}:{' '}
+                      {range === '1W'
+                        ? t.history.rangeWeek
+                        : range === '1M'
+                          ? t.history.rangeMonth
+                          : range === '1Y'
+                            ? t.history.rangeYear
+                            : range === 'All'
+                              ? t.history.rangeAll
+                              : t.history.rangeCustom}
+                    </span>
+                    <div className="flex gap-2">
+                      <button
+                        type="button"
+                        className={cn(
+                          'inline-flex size-9 items-center justify-center rounded-full',
+                          canPanEarlier
+                            ? 'bg-muted text-foreground'
+                            : 'bg-muted text-muted-foreground',
+                        )}
+                        disabled={!canPanEarlier}
+                        aria-label={t.dashboard.panEarlier}
+                        onClick={panEarlier}
+                      >
+                        <ChevronLeft className="size-5" aria-hidden />
+                      </button>
+                      <button
+                        type="button"
+                        className={cn(
+                          'inline-flex size-9 items-center justify-center rounded-full',
+                          canPanLater
+                            ? 'bg-muted text-foreground'
+                            : 'bg-muted text-muted-foreground',
+                        )}
+                        disabled={!canPanLater}
+                        aria-label={t.dashboard.panLater}
+                        onClick={panLater}
+                      >
+                        <ChevronRight className="size-5" aria-hidden />
+                      </button>
+                      <button
+                        type="button"
+                        className={cn(
+                          'rounded-full px-3 py-1.5 text-sm font-medium',
+                          canZoomIn
+                            ? 'bg-muted text-foreground'
+                            : 'bg-muted text-muted-foreground',
+                        )}
+                        disabled={!canZoomIn}
+                        onClick={() => {
+                          if (!canZoomIn) return
+                          setSelectedChartDate(null)
+                          setAsOfError(undefined)
+                          const next = stepHistoryRange(range, 'in')
+                          setRange(next)
+                          if (next === 'All') setRangeEnd(today)
+                        }}
+                      >
+                        {t.dashboard.zoomIn}
+                      </button>
+                      <button
+                        type="button"
+                        className={cn(
+                          'rounded-full px-3 py-1.5 text-sm font-medium',
+                          canZoomOut
+                            ? 'bg-muted text-foreground'
+                            : 'bg-muted text-muted-foreground',
+                        )}
+                        disabled={!canZoomOut}
+                        onClick={() => {
+                          if (!canZoomOut) return
+                          setSelectedChartDate(null)
+                          setAsOfError(undefined)
+                          const next = stepHistoryRange(range, 'out')
+                          setRange(next)
+                          if (next === 'All') setRangeEnd(today)
+                        }}
+                      >
+                        {t.dashboard.zoomOut}
+                      </button>
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <EmptyState
+                  title={t.dashboard.noHoldingsOnDateTitle}
+                  description={t.dashboard.noHoldingsOnDateDescription}
+                />
+              )}
             </>
           )}
           {convertedHoldingsToday.length > 0 &&
