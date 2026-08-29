@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 140,
+    issue: 133,
+    date: '2026-08-29T12:55:00+03:00',
+    en: 'The chart no longer opens a holdings popover. Tap a day to update Positions; the list above the graph is the breakdown.',
+    ru: 'График больше не открывает карточку с активами. Нажмите день, чтобы обновить Позиции — разбивка уже в списке над графиком.',
+  },
+  {
     version: 139,
     issue: 131,
     date: '2026-08-29T12:30:00+03:00',

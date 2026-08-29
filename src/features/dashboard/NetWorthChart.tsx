@@ -1,9 +1,4 @@
-import {
-  useCallback,
-  useEffect,
-  useRef,
-  type TouchEvent as ReactTouchEvent,
-} from 'react'
+import { useEffect, useRef } from 'react'
 import {
   CartesianGrid,
   Line,
@@ -15,21 +10,16 @@ import {
 } from 'recharts'
 import type { HoldingConversion } from '@/domain/netWorth'
 import {
-  formatAmount,
   formatChartAxisDate,
   formatCompactNumber,
   chartAxisScale,
   uniqueChartAxisDates,
 } from '@/shared/lib/money'
-import {
-  CHART_TOOLTIP_SCROLL_CLASS,
-  NET_WORTH_CHART_TESTID,
-  useDismissOnScroll,
-} from '@/shared/hooks/useDismissOnScroll'
 import { useChartPan } from '@/shared/hooks/useChartPan'
 import { usePinchZoom } from '@/shared/hooks/usePinchZoom'
 import { useLocale, useTranslation } from '@/i18n'
-import { HoldingBreakdownList } from './HoldingBreakdownList'
+
+export const NET_WORTH_CHART_TESTID = 'net-worth-chart'
 
 export interface NetWorthChartPoint {
   date: string
@@ -37,24 +27,20 @@ export interface NetWorthChartPoint {
   holdings?: readonly HoldingConversion[]
 }
 
-/** Sync Positions / As of when the tooltip becomes active (incl. iOS tap). #112 */
-function TooltipDateBridge({
+/** Sync Positions / As of when Recharts has an active point (incl. iOS tap). #112 */
+function ChartDaySelect({
   active,
   payload,
   onSelectDate,
-  pinTooltip,
 }: {
   active?: boolean
   payload?: ReadonlyArray<{ payload?: NetWorthChartPoint }>
   onSelectDate?: (date: string | null) => void
-  pinTooltip?: () => void
 }) {
   const onSelectDateRef = useRef(onSelectDate)
-  const pinTooltipRef = useRef(pinTooltip)
   useEffect(() => {
     onSelectDateRef.current = onSelectDate
-    pinTooltipRef.current = pinTooltip
-  }, [onSelectDate, pinTooltip])
+  }, [onSelectDate])
 
   const date =
     active && typeof payload?.[0]?.payload?.date === 'string'
@@ -62,81 +48,27 @@ function TooltipDateBridge({
       : null
 
   useEffect(() => {
-    if (date) {
-      onSelectDateRef.current?.(date)
-      pinTooltipRef.current?.()
-    }
+    if (date) onSelectDateRef.current?.(date)
   }, [date])
 
   return null
 }
 
-export function NetWorthChartTooltip({
-  active,
-  payload,
-  currency,
-  onSelectDate,
-  pinTooltip,
-}: {
-  active?: boolean
-  payload?: ReadonlyArray<{ payload?: NetWorthChartPoint }>
-  currency: string
-  onSelectDate?: (date: string | null) => void
-  pinTooltip?: () => void
-}) {
-  const t = useTranslation()
-  const locale = useLocale()
-
-  /** Single-finger scroll stays in the tooltip; two-finger pinch must reach the chart (#116). */
-  const stopSingleFinger = useCallback((event: ReactTouchEvent) => {
-    if (event.touches.length < 2) event.stopPropagation()
-  }, [])
-
-  const point =
-    active && payload?.[0]?.payload !== undefined
-      ? payload[0].payload
-      : undefined
-
-  return (
-    <>
-      <TooltipDateBridge
-        active={active}
-        payload={payload}
-        onSelectDate={onSelectDate}
-        pinTooltip={pinTooltip}
-      />
-      {point ? (
-        <div
-          data-testid="chart-holdings-tooltip"
-          className={`${CHART_TOOLTIP_SCROLL_CLASS} max-h-[min(20rem,calc(100dvh-8rem-env(safe-area-inset-bottom)))] max-w-64 overflow-y-scroll overscroll-contain rounded-lg border border-border bg-card p-3 text-foreground shadow-md touch-pan-y`}
-          onPointerDown={(event) => event.stopPropagation()}
-          onTouchStart={stopSingleFinger}
-          onTouchMove={stopSingleFinger}
-          onWheel={(event) => event.stopPropagation()}
-        >
-          <p className="text-xs font-medium">{point.date}</p>
-          {point.holdings && point.holdings.length > 0 && (
-            <div className="mt-2">
-              <HoldingBreakdownList
-                holdings={point.holdings}
-                baseCurrency={currency}
-                compact
-              />
-            </div>
-          )}
-          <p className="mt-2 text-xs font-medium">
-            {t.dashboard.netWorth}:{' '}
-            {formatAmount(point.total, currency, locale)}
-          </p>
-        </div>
-      ) : null}
-    </>
-  )
+function selectDateFromChartState(
+  state: unknown,
+  onSelectDate: ((date: string | null) => void) | undefined,
+) {
+  const payload = (
+    state as {
+      activePayload?: ReadonlyArray<{ payload?: { date?: string } }>
+    }
+  )?.activePayload?.[0]?.payload
+  const date = payload?.date
+  if (typeof date === 'string') onSelectDate?.(date)
 }
 
 export function NetWorthChart({
   points,
-  currency,
   seriesName,
   onZoomIn,
   onZoomOut,
@@ -145,11 +77,12 @@ export function NetWorthChart({
   onPanLater,
 }: {
   points: readonly NetWorthChartPoint[]
+  /** Kept so call sites stay unchanged; totals are already in `points`. */
   currency: string
   seriesName?: string
   onZoomIn: () => void
   onZoomOut: () => void
-  /** Called with the tapped chart day, or null when the tooltip is dismissed (#112). */
+  /** Called with the tapped chart day (#112). */
   onSelectDate?: (date: string | null) => void
   /** Horizontal drag right → earlier history (#111). */
   onPanEarlier?: () => void
@@ -158,18 +91,13 @@ export function NetWorthChart({
 }) {
   const t = useTranslation()
   const locale = useLocale()
-  const { tooltipActive, allowTooltip, pinTooltip, dismissTooltip } =
-    useDismissOnScroll()
-  const pinchRef = usePinchZoom(onZoomIn, onZoomOut, dismissTooltip)
+  const pinchRef = usePinchZoom(onZoomIn, onZoomOut)
   const panRef = useChartPan(onPanEarlier, onPanLater)
   const onSelectDateRef = useRef(onSelectDate)
 
   useEffect(() => {
     onSelectDateRef.current = onSelectDate
   }, [onSelectDate])
-
-  // Do not clear onSelectDate when the tooltip dismisses on scroll (#112).
-  // Positions must keep the tapped day; only pan/zoom (parent) clears selection.
 
   const name = seriesName ?? t.dashboard.netWorth
   if (points.length === 0) return null
@@ -189,34 +117,17 @@ export function NetWorthChart({
       }}
       className="h-48 w-full touch-pan-y"
       data-testid={NET_WORTH_CHART_TESTID}
-      onPointerDown={allowTooltip}
     >
       <ResponsiveContainer width="100%" height="100%">
         <LineChart
           data={[...points]}
           margin={{ top: 8, right: 8, left: 0, bottom: 0 }}
-          onMouseMove={(state) => {
-            const payload = (
-              state as {
-                activePayload?: ReadonlyArray<{ payload?: { date?: string } }>
-              }
-            )?.activePayload?.[0]?.payload
-            const date = payload?.date
-            if (typeof date === 'string') {
-              onSelectDateRef.current?.(date)
-              pinTooltip()
-            }
-          }}
-          onClick={(state) => {
-            const payload = (
-              state as { activePayload?: ReadonlyArray<{ payload?: { date?: string } }> }
-            )?.activePayload?.[0]?.payload
-            const date = payload?.date
-            if (typeof date === 'string') {
-              onSelectDateRef.current?.(date)
-              pinTooltip()
-            }
-          }}
+          onMouseMove={(state) =>
+            selectDateFromChartState(state, onSelectDateRef.current)
+          }
+          onClick={(state) =>
+            selectDateFromChartState(state, onSelectDateRef.current)
+          }
         >
           <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
           <XAxis
@@ -241,15 +152,9 @@ export function NetWorthChart({
             tickLine={false}
           />
           <Tooltip
-            active={tooltipActive}
-            content={
-              <NetWorthChartTooltip
-                currency={currency}
-                onSelectDate={onSelectDate}
-                pinTooltip={pinTooltip}
-              />
-            }
-            wrapperStyle={{ zIndex: 50, pointerEvents: 'auto' }}
+            content={<ChartDaySelect onSelectDate={onSelectDate} />}
+            cursor={false}
+            wrapperStyle={{ display: 'none' }}
           />
           <Line
             type="monotone"
@@ -270,10 +175,7 @@ export function NetWorthChart({
                   'date' in payload.payload
                     ? (payload.payload as { date?: string }).date
                     : undefined
-                if (typeof date === 'string') {
-                  onSelectDateRef.current?.(date)
-                  pinTooltip()
-                }
+                if (typeof date === 'string') onSelectDateRef.current?.(date)
               },
             }}
           />
