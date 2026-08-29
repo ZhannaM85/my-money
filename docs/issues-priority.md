@@ -21,15 +21,6 @@ _After the four web flows feel good. Android wraps this app; iOS does not._
 
 ---
 
-## Tier 15 — Live feedback (2026-08-29)
-
-| # | Status | Issue | Notes |
-|---|--------|-------|-------|
-| [#139](https://github.com/ZhannaM85/my-money/issues/139) | 🔍 Pending validation | Comparison: only date columns scroll horizontally; name column stays fixed | Still panned (`IMG_0910.MP4`). Names outside the scroller; only date columns scroll. Related #138, #84. |
-| [#142](https://github.com/ZhannaM85/my-money/issues/142) | 🔍 Pending validation | Comparison dates disappear on page refresh | `IMG_0909.MP4`. Store is session-only today (#137). Persist on device. |
-
----
-
 ## Explicitly not filed
 
 Out of scope for the MVP (`PROJECT_BRIEF.md` §20) — do not implement from chat:
