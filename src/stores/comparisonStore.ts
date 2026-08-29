@@ -1,4 +1,7 @@
 import { create } from 'zustand'
+import { createJSONStorage, persist } from 'zustand/middleware'
+
+export const COMPARISON_STORAGE_KEY = 'my-money-comparison'
 
 interface ComparisonState {
   dates: string[]
@@ -6,15 +9,24 @@ interface ComparisonState {
   removeDate: (date: string) => void
 }
 
-export const useComparisonStore = create<ComparisonState>((set) => ({
-  dates: [],
-  addDate: (date) =>
-    set((state) => {
-      if (state.dates.includes(date)) return state
-      return { dates: [...state.dates, date].sort() }
+export const useComparisonStore = create<ComparisonState>()(
+  persist(
+    (set) => ({
+      dates: [],
+      addDate: (date) =>
+        set((state) => {
+          if (state.dates.includes(date)) return state
+          return { dates: [...state.dates, date].sort() }
+        }),
+      removeDate: (date) =>
+        set((state) => ({
+          dates: state.dates.filter((row) => row !== date),
+        })),
     }),
-  removeDate: (date) =>
-    set((state) => ({
-      dates: state.dates.filter((row) => row !== date),
-    })),
-}))
+    {
+      name: COMPARISON_STORAGE_KEY,
+      storage: createJSONStorage(() => localStorage),
+      partialize: (state) => ({ dates: state.dates }),
+    },
+  ),
+)

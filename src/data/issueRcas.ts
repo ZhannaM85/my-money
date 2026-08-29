@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 142,
+    title: {
+      en: 'Comparison dates disappear on page refresh',
+      ru: 'Даты сравнения пропадают при обновлении страницы',
+    },
+    en: 'Dates lived only in memory (#137 session-only). Same localStorage persist as appearance mood; add/remove still writes the set so refresh keeps the columns.',
+    ru: 'Даты жили только в памяти (#137 только на сессию). Тот же persist в localStorage, что у оформления; добавление/удаление пишет набор, обновление страницы оставляет столбцы.',
+  },
+  {
     issue: 141,
     title: {
       en: 'Chart: toggle to show or hide the holdings tooltip',
