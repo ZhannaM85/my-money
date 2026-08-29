@@ -144,7 +144,6 @@ export function NetWorthChart({
   onSelectDate,
   onPanEarlier,
   onPanLater,
-  holdingsTooltip = true,
 }: {
   points: readonly NetWorthChartPoint[]
   currency: string
@@ -157,11 +156,6 @@ export function NetWorthChart({
   onPanEarlier?: () => void
   /** Horizontal drag left → later history (#111). */
   onPanLater?: () => void
-  /**
-   * Holdings popover on tap. Dashboard sets false — Positions above the graph
-   * already shows the same list (#133). History and asset details keep the default.
-   */
-  holdingsTooltip?: boolean
 }) {
   const t = useTranslation()
   const locale = useLocale()
@@ -225,23 +219,15 @@ export function NetWorthChart({
             axisLine={false}
             tickLine={false}
           />
-          {holdingsTooltip ? (
-            <Tooltip
-              content={
-                <NetWorthChartTooltip
-                  currency={currency}
-                  onSelectDate={onSelectDate}
-                />
-              }
-              wrapperStyle={{ zIndex: 50, pointerEvents: 'auto' }}
-            />
-          ) : (
-            <Tooltip
-              content={<ChartDaySelect onSelectDate={onSelectDate} />}
-              cursor={false}
-              wrapperStyle={{ display: 'none' }}
-            />
-          )}
+          <Tooltip
+            content={
+              <NetWorthChartTooltip
+                currency={currency}
+                onSelectDate={onSelectDate}
+              />
+            }
+            wrapperStyle={{ zIndex: 50, pointerEvents: 'auto' }}
+          />
           <Line
             type="monotone"
             dataKey="total"

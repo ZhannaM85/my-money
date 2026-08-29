@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 135,
+    title: {
+      en: 'Restore Dashboard chart holdings tooltip now that Positions are below the graph',
+      ru: 'Вернуть подсказку графика на Сводке: Позиции теперь под графиком',
+    },
+    en: '#133 hid the popover because Positions sat above the chart. After #134 the list is below, so Dashboard uses the same simple holdings tooltip as History (no pin / dismiss-on-scroll).',
+    ru: '#133 прятал карточку, потому что Позиции были над графиком. После #134 список снизу, поэтому Сводка снова использует ту же простую подсказку, что История (без pin / dismiss-on-scroll).',
+  },
+  {
     issue: 134,
     title: {
       en: 'Move Dashboard Positions below the net-worth chart',
