@@ -25,8 +25,10 @@ _After the four web flows feel good. Android wraps this app; iOS does not._
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
-| [#128](https://github.com/ZhannaM85/my-money/issues/128) | 🔍 Pending validation | Chart tooltip closes when scrolling its holdings list | Page scroll should still dismiss (#77); inner tooltip scroll should not. |
 | [#129](https://github.com/ZhannaM85/my-money/issues/129) | ⬜ Open | Show original amount in muted text under converted values on asset details | Dashboard Positions already show native under converted; asset history does not. |
+| [#130](https://github.com/ZhannaM85/my-money/issues/130) | ⬜ Open | Chart tooltip does not close when tapping away | Follow-up to #128 pin: dismiss on outside tap, not on inner list. |
+| [#131](https://github.com/ZhannaM85/my-money/issues/131) | ⬜ Open | Chart tooltip is hidden behind the tab bar | Tall holdings card paints under BottomNav. |
+| [#132](https://github.com/ZhannaM85/my-money/issues/132) | ⬜ Open | Chart tooltip flickers open then closed on tap | Appear-then-hide when opening; video IMG_0876. |
 
 ---
 

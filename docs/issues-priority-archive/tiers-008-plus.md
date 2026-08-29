@@ -148,3 +148,4 @@ Closed live-feedback rows from Tier 8 onward. Open / pending items stay in [`../
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
 | [#127](https://github.com/ZhannaM85/my-money/issues/127) | ✅ Done | No automatic GEL→RUB conversion despite NBG rates | NBG already used for RUB via GEL (#47); GEL pickers from #107; GEL→RUB = invert of RUB row (quantity applied). Validated on-device 2026-08-29. |
+| [#128](https://github.com/ZhannaM85/my-money/issues/128) | ✅ Done | Chart tooltip closes when scrolling its holdings list | Page scroll should still dismiss (#77); inner tooltip scroll should not. Follow-ups #130–#132. Validated on-device 2026-08-29. |
