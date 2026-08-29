@@ -26,7 +26,6 @@ _After the four web flows feel good. Android wraps this app; iOS does not._
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
 | [#139](https://github.com/ZhannaM85/my-money/issues/139) | 🔍 Pending validation | Comparison: only date columns scroll horizontally; name column stays fixed | Still panned with 4 columns (`IMG_0908.MP4`). Grid-bounded inner scroller + `overflow-x: clip` on main. Related #138, #84. |
-| [#141](https://github.com/ZhannaM85/my-money/issues/141) | 🔍 Pending validation | Chart: toggle to show or hide the holdings tooltip | Tooltip can cover the whole plot. User-controlled; persist; day tap still selects (#112). |
 | [#142](https://github.com/ZhannaM85/my-money/issues/142) | 🔲 Open | Comparison dates disappear on page refresh | `IMG_0909.MP4`. Store is session-only today (#137). Persist on device. |
 
 ---
