@@ -20,6 +20,15 @@ export const issueRcas: IssueRca[] = [
     ru: 'Крестик на столбце даты сразу убирал день. Тот же window.confirm, что при удалении актива; Отмена оставляет день.',
   },
   {
+    issue: 138,
+    title: {
+      en: 'Comparison table: narrow name column, wrap titles, show two date columns',
+      ru: 'Таблица сравнения: узкая колонка имён, перенос названий, два столбца дат',
+    },
+    en: 'Long names stretched the first column over the first date. Name column is 6rem with wrapping; each date column is 8.25rem so two fit a phone.',
+    ru: 'Длинные имена растягивали первую колонку на первый день. Колонка имён 6rem с переносом; каждый день 8.25rem — два столбца влезают на телефон.',
+  },
+  {
     issue: 137,
     title: {
       en: 'Compare holdings across selected dates (table page)',

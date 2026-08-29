@@ -141,4 +141,42 @@ describe('ComparisonScreen (#137)', () => {
     )
     expect(useComparisonStore.getState().dates).toEqual(['2026-08-29'])
   })
+
+  it('keeps the name column narrow and wrapping so two date columns fit (#138)', async () => {
+    const now = '2026-08-17T00:00:00.000Z'
+    await useAssetStore.getState().saveAsset(
+      {
+        id: 'a1',
+        name: 'Дебетовая карта BOG-GEL',
+        assetClass: 'money',
+        type: 'debit_card',
+        currency: 'GEL',
+        trackingStatus: 'included',
+        valuationMethod: 'account_balance',
+        updateFrequency: 'weekly',
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        assetId: 'a1',
+        date: '2026-08-25',
+        amount: 100,
+        currency: 'GEL',
+      },
+    )
+    useComparisonStore.setState({ dates: ['2026-08-25', '2026-08-29'] })
+    render(
+      <MemoryRouter>
+        <ComparisonScreen />
+      </MemoryRouter>,
+    )
+    const nameCol = await screen.findByTestId('comparison-name-col')
+    expect(nameCol).toHaveClass('w-24')
+    expect(nameCol).toHaveClass('max-w-24')
+    expect(nameCol).toHaveClass('whitespace-normal')
+    expect(nameCol).toHaveClass('break-words')
+    const dateHeader = screen.getByRole('columnheader', { name: '25 Aug' })
+    expect(dateHeader.className).toContain('min-w-[8.25rem]')
+    expect(dateHeader.className).toContain('w-[8.25rem]')
+  })
 })

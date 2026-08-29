@@ -14,6 +14,12 @@ import { useComparisonStore } from '@/stores/comparisonStore'
 import { useFxStore } from '@/stores/fxStore'
 import { useSettingsStore } from '@/stores/settingsStore'
 
+/** Narrow wrapping name column so two date columns fit a phone (#138). */
+export const COMPARISON_NAME_COL_CLASS =
+  'w-24 max-w-24 min-w-24 whitespace-normal break-words [overflow-wrap:anywhere]'
+export const COMPARISON_DATE_COL_CLASS =
+  'min-w-[8.25rem] w-[8.25rem] max-w-[8.25rem]'
+
 function ComparisonCell({
   holding,
   baseCurrency,
@@ -148,18 +154,27 @@ export function ComparisonScreen() {
       />
       <div className="overflow-x-auto">
         <table
-          className="w-full min-w-max border-separate border-spacing-0 text-sm"
+          className="w-max table-fixed border-separate border-spacing-0 text-sm"
           data-testid="comparison-table"
         >
+          <colgroup>
+            <col className="w-24" />
+            {dates.map((date) => (
+              <col key={date} className="w-[8.25rem]" />
+            ))}
+          </colgroup>
           <thead>
             <tr>
-              <th className="sticky left-0 z-10 bg-background py-2 pr-3 text-left font-medium text-muted-foreground">
+              <th
+                data-testid="comparison-name-col"
+                className={`sticky left-0 z-10 bg-background py-2 pr-2 text-left font-medium text-muted-foreground ${COMPARISON_NAME_COL_CLASS}`}
+              >
                 {t.dashboard.holdings}
               </th>
               {dates.map((date) => (
                 <th
                   key={date}
-                  className="px-3 py-2 text-right font-medium text-foreground"
+                  className={`px-2 py-2 text-right font-medium text-foreground ${COMPARISON_DATE_COL_CLASS}`}
                 >
                   <span className="inline-flex items-center justify-end gap-1">
                     {formatChartAxisDate(date, locale)}
@@ -179,11 +194,16 @@ export function ComparisonScreen() {
           <tbody>
             {rows.map((row) => (
               <tr key={row.assetId}>
-                <th className="sticky left-0 bg-background py-3 pr-3 text-left font-medium">
+                <th
+                  className={`sticky left-0 z-10 bg-background py-3 pr-2 text-left font-medium ${COMPARISON_NAME_COL_CLASS}`}
+                >
                   {row.name}
                 </th>
                 {dates.map((date) => (
-                  <td key={date} className="px-3 py-3 text-right align-top">
+                  <td
+                    key={date}
+                    className={`px-2 py-3 text-right align-top ${COMPARISON_DATE_COL_CLASS}`}
+                  >
                     <ComparisonCell
                       holding={row.byDate[date]}
                       baseCurrency={baseCurrency}
@@ -195,13 +215,15 @@ export function ComparisonScreen() {
           </tbody>
           <tfoot>
             <tr>
-              <th className="sticky left-0 bg-background py-3 pr-3 text-left font-semibold">
+              <th
+                className={`sticky left-0 z-10 bg-background py-3 pr-2 text-left font-semibold ${COMPARISON_NAME_COL_CLASS}`}
+              >
                 {t.dashboard.positionsTotal}
               </th>
               {dates.map((date) => (
                 <td
                   key={date}
-                  className="px-3 py-3 text-right font-semibold tabular-nums"
+                  className={`px-2 py-3 text-right font-semibold tabular-nums ${COMPARISON_DATE_COL_CLASS}`}
                 >
                   {formatAmount(totals[date] ?? 0, baseCurrency, locale)}
                 </td>

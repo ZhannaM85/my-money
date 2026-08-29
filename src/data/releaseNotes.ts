@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 147,
+    issue: 138,
+    date: '2026-08-29T18:25:00+03:00',
+    en: 'Comparison names wrap in a narrower first column so two date columns fit on a phone.',
+    ru: 'В сравнении имена переносятся в узкой первой колонке, чтобы на телефоне было видно два столбца дат.',
+  },
+  {
     version: 146,
     issue: 140,
     date: '2026-08-29T18:20:00+03:00',
