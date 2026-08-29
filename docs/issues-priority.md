@@ -21,6 +21,14 @@ _After the four web flows feel good. Android wraps this app; iOS does not._
 
 ---
 
+## Tier 15 — Live feedback (2026-08-29)
+
+| # | Status | Issue | Notes |
+|---|--------|-------|-------|
+| [#143](https://github.com/ZhannaM85/my-money/issues/143) | 🔲 Open | Comparison: remove-all control to clear every date | Only per-column X today. Confirm then clear the set. Follow-up to #137 / #140. |
+
+---
+
 ## Explicitly not filed
 
 Out of scope for the MVP (`PROJECT_BRIEF.md` §20) — do not implement from chat:
