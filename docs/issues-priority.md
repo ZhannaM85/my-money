@@ -25,7 +25,6 @@ _After the four web flows feel good. Android wraps this app; iOS does not._
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
-| [#138](https://github.com/ZhannaM85/my-money/issues/138) | 🔍 Pending validation | Comparison table: narrow name column, wrap titles, show two date columns | Follow-up to #137. First column overlaps date values on a phone. |
 | [#139](https://github.com/ZhannaM85/my-money/issues/139) | 🔍 Pending validation | Comparison: only date columns scroll horizontally; name column stays fixed | Still panned with 4 columns (`IMG_0908.MP4`). Grid-bounded inner scroller + `overflow-x: clip` on main. Related #138, #84. |
 | [#140](https://github.com/ZhannaM85/my-money/issues/140) | 🔍 Pending validation | Confirm before removing a date from comparison | X on a date column removes immediately; need Cancel/Confirm. Follow-up to #137. |
 | [#141](https://github.com/ZhannaM85/my-money/issues/141) | 🔍 Pending validation | Chart: toggle to show or hide the holdings tooltip | Tooltip can cover the whole plot. User-controlled; persist; day tap still selects (#112). |
