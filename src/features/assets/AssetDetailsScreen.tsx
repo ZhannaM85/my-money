@@ -7,6 +7,7 @@ import { BASE_CURRENCIES } from '@/domain/settings'
 import { latestSnapshot, optionalSnapshotNote, hasDuplicateSnapshot } from '@/domain/snapshot'
 import { NetWorthChart } from '@/features/dashboard/NetWorthChart'
 import { ChartRangePicker } from '@/features/dashboard/ChartRangePicker'
+import { assetChartPoints } from './assetChartPoints'
 import { formatLastUpdated, useLocale, useTranslation } from '@/i18n'
 import {
   formatOwnershipShare,
@@ -26,6 +27,7 @@ import {
   canZoomHistoryOut,
   type HistoryRange,
   isIsoDateOnOrBefore,
+  isoDatesInclusive,
   rangeStartIso,
   stepHistoryRange,
 } from '@/shared/lib/dates'
@@ -130,27 +132,16 @@ export function AssetDetailsScreen() {
     setRange(next)
   }
 
-  const points = ordered.flatMap((row) => {
-    if (!asset || !displayCurrency) return []
-    if (row.date < chartStart || row.date > chartEnd) return []
-    if (mode === 'native') {
-      return [{ date: row.date, total: row.amount }]
-    }
-    const rate = lookupRate(quotes, row.currency, baseCurrency, row.date)
-    if (rate === undefined) return []
-    const total = convertAmount(row.amount, rate)
-    if (row.currency !== baseCurrency) {
-      return [
-        {
-          date: row.date,
-          total,
-          nativeAmount: row.amount,
-          nativeCurrency: row.currency,
-        },
-      ]
-    }
-    return [{ date: row.date, total }]
-  })
+  const points = asset
+    ? assetChartPoints(
+        asset.id,
+        snapshots,
+        isoDatesInclusive(chartStart, chartEnd),
+        mode,
+        quotes,
+        baseCurrency,
+      )
+    : []
 
   const convertedNow =
     snapshot && asset

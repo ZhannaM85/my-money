@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 144,
+    title: {
+      en: 'Asset chart X-axis spaces snapshot dates evenly, not by calendar time',
+      ru: 'Ось X графика актива ставит даты снимков равномерно, не по календарю',
+    },
+    en: 'One point per snapshot on a category axis made May–August as wide as two weeks in December. The series is now one point per calendar day (last snapshot carried forward).',
+    ru: 'Одна точка на снимок на категориальной оси делала май–август таким же широким, как две недели в декабре. Теперь одна точка на календарный день (последний снимок протягивается вперёд).',
+  },
+  {
     issue: 143,
     title: {
       en: 'Comparison: remove-all control to clear every date',

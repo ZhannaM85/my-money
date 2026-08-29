@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 154,
+    issue: 144,
+    date: '2026-08-29T19:30:00+03:00',
+    en: 'On an asset chart, the time axis follows the calendar. A four-month gap is wider than two weeks.',
+    ru: 'На графике актива ось времени следует календарю. Промежуток в четыре месяца шире, чем две недели.',
+  },
+  {
     version: 153,
     issue: 143,
     date: '2026-08-29T19:05:00+03:00',

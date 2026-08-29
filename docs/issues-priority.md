@@ -25,7 +25,7 @@ _After the four web flows feel good. Android wraps this app; iOS does not._
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
-| [#144](https://github.com/ZhannaM85/my-money/issues/144) | 🔲 Open | Asset chart X-axis spaces snapshot dates evenly, not by calendar time | All range: May→Aug looks as close as Dec 8→21. Category axis, one point per snapshot. |
+| [#144](https://github.com/ZhannaM85/my-money/issues/144) | 🔍 Pending validation | Asset chart X-axis spaces snapshot dates evenly, not by calendar time | All range: May→Aug looks as close as Dec 8→21. Category axis, one point per snapshot. |
 
 ---
 
