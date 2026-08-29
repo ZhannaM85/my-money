@@ -21,6 +21,14 @@ _After the four web flows feel good. Android wraps this app; iOS does not._
 
 ---
 
+## Tier 15 — Live feedback (2026-08-29)
+
+| # | Status | Issue | Notes |
+|---|--------|-------|-------|
+| [#144](https://github.com/ZhannaM85/my-money/issues/144) | 🔲 Open | Asset chart X-axis spaces snapshot dates evenly, not by calendar time | All range: May→Aug looks as close as Dec 8→21. Category axis, one point per snapshot. |
+
+---
+
 ## Explicitly not filed
 
 Out of scope for the MVP (`PROJECT_BRIEF.md` §20) — do not implement from chat:
