@@ -1,7 +1,8 @@
 import { act, renderHook } from '@testing-library/react'
-import { afterEach, describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import {
   CHART_TOOLTIP_SCROLL_CLASS,
+  PIN_SCROLL_GRACE_MS,
   useDismissOnScroll,
 } from './useDismissOnScroll'
 
@@ -33,6 +34,7 @@ function fireTouch(
 describe('useDismissOnScroll', () => {
   afterEach(() => {
     document.body.replaceChildren()
+    vi.useRealTimers()
   })
 
   it('leaves tooltip control to the chart until the page scrolls', () => {
@@ -56,6 +58,7 @@ describe('useDismissOnScroll', () => {
   })
 
   it('pins the tooltip open until page scroll (#128)', () => {
+    vi.useFakeTimers()
     const { result } = renderHook(() => useDismissOnScroll())
     act(() => {
       result.current.pinTooltip()
@@ -63,9 +66,22 @@ describe('useDismissOnScroll', () => {
     expect(result.current.tooltipActive).toBe(true)
 
     act(() => {
+      vi.advanceTimersByTime(PIN_SCROLL_GRACE_MS + 1)
       window.dispatchEvent(new Event('scroll'))
     })
     expect(result.current.tooltipActive).toBe(false)
+    vi.useRealTimers()
+  })
+
+  it('does not dismiss on scroll in the grace period after pin (#132)', () => {
+    vi.useFakeTimers()
+    const { result } = renderHook(() => useDismissOnScroll())
+    act(() => {
+      result.current.pinTooltip()
+      window.dispatchEvent(new Event('scroll'))
+    })
+    expect(result.current.tooltipActive).toBe(true)
+    vi.useRealTimers()
   })
 
   it('does not dismiss when the holdings tooltip list scrolls (#128)', () => {
@@ -117,6 +133,7 @@ describe('useDismissOnScroll', () => {
   })
 
   it('still dismisses when a nested non-tooltip scroller moves (#128)', () => {
+    vi.useFakeTimers()
     const other = document.createElement('div')
     other.className = 'overflow-y-scroll'
     document.body.appendChild(other)
@@ -126,6 +143,7 @@ describe('useDismissOnScroll', () => {
       result.current.pinTooltip()
     })
     act(() => {
+      vi.advanceTimersByTime(PIN_SCROLL_GRACE_MS + 1)
       other.dispatchEvent(new Event('scroll', { bubbles: false }))
     })
     expect(result.current.tooltipActive).toBe(false)

@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 132,
+    title: {
+      en: 'Chart tooltip flickers open then closed on tap',
+      ru: 'Подсказка графика мигает: открывается и сразу закрывается',
+    },
+    en: 'Pinning kept the list open, but a tap still nudged the page. Dismiss-on-scroll treated that jiggle as a real scroll and hid the card. Scroll is ignored for a short grace after pin; a later page scroll still dismisses.',
+    ru: 'Закрепление держало список, но тап чуть сдвигал страницу. Скрытие по scroll считало это настоящим скроллом и убирало карточку. Сразу после pin скролл игнорируется; поздний скролл страницы по-прежнему скрывает.',
+  },
+  {
     issue: 129,
     title: {
       en: 'Show original amount in muted text under converted values on asset details',

@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 137,
+    issue: 132,
+    date: '2026-08-29T12:15:00+03:00',
+    en: 'Tapping a chart day no longer flashes the holdings tooltip closed. Scrolling the page still dismisses it.',
+    ru: 'Нажатие дня на графике больше не вспыхивает и не закрывает подсказку. Прокрутка страницы по-прежнему её скрывает.',
+  },
+  {
     version: 136,
     issue: 129,
     date: '2026-08-29T12:05:00+03:00',

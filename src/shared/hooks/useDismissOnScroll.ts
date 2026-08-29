@@ -1,5 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 
+/** Ignore page scroll right after pin so a tap does not flash-close the tooltip (#132). */
+export const PIN_SCROLL_GRACE_MS = 450
+
 /** Inner holdings list — scroll here must not dismiss the tooltip (#128). */
 export const CHART_TOOLTIP_SCROLL_CLASS = 'chart-tooltip-scroll'
 
@@ -22,7 +25,8 @@ function tooltipScroller(target: EventTarget | null): HTMLElement | null {
  * A finger on the holdings list must not close it (#128): iOS often scrolls
  * the page instead of the overflow layer (Recharts `transform`), so we
  * pin `active`, ignore page scroll for that gesture, and pan `scrollTop`
- * ourselves.
+ * ourselves. A tap also jiggles the page; ignore scroll for a short grace
+ * after pin so the tooltip does not flash closed (#132).
  */
 export function useDismissOnScroll() {
   const [dismissed, setDismissed] = useState(false)
@@ -30,9 +34,11 @@ export function useDismissOnScroll() {
   const tooltipGesture = useRef(false)
   const scroller = useRef<HTMLElement | null>(null)
   const lastY = useRef(0)
+  const ignoreScrollUntil = useRef(0)
 
   useEffect(() => {
     const dismissIfPageScroll = (event: Event) => {
+      if (Date.now() < ignoreScrollUntil.current) return
       if (tooltipGesture.current || isInsideTooltip(event.target)) return
       setDismissed(true)
       setPinned(false)
@@ -89,8 +95,12 @@ export function useDismissOnScroll() {
     }
   }, [])
 
-  const allowTooltip = useCallback(() => setDismissed(false), [])
+  const allowTooltip = useCallback(() => {
+    ignoreScrollUntil.current = Date.now() + PIN_SCROLL_GRACE_MS
+    setDismissed(false)
+  }, [])
   const pinTooltip = useCallback(() => {
+    ignoreScrollUntil.current = Date.now() + PIN_SCROLL_GRACE_MS
     setDismissed(false)
     setPinned(true)
   }, [])
