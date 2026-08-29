@@ -26,6 +26,7 @@ _After the four web flows feel good. Android wraps this app; iOS does not._
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
 | [#136](https://github.com/ZhannaM85/my-money/issues/136) | 🔲 Open | Asset details chart tooltip: show original amount in muted grey under converted | Same idea as #129 history rows. Converted mode only; skip when native is already base. |
+| [#137](https://github.com/ZhannaM85/my-money/issues/137) | 🔲 Open | Compare holdings on two dates without taking screenshots | Dashboard Compare-with date + per-asset A/B/Δ. Not a new tab. Period change (From amounts/rates) is a different feature. |
 
 ---
 
