@@ -48,6 +48,8 @@ export const ru: Dictionary = {
     removeFromComparison: (date) => `Убрать ${date}`,
     removeFromComparisonConfirm: (date) =>
       `Убрать ${date} из сравнения?`,
+    removeAllFromComparison: 'Убрать все даты',
+    removeAllFromComparisonConfirm: 'Убрать все даты из сравнения?',
     positionsTotal: 'Итого',
     emptyTitle: 'Пока нет активов',
     emptyDescription:

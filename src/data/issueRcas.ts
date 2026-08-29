@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 143,
+    title: {
+      en: 'Comparison: remove-all control to clear every date',
+      ru: 'Сравнение: убрать все даты сразу',
+    },
+    en: 'Only per-column X existed, so many days meant many confirms. Trash next to the title asks once, then clears the persisted set.',
+    ru: 'Был только крестик на столбце, много дней — много подтверждений. Корзина у заголовка спрашивает один раз и очищает сохранённый набор.',
+  },
+  {
     issue: 142,
     title: {
       en: 'Comparison dates disappear on page refresh',

@@ -47,6 +47,8 @@ export const en: Dictionary = {
     removeFromComparison: (date) => `Remove ${date}`,
     removeFromComparisonConfirm: (date) =>
       `Remove ${date} from comparison?`,
+    removeAllFromComparison: 'Remove all dates',
+    removeAllFromComparisonConfirm: 'Remove all dates from comparison?',
     positionsTotal: 'Total',
     emptyTitle: 'No assets yet',
     emptyDescription: 'Add what you own or owe to see your first net worth.',

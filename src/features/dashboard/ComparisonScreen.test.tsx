@@ -142,6 +142,65 @@ describe('ComparisonScreen (#137)', () => {
     expect(useComparisonStore.getState().dates).toEqual(['2026-08-29'])
   })
 
+  it('asks before removing every date; cancel keeps them (#143)', async () => {
+    const now = '2026-08-17T00:00:00.000Z'
+    await useAssetStore.getState().saveAsset(
+      {
+        id: 'a1',
+        name: 'Cash',
+        assetClass: 'money',
+        type: 'cash',
+        currency: 'EUR',
+        trackingStatus: 'included',
+        valuationMethod: 'account_balance',
+        updateFrequency: 'weekly',
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        assetId: 'a1',
+        date: '2026-08-25',
+        amount: 100,
+        currency: 'EUR',
+      },
+    )
+    await useAssetStore.getState().saveSnapshots([
+      {
+        assetId: 'a1',
+        date: '2026-08-29',
+        amount: 150,
+        currency: 'EUR',
+      },
+    ])
+    useComparisonStore.setState({ dates: ['2026-08-25', '2026-08-29'] })
+    const confirm = vi.spyOn(window, 'confirm').mockReturnValue(false)
+    const user = userEvent.setup()
+    render(
+      <MemoryRouter>
+        <ComparisonScreen />
+      </MemoryRouter>,
+    )
+    expect(await screen.findByTestId('comparison-table')).toBeInTheDocument()
+    await user.click(
+      screen.getByRole('button', { name: 'Remove all dates' }),
+    )
+    expect(confirm).toHaveBeenCalledWith(
+      'Remove all dates from comparison?',
+    )
+    expect(useComparisonStore.getState().dates).toEqual([
+      '2026-08-25',
+      '2026-08-29',
+    ])
+    confirm.mockReturnValue(true)
+    await user.click(
+      screen.getByRole('button', { name: 'Remove all dates' }),
+    )
+    expect(useComparisonStore.getState().dates).toEqual([])
+    expect(
+      await screen.findByText('Add at least two dates from Dashboard.'),
+    ).toBeInTheDocument()
+  })
+
   it('keeps the name column narrow and wrapping so two date columns fit (#138)', async () => {
     const now = '2026-08-17T00:00:00.000Z'
     await useAssetStore.getState().saveAsset(
@@ -220,7 +279,7 @@ describe('ComparisonScreen (#137)', () => {
     expect(scroller.contains(nameCol)).toBe(false)
     expect(nameCol.className).not.toContain('sticky')
     expect(
-      screen.getAllByRole('button', { name: /Remove / }),
+      screen.getAllByRole('button', { name: /^Remove \d{4}-/ }),
     ).toHaveLength(4)
   })
 })

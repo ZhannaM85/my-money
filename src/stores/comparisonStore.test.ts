@@ -25,6 +25,12 @@ describe('useComparisonStore (#137)', () => {
     useComparisonStore.getState().removeDate('2026-08-25')
     expect(useComparisonStore.getState().dates).toEqual(['2026-08-29'])
   })
+
+  it('clears every date (#143)', () => {
+    useComparisonStore.setState({ dates: ['2026-08-25', '2026-08-29'] })
+    useComparisonStore.getState().clearDates()
+    expect(useComparisonStore.getState().dates).toEqual([])
+  })
 })
 
 describe('useComparisonStore persistence (#142)', () => {

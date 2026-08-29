@@ -1,6 +1,6 @@
 import { useEffect, useLayoutEffect, useMemo, useRef } from 'react'
 import { Link } from 'react-router-dom'
-import { X } from 'lucide-react'
+import { Trash2, X } from 'lucide-react'
 import { historicalNetWorth } from '@/domain/netWorth'
 import type { HoldingConversion } from '@/domain/netWorth'
 import { comparisonRows } from '@/features/dashboard/comparisonRows'
@@ -94,10 +94,15 @@ export function ComparisonScreen() {
   const locale = useLocale()
   const dates = useComparisonStore((state) => state.dates)
   const removeDate = useComparisonStore((state) => state.removeDate)
+  const clearDates = useComparisonStore((state) => state.clearDates)
 
   const confirmRemoveDate = (date: string) => {
     if (!window.confirm(t.dashboard.removeFromComparisonConfirm(date))) return
     removeDate(date)
+  }
+  const confirmRemoveAll = () => {
+    if (!window.confirm(t.dashboard.removeAllFromComparisonConfirm)) return
+    clearDates()
   }
   const loadAssets = useAssetStore((state) => state.load)
   const assets = useAssetStore((state) => state.assets)
@@ -185,6 +190,17 @@ export function ComparisonScreen() {
       <PageHeader
         title={t.dashboard.comparisonTitle}
         description={t.dashboard.comparisonDescription}
+        action={
+          <Button
+            type="button"
+            variant="outline"
+            size="icon-xl"
+            aria-label={t.dashboard.removeAllFromComparison}
+            onClick={confirmRemoveAll}
+          >
+            <Trash2 className="size-5" aria-hidden />
+          </Button>
+        }
       />
       <div
         className="flex w-full min-w-0"

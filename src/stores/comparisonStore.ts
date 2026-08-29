@@ -7,6 +7,7 @@ interface ComparisonState {
   dates: string[]
   addDate: (date: string) => void
   removeDate: (date: string) => void
+  clearDates: () => void
 }
 
 export const useComparisonStore = create<ComparisonState>()(
@@ -22,6 +23,7 @@ export const useComparisonStore = create<ComparisonState>()(
         set((state) => ({
           dates: state.dates.filter((row) => row !== date),
         })),
+      clearDates: () => set({ dates: [] }),
     }),
     {
       name: COMPARISON_STORAGE_KEY,

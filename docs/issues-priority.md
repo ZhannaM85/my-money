@@ -25,7 +25,7 @@ _After the four web flows feel good. Android wraps this app; iOS does not._
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
-| [#143](https://github.com/ZhannaM85/my-money/issues/143) | 🔲 Open | Comparison: remove-all control to clear every date | Only per-column X today. Confirm then clear the set. Follow-up to #137 / #140. |
+| [#143](https://github.com/ZhannaM85/my-money/issues/143) | 🔍 Pending validation | Comparison: remove-all control to clear every date | Only per-column X today. Confirm then clear the set. Follow-up to #137 / #140. |
 
 ---
 

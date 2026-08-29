@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 153,
+    issue: 143,
+    date: '2026-08-29T19:05:00+03:00',
+    en: 'On Comparison, a trash control clears every date after confirmation. Cancel keeps them.',
+    ru: 'В сравнении корзина убирает все даты после подтверждения. Отмена оставляет их.',
+  },
+  {
     version: 152,
     issue: 139,
     date: '2026-08-29T18:55:00+03:00',
