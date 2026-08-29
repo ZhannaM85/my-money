@@ -26,6 +26,7 @@ _After the four web flows feel good. Android wraps this app; iOS does not._
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
 | [#128](https://github.com/ZhannaM85/my-money/issues/128) | 🔍 Pending validation | Chart tooltip closes when scrolling its holdings list | Page scroll should still dismiss (#77); inner tooltip scroll should not. |
+| [#129](https://github.com/ZhannaM85/my-money/issues/129) | ⬜ Open | Show original amount in muted text under converted values on asset details | Dashboard Positions already show native under converted; asset history does not. |
 
 ---
 
