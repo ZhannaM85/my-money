@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 144,
+    issue: 136,
+    date: '2026-08-29T18:00:00+03:00',
+    en: 'On an asset’s chart, the tooltip in Converted mode shows the original amount in muted grey under the converted total.',
+    ru: 'В карточке актива подсказка графика в режиме пересчёта показывает оригинальную сумму серым под пересчитанной.',
+  },
+  {
     version: 143,
     issue: 135,
     date: '2026-08-29T13:25:00+03:00',

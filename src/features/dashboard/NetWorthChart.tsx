@@ -33,6 +33,9 @@ export interface NetWorthChartPoint {
   date: string
   total: number
   holdings?: readonly HoldingConversion[]
+  /** Native amount for asset-details Converted tooltip (#136). */
+  nativeAmount?: number
+  nativeCurrency?: string
 }
 
 /** Sync Positions / As of when Recharts has an active point (incl. iOS tap). #112 */
@@ -116,6 +119,16 @@ export function NetWorthChartTooltip({
             {t.dashboard.netWorth}:{' '}
             {formatAmount(point.total, currency, locale)}
           </p>
+          {point.nativeAmount !== undefined &&
+          point.nativeCurrency &&
+          point.nativeCurrency !== currency ? (
+            <p
+              className="text-xs text-muted-foreground"
+              data-testid="chart-tooltip-native"
+            >
+              {formatAmount(point.nativeAmount, point.nativeCurrency, locale)}
+            </p>
+          ) : null}
         </div>
       ) : null}
     </>

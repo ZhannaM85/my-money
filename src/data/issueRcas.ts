@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 136,
+    title: {
+      en: 'Asset details chart tooltip: show original amount in muted grey under converted',
+      ru: 'Подсказка графика в карточке актива: оригинальная сумма серым под пересчётом',
+    },
+    en: 'Converted tooltip showed only the base total. The point now carries native amount/currency; muted grey under net worth when they differ. Original mode and same-currency skip the extra line.',
+    ru: 'В режиме пересчёта подсказка показывала только сумму в базе. Точка несёт оригинал; серым под чистым капиталом, если валюты разные. В оригинале и если валюта уже база — одной строки.',
+  },
+  {
     issue: 135,
     title: {
       en: 'Restore Dashboard chart holdings tooltip now that Positions are below the graph',

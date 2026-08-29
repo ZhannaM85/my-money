@@ -138,7 +138,18 @@ export function AssetDetailsScreen() {
     }
     const rate = lookupRate(quotes, row.currency, baseCurrency, row.date)
     if (rate === undefined) return []
-    return [{ date: row.date, total: convertAmount(row.amount, rate) }]
+    const total = convertAmount(row.amount, rate)
+    if (row.currency !== baseCurrency) {
+      return [
+        {
+          date: row.date,
+          total,
+          nativeAmount: row.amount,
+          nativeCurrency: row.currency,
+        },
+      ]
+    }
+    return [{ date: row.date, total }]
   })
 
   const convertedNow =

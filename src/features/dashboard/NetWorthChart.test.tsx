@@ -80,6 +80,52 @@ describe('NetWorthChartTooltip', () => {
       expect(screen.getByText(name)).toBeInTheDocument()
     }
   })
+
+  it('shows muted native amount under converted net worth (#136)', () => {
+    render(
+      <NetWorthChartTooltip
+        active
+        currency="RUB"
+        payload={[
+          {
+            payload: {
+              date: '2026-08-05',
+              total: 1_531_286.67,
+              nativeAmount: 18_000,
+              nativeCurrency: 'USD',
+            },
+          },
+        ]}
+      />,
+    )
+
+    expect(screen.getByText('2026-08-05')).toBeInTheDocument()
+    expect(screen.getByText(/Net worth/)).toBeInTheDocument()
+    const native = screen.getByTestId('chart-tooltip-native')
+    expect(native).toHaveTextContent(formatAmount(18_000, 'USD'))
+    expect(native).toHaveClass('text-muted-foreground')
+  })
+
+  it('does not duplicate native when it is already the display currency (#136)', () => {
+    render(
+      <NetWorthChartTooltip
+        active
+        currency="USD"
+        payload={[
+          {
+            payload: {
+              date: '2026-08-05',
+              total: 18_000,
+              nativeAmount: 18_000,
+              nativeCurrency: 'USD',
+            },
+          },
+        ]}
+      />,
+    )
+
+    expect(screen.queryByTestId('chart-tooltip-native')).not.toBeInTheDocument()
+  })
 })
 
 describe('NetWorthChart', () => {
