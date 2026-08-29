@@ -21,7 +21,10 @@ import {
   chartAxisScale,
   uniqueChartAxisDates,
 } from '@/shared/lib/money'
-import { useDismissOnScroll } from '@/shared/hooks/useDismissOnScroll'
+import {
+  CHART_TOOLTIP_SCROLL_CLASS,
+  useDismissOnScroll,
+} from '@/shared/hooks/useDismissOnScroll'
 import { useChartPan } from '@/shared/hooks/useChartPan'
 import { usePinchZoom } from '@/shared/hooks/usePinchZoom'
 import { useLocale, useTranslation } from '@/i18n'
@@ -94,7 +97,7 @@ export function NetWorthChartTooltip({
       {point ? (
         <div
           data-testid="chart-holdings-tooltip"
-          className="chart-tooltip-scroll max-h-[min(32rem,70svh)] max-w-64 overflow-y-scroll overscroll-contain rounded-lg border border-border bg-card p-3 text-foreground shadow-md touch-pan-y"
+          className={`${CHART_TOOLTIP_SCROLL_CLASS} max-h-[min(32rem,70svh)] max-w-64 overflow-y-scroll overscroll-contain rounded-lg border border-border bg-card p-3 text-foreground shadow-md touch-pan-y`}
           onTouchStart={stopSingleFinger}
           onTouchMove={stopSingleFinger}
           onWheel={(event) => event.stopPropagation()}

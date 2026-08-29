@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 128,
+    title: {
+      en: 'Chart tooltip closes when scrolling its holdings list',
+      ru: 'Подсказка графика закрывается при прокрутке списка активов',
+    },
+    en: 'Dismiss-on-scroll listened in capture on document, so overflow scroll inside the holdings tooltip looked like page scroll and closed the card. Inner .chart-tooltip-scroll events are ignored; page and other nested scrollers still dismiss.',
+    ru: 'Скрытие по scroll слушалось на document в capture, поэтому прокрутка списка внутри подсказки считалась скроллом страницы и закрывала карточку. События внутри .chart-tooltip-scroll игнорируются; скролл страницы и других контейнеров по-прежнему скрывает.',
+  },
+  {
     issue: 127,
     title: {
       en: 'No automatic GEL to RUB conversion despite NBG rates',
