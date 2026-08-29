@@ -27,6 +27,7 @@ _After the four web flows feel good. Android wraps this app; iOS does not._
 |---|--------|-------|-------|
 | [#138](https://github.com/ZhannaM85/my-money/issues/138) | 🔲 Open | Comparison table: narrow name column, wrap titles, show two date columns | Follow-up to #137. First column overlaps date values on a phone. |
 | [#139](https://github.com/ZhannaM85/my-money/issues/139) | 🔲 Open | Comparison: only date columns scroll horizontally; name column stays fixed | Page pans sideways (`IMG_0906.MP4`). Inner scroll + sticky names. Related #138, #84. |
+| [#140](https://github.com/ZhannaM85/my-money/issues/140) | 🔲 Open | Confirm before removing a date from comparison | X on a date column removes immediately; need Cancel/Confirm. Follow-up to #137. |
 
 ---
 
