@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 146,
+    issue: 140,
+    date: '2026-08-29T18:20:00+03:00',
+    en: 'Removing a day from comparison asks for confirmation first. Cancel keeps it.',
+    ru: 'Удаление дня из сравнения сначала спрашивает подтверждение. Отмена оставляет день.',
+  },
+  {
     version: 145,
     issue: 137,
     date: '2026-08-29T18:10:00+03:00',

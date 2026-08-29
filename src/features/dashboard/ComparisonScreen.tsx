@@ -64,6 +64,11 @@ export function ComparisonScreen() {
   const locale = useLocale()
   const dates = useComparisonStore((state) => state.dates)
   const removeDate = useComparisonStore((state) => state.removeDate)
+
+  const confirmRemoveDate = (date: string) => {
+    if (!window.confirm(t.dashboard.removeFromComparisonConfirm(date))) return
+    removeDate(date)
+  }
   const loadAssets = useAssetStore((state) => state.load)
   const assets = useAssetStore((state) => state.assets)
   const snapshots = useAssetStore((state) => state.snapshots)
@@ -162,7 +167,7 @@ export function ComparisonScreen() {
                       type="button"
                       className="inline-flex size-8 items-center justify-center rounded-full text-muted-foreground hover:bg-muted hover:text-foreground"
                       aria-label={t.dashboard.removeFromComparison(date)}
-                      onClick={() => removeDate(date)}
+                      onClick={() => confirmRemoveDate(date)}
                     >
                       <X className="size-4" aria-hidden />
                     </button>

@@ -50,6 +50,7 @@ export interface Dictionary {
     comparisonDescription: string
     comparisonNeedTwoDates: string
     removeFromComparison: (date: string) => string
+    removeFromComparisonConfirm: (date: string) => string
     positionsTotal: string
     emptyTitle: string
     emptyDescription: string

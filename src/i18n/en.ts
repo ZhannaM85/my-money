@@ -45,6 +45,8 @@ export const en: Dictionary = {
       'Holdings on the dates you added from Dashboard.',
     comparisonNeedTwoDates: 'Add at least two dates from Dashboard.',
     removeFromComparison: (date) => `Remove ${date}`,
+    removeFromComparisonConfirm: (date) =>
+      `Remove ${date} from comparison?`,
     positionsTotal: 'Total',
     emptyTitle: 'No assets yet',
     emptyDescription: 'Add what you own or owe to see your first net worth.',

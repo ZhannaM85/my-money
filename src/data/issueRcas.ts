@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 140,
+    title: {
+      en: 'Confirm before removing a date from comparison',
+      ru: 'Подтверждать удаление даты из сравнения',
+    },
+    en: 'X on a date column removed it immediately. Same window.confirm as asset delete; Cancel keeps the day.',
+    ru: 'Крестик на столбце даты сразу убирал день. Тот же window.confirm, что при удалении актива; Отмена оставляет день.',
+  },
+  {
     issue: 137,
     title: {
       en: 'Compare holdings across selected dates (table page)',

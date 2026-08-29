@@ -46,6 +46,8 @@ export const ru: Dictionary = {
       'Позиции на даты, которые вы добавили со Сводки.',
     comparisonNeedTwoDates: 'Добавьте хотя бы две даты со Сводки.',
     removeFromComparison: (date) => `Убрать ${date}`,
+    removeFromComparisonConfirm: (date) =>
+      `Убрать ${date} из сравнения?`,
     positionsTotal: 'Итого',
     emptyTitle: 'Пока нет активов',
     emptyDescription:
