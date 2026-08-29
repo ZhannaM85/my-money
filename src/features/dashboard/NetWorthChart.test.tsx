@@ -1,7 +1,13 @@
 import { render, screen } from '@testing-library/react'
-import { describe, expect, it, vi } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
+import { DEFAULT_SETTINGS } from '@/domain/settings'
 import { formatAmount } from '@/shared/lib/money'
+import { useSettingsStore } from '@/stores/settingsStore'
 import { NetWorthChart, NetWorthChartTooltip } from './NetWorthChart'
+
+afterEach(() => {
+  useSettingsStore.setState({ settings: DEFAULT_SETTINGS, loaded: true })
+})
 
 describe('NetWorthChartTooltip', () => {
   it('lists holdings for the active chart point', () => {
@@ -126,6 +132,37 @@ describe('NetWorthChartTooltip', () => {
 
     expect(screen.queryByTestId('chart-tooltip-native')).not.toBeInTheDocument()
   })
+
+  it('omits the holdings card when the tooltip is turned off (#141)', () => {
+    render(
+      <NetWorthChartTooltip
+        active
+        showHoldings={false}
+        currency="EUR"
+        payload={[
+          {
+            payload: {
+              date: '2026-08-14',
+              total: 1200,
+              holdings: [
+                {
+                  assetId: 'eur',
+                  name: 'Cash',
+                  currency: 'EUR',
+                  nativeAmount: 1200,
+                  convertedAmount: 1200,
+                  conversionAvailable: true,
+                },
+              ],
+            },
+          },
+        ]}
+      />,
+    )
+
+    expect(screen.queryByTestId('chart-holdings-tooltip')).not.toBeInTheDocument()
+    expect(screen.queryByText('Cash')).not.toBeInTheDocument()
+  })
 })
 
 describe('NetWorthChart', () => {
@@ -160,5 +197,39 @@ describe('NetWorthChart', () => {
     )
     expect(screen.getByTestId('net-worth-chart')).toBeInTheDocument()
     expect(onSelectDate).not.toHaveBeenCalled()
+    expect(screen.getByTestId('chart-tooltip-toggle')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Show' })).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    )
+    expect(screen.getByRole('button', { name: 'Hide' })).toHaveAttribute(
+      'aria-pressed',
+      'false',
+    )
+  })
+
+  it('marks Hide pressed when the tooltip preference is off (#141)', () => {
+    useSettingsStore.setState({
+      settings: { ...DEFAULT_SETTINGS, showChartTooltip: false },
+      loaded: true,
+    })
+    render(
+      <div style={{ width: 400, height: 200 }}>
+        <NetWorthChart
+          points={[{ date: '2026-08-14', total: 1_000 }]}
+          currency="EUR"
+          onZoomIn={() => undefined}
+          onZoomOut={() => undefined}
+        />
+      </div>,
+    )
+    expect(screen.getByRole('button', { name: 'Hide' })).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    )
+    expect(screen.getByRole('button', { name: 'Show' })).toHaveAttribute(
+      'aria-pressed',
+      'false',
+    )
   })
 })

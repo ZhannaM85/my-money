@@ -66,6 +66,9 @@ export interface Dictionary {
     rateChange: string
     updateRates: string
     periodChangeHint: string
+    chartTooltip: string
+    chartTooltipShow: string
+    chartTooltipHide: string
   }
   assets: {
     title: string

@@ -67,6 +67,9 @@ export const en: Dictionary = {
     updateRates: 'Update rates',
     periodChangeHint:
       'From amounts is what you added or reduced, valued at the latest rate. From rates is the same starting balances when the reference rate moved — including dollars you already held. Together they equal the period total.',
+    chartTooltip: 'Chart tooltip',
+    chartTooltipShow: 'Show',
+    chartTooltipHide: 'Hide',
   },
   assets: {
     title: 'Assets',

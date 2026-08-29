@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 149,
+    issue: 141,
+    date: '2026-08-29T18:40:00+03:00',
+    en: 'Show or hide the chart holdings tooltip. Hidden, the graph stays visible; tapping a day still updates As of.',
+    ru: 'Можно показать или скрыть подсказку графика с активами. Скрытая — график виден; тап по дню всё равно обновляет «На дату».',
+  },
+  {
     version: 148,
     issue: 139,
     date: '2026-08-29T18:30:00+03:00',

@@ -24,8 +24,9 @@ describe('NetWorthChart pinch wiring (#116)', () => {
 })
 
 describe('NetWorthChart holdings tooltip (#135)', () => {
-  it('does not hide the holdings popover on any screen that mounts NetWorthChart', () => {
+  it('does not hardcode hiding the holdings popover on any screen that mounts NetWorthChart', () => {
     // #133 hid it on Dashboard; #134 moved Positions below the chart; restore (#135).
+    // Users can hide it themselves (#141). Screens must not hardcode holdingsTooltip={false}.
     // #128 / #130 / #132 overlay hacks stay out (no pin / dismiss-on-scroll).
     const hidden: string[] = []
     for (const [path, source] of Object.entries(screenSources)) {

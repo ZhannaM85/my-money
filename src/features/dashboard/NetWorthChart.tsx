@@ -24,6 +24,8 @@ import {
 import { useChartPan } from '@/shared/hooks/useChartPan'
 import { usePinchZoom } from '@/shared/hooks/usePinchZoom'
 import { useLocale, useTranslation } from '@/i18n'
+import { cn } from '@/shared/lib/utils'
+import { useSettingsStore } from '@/stores/settingsStore'
 import { HoldingBreakdownList } from './HoldingBreakdownList'
 
 export const NET_WORTH_CHART_TESTID = 'net-worth-chart'
@@ -70,11 +72,14 @@ export function NetWorthChartTooltip({
   payload,
   currency,
   onSelectDate,
+  showHoldings = true,
 }: {
   active?: boolean
   payload?: ReadonlyArray<{ payload?: NetWorthChartPoint }>
   currency: string
   onSelectDate?: (date: string | null) => void
+  /** When false, still selects the day (#112) without covering the plot (#141). */
+  showHoldings?: boolean
 }) {
   const t = useTranslation()
   const locale = useLocale()
@@ -96,7 +101,7 @@ export function NetWorthChartTooltip({
         payload={payload}
         onSelectDate={onSelectDate}
       />
-      {point ? (
+      {point && showHoldings ? (
         <div
           data-testid="chart-holdings-tooltip"
           className={`${CHART_TOOLTIP_SCROLL_CLASS} max-h-[min(20rem,calc(100dvh-8rem-env(safe-area-inset-bottom)))] max-w-64 overflow-y-scroll overscroll-contain rounded-lg border border-border bg-card p-3 text-foreground shadow-md touch-pan-y`}
@@ -175,6 +180,12 @@ export function NetWorthChart({
   const pinchRef = usePinchZoom(onZoomIn, onZoomOut)
   const panRef = useChartPan(onPanEarlier, onPanLater)
   const onSelectDateRef = useRef(onSelectDate)
+  const showChartTooltip = useSettingsStore(
+    (state) => state.settings.showChartTooltip,
+  )
+  const setShowChartTooltip = useSettingsStore(
+    (state) => state.setShowChartTooltip,
+  )
 
   useEffect(() => {
     onSelectDateRef.current = onSelectDate
@@ -191,14 +202,46 @@ export function NetWorthChart({
   const xTicks = uniqueChartAxisDates(points.map((point) => point.date))
 
   return (
-    <div
-      ref={(node) => {
-        pinchRef.current = node
-        panRef.current = node
-      }}
-      className="h-48 w-full touch-pan-y"
-      data-testid={NET_WORTH_CHART_TESTID}
-    >
+    <div className="flex min-w-0 flex-col gap-2">
+      <div className="flex items-center justify-between gap-2">
+        <span className="text-sm font-medium">{t.dashboard.chartTooltip}</span>
+        <div
+          className="flex gap-2"
+          role="group"
+          aria-label={t.dashboard.chartTooltip}
+          data-testid="chart-tooltip-toggle"
+        >
+          {(
+            [
+              { on: true, label: t.dashboard.chartTooltipShow },
+              { on: false, label: t.dashboard.chartTooltipHide },
+            ] as const
+          ).map((item) => (
+            <button
+              key={item.label}
+              type="button"
+              className={cn(
+                'rounded-full px-3 py-1.5 text-sm font-medium',
+                showChartTooltip === item.on
+                  ? 'bg-primary text-primary-foreground'
+                  : 'bg-muted text-muted-foreground',
+              )}
+              aria-pressed={showChartTooltip === item.on}
+              onClick={() => void setShowChartTooltip(item.on)}
+            >
+              {item.label}
+            </button>
+          ))}
+        </div>
+      </div>
+      <div
+        ref={(node) => {
+          pinchRef.current = node
+          panRef.current = node
+        }}
+        className="h-48 w-full touch-pan-y"
+        data-testid={NET_WORTH_CHART_TESTID}
+      >
       <ResponsiveContainer width="100%" height="100%">
         <LineChart
           data={[...points]}
@@ -237,9 +280,14 @@ export function NetWorthChart({
               <NetWorthChartTooltip
                 currency={currency}
                 onSelectDate={onSelectDate}
+                showHoldings={showChartTooltip}
               />
             }
-            wrapperStyle={{ zIndex: 50, pointerEvents: 'auto' }}
+            wrapperStyle={
+              showChartTooltip
+                ? { zIndex: 50, pointerEvents: 'auto' }
+                : { display: 'none' }
+            }
           />
           <Line
             type="monotone"
@@ -266,6 +314,7 @@ export function NetWorthChart({
           />
         </LineChart>
       </ResponsiveContainer>
+      </div>
     </div>
   )
 }

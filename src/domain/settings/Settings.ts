@@ -19,6 +19,8 @@ export interface Settings {
   onboardingCompleted: boolean
   assetListSort: AssetListSort
   assetListOrder: string[]
+  /** Holdings popover on net-worth charts (#141). Default on. */
+  showChartTooltip: boolean
   updatedAt: string
 }
 
@@ -30,6 +32,7 @@ export const DEFAULT_SETTINGS: Settings = {
   onboardingCompleted: false,
   assetListSort: 'custom',
   assetListOrder: [],
+  showChartTooltip: true,
   updatedAt: '1970-01-01T00:00:00.000Z',
 }
 

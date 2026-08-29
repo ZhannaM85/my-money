@@ -19,6 +19,7 @@ interface SettingsStoreState {
   setLocale: (locale: Locale) => Promise<void>
   setAssetListSort: (assetListSort: AssetListSort) => Promise<void>
   persistCustomAssetOrder: (assetListOrder: string[]) => Promise<void>
+  setShowChartTooltip: (showChartTooltip: boolean) => Promise<void>
   completeOnboarding: () => Promise<void>
 }
 
@@ -54,6 +55,9 @@ export const useSettingsStore = create<SettingsStoreState>((set, get) => {
     },
     persistCustomAssetOrder: async (assetListOrder) => {
       await save({ assetListSort: 'custom', assetListOrder })
+    },
+    setShowChartTooltip: async (showChartTooltip) => {
+      await save({ showChartTooltip })
     },
     completeOnboarding: async () => {
       await save({ onboardingCompleted: true })

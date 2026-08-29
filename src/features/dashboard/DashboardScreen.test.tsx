@@ -1,5 +1,5 @@
 import 'fake-indexeddb/auto'
-import { render, screen } from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router-dom'
 import { beforeEach, describe, expect, it } from 'vitest'
@@ -886,5 +886,44 @@ describe('DashboardScreen', () => {
       'href',
       '/compare',
     )
+  })
+
+  it('lets the user hide the chart holdings tooltip (#141)', async () => {
+    const today = todayIsoDate()
+    const now = `${today}T00:00:00.000Z`
+    await useAssetStore.getState().saveAsset(
+      {
+        id: 'a1',
+        name: 'Cash',
+        assetClass: 'money',
+        type: 'cash',
+        currency: 'EUR',
+        trackingStatus: 'included',
+        valuationMethod: 'account_balance',
+        updateFrequency: 'weekly',
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        assetId: 'a1',
+        date: today,
+        amount: 1000,
+        currency: 'EUR',
+      },
+    )
+    const user = userEvent.setup()
+    render(
+      <MemoryRouter>
+        <DashboardScreen />
+      </MemoryRouter>,
+    )
+    expect(await screen.findByTestId('net-worth-chart')).toBeInTheDocument()
+    const hide = screen.getByRole('button', { name: 'Hide' })
+    expect(hide).toHaveAttribute('aria-pressed', 'false')
+    await user.click(hide)
+    await waitFor(() => {
+      expect(hide).toHaveAttribute('aria-pressed', 'true')
+    })
+    expect(useSettingsStore.getState().settings.showChartTooltip).toBe(false)
   })
 })

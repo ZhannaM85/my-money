@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 141,
+    title: {
+      en: 'Chart: toggle to show or hide the holdings tooltip',
+      ru: 'График: переключатель показа подсказки с активами',
+    },
+    en: 'The holdings card could cover the whole plot. Show/Hide next to the chart persists; tapping a day still selects it when the card is hidden.',
+    ru: 'Карточка с активами могла закрыть весь график. Показать/Скрыть рядом с графиком запоминается; тап по дню по-прежнему выбирает его, если карточка скрыта.',
+  },
+  {
     issue: 140,
     title: {
       en: 'Confirm before removing a date from comparison',

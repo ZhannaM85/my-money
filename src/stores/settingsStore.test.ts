@@ -65,4 +65,13 @@ describe('settingsStore', () => {
       'a',
     ])
   })
+
+  it('persists hiding the chart holdings tooltip (#141)', async () => {
+    await useSettingsStore.getState().load()
+    expect(useSettingsStore.getState().settings.showChartTooltip).toBe(true)
+    await useSettingsStore.getState().setShowChartTooltip(false)
+    expect(useSettingsStore.getState().settings.showChartTooltip).toBe(false)
+    await useSettingsStore.getState().load()
+    expect(useSettingsStore.getState().settings.showChartTooltip).toBe(false)
+  })
 })

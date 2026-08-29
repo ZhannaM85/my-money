@@ -18,6 +18,7 @@ const settingsSchema = z.object({
     .enum(['custom', 'name_asc', 'name_desc', 'amount_asc', 'amount_desc'])
     .default('custom'),
   assetListOrder: z.array(z.string().min(1)).default([]),
+  showChartTooltip: z.boolean().default(true),
   updatedAt: z.string().min(1),
 })
 
