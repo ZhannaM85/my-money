@@ -47,7 +47,7 @@ describe('NetWorthChartTooltip', () => {
     ).toBeInTheDocument()
   })
 
-  it('keeps six holdings inside a taller scrollable popover (#92)', () => {
+  it('keeps six holdings inside a scrollable popover above the tab bar (#92, #131)', () => {
     const holdings = [
       'До 8 октября',
       'Доллары',
@@ -75,6 +75,7 @@ describe('NetWorthChartTooltip', () => {
     const popover = screen.getByTestId('chart-holdings-tooltip')
     expect(popover).toHaveClass('overflow-y-scroll')
     expect(popover).toHaveClass('chart-tooltip-scroll')
+    expect(popover.className).toContain('safe-area-inset-bottom')
     for (const name of holdings.map((row) => row.name)) {
       expect(screen.getByText(name)).toBeInTheDocument()
     }

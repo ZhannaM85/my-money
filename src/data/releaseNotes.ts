@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 139,
+    issue: 131,
+    date: '2026-08-29T12:30:00+03:00',
+    en: 'The chart holdings tooltip sits above the tab bar instead of hiding under it. The list still scrolls inside the card.',
+    ru: 'Подсказка с активами на графике рисуется поверх нижней панели, а не под ней. Список по-прежнему прокручивается внутри карточки.',
+  },
+  {
     version: 138,
     issue: 130,
     date: '2026-08-29T12:20:00+03:00',

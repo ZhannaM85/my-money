@@ -20,6 +20,15 @@ export const issueRcas: IssueRca[] = [
     ru: 'Закрепление держало список, но тап чуть сдвигал страницу. Скрытие по scroll считало это настоящим скроллом и убирало карточку. Сразу после pin скролл игнорируется; поздний скролл страницы по-прежнему скрывает.',
   },
   {
+    issue: 131,
+    title: {
+      en: 'Chart tooltip is hidden behind the tab bar',
+      ru: 'Подсказка графика прячется под нижней панелью',
+    },
+    en: 'The holdings card is tall (70svh) and lives in main; the tab bar is a later sibling so it painted on top. Main is now above the nav in stacking, the wrapper z-index is higher, and max-height leaves room for the tab bar + safe area.',
+    ru: 'Карточка высокая (70svh) и живёт в main; панель вкладок — следующий sibling и рисовалась сверху. Main выше nav по stacking, z-index обёртки больше, max-height оставляет место под таббар и safe area.',
+  },
+  {
     issue: 130,
     title: {
       en: 'Chart tooltip does not close when tapping away',

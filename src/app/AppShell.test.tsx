@@ -82,6 +82,18 @@ describe('AppShell', () => {
     expect(main.compareDocumentPosition(nav) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
   })
 
+  it('stacks main above the tab bar so chart tooltips are not covered (#131)', async () => {
+    render(
+      <MemoryRouter>
+        <AppShell />
+      </MemoryRouter>,
+    )
+    const nav = await screen.findByRole('navigation', { name: 'Tabs' })
+    const main = screen.getByRole('main')
+    expect(main).toHaveClass('z-20')
+    expect(nav).toHaveClass('z-10')
+  })
+
   it('lets main scroll instead of overlaying the tab bar with extra padding', async () => {
     render(
       <MemoryRouter>

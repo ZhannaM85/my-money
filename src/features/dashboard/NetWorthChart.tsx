@@ -108,7 +108,7 @@ export function NetWorthChartTooltip({
       {point ? (
         <div
           data-testid="chart-holdings-tooltip"
-          className={`${CHART_TOOLTIP_SCROLL_CLASS} max-h-[min(32rem,70svh)] max-w-64 overflow-y-scroll overscroll-contain rounded-lg border border-border bg-card p-3 text-foreground shadow-md touch-pan-y`}
+          className={`${CHART_TOOLTIP_SCROLL_CLASS} max-h-[min(20rem,calc(100dvh-8rem-env(safe-area-inset-bottom)))] max-w-64 overflow-y-scroll overscroll-contain rounded-lg border border-border bg-card p-3 text-foreground shadow-md touch-pan-y`}
           onPointerDown={(event) => event.stopPropagation()}
           onTouchStart={stopSingleFinger}
           onTouchMove={stopSingleFinger}
@@ -249,7 +249,7 @@ export function NetWorthChart({
                 pinTooltip={pinTooltip}
               />
             }
-            wrapperStyle={{ zIndex: 20, pointerEvents: 'auto' }}
+            wrapperStyle={{ zIndex: 50, pointerEvents: 'auto' }}
           />
           <Line
             type="monotone"
