@@ -147,14 +147,14 @@ export function ComparisonScreen() {
   }
 
   return (
-    <div className="flex min-w-0 max-w-full flex-col gap-6 overflow-x-hidden">
+    <div className="grid w-full min-w-0 grid-cols-[minmax(0,1fr)] gap-6 overflow-x-clip">
       <PageHeader
         title={t.dashboard.comparisonTitle}
         description={t.dashboard.comparisonDescription}
       />
       <div
         data-testid="comparison-h-scroll"
-        className="min-w-0 max-w-full overflow-x-auto overscroll-x-contain"
+        className="comparison-h-scroll min-w-0 w-full max-w-full overflow-x-auto overflow-y-hidden overscroll-x-contain"
       >
         <table
           className="w-max table-fixed border-separate border-spacing-0 text-sm"

@@ -96,7 +96,7 @@ export function AppShell() {
       <main
         ref={mainRef}
         id="main-content"
-        className="mx-auto w-full max-w-3xl min-h-0 min-w-0 flex-1 overflow-x-hidden overflow-y-auto px-4 py-6 relative z-20"
+        className="mx-auto w-full max-w-3xl min-h-0 min-w-0 flex-1 overflow-x-clip overflow-y-auto overscroll-x-none px-4 py-6 relative z-20"
       >
         {fxError && (
           <p className="mb-4 text-sm text-muted-foreground">

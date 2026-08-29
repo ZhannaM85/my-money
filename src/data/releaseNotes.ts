@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 150,
+    issue: 139,
+    date: '2026-08-29T18:45:00+03:00',
+    en: 'Comparison with several date columns no longer pans the whole page. Only the date columns scroll; names stay put.',
+    ru: 'Сравнение с несколькими столбцами дат больше не двигает всю страницу. Вбок едут только даты; имена остаются на месте.',
+  },
+  {
     version: 149,
     issue: 141,
     date: '2026-08-29T18:40:00+03:00',

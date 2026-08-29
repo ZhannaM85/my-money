@@ -203,7 +203,7 @@ describe('ComparisonScreen (#137)', () => {
       },
     )
     useComparisonStore.setState({
-      dates: ['2026-08-25', '2026-08-26', '2026-08-29'],
+      dates: ['2026-08-25', '2026-08-26', '2026-08-28', '2026-08-29'],
     })
     render(
       <MemoryRouter>
@@ -212,11 +212,17 @@ describe('ComparisonScreen (#137)', () => {
     )
     const scroller = await screen.findByTestId('comparison-h-scroll')
     expect(scroller.className).toContain('overflow-x-auto')
+    expect(scroller.className).toContain('overflow-y-hidden')
+    expect(scroller.className).toContain('comparison-h-scroll')
     expect(scroller.className).toContain('max-w-full')
     expect(scroller.className).toContain('min-w-0')
-    expect(scroller.parentElement?.className).toContain('overflow-x-hidden')
+    expect(scroller.parentElement?.className).toContain('grid-cols-[minmax(0,1fr)]')
+    expect(scroller.parentElement?.className).toContain('overflow-x-clip')
     const nameCol = screen.getByTestId('comparison-name-col')
     expect(nameCol.className).toContain('sticky')
     expect(nameCol.className).toContain('left-0')
+    expect(
+      screen.getAllByRole('button', { name: /Remove / }),
+    ).toHaveLength(4)
   })
 })

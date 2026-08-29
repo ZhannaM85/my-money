@@ -373,6 +373,11 @@
     opacity: 0;
   }
 
+  /* Comparison date columns: iOS must pan this box, not the page (#139). */
+  .comparison-h-scroll {
+    -webkit-overflow-scrolling: touch;
+  }
+
   /* Chart holdings popover on History / asset details (#92, #133). */
   .chart-tooltip-scroll {
     -webkit-overflow-scrolling: touch;
