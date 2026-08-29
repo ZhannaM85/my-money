@@ -16,6 +16,23 @@ describe('nbgSeries', () => {
     expect(eurToRub).toBeCloseTo(3.0315 / 0.030686, 5)
   })
 
+  it('emits GEL→RUB by inverting the RUB row with quantity (#127)', () => {
+    const payload = [
+      {
+        date: '2026-08-29T00:00:00.000Z',
+        currencies: [{ code: 'RUB', quantity: 100, rate: 3.0496 }],
+      },
+    ]
+    const quotes = quotesFromNbgPayload(payload, '2026-08-29', ['GEL'])
+    expect(quotes).toHaveLength(1)
+    expect(quotes[0]).toMatchObject({
+      date: '2026-08-29',
+      base: 'GEL',
+      quote: 'RUB',
+    })
+    expect(quotes[0].rate).toBeCloseTo(100 / 3.0496, 5)
+  })
+
   it('builds CODE→RUB quotes from an NBG day payload', () => {
     const payload = [
       {

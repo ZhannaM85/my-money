@@ -44,7 +44,7 @@ interface NbgDay {
   currencies?: NbgCurrencyRow[]
 }
 
-/** Parse one NBG day into foreign-currency → RUB quotes via GEL. */
+/** Parse one NBG day into foreign-currency → RUB quotes via GEL (incl. GEL→RUB). */
 export function quotesFromNbgDay(
   date: string,
   payload: unknown,
@@ -64,6 +64,8 @@ export function quotesFromNbgDay(
 
   const gelPerRub = byCode.get('RUB')
   if (gelPerRub === undefined) return []
+
+  byCode.set('GEL', 1)
 
   const codes =
     targetCodes ??

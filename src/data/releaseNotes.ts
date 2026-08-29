@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 134,
+    issue: 127,
+    date: '2026-08-29T11:00:00+03:00',
+    en: 'Georgian Lari holdings convert to rubles from National Bank of Georgia rates (invert the RUB row, including quantity).',
+    ru: 'Холдинги в лари пересчитываются в рубли по курсам НБ Грузии (инверсия строки RUB с учётом quantity).',
+  },
+  {
     version: 133,
     issue: 126,
     date: '2026-08-27T17:55:00+03:00',

@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 127,
+    title: {
+      en: 'No automatic GEL to RUB conversion despite NBG rates',
+      ru: 'Нет автоматической конвертации GEL→RUB при курсах НБГ',
+    },
+    en: 'NBG quotes every currency vs GEL. The parser crossed other codes to RUB but never inverted the RUB row, so GEL holdings had no fx/rub/GEL.json. GEL per GEL is 1, so GEL→RUB = 1 / (RUB rate / quantity).',
+    ru: 'НБГ котирует все валюты к лари. Парсер кроссил другие коды в RUB, но не инвертировал строку RUB, поэтому для GEL не было fx/rub/GEL.json. 1 GEL = 1 GEL, значит GEL→RUB = 1 / (курс RUB / quantity).',
+  },
+  {
     issue: 126,
     title: {
       en: 'Let user pick chart range: week, month, year, all, custom',

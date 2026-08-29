@@ -9,6 +9,7 @@ const START_DATE = addDaysIso(TODAY, -365 * 5)
 const TARGET_CODES = [
   'EUR',
   'USD',
+  'GEL',
   'GBP',
   'CHF',
   'JPY',

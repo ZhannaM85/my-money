@@ -2,6 +2,7 @@
  * National Bank of Georgia publishes each currency vs GEL.
  * Cross to RUB: CODE→RUB = (GEL per 1 CODE) / (GEL per 1 RUB)
  * where GEL per 1 unit = rate / quantity.
+ * GEL is the numeraire (not a table row): GEL per 1 GEL = 1, so GEL→RUB = 1 / (GEL per 1 RUB).
  */
 
 export function gelPerUnit(rate, quantity) {
@@ -46,6 +47,8 @@ export function quotesFromNbgPayload(payload, requestDate, targetCodes) {
 
   const gelPerRub = byCode.get('RUB')
   if (gelPerRub === undefined) return []
+
+  byCode.set('GEL', 1)
 
   const quotes = []
   for (const code of targetCodes) {

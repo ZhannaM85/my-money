@@ -12,6 +12,26 @@ describe('nbg client', () => {
     expect(rate).toBeCloseTo(3.0315 / 0.030686, 5)
   })
 
+  it('emits GEL→RUB by inverting the RUB row with quantity (#127)', () => {
+    const quotes = quotesFromNbgDay(
+      '2026-08-29',
+      [
+        {
+          currencies: [{ code: 'RUB', quantity: 100, rate: 3.0496 }],
+        },
+      ],
+      ['GEL'],
+    )
+    expect(quotes).toEqual([
+      {
+        date: '2026-08-29',
+        base: 'GEL',
+        quote: 'RUB',
+        rate: expect.closeTo(100 / 3.0496, 5),
+      },
+    ])
+  })
+
   it('parses an NBG day payload into CODE→RUB quotes', () => {
     const quotes = quotesFromNbgDay(
       '2026-08-18',
