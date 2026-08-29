@@ -16,8 +16,8 @@ export const issueRcas: IssueRca[] = [
       en: 'Chart tooltip closes when scrolling its holdings list',
       ru: 'Подсказка графика закрывается при прокрутке списка активов',
     },
-    en: 'Dismiss-on-scroll listened in capture on document, so overflow scroll inside the holdings tooltip looked like page scroll and closed the card. Inner .chart-tooltip-scroll events are ignored; page and other nested scrollers still dismiss.',
-    ru: 'Скрытие по scroll слушалось на document в capture, поэтому прокрутка списка внутри подсказки считалась скроллом страницы и закрывала карточку. События внутри .chart-tooltip-scroll игнорируются; скролл страницы и других контейнеров по-прежнему скрывает.',
+    en: 'A finger on the holdings list scrolled the page (Recharts transform + iOS overflow), so dismiss-on-scroll closed the card. That gesture now pins the tooltip, preventDefaults, and pans scrollTop; page scroll still dismisses.',
+    ru: 'Палец по списку в подсказке крутил страницу (transform Recharts + overflow на iOS), и скрытие по scroll закрывало карточку. Жест теперь закрепляет подсказку, preventDefault и двигает scrollTop; скролл страницы по-прежнему скрывает.',
   },
   {
     issue: 127,

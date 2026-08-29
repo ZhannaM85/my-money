@@ -13,8 +13,8 @@ export const releaseNotes: ReleaseNote[] = [
     version: 135,
     issue: 128,
     date: '2026-08-29T11:10:00+03:00',
-    en: 'Scrolling the chart holdings tooltip no longer closes it. Scrolling the page still dismisses the tooltip.',
-    ru: 'Прокрутка списка в подсказке графика больше её не закрывает. Прокрутка страницы по-прежнему скрывает подсказку.',
+    en: 'Dragging the holdings list in the chart tooltip scrolls that list and keeps the tooltip open. Scrolling the page still dismisses it.',
+    ru: 'Протягивание списка в подсказке графика крутит сам список и не закрывает карточку. Прокрутка страницы по-прежнему скрывает подсказку.',
   },
   {
     version: 134,
