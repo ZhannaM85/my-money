@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 138,
+    issue: 130,
+    date: '2026-08-29T12:20:00+03:00',
+    en: 'Tap outside the chart holdings tooltip to close it. Taps on the chart or inside the list still keep it open.',
+    ru: 'Тап вне подсказки графика закрывает её. Тап по графику или внутри списка оставляет её открытой.',
+  },
+  {
     version: 137,
     issue: 132,
     date: '2026-08-29T12:15:00+03:00',

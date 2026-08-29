@@ -2,6 +2,7 @@ import { act, renderHook } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import {
   CHART_TOOLTIP_SCROLL_CLASS,
+  NET_WORTH_CHART_TESTID,
   PIN_SCROLL_GRACE_MS,
   useDismissOnScroll,
 } from './useDismissOnScroll'
@@ -147,5 +148,37 @@ describe('useDismissOnScroll', () => {
       other.dispatchEvent(new Event('scroll', { bubbles: false }))
     })
     expect(result.current.tooltipActive).toBe(false)
+  })
+
+  it('dismisses when tapping away from the tooltip (#130)', () => {
+    const { result } = renderHook(() => useDismissOnScroll())
+    act(() => {
+      result.current.pinTooltip()
+    })
+    act(() => {
+      document.body.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true }))
+    })
+    expect(result.current.tooltipActive).toBe(false)
+  })
+
+  it('does not dismiss when tapping the chart or the holdings list (#130)', () => {
+    const chart = document.createElement('div')
+    chart.dataset.testid = NET_WORTH_CHART_TESTID
+    const tooltip = document.createElement('div')
+    tooltip.className = CHART_TOOLTIP_SCROLL_CLASS
+    document.body.append(chart, tooltip)
+
+    const { result } = renderHook(() => useDismissOnScroll())
+    act(() => {
+      result.current.pinTooltip()
+    })
+    act(() => {
+      chart.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true }))
+    })
+    expect(result.current.tooltipActive).toBe(true)
+    act(() => {
+      tooltip.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true }))
+    })
+    expect(result.current.tooltipActive).toBe(true)
   })
 })

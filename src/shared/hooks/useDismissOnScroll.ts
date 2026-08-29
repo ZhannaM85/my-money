@@ -6,10 +6,23 @@ export const PIN_SCROLL_GRACE_MS = 450
 /** Inner holdings list — scroll here must not dismiss the tooltip (#128). */
 export const CHART_TOOLTIP_SCROLL_CLASS = 'chart-tooltip-scroll'
 
+/** Chart plot — taps here select a day and must not count as tap-away (#130). */
+export const NET_WORTH_CHART_TESTID = 'net-worth-chart'
+
 function isInsideTooltip(target: EventTarget | null): boolean {
   return (
     target instanceof Element &&
-    Boolean(target.closest(`.${CHART_TOOLTIP_SCROLL_CLASS}`))
+    Boolean(
+      target.closest(`.${CHART_TOOLTIP_SCROLL_CLASS}`) ??
+        target.closest('.recharts-tooltip-wrapper'),
+    )
+  )
+}
+
+function isInsideChart(target: EventTarget | null): boolean {
+  return (
+    target instanceof Element &&
+    Boolean(target.closest(`[data-testid="${NET_WORTH_CHART_TESTID}"]`))
   )
 }
 
@@ -26,7 +39,8 @@ function tooltipScroller(target: EventTarget | null): HTMLElement | null {
  * the page instead of the overflow layer (Recharts `transform`), so we
  * pin `active`, ignore page scroll for that gesture, and pan `scrollTop`
  * ourselves. A tap also jiggles the page; ignore scroll for a short grace
- * after pin so the tooltip does not flash closed (#132).
+ * after pin so the tooltip does not flash closed (#132). A pointer down
+ * outside the chart and tooltip dismisses it (#130).
  */
 export function useDismissOnScroll() {
   const [dismissed, setDismissed] = useState(false)
@@ -35,6 +49,11 @@ export function useDismissOnScroll() {
   const scroller = useRef<HTMLElement | null>(null)
   const lastY = useRef(0)
   const ignoreScrollUntil = useRef(0)
+  const showingRef = useRef(false)
+
+  useEffect(() => {
+    showingRef.current = pinned && !dismissed
+  }, [pinned, dismissed])
 
   useEffect(() => {
     const dismissIfPageScroll = (event: Event) => {
@@ -75,6 +94,13 @@ export function useDismissOnScroll() {
       }
     }
 
+    const onPointerDown = (event: PointerEvent) => {
+      if (!showingRef.current) return
+      if (isInsideTooltip(event.target) || isInsideChart(event.target)) return
+      setDismissed(true)
+      setPinned(false)
+    }
+
     const scrollOptions: AddEventListenerOptions = { capture: true, passive: true }
     const startOptions: AddEventListenerOptions = { capture: true, passive: true }
     const moveOptions: AddEventListenerOptions = { capture: true, passive: false }
@@ -85,6 +111,7 @@ export function useDismissOnScroll() {
     document.addEventListener('touchmove', onTouchMove, moveOptions)
     document.addEventListener('touchend', onTouchEnd, startOptions)
     document.addEventListener('touchcancel', onTouchEnd, startOptions)
+    document.addEventListener('pointerdown', onPointerDown, true)
     return () => {
       window.removeEventListener('scroll', dismissIfPageScroll, scrollOptions)
       document.removeEventListener('scroll', dismissIfPageScroll, scrollOptions)
@@ -92,6 +119,7 @@ export function useDismissOnScroll() {
       document.removeEventListener('touchmove', onTouchMove, moveOptions)
       document.removeEventListener('touchend', onTouchEnd, startOptions)
       document.removeEventListener('touchcancel', onTouchEnd, startOptions)
+      document.removeEventListener('pointerdown', onPointerDown, true)
     }
   }, [])
 

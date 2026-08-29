@@ -23,6 +23,7 @@ import {
 } from '@/shared/lib/money'
 import {
   CHART_TOOLTIP_SCROLL_CLASS,
+  NET_WORTH_CHART_TESTID,
   useDismissOnScroll,
 } from '@/shared/hooks/useDismissOnScroll'
 import { useChartPan } from '@/shared/hooks/useChartPan'
@@ -187,7 +188,7 @@ export function NetWorthChart({
         panRef.current = node
       }}
       className="h-48 w-full touch-pan-y"
-      data-testid="net-worth-chart"
+      data-testid={NET_WORTH_CHART_TESTID}
       onPointerDown={allowTooltip}
     >
       <ResponsiveContainer width="100%" height="100%">

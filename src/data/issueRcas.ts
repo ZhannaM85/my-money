@@ -20,6 +20,15 @@ export const issueRcas: IssueRca[] = [
     ru: 'Закрепление держало список, но тап чуть сдвигал страницу. Скрытие по scroll считало это настоящим скроллом и убирало карточку. Сразу после pin скролл игнорируется; поздний скролл страницы по-прежнему скрывает.',
   },
   {
+    issue: 130,
+    title: {
+      en: 'Chart tooltip does not close when tapping away',
+      ru: 'Подсказка графика не закрывается по тапу мимо',
+    },
+    en: '#128 pinned the tooltip until page scroll, so a tap on Positions or empty space left it stuck. Pointer down outside the chart and holdings card now dismisses; taps on the plot or list do not.',
+    ru: '#128 закреплял подсказку до скролла страницы, поэтому тап по Позициям или пустому месту её не убирал. Pointer down вне графика и карточки скрывает; тап по графику или списку — нет.',
+  },
+  {
     issue: 129,
     title: {
       en: 'Show original amount in muted text under converted values on asset details',
