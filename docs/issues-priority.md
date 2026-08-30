@@ -21,7 +21,7 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 | [#163](https://github.com/ZhannaM85/my-money/issues/163) | 🔍 Pending validation | Generate iOS/Android icon and splash-screen assets | Reuse PWA mark. Blocks both store listings. |
 | [#164](https://github.com/ZhannaM85/my-money/issues/164) | 🔍 Pending validation | Write a privacy policy page (required by both app stores) | Can ship on web first. Public `/privacy` URL. |
 | [#166](https://github.com/ZhannaM85/my-money/issues/166) | 🔍 Pending validation | Native status bar / safe-area / system theming pass (iOS + Android) | Depends on #162. |
-| [#165](https://github.com/ZhannaM85/my-money/issues/165) | 🔲 Open | Android: hardware/gesture back-button navigation handling | Depends on #162. |
+| [#165](https://github.com/ZhannaM85/my-money/issues/165) | 🔍 Pending validation | Android: hardware/gesture back-button navigation handling | Depends on #162. |
 | [#169](https://github.com/ZhannaM85/my-money/issues/169) | 🔲 Open | Native: backup and CSV export/import via share sheet | `<a download>` often fails in WebView. Depends on #162. |
 | [#167](https://github.com/ZhannaM85/my-money/issues/167) | 🔲 Open | iOS: App Store Connect app record + signing (Developer Program enrolled) | Account step. Enrollment is done; Connect record is not. |
 | [#168](https://github.com/ZhannaM85/my-money/issues/168) | 🔲 Open | iOS: code signing + first TestFlight beta build | Depends on #162 + #167. Requires a Mac. |

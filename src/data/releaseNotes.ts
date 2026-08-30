@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 180,
+    issue: 165,
+    date: '2026-08-30T17:45:00+03:00',
+    en: 'On Android, the system Back button closes a dialog, then goes back in history, then to Dashboard, then exits. Web is unchanged.',
+    ru: 'На Android системная кнопка «Назад» закрывает диалог, затем идёт по истории, затем на Сводку, затем выходит. Веб без изменений.',
+  },
+  {
     version: 179,
     issue: 166,
     date: '2026-08-30T17:35:00+03:00',

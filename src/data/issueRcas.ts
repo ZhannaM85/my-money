@@ -20,6 +20,15 @@ export const issueRcas: IssueRca[] = [
     ru: 'Не дефект. Запланированное продолжение оболочки. Стандартный хром WebView перекрывал шапку/табы, пока оболочка не стала edge-to-edge и SystemBars не совпали со светлой/тёмной темой.',
   },
   {
+    issue: 165,
+    title: {
+      en: 'Android hardware back-button navigation',
+      ru: 'Кнопка «Назад» на Android',
+    },
+    en: 'Not a defect. Planned wrap follow-up. Default WebView back either did nothing useful or exited. Handler closes a dialog, then history, then Dashboard, then exit. Tab hops already replace.',
+    ru: 'Не дефект. Запланированное продолжение оболочки. Стандартный «Назад» в WebView ничего не делал или закрывал приложение. Обработчик закрывает диалог, затем историю, затем Сводку, затем выход. Табы уже replace.',
+  },
+  {
     issue: 164,
     title: {
       en: 'Privacy policy page for app stores',

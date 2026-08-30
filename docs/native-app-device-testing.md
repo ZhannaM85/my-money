@@ -29,6 +29,8 @@ This only produces **debug** builds. Play / TestFlight signing is later.
    ```
 
 5. Confirm the app loads and a saved amount survives an app restart.
+6. From Settings, Back should land on Dashboard, not exit. From Dashboard with
+   no history, Back should exit. Tab hops must not pile up on the back stack.
 
 `npx cap open android` if you prefer Android Studio.
 
