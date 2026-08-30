@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 171,
+    issue: 160,
+    date: '2026-08-30T17:20:00+03:00',
+    en: 'On Assets, excluded holdings sit at the bottom of All and class lists. Name, amount, and custom sort still apply inside the active group and inside the excluded group.',
+    ru: 'На экране активов исключённые стоят внизу списков «Все» и классов. Сортировка по имени, сумме и своя по-прежнему действует внутри активных и внутри исключённых.',
+  },
+  {
     version: 170,
     issue: 159,
     date: '2026-08-30T16:30:00+03:00',

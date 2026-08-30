@@ -523,6 +523,66 @@ test('capture Assets filter chips wrap (#153)', async ({ page }) => {
   })
 })
 
+test('capture Assets excluded rows at the bottom (#160)', async ({ page }) => {
+  await seedValidationFixture(page)
+  await page.evaluate(async () => {
+    const now = '2026-08-17T00:00:00.000Z'
+    const version = await (async () => {
+      const listed = await indexedDB.databases?.()
+      const existing = listed?.find((row) => row.name === 'my-money')
+      return existing?.version && existing.version > 0 ? existing.version : 2
+    })()
+    await new Promise<void>((resolve, reject) => {
+      const open = indexedDB.open('my-money', version)
+      open.onerror = () => reject(open.error ?? new Error('idb open failed'))
+      open.onsuccess = () => {
+        const db = open.result
+        const tx = db.transaction(['assets', 'snapshots'], 'readwrite')
+        tx.objectStore('assets').put({
+          id: 'aaa-hidden',
+          name: 'Aaa hidden',
+          assetClass: 'money',
+          type: 'cash',
+          currency: 'EUR',
+          trackingStatus: 'excluded',
+          valuationMethod: 'account_balance',
+          updateFrequency: 'weekly',
+          createdAt: now,
+          updatedAt: now,
+        })
+        tx.objectStore('snapshots').put({
+          id: 's-aaa-hidden',
+          assetId: 'aaa-hidden',
+          date: '2026-08-17',
+          amount: 9000,
+          currency: 'EUR',
+        })
+        tx.oncomplete = () => {
+          db.close()
+          resolve()
+        }
+        tx.onerror = () => reject(tx.error ?? new Error('idb tx failed'))
+      }
+    })
+  })
+  await page.goto('/assets')
+  await expect(page.getByRole('heading', { name: 'Assets' })).toBeVisible()
+  await page.getByLabel('Sort assets').selectOption('name_asc')
+  const hrefs = await page
+    .locator('a[href^="/assets/"]:not([href="/assets/new"])')
+    .evaluateAll((els) => els.map((el) => el.getAttribute('href')))
+  expect(hrefs).toEqual([
+    '/assets/eur-cash',
+    '/assets/usd-cash',
+    '/assets/aaa-hidden',
+  ])
+  await expect(page.getByText('Aaa hidden')).toBeVisible()
+  await page.screenshot({
+    path: join(outDir, '160-assets-excluded-at-bottom.png'),
+    fullPage: true,
+  })
+})
+
 test('capture Add asset Quick add House chip (#149)', async ({ page }) => {
   await seedValidationFixture(page)
   await page.goto('/assets/new')

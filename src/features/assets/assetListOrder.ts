@@ -1,3 +1,4 @@
+import type { TrackingStatus } from '@/domain/asset/Asset'
 import type { AssetListSort } from '@/domain/settings'
 
 export function ensureAssetOrder(
@@ -35,7 +36,21 @@ export function spliceVisibleOrder(
   )
 }
 
-export function sortAssets<T extends { id: string; name: string }>(
+function pinExcludedLast<T extends { trackingStatus?: TrackingStatus }>(
+  rows: readonly T[],
+): T[] {
+  const included: T[] = []
+  const excluded: T[] = []
+  for (const row of rows) {
+    if (row.trackingStatus === 'excluded') excluded.push(row)
+    else included.push(row)
+  }
+  return [...included, ...excluded]
+}
+
+export function sortAssets<
+  T extends { id: string; name: string; trackingStatus?: TrackingStatus },
+>(
   assets: readonly T[],
   options: {
     sort: AssetListSort
@@ -45,6 +60,7 @@ export function sortAssets<T extends { id: string; name: string }>(
   },
 ): T[] {
   const rows = [...assets]
+  let sorted: T[]
   if (options.sort === 'custom') {
     const rank = new Map(
       ensureAssetOrder(
@@ -52,28 +68,31 @@ export function sortAssets<T extends { id: string; name: string }>(
         rows.map((asset) => asset.id),
       ).map((id, index) => [id, index]),
     )
-    return rows.sort(
+    sorted = rows.sort(
       (left, right) => (rank.get(left.id) ?? 0) - (rank.get(right.id) ?? 0),
     )
-  }
-  const direction = options.sort.endsWith('_desc') ? -1 : 1
-  if (options.sort.startsWith('name_')) {
-    return rows.sort(
-      (left, right) =>
-        direction * left.name.localeCompare(right.name, options.locale),
-    )
-  }
-  return rows.sort((left, right) => {
-    const leftAmount = options.amountOf(left)
-    const rightAmount = options.amountOf(right)
-    if (leftAmount === null && rightAmount === null) {
-      return left.name.localeCompare(right.name, options.locale)
+  } else {
+    const direction = options.sort.endsWith('_desc') ? -1 : 1
+    if (options.sort.startsWith('name_')) {
+      sorted = rows.sort(
+        (left, right) =>
+          direction * left.name.localeCompare(right.name, options.locale),
+      )
+    } else {
+      sorted = rows.sort((left, right) => {
+        const leftAmount = options.amountOf(left)
+        const rightAmount = options.amountOf(right)
+        if (leftAmount === null && rightAmount === null) {
+          return left.name.localeCompare(right.name, options.locale)
+        }
+        if (leftAmount === null) return 1
+        if (rightAmount === null) return -1
+        if (leftAmount === rightAmount) {
+          return left.name.localeCompare(right.name, options.locale)
+        }
+        return (leftAmount - rightAmount) * direction
+      })
     }
-    if (leftAmount === null) return 1
-    if (rightAmount === null) return -1
-    if (leftAmount === rightAmount) {
-      return left.name.localeCompare(right.name, options.locale)
-    }
-    return (leftAmount - rightAmount) * direction
-  })
+  }
+  return pinExcludedLast(sorted)
 }

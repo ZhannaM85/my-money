@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 160,
+    title: {
+      en: 'Assets list: show excluded assets at the bottom',
+      ru: 'Список активов: исключённые внизу',
+    },
+    en: 'sortAssets mixed excluded rows into name/amount/custom order. After that sort, excluded rows are pinned last so the active book stays on top; archived still lives on its chip.',
+    ru: 'sortAssets мешал excluded в общий порядок по имени/сумме/свой. После сортировки excluded закреплены внизу, чтобы активная книга была сверху; архив по-прежнему на своём чипе.',
+  },
+  {
     issue: 159,
     title: {
       en: 'Show action should be green (Hide stays red)',

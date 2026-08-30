@@ -85,6 +85,24 @@ describe('AssetsScreen', () => {
     ).not.toBeInTheDocument()
   })
 
+  it('keeps archived assets on the Archived chip, not All (#160)', async () => {
+    const user = userEvent.setup()
+    await addNamedAsset('old', 'Old cash', 10, 'EUR', 'archived')
+    await addNamedAsset('alpha', 'Alpha', 300, 'EUR', 'excluded')
+    render(
+      <MemoryRouter>
+        <AssetsScreen />
+      </MemoryRouter>,
+    )
+    await screen.findByText('Broker')
+    expect(listedAssetHrefs()).toEqual([
+      '/assets/a1',
+      '/assets/alpha',
+    ])
+    await user.click(screen.getByRole('button', { name: 'Hidden' }))
+    expect(listedAssetHrefs()).toEqual(['/assets/old'])
+  })
+
   it('shows type and institution on the muted Assets subtitle (#109)', async () => {
     const existing = useAssetStore.getState().assets[0]
     await useAssetStore.getState().saveAsset({
@@ -164,6 +182,7 @@ async function addNamedAsset(
   name: string,
   amount: number,
   currency: 'EUR' | 'USD',
+  trackingStatus: 'included' | 'excluded' | 'archived' = 'included',
 ) {
   await useAssetStore.getState().saveAsset(
     {
@@ -172,7 +191,7 @@ async function addNamedAsset(
       assetClass: 'money',
       type: 'cash',
       currency,
-      trackingStatus: 'included',
+      trackingStatus,
       valuationMethod: 'account_balance',
       updateFrequency: 'weekly',
       createdAt: now,
@@ -221,6 +240,33 @@ describe('AssetsScreen sort (#100)', () => {
     expect(listedAssetHrefs()).toEqual([
       '/assets/cash',
       '/assets/a1',
+      '/assets/alpha',
+    ])
+  })
+
+  it('lists excluded assets after included, still sorted within the group (#160)', async () => {
+    const user = userEvent.setup()
+    await addNamedAsset('cash', 'Cash', 50, 'EUR')
+    await addNamedAsset('alpha', 'Alpha', 300, 'EUR', 'excluded')
+    render(
+      <MemoryRouter>
+        <AssetsScreen />
+      </MemoryRouter>,
+    )
+    await screen.findByLabelText('Sort assets')
+    await user.selectOptions(screen.getByLabelText('Sort assets'), 'name_asc')
+    expect(listedAssetHrefs()).toEqual([
+      '/assets/a1',
+      '/assets/cash',
+      '/assets/alpha',
+    ])
+    await user.selectOptions(
+      screen.getByLabelText('Sort assets'),
+      'amount_desc',
+    )
+    expect(listedAssetHrefs()).toEqual([
+      '/assets/a1',
+      '/assets/cash',
       '/assets/alpha',
     ])
   })
