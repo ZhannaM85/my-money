@@ -25,7 +25,7 @@ _After the four web flows feel good. Android wraps this app; iOS does not._
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
-| [#157](https://github.com/ZhannaM85/my-money/issues/157) | 🔍 Pending validation | Allocation: Show/Hide needs three or four taps (Dashboard is one tap) | Expanded holding under Class card. Class expand button likely steals taps. Related #150 / #154. |
+| [#157](https://github.com/ZhannaM85/my-money/issues/157) | 🔲 Open | Allocation: Show/Hide needs three or four taps (Dashboard is one tap) | Still 3 taps on device after first fix. Tap log via Settings FX debug (Copy). Related #150 / #154. |
 
 ---
 

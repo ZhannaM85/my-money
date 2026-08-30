@@ -5,6 +5,7 @@ import type { AllocationHolding } from '@/domain/netWorth'
 import { useLocale, useTranslation } from '@/i18n'
 import { formatAmount } from '@/shared/lib/money'
 import { cn } from '@/shared/lib/utils'
+import { tapDebug } from '@/infrastructure/debug/tapDebug'
 import { SwipeRevealRow } from '@/shared/ui/swipe-reveal-row'
 import { useAssetStore } from '@/stores/assetStore'
 
@@ -117,9 +118,21 @@ export function AllocationChart({
                   className="relative z-0 flex w-full cursor-pointer items-center justify-between gap-3 text-left"
                   aria-expanded={open}
                   aria-label={`${row.name} · ${holdingsLabel}`}
-                  onClick={() =>
-                    setOpenId((current) => (current === row.id ? null : row.id))
+                  onPointerDown={(event) =>
+                    tapDebug('slice-pointerdown', event, {
+                      slice: row.name,
+                      open,
+                    })
                   }
+                  onClick={(event) => {
+                    tapDebug('slice-click', event, {
+                      slice: row.name,
+                      open,
+                    })
+                    setOpenId((current) =>
+                      current === row.id ? null : row.id,
+                    )
+                  }}
                   onKeyDown={(event) => {
                     if (event.key !== 'Enter' && event.key !== ' ') return
                     event.preventDefault()
@@ -185,8 +198,16 @@ export function AllocationChart({
               {open ? (
                 <div
                   className="relative z-10 flex flex-col gap-2"
-                  onPointerDown={(event) => event.stopPropagation()}
-                  onClick={(event) => event.stopPropagation()}
+                  onPointerDown={(event) => {
+                    tapDebug('holdings-pointerdown', event, {
+                      slice: row.name,
+                    })
+                    event.stopPropagation()
+                  }}
+                  onClick={(event) => {
+                    tapDebug('holdings-click', event, { slice: row.name })
+                    event.stopPropagation()
+                  }}
                 >
                   {holdings.map((holding) => {
                     const excluded = Boolean(holding.excluded)

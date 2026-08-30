@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 169,
+    issue: 157,
+    date: '2026-08-30T16:15:00+03:00',
+    en: 'Settings FX debug also records Allocation Hide/Show taps, so a copied log can show why more than one tap is needed.',
+    ru: 'Отладка FX в настройках записывает и нажатия «Скрыть»/«Показать» в распределении, чтобы по скопированному логу было видно, почему нужно больше одного нажатия.',
+  },
+  {
     version: 168,
     issue: 157,
     date: '2026-08-30T16:00:00+03:00',

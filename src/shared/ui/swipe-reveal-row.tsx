@@ -1,4 +1,5 @@
 import { useRef, useState, type PointerEvent, type ReactNode } from 'react'
+import { tapDebug } from '@/infrastructure/debug/tapDebug'
 import { cn } from '@/shared/lib/utils'
 
 const THRESHOLD_PX = 48
@@ -58,6 +59,7 @@ export function SwipeRevealRow({
         aria-label={actionAria}
         onClick={(event) => {
           event.stopPropagation()
+          tapDebug('action-click', event, { action: actionLabel })
           onAction()
           setOpen(false)
         }}
@@ -71,9 +73,23 @@ export function SwipeRevealRow({
           style={panelStyle}
           data-swipe-open={open ? 'true' : 'false'}
           aria-expanded={open}
+          onPointerDown={(event) =>
+            tapDebug('reveal-pointerdown', event, {
+              open,
+              action: actionLabel,
+            })
+          }
           onClick={(event) => {
             event.stopPropagation()
-            setOpen((current) => !current)
+            setOpen((current) => {
+              const next = !current
+              tapDebug('reveal-click', event, {
+                open: current,
+                next,
+                action: actionLabel,
+              })
+              return next
+            })
           }}
         >
           {children}
