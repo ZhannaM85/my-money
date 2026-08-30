@@ -370,4 +370,45 @@ describe('AllocationScreen', () => {
     ).toHaveAttribute('data-excluded', 'true')
     expect(screen.getByText('Savings')).toBeInTheDocument()
   })
+
+  it('keeps a Property slice when every holding is hidden (#155)', async () => {
+    const user = userEvent.setup()
+    await useAssetStore.getState().saveAsset(
+      {
+        id: 'house',
+        name: 'Sosnovo',
+        assetClass: 'property',
+        type: 'house',
+        currency: 'EUR',
+        trackingStatus: 'excluded',
+        valuationMethod: 'account_balance',
+        updateFrequency: 'yearly',
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        assetId: 'house',
+        date: '2026-08-17',
+        amount: 5_000_000,
+        currency: 'EUR',
+      },
+    )
+    render(
+      <MemoryRouter>
+        <AllocationScreen />
+      </MemoryRouter>,
+    )
+    expect(await screen.findByText('Money · EUR')).toBeInTheDocument()
+    expect(screen.getByText('Property · EUR')).toBeInTheDocument()
+    expect(
+      screen.getByText('Property · EUR').closest('[data-slice-excluded]'),
+    ).toHaveAttribute('data-slice-excluded', 'true')
+    await user.click(
+      screen.getByRole('button', { name: 'Property · EUR · Holdings' }),
+    )
+    expect(await screen.findByText('Sosnovo')).toBeInTheDocument()
+    expect(
+      screen.getByText('Sosnovo').closest('[data-excluded]'),
+    ).toHaveAttribute('data-excluded', 'true')
+  })
 })

@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 155,
+    title: {
+      en: 'Allocation: hidden assets vanish when they were the last in a slice',
+      ru: 'Распределение: скрытые активы пропадают, если они были последними в доле',
+    },
+    en: 'Slice totals skipped excluded assets, so hiding every Property removed the Property row. Listed-but-excluded groups now keep a 0% greyed slice so Show still works.',
+    ru: 'Итоги долей не брали excluded, поэтому скрытие всего имущества убирало строку класса. Теперь группа с только скрытыми остаётся серой на 0%, чтобы «Показать» работало.',
+  },
+  {
     issue: 154,
     title: {
       en: 'Dashboard Positions: tap row to reveal Hide (same as Allocation)',

@@ -76,11 +76,15 @@ export function nativeTotalsByCurrency(
 ): { currency: string; amount: number }[] {
   const buckets = new Map<string, number>()
   for (const asset of assets) {
-    if (!contributesToNetWorth(asset)) continue
+    if (!isListedOnDashboard(asset)) continue
     const snapshot = latestSnapshot(snapshots, asset.id)
     if (!snapshot) continue
     const native = effectiveAmount(snapshot.amount, asset)
     const signed = isLiability(asset) ? -native : native
+    if (!contributesToNetWorth(asset)) {
+      if (!buckets.has(snapshot.currency)) buckets.set(snapshot.currency, 0)
+      continue
+    }
     buckets.set(
       snapshot.currency,
       (buckets.get(snapshot.currency) ?? 0) + signed,
@@ -345,9 +349,14 @@ export function breakdownBy(
 ): { id: string; amount: number; percent: number }[] {
   const buckets = new Map<string, number>()
   for (const asset of assets) {
-    if (!contributesToNetWorth(asset)) continue
+    if (!isListedOnDashboard(asset)) continue
     const snapshot = latestSnapshot(snapshots, asset.id)
     if (!snapshot) continue
+    const key = keyOf(asset)
+    if (!contributesToNetWorth(asset)) {
+      if (!buckets.has(key)) buckets.set(key, 0)
+      continue
+    }
     const result = convertedContribution(
       asset,
       snapshot,
@@ -356,7 +365,6 @@ export function breakdownBy(
       snapshot.date,
     )
     if ('missing' in result) continue
-    const key = keyOf(asset)
     buckets.set(key, (buckets.get(key) ?? 0) + result.amount)
   }
   const rows = [...buckets.entries()].map(([id, amount]) => ({ id, amount }))
@@ -453,13 +461,24 @@ export function nativeBreakdownBy(
     }
   >()
   for (const asset of assets) {
-    if (!contributesToNetWorth(asset)) continue
+    if (!isListedOnDashboard(asset)) continue
     const snapshot = latestSnapshot(snapshots, asset.id)
     if (!snapshot) continue
     const native = effectiveAmount(snapshot.amount, asset)
     const signed = isLiability(asset) ? -native : native
     const labelKey = keyOf(asset)
     const id = `${labelKey}::${snapshot.currency}`
+    if (!contributesToNetWorth(asset)) {
+      if (!buckets.has(id)) {
+        buckets.set(id, {
+          amount: 0,
+          currency: snapshot.currency,
+          shareWeight: 0,
+          conversionAvailable: true,
+        })
+      }
+      continue
+    }
     const share = shareWeightFor(
       signed,
       snapshot.currency,

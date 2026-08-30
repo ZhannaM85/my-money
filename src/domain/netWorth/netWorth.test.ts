@@ -423,6 +423,35 @@ describe('breakdownBy', () => {
       { id: 'liabilities', amount: -25, percent: 20 },
     ])
   })
+
+  it('keeps a zero slice when every asset in the group is excluded (#155)', () => {
+    const cash = asset({ id: 'cash', name: 'Cash', type: 'cash' })
+    const house = asset({
+      id: 'house',
+      name: 'Sosnovo',
+      assetClass: 'property',
+      type: 'house',
+      trackingStatus: 'excluded',
+    })
+    const rows = breakdownBy(
+      [cash, house],
+      [
+        snap({ id: 's1', assetId: 'cash', amount: 1000 }),
+        snap({ id: 's2', assetId: 'house', amount: 5_000_000 }),
+      ],
+      [],
+      'EUR',
+      (row) => row.assetClass,
+    )
+    expect(rows.find((row) => row.id === 'money')).toMatchObject({
+      amount: 1000,
+      percent: 100,
+    })
+    expect(rows.find((row) => row.id === 'property')).toMatchObject({
+      amount: 0,
+      percent: 0,
+    })
+  })
 })
 
 describe('nativeBreakdownBy (#108)', () => {

@@ -51,6 +51,7 @@ export function AllocationChart({
     ...row,
     slice: row.shareWeight ?? Math.abs(row.amount),
   }))
+  const chartSlices = pieData.filter((row) => row.slice > 0)
   if (pieData.length === 0) return null
 
   function amountCurrency(row: { currency?: string }): string {
@@ -63,14 +64,14 @@ export function AllocationChart({
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
             <Pie
-              data={pieData}
+              data={chartSlices}
               dataKey="slice"
               nameKey="name"
               innerRadius={55}
               outerRadius={85}
               paddingAngle={2}
             >
-              {pieData.map((row, index) => (
+              {chartSlices.map((row, index) => (
                 <Cell
                   key={row.id}
                   fill={SLICE_COLORS[index % SLICE_COLORS.length]}
@@ -98,10 +99,16 @@ export function AllocationChart({
           const holdings = row.holdings ?? []
           const expandable = holdings.length > 0
           const open = openId === row.id
+          const sliceHidden =
+            holdings.length > 0 && holdings.every((holding) => holding.excluded)
           return (
             <li
               key={row.id}
-              className="flex flex-col gap-2 rounded-xl bg-card px-4 py-3 ring-1 ring-foreground/10"
+              data-slice-excluded={sliceHidden ? 'true' : 'false'}
+              className={cn(
+                'flex flex-col gap-2 rounded-xl bg-card px-4 py-3 ring-1 ring-foreground/10',
+                sliceHidden && 'opacity-60 text-muted-foreground',
+              )}
             >
               {expandable ? (
                 <button

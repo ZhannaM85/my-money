@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 166,
+    issue: 155,
+    date: '2026-08-30T14:25:00+03:00',
+    en: 'Hiding every asset in an Allocation class (for example all Property) leaves that class in the list, greyed, so you can Show them again.',
+    ru: 'Если скрыть все активы класса в распределении (например всё имущество), класс остаётся в списке серым, чтобы их можно было снова показать.',
+  },
+  {
     version: 165,
     issue: 154,
     date: '2026-08-30T14:10:00+03:00',
