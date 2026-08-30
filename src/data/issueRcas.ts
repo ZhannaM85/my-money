@@ -29,6 +29,15 @@ export const issueRcas: IssueRca[] = [
     ru: 'Тип «Дом» уже был в имуществе, но в быстром добавлении была только квартира. Чип «Дом» ставит класс «Имущество» и тип «Дом».',
   },
   {
+    issue: 148,
+    title: {
+      en: 'Dashboard-hidden assets stay in Positions in a disabled state',
+      ru: 'Скрытые на Сводке активы остаются в позициях в неактивном виде',
+    },
+    en: 'After Hide (#146) the row stayed fully styled, so it still looked counted. Hidden rows now use muted/disabled contrast; Show restores the card.',
+    ru: 'После «Скрыть» (#146) строка выглядела как обычная, будто всё ещё учитывается. Скрытые строки теперь приглушены; «Показать» возвращает карточку.',
+  },
+  {
     issue: 146,
     title: {
       en: 'Dashboard Positions: swipe left to reveal Hide',

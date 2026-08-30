@@ -1,6 +1,7 @@
 import type { HoldingConversion } from '@/domain/netWorth'
 import { useLocale, useTranslation } from '@/i18n'
 import { formatAmount } from '@/shared/lib/money'
+import { cn } from '@/shared/lib/utils'
 import { SwipeRevealRow } from '@/shared/ui/swipe-reveal-row'
 import { useAssetStore } from '@/stores/assetStore'
 
@@ -35,11 +36,13 @@ export function PositionsHoldingRow({
       }
     >
       <div
-        className={
+        data-excluded={excluded ? 'true' : 'false'}
+        className={cn(
           compact
             ? 'flex items-center justify-between gap-3 border-t border-border bg-card px-0 py-2'
-            : 'flex items-center justify-between gap-3 bg-card px-4 py-3 ring-1 ring-foreground/10'
-        }
+            : 'flex items-center justify-between gap-3 bg-card px-4 py-3 ring-1 ring-foreground/10',
+          excluded && 'opacity-60 text-muted-foreground',
+        )}
       >
         <span className="flex min-w-0 flex-col">
           <span

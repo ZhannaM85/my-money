@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 159,
+    issue: 148,
+    date: '2026-08-30T12:20:00+03:00',
+    en: 'A hidden Positions row stays in the list, greyed out, until you Show it again.',
+    ru: 'Скрытая строка позиций остаётся в списке, серой, пока вы снова не нажмёте Показать.',
+  },
+  {
     version: 158,
     issue: 146,
     date: '2026-08-30T12:10:00+03:00',

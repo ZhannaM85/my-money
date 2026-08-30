@@ -1081,4 +1081,40 @@ describe('DashboardScreen', () => {
     await userEvent.click(screen.getByRole('button', { name: 'Show Sosnovo' }))
     expect(useAssetStore.getState().assets[0]?.trackingStatus).toBe('included')
   })
+
+  it('shows a hidden Positions row in a disabled visual state (#148)', async () => {
+    const now = '2026-08-17T00:00:00.000Z'
+    await useAssetStore.getState().saveAsset(
+      {
+        id: 'house',
+        name: 'Sosnovo',
+        assetClass: 'property',
+        type: 'house',
+        currency: 'EUR',
+        trackingStatus: 'included',
+        valuationMethod: 'account_balance',
+        updateFrequency: 'yearly',
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        assetId: 'house',
+        date: '2026-08-17',
+        amount: 5_000_000,
+        currency: 'EUR',
+      },
+    )
+    render(
+      <MemoryRouter>
+        <DashboardScreen />
+      </MemoryRouter>,
+    )
+    await userEvent.click(await screen.findByRole('button', { name: 'Holdings' }))
+    const row = (await screen.findByText('Sosnovo')).closest('[data-excluded]')
+    expect(row).toHaveAttribute('data-excluded', 'false')
+    await userEvent.click(screen.getByRole('button', { name: 'Hide Sosnovo' }))
+    const hidden = (await screen.findByText('Sosnovo')).closest('[data-excluded]')
+    expect(hidden).toHaveAttribute('data-excluded', 'true')
+    expect(hidden).toHaveClass('opacity-60')
+  })
 })
