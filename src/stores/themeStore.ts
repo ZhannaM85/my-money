@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
+import { applyNativeChromeTheme } from '@/shared/native/nativeChrome'
 
 export type Mood = 'fresh' | 'ledger' | 'green' | 'soft' | 'neutral' | 'pastel'
 
@@ -15,6 +16,11 @@ export const MOODS: Mood[] = [
 export function applyTheme(mood: Mood) {
   if (typeof document === 'undefined') return
   document.documentElement.dataset.mood = mood
+  const isDark =
+    typeof window !== 'undefined' &&
+    typeof window.matchMedia === 'function' &&
+    window.matchMedia('(prefers-color-scheme: dark)').matches
+  applyNativeChromeTheme(isDark)
 }
 
 interface ThemeStoreState {

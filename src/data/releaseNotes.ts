@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 179,
+    issue: 166,
+    date: '2026-08-30T17:35:00+03:00',
+    en: 'On the native app, the status bar and home indicator sit on the same background as the rest of the screen. Web is unchanged.',
+    ru: 'В нативном приложении строка состояния и индикатор «домой» на том же фоне, что и экран. Веб без изменений.',
+  },
+  {
     version: 178,
     issue: 163,
     date: '2026-08-30T17:25:00+03:00',

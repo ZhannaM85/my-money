@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 166,
+    title: {
+      en: 'Native status bar and safe-area theming',
+      ru: 'Системные панели и безопасная зона',
+    },
+    en: 'Not a defect. Planned wrap follow-up. WebView default chrome sat over the header/tab bar until the shell drew edge-to-edge and SystemBars matched light/dark.',
+    ru: 'Не дефект. Запланированное продолжение оболочки. Стандартный хром WebView перекрывал шапку/табы, пока оболочка не стала edge-to-edge и SystemBars не совпали со светлой/тёмной темой.',
+  },
+  {
     issue: 164,
     title: {
       en: 'Privacy policy page for app stores',
