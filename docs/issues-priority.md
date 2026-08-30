@@ -30,9 +30,6 @@ _After the four web flows feel good. Android wraps this app; iOS does not._
 | [#147](https://github.com/ZhannaM85/my-money/issues/147) | 🔍 Pending validation | Exclude dashboard-hidden assets from totals and the chart | Drop hidden values from header, Positions total, chart, Allocation. Depends on #146. Prefer excluded (#30). |
 | [#150](https://github.com/ZhannaM85/my-money/issues/150) | 🔍 Pending validation | Allocation: hide/exclude assets and drop them from comparison | Tap expanded holding to reveal Hide (swipe fought page scroll). Omit from comparison. |
 | [#154](https://github.com/ZhannaM85/my-money/issues/154) | 🔲 Open | Dashboard Positions: tap row to reveal Hide (same as Allocation) | #146 shipped swipe; tap does nothing. Match Allocation #150 tap-to-reveal. |
-| [#148](https://github.com/ZhannaM85/my-money/issues/148) | 🔍 Pending validation | Dashboard-hidden assets stay in Positions in a disabled state | Row stays, greyed/muted. Depends on #146. |
-| [#147](https://github.com/ZhannaM85/my-money/issues/147) | 🔍 Pending validation | Exclude dashboard-hidden assets from totals and the chart | Drop hidden values from header, Positions total, chart, Allocation. Depends on #146. Prefer excluded (#30). |
-| [#150](https://github.com/ZhannaM85/my-money/issues/150) | 🔍 Pending validation | Allocation: hide/exclude assets and drop them from comparison | Tap expanded holding to reveal Hide (swipe fought page scroll). Omit from comparison. |
 
 ---
 
