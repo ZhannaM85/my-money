@@ -280,4 +280,33 @@ describe('AllocationScreen', () => {
     )
     expect(await screen.findByText('Revolut')).toBeInTheDocument()
   })
+
+  it('shows ownership share on expanded holdings when not 1/1 (#151)', async () => {
+    const user = userEvent.setup()
+    const existing = useAssetStore.getState().assets[0]
+    await useAssetStore.getState().saveAsset({
+      ...existing!,
+      ownershipShareNumerator: 1,
+      ownershipShareDenominator: 2,
+    })
+    const settings = {
+      ...DEFAULT_SETTINGS,
+      currencyDisplayMode: 'native' as const,
+      baseCurrency: 'EUR',
+    }
+    await db.settings.put(settings)
+    useSettingsStore.setState({ settings, loaded: true })
+    render(
+      <MemoryRouter>
+        <AllocationScreen />
+      </MemoryRouter>,
+    )
+    await user.click(await screen.findByRole('button', { name: 'Type' }))
+    await user.click(
+      await screen.findByRole('button', {
+        name: 'Bank account · EUR · Holdings',
+      }),
+    )
+    expect(await screen.findByText('Your share: 1/2')).toBeInTheDocument()
+  })
 })

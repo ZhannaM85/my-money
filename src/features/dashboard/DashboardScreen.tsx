@@ -471,6 +471,11 @@ export function DashboardScreen() {
                                   {holding.institution}
                                 </span>
                               ) : null}
+                              {holding.ownershipShare ? (
+                                <span className="text-xs text-muted-foreground">
+                                  {t.asset.yourShare(holding.ownershipShare)}
+                                </span>
+                              ) : null}
                             </span>
                             <span className="shrink-0 tabular-nums text-sm">
                               {formatAmount(
@@ -885,17 +890,24 @@ export function DashboardScreen() {
                         <span className="truncate text-sm font-medium">
                           {row.name}
                         </span>
-                        {!isOriginal && (
+                        {row.ownershipShare ? (
                           <span className="text-xs text-muted-foreground">
-                            {row.conversionAvailable
-                              ? formatAmount(
-                                  row.nativeAmount,
-                                  row.currency,
-                                  locale,
-                                )
-                              : t.dashboard.conversionUnavailable}
+                            {t.asset.yourShare(row.ownershipShare)}
                           </span>
-                        )}
+                        ) : null}
+                        {!isOriginal && !row.conversionAvailable ? (
+                          <span className="text-xs text-muted-foreground">
+                            {t.dashboard.conversionUnavailable}
+                          </span>
+                        ) : !isOriginal && row.currency !== baseCurrency ? (
+                          <span className="text-xs text-muted-foreground">
+                            {formatAmount(
+                              row.nativeAmount,
+                              row.currency,
+                              locale,
+                            )}
+                          </span>
+                        ) : null}
                       </span>
                       <span className="shrink-0 text-right">
                         {isOriginal ||

@@ -226,7 +226,14 @@ export function ComparisonScreen() {
                 <th
                   className={`py-3 pr-2 text-left font-medium ${COMPARISON_NAME_COL_CLASS}`}
                 >
-                  {row.name}
+                  <span className="flex min-w-0 flex-col">
+                    <span className="whitespace-normal">{row.name}</span>
+                    {row.ownershipShare ? (
+                      <span className="text-xs font-normal text-muted-foreground">
+                        {t.asset.yourShare(row.ownershipShare)}
+                      </span>
+                    ) : null}
+                  </span>
                 </th>
               </tr>
             ))}

@@ -1,5 +1,10 @@
 import type { Asset, AssetClass } from '@/domain/asset'
-import { contributesToNetWorth, effectiveAmount, isLiability } from '@/domain/asset'
+import {
+  contributesToNetWorth,
+  effectiveAmount,
+  isLiability,
+  partialOwnershipShare,
+} from '@/domain/asset'
 import {
   convertAmount,
   lookupRate,
@@ -91,6 +96,7 @@ export type AllocationHolding = {
   institution?: string
   amount: number
   currency: string
+  ownershipShare?: string
 }
 
 /** Assets that belong in one Allocation Class, Currency, or Type slice (#122, #123). */
@@ -107,12 +113,14 @@ export function allocationSliceHoldings(
     if (!match(asset, snapshot)) continue
     const native = effectiveAmount(snapshot.amount, asset)
     const signed = isLiability(asset) ? -native : native
+    const ownershipShare = partialOwnershipShare(asset)
     rows.push({
       assetId: asset.id,
       name: asset.name,
       ...(asset.institution ? { institution: asset.institution } : {}),
       amount: signed,
       currency: snapshot.currency,
+      ...(ownershipShare ? { ownershipShare } : {}),
     })
   }
   return rows.sort((a, b) => a.name.localeCompare(b.name))
@@ -135,18 +143,9 @@ export function historicalNativeNetWorth(
       const native = effectiveAmount(snapshot.amount, asset)
       const signed = isLiability(asset) ? -native : native
       total += signed
-      holdings.push({
-        assetId: asset.id,
-        name: asset.name,
-        currency: snapshot.currency,
-        nativeAmount: signed,
-        convertedAmount: signed,
-        conversionAvailable: true,
-        ...(snapshot.note ? { note: snapshot.note } : {}),
-        ...(asset.institution?.trim()
-          ? { institution: asset.institution.trim() }
-          : {}),
-      })
+      holdings.push(
+        toHoldingConversion(asset, snapshot, signed, signed, true),
+      )
     }
     holdings.sort((a, b) => a.name.localeCompare(b.name))
     return { date, total, missingRates: [], holdings }
@@ -163,6 +162,31 @@ export interface HoldingConversion {
   conversionAvailable: boolean
   note?: string
   institution?: string
+  /** Set when ownership is not 1/1 (#151). */
+  ownershipShare?: string
+}
+
+function toHoldingConversion(
+  asset: Asset,
+  snapshot: AssetSnapshot,
+  nativeAmount: number,
+  convertedAmount: number | null,
+  conversionAvailable: boolean,
+): HoldingConversion {
+  const ownershipShare = partialOwnershipShare(asset)
+  return {
+    assetId: asset.id,
+    name: asset.name,
+    currency: snapshot.currency,
+    nativeAmount,
+    convertedAmount,
+    conversionAvailable,
+    ...(snapshot.note ? { note: snapshot.note } : {}),
+    ...(asset.institution?.trim()
+      ? { institution: asset.institution.trim() }
+      : {}),
+    ...(ownershipShare ? { ownershipShare } : {}),
+  }
 }
 
 export interface HistoricalPoint {
@@ -192,34 +216,22 @@ export function holdingsWithConversion(
     const nativeAmount = isLiability(asset) ? -nativeRaw : nativeRaw
     const rate = lookupRate(rates, snapshot.currency, baseCurrency, snapshot.date)
     if (rate === undefined) {
-      rows.push({
-        assetId: asset.id,
-        name: asset.name,
-        currency: snapshot.currency,
-        nativeAmount,
-        convertedAmount: null,
-        conversionAvailable: false,
-        ...(snapshot.note ? { note: snapshot.note } : {}),
-        ...(asset.institution?.trim()
-          ? { institution: asset.institution.trim() }
-          : {}),
-      })
+      rows.push(
+        toHoldingConversion(asset, snapshot, nativeAmount, null, false),
+      )
       continue
     }
     const convertedRaw = effectiveAmount(convertAmount(snapshot.amount, rate), asset)
     const convertedAmount = isLiability(asset) ? -convertedRaw : convertedRaw
-    rows.push({
-      assetId: asset.id,
-      name: asset.name,
-      currency: snapshot.currency,
-      nativeAmount,
-      convertedAmount,
-      conversionAvailable: true,
-      ...(snapshot.note ? { note: snapshot.note } : {}),
-      ...(asset.institution?.trim()
-        ? { institution: asset.institution.trim() }
-        : {}),
-    })
+    rows.push(
+      toHoldingConversion(
+        asset,
+        snapshot,
+        nativeAmount,
+        convertedAmount,
+        true,
+      ),
+    )
   }
   return rows.sort((a, b) => a.name.localeCompare(b.name))
 }
@@ -284,33 +296,21 @@ export function historicalNetWorth(
       )
       if ('missing' in result) {
         missingRates.push(result.missing)
-        holdings.push({
-          assetId: asset.id,
-          name: asset.name,
-          currency: snapshot.currency,
-          nativeAmount,
-          convertedAmount: null,
-          conversionAvailable: false,
-          ...(snapshot.note ? { note: snapshot.note } : {}),
-          ...(asset.institution?.trim()
-            ? { institution: asset.institution.trim() }
-            : {}),
-        })
+        holdings.push(
+          toHoldingConversion(asset, snapshot, nativeAmount, null, false),
+        )
         continue
       }
       total += result.amount
-      holdings.push({
-        assetId: asset.id,
-        name: asset.name,
-        currency: snapshot.currency,
-        nativeAmount,
-        convertedAmount: result.amount,
-        conversionAvailable: true,
-        ...(snapshot.note ? { note: snapshot.note } : {}),
-        ...(asset.institution?.trim()
-          ? { institution: asset.institution.trim() }
-          : {}),
-      })
+      holdings.push(
+        toHoldingConversion(
+          asset,
+          snapshot,
+          nativeAmount,
+          result.amount,
+          true,
+        ),
+      )
     }
     holdings.sort((a, b) => a.name.localeCompare(b.name))
     return { date, total, missingRates, holdings }

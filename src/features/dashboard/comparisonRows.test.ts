@@ -50,4 +50,26 @@ describe('comparisonRows (#137)', () => {
     expect(rows[1]?.byDate['2026-08-25']).toBeUndefined()
     expect(rows[1]?.byDate['2026-08-29']?.assetId).toBe('usd')
   })
+
+  it('copies ownershipShare onto the row (#151)', () => {
+    const rows = comparisonRows([
+      {
+        date: '2026-08-25',
+        total: 50,
+        missingRates: [],
+        holdings: [
+          {
+            assetId: 'house',
+            name: 'Sosnovo',
+            currency: 'EUR',
+            nativeAmount: 50,
+            convertedAmount: 50,
+            conversionAvailable: true,
+            ownershipShare: '1/2',
+          },
+        ],
+      },
+    ])
+    expect(rows[0]?.ownershipShare).toBe('1/2')
+  })
 })

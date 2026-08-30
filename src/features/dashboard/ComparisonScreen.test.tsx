@@ -282,4 +282,38 @@ describe('ComparisonScreen (#137)', () => {
       screen.getAllByRole('button', { name: /^Remove \d{4}-/ }),
     ).toHaveLength(4)
   })
+
+  it('shows ownership share under the asset name when not 1/1 (#151)', async () => {
+    const now = '2026-08-17T00:00:00.000Z'
+    await useAssetStore.getState().saveAsset(
+      {
+        id: 'a1',
+        name: 'Sosnovo',
+        assetClass: 'property',
+        type: 'house',
+        currency: 'EUR',
+        trackingStatus: 'included',
+        valuationMethod: 'account_balance',
+        updateFrequency: 'yearly',
+        ownershipShareNumerator: 1,
+        ownershipShareDenominator: 2,
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        assetId: 'a1',
+        date: '2026-08-25',
+        amount: 10_000_000,
+        currency: 'EUR',
+      },
+    )
+    useComparisonStore.setState({ dates: ['2026-08-25', '2026-08-29'] })
+    render(
+      <MemoryRouter>
+        <ComparisonScreen />
+      </MemoryRouter>,
+    )
+    expect(await screen.findByText('Sosnovo')).toBeInTheDocument()
+    expect(screen.getByText('Your share: 1/2')).toBeInTheDocument()
+  })
 })

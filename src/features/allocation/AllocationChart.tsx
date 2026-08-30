@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { ChevronDown } from 'lucide-react'
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts'
 import type { AllocationHolding } from '@/domain/netWorth'
-import { useLocale } from '@/i18n'
+import { useLocale, useTranslation } from '@/i18n'
 import { formatAmount } from '@/shared/lib/money'
 import { cn } from '@/shared/lib/utils'
 
@@ -42,6 +42,7 @@ export function AllocationChart({
   holdingsLabel: string
 }) {
   const locale = useLocale()
+  const t = useTranslation()
   const [openId, setOpenId] = useState<string | null>(null)
   const pieData = rows.map((row) => ({
     ...row,
@@ -174,6 +175,11 @@ export function AllocationChart({
                       {holding.institution ? (
                         <span className="truncate text-xs text-muted-foreground">
                           {holding.institution}
+                        </span>
+                      ) : null}
+                      {holding.ownershipShare ? (
+                        <span className="text-xs text-muted-foreground">
+                          {t.asset.yourShare(holding.ownershipShare)}
                         </span>
                       ) : null}
                     </span>

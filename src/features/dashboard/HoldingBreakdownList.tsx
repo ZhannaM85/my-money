@@ -43,13 +43,24 @@ export function HoldingBreakdownList({
                   {row.institution}
                 </span>
               ) : null}
-              <span className="text-xs text-muted-foreground">
-                {nativeOnly
-                  ? row.currency
-                  : row.conversionAvailable
-                    ? formatAmount(row.nativeAmount, row.currency, locale)
-                    : t.dashboard.conversionUnavailable}
-              </span>
+              {row.ownershipShare ? (
+                <span className="text-xs text-muted-foreground">
+                  {t.asset.yourShare(row.ownershipShare)}
+                </span>
+              ) : null}
+              {nativeOnly ? (
+                <span className="text-xs text-muted-foreground">
+                  {row.currency}
+                </span>
+              ) : !row.conversionAvailable ? (
+                <span className="text-xs text-muted-foreground">
+                  {t.dashboard.conversionUnavailable}
+                </span>
+              ) : row.currency !== baseCurrency ? (
+                <span className="text-xs text-muted-foreground">
+                  {formatAmount(row.nativeAmount, row.currency, locale)}
+                </span>
+              ) : null}
               {compact && row.note ? (
                 <span className="text-xs text-muted-foreground whitespace-normal">
                   {row.note}

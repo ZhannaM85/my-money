@@ -984,4 +984,64 @@ describe('DashboardScreen', () => {
       screen.queryByText('No holdings on this date'),
     ).not.toBeInTheDocument()
   })
+
+  it('shows ownership share on Positions when it is not 1/1 (#151)', async () => {
+    const now = '2026-08-17T00:00:00.000Z'
+    await useAssetStore.getState().saveAsset(
+      {
+        id: 'flat',
+        name: 'Квартира Ручьи',
+        assetClass: 'property',
+        type: 'apartment',
+        currency: 'EUR',
+        trackingStatus: 'included',
+        valuationMethod: 'account_balance',
+        updateFrequency: 'yearly',
+        ownershipShareNumerator: 1,
+        ownershipShareDenominator: 2,
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        assetId: 'flat',
+        date: '2026-08-17',
+        amount: 7_200_000,
+        currency: 'EUR',
+      },
+    )
+    await useAssetStore.getState().saveAsset(
+      {
+        id: 'cash',
+        name: 'Euro cash',
+        assetClass: 'money',
+        type: 'cash',
+        currency: 'EUR',
+        trackingStatus: 'included',
+        valuationMethod: 'account_balance',
+        updateFrequency: 'weekly',
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        assetId: 'cash',
+        date: '2026-08-17',
+        amount: 1000,
+        currency: 'EUR',
+      },
+    )
+    render(
+      <MemoryRouter>
+        <DashboardScreen />
+      </MemoryRouter>,
+    )
+    await userEvent.click(await screen.findByRole('button', { name: 'Holdings' }))
+    expect(await screen.findByText('Квартира Ручьи')).toBeInTheDocument()
+    expect(screen.getByText('Your share: 1/2')).toBeInTheDocument()
+    expect(
+      screen.getAllByText(formatAmount(3_600_000, 'EUR')).length,
+    ).toBeGreaterThan(0)
+    expect(screen.queryByText(formatAmount(7_200_000, 'EUR'))).not.toBeInTheDocument()
+    expect(screen.getByText('Euro cash')).toBeInTheDocument()
+    expect(screen.getAllByText('Your share: 1/2')).toHaveLength(1)
+  })
 })

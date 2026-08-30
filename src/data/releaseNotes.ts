@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 157,
+    issue: 151,
+    date: '2026-08-30T11:45:00+03:00',
+    en: 'Positions and other lists show your ownership share when it is not 100%, so a partial stake does not look like a cheap full price.',
+    ru: 'В позициях и других списках видна ваша доля, если она не 100%, чтобы частичная собственность не выглядела как слишком дешёвая полная цена.',
+  },
+  {
     version: 156,
     issue: 149,
     date: '2026-08-30T11:30:00+03:00',

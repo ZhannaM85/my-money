@@ -580,6 +580,31 @@ describe('holdingsWithConversion', () => {
     expect(rows[0]?.conversionAvailable).toBe(true)
   })
 
+  it('includes ownershipShare on holdings when not 1/1 (#151)', () => {
+    const house = asset({
+      id: 'house',
+      name: 'Sosnovo',
+      ownershipShareNumerator: 1,
+      ownershipShareDenominator: 2,
+    })
+    const rows = holdingsWithConversion(
+      [house],
+      [snap({ id: 's1', assetId: 'house', amount: 7_200_000 })],
+      [],
+      'EUR',
+    )
+    expect(rows[0]?.nativeAmount).toBe(3_600_000)
+    expect(rows[0]?.ownershipShare).toBe('1/2')
+    expect(
+      holdingsWithConversion(
+        [asset({ id: 'full', name: 'Full' })],
+        [snap({ id: 's', assetId: 'full', amount: 100 })],
+        [],
+        'EUR',
+      )[0]?.ownershipShare,
+    ).toBeUndefined()
+  })
+
   it('includes institution on holdings when set (#109)', () => {
     const cash = asset({
       id: 'usd',

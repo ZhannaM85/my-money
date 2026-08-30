@@ -4,6 +4,7 @@ import {
   formatOwnershipShare,
   ownershipMultiplier,
   parseOwnershipShare,
+  partialOwnershipShare,
 } from './ownershipShare'
 
 describe('ownershipShare', () => {
@@ -24,5 +25,12 @@ describe('ownershipShare', () => {
     ).toBe(500)
     expect(ownershipMultiplier({})).toBe(1)
     expect(formatOwnershipShare({ numerator: 1, denominator: 2 })).toBe('1/2')
+    expect(
+      partialOwnershipShare({
+        ownershipShareNumerator: 1,
+        ownershipShareDenominator: 2,
+      }),
+    ).toBe('1/2')
+    expect(partialOwnershipShare({})).toBeUndefined()
   })
 })

@@ -36,5 +36,6 @@ export {
   formatOwnershipShare,
   ownershipMultiplier,
   parseOwnershipShare,
+  partialOwnershipShare,
   type OwnershipShare,
 } from './ownershipShare'

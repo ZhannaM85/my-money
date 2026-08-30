@@ -137,6 +137,61 @@ test('capture Dashboard chart range picker (#126)', async ({ page }) => {
   })
 })
 
+test('capture Positions ownership share (#151)', async ({ page }) => {
+  await seedValidationFixture(page, { currencyDisplayMode: 'base' })
+  await page.evaluate(async () => {
+    const now = '2026-08-17T00:00:00.000Z'
+    const version = await (async () => {
+      const listed = await indexedDB.databases?.()
+      const existing = listed?.find((row) => row.name === 'my-money')
+      return existing?.version && existing.version > 0 ? existing.version : 2
+    })()
+    await new Promise<void>((resolve, reject) => {
+      const open = indexedDB.open('my-money', version)
+      open.onerror = () => reject(open.error ?? new Error('idb open failed'))
+      open.onsuccess = () => {
+        const db = open.result
+        const tx = db.transaction(['assets', 'snapshots'], 'readwrite')
+        tx.objectStore('assets').put({
+          id: 'ruchyi',
+          name: 'Квартира Ручьи',
+          assetClass: 'property',
+          type: 'apartment',
+          currency: 'EUR',
+          trackingStatus: 'included',
+          valuationMethod: 'account_balance',
+          updateFrequency: 'yearly',
+          ownershipShareNumerator: 1,
+          ownershipShareDenominator: 2,
+          createdAt: now,
+          updatedAt: now,
+        })
+        tx.objectStore('snapshots').put({
+          id: 's-ruchyi',
+          assetId: 'ruchyi',
+          date: '2026-08-17',
+          amount: 7_200_000,
+          currency: 'EUR',
+        })
+        tx.oncomplete = () => {
+          db.close()
+          resolve()
+        }
+        tx.onerror = () => reject(tx.error ?? new Error('idb tx failed'))
+      }
+    })
+  })
+  await page.goto('/')
+  await expect(page.getByRole('heading', { name: 'Dashboard' })).toBeVisible()
+  await page.getByRole('button', { name: 'Holdings' }).click()
+  await expect(page.getByText('Квартира Ручьи')).toBeVisible()
+  await expect(page.getByText('Your share: 1/2')).toBeVisible()
+  await page.screenshot({
+    path: join(outDir, '151-positions-ownership-share.png'),
+    fullPage: true,
+  })
+})
+
 test('capture Add asset Quick add House chip (#149)', async ({ page }) => {
   await seedValidationFixture(page)
   await page.goto('/assets/new')

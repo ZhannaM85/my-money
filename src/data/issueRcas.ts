@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 151,
+    title: {
+      en: 'Show ownership share on Positions so partial-share prices are not confusing',
+      ru: 'Показывать долю владения в позициях, чтобы цена не казалась слишком низкой',
+    },
+    en: 'Share was stored and applied to net worth (#28) but list rows only showed the reduced amount. Lists now show “Your share: 1/2” when ownership is not 100%.',
+    ru: 'Доля уже хранилась и учитывалась в капитале (#28), но в списках была только уменьшенная сумма. Теперь при доле не 100% показывается «Ваша доля: 1/2».',
+  },
+  {
     issue: 149,
     title: {
       en: 'Quick add: House chip on Add asset',

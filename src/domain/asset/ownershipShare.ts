@@ -36,6 +36,17 @@ export function formatOwnershipShare(
   return `${numerator}/${denominator}`
 }
 
+/** Formatted fraction when ownership is not 100% (#151). */
+export function partialOwnershipShare(
+  asset: Pick<Asset, 'ownershipShareNumerator' | 'ownershipShareDenominator'>,
+): string | undefined {
+  if (ownershipMultiplier(asset) >= 1) return undefined
+  return formatOwnershipShare({
+    numerator: asset.ownershipShareNumerator ?? 1,
+    denominator: asset.ownershipShareDenominator ?? 1,
+  })
+}
+
 export function ownershipMultiplier(
   asset: Pick<Asset, 'ownershipShareNumerator' | 'ownershipShareDenominator'>,
 ): number {

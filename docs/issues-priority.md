@@ -30,7 +30,7 @@ _After the four web flows feel good. Android wraps this app; iOS does not._
 | [#147](https://github.com/ZhannaM85/my-money/issues/147) | 🔲 Open | Exclude dashboard-hidden assets from totals and the chart | Drop hidden values from header, Positions total, chart, Allocation. Depends on #146. Prefer excluded (#30). |
 | [#149](https://github.com/ZhannaM85/my-money/issues/149) | 🔍 Pending validation | Quick add: House chip on Add asset | Type `house` already exists. Chip missing next to Apartment (screenshot: Квартира circled). |
 | [#150](https://github.com/ZhannaM85/my-money/issues/150) | 🔲 Open | Allocation: hide/exclude assets and drop them from comparison | Same hide as #146–#148 on Распределение; omit from comparison rows/totals. |
-| [#151](https://github.com/ZhannaM85/my-money/issues/151) | 🔲 Open | Show ownership share on Positions so partial-share prices are not confusing | Screenshot: Домик Сосново / Квартира Ручьи. Share already stored (#28); lists omit it. |
+| [#151](https://github.com/ZhannaM85/my-money/issues/151) | 🔍 Pending validation | Show ownership share on Positions so partial-share prices are not confusing | Screenshot: Домик Сосново / Квартира Ручьи. Share already stored (#28); lists omit it. |
 
 ---
 

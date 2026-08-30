@@ -98,6 +98,21 @@ describe('AssetsScreen', () => {
     )
     expect(await screen.findByText('Brokerage · BOG')).toBeInTheDocument()
   })
+
+  it('shows ownership share on the muted subtitle when not 1/1 (#151)', async () => {
+    const existing = useAssetStore.getState().assets[0]
+    await useAssetStore.getState().saveAsset({
+      ...existing!,
+      ownershipShareNumerator: 1,
+      ownershipShareDenominator: 2,
+    })
+    render(
+      <MemoryRouter>
+        <AssetsScreen />
+      </MemoryRouter>,
+    )
+    expect(await screen.findByText(/Your share: 1\/2/)).toBeInTheDocument()
+  })
 })
 
 async function addNamedAsset(
