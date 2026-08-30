@@ -94,6 +94,7 @@ export interface Dictionary {
     sortAmountDesc: string
     reorderAria: (name: string) => string
     enterReorderMode: string
+    rowMenuAria: (name: string) => string
   }
   asset: {
     classes: Record<AssetClass, string>

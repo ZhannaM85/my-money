@@ -583,25 +583,23 @@ test('capture Assets excluded rows at the bottom (#160)', async ({ page }) => {
   })
 })
 
-test('capture Assets trailing Hide and greyed excluded row (#158)', async ({
+test('capture Assets overflow Hide and greyed excluded row (#158)', async ({
   page,
 }) => {
   await seedValidationFixture(page)
   await page.goto('/assets')
   await expect(page.getByRole('heading', { name: 'Assets' })).toBeVisible()
-  const hideEuro = page.getByRole('button', { name: 'Hide Euro cash' })
-  await expect(hideEuro).toBeVisible()
-  await expect(hideEuro).toHaveAttribute('data-action-tone', 'destructive')
   await expect(page.getByRole('link', { name: /Euro cash/ })).toHaveAttribute(
     'href',
     '/assets/eur-cash',
   )
-  await hideEuro.click()
-  const showEuro = page.getByRole('button', { name: 'Show Euro cash' })
-  await expect(showEuro).toBeVisible()
-  await expect(showEuro).toHaveAttribute('data-action-tone', 'positive')
+  await page.getByRole('button', { name: 'Actions for Euro cash' }).click()
+  await expect(page.getByRole('menuitem', { name: 'Hide Euro cash' })).toBeVisible()
+  await page.getByRole('menuitem', { name: 'Hide Euro cash' }).click()
   await expect(page.locator('[data-excluded="true"]')).toBeVisible()
   await expect(page.getByRole('heading', { name: 'Assets' })).toBeVisible()
+  await page.getByRole('button', { name: 'Actions for Euro cash' }).click()
+  await expect(page.getByRole('menuitem', { name: 'Show Euro cash' })).toBeVisible()
   await page.screenshot({
     path: join(outDir, '158-assets-hide-greyed.png'),
     fullPage: true,

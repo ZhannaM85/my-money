@@ -99,6 +99,7 @@ export const ru: Dictionary = {
     sortAmountDesc: 'Сумма: по убыванию',
     reorderAria: (name) => `Изменить порядок: ${name}`,
     enterReorderMode: 'Порядок',
+    rowMenuAria: (name) => `Действия: ${name}`,
   },
   asset: {
     classes: {

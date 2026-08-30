@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, type ReactNode } from 'react'
+import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { Link } from 'react-router-dom'
 import {
   DndContext,
@@ -14,7 +14,7 @@ import {
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
-import { GripVertical } from 'lucide-react'
+import { EllipsisVertical, GripVertical } from 'lucide-react'
 import {
   ASSET_CLASSES,
   listOwnershipShare,
@@ -103,6 +103,75 @@ function SortableAssetRow({
       </button>
       {children}
     </li>
+  )
+}
+
+function AssetRowMenu({
+  name,
+  excluded,
+  onToggle,
+}: {
+  name: string
+  excluded: boolean
+  onToggle: () => void
+}) {
+  const t = useTranslation()
+  const [open, setOpen] = useState(false)
+  const rootRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (!open) return
+    function onDocumentPointerDown(event: PointerEvent) {
+      const root = rootRef.current
+      if (root && event.target instanceof Node && root.contains(event.target)) {
+        return
+      }
+      setOpen(false)
+    }
+    document.addEventListener('pointerdown', onDocumentPointerDown)
+    return () =>
+      document.removeEventListener('pointerdown', onDocumentPointerDown)
+  }, [open])
+
+  const actionLabel = excluded
+    ? t.dashboard.showOnPositions
+    : t.dashboard.hideFromPositions
+  const actionAria = excluded
+    ? t.dashboard.showOnPositionsAria(name)
+    : t.dashboard.hideFromPositionsAria(name)
+
+  return (
+    <div ref={rootRef} className="relative shrink-0 self-stretch">
+      <button
+        type="button"
+        className="flex h-full min-w-11 items-center justify-center px-2 text-muted-foreground"
+        aria-label={t.assets.rowMenuAria(name)}
+        aria-haspopup="menu"
+        aria-expanded={open}
+        onClick={() => setOpen((current) => !current)}
+      >
+        <EllipsisVertical className="size-5" />
+      </button>
+      {open ? (
+        <div
+          role="menu"
+          className="absolute right-2 top-full z-30 min-w-36 rounded-lg bg-card py-1 shadow-md ring-1 ring-foreground/10"
+        >
+          <button
+            type="button"
+            role="menuitem"
+            className="w-full px-3 py-3 text-left text-sm"
+            aria-label={actionAria}
+            onClick={() => {
+              setOpen(false)
+              onToggle()
+            }}
+          >
+            {actionLabel}
+          </button>
+        </div>
+      ) : null}
+    </div>
   )
 }
 
@@ -405,34 +474,19 @@ export function AssetsScreen() {
                 return (
                   <li
                     key={asset.id}
-                    className="flex items-stretch overflow-hidden rounded-xl bg-card ring-1 ring-foreground/10"
+                    className="relative flex items-stretch rounded-xl bg-card ring-1 ring-foreground/10"
                   >
                     {inner}
-                    <button
-                      type="button"
-                      className={cn(
-                        'flex w-24 shrink-0 items-center justify-center text-sm font-medium text-white',
-                        excluded
-                          ? 'bg-[var(--chart-investments)]'
-                          : 'bg-destructive',
-                      )}
-                      data-action-tone={excluded ? 'positive' : 'destructive'}
-                      aria-label={
-                        excluded
-                          ? t.dashboard.showOnPositionsAria(asset.name)
-                          : t.dashboard.hideFromPositionsAria(asset.name)
-                      }
-                      onClick={() =>
+                    <AssetRowMenu
+                      name={asset.name}
+                      excluded={excluded}
+                      onToggle={() =>
                         void setTrackingStatus(
                           asset.id,
                           excluded ? 'included' : 'excluded',
                         )
                       }
-                    >
-                      {excluded
-                        ? t.dashboard.showOnPositions
-                        : t.dashboard.hideFromPositions}
-                    </button>
+                    />
                   </li>
                 )
               })}

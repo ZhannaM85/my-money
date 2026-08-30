@@ -43,8 +43,8 @@ export const issueRcas: IssueRca[] = [
       en: 'Assets list: Hide/Show like Dashboard Positions',
       ru: 'Список активов: «Скрыть»/«Показать» как в позициях на Сводке',
     },
-    en: 'The whole Assets row was a details link, so Dashboard tap-to-reveal would steal open. Trailing Hide/Show is a sibling of the link; excluded rows use the same greyed opacity as Positions.',
-    ru: 'Вся строка активов была ссылкой на карточку, поэтому нажатие как на Сводке перехватывало бы открытие. «Скрыть»/«Показать» справа рядом со ссылкой; excluded те же серые, что позиции.',
+    en: 'The whole Assets row was a details link, so Dashboard tap-to-reveal would steal open. Option 2 is a ⋮ menu beside the link (not a permanent red Hide strip); excluded rows use the same greyed opacity as Positions.',
+    ru: 'Вся строка активов была ссылкой на карточку, поэтому нажатие как на Сводке перехватывало бы открытие. Вариант 2 — меню ⋮ рядом со ссылкой (не постоянная красная полоса «Скрыть»); excluded те же серые, что позиции.',
   },
   {
     issue: 157,

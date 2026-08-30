@@ -104,9 +104,12 @@ describe('AssetsScreen', () => {
     expect(
       screen.queryByRole('button', { name: 'Hide Old cash' }),
     ).not.toBeInTheDocument()
+    expect(
+      screen.queryByRole('button', { name: 'Actions for Old cash' }),
+    ).not.toBeInTheDocument()
   })
 
-  it('hides from a trailing control and greys the row without opening details (#158)', async () => {
+  it('hides from a ⋮ menu and greys the row without opening details (#158)', async () => {
     const user = userEvent.setup()
     await addNamedAsset('cash', 'Cash', 50, 'EUR')
     render(
@@ -118,7 +121,11 @@ describe('AssetsScreen', () => {
       'href',
       '/assets/a1',
     )
-    await user.click(screen.getByRole('button', { name: 'Hide Broker' }))
+    expect(
+      screen.queryByRole('button', { name: 'Hide Broker' }),
+    ).not.toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Actions for Broker' }))
+    await user.click(screen.getByRole('menuitem', { name: 'Hide Broker' }))
     await waitFor(() => {
       expect(useAssetStore.getState().assets.find((a) => a.id === 'a1')
         ?.trackingStatus).toBe('excluded')
@@ -127,10 +134,8 @@ describe('AssetsScreen', () => {
     const hidden = screen.getByText('Broker').closest('[data-excluded]')
     expect(hidden).toHaveAttribute('data-excluded', 'true')
     expect(hidden).toHaveClass('opacity-60')
-    const show = screen.getByRole('button', { name: 'Show Broker' })
-    expect(show).toHaveAttribute('data-action-tone', 'positive')
-    expect(listedAssetHrefs()).toEqual(['/assets/cash', '/assets/a1'])
-    await user.click(show)
+    await user.click(screen.getByRole('button', { name: 'Actions for Broker' }))
+    await user.click(screen.getByRole('menuitem', { name: 'Show Broker' }))
     await waitFor(() => {
       expect(useAssetStore.getState().assets.find((a) => a.id === 'a1')
         ?.trackingStatus).toBe('included')
@@ -140,7 +145,7 @@ describe('AssetsScreen', () => {
     ).toHaveAttribute('data-excluded', 'false')
   })
 
-  it('hides the trailing Hide control while reordering (#158)', async () => {
+  it('hides the row menu while reordering (#158)', async () => {
     const user = userEvent.setup()
     await addNamedAsset('cash', 'Cash', 50, 'EUR')
     render(
@@ -149,11 +154,11 @@ describe('AssetsScreen', () => {
       </MemoryRouter>,
     )
     expect(
-      await screen.findByRole('button', { name: 'Hide Broker' }),
+      await screen.findByRole('button', { name: 'Actions for Broker' }),
     ).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: 'Reorder' }))
     expect(
-      screen.queryByRole('button', { name: 'Hide Broker' }),
+      screen.queryByRole('button', { name: 'Actions for Broker' }),
     ).not.toBeInTheDocument()
   })
 
