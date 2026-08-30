@@ -25,8 +25,8 @@ export const issueRcas: IssueRca[] = [
       en: 'Allocation: hide/exclude assets and drop them from comparison',
       ru: 'Распределение: скрывать активы и убирать их из сравнения',
     },
-    en: 'Dashboard Hide (#146) did not exist on Allocation expanded rows, and comparison still listed excluded holdings. Same swipe Hide; comparison omits those rows.',
-    ru: 'Скрытие со Сводки (#146) не работало на развёрнутых строках распределения, а сравнение всё ещё показывало excluded. Тот же свайп «Скрыть»; сравнение эти строки не берёт.',
+    en: 'Dashboard Hide (#146) did not exist on Allocation expanded rows, and comparison still listed excluded holdings. Tap the holding to reveal Hide (swipe fought page scroll); comparison omits those rows.',
+    ru: 'Скрытие со Сводки (#146) не работало на развёрнутых строках распределения, а сравнение всё ещё показывало excluded. Нажатие на строку открывает «Скрыть» (свайп перехватывала прокрутка); сравнение эти строки не берёт.',
   },
   {
     issue: 149,

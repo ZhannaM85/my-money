@@ -9,11 +9,14 @@ export function SwipeRevealRow({
   actionAria,
   onAction,
   children,
+  revealOn = 'swipe',
 }: {
   actionLabel: string
   actionAria: string
   onAction: () => void
   children: ReactNode
+  /** Allocation uses click so vertical scroll does not steal a swipe (#150). */
+  revealOn?: 'swipe' | 'click'
 }) {
   const [open, setOpen] = useState(false)
   const startX = useRef<number | null>(null)
@@ -38,6 +41,12 @@ export function SwipeRevealRow({
     else if (dx > THRESHOLD_PX) setOpen(false)
   }
 
+  const panelClassName =
+    'relative w-full bg-card text-left transition-transform duration-200 ease-out'
+  const panelStyle = {
+    transform: open ? 'translateX(-6rem)' : 'translateX(0)',
+  } as const
+
   return (
     <div className="relative overflow-hidden rounded-xl">
       <button
@@ -47,22 +56,36 @@ export function SwipeRevealRow({
           ACTION_WIDTH_CLASS,
         )}
         aria-label={actionAria}
-        onClick={() => {
+        onClick={(event) => {
+          event.stopPropagation()
           onAction()
           setOpen(false)
         }}
       >
         {actionLabel}
       </button>
-      <div
-        className="relative bg-card transition-transform duration-200 ease-out"
-        style={{ transform: open ? 'translateX(-6rem)' : 'translateX(0)' }}
-        data-swipe-open={open ? 'true' : 'false'}
-        onPointerDown={onPointerDown}
-        onPointerUp={onPointerUp}
-      >
-        {children}
-      </div>
+      {revealOn === 'click' ? (
+        <button
+          type="button"
+          className={panelClassName}
+          style={panelStyle}
+          data-swipe-open={open ? 'true' : 'false'}
+          aria-expanded={open}
+          onClick={() => setOpen((current) => !current)}
+        >
+          {children}
+        </button>
+      ) : (
+        <div
+          className={panelClassName}
+          style={panelStyle}
+          data-swipe-open={open ? 'true' : 'false'}
+          onPointerDown={onPointerDown}
+          onPointerUp={onPointerUp}
+        >
+          {children}
+        </div>
+      )}
     </div>
   )
 }

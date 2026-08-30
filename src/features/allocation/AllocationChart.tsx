@@ -173,6 +173,7 @@ export function AllocationChart({
                   return (
                     <SwipeRevealRow
                       key={holding.assetId}
+                      revealOn="click"
                       actionLabel={
                         excluded
                           ? t.dashboard.showOnPositions

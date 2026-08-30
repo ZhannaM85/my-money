@@ -27,4 +27,26 @@ describe('SwipeRevealRow (#146)', () => {
     await user.click(screen.getByRole('button', { name: 'Hide Cash' }))
     expect(onAction).toHaveBeenCalledOnce()
   })
+
+  it('reveals the action on click when revealOn is click (#150)', async () => {
+    const user = userEvent.setup()
+    const onAction = vi.fn()
+    render(
+      <SwipeRevealRow
+        revealOn="click"
+        actionLabel="Hide"
+        actionAria="Hide Cash"
+        onAction={onAction}
+      >
+        <p>Cash</p>
+      </SwipeRevealRow>,
+    )
+    const panel = screen.getByRole('button', { expanded: false })
+    expect(panel).toHaveAttribute('data-swipe-open', 'false')
+    await user.click(panel)
+    expect(panel).toHaveAttribute('data-swipe-open', 'true')
+    expect(panel).toHaveAttribute('aria-expanded', 'true')
+    await user.click(screen.getByRole('button', { name: 'Hide Cash' }))
+    expect(onAction).toHaveBeenCalledOnce()
+  })
 })

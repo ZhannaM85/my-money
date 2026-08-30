@@ -74,21 +74,16 @@ test('capture Allocation Type expanded holdings (#123)', async ({ page }) => {
   })
 })
 
-test('capture Allocation expanded swipe Hide (#150)', async ({ page }) => {
+test('capture Allocation expanded tap Hide (#150)', async ({ page }) => {
   await seedValidationFixture(page, { currencyDisplayMode: 'base' })
   await page.goto('/allocation')
   await expect(page.getByRole('heading', { name: 'Allocation' })).toBeVisible()
   const slice = page.getByRole('button', { name: 'Money · Holdings' })
   await slice.click()
   await expect(page.getByText('Euro cash')).toBeVisible()
-  await page.getByRole('button', { name: 'Hide Euro cash' }).evaluate((el) =>
-    (el as HTMLButtonElement).click(),
-  )
-  await page.reload()
-  await expect(page.getByRole('heading', { name: 'Allocation' })).toBeVisible()
-  await slice.click()
-  await expect(page.getByText('Euro cash')).toBeVisible()
-  await expect(page.locator('[data-excluded="true"]')).toBeVisible()
+  await page.getByText('Euro cash').click()
+  await expect(page.locator('[data-swipe-open="true"]')).toBeVisible()
+  await expect(page.getByRole('button', { name: 'Hide Euro cash' })).toBeVisible()
   await page.screenshot({
     path: join(outDir, '150-allocation-swipe-hide.png'),
     fullPage: true,

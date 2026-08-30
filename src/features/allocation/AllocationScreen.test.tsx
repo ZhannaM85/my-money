@@ -1,5 +1,5 @@
 import 'fake-indexeddb/auto'
-import { render, screen } from '@testing-library/react'
+import { act, render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router-dom'
 import { beforeEach, describe, expect, it } from 'vitest'
@@ -351,10 +351,19 @@ describe('AllocationScreen', () => {
       }),
     )
     expect(await screen.findByText('Revolut')).toBeInTheDocument()
-    await user.click(screen.getByRole('button', { name: 'Hide Revolut' }))
-    expect(useAssetStore.getState().assets.find((a) => a.id === 'a1')?.trackingStatus).toBe(
-      'excluded',
-    )
+    await user.click(screen.getByText('Revolut'))
+    expect(
+      screen.getByText('Revolut').closest('[data-swipe-open]'),
+    ).toHaveAttribute('data-swipe-open', 'true')
+    await act(async () => {
+      screen.getByRole('button', { name: 'Hide Revolut' }).click()
+    })
+    await waitFor(() => {
+      expect(
+        useAssetStore.getState().assets.find((a) => a.id === 'a1')
+          ?.trackingStatus,
+      ).toBe('excluded')
+    })
     expect(await screen.findByText('Revolut')).toBeInTheDocument()
     expect(
       screen.getByText('Revolut').closest('[data-excluded]'),

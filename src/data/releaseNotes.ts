@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 162,
+    issue: 150,
+    date: '2026-08-30T13:15:00+03:00',
+    en: 'On Allocation, tap an expanded asset to show Hide — swipe was too easy to confuse with scrolling the page.',
+    ru: 'В распределении нажмите на развёрнутый актив, чтобы показать «Скрыть» — свайп слишком легко путался с прокруткой страницы.',
+  },
+  {
     version: 161,
     issue: 150,
     date: '2026-08-30T12:50:00+03:00',
