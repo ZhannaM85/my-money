@@ -12,12 +12,11 @@ Prototype checkpoint after Tier 5: the four flows in `PROJECT_BRIEF.md` §25 (on
 
 ## Tier 7 — Native platforms
 
-_After the four web flows feel good. Android wraps this app; iOS does not._
+_After the four web flows feel good. Android and iOS both wrap this app._
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
-| [#19](https://github.com/ZhannaM85/my-money/issues/19) | 🔲 Open | Epic 18 — Android via Capacitor | Wrap, don’t rewrite. Store listing can be child issues later. |
-| [#20](https://github.com/ZhannaM85/my-money/issues/20) | 🔲 Open | Epic 19 — Native iOS app (Swift / SwiftUI) | Tracking epic. Requires a Mac. Split into children when scheduled. Shares JSON schema with #13. |
+| [#19](https://github.com/ZhannaM85/my-money/issues/19) | 🔲 Open | Epic 18 — Android and iOS via Capacitor | Wrap both platforms, don’t rewrite. Android first; iOS needs a Mac. Store listing can be child issues later. |
 
 ---
 
