@@ -12,7 +12,7 @@ afterEach(() => {
 
 describe('downloadDebugTxt (#161)', () => {
   it('saves a text/plain .txt download', () => {
-    const createObjectURL = vi.fn((_blob: Blob) => 'blob:debug')
+    const createObjectURL = vi.fn<(blob: Blob) => string>(() => 'blob:debug')
     const revokeObjectURL = vi.fn()
     vi.stubGlobal('URL', { createObjectURL, revokeObjectURL })
     const click = vi
@@ -47,7 +47,7 @@ describe('downloadDebugTxt (#161)', () => {
 
   it('downloads when share is unavailable', async () => {
     vi.stubGlobal('navigator', {})
-    const createObjectURL = vi.fn((_blob: Blob) => 'blob:debug')
+    const createObjectURL = vi.fn<(blob: Blob) => string>(() => 'blob:debug')
     vi.stubGlobal('URL', {
       createObjectURL,
       revokeObjectURL: vi.fn(),
