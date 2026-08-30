@@ -11,6 +11,7 @@ export const ASSET_PRESETS: readonly AssetPreset[] = [
   { id: 'cash', assetClass: 'money', type: 'cash' },
   { id: 'vehicle', assetClass: 'property', type: 'vehicle' },
   { id: 'apartment', assetClass: 'property', type: 'apartment' },
+  { id: 'house', assetClass: 'property', type: 'house' },
   { id: 'brokerage', assetClass: 'investments', type: 'brokerage' },
 ]
 

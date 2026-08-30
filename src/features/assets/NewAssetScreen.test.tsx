@@ -93,6 +93,21 @@ describe('NewAssetScreen', () => {
     expect(useAssetStore.getState().snapshots).toHaveLength(0)
   })
 
+  it('offers a House quick-add chip that fills Property → House (#149)', async () => {
+    const user = userEvent.setup()
+    render(
+      <MemoryRouter>
+        <NewAssetScreen />
+      </MemoryRouter>,
+    )
+
+    expect(screen.getByRole('button', { name: 'Apartment' })).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'House' }))
+
+    expect(screen.getByLabelText('Class')).toHaveValue('property')
+    expect(screen.getByLabelText('Type')).toHaveValue('house')
+  })
+
   it('keeps the As of date field at Turtle’s fixed width on the add-asset form', () => {
     render(
       <MemoryRouter>

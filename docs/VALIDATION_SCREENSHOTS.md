@@ -44,5 +44,6 @@ gh issue edit 108 --add-label validation
 | `126-dashboard-range-picker.png` | Dashboard · Week/Month/Year/All/Custom chips (#126) |
 | `126-dashboard-range-custom.png` | Dashboard · Custom From/To dates (#126) |
 | `119-duplicate-soft-warning.png` | Asset details duplicate soft warning (#119) |
+| `149-add-asset-house-chip.png` | Add asset · Quick add House chip selected (#149) |
 
 Fixtures are seeded in IndexedDB (`e2e/seed.ts`). Local only — no user balances leave the device.

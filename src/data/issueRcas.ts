@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 149,
+    title: {
+      en: 'Quick add: House chip on Add asset',
+      ru: 'Быстро добавить: чип «Дом» на экране нового актива',
+    },
+    en: 'House was already a Property type, but Quick add only listed Apartment. The House chip sets Class Property and Type House.',
+    ru: 'Тип «Дом» уже был в имуществе, но в быстром добавлении была только квартира. Чип «Дом» ставит класс «Имущество» и тип «Дом».',
+  },
+  {
     issue: 145,
     title: {
       en: 'Show no-data warning instead of the chart when As of has no holdings',

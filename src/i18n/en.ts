@@ -212,6 +212,7 @@ export const en: Dictionary = {
       cash: 'Cash',
       vehicle: 'Vehicle',
       apartment: 'Apartment',
+      house: 'House',
       brokerage: 'Brokerage',
     },
     ownershipShare: 'Your ownership share',

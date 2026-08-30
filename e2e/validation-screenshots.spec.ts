@@ -137,6 +137,19 @@ test('capture Dashboard chart range picker (#126)', async ({ page }) => {
   })
 })
 
+test('capture Add asset Quick add House chip (#149)', async ({ page }) => {
+  await seedValidationFixture(page)
+  await page.goto('/assets/new')
+  await expect(page.getByRole('heading', { name: 'Add asset' })).toBeVisible()
+  await expect(page.getByRole('button', { name: 'House' })).toBeVisible()
+  await page.getByRole('button', { name: 'House' }).click()
+  await expect(page.getByLabel('Type')).toHaveValue('house')
+  await page.screenshot({
+    path: join(outDir, '149-add-asset-house-chip.png'),
+    fullPage: true,
+  })
+})
+
 test('capture duplicate soft warning orange (#119)', async ({ page }) => {
   await seedValidationFixture(page)
   await page.goto('/assets/eur-cash')

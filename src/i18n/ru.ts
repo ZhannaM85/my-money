@@ -216,6 +216,7 @@ export const ru: Dictionary = {
       cash: 'Наличные',
       vehicle: 'Транспорт',
       apartment: 'Квартира',
+      house: 'Дом',
       brokerage: 'Брокерский счёт',
     },
     ownershipShare: 'Ваша доля',

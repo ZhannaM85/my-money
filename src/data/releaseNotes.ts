@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 156,
+    issue: 149,
+    date: '2026-08-30T11:30:00+03:00',
+    en: 'Quick add on Add asset includes House next to Apartment.',
+    ru: 'В «Быстро добавить» на экране нового актива есть «Дом» рядом с «Квартира».',
+  },
+  {
     version: 155,
     issue: 145,
     date: '2026-08-29T19:50:00+03:00',

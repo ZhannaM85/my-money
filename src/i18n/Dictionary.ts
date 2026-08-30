@@ -153,7 +153,10 @@ export interface Dictionary {
     editSnapshotAria: (date: string) => string
     editSnapshotAmount: string
     quickAdd: string
-    presets: Record<'bank' | 'cash' | 'vehicle' | 'apartment' | 'brokerage', string>
+    presets: Record<
+      'bank' | 'cash' | 'vehicle' | 'apartment' | 'house' | 'brokerage',
+      string
+    >
     ownershipShare: string
     ownershipShareInvalid: string
     yourShare: (share: string) => string
