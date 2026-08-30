@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 170,
+    issue: 159,
+    date: '2026-08-30T16:30:00+03:00',
+    en: 'On Positions and Allocation, Show is green. Hide stays red.',
+    ru: 'В позициях и распределении «Показать» зелёное. «Скрыть» остаётся красным.',
+  },
+  {
     version: 169,
     issue: 157,
     date: '2026-08-30T16:15:00+03:00',

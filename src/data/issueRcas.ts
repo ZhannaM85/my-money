@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 159,
+    title: {
+      en: 'Show action should be green (Hide stays red)',
+      ru: '«Показать» должно быть зелёным («Скрыть» остаётся красным)',
+    },
+    en: 'SwipeRevealRow always used destructive red. Show is a restore, so it uses the investments/green token; Hide stays red.',
+    ru: 'SwipeRevealRow всегда был красным destructive. «Показать» — восстановление, поэтому зелёный токен investments; «Скрыть» остаётся красным.',
+  },
+  {
     issue: 157,
     title: {
       en: 'Allocation: Show/Hide needs three or four taps (Dashboard is one tap)',

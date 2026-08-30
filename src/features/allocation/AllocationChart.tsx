@@ -225,6 +225,7 @@ export function AllocationChart({
                             ? t.dashboard.showOnPositionsAria(holding.name)
                             : t.dashboard.hideFromPositionsAria(holding.name)
                         }
+                        actionTone={excluded ? 'positive' : 'destructive'}
                         onAction={() =>
                           void setTrackingStatus(
                             holding.assetId,

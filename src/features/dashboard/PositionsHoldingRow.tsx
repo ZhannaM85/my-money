@@ -32,6 +32,7 @@ export function PositionsHoldingRow({
       revealOn="click"
       actionLabel={actionLabel}
       actionAria={actionAria}
+      actionTone={excluded ? 'positive' : 'destructive'}
       onAction={() =>
         void setTrackingStatus(row.assetId, excluded ? 'included' : 'excluded')
       }

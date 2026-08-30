@@ -73,4 +73,39 @@ describe('SwipeRevealRow (#146)', () => {
       'true',
     )
   })
+
+  it('paints Show green and Hide red (#159)', async () => {
+    const user = userEvent.setup()
+    const { rerender } = render(
+      <SwipeRevealRow
+        revealOn="click"
+        actionLabel="Hide"
+        actionAria="Hide Cash"
+        actionTone="destructive"
+        onAction={() => undefined}
+      >
+        <p>Cash</p>
+      </SwipeRevealRow>,
+    )
+    await user.click(screen.getByRole('button', { expanded: false }))
+    expect(screen.getByRole('button', { name: 'Hide Cash' })).toHaveAttribute(
+      'data-action-tone',
+      'destructive',
+    )
+    rerender(
+      <SwipeRevealRow
+        revealOn="click"
+        actionLabel="Show"
+        actionAria="Show Cash"
+        actionTone="positive"
+        onAction={() => undefined}
+      >
+        <p>Cash</p>
+      </SwipeRevealRow>,
+    )
+    expect(screen.getByRole('button', { name: 'Show Cash' })).toHaveAttribute(
+      'data-action-tone',
+      'positive',
+    )
+  })
 })

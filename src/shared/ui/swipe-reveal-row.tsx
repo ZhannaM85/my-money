@@ -11,6 +11,7 @@ export function SwipeRevealRow({
   onAction,
   children,
   revealOn = 'swipe',
+  actionTone = 'destructive',
 }: {
   actionLabel: string
   actionAria: string
@@ -18,6 +19,8 @@ export function SwipeRevealRow({
   children: ReactNode
   /** Allocation and Positions use click so vertical scroll does not steal a swipe (#150, #154). */
   revealOn?: 'swipe' | 'click'
+  /** Hide stays red; Show is green (#159). */
+  actionTone?: 'destructive' | 'positive'
 }) {
   const [open, setOpen] = useState(false)
   const startX = useRef<number | null>(null)
@@ -53,9 +56,13 @@ export function SwipeRevealRow({
       <button
         type="button"
         className={cn(
-          'absolute inset-y-0 right-0 flex items-center justify-center bg-destructive text-sm font-medium text-white',
+          'absolute inset-y-0 right-0 flex items-center justify-center text-sm font-medium text-white',
           ACTION_WIDTH_CLASS,
+          actionTone === 'positive'
+            ? 'bg-[var(--chart-investments)]'
+            : 'bg-destructive',
         )}
+        data-action-tone={actionTone}
         aria-label={actionAria}
         onClick={(event) => {
           event.stopPropagation()
