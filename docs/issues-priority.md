@@ -27,6 +27,7 @@ _After the four web flows feel good. Android wraps this app; iOS does not._
 |---|--------|-------|-------|
 | [#157](https://github.com/ZhannaM85/my-money/issues/157) | 🔲 Open | Allocation: Show/Hide needs three or four taps (Dashboard is one tap) | Still 3 taps on device after first fix. Tap log via Settings FX debug (Copy). Related #150 / #154. |
 | [#158](https://github.com/ZhannaM85/my-money/issues/158) | 🔲 Open | Assets list: Hide/Show like Dashboard Positions | Row is a link to details — same first-tap reveal would steal open. Discuss shape before implementing. |
+| [#159](https://github.com/ZhannaM85/my-money/issues/159) | 🔲 Open | Show action should be green (Hide stays red) | SwipeRevealRow uses destructive red for both. Show = restore, should be green. |
 
 ---
 
