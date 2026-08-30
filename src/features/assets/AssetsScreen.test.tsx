@@ -113,6 +113,18 @@ describe('AssetsScreen', () => {
     )
     expect(await screen.findByText(/Your share: 1\/2/)).toBeInTheDocument()
   })
+
+  it('wraps filter chips instead of a horizontal scroller (#153)', async () => {
+    render(
+      <MemoryRouter>
+        <AssetsScreen />
+      </MemoryRouter>,
+    )
+    expect(await screen.findByTestId('asset-filters')).toHaveClass('flex-wrap')
+    expect(screen.getByTestId('asset-filters')).not.toHaveClass('overflow-x-auto')
+    expect(screen.getByRole('button', { name: 'All' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Hidden' })).toBeInTheDocument()
+  })
 })
 
 async function addNamedAsset(

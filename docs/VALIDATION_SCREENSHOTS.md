@@ -50,5 +50,6 @@ gh issue edit 108 --add-label validation
 | `150-allocation-swipe-hide.png` | Allocation · tap expanded holding to reveal Hide (#150) |
 | `148-positions-hidden-disabled.png` | Dashboard Positions · hidden row disabled (#148) |
 | `151-positions-ownership-share.png` | Dashboard Positions · ownership share cue (#151) |
+| `153-assets-filter-chips-wrap.png` | Assets · filter chips wrap to extra rows (#153) |
 
 Fixtures are seeded in IndexedDB (`e2e/seed.ts`). Local only — no user balances leave the device.

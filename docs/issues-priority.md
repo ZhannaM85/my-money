@@ -30,7 +30,7 @@ _After the four web flows feel good. Android wraps this app; iOS does not._
 | [#147](https://github.com/ZhannaM85/my-money/issues/147) | 🔍 Pending validation | Exclude dashboard-hidden assets from totals and the chart | Drop hidden values from header, Positions total, chart, Allocation. Depends on #146. Prefer excluded (#30). |
 | [#150](https://github.com/ZhannaM85/my-money/issues/150) | 🔍 Pending validation | Allocation: hide/exclude assets and drop them from comparison | Tap expanded holding to reveal Hide (swipe fought page scroll). Omit from comparison. |
 | [#152](https://github.com/ZhannaM85/my-money/issues/152) | 🔲 Open | Show Your share: 1/1 on property when ownership is full | Follow-up to #151. Positions: apartment with 100% stake has no share line next to 1/2 neighbors. |
-| [#153](https://github.com/ZhannaM85/my-money/issues/153) | 🔲 Open | Assets: wrap filter chips instead of a horizontal scrollbar | One scrolling chip row; wrap to multiple rows. Custom order / Reorder stay as they are. |
+| [#153](https://github.com/ZhannaM85/my-money/issues/153) | 🔍 Pending validation | Assets: wrap filter chips instead of a horizontal scrollbar | One scrolling chip row; wrap to multiple rows. Custom order / Reorder stay as they are. |
 
 ---
 

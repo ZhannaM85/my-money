@@ -268,6 +268,18 @@ test('capture Positions ownership share (#151)', async ({ page }) => {
   })
 })
 
+test('capture Assets filter chips wrap (#153)', async ({ page }) => {
+  await seedValidationFixture(page)
+  await page.goto('/assets')
+  await expect(page.getByRole('heading', { name: 'Assets' })).toBeVisible()
+  await expect(page.getByRole('button', { name: 'All' })).toBeVisible()
+  await expect(page.getByRole('button', { name: 'Hidden' })).toBeVisible()
+  await page.screenshot({
+    path: join(outDir, '153-assets-filter-chips-wrap.png'),
+    fullPage: true,
+  })
+})
+
 test('capture Add asset Quick add House chip (#149)', async ({ page }) => {
   await seedValidationFixture(page)
   await page.goto('/assets/new')

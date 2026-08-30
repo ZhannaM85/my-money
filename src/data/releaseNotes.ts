@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 163,
+    issue: 153,
+    date: '2026-08-30T13:30:00+03:00',
+    en: 'Assets filter chips wrap onto extra rows instead of scrolling sideways.',
+    ru: 'Чипы фильтров на экране активов переносятся на следующие строки, а не скроллятся вбок.',
+  },
+  {
     version: 162,
     issue: 150,
     date: '2026-08-30T13:15:00+03:00',

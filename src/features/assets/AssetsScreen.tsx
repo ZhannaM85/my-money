@@ -210,14 +210,14 @@ export function AssetsScreen() {
           </Button>
         }
       />
-      <div className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1">
+      <div className="flex flex-wrap gap-2" data-testid="asset-filters">
         {filters.map((item) => (
           <button
             key={item.id}
             type="button"
             onClick={() => setFilter(item.id)}
             className={cn(
-              'shrink-0 rounded-full px-3 py-1.5 text-sm font-medium',
+              'rounded-full px-3 py-1.5 text-sm font-medium',
               filter === item.id
                 ? 'bg-primary text-primary-foreground'
                 : 'bg-muted text-muted-foreground',

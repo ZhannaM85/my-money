@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 153,
+    title: {
+      en: 'Assets: wrap filter chips instead of a horizontal scrollbar',
+      ru: 'Активы: переносить чипы фильтров, а не скроллить вбок',
+    },
+    en: 'The chip row used overflow-x-auto and shrink-0, so All / Hidden sat off-screen. flex-wrap shows every chip without a sideways scroller.',
+    ru: 'Ряд чипов был overflow-x-auto и shrink-0, поэтому «Все» / «Скрытые» уезжали за край. flex-wrap показывает все чипы без горизонтального скролла.',
+  },
+  {
     issue: 151,
     title: {
       en: 'Show ownership share on Positions so partial-share prices are not confusing',
