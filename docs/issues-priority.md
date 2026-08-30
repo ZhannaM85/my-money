@@ -25,7 +25,6 @@ _After the four web flows feel good. Android wraps this app; iOS does not._
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
-| [#147](https://github.com/ZhannaM85/my-money/issues/147) | 🔍 Pending validation | Exclude dashboard-hidden assets from totals and the chart | Drop hidden values from header, Positions total, chart, Allocation. Depends on #146. Prefer excluded (#30). |
 | [#150](https://github.com/ZhannaM85/my-money/issues/150) | 🔍 Pending validation | Allocation: hide/exclude assets and drop them from comparison | Tap expanded holding to reveal Hide (swipe fought page scroll). Omit from comparison. Last-in-slice vanish → #155. |
 | [#154](https://github.com/ZhannaM85/my-money/issues/154) | 🔍 Pending validation | Dashboard Positions: tap row to reveal Hide (same as Allocation) | Shipped click instead of #146 swipe (scroll stole swipe). Match Allocation #150 tap-to-reveal. |
 | [#155](https://github.com/ZhannaM85/my-money/issues/155) | 🔍 Pending validation | Allocation: hidden assets vanish when they were the last in a slice | Hide all Property → class gone. Keep greyed so Show still works. Totals stay excluded. Dashboard persist → #156. |
