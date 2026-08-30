@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 177,
+    issue: 162,
+    date: '2026-08-30T16:30:00+03:00',
+    en: 'The same app can be built as Android and iOS via Capacitor. Store listings come later. Web and PWA are unchanged.',
+    ru: 'То же приложение можно собрать как Android и iOS через Capacitor. Магазины — позже. Веб и PWA без изменений.',
+  },
+  {
     version: 176,
     issue: 164,
     date: '2026-08-30T16:15:00+03:00',

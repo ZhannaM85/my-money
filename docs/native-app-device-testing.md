@@ -1,0 +1,39 @@
+# Testing the native app on a device
+
+Capacitor wrap is #162. Store signing is later (#167–#173).
+
+Native builds must use the default Vite `/` base. GitHub Pages uses
+`--base=/my-money/`. Do **not** `npx cap sync` from a Pages `dist/`.
+
+```bash
+npm run cap:sync
+```
+
+(`npm run build && npx cap sync` — web assets are copied into `android/` and
+`ios/`, then gitignored there.)
+
+This only produces **debug** builds. Play / TestFlight signing is later.
+
+## Android — Windows is enough
+
+1. Phone: Developer options → USB debugging. Allow this computer.
+2. `adb devices` (`%LOCALAPPDATA%\Android\Sdk\platform-tools\adb.exe`).
+3. First time: `android/local.properties` with `sdk.dir=` pointing at the SDK
+   (gitignored). Android Studio writes this when you open the project.
+4. From `android/`:
+
+   ```
+   JAVA_HOME="C:\Program Files\Android\Android Studio\jbr" ./gradlew.bat assembleDebug
+   adb install -r app/build/outputs/apk/debug/app-debug.apk
+   adb shell am start -n io.github.zhannam85.mymoney/.MainActivity
+   ```
+
+5. Confirm the app loads and a saved amount survives an app restart.
+
+`npx cap open android` if you prefer Android Studio.
+
+## iOS — Mac + Xcode
+
+`ios/` is generated and committed. Building, signing, and TestFlight need a
+Mac (#168). A free Apple ID is enough for a USB debug install; TestFlight
+needs the paid Developer Program (already enrolled) plus #167.

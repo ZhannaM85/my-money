@@ -4,7 +4,7 @@ This document is updated after each issue is completed. It explains what every f
 
 Product context lives in `PROJECT_BRIEF.md`; the visual language lives in `docs/DESIGN_SYSTEM.md`; the active work queue lives in `docs/issues-priority.md` (closed history: `docs/issues-priority-archive/`); the public-facing overview lives in `README.md`.
 
-**Status (2026-08-17):** Epics 0–17 (#1–#18) plus GitHub Pages landed. Deployed at `https://zhannam85.github.io/my-money/`. Native platforms (#19–#20) wait until the web flows feel good.
+**Status (2026-08-30):** Epics 0–17 plus GitHub Pages landed. Deployed at `https://zhannam85.github.io/my-money/`. Native wrap is #162 (Capacitor Android + iOS); store listing is later children of #19.
 
 ---
 
@@ -12,7 +12,7 @@ Product context lives in `PROJECT_BRIEF.md`; the visual language lives in `docs/
 
 My Money is a local-first personal balance sheet: the user manually records assets and liabilities, the app converts them into one base currency, and history is a first-class feature. Everything for the web/PWA/Android client runs in the browser — no backend, no accounts, no telemetry, no AI. User data lives in IndexedDB. The only expected network call in the MVP is a public FX API (Frankfurter / ECB reference rates).
 
-iOS is a **separate native Swift/SwiftUI app** that must share the same product model, calculations, terminology, and JSON/CSV import/export format — not a Capacitor wrapper of this UI.
+iOS is the **same Capacitor wrap** as Android (`ios/` next to `android/`), not a Swift rewrite. #20 (native Swift/SwiftUI) is won't-fix.
 
 The web codebase follows Clean Architecture layering with feature-based folders, matching sibling projects (`turtle-steps-to-the-goal`, `life-kaleidoscope`):
 
@@ -262,11 +262,11 @@ Base currency is stored in `Settings`. Changing it re-reads FX and re-renders; i
 |---|---|---|
 | Web / PWA | This React app | IndexedDB (Dexie) |
 | Android | Capacitor wrapping this app | Same IndexedDB (WebView) |
-| iOS | Native Swift / SwiftUI | Native local store; import/export JSON must round-trip with the web schema |
+| iOS | Capacitor wrapping this app | Same IndexedDB (WebView) |
 
-Do not architect the web `domain/` against Capacitor or UIKit. Shared *meaning* (entities, calculations, export JSON) matters more than shared UI.
+Do not architect `domain/` against Capacitor. Shared meaning (entities, calculations, export JSON) still matters. Native builds use Vite’s default `/` base (`npm run cap:sync`); GitHub Pages keeps `--base=/my-money/`. iOS Xcode/TestFlight still need a Mac (`docs/native-app-device-testing.md`).
 
-Capacitor and iOS come after the web prototype's four flows feel good (`PROJECT_BRIEF.md` §25).
+Capacitor follow-ups (icons, chrome, back button, backup share, stores) are children of #19.
 
 ---
 
@@ -293,7 +293,8 @@ Accessibility as we build: semantic HTML, visible focus, ARIA on icon-only contr
 | `test/setup.ts` | jest-dom + RTL cleanup |
 | `public/favicon-*-64.png` (#22) | Tab icons, turtle-steps pattern: 64px circular mark with padding. Generated from `public/icon-*-192.png`. |
 | `public/manifest.json` (#16) | PWA install manifest. Relative `start_url` / `scope` for the GitHub Pages subpath. |
-| `src/shared/lib/registerServiceWorker.ts` (#16) | Registers `sw.js` on web; skipped when Capacitor reports native. |
+| `src/shared/lib/registerServiceWorker.ts` (#16) | Registers `sw.js` on web; skipped when Capacitor reports native (#162). |
+| `capacitor.config.ts` (#162) | `appId: io.github.zhannam85.mymoney`, `webDir: dist`. `android/` + `ios/` are git-tracked native projects. |
 | `src/i18n/` (#17) | Typed `Dictionary`, `en` + `ru`. `useTranslation` reads `settings.locale`. Backup JSON keeps English field names. |
 
 ---
@@ -367,5 +368,5 @@ Restore is empty-book only: if any asset already exists, import is refused rathe
 
 These are real forks — pause and ask rather than picking silently when the issue is implemented:
 
-- iOS storage engine (Core Data vs. SQLite vs. JSON file) — irrelevant until the native epic.
+- iOS storage engine (Core Data vs. SQLite vs. JSON file) — obsolete; iOS is Capacitor/IndexedDB like Android (#162).
 - Encrypted-at-rest local storage — not required to validate the prototype; revisit before store release.

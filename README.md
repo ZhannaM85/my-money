@@ -35,7 +35,7 @@ Start at [`docs/issues-priority.md`](docs/issues-priority.md).
 |---|---|
 | Web / PWA | React + TypeScript + Vite |
 | Android | Same web app, wrapped with Capacitor |
-| iOS | Native Swift / SwiftUI, sharing the data model and export format |
+| iOS | Same web app, wrapped with Capacitor (Xcode/TestFlight still need a Mac) |
 
 ## Tech stack
 
@@ -55,12 +55,16 @@ npm install
 npm run dev      # start the dev server
 npm test         # run the test suite
 npm run lint     # lint
-npm run build    # typecheck + production build
+npm run build    # typecheck + production web build
+npm run cap:sync # web build (base /) + copy into android/ and ios/
 ```
+
+Native device steps: [`docs/native-app-device-testing.md`](docs/native-app-device-testing.md).
 
 ## More
 
 - [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) — how the codebase is structured and why.
+- [`docs/native-app-device-testing.md`](docs/native-app-device-testing.md) — Android/iOS debug installs.
 - [`docs/issues-priority.md`](docs/issues-priority.md) — the work queue, in order.
 - [`PROJECT_BRIEF.md`](PROJECT_BRIEF.md) — the original product brief.
 - [`docs/mocks/`](docs/mocks/) — starting UI mocks (can change).

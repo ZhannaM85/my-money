@@ -597,9 +597,7 @@ Desktop should use additional horizontal space rather than simply stretching the
 
 ## Platform Differences
 
-React + TypeScript is shared between Web/PWA and Android/Capacitor.
-
-iOS uses native Swift/SwiftUI.
+React + TypeScript is shared between Web/PWA and the Capacitor Android/iOS shells.
 
 Share:
 - design tokens;
@@ -609,7 +607,7 @@ Share:
 - product terminology;
 - interaction semantics.
 
-They do not need to be pixel-identical. Follow platform conventions where they improve usability.
+They do not need to be pixel-identical to a Swift-only app. Follow platform conventions where they improve usability (status bar, back button — children of #19).
 
 ---
 

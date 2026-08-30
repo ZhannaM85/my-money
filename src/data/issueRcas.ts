@@ -20,6 +20,15 @@ export const issueRcas: IssueRca[] = [
     ru: 'Не дефект. Запланировано. App Store и Play нужен публичный URL /privacy. Данные на устройстве; единственный ожидаемый сетевой запрос — курсы FX.',
   },
   {
+    issue: 162,
+    title: {
+      en: 'Adopt Capacitor for Android and iOS',
+      ru: 'Capacitor для Android и iOS',
+    },
+    en: 'Not a defect. Planned wrap of the Vite app. Native builds use / not GitHub Pages /my-money/. iOS project is generated; Xcode still needs a Mac.',
+    ru: 'Не дефект. Запланированная оболочка Vite-приложения. Нативная сборка с /, не GitHub Pages /my-money/. Проект iOS сгенерирован; Xcode по-прежнему нужен Mac.',
+  },
+  {
     issue: 161,
     title: {
       en: 'FX debug: save log as a .txt file',

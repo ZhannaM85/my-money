@@ -17,7 +17,7 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
 | [#19](https://github.com/ZhannaM85/my-money/issues/19) | 🔲 Open | Epic 18 — Android and iOS via Capacitor | Tracking only. Children below. |
-| [#162](https://github.com/ZhannaM85/my-money/issues/162) | 🔲 Open | Adopt Capacitor to wrap the app for native iOS/Android builds | Shared foundation. Native `/` base, not GitHub Pages `/my-money/`. |
+| [#162](https://github.com/ZhannaM85/my-money/issues/162) | 🔍 Pending validation | Adopt Capacitor to wrap the app for native iOS/Android builds | Shared foundation. Native `/` base, not GitHub Pages `/my-money/`. |
 | [#163](https://github.com/ZhannaM85/my-money/issues/163) | 🔲 Open | Generate iOS/Android icon and splash-screen assets | Reuse PWA mark. Blocks both store listings. |
 | [#164](https://github.com/ZhannaM85/my-money/issues/164) | 🔍 Pending validation | Write a privacy policy page (required by both app stores) | Can ship on web first. Public `/privacy` URL. |
 | [#166](https://github.com/ZhannaM85/my-money/issues/166) | 🔲 Open | Native status bar / safe-area / system theming pass (iOS + Android) | Depends on #162. |

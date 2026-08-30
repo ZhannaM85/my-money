@@ -4,7 +4,7 @@ function nativeCapacitor(): { isNativePlatform?: () => boolean } | undefined {
     | undefined
 }
 
-/** Skip the web service worker inside a later Capacitor wrap (#19). */
+/** Skip the web service worker inside the Capacitor wrap (#162). */
 export function isNativePlatform(): boolean {
   return nativeCapacitor()?.isNativePlatform?.() === true
 }
