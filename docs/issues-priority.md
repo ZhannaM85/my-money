@@ -25,7 +25,6 @@ _After the four web flows feel good. Android wraps this app; iOS does not._
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
-| [#150](https://github.com/ZhannaM85/my-money/issues/150) | 🔍 Pending validation | Allocation: hide/exclude assets and drop them from comparison | Tap expanded holding to reveal Hide (swipe fought page scroll). Omit from comparison. Last-in-slice vanish → #155. |
 | [#157](https://github.com/ZhannaM85/my-money/issues/157) | 🔲 Open | Allocation: Show/Hide needs three or four taps (Dashboard is one tap) | Expanded holding under Class card. Class expand button likely steals taps. Related #150 / #154. |
 
 ---
