@@ -25,7 +25,7 @@ describe('isNativePlatform', () => {
 })
 
 describe('registerServiceWorker', () => {
-  it('does not register inside the native shell', () => {
+  it('does not register inside the native shell (#162)', () => {
     const add = vi.spyOn(window, 'addEventListener')
     Reflect.set(window, 'Capacitor', { isNativePlatform: () => true })
     registerServiceWorker()
