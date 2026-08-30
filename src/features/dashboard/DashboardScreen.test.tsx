@@ -1117,4 +1117,65 @@ describe('DashboardScreen', () => {
     expect(hidden).toHaveAttribute('data-excluded', 'true')
     expect(hidden).toHaveClass('opacity-60')
   })
+
+  it('drops a hidden asset from Positions total and net worth (#147)', async () => {
+    const now = '2026-08-17T00:00:00.000Z'
+    await useAssetStore.getState().saveAsset(
+      {
+        id: 'cash',
+        name: 'Euro cash',
+        assetClass: 'money',
+        type: 'cash',
+        currency: 'EUR',
+        trackingStatus: 'included',
+        valuationMethod: 'account_balance',
+        updateFrequency: 'weekly',
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        assetId: 'cash',
+        date: '2026-08-17',
+        amount: 1000,
+        currency: 'EUR',
+      },
+    )
+    await useAssetStore.getState().saveAsset(
+      {
+        id: 'house',
+        name: 'Sosnovo',
+        assetClass: 'property',
+        type: 'house',
+        currency: 'EUR',
+        trackingStatus: 'included',
+        valuationMethod: 'account_balance',
+        updateFrequency: 'yearly',
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        assetId: 'house',
+        date: '2026-08-17',
+        amount: 5_000_000,
+        currency: 'EUR',
+      },
+    )
+    render(
+      <MemoryRouter>
+        <DashboardScreen />
+      </MemoryRouter>,
+    )
+    expect(await screen.findByTestId('positions-total')).toHaveTextContent(
+      formatAmount(5_001_000, 'EUR'),
+    )
+    await userEvent.click(screen.getByRole('button', { name: 'Holdings' }))
+    await userEvent.click(await screen.findByRole('button', { name: 'Hide Sosnovo' }))
+    expect(await screen.findByText('Sosnovo')).toBeInTheDocument()
+    expect(await screen.findByTestId('positions-total')).toHaveTextContent(
+      formatAmount(1000, 'EUR'),
+    )
+    expect(
+      screen.getByText(formatAmount(1000, 'EUR'), { selector: '.text-4xl' }),
+    ).toBeInTheDocument()
+  })
 })

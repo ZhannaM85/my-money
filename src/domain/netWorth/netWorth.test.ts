@@ -236,6 +236,50 @@ describe('allocation / periodChange / history / performance', () => {
     )
   })
 
+  it('ignores excluded holdings in period-change math (#147)', () => {
+    const start = [
+      {
+        assetId: 'cash',
+        name: 'Cash',
+        currency: 'EUR',
+        nativeAmount: 1000,
+        convertedAmount: 1000,
+        conversionAvailable: true,
+      },
+      {
+        assetId: 'house',
+        name: 'House',
+        currency: 'EUR',
+        nativeAmount: 5_000_000,
+        convertedAmount: 5_000_000,
+        conversionAvailable: true,
+        excluded: true,
+      },
+    ]
+    const end = [
+      {
+        assetId: 'cash',
+        name: 'Cash',
+        currency: 'EUR',
+        nativeAmount: 1100,
+        convertedAmount: 1100,
+        conversionAvailable: true,
+      },
+      {
+        assetId: 'house',
+        name: 'House',
+        currency: 'EUR',
+        nativeAmount: 5_000_000,
+        convertedAmount: 5_000_000,
+        conversionAvailable: true,
+        excluded: true,
+      },
+    ]
+    const split = decomposeConvertedPeriodChange(start, end)
+    expect(split.amountChange).toBe(100)
+    expect(split.holdings.map((row) => row.assetId)).toEqual(['cash'])
+  })
+
   it('uses the snapshot-date FX for historical points, not a later rate', () => {
     const usd = asset({ id: 'usd', currency: 'USD' })
     const points = historicalNetWorth(
@@ -595,6 +639,15 @@ describe('holdingsWithConversion', () => {
     expect(rows.map((row) => row.name)).toEqual(['Euro cash', 'Sosnovo'])
     expect(rows.find((row) => row.assetId === 'house')?.excluded).toBe(true)
     expect(netWorth([cash, house], snapshots, [], 'EUR').total).toBe(1000)
+    expect(
+      historicalNetWorth(
+        [cash, house],
+        snapshots,
+        [],
+        ['2026-08-17'],
+        'EUR',
+      )[0]?.total,
+    ).toBe(1000)
     const archived = asset({
       id: 'old',
       name: 'Gone',

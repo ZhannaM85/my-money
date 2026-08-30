@@ -180,6 +180,23 @@ test('capture Positions hidden disabled state (#148)', async ({ page }) => {
   })
 })
 
+test('capture Positions hidden excluded from total (#147)', async ({ page }) => {
+  await seedValidationFixture(page, { currencyDisplayMode: 'base' })
+  await page.goto('/')
+  await expect(page.getByRole('heading', { name: 'Dashboard' })).toBeVisible()
+  await page.getByRole('button', { name: 'Holdings' }).click()
+  await expect(page.getByText('Euro cash')).toBeVisible()
+  await page.getByRole('button', { name: 'Hide Euro cash' }).evaluate((el) =>
+    (el as HTMLButtonElement).click(),
+  )
+  await expect(page.locator('[data-excluded="true"]')).toBeVisible()
+  await expect(page.getByTestId('positions-total')).not.toContainText('1,000')
+  await page.screenshot({
+    path: join(outDir, '147-positions-hidden-from-total.png'),
+    fullPage: true,
+  })
+})
+
 test('capture Positions ownership share (#151)', async ({ page }) => {
   await seedValidationFixture(page, { currencyDisplayMode: 'base' })
   await page.evaluate(async () => {

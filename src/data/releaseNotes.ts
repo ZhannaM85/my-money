@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 160,
+    issue: 147,
+    date: '2026-08-30T12:35:00+03:00',
+    en: 'Hiding a Positions row drops it from net worth, Positions total, the chart, and period change. The greyed row stays in the list.',
+    ru: 'Скрытие строки позиций убирает её из капитала, итога позиций, графика и изменения за период. Серая строка остаётся в списке.',
+  },
+  {
     version: 159,
     issue: 148,
     date: '2026-08-30T12:20:00+03:00',

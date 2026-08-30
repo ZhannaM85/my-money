@@ -38,6 +38,15 @@ export const issueRcas: IssueRca[] = [
     ru: 'После «Скрыть» (#146) строка выглядела как обычная, будто всё ещё учитывается. Скрытые строки теперь приглушены; «Показать» возвращает карточку.',
   },
   {
+    issue: 147,
+    title: {
+      en: 'Exclude dashboard-hidden assets from totals and the chart',
+      ru: 'Исключать скрытые на Сводке активы из итогов и графика',
+    },
+    en: 'Hide already set excluded (#146). Totals and the chart already skipped excluded; period-change still summed hidden holdings. Those are omitted now, matching Positions total.',
+    ru: '«Скрыть» уже ставит excluded (#146). Итоги и график excluded не считали; изменение за период ещё суммировало скрытые. Теперь они не входят, как в итоге позиций.',
+  },
+  {
     issue: 146,
     title: {
       en: 'Dashboard Positions: swipe left to reveal Hide',

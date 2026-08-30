@@ -531,8 +531,10 @@ export function decomposeConvertedPeriodChange(
     rateChange: number
   }[]
 } {
-  const startById = new Map(start.map((row) => [row.assetId, row]))
-  const endById = new Map(end.map((row) => [row.assetId, row]))
+  const countedStart = start.filter((row) => !row.excluded)
+  const countedEnd = end.filter((row) => !row.excluded)
+  const startById = new Map(countedStart.map((row) => [row.assetId, row]))
+  const endById = new Map(countedEnd.map((row) => [row.assetId, row]))
   const ids = [...new Set([...startById.keys(), ...endById.keys()])].sort(
     (a, b) => {
       const left = startById.get(a)?.name ?? endById.get(a)?.name ?? a
