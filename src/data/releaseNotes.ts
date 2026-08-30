@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 175,
+    issue: 157,
+    date: '2026-08-30T18:25:00+03:00',
+    en: 'On Allocation, Hide and Show open on finger-up, not only on a click. Extra taps were iOS dropping the click after Hide redrew the list.',
+    ru: 'В распределении «Скрыть» и «Показать» открываются по отпусканию пальца, не только по click. Лишние нажатия были из‑за того, что iOS терял click после перерисовки списка.',
+  },
+  {
     version: 174,
     issue: 158,
     date: '2026-08-30T18:00:00+03:00',

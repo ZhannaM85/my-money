@@ -25,7 +25,7 @@ _After the four web flows feel good. Android wraps this app; iOS does not._
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
-| [#157](https://github.com/ZhannaM85/my-money/issues/157) | 🔲 Open | Allocation: Show/Hide needs three or four taps (Dashboard is one tap) | Device log: reveal-click works; extra taps are pointerdown without click after Hide/ensureRates re-render. |
+| [#157](https://github.com/ZhannaM85/my-money/issues/157) | 🔍 Pending validation | Allocation: Show/Hide needs three or four taps (Dashboard is one tap) | Device log: pointerdown without click after Hide. Reveal now on pointerup. |
 
 ---
 

@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { fireEvent, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 import { SwipeRevealRow } from './swipe-reveal-row'
@@ -48,6 +48,27 @@ describe('SwipeRevealRow (#146)', () => {
     expect(panel).toHaveAttribute('aria-expanded', 'true')
     await user.click(screen.getByRole('button', { name: 'Hide Cash' }))
     expect(onAction).toHaveBeenCalledOnce()
+  })
+
+  it('reveals on pointerup and ignores a duplicate click (#157)', () => {
+    const onAction = vi.fn()
+    render(
+      <SwipeRevealRow
+        revealOn="click"
+        actionLabel="Hide"
+        actionAria="Hide Cash"
+        onAction={onAction}
+      >
+        <p>Cash</p>
+      </SwipeRevealRow>,
+    )
+    const panel = screen.getByRole('button', { expanded: false })
+    fireEvent.pointerDown(panel, { clientX: 40, clientY: 10 })
+    fireEvent.pointerUp(panel, { clientX: 40, clientY: 10 })
+    expect(panel).toHaveAttribute('data-swipe-open', 'true')
+    expect(panel).toHaveAttribute('aria-expanded', 'true')
+    fireEvent.click(panel)
+    expect(panel).toHaveAttribute('data-swipe-open', 'true')
   })
 
   it('does not let a click-mode reveal bubble to a parent toggle (#157)', async () => {

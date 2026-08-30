@@ -52,8 +52,8 @@ export const issueRcas: IssueRca[] = [
       en: 'Allocation: Show/Hide needs three or four taps (Dashboard is one tap)',
       ru: 'Распределение: «Показать»/«Скрыть» только с третьего-четвёртого нажатия (на Сводке — с первого)',
     },
-    en: 'Holdings sat in the same card as a native Class expand <button>. iOS retargets taps to that first button (hit-slop / nested controls), so the slice toggled instead of revealing Show. Header is now role=button; holdings sit in a higher stacking context and stop bubbling.',
-    ru: 'Строки активов были в той же карточке, что и нативный <button> раскрытия класса. iOS перенаправлял нажатия на эту первую кнопку, поэтому доля сворачивалась вместо «Показать». Заголовок теперь role=button; строки выше по z-index и не всплывают.',
+    en: 'Holdings sat in the same card as a native Class expand <button>, so iOS retargeted taps. After that, device logs showed pointerdown with no click after Hide (Allocation re-render). Reveal now toggles on pointerup and ignores a duplicate click.',
+    ru: 'Строки активов были в той же карточке, что и нативный <button> раскрытия класса, iOS перенаправлял нажатия. Потом лог с устройства: pointerdown без click после «Скрыть» (перерисовка распределения). Раскрытие теперь по pointerup, повторный click игнорируется.',
   },
   {
     issue: 156,

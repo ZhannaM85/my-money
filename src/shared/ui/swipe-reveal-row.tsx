@@ -1,8 +1,9 @@
-import { useRef, useState, type PointerEvent, type ReactNode } from 'react'
+import { useRef, useState, type MouseEvent, type PointerEvent, type ReactNode } from 'react'
 import { tapDebug } from '@/infrastructure/debug/tapDebug'
 import { cn } from '@/shared/lib/utils'
 
 const THRESHOLD_PX = 48
+const TAP_SLOP_PX = 12
 const ACTION_WIDTH_CLASS = 'w-24'
 
 export function SwipeRevealRow({
@@ -17,7 +18,7 @@ export function SwipeRevealRow({
   actionAria: string
   onAction: () => void
   children: ReactNode
-  /** Allocation and Positions use click so vertical scroll does not steal a swipe (#150, #154). */
+  /** Allocation and Positions use tap so vertical scroll does not steal a swipe (#150, #154). */
   revealOn?: 'swipe' | 'click'
   /** Hide stays red; Show is green (#159). */
   actionTone?: 'destructive' | 'positive'
@@ -25,6 +26,7 @@ export function SwipeRevealRow({
   const [open, setOpen] = useState(false)
   const startX = useRef<number | null>(null)
   const startY = useRef<number | null>(null)
+  const revealedOnPointerUp = useRef(false)
 
   function onPointerDown(event: PointerEvent<HTMLDivElement>) {
     startX.current = event.clientX
@@ -43,6 +45,56 @@ export function SwipeRevealRow({
     if (Math.abs(dx) < Math.abs(dy)) return
     if (dx < -THRESHOLD_PX) setOpen(true)
     else if (dx > THRESHOLD_PX) setOpen(false)
+  }
+
+  function onRevealPointerDown(event: PointerEvent<HTMLButtonElement>) {
+    startX.current = event.clientX
+    startY.current = event.clientY
+    tapDebug('reveal-pointerdown', event, {
+      open,
+      action: actionLabel,
+    })
+  }
+
+  function onRevealPointerUp(event: PointerEvent<HTMLButtonElement>) {
+    if (startX.current === null || startY.current === null) return
+    const dx = event.clientX - startX.current
+    const dy = event.clientY - startY.current
+    startX.current = null
+    startY.current = null
+    if (Math.hypot(dx, dy) > TAP_SLOP_PX) return
+    event.stopPropagation()
+    revealedOnPointerUp.current = true
+    setOpen((current) => {
+      const next = !current
+      tapDebug('reveal-pointerup', event, {
+        open: current,
+        next,
+        action: actionLabel,
+      })
+      return next
+    })
+  }
+
+  function onRevealClick(event: MouseEvent<HTMLButtonElement>) {
+    event.stopPropagation()
+    if (revealedOnPointerUp.current) {
+      revealedOnPointerUp.current = false
+      tapDebug('reveal-click-ignored', event, {
+        open,
+        action: actionLabel,
+      })
+      return
+    }
+    setOpen((current) => {
+      const next = !current
+      tapDebug('reveal-click', event, {
+        open: current,
+        next,
+        action: actionLabel,
+      })
+      return next
+    })
   }
 
   const panelClassName =
@@ -80,24 +132,9 @@ export function SwipeRevealRow({
           style={panelStyle}
           data-swipe-open={open ? 'true' : 'false'}
           aria-expanded={open}
-          onPointerDown={(event) =>
-            tapDebug('reveal-pointerdown', event, {
-              open,
-              action: actionLabel,
-            })
-          }
-          onClick={(event) => {
-            event.stopPropagation()
-            setOpen((current) => {
-              const next = !current
-              tapDebug('reveal-click', event, {
-                open: current,
-                next,
-                action: actionLabel,
-              })
-              return next
-            })
-          }}
+          onPointerDown={onRevealPointerDown}
+          onPointerUp={onRevealPointerUp}
+          onClick={onRevealClick}
         >
           {children}
         </button>
