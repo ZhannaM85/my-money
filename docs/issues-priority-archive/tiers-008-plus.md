@@ -166,3 +166,9 @@ Closed live-feedback rows from Tier 8 onward. Open / pending items stay in [`../
 | [#143](https://github.com/ZhannaM85/my-money/issues/143) | ✅ Done | Comparison: remove-all control to clear every date | Only per-column X today. Confirm then clear the set. Follow-up to #137 / #140. Validated on-device 2026-08-29. |
 | [#144](https://github.com/ZhannaM85/my-money/issues/144) | ✅ Done | Asset chart X-axis spaces snapshot dates evenly, not by calendar time | All range: May→Aug looks as close as Dec 8→21. Category axis, one point per snapshot. Validated on-device 2026-08-30. |
 | [#145](https://github.com/ZhannaM85/my-money/issues/145) | ✅ Done | Show no-data warning instead of the chart when As of has no holdings | As of 2022-12-31 shows 0,00 ₽ but All chart still plots later history. Validated on-device 2026-08-30. |
+
+## Tier 16 — Live feedback (2026-08-30)
+
+| # | Status | Issue | Notes |
+|---|--------|-------|-------|
+| [#151](https://github.com/ZhannaM85/my-money/issues/151) | ✅ Done | Show ownership share on Positions so partial-share prices are not confusing | Screenshot: Домик Сосново / Квартира Ручьи. Share already stored (#28); lists omit it. Validated on-device 2026-08-30. Full-share property → #152. |
