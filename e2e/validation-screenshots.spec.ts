@@ -636,3 +636,17 @@ test('capture duplicate soft warning orange (#119)', async ({ page }) => {
     fullPage: true,
   })
 })
+
+test('capture FX debug Save .txt (#161)', async ({ page }) => {
+  await seedValidationFixture(page)
+  await page.goto('/settings')
+  await expect(page.getByRole('heading', { name: 'More' })).toBeVisible()
+  const save = page.getByRole('button', { name: 'Save .txt' })
+  await save.scrollIntoViewIfNeeded()
+  await expect(save).toBeVisible()
+  await expect(save).toBeDisabled()
+  await page.screenshot({
+    path: join(outDir, '161-fx-debug-save-txt.png'),
+    fullPage: true,
+  })
+})

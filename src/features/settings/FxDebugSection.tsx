@@ -1,5 +1,6 @@
 import { useEffect, useState, useSyncExternalStore } from 'react'
 import { useTranslation } from '@/i18n'
+import { shareOrDownloadDebugTxt } from '@/infrastructure/debug/downloadDebugTxt'
 import {
   clearFxDebugLog,
   formatFxDebugLog,
@@ -19,12 +20,21 @@ export function FxDebugSection() {
   const [copyState, setCopyState] = useState<'idle' | 'copied' | 'failed'>(
     'idle',
   )
+  const [saveState, setSaveState] = useState<
+    'idle' | 'saved' | 'shared' | 'failed'
+  >('idle')
 
   useEffect(() => {
     if (copyState === 'idle') return
     const id = window.setTimeout(() => setCopyState('idle'), 2000)
     return () => window.clearTimeout(id)
   }, [copyState])
+
+  useEffect(() => {
+    if (saveState === 'idle') return
+    const id = window.setTimeout(() => setSaveState('idle'), 2000)
+    return () => window.clearTimeout(id)
+  }, [saveState])
 
   async function handleCopy() {
     const text = formatFxDebugLog(entries)
@@ -33,6 +43,17 @@ export function FxDebugSection() {
       setCopyState('copied')
     } catch {
       setCopyState('failed')
+    }
+  }
+
+  async function handleSave() {
+    const text = formatFxDebugLog(entries) || t.settings.fxDebugEmpty
+    try {
+      const result = await shareOrDownloadDebugTxt(text)
+      setSaveState(result === 'shared' ? 'shared' : 'saved')
+    } catch (error) {
+      if (error instanceof DOMException && error.name === 'AbortError') return
+      setSaveState('failed')
     }
   }
 
@@ -51,6 +72,14 @@ export function FxDebugSection() {
           onClick={() => setFxDebugEnabled(!enabled)}
         >
           {enabled ? t.settings.fxDebugDisable : t.settings.fxDebugEnable}
+        </Button>
+        <Button
+          type="button"
+          variant="outline"
+          disabled={entries.length === 0}
+          onClick={() => void handleSave()}
+        >
+          {t.settings.fxDebugSave}
         </Button>
         <Button
           type="button"
@@ -75,6 +104,19 @@ export function FxDebugSection() {
       {copyState === 'failed' && (
         <p className="text-sm text-muted-foreground">
           {t.settings.fxDebugCopyFailed}
+        </p>
+      )}
+      {saveState === 'saved' && (
+        <p className="text-sm text-muted-foreground">{t.settings.fxDebugSaved}</p>
+      )}
+      {saveState === 'shared' && (
+        <p className="text-sm text-muted-foreground">
+          {t.settings.fxDebugShared}
+        </p>
+      )}
+      {saveState === 'failed' && (
+        <p className="text-sm text-muted-foreground">
+          {t.settings.fxDebugSaveFailed}
         </p>
       )}
       {enabled && (

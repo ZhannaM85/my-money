@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 161,
+    title: {
+      en: 'FX debug: save log as a .txt file',
+      ru: 'Отладка FX: сохранять лог файлом .txt',
+    },
+    en: 'Copy log used the clipboard, so a long Hide/Show + FX dump split across Telegram messages. Save .txt downloads or opens the share sheet with a File.',
+    ru: '«Копировать лог» шёл в буфер, и длинный дамп Hide/Show + FX дробился в Telegram. «Сохранить .txt» качает файл или открывает «Поделиться» с File.',
+  },
+  {
     issue: 160,
     title: {
       en: 'Assets list: show excluded assets at the bottom',

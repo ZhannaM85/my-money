@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 173,
+    issue: 161,
+    date: '2026-08-30T17:50:00+03:00',
+    en: 'Settings FX debug can save the log as my-money-debug.txt, so you can attach one file in Telegram instead of pasting a huge copy.',
+    ru: 'Отладка FX в настройках сохраняет лог как my-money-debug.txt, чтобы отправить один файл в Telegram вместо огромной вставки.',
+  },
+  {
     version: 172,
     issue: 158,
     date: '2026-08-30T17:35:00+03:00',

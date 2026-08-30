@@ -332,13 +332,17 @@ export const en: Dictionary = {
       `${count} manual rate${count === 1 ? '' : 's'} active for ${date}.`,
     fxDebugTitle: 'FX debug',
     fxDebugDescription:
-      'On-phone log for conversion issues and Allocation Hide/Show taps (#157). Turn on, reproduce, then copy the log. Nothing is uploaded automatically.',
+      'On-phone log for conversion issues and Allocation Hide/Show taps (#157). Turn on, reproduce, then save a .txt file (or copy). Nothing is uploaded automatically.',
     fxDebugEnable: 'Turn on FX debug',
     fxDebugDisable: 'Turn off FX debug',
     fxDebugCopy: 'Copy log',
+    fxDebugSave: 'Save .txt',
     fxDebugClear: 'Clear log',
     fxDebugCopied: 'Log copied.',
+    fxDebugSaved: 'Log saved as a .txt file.',
+    fxDebugShared: 'Share sheet opened.',
     fxDebugCopyFailed: 'Could not copy the log.',
+    fxDebugSaveFailed: 'Could not save the log.',
     fxDebugEmpty:
       'No events yet. Open Dashboard or tap an Allocation holding while debug is on.',
   },

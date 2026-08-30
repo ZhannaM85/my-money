@@ -26,4 +26,25 @@ describe('FxDebugSection', () => {
 
     expect(await screen.findByText(/ensureRange done/)).toBeInTheDocument()
   })
+
+  it('saves the log as a .txt file (#161)', async () => {
+    const user = userEvent.setup()
+    vi.spyOn(console, 'info').mockImplementation(() => undefined)
+    const share = vi.fn().mockResolvedValue(undefined)
+    vi.stubGlobal('navigator', {
+      ...navigator,
+      share,
+      canShare: () => true,
+    })
+    render(<FxDebugSection />)
+
+    expect(screen.getByRole('button', { name: 'Save .txt' })).toBeDisabled()
+    await user.click(screen.getByRole('button', { name: 'Turn on FX debug' }))
+    fxDebug('ensureRange done', { quoteCount: 3 })
+    const save = await screen.findByRole('button', { name: 'Save .txt' })
+    expect(save).toBeEnabled()
+    await user.click(save)
+    expect(share).toHaveBeenCalled()
+    expect(await screen.findByText('Share sheet opened.')).toBeInTheDocument()
+  })
 })

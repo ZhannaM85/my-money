@@ -53,6 +53,7 @@ gh issue edit 108 --add-label validation
 | `159-positions-show-green.png` | Dashboard Positions · Show action green (#159) |
 | `160-assets-excluded-at-bottom.png` | Assets · excluded rows at the bottom (#160) |
 | `158-assets-hide-greyed.png` | Assets · trailing Hide/Show; excluded row greyed (#158) |
+| `161-fx-debug-save-txt.png` | Settings · FX debug Save .txt (#161) |
 | `147-positions-hidden-from-total.png` | Dashboard · hidden asset dropped from total (#147) |
 | `150-allocation-swipe-hide.png` | Allocation · tap expanded holding to reveal Hide (#150) |
 | `148-positions-hidden-disabled.png` | Dashboard Positions · hidden row disabled (#148) |

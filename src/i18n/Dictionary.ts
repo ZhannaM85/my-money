@@ -258,9 +258,13 @@ export interface Dictionary {
     fxDebugEnable: string
     fxDebugDisable: string
     fxDebugCopy: string
+    fxDebugSave: string
     fxDebugClear: string
     fxDebugCopied: string
+    fxDebugSaved: string
+    fxDebugShared: string
     fxDebugCopyFailed: string
+    fxDebugSaveFailed: string
     fxDebugEmpty: string
   }
   backup: {
