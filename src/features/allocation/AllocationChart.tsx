@@ -106,19 +106,27 @@ export function AllocationChart({
               key={row.id}
               data-slice-excluded={sliceHidden ? 'true' : 'false'}
               className={cn(
-                'flex flex-col gap-2 rounded-xl bg-card px-4 py-3 ring-1 ring-foreground/10',
+                'relative flex flex-col gap-2 overflow-hidden rounded-xl bg-card px-4 py-3 ring-1 ring-foreground/10',
                 sliceHidden && 'opacity-60 text-muted-foreground',
               )}
             >
               {expandable ? (
-                <button
-                  type="button"
-                  className="flex w-full items-center justify-between gap-3 text-left"
+                <div
+                  role="button"
+                  tabIndex={0}
+                  className="relative z-0 flex w-full cursor-pointer items-center justify-between gap-3 text-left"
                   aria-expanded={open}
                   aria-label={`${row.name} · ${holdingsLabel}`}
                   onClick={() =>
                     setOpenId((current) => (current === row.id ? null : row.id))
                   }
+                  onKeyDown={(event) => {
+                    if (event.key !== 'Enter' && event.key !== ' ') return
+                    event.preventDefault()
+                    setOpenId((current) =>
+                      current === row.id ? null : row.id,
+                    )
+                  }}
                 >
                   <span className="flex items-center gap-2 text-sm">
                     <span
@@ -149,7 +157,7 @@ export function AllocationChart({
                       aria-hidden
                     />
                   </span>
-                </button>
+                </div>
               ) : (
                 <div className="flex items-center justify-between gap-3">
                   <span className="flex items-center gap-2 text-sm">
@@ -174,63 +182,70 @@ export function AllocationChart({
                   </span>
                 </div>
               )}
-              {open &&
-                holdings.map((holding) => {
-                  const excluded = Boolean(holding.excluded)
-                  return (
-                    <SwipeRevealRow
-                      key={holding.assetId}
-                      revealOn="click"
-                      actionLabel={
-                        excluded
-                          ? t.dashboard.showOnPositions
-                          : t.dashboard.hideFromPositions
-                      }
-                      actionAria={
-                        excluded
-                          ? t.dashboard.showOnPositionsAria(holding.name)
-                          : t.dashboard.hideFromPositionsAria(holding.name)
-                      }
-                      onAction={() =>
-                        void setTrackingStatus(
-                          holding.assetId,
-                          excluded ? 'included' : 'excluded',
-                        )
-                      }
-                    >
-                      <div
-                        data-excluded={excluded ? 'true' : 'false'}
-                        className={cn(
-                          'flex items-center justify-between gap-3 border-t border-border bg-card py-2',
-                          excluded && 'opacity-60 text-muted-foreground',
-                        )}
+              {open ? (
+                <div
+                  className="relative z-10 flex flex-col gap-2"
+                  onPointerDown={(event) => event.stopPropagation()}
+                  onClick={(event) => event.stopPropagation()}
+                >
+                  {holdings.map((holding) => {
+                    const excluded = Boolean(holding.excluded)
+                    return (
+                      <SwipeRevealRow
+                        key={holding.assetId}
+                        revealOn="click"
+                        actionLabel={
+                          excluded
+                            ? t.dashboard.showOnPositions
+                            : t.dashboard.hideFromPositions
+                        }
+                        actionAria={
+                          excluded
+                            ? t.dashboard.showOnPositionsAria(holding.name)
+                            : t.dashboard.hideFromPositionsAria(holding.name)
+                        }
+                        onAction={() =>
+                          void setTrackingStatus(
+                            holding.assetId,
+                            excluded ? 'included' : 'excluded',
+                          )
+                        }
                       >
-                        <span className="flex min-w-0 flex-col">
-                          <span className="truncate text-sm">
-                            {holding.name}
-                          </span>
-                          {holding.institution ? (
-                            <span className="truncate text-xs text-muted-foreground">
-                              {holding.institution}
-                            </span>
-                          ) : null}
-                          {holding.ownershipShare ? (
-                            <span className="text-xs text-muted-foreground">
-                              {t.asset.yourShare(holding.ownershipShare)}
-                            </span>
-                          ) : null}
-                        </span>
-                        <span className="shrink-0 tabular-nums text-sm">
-                          {formatAmount(
-                            holding.amount,
-                            holding.currency,
-                            locale,
+                        <div
+                          data-excluded={excluded ? 'true' : 'false'}
+                          className={cn(
+                            'flex items-center justify-between gap-3 border-t border-border bg-card py-2',
+                            excluded && 'opacity-60 text-muted-foreground',
                           )}
-                        </span>
-                      </div>
-                    </SwipeRevealRow>
-                  )
-                })}
+                        >
+                          <span className="flex min-w-0 flex-col">
+                            <span className="truncate text-sm">
+                              {holding.name}
+                            </span>
+                            {holding.institution ? (
+                              <span className="truncate text-xs text-muted-foreground">
+                                {holding.institution}
+                              </span>
+                            ) : null}
+                            {holding.ownershipShare ? (
+                              <span className="text-xs text-muted-foreground">
+                                {t.asset.yourShare(holding.ownershipShare)}
+                              </span>
+                            ) : null}
+                          </span>
+                          <span className="shrink-0 tabular-nums text-sm">
+                            {formatAmount(
+                              holding.amount,
+                              holding.currency,
+                              locale,
+                            )}
+                          </span>
+                        </div>
+                      </SwipeRevealRow>
+                    )
+                  })}
+                </div>
+              ) : null}
             </li>
           )
         })}

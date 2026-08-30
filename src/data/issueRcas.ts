@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 157,
+    title: {
+      en: 'Allocation: Show/Hide needs three or four taps (Dashboard is one tap)',
+      ru: 'Распределение: «Показать»/«Скрыть» только с третьего-четвёртого нажатия (на Сводке — с первого)',
+    },
+    en: 'Holdings sat in the same card as a native Class expand <button>. iOS retargets taps to that first button (hit-slop / nested controls), so the slice toggled instead of revealing Show. Header is now role=button; holdings sit in a higher stacking context and stop bubbling.',
+    ru: 'Строки активов были в той же карточке, что и нативный <button> раскрытия класса. iOS перенаправлял нажатия на эту первую кнопку, поэтому доля сворачивалась вместо «Показать». Заголовок теперь role=button; строки выше по z-index и не всплывают.',
+  },
+  {
     issue: 156,
     title: {
       en: 'Dashboard: keep hidden assets in Positions after hide from Allocation',

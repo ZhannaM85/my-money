@@ -371,6 +371,55 @@ describe('AllocationScreen', () => {
     expect(screen.getByText('Savings')).toBeInTheDocument()
   })
 
+  it('reveals Hide on the first tap of an expanded holding without collapsing the slice (#157)', async () => {
+    const user = userEvent.setup()
+    await useAssetStore.getState().saveAsset(
+      {
+        id: 'house',
+        name: 'Sosnovo',
+        assetClass: 'property',
+        type: 'house',
+        currency: 'EUR',
+        trackingStatus: 'excluded',
+        valuationMethod: 'account_balance',
+        updateFrequency: 'yearly',
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        assetId: 'house',
+        date: '2026-08-17',
+        amount: 5_000_000,
+        currency: 'EUR',
+      },
+    )
+    const settings = {
+      ...DEFAULT_SETTINGS,
+      currencyDisplayMode: 'native' as const,
+      baseCurrency: 'EUR',
+    }
+    await db.settings.put(settings)
+    useSettingsStore.setState({ settings, loaded: true })
+    render(
+      <MemoryRouter>
+        <AllocationScreen />
+      </MemoryRouter>,
+    )
+    const slice = await screen.findByRole('button', {
+      name: 'Property · EUR · Holdings',
+    })
+    await user.click(slice)
+    expect(await screen.findByText('Sosnovo')).toBeInTheDocument()
+    expect(slice).toHaveAttribute('aria-expanded', 'true')
+    await user.click(screen.getByText('Sosnovo'))
+    expect(
+      screen.getByText('Sosnovo').closest('[data-swipe-open]'),
+    ).toHaveAttribute('data-swipe-open', 'true')
+    expect(screen.getByRole('button', { name: 'Show Sosnovo' })).toBeInTheDocument()
+    expect(slice).toHaveAttribute('aria-expanded', 'true')
+    expect(screen.getByText('Sosnovo')).toBeInTheDocument()
+  })
+
   it('keeps a Property slice when every holding is hidden (#155)', async () => {
     const user = userEvent.setup()
     await useAssetStore.getState().saveAsset(

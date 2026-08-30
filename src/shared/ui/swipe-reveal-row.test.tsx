@@ -49,4 +49,28 @@ describe('SwipeRevealRow (#146)', () => {
     await user.click(screen.getByRole('button', { name: 'Hide Cash' }))
     expect(onAction).toHaveBeenCalledOnce()
   })
+
+  it('does not let a click-mode reveal bubble to a parent toggle (#157)', async () => {
+    const user = userEvent.setup()
+    const onParent = vi.fn()
+    const onAction = vi.fn()
+    render(
+      <div onClick={onParent}>
+        <SwipeRevealRow
+          revealOn="click"
+          actionLabel="Hide"
+          actionAria="Hide Cash"
+          onAction={onAction}
+        >
+          <p>Cash</p>
+        </SwipeRevealRow>
+      </div>,
+    )
+    await user.click(screen.getByRole('button', { expanded: false }))
+    expect(onParent).not.toHaveBeenCalled()
+    expect(screen.getByRole('button', { expanded: true })).toHaveAttribute(
+      'data-swipe-open',
+      'true',
+    )
+  })
 })

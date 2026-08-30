@@ -67,11 +67,14 @@ export function SwipeRevealRow({
       {revealOn === 'click' ? (
         <button
           type="button"
-          className={panelClassName}
+          className={cn(panelClassName, 'touch-manipulation')}
           style={panelStyle}
           data-swipe-open={open ? 'true' : 'false'}
           aria-expanded={open}
-          onClick={() => setOpen((current) => !current)}
+          onClick={(event) => {
+            event.stopPropagation()
+            setOpen((current) => !current)
+          }}
         >
           {children}
         </button>

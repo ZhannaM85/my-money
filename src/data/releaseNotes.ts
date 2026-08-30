@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 168,
+    issue: 157,
+    date: '2026-08-30T16:00:00+03:00',
+    en: 'On Allocation, one tap on an expanded holding shows Hide or Show — same as Dashboard. Extra taps were going to the class row instead.',
+    ru: 'В распределении одно нажатие на развёрнутый актив показывает «Скрыть» или «Показать» — как на Сводке. Лишние нажатия раньше попадали в строку класса.',
+  },
+  {
     version: 167,
     issue: 156,
     date: '2026-08-30T15:30:00+03:00',
