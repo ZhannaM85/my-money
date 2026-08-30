@@ -21,14 +21,6 @@ _After the four web flows feel good. Android wraps this app; iOS does not._
 
 ---
 
-## Tier 16 — Live feedback (2026-08-30)
-
-| # | Status | Issue | Notes |
-|---|--------|-------|-------|
-| [#157](https://github.com/ZhannaM85/my-money/issues/157) | 🔍 Pending validation | Allocation: Show/Hide needs three or four taps (Dashboard is one tap) | Device log: pointerdown without click after Hide. Reveal now on pointerup. |
-
----
-
 ## Explicitly not filed
 
 Out of scope for the MVP (`PROJECT_BRIEF.md` §20) — do not implement from chat:
