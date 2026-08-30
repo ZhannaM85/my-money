@@ -38,5 +38,6 @@ export {
   ownershipMultiplier,
   parseOwnershipShare,
   partialOwnershipShare,
+  listOwnershipShare,
   type OwnershipShare,
 } from './ownershipShare'

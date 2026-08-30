@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 164,
+    issue: 152,
+    date: '2026-08-30T13:45:00+03:00',
+    en: 'Fully owned property now shows Your share: 1/1 on lists, so it is clear next to half-owned flats.',
+    ru: 'У полностью своего имущества в списках показывается «Ваша доля: 1/1», чтобы было ясно рядом с половиной квартиры.',
+  },
+  {
     version: 163,
     issue: 153,
     date: '2026-08-30T13:30:00+03:00',

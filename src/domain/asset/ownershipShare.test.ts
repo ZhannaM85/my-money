@@ -5,6 +5,7 @@ import {
   ownershipMultiplier,
   parseOwnershipShare,
   partialOwnershipShare,
+  listOwnershipShare,
 } from './ownershipShare'
 
 describe('ownershipShare', () => {
@@ -32,5 +33,22 @@ describe('ownershipShare', () => {
       }),
     ).toBe('1/2')
     expect(partialOwnershipShare({})).toBeUndefined()
+    expect(
+      listOwnershipShare({
+        assetClass: 'property',
+      }),
+    ).toBe('1/1')
+    expect(
+      listOwnershipShare({
+        assetClass: 'money',
+      }),
+    ).toBeUndefined()
+    expect(
+      listOwnershipShare({
+        assetClass: 'property',
+        ownershipShareNumerator: 1,
+        ownershipShareDenominator: 2,
+      }),
+    ).toBe('1/2')
   })
 })

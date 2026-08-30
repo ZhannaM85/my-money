@@ -593,6 +593,7 @@ describe('allocationSliceHoldings (#122)', () => {
         amount: 5_000_000,
         currency: 'EUR',
         excluded: true,
+        ownershipShare: '1/1',
       },
     ])
   })
@@ -717,6 +718,29 @@ describe('holdingsWithConversion', () => {
         'EUR',
       )[0]?.ownershipShare,
     ).toBeUndefined()
+  })
+
+  it('includes 1/1 ownershipShare on property holdings (#152)', () => {
+    const house = asset({
+      id: 'house',
+      name: 'Sosnovo',
+      assetClass: 'property',
+      type: 'house',
+    })
+    const rows = holdingsWithConversion(
+      [house],
+      [snap({ id: 's1', assetId: 'house', amount: 5_000_000 })],
+      [],
+      'EUR',
+    )
+    expect(rows[0]?.ownershipShare).toBe('1/1')
+    expect(
+      allocationSliceHoldings(
+        [house],
+        [snap({ id: 's1', assetId: 'house', amount: 5_000_000 })],
+        (row) => row.assetClass === 'property',
+      )[0]?.ownershipShare,
+    ).toBe('1/1')
   })
 
   it('includes institution on holdings when set (#109)', () => {

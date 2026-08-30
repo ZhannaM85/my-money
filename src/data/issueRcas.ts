@@ -20,6 +20,15 @@ export const issueRcas: IssueRca[] = [
     ru: 'Ряд чипов был overflow-x-auto и shrink-0, поэтому «Все» / «Скрытые» уезжали за край. flex-wrap показывает все чипы без горизонтального скролла.',
   },
   {
+    issue: 152,
+    title: {
+      en: 'Show Your share: 1/1 on property when ownership is full',
+      ru: 'Показывать «Ваша доля: 1/1» для имущества при полной доле',
+    },
+    en: '#151 hid the cue at 100%. A fully owned flat next to 1/2 neighbors looked like it had no share. Property rows now show 1/1; other classes still omit it.',
+    ru: '#151 прятал подпись при 100%. Полностью своя квартира рядом с 1/2 выглядела так, будто доли нет. У имущества теперь 1/1; у других классов по-прежнему скрыто.',
+  },
+  {
     issue: 151,
     title: {
       en: 'Show ownership share on Positions so partial-share prices are not confusing',

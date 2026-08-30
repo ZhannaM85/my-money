@@ -17,7 +17,7 @@ import { CSS } from '@dnd-kit/utilities'
 import { GripVertical } from 'lucide-react'
 import {
   ASSET_CLASSES,
-  partialOwnershipShare,
+  listOwnershipShare,
   type AssetClass,
 } from '@/domain/asset'
 import { convertAmount, lookupRate, type RateTable } from '@/domain/fx'
@@ -310,7 +310,7 @@ export function AssetsScreen() {
               {visible.map((asset) => {
                 const snapshot = latestSnapshot(snapshots, asset.id)
                 const estimated = asset.valuationMethod !== 'account_balance'
-                const share = partialOwnershipShare(asset)
+                const share = listOwnershipShare(asset)
                 const sameCurrency = snapshot?.currency === baseCurrency
                 const rate =
                   snapshot &&

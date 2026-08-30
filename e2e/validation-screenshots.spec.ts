@@ -268,6 +268,59 @@ test('capture Positions ownership share (#151)', async ({ page }) => {
   })
 })
 
+test('capture Positions property full share 1/1 (#152)', async ({ page }) => {
+  await seedValidationFixture(page, { currencyDisplayMode: 'base' })
+  await page.evaluate(async () => {
+    const now = '2026-08-17T00:00:00.000Z'
+    const version = await (async () => {
+      const listed = await indexedDB.databases?.()
+      const existing = listed?.find((row) => row.name === 'my-money')
+      return existing?.version && existing.version > 0 ? existing.version : 2
+    })()
+    await new Promise<void>((resolve, reject) => {
+      const open = indexedDB.open('my-money', version)
+      open.onerror = () => reject(open.error ?? new Error('idb open failed'))
+      open.onsuccess = () => {
+        const db = open.result
+        const tx = db.transaction(['assets', 'snapshots'], 'readwrite')
+        tx.objectStore('assets').put({
+          id: 'korneya',
+          name: 'Квартира Корнея',
+          assetClass: 'property',
+          type: 'apartment',
+          currency: 'EUR',
+          trackingStatus: 'included',
+          valuationMethod: 'account_balance',
+          updateFrequency: 'yearly',
+          createdAt: now,
+          updatedAt: now,
+        })
+        tx.objectStore('snapshots').put({
+          id: 's-korneya',
+          assetId: 'korneya',
+          date: '2026-08-17',
+          amount: 9_800_000,
+          currency: 'EUR',
+        })
+        tx.oncomplete = () => {
+          db.close()
+          resolve()
+        }
+        tx.onerror = () => reject(tx.error ?? new Error('idb tx failed'))
+      }
+    })
+  })
+  await page.goto('/')
+  await expect(page.getByRole('heading', { name: 'Dashboard' })).toBeVisible()
+  await page.getByRole('button', { name: 'Holdings' }).click()
+  await expect(page.getByText('Квартира Корнея')).toBeVisible()
+  await expect(page.getByText('Your share: 1/1')).toBeVisible()
+  await page.screenshot({
+    path: join(outDir, '152-positions-property-full-share.png'),
+    fullPage: true,
+  })
+})
+
 test('capture Assets filter chips wrap (#153)', async ({ page }) => {
   await seedValidationFixture(page)
   await page.goto('/assets')

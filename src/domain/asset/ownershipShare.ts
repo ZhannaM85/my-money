@@ -47,6 +47,22 @@ export function partialOwnershipShare(
   })
 }
 
+/** List-row share: always when not 1/1; property also shows 1/1 (#151, #152). */
+export function listOwnershipShare(
+  asset: Pick<
+    Asset,
+    'assetClass' | 'ownershipShareNumerator' | 'ownershipShareDenominator'
+  >,
+): string | undefined {
+  const share = formatOwnershipShare({
+    numerator: asset.ownershipShareNumerator ?? 1,
+    denominator: asset.ownershipShareDenominator ?? 1,
+  })
+  if (ownershipMultiplier(asset) < 1) return share
+  if (asset.assetClass === 'property') return share
+  return undefined
+}
+
 export function ownershipMultiplier(
   asset: Pick<Asset, 'ownershipShareNumerator' | 'ownershipShareDenominator'>,
 ): number {

@@ -4,7 +4,7 @@ import {
   effectiveAmount,
   isLiability,
   isListedOnDashboard,
-  partialOwnershipShare,
+  listOwnershipShare,
 } from '@/domain/asset'
 import {
   convertAmount,
@@ -115,7 +115,7 @@ export function allocationSliceHoldings(
     if (!match(asset, snapshot)) continue
     const native = effectiveAmount(snapshot.amount, asset)
     const signed = isLiability(asset) ? -native : native
-    const ownershipShare = partialOwnershipShare(asset)
+    const ownershipShare = listOwnershipShare(asset)
     rows.push({
       assetId: asset.id,
       name: asset.name,
@@ -165,7 +165,7 @@ export interface HoldingConversion {
   conversionAvailable: boolean
   note?: string
   institution?: string
-  /** Set when ownership is not 1/1 (#151). */
+  /** Set when ownership is not 1/1, or always for property (#151, #152). */
   ownershipShare?: string
   /** Dashboard-hidden via swipe; still listed, not in totals (#146). */
   excluded?: boolean
@@ -178,7 +178,7 @@ function toHoldingConversion(
   convertedAmount: number | null,
   conversionAvailable: boolean,
 ): HoldingConversion {
-  const ownershipShare = partialOwnershipShare(asset)
+  const ownershipShare = listOwnershipShare(asset)
   return {
     assetId: asset.id,
     name: asset.name,

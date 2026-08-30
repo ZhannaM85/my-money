@@ -114,6 +114,38 @@ describe('AssetsScreen', () => {
     expect(await screen.findByText(/Your share: 1\/2/)).toBeInTheDocument()
   })
 
+  it('shows Your share: 1/1 on full-ownership property (#152)', async () => {
+    await useAssetStore.getState().saveAsset(
+      {
+        id: 'flat',
+        name: 'Квартира Корнея',
+        assetClass: 'property',
+        type: 'apartment',
+        currency: 'EUR',
+        trackingStatus: 'included',
+        valuationMethod: 'account_balance',
+        updateFrequency: 'yearly',
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        assetId: 'flat',
+        date: '2026-08-17',
+        amount: 9_800_000,
+        currency: 'EUR',
+      },
+    )
+    render(
+      <MemoryRouter>
+        <AssetsScreen />
+      </MemoryRouter>,
+    )
+    expect(await screen.findByText('Квартира Корнея')).toBeInTheDocument()
+    expect(screen.getByText(/Your share: 1\/1/)).toBeInTheDocument()
+    expect(screen.getByText('Broker')).toBeInTheDocument()
+    expect(screen.getAllByText(/Your share: 1\/1/)).toHaveLength(1)
+  })
+
   it('wraps filter chips instead of a horizontal scroller (#153)', async () => {
     render(
       <MemoryRouter>
