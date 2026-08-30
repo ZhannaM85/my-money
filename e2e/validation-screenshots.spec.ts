@@ -137,6 +137,26 @@ test('capture Dashboard chart range picker (#126)', async ({ page }) => {
   })
 })
 
+test('capture Positions swipe Hide (#146)', async ({ page }) => {
+  await seedValidationFixture(page, { currencyDisplayMode: 'base' })
+  await page.goto('/')
+  await expect(page.getByRole('heading', { name: 'Dashboard' })).toBeVisible()
+  await page.getByRole('button', { name: 'Holdings' }).click()
+  await expect(page.getByText('Euro cash')).toBeVisible()
+  const row = page.getByText('Euro cash')
+  const box = await row.boundingBox()
+  if (!box) throw new Error('missing row')
+  await page.mouse.move(box.x + box.width - 8, box.y + box.height / 2)
+  await page.mouse.down()
+  await page.mouse.move(box.x + 8, box.y + box.height / 2, { steps: 8 })
+  await page.mouse.up()
+  await expect(page.getByRole('button', { name: 'Hide Euro cash' })).toBeVisible()
+  await page.screenshot({
+    path: join(outDir, '146-positions-swipe-hide.png'),
+    fullPage: true,
+  })
+})
+
 test('capture Positions ownership share (#151)', async ({ page }) => {
   await seedValidationFixture(page, { currencyDisplayMode: 'base' })
   await page.evaluate(async () => {

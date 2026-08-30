@@ -64,6 +64,10 @@ export interface Dictionary {
     currencyFilterDisabledHint: string
     conversionUnavailable: string
     holdings: string
+    hideFromPositions: string
+    showOnPositions: string
+    hideFromPositionsAria: (name: string) => string
+    showOnPositionsAria: (name: string) => string
     amountChange: string
     rateChange: string
     updateRates: string

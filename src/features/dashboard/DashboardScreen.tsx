@@ -45,6 +45,7 @@ import { ChartRangePicker } from './ChartRangePicker'
 import { dashboardNeedsRemoteFx } from './dashboardFx'
 import { asOfHasLoggedData } from './asOfHasLoggedData'
 import { holdingsForSelectedChartDay } from './holdingsForSelectedChartDay'
+import { PositionsHoldingRow } from './PositionsHoldingRow'
 
 export function DashboardScreen() {
   const t = useTranslation()
@@ -458,33 +459,13 @@ export function DashboardScreen() {
                       </button>
                       {open &&
                         holdings.map((holding) => (
-                          <div
+                          <PositionsHoldingRow
                             key={holding.assetId}
-                            className="flex items-center justify-between gap-3 border-t border-border pt-2"
-                          >
-                            <span className="flex min-w-0 flex-col">
-                              <span className="truncate text-sm">
-                                {holding.name}
-                              </span>
-                              {holding.institution ? (
-                                <span className="truncate text-xs text-muted-foreground">
-                                  {holding.institution}
-                                </span>
-                              ) : null}
-                              {holding.ownershipShare ? (
-                                <span className="text-xs text-muted-foreground">
-                                  {t.asset.yourShare(holding.ownershipShare)}
-                                </span>
-                              ) : null}
-                            </span>
-                            <span className="shrink-0 tabular-nums text-sm">
-                              {formatAmount(
-                                holding.nativeAmount,
-                                holding.currency,
-                                locale,
-                              )}
-                            </span>
-                          </div>
+                            row={holding}
+                            isOriginal
+                            baseCurrency={baseCurrency}
+                            compact
+                          />
                         ))}
                     </li>
                   )
@@ -882,54 +863,12 @@ export function DashboardScreen() {
               {holdingsOpen && (
                 <ul className="flex flex-col gap-2">
                   {convertedHoldingsToday.map((row) => (
-                    <li
-                      key={row.assetId}
-                      className="flex items-center justify-between gap-3 rounded-xl bg-card px-4 py-3 ring-1 ring-foreground/10"
-                    >
-                      <span className="flex min-w-0 flex-col">
-                        <span className="truncate text-sm font-medium">
-                          {row.name}
-                        </span>
-                        {row.ownershipShare ? (
-                          <span className="text-xs text-muted-foreground">
-                            {t.asset.yourShare(row.ownershipShare)}
-                          </span>
-                        ) : null}
-                        {!isOriginal && !row.conversionAvailable ? (
-                          <span className="text-xs text-muted-foreground">
-                            {t.dashboard.conversionUnavailable}
-                          </span>
-                        ) : !isOriginal && row.currency !== baseCurrency ? (
-                          <span className="text-xs text-muted-foreground">
-                            {formatAmount(
-                              row.nativeAmount,
-                              row.currency,
-                              locale,
-                            )}
-                          </span>
-                        ) : null}
-                      </span>
-                      <span className="shrink-0 text-right">
-                        {isOriginal ||
-                        !row.conversionAvailable ||
-                        row.convertedAmount === null ? (
-                          <span className="block tabular-nums text-sm">
-                            {formatAmount(
-                              row.nativeAmount,
-                              row.currency,
-                              locale,
-                            )}
-                          </span>
-                        ) : (
-                          <span className="block tabular-nums text-sm font-medium">
-                            {formatAmount(
-                              row.convertedAmount,
-                              baseCurrency,
-                              locale,
-                            )}
-                          </span>
-                        )}
-                      </span>
+                    <li key={row.assetId}>
+                      <PositionsHoldingRow
+                        row={row}
+                        isOriginal={isOriginal}
+                        baseCurrency={baseCurrency}
+                      />
                     </li>
                   ))}
                 </ul>

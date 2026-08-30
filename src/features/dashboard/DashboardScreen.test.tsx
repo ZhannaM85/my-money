@@ -1044,4 +1044,41 @@ describe('DashboardScreen', () => {
     expect(screen.getByText('Euro cash')).toBeInTheDocument()
     expect(screen.getAllByText('Your share: 1/2')).toHaveLength(1)
   })
+
+  it('swipes Hide on a Positions row without archiving (#146)', async () => {
+    const now = '2026-08-17T00:00:00.000Z'
+    await useAssetStore.getState().saveAsset(
+      {
+        id: 'house',
+        name: 'Sosnovo',
+        assetClass: 'property',
+        type: 'house',
+        currency: 'EUR',
+        trackingStatus: 'included',
+        valuationMethod: 'account_balance',
+        updateFrequency: 'yearly',
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        assetId: 'house',
+        date: '2026-08-17',
+        amount: 5_000_000,
+        currency: 'EUR',
+      },
+    )
+    render(
+      <MemoryRouter>
+        <DashboardScreen />
+      </MemoryRouter>,
+    )
+    await userEvent.click(await screen.findByRole('button', { name: 'Holdings' }))
+    expect(await screen.findByText('Sosnovo')).toBeInTheDocument()
+    await userEvent.click(screen.getByRole('button', { name: 'Hide Sosnovo' }))
+    expect(useAssetStore.getState().assets[0]?.trackingStatus).toBe('excluded')
+    expect(await screen.findByText('Sosnovo')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Show Sosnovo' })).toBeInTheDocument()
+    await userEvent.click(screen.getByRole('button', { name: 'Show Sosnovo' }))
+    expect(useAssetStore.getState().assets[0]?.trackingStatus).toBe('included')
+  })
 })

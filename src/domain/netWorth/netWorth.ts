@@ -3,6 +3,7 @@ import {
   contributesToNetWorth,
   effectiveAmount,
   isLiability,
+  isListedOnDashboard,
   partialOwnershipShare,
 } from '@/domain/asset'
 import {
@@ -137,12 +138,12 @@ export function historicalNativeNetWorth(
     const holdings: HoldingConversion[] = []
     let total = 0
     for (const asset of assets) {
-      if (!contributesToNetWorth(asset)) continue
+      if (!isListedOnDashboard(asset)) continue
       const snapshot = snapshotsOnOrBefore(snapshots, asset.id, date)
       if (!snapshot || snapshot.currency !== currency) continue
       const native = effectiveAmount(snapshot.amount, asset)
       const signed = isLiability(asset) ? -native : native
-      total += signed
+      if (contributesToNetWorth(asset)) total += signed
       holdings.push(
         toHoldingConversion(asset, snapshot, signed, signed, true),
       )
@@ -164,6 +165,8 @@ export interface HoldingConversion {
   institution?: string
   /** Set when ownership is not 1/1 (#151). */
   ownershipShare?: string
+  /** Dashboard-hidden via swipe; still listed, not in totals (#146). */
+  excluded?: boolean
 }
 
 function toHoldingConversion(
@@ -186,6 +189,7 @@ function toHoldingConversion(
       ? { institution: asset.institution.trim() }
       : {}),
     ...(ownershipShare ? { ownershipShare } : {}),
+    ...(asset.trackingStatus === 'excluded' ? { excluded: true } : {}),
   }
 }
 
@@ -209,7 +213,7 @@ export function holdingsWithConversion(
 ): HoldingConversion[] {
   const rows: HoldingConversion[] = []
   for (const asset of assets) {
-    if (!contributesToNetWorth(asset)) continue
+    if (!isListedOnDashboard(asset)) continue
     const snapshot = latestSnapshot(snapshots, asset.id)
     if (!snapshot) continue
     const nativeRaw = effectiveAmount(snapshot.amount, asset)
@@ -281,7 +285,7 @@ export function historicalNetWorth(
     const holdings: HoldingConversion[] = []
     let total = 0
     for (const asset of assets) {
-      if (!contributesToNetWorth(asset)) continue
+      if (!isListedOnDashboard(asset)) continue
       const snapshot = snapshotsOnOrBefore(snapshots, asset.id, date)
       if (!snapshot) continue
       const nativeRaw = effectiveAmount(snapshot.amount, asset)
@@ -301,7 +305,7 @@ export function historicalNetWorth(
         )
         continue
       }
-      total += result.amount
+      if (contributesToNetWorth(asset)) total += result.amount
       holdings.push(
         toHoldingConversion(
           asset,

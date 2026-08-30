@@ -29,6 +29,15 @@ export const issueRcas: IssueRca[] = [
     ru: 'Тип «Дом» уже был в имуществе, но в быстром добавлении была только квартира. Чип «Дом» ставит класс «Имущество» и тип «Дом».',
   },
   {
+    issue: 146,
+    title: {
+      en: 'Dashboard Positions: swipe left to reveal Hide',
+      ru: 'Позиции на Сводке: свайп влево открывает «Скрыть»',
+    },
+    en: 'Positions had no row action. Swipe left reveals Hide (sets excluded, not archived). The row stays so Show can restore it.',
+    ru: 'У позиций не было действия на строке. Свайп влево открывает «Скрыть» (excluded, не архив). Строка остаётся, чтобы «Показать» вернуло актив.',
+  },
+  {
     issue: 145,
     title: {
       en: 'Show no-data warning instead of the chart when As of has no holdings',

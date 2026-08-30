@@ -45,6 +45,7 @@ gh issue edit 108 --add-label validation
 | `126-dashboard-range-custom.png` | Dashboard · Custom From/To dates (#126) |
 | `119-duplicate-soft-warning.png` | Asset details duplicate soft warning (#119) |
 | `149-add-asset-house-chip.png` | Add asset · Quick add House chip selected (#149) |
+| `146-positions-swipe-hide.png` | Dashboard Positions · swipe left Hide CTA (#146) |
 | `151-positions-ownership-share.png` | Dashboard Positions · ownership share cue (#151) |
 
 Fixtures are seeded in IndexedDB (`e2e/seed.ts`). Local only — no user balances leave the device.

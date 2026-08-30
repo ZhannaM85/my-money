@@ -580,6 +580,39 @@ describe('holdingsWithConversion', () => {
     expect(rows[0]?.conversionAvailable).toBe(true)
   })
 
+  it('lists excluded holdings but omits them from the total (#146)', () => {
+    const cash = asset({ id: 'cash', name: 'Euro cash' })
+    const house = asset({
+      id: 'house',
+      name: 'Sosnovo',
+      trackingStatus: 'excluded',
+    })
+    const snapshots = [
+      snap({ id: 's1', assetId: 'cash', amount: 1000 }),
+      snap({ id: 's2', assetId: 'house', amount: 5_000_000 }),
+    ]
+    const rows = holdingsWithConversion([cash, house], snapshots, [], 'EUR')
+    expect(rows.map((row) => row.name)).toEqual(['Euro cash', 'Sosnovo'])
+    expect(rows.find((row) => row.assetId === 'house')?.excluded).toBe(true)
+    expect(netWorth([cash, house], snapshots, [], 'EUR').total).toBe(1000)
+    const archived = asset({
+      id: 'old',
+      name: 'Gone',
+      trackingStatus: 'archived',
+    })
+    expect(
+      holdingsWithConversion(
+        [cash, archived],
+        [
+          snap({ id: 's1', assetId: 'cash', amount: 1000 }),
+          snap({ id: 's3', assetId: 'old', amount: 50 }),
+        ],
+        [],
+        'EUR',
+      ).map((row) => row.assetId),
+    ).toEqual(['cash'])
+  })
+
   it('includes ownershipShare on holdings when not 1/1 (#151)', () => {
     const house = asset({
       id: 'house',

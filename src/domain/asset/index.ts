@@ -14,6 +14,7 @@ export {
   UPDATE_FREQUENCIES,
   isLiability,
   contributesToNetWorth,
+  isListedOnDashboard,
 } from './Asset'
 export {
   daysBetweenIso,

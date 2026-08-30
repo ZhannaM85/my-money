@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 158,
+    issue: 146,
+    date: '2026-08-30T12:10:00+03:00',
+    en: 'Swipe left on a Dashboard Positions row to Hide it. Swipe again to Show. Hidden assets stay in the list (not archived).',
+    ru: 'Свайп влево по строке позиций на Сводке скрывает актив. Повторный свайп показывает. Скрытый актив остаётся в списке (не в архиве).',
+  },
+  {
     version: 157,
     issue: 151,
     date: '2026-08-30T11:45:00+03:00',

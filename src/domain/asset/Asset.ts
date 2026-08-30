@@ -83,3 +83,10 @@ export function contributesToNetWorth(
 ): boolean {
   return asset.trackingStatus === 'included'
 }
+
+/** Positions can still list excluded assets; archived stay off the dashboard (#146). */
+export function isListedOnDashboard(
+  asset: Pick<Asset, 'trackingStatus'>,
+): boolean {
+  return asset.trackingStatus !== 'archived'
+}
