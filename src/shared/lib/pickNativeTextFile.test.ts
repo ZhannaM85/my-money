@@ -36,6 +36,7 @@ describe('pickNativeTextFile (#169)', () => {
           name: 'book.json',
           mimeType: 'application/json',
           data: btoa('{"ok":true}'),
+          size: 11,
         },
       ],
     })
