@@ -27,8 +27,7 @@ export const ru: Dictionary = {
   },
   dashboard: {
     title: 'Сводка',
-    description:
-      'Что у вас есть минус что вы должны, в базовой валюте.',
+    description: 'Что у вас есть минус что вы должны, в базовой валюте.',
     netWorth: 'Чистый капитал',
     thisMonth: 'за этот месяц',
     zoomRange: 'Диапазон графика',
@@ -42,12 +41,10 @@ export const ru: Dictionary = {
     addToComparison: 'Добавить к сравнению',
     navigateToComparison: 'Перейти к сравнению',
     comparisonTitle: 'Сравнение',
-    comparisonDescription:
-      'Позиции на даты, которые вы добавили со Сводки.',
+    comparisonDescription: 'Позиции на даты, которые вы добавили со Сводки.',
     comparisonNeedTwoDates: 'Добавьте хотя бы две даты со Сводки.',
     removeFromComparison: (date) => `Убрать ${date}`,
-    removeFromComparisonConfirm: (date) =>
-      `Убрать ${date} из сравнения?`,
+    removeFromComparisonConfirm: (date) => `Убрать ${date} из сравнения?`,
     removeAllFromComparison: 'Убрать все даты',
     removeAllFromComparisonConfirm: 'Убрать все даты из сравнения?',
     positionsTotal: 'Итого',
@@ -281,7 +278,8 @@ export const ru: Dictionary = {
     byCurrency: 'Валюта',
     byType: 'Тип',
     emptyTitle: 'Пока нечего делить',
-    emptyDescription: 'Добавьте учитываемые активы, чтобы увидеть распределение.',
+    emptyDescription:
+      'Добавьте учитываемые активы, чтобы увидеть распределение.',
   },
   onboarding: {
     welcomeTitle: 'Добро пожаловать',
@@ -394,6 +392,7 @@ export const ru: Dictionary = {
     importAria: 'Импорт JSON-копии',
     onlyEmpty: 'Импорт доступен, только когда в этой книге нет активов.',
     downloaded: 'Копия скачана.',
+    shared: 'Открыт лист «Поделиться».',
     restored: 'Копия восстановлена.',
     exportFailed: 'Не удалось экспортировать копию.',
     importFailed: 'Не удалось импортировать этот файл.',
@@ -423,6 +422,7 @@ export const ru: Dictionary = {
         : `Готово снимков: ${ready}, строк без совпадения или с ошибкой: ${issues}.`,
     importMapped: 'Импортировать сопоставленные строки',
     exported: 'CSV скачан.',
+    shared: 'Открыт лист «Поделиться».',
     exportFailed: 'Не удалось экспортировать CSV.',
     importFailed: 'Не удалось импортировать этот файл.',
     invalidFile: 'Это не действительный CSV.',
@@ -437,7 +437,8 @@ export const ru: Dictionary = {
       invalidDate: (row, who) =>
         `Строка ${row}${who}: дата должна быть в формате ГГГГ-ММ-ДД.`,
       invalidAmount: (row, who) => `Строка ${row}${who}: сумма не число.`,
-      unmatchedAsset: (row, who) => `Строка ${row}${who}: нет подходящего актива.`,
+      unmatchedAsset: (row, who) =>
+        `Строка ${row}${who}: нет подходящего актива.`,
       ambiguousAsset: (row, who) =>
         `Строка ${row}${who}: подходит больше одного актива.`,
     },

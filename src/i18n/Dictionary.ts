@@ -300,6 +300,7 @@ export interface Dictionary {
     importAria: string
     onlyEmpty: string
     downloaded: string
+    shared: string
     restored: string
     exportFailed: string
     importFailed: string
@@ -324,6 +325,7 @@ export interface Dictionary {
     ready: (ready: number, issues: number) => string
     importMapped: string
     exported: string
+    shared: string
     exportFailed: string
     importFailed: string
     invalidFile: string

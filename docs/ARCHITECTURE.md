@@ -297,6 +297,7 @@ Accessibility as we build: semantic HTML, visible focus, ARIA on icon-only contr
 | `capacitor.config.ts` (#162) | `appId: io.github.zhannam85.mymoney`, `webDir: dist`. `android/` + `ios/` are git-tracked native projects. |
 | `src/shared/native/nativeChrome.ts` (#166) | Capacitor `SystemBars` style from light/dark. No-op on web. |
 | `src/shared/native/backButtonHandler.ts` (#165) | Android `App.backButton`: dialog → history → Dashboard → exit. No-op on web/iOS. |
+| `src/shared/lib/shareOrDownloadFile.ts` (#169) | Web Share File, else Capacitor Share/Filesystem, else `<a download>`. |
 | `src/i18n/` (#17) | Typed `Dictionary`, `en` + `ru`. `useTranslation` reads `settings.locale`. Backup JSON keeps English field names. |
 
 ---

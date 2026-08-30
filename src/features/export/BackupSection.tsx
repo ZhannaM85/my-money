@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from '@/i18n'
+import { pickImportFile } from '@/shared/lib/pickNativeTextFile'
 import { Button } from '@/shared/ui/button'
 import { useAssetStore } from '@/stores/assetStore'
 import { useSettingsStore } from '@/stores/settingsStore'
@@ -9,7 +10,7 @@ import {
   importBackupJson,
   InvalidBackupError,
 } from './backupActions'
-import { downloadBackupJson } from './downloadBackup'
+import { shareOrDownloadBackupJson } from './downloadBackup'
 
 export function BackupSection() {
   const t = useTranslation()
@@ -34,9 +35,12 @@ export function BackupSection() {
     setBusy(true)
     try {
       const bundle = await exportBackup()
-      downloadBackupJson(bundle)
-      setMessage(t.backup.downloaded)
-    } catch {
+      const result = await shareOrDownloadBackupJson(bundle)
+      setMessage(result === 'shared' ? t.backup.shared : t.backup.downloaded)
+    } catch (caught) {
+      if (caught instanceof DOMException && caught.name === 'AbortError') {
+        return
+      }
       setError(t.backup.exportFailed)
     } finally {
       setBusy(false)
@@ -97,14 +101,20 @@ export function BackupSection() {
         size="xl"
         className="w-full"
         disabled={busy || bookHasAssets}
-        onClick={() => inputRef.current?.click()}
+        onClick={() => {
+          void (async () => {
+            const nativeFile = await pickImportFile(
+              ['application/json'],
+              inputRef.current,
+            )
+            if (nativeFile) void handleImport(nativeFile)
+          })()
+        }}
       >
         {t.backup.importJson}
       </Button>
       {bookHasAssets && (
-        <p className="text-sm text-muted-foreground">
-          {t.backup.onlyEmpty}
-        </p>
+        <p className="text-sm text-muted-foreground">{t.backup.onlyEmpty}</p>
       )}
       {message && <p className="text-sm text-muted-foreground">{message}</p>}
       {error && <p className="text-sm text-destructive">{error}</p>}

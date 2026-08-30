@@ -26,8 +26,7 @@ export const en: Dictionary = {
   },
   dashboard: {
     title: 'Dashboard',
-    description:
-      'What you own minus what you owe, in your base currency.',
+    description: 'What you own minus what you owe, in your base currency.',
     netWorth: 'Net worth',
     thisMonth: 'this month',
     zoomRange: 'Chart range',
@@ -41,12 +40,10 @@ export const en: Dictionary = {
     addToComparison: 'Add to comparison',
     navigateToComparison: 'Go to comparison',
     comparisonTitle: 'Comparison',
-    comparisonDescription:
-      'Holdings on the dates you added from Dashboard.',
+    comparisonDescription: 'Holdings on the dates you added from Dashboard.',
     comparisonNeedTwoDates: 'Add at least two dates from Dashboard.',
     removeFromComparison: (date) => `Remove ${date}`,
-    removeFromComparisonConfirm: (date) =>
-      `Remove ${date} from comparison?`,
+    removeFromComparisonConfirm: (date) => `Remove ${date} from comparison?`,
     removeAllFromComparison: 'Remove all dates',
     removeAllFromComparisonConfirm: 'Remove all dates from comparison?',
     positionsTotal: 'Total',
@@ -303,7 +300,8 @@ export const en: Dictionary = {
     language: 'Language',
     languageEn: 'English',
     languageRu: 'Русский',
-    skipWelcomeHint: 'Welcome still wants a first asset. Skip it to use the app empty.',
+    skipWelcomeHint:
+      'Welcome still wants a first asset. Skip it to use the app empty.',
     skipWelcome: 'Skip welcome',
     allocation: 'Allocation',
     appearance: 'Appearance',
@@ -328,7 +326,8 @@ export const en: Dictionary = {
     manualRatesPair: (base, quote) => `1 ${base} = … ${quote}`,
     manualRatesSave: "Save today's rates",
     manualRatesClear: "Clear today's rates",
-    manualRatesSaved: 'Saved. Converted totals will use these overrides for today.',
+    manualRatesSaved:
+      'Saved. Converted totals will use these overrides for today.',
     manualRatesActive: (count, date) =>
       `${count} manual rate${count === 1 ? '' : 's'} active for ${date}.`,
     fxDebugTitle: 'FX debug',
@@ -387,6 +386,7 @@ export const en: Dictionary = {
     importAria: 'Import JSON backup',
     onlyEmpty: 'Import is available only when this book has no assets.',
     downloaded: 'Backup downloaded.',
+    shared: 'Opened the share sheet.',
     restored: 'Backup restored.',
     exportFailed: 'Could not export the backup.',
     importFailed: 'Could not import this file.',
@@ -416,6 +416,7 @@ export const en: Dictionary = {
         : `${ready} snapshot${ready === 1 ? '' : 's'} ready, ${issues} row${issues === 1 ? '' : 's'} unmatched or invalid.`,
     importMapped: 'Import mapped rows',
     exported: 'CSV downloaded.',
+    shared: 'Opened the share sheet.',
     exportFailed: 'Could not export CSV.',
     importFailed: 'Could not import this file.',
     invalidFile: 'This file is not valid CSV.',

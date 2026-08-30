@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from '@/i18n'
+import { pickImportFile } from '@/shared/lib/pickNativeTextFile'
 import { Button } from '@/shared/ui/button'
 import { useAssetStore } from '@/stores/assetStore'
 import { exportCsv, importCsv, InvalidCsvError } from './csvActions'
@@ -12,7 +13,7 @@ import {
   type CsvColumnMapping,
 } from './csvImport'
 import { parseCsv } from './csvParse'
-import { downloadCsv } from './downloadCsv'
+import { shareOrDownloadCsv } from './downloadCsv'
 
 type CsvDraft = {
   text: string
@@ -47,9 +48,12 @@ export function CsvSection() {
     setBusy(true)
     try {
       const csv = await exportCsv()
-      downloadCsv(csv)
-      setMessage(t.csv.exported)
-    } catch {
+      const result = await shareOrDownloadCsv(csv)
+      setMessage(result === 'shared' ? t.csv.shared : t.csv.exported)
+    } catch (caught) {
+      if (caught instanceof DOMException && caught.name === 'AbortError') {
+        return
+      }
       setError(t.csv.exportFailed)
     } finally {
       setBusy(false)
@@ -137,7 +141,15 @@ export function CsvSection() {
         size="xl"
         className="w-full"
         disabled={busy}
-        onClick={() => inputRef.current?.click()}
+        onClick={() => {
+          void (async () => {
+            const nativeFile = await pickImportFile(
+              ['text/csv', 'text/plain'],
+              inputRef.current,
+            )
+            if (nativeFile) handlePick(nativeFile)
+          })()
+        }}
       >
         {t.csv.importCsv}
       </Button>

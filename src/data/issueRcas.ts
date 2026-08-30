@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 169,
+    title: {
+      en: 'Native backup and CSV via share sheet',
+      ru: 'Резервная копия и CSV через «Поделиться»',
+    },
+    en: 'Not a defect. Planned wrap follow-up. <a download> often does nothing in WebView. Export uses Web Share, then Capacitor Share/Filesystem; import uses the native document picker. Web still downloads and uses a file input.',
+    ru: 'Не дефект. Запланированное продолжение оболочки. <a download> в WebView часто ничего не делает. Экспорт — Web Share, затем Capacitor Share/Filesystem; импорт — системный выбор файла. Веб по-прежнему скачивает и использует file input.',
+  },
+  {
     issue: 166,
     title: {
       en: 'Native status bar and safe-area theming',

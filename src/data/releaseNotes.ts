@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 181,
+    issue: 169,
+    date: '2026-08-30T17:55:00+03:00',
+    en: 'Backup JSON and CSV export open the share sheet on the native app. Import uses the system file picker. Web still downloads and picks files as before.',
+    ru: 'Экспорт JSON и CSV в нативном приложении открывает «Поделиться». Импорт идёт через системный выбор файла. Веб по-прежнему скачивает и выбирает файлы как раньше.',
+  },
+  {
     version: 180,
     issue: 165,
     date: '2026-08-30T17:45:00+03:00',

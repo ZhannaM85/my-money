@@ -31,6 +31,8 @@ This only produces **debug** builds. Play / TestFlight signing is later.
 5. Confirm the app loads and a saved amount survives an app restart.
 6. From Settings, Back should land on Dashboard, not exit. From Dashboard with
    no history, Back should exit. Tab hops must not pile up on the back stack.
+7. Export JSON/CSV should open the share sheet (or save a file). Import should
+   open the system picker; JSON restore still requires an empty book.
 
 `npx cap open android` if you prefer Android Studio.
 

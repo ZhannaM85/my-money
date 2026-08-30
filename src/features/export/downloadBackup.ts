@@ -1,3 +1,8 @@
+import {
+  shareOrDownloadFile,
+  triggerBlobDownload,
+} from '@/shared/lib/shareOrDownloadFile'
+
 export function backupFilename(exportedAt: string): string {
   const day = exportedAt.slice(0, 10) || 'backup'
   return `my-money-backup-${day}.json`
@@ -5,13 +10,18 @@ export function backupFilename(exportedAt: string): string {
 
 export function downloadBackupJson(bundle: { exportedAt: string }): void {
   const json = JSON.stringify(bundle, null, 2)
-  const blob = new Blob([json], { type: 'application/json' })
-  const url = URL.createObjectURL(blob)
-  const anchor = document.createElement('a')
-  anchor.href = url
-  anchor.download = backupFilename(bundle.exportedAt)
-  document.body.appendChild(anchor)
-  anchor.click()
-  anchor.remove()
-  URL.revokeObjectURL(url)
+  triggerBlobDownload(
+    new Blob([json], { type: 'application/json' }),
+    backupFilename(bundle.exportedAt),
+  )
+}
+
+export async function shareOrDownloadBackupJson(bundle: {
+  exportedAt: string
+}): Promise<'shared' | 'downloaded'> {
+  const json = JSON.stringify(bundle, null, 2)
+  const file = new File([json], backupFilename(bundle.exportedAt), {
+    type: 'application/json',
+  })
+  return shareOrDownloadFile(file)
 }
