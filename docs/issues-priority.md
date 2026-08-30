@@ -21,15 +21,6 @@ _After the four web flows feel good. Android wraps this app; iOS does not._
 
 ---
 
-## Tier 15 — Live feedback (2026-08-29)
-
-| # | Status | Issue | Notes |
-|---|--------|-------|-------|
-| [#144](https://github.com/ZhannaM85/my-money/issues/144) | 🔍 Pending validation | Asset chart X-axis spaces snapshot dates evenly, not by calendar time | All range: May→Aug looks as close as Dec 8→21. Category axis, one point per snapshot. |
-| [#145](https://github.com/ZhannaM85/my-money/issues/145) | 🔍 Pending validation | Show no-data warning instead of the chart when As of has no holdings | As of 2022-12-31 shows 0,00 ₽ but All chart still plots later history. |
-
----
-
 ## Tier 16 — Live feedback (2026-08-30)
 
 | # | Status | Issue | Notes |
