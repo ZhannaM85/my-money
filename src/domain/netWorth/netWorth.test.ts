@@ -811,6 +811,35 @@ describe('nativeTotalsByCurrency', () => {
       { currency: 'RUB', amount: 20000 },
     ])
   })
+
+  it('keeps a zero currency total when every holding in that currency is excluded (#156)', () => {
+    const cash = asset({ id: 'cash', currency: 'EUR' })
+    const house = asset({
+      id: 'house',
+      name: 'Sosnovo',
+      assetClass: 'property',
+      type: 'house',
+      currency: 'GEL',
+      trackingStatus: 'excluded',
+    })
+    expect(
+      nativeTotalsByCurrency(
+        [cash, house],
+        [
+          snap({ id: 's1', assetId: 'cash', amount: 1000, currency: 'EUR' }),
+          snap({
+            id: 's2',
+            assetId: 'house',
+            amount: 200_000,
+            currency: 'GEL',
+          }),
+        ],
+      ),
+    ).toEqual([
+      { currency: 'EUR', amount: 1000 },
+      { currency: 'GEL', amount: 0 },
+    ])
+  })
 })
 
 describe('historicalNativeNetWorth', () => {

@@ -15,6 +15,7 @@ import { useAssetStore } from '@/stores/assetStore'
 import { useFxStore } from '@/stores/fxStore'
 import { useSettingsStore } from '@/stores/settingsStore'
 import { useComparisonStore } from '@/stores/comparisonStore'
+import { AllocationScreen } from '@/features/allocation'
 import { DashboardScreen } from './DashboardScreen'
 
 beforeEach(async () => {
@@ -1249,11 +1250,186 @@ describe('DashboardScreen', () => {
       ;(await screen.findByRole('button', { name: 'Hide Sosnovo' })).click()
     })
     expect(await screen.findByText('Sosnovo')).toBeInTheDocument()
-    expect(await screen.findByTestId('positions-total')).toHaveTextContent(
-      formatAmount(1000, 'EUR'),
-    )
+    await waitFor(() => {
+      expect(screen.getByTestId('positions-total')).toHaveTextContent(
+        formatAmount(1000, 'EUR'),
+      )
+    })
     expect(
       screen.getByText(formatAmount(1000, 'EUR'), { selector: '.text-4xl' }),
     ).toBeInTheDocument()
+  })
+
+  it('keeps a greyed Positions row after hide from Allocation, navigation, and reload (#156)', async () => {
+    const user = userEvent.setup()
+    const now = '2026-08-17T00:00:00.000Z'
+    await useAssetStore.getState().saveAsset(
+      {
+        id: 'cash',
+        name: 'Euro cash',
+        assetClass: 'money',
+        type: 'cash',
+        currency: 'EUR',
+        trackingStatus: 'included',
+        valuationMethod: 'account_balance',
+        updateFrequency: 'weekly',
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        assetId: 'cash',
+        date: '2026-08-17',
+        amount: 1000,
+        currency: 'EUR',
+      },
+    )
+    await useAssetStore.getState().saveAsset(
+      {
+        id: 'house',
+        name: 'Sosnovo',
+        assetClass: 'property',
+        type: 'house',
+        currency: 'EUR',
+        trackingStatus: 'included',
+        valuationMethod: 'account_balance',
+        updateFrequency: 'yearly',
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        assetId: 'house',
+        date: '2026-08-17',
+        amount: 5_000_000,
+        currency: 'EUR',
+      },
+    )
+    const allocation = render(
+      <MemoryRouter>
+        <AllocationScreen />
+      </MemoryRouter>,
+    )
+    await user.click(
+      await screen.findByRole('button', { name: 'Property · Holdings' }),
+    )
+    expect(await screen.findByText('Sosnovo')).toBeInTheDocument()
+    await user.click(screen.getByText('Sosnovo'))
+    await act(async () => {
+      screen.getByRole('button', { name: 'Hide Sosnovo' }).click()
+    })
+    await waitFor(() => {
+      expect(
+        useAssetStore.getState().assets.find((asset) => asset.id === 'house')
+          ?.trackingStatus,
+      ).toBe('excluded')
+    })
+    allocation.unmount()
+
+    const dashboard = render(
+      <MemoryRouter>
+        <DashboardScreen />
+      </MemoryRouter>,
+    )
+    await user.click(await screen.findByRole('button', { name: 'Holdings' }))
+    expect(await screen.findByText('Sosnovo')).toBeInTheDocument()
+    expect(
+      screen.getByText('Sosnovo').closest('[data-excluded]'),
+    ).toHaveAttribute('data-excluded', 'true')
+    expect(screen.getByRole('button', { name: 'Show Sosnovo' })).toBeInTheDocument()
+    expect(await screen.findByTestId('positions-total')).toHaveTextContent(
+      formatAmount(1000, 'EUR'),
+    )
+    dashboard.unmount()
+
+    useAssetStore.setState({ assets: [], snapshots: [], loaded: false })
+    render(
+      <MemoryRouter>
+        <DashboardScreen />
+      </MemoryRouter>,
+    )
+    await user.click(await screen.findByRole('button', { name: 'Holdings' }))
+    const hidden = (await screen.findByText('Sosnovo')).closest(
+      '[data-excluded]',
+    )
+    expect(hidden).toHaveAttribute('data-excluded', 'true')
+    expect(hidden).toHaveClass('opacity-60')
+    expect(screen.getByRole('button', { name: 'Show Sosnovo' })).toBeInTheDocument()
+    expect(await screen.findByTestId('positions-total')).toHaveTextContent(
+      formatAmount(1000, 'EUR'),
+    )
+    await act(async () => {
+      screen.getByRole('button', { name: 'Show Sosnovo' }).click()
+    })
+    await waitFor(() => {
+      expect(
+        useAssetStore.getState().assets.find((asset) => asset.id === 'house')
+          ?.trackingStatus,
+      ).toBe('included')
+    })
+  })
+
+  it('keeps an excluded-only currency in Original Positions after reload (#156)', async () => {
+    const now = '2026-08-17T00:00:00.000Z'
+    await db.settings.put({
+      ...DEFAULT_SETTINGS,
+      currencyDisplayMode: 'native',
+    })
+    useSettingsStore.setState({
+      settings: { ...DEFAULT_SETTINGS, currencyDisplayMode: 'native' },
+      loaded: false,
+    })
+    await useAssetStore.getState().saveAsset(
+      {
+        id: 'cash',
+        name: 'Euro cash',
+        assetClass: 'money',
+        type: 'cash',
+        currency: 'EUR',
+        trackingStatus: 'included',
+        valuationMethod: 'account_balance',
+        updateFrequency: 'weekly',
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        assetId: 'cash',
+        date: '2026-08-17',
+        amount: 1000,
+        currency: 'EUR',
+      },
+    )
+    await useAssetStore.getState().saveAsset(
+      {
+        id: 'house',
+        name: 'Sosnovo',
+        assetClass: 'property',
+        type: 'house',
+        currency: 'GEL',
+        trackingStatus: 'excluded',
+        valuationMethod: 'account_balance',
+        updateFrequency: 'yearly',
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        assetId: 'house',
+        date: '2026-08-17',
+        amount: 200_000,
+        currency: 'GEL',
+      },
+    )
+    useAssetStore.setState({ assets: [], snapshots: [], loaded: false })
+    render(
+      <MemoryRouter>
+        <DashboardScreen />
+      </MemoryRouter>,
+    )
+    expect(await screen.findByText('Holdings by currency')).toBeInTheDocument()
+    await userEvent.click(screen.getByRole('button', { name: 'GEL · Holdings' }))
+    const hidden = (await screen.findByText('Sosnovo')).closest(
+      '[data-excluded]',
+    )
+    expect(hidden).toHaveAttribute('data-excluded', 'true')
+    expect(hidden).toHaveClass('opacity-60')
+    expect(screen.getByRole('button', { name: 'Show Sosnovo' })).toBeInTheDocument()
   })
 })

@@ -144,6 +144,64 @@ test('capture Allocation hidden class slice stays (#155)', async ({ page }) => {
   })
 })
 
+test('capture Positions greyed after hide from Allocation (#156)', async ({
+  page,
+}) => {
+  await seedValidationFixture(page, { currencyDisplayMode: 'base' })
+  await page.evaluate(async () => {
+    const now = '2026-08-17T00:00:00.000Z'
+    const version = await (async () => {
+      const listed = await indexedDB.databases?.()
+      const existing = listed?.find((row) => row.name === 'my-money')
+      return existing?.version && existing.version > 0 ? existing.version : 2
+    })()
+    await new Promise<void>((resolve, reject) => {
+      const open = indexedDB.open('my-money', version)
+      open.onerror = () => reject(open.error ?? new Error('idb open failed'))
+      open.onsuccess = () => {
+        const db = open.result
+        const tx = db.transaction(['assets', 'snapshots'], 'readwrite')
+        tx.objectStore('assets').put({
+          id: 'sosnovo',
+          name: 'Sosnovo',
+          assetClass: 'property',
+          type: 'house',
+          currency: 'EUR',
+          trackingStatus: 'excluded',
+          valuationMethod: 'account_balance',
+          updateFrequency: 'yearly',
+          createdAt: now,
+          updatedAt: now,
+        })
+        tx.objectStore('snapshots').put({
+          id: 's-sosnovo',
+          assetId: 'sosnovo',
+          date: '2026-08-17',
+          amount: 5_000_000,
+          currency: 'EUR',
+        })
+        tx.oncomplete = () => {
+          db.close()
+          resolve()
+        }
+        tx.onerror = () => reject(tx.error ?? new Error('idb tx failed'))
+      }
+    })
+  })
+  await page.goto('/')
+  await expect(page.getByRole('heading', { name: 'Dashboard' })).toBeVisible()
+  await page.getByRole('button', { name: 'Holdings' }).click()
+  await expect(page.getByText('Sosnovo')).toBeVisible()
+  const hidden = page.locator('[data-excluded="true"]')
+  await expect(hidden).toBeVisible()
+  await hidden.scrollIntoViewIfNeeded()
+  await expect(page.getByRole('button', { name: 'Show Sosnovo' })).toBeVisible()
+  await page.screenshot({
+    path: join(outDir, '156-positions-hidden-after-allocation.png'),
+    fullPage: true,
+  })
+})
+
 test('capture Dashboard chart controls and As of (#111, #112, #116, #117)', async ({
   page,
 }) => {

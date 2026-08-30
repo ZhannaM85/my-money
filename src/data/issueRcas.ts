@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 156,
+    title: {
+      en: 'Dashboard: keep hidden assets in Positions after hide from Allocation',
+      ru: 'Сводка: оставлять скрытые активы в позициях после скрытия в распределении',
+    },
+    en: 'Hide from Allocation already set excluded in IndexedDB (#150). Dashboard Positions (#148) only covered hide-on-Dashboard. Reload and leaving Allocation now still list the greyed row with Show, including an excluded-only native currency group.',
+    ru: 'Скрытие в распределении уже писало excluded в IndexedDB (#150). Серые позиции (#148) покрывали только скрытие на Сводке. После ухода с распределения и перезагрузки серая строка с «Показать» остаётся, в том числе если это единственный актив в валюте.',
+  },
+  {
     issue: 155,
     title: {
       en: 'Allocation: hidden assets vanish when they were the last in a slice',

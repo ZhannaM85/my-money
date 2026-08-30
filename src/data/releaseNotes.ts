@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 167,
+    issue: 156,
+    date: '2026-08-30T15:30:00+03:00',
+    en: 'Hiding an asset on Allocation still leaves it on Dashboard Positions, greyed, after you switch screens or reload. Show brings it back; totals stay without it until then.',
+    ru: 'Скрытие актива в распределении оставляет его серым в позициях на Сводке после перехода и перезагрузки. «Показать» возвращает его; до этого итоги его не считают.',
+  },
+  {
     version: 166,
     issue: 155,
     date: '2026-08-30T14:25:00+03:00',
