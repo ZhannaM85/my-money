@@ -18,3 +18,4 @@ Tab icons follow turtle-steps: a **64px** PNG of the circular mark (`favicon-*-6
 | `public/apple-touch-icon.png` | iOS home-screen (180, dark circular mark) |
 | `public/icon-light-192.png` / `icon-dark-192.png` | Source circular marks (do not overwrite from this script) |
 | `public/icon-512.png` | PWA install icon (scaled from the dark 192) |
+| `resources/icon.png` | Capacitor source (#163): 1024 padded dark mark. Regenerated native icons/splash with `npx capacitor-assets generate --android --ios`. Do not overwrite PWA files in `public/`. |

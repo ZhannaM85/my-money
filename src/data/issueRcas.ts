@@ -20,6 +20,15 @@ export const issueRcas: IssueRca[] = [
     ru: 'Не дефект. Запланировано. App Store и Play нужен публичный URL /privacy. Данные на устройстве; единственный ожидаемый сетевой запрос — курсы FX.',
   },
   {
+    issue: 163,
+    title: {
+      en: 'Native iOS/Android icon and splash assets',
+      ru: 'Иконка и сплэш для iOS/Android',
+    },
+    en: 'Not a defect. Planned store assets. PWA icons existed; Capacitor needed adaptive icons, App Store 1024, and splash screens from the same mark.',
+    ru: 'Не дефект. Запланированные ассеты магазинов. PWA-иконки были; Capacitor нужны adaptive, 1024 для App Store и сплэши из того же знака.',
+  },
+  {
     issue: 162,
     title: {
       en: 'Adopt Capacitor for Android and iOS',

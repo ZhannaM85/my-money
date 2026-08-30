@@ -17,6 +17,7 @@
 
 
     <style name="AppTheme.NoActionBarLaunch" parent="Theme.SplashScreen">
-        <item name="android:background">@drawable/splash</item>
+        <!-- #163: wrap generated splash so it is centered, not stretched. -->
+        <item name="android:background">@drawable/splash_screen_bg</item>
     </style>
 </resources>

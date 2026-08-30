@@ -32,6 +32,12 @@ This only produces **debug** builds. Play / TestFlight signing is later.
 
 `npx cap open android` if you prefer Android Studio.
 
+Regenerate native icons/splash from `resources/icon.png` (do not touch `public/` PWA icons):
+
+```
+npx capacitor-assets generate --android --ios --iconBackgroundColor "#1b2a41" --iconBackgroundColorDark "#1b2a41" --splashBackgroundColor "#f8faf8" --splashBackgroundColorDark "#1b2a41" --logoSplashScale 0.65
+```
+
 ## iOS — Mac + Xcode
 
 `ios/` is generated and committed. Building, signing, and TestFlight need a

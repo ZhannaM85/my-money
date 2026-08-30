@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 178,
+    issue: 163,
+    date: '2026-08-30T17:25:00+03:00',
+    en: 'The Android and iOS shells use the same My Money mark as the PWA for the home-screen icon and splash. Web icons are unchanged.',
+    ru: 'Оболочки Android и iOS используют тот же знак My Money, что и PWA, для иконки и сплэша. Веб-иконки без изменений.',
+  },
+  {
     version: 177,
     issue: 162,
     date: '2026-08-30T16:30:00+03:00',

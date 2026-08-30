@@ -295,6 +295,7 @@ Accessibility as we build: semantic HTML, visible focus, ARIA on icon-only contr
 | `public/manifest.json` (#16) | PWA install manifest. Relative `start_url` / `scope` for the GitHub Pages subpath. |
 | `src/shared/lib/registerServiceWorker.ts` (#16) | Registers `sw.js` on web; skipped when Capacitor reports native (#162). |
 | `capacitor.config.ts` (#162) | `appId: io.github.zhannam85.mymoney`, `webDir: dist`. `android/` + `ios/` are git-tracked native projects. |
+| `resources/icon.png` (#163) | Padded 1024 source for `@capacitor/assets`. PWA icons in `public/` stay as they are. |
 | `src/i18n/` (#17) | Typed `Dictionary`, `en` + `ru`. `useTranslation` reads `settings.locale`. Backup JSON keeps English field names. |
 
 ---
