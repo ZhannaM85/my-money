@@ -12,11 +12,23 @@ Prototype checkpoint after Tier 5: the four flows in `PROJECT_BRIEF.md` §25 (on
 
 ## Tier 7 — Native platforms
 
-_After the four web flows feel good. Android and iOS both wrap this app._
+_After the four web flows feel good. Android and iOS both wrap this app. One tracking epic plus 12 children (turtle-steps native-release shape, minus camera, plus backup/CSV). Row order is the intended sequence, not issue-number order. Apple Developer Program enrolled 2026-08-30; TestFlight still needs a Mac._
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
-| [#19](https://github.com/ZhannaM85/my-money/issues/19) | 🔲 Open | Epic 18 — Android and iOS via Capacitor | Wrap both platforms, don’t rewrite. Android first; iOS needs a Mac. Store listing can be child issues later. |
+| [#19](https://github.com/ZhannaM85/my-money/issues/19) | 🔲 Open | Epic 18 — Android and iOS via Capacitor | Tracking only. Children below. |
+| [#162](https://github.com/ZhannaM85/my-money/issues/162) | 🔲 Open | Adopt Capacitor to wrap the app for native iOS/Android builds | Shared foundation. Native `/` base, not GitHub Pages `/my-money/`. |
+| [#163](https://github.com/ZhannaM85/my-money/issues/163) | 🔲 Open | Generate iOS/Android icon and splash-screen assets | Reuse PWA mark. Blocks both store listings. |
+| [#164](https://github.com/ZhannaM85/my-money/issues/164) | 🔲 Open | Write a privacy policy page (required by both app stores) | Can ship on web first. Public `/privacy` URL. |
+| [#166](https://github.com/ZhannaM85/my-money/issues/166) | 🔲 Open | Native status bar / safe-area / system theming pass (iOS + Android) | Depends on #162. |
+| [#165](https://github.com/ZhannaM85/my-money/issues/165) | 🔲 Open | Android: hardware/gesture back-button navigation handling | Depends on #162. |
+| [#169](https://github.com/ZhannaM85/my-money/issues/169) | 🔲 Open | Native: backup and CSV export/import via share sheet | `<a download>` often fails in WebView. Depends on #162. |
+| [#167](https://github.com/ZhannaM85/my-money/issues/167) | 🔲 Open | iOS: App Store Connect app record + signing (Developer Program enrolled) | Account step. Enrollment is done; Connect record is not. |
+| [#168](https://github.com/ZhannaM85/my-money/issues/168) | 🔲 Open | iOS: code signing + first TestFlight beta build | Depends on #162 + #167. Requires a Mac. |
+| [#170](https://github.com/ZhannaM85/my-money/issues/170) | 🔲 Open | iOS: App Store listing content and submit for review | Depends on #163, #164, #168. |
+| [#171](https://github.com/ZhannaM85/my-money/issues/171) | 🔲 Open | Android: Google Play Console enrollment + app signing setup | Account step. $25 one-time. |
+| [#173](https://github.com/ZhannaM85/my-money/issues/173) | 🔲 Open | Android: Play Store listing content + internal/closed testing track | Depends on #162, #163, #164, #171. |
+| [#172](https://github.com/ZhannaM85/my-money/issues/172) | 🔲 Open | Android: promote to production + submit for Play Store review | Depends on #173. |
 
 ---
 
