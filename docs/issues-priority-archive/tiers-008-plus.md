@@ -171,4 +171,5 @@ Closed live-feedback rows from Tier 8 onward. Open / pending items stay in [`../
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
+| [#149](https://github.com/ZhannaM85/my-money/issues/149) | ✅ Done | Quick add: House chip on Add asset | Type `house` already exists. Chip missing next to Apartment (screenshot: Квартира circled). Validated on-device 2026-08-30. |
 | [#151](https://github.com/ZhannaM85/my-money/issues/151) | ✅ Done | Show ownership share on Positions so partial-share prices are not confusing | Screenshot: Домик Сосново / Квартира Ручьи. Share already stored (#28); lists omit it. Validated on-device 2026-08-30. Full-share property → #152. |
