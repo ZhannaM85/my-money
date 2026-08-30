@@ -29,6 +29,7 @@ export function PositionsHoldingRow({
 
   return (
     <SwipeRevealRow
+      revealOn="click"
       actionLabel={actionLabel}
       actionAria={actionAria}
       onAction={() =>

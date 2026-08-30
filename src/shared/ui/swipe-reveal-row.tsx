@@ -15,7 +15,7 @@ export function SwipeRevealRow({
   actionAria: string
   onAction: () => void
   children: ReactNode
-  /** Allocation uses click so vertical scroll does not steal a swipe (#150). */
+  /** Allocation and Positions use click so vertical scroll does not steal a swipe (#150, #154). */
   revealOn?: 'swipe' | 'click'
 }) {
   const [open, setOpen] = useState(false)

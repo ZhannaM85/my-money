@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 165,
+    issue: 154,
+    date: '2026-08-30T14:10:00+03:00',
+    en: 'On Dashboard Positions, tap a row to show Hide — same as Allocation, so scrolling the list does not steal a swipe.',
+    ru: 'В позициях на Сводке нажмите на строку, чтобы показать «Скрыть» — как в распределении, чтобы прокрутка списка не перехватывала свайп.',
+  },
+  {
     version: 164,
     issue: 152,
     date: '2026-08-30T13:45:00+03:00',

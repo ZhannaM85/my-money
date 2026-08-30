@@ -1,5 +1,5 @@
 import 'fake-indexeddb/auto'
-import { render, screen, waitFor } from '@testing-library/react'
+import { act, render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router-dom'
 import { beforeEach, describe, expect, it } from 'vitest'
@@ -1099,7 +1099,7 @@ describe('DashboardScreen', () => {
     expect(screen.queryAllByText('Your share: 1/1')).toHaveLength(1)
   })
 
-  it('swipes Hide on a Positions row without archiving (#146)', async () => {
+  it('taps a Positions row to reveal Hide without archiving (#146, #154)', async () => {
     const now = '2026-08-17T00:00:00.000Z'
     await useAssetStore.getState().saveAsset(
       {
@@ -1128,12 +1128,28 @@ describe('DashboardScreen', () => {
     )
     await userEvent.click(await screen.findByRole('button', { name: 'Holdings' }))
     expect(await screen.findByText('Sosnovo')).toBeInTheDocument()
-    await userEvent.click(screen.getByRole('button', { name: 'Hide Sosnovo' }))
-    expect(useAssetStore.getState().assets[0]?.trackingStatus).toBe('excluded')
+    await userEvent.click(screen.getByText('Sosnovo'))
+    expect(
+      screen.getByText('Sosnovo').closest('[data-swipe-open]'),
+    ).toHaveAttribute('data-swipe-open', 'true')
+    await act(async () => {
+      screen.getByRole('button', { name: 'Hide Sosnovo' }).click()
+    })
+    await waitFor(() => {
+      expect(useAssetStore.getState().assets[0]?.trackingStatus).toBe(
+        'excluded',
+      )
+    })
     expect(await screen.findByText('Sosnovo')).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Show Sosnovo' })).toBeInTheDocument()
-    await userEvent.click(screen.getByRole('button', { name: 'Show Sosnovo' }))
-    expect(useAssetStore.getState().assets[0]?.trackingStatus).toBe('included')
+    await act(async () => {
+      screen.getByRole('button', { name: 'Show Sosnovo' }).click()
+    })
+    await waitFor(() => {
+      expect(useAssetStore.getState().assets[0]?.trackingStatus).toBe(
+        'included',
+      )
+    })
   })
 
   it('shows a hidden Positions row in a disabled visual state (#148)', async () => {
@@ -1166,7 +1182,9 @@ describe('DashboardScreen', () => {
     await userEvent.click(await screen.findByRole('button', { name: 'Holdings' }))
     const row = (await screen.findByText('Sosnovo')).closest('[data-excluded]')
     expect(row).toHaveAttribute('data-excluded', 'false')
-    await userEvent.click(screen.getByRole('button', { name: 'Hide Sosnovo' }))
+    await act(async () => {
+      screen.getByRole('button', { name: 'Hide Sosnovo' }).click()
+    })
     const hidden = (await screen.findByText('Sosnovo')).closest('[data-excluded]')
     expect(hidden).toHaveAttribute('data-excluded', 'true')
     expect(hidden).toHaveClass('opacity-60')
@@ -1223,7 +1241,9 @@ describe('DashboardScreen', () => {
       formatAmount(5_001_000, 'EUR'),
     )
     await userEvent.click(screen.getByRole('button', { name: 'Holdings' }))
-    await userEvent.click(await screen.findByRole('button', { name: 'Hide Sosnovo' }))
+    await act(async () => {
+      ;(await screen.findByRole('button', { name: 'Hide Sosnovo' })).click()
+    })
     expect(await screen.findByText('Sosnovo')).toBeInTheDocument()
     expect(await screen.findByTestId('positions-total')).toHaveTextContent(
       formatAmount(1000, 'EUR'),

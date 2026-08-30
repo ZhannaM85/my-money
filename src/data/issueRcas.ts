@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 154,
+    title: {
+      en: 'Dashboard Positions: tap row to reveal Hide (same as Allocation)',
+      ru: 'Позиции на Сводке: нажатие открывает «Скрыть» (как в распределении)',
+    },
+    en: '#146 shipped swipe. After Allocation moved to tap (#150), Positions tap did nothing. Same revealOn=click as Allocation.',
+    ru: '#146 сделали свайпом. После перехода распределения на нажатие (#150) тап по позициям ничего не делал. Тот же revealOn=click, что в распределении.',
+  },
+  {
     issue: 153,
     title: {
       en: 'Assets: wrap filter chips instead of a horizontal scrollbar',

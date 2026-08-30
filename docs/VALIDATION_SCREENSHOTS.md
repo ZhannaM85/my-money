@@ -46,6 +46,7 @@ gh issue edit 108 --add-label validation
 | `119-duplicate-soft-warning.png` | Asset details duplicate soft warning (#119) |
 | `149-add-asset-house-chip.png` | Add asset · Quick add House chip selected (#149) |
 | `146-positions-swipe-hide.png` | Dashboard Positions · swipe left Hide CTA (#146) |
+| `154-positions-tap-hide.png` | Dashboard Positions · tap row to reveal Hide (#154) |
 | `147-positions-hidden-from-total.png` | Dashboard · hidden asset dropped from total (#147) |
 | `150-allocation-swipe-hide.png` | Allocation · tap expanded holding to reveal Hide (#150) |
 | `148-positions-hidden-disabled.png` | Dashboard Positions · hidden row disabled (#148) |
