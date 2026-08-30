@@ -346,6 +346,37 @@ export const en: Dictionary = {
     fxDebugSaveFailed: 'Could not save the log.',
     fxDebugEmpty:
       'No events yet. Open Dashboard or tap an Allocation holding while debug is on.',
+    readPrivacyPolicyLabel: 'Privacy policy',
+  },
+  privacyPolicy: {
+    title: 'Privacy Policy',
+    description: 'How My Money handles your data',
+    lastUpdatedLabel: (date) => `Last updated: ${date}`,
+    collectionHeading: 'What we collect',
+    collectionBody:
+      'My Money does not collect any data automatically. Everything in the app was entered by you: assets, liabilities, amounts, dates, and settings, plus anything you choose to import from a backup or CSV file.',
+    storageHeading: 'Where your data lives',
+    storageBody:
+      'All data is stored locally on your own device, in this browser’s or app’s storage (IndexedDB). There is no account, no server, and no cloud sync — My Money never sees your balances.',
+    networkHeading: 'Network',
+    networkBody:
+      'The only expected network call is a request for public foreign-exchange reference rates (currency codes and dates only). User balances, names, and assets are never sent. If rates cannot be fetched, the app keeps last cached quotes.',
+    sharingHeading: 'Sharing with third parties',
+    sharingBody:
+      'Your data is never sold, shared, or transmitted anywhere except the FX request above. The app contains no analytics, advertising, or tracking of any kind.',
+    exportHeading: 'Exporting your data',
+    exportBody:
+      'The only way your data ever leaves your device is if you choose to export it yourself (JSON backup or CSV) from More. Where that file goes afterward is entirely up to you.',
+    childrenHeading: 'Children',
+    childrenBody:
+      'My Money is not directed at children and does not knowingly collect data from anyone, including children — nothing is collected automatically regardless of age.',
+    changesHeading: 'Changes to this policy',
+    changesBody:
+      'If this policy ever changes, the update will be posted on this same page.',
+    contactHeading: 'Contact',
+    contactBody:
+      'Questions about this policy can be sent via the project’s GitHub page: https://github.com/ZhannaM85/my-money',
+    backToSettingsLabel: 'Back to More',
   },
   backup: {
     title: 'Backup',

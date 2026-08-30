@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 176,
+    issue: 164,
+    date: '2026-08-30T16:15:00+03:00',
+    en: 'More links to a Privacy Policy page. App Store and Play listings can use that URL. Your data stays on this device.',
+    ru: 'В «Ещё» есть ссылка на политику конфиденциальности. App Store и Play могут указать этот адрес. Данные остаются на этом устройстве.',
+  },
+  {
     version: 175,
     issue: 157,
     date: '2026-08-30T18:25:00+03:00',

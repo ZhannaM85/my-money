@@ -197,6 +197,12 @@ export function SettingsScreen() {
       <Button asChild variant="outline" size="xl" className="w-full">
         <Link to="/allocation">{t.settings.allocation}</Link>
       </Button>
+      <Link
+        to="/privacy"
+        className="text-sm text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
+      >
+        {t.settings.readPrivacyPolicyLabel}
+      </Link>
       <BackupSection />
       <CsvSection />
       <section id="release-notes" className="flex flex-col gap-3">

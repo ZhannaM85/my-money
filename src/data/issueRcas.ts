@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 164,
+    title: {
+      en: 'Privacy policy page for app stores',
+      ru: 'Страница политики конфиденциальности',
+    },
+    en: 'Not a defect. Planned work. App Store and Play listings need a public /privacy URL. Data stays on-device; FX rates are the only expected network call.',
+    ru: 'Не дефект. Запланировано. App Store и Play нужен публичный URL /privacy. Данные на устройстве; единственный ожидаемый сетевой запрос — курсы FX.',
+  },
+  {
     issue: 161,
     title: {
       en: 'FX debug: save log as a .txt file',

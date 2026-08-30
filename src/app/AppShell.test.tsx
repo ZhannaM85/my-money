@@ -124,6 +124,33 @@ describe('AppShell', () => {
     ).toBeInTheDocument()
     expect(screen.getByRole('navigation', { name: 'Tabs' })).toBeInTheDocument()
   })
+
+  it('does not redirect /privacy to onboarding so store listings can open the policy (#164)', async () => {
+    await db.settings.put({
+      ...DEFAULT_SETTINGS,
+      onboardingCompleted: false,
+      updatedAt: '2026-08-17T00:00:00.000Z',
+    })
+    useSettingsStore.setState({
+      settings: { ...DEFAULT_SETTINGS, onboardingCompleted: false },
+      loaded: false,
+    })
+    const router = createMemoryRouter(
+      [
+        {
+          element: <AppShell />,
+          children: [
+            { path: '/privacy', element: <div>Privacy Policy</div> },
+            { path: '/onboarding', element: <div>Onboarding welcome</div> },
+          ],
+        },
+      ],
+      { initialEntries: ['/privacy'] },
+    )
+    render(<RouterProvider router={router} />)
+    expect(await screen.findByText('Privacy Policy')).toBeInTheDocument()
+    expect(screen.queryByText('Onboarding welcome')).not.toBeInTheDocument()
+  })
 })
 
 function renderShellWithInput(onConfirm?: () => void) {

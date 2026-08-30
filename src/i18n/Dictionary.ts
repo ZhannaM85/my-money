@@ -267,6 +267,30 @@ export interface Dictionary {
     fxDebugCopyFailed: string
     fxDebugSaveFailed: string
     fxDebugEmpty: string
+    readPrivacyPolicyLabel: string
+  }
+  /** #164 — full privacy policy at `/privacy` (store listings need a stable URL). */
+  privacyPolicy: {
+    title: string
+    description: string
+    lastUpdatedLabel: (date: string) => string
+    collectionHeading: string
+    collectionBody: string
+    storageHeading: string
+    storageBody: string
+    networkHeading: string
+    networkBody: string
+    sharingHeading: string
+    sharingBody: string
+    exportHeading: string
+    exportBody: string
+    childrenHeading: string
+    childrenBody: string
+    changesHeading: string
+    changesBody: string
+    contactHeading: string
+    contactBody: string
+    backToSettingsLabel: string
   }
   backup: {
     title: string

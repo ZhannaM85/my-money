@@ -122,4 +122,14 @@ describe('SettingsScreen', () => {
     await user.click(screen.getByRole('button', { name: 'Fresh' }))
     expect(document.documentElement.dataset.mood).toBe('fresh')
   })
+
+  it('links to the privacy policy page (#164)', async () => {
+    render(
+      <MemoryRouter>
+        <SettingsScreen />
+      </MemoryRouter>,
+    )
+    const link = await screen.findByRole('link', { name: 'Privacy policy' })
+    expect(link).toHaveAttribute('href', '/privacy')
+  })
 })

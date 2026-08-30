@@ -330,7 +330,7 @@ Until later feature epics land, UI module tables below are still the intended ma
 | `features/assets/` | List, filters, create/edit |
 | `features/allocation/` | Donut + legend |
 | `features/history/` | Net-worth snapshots over ranges |
-| `features/settings/` | Base currency, locale, tracking, export/import |
+| `features/settings/` | Base currency, locale, tracking, export/import, `/privacy` (#164) |
 | `features/export/` | JSON (backup) then CSV |
 
 ---

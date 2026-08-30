@@ -64,7 +64,12 @@ export function AppShell() {
   useEffect(() => {
     if (!assetsLoaded || !settingsLoaded) return
     if (!shouldShowOnboarding(assetCount, onboardingCompleted)) return
-    if (pathname === '/onboarding' || pathname === '/settings') return
+    if (
+      pathname === '/onboarding' ||
+      pathname === '/settings' ||
+      pathname === '/privacy'
+    )
+      return
     navigate('/onboarding', { replace: true })
   }, [
     assetCount,

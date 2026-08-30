@@ -648,3 +648,17 @@ test('capture FX debug Save .txt (#161)', async ({ page }) => {
     fullPage: true,
   })
 })
+
+test('capture privacy policy page (#164)', async ({ page }) => {
+  await seedValidationFixture(page)
+  await page.goto('/privacy')
+  await expect(
+    page.getByRole('heading', { name: 'Privacy Policy' }),
+  ).toBeVisible()
+  await expect(page.getByText('What we collect')).toBeVisible()
+  await expect(page.getByText('Network', { exact: true })).toBeVisible()
+  await page.screenshot({
+    path: join(outDir, '164-privacy-policy.png'),
+    fullPage: true,
+  })
+})

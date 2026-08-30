@@ -10,7 +10,7 @@ import {
 import { UpdateFinancesScreen } from '@/features/update-finances'
 import { AllocationScreen } from '@/features/allocation'
 import { HistoryScreen } from '@/features/history'
-import { SettingsScreen } from '@/features/settings'
+import { PrivacyScreen, SettingsScreen } from '@/features/settings'
 import { OnboardingScreen } from '@/features/onboarding'
 
 export const routes: RouteObject[] = [
@@ -26,6 +26,7 @@ export const routes: RouteObject[] = [
       { path: '/allocation', element: <AllocationScreen /> },
       { path: '/history', element: <HistoryScreen /> },
       { path: '/settings', element: <SettingsScreen /> },
+      { path: '/privacy', element: <PrivacyScreen /> },
       { path: '/onboarding', element: <OnboardingScreen /> },
     ],
   },
