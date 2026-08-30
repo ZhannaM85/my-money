@@ -32,6 +32,7 @@ _After the four web flows feel good. Android wraps this app; iOS does not._
 | [#154](https://github.com/ZhannaM85/my-money/issues/154) | 🔍 Pending validation | Dashboard Positions: tap row to reveal Hide (same as Allocation) | #146 shipped swipe; tap does nothing. Match Allocation #150 tap-to-reveal. |
 | [#155](https://github.com/ZhannaM85/my-money/issues/155) | 🔍 Pending validation | Allocation: hidden assets vanish when they were the last in a slice | Hide all Property → class gone. Keep greyed so Show still works. Totals stay excluded. Dashboard persist → #156. |
 | [#156](https://github.com/ZhannaM85/my-money/issues/156) | 🔍 Pending validation | Dashboard: keep hidden assets in Positions (disabled) after hide from Allocation | Same keep-visible-disabled as #155; must stick on Dashboard after navigation/reload. Related #148. |
+| [#157](https://github.com/ZhannaM85/my-money/issues/157) | 🔲 Open | Allocation: Show/Hide needs three or four taps (Dashboard is one tap) | Expanded holding under Class card. Class expand button likely steals taps. Related #150 / #154. |
 
 ---
 
