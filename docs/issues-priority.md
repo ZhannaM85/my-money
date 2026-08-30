@@ -26,9 +26,6 @@ _After the four web flows feel good. Android wraps this app; iOS does not._
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
 | [#157](https://github.com/ZhannaM85/my-money/issues/157) | 🔲 Open | Allocation: Show/Hide needs three or four taps (Dashboard is one tap) | Device log: reveal-click works; extra taps are pointerdown without click after Hide/ensureRates re-render. |
-| [#158](https://github.com/ZhannaM85/my-money/issues/158) | 🔍 Pending validation | Assets list: Hide/Show like Dashboard Positions | Option 2: ⋮ overflow with Hide/Show, tap still opens details. Excluded rows greyed. `excluded`, not archive. |
-| [#160](https://github.com/ZhannaM85/my-money/issues/160) | 🔍 Pending validation | Assets list: show excluded assets at the bottom | Included first; excluded after, still sorted within the group. Archived stays on its chip. |
-| [#161](https://github.com/ZhannaM85/my-money/issues/161) | 🔍 Pending validation | FX debug: save log as a .txt file | Copy is too big for Telegram/email. Download/share `my-money-debug.txt`. |
 
 ---
 
