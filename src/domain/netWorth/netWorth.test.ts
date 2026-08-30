@@ -568,6 +568,34 @@ describe('allocationSliceHoldings (#122)', () => {
       },
     ])
   })
+
+  it('lists excluded assets in a slice as excluded (#150)', () => {
+    const cash = asset({ id: 'cash', name: 'Euro cash' })
+    const house = asset({
+      id: 'house',
+      name: 'Sosnovo',
+      assetClass: 'property',
+      type: 'house',
+      trackingStatus: 'excluded',
+    })
+    const rows = allocationSliceHoldings(
+      [cash, house],
+      [
+        snap({ id: 's1', assetId: 'cash', amount: 1000 }),
+        snap({ id: 's2', assetId: 'house', amount: 5_000_000 }),
+      ],
+      (row) => row.assetClass === 'property',
+    )
+    expect(rows).toEqual([
+      {
+        assetId: 'house',
+        name: 'Sosnovo',
+        amount: 5_000_000,
+        currency: 'EUR',
+        excluded: true,
+      },
+    ])
+  })
 })
 
 describe('holdingsWithConversion', () => {

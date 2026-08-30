@@ -5,6 +5,8 @@ import type { AllocationHolding } from '@/domain/netWorth'
 import { useLocale, useTranslation } from '@/i18n'
 import { formatAmount } from '@/shared/lib/money'
 import { cn } from '@/shared/lib/utils'
+import { SwipeRevealRow } from '@/shared/ui/swipe-reveal-row'
+import { useAssetStore } from '@/stores/assetStore'
 
 const SLICE_COLORS = [
   'var(--chart-money)',
@@ -43,6 +45,7 @@ export function AllocationChart({
 }) {
   const locale = useLocale()
   const t = useTranslation()
+  const setTrackingStatus = useAssetStore((state) => state.setTrackingStatus)
   const [openId, setOpenId] = useState<string | null>(null)
   const pieData = rows.map((row) => ({
     ...row,
@@ -165,33 +168,61 @@ export function AllocationChart({
                 </div>
               )}
               {open &&
-                holdings.map((holding) => (
-                  <div
-                    key={holding.assetId}
-                    className="flex items-center justify-between gap-3 border-t border-border pt-2"
-                  >
-                    <span className="flex min-w-0 flex-col">
-                      <span className="truncate text-sm">{holding.name}</span>
-                      {holding.institution ? (
-                        <span className="truncate text-xs text-muted-foreground">
-                          {holding.institution}
+                holdings.map((holding) => {
+                  const excluded = Boolean(holding.excluded)
+                  return (
+                    <SwipeRevealRow
+                      key={holding.assetId}
+                      actionLabel={
+                        excluded
+                          ? t.dashboard.showOnPositions
+                          : t.dashboard.hideFromPositions
+                      }
+                      actionAria={
+                        excluded
+                          ? t.dashboard.showOnPositionsAria(holding.name)
+                          : t.dashboard.hideFromPositionsAria(holding.name)
+                      }
+                      onAction={() =>
+                        void setTrackingStatus(
+                          holding.assetId,
+                          excluded ? 'included' : 'excluded',
+                        )
+                      }
+                    >
+                      <div
+                        data-excluded={excluded ? 'true' : 'false'}
+                        className={cn(
+                          'flex items-center justify-between gap-3 border-t border-border bg-card py-2',
+                          excluded && 'opacity-60 text-muted-foreground',
+                        )}
+                      >
+                        <span className="flex min-w-0 flex-col">
+                          <span className="truncate text-sm">
+                            {holding.name}
+                          </span>
+                          {holding.institution ? (
+                            <span className="truncate text-xs text-muted-foreground">
+                              {holding.institution}
+                            </span>
+                          ) : null}
+                          {holding.ownershipShare ? (
+                            <span className="text-xs text-muted-foreground">
+                              {t.asset.yourShare(holding.ownershipShare)}
+                            </span>
+                          ) : null}
                         </span>
-                      ) : null}
-                      {holding.ownershipShare ? (
-                        <span className="text-xs text-muted-foreground">
-                          {t.asset.yourShare(holding.ownershipShare)}
+                        <span className="shrink-0 tabular-nums text-sm">
+                          {formatAmount(
+                            holding.amount,
+                            holding.currency,
+                            locale,
+                          )}
                         </span>
-                      ) : null}
-                    </span>
-                    <span className="shrink-0 tabular-nums text-sm">
-                      {formatAmount(
-                        holding.amount,
-                        holding.currency,
-                        locale,
-                      )}
-                    </span>
-                  </div>
-                ))}
+                      </div>
+                    </SwipeRevealRow>
+                  )
+                })}
             </li>
           )
         })}

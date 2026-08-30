@@ -20,6 +20,15 @@ export const issueRcas: IssueRca[] = [
     ru: 'Доля уже хранилась и учитывалась в капитале (#28), но в списках была только уменьшенная сумма. Теперь при доле не 100% показывается «Ваша доля: 1/2».',
   },
   {
+    issue: 150,
+    title: {
+      en: 'Allocation: hide/exclude assets and drop them from comparison',
+      ru: 'Распределение: скрывать активы и убирать их из сравнения',
+    },
+    en: 'Dashboard Hide (#146) did not exist on Allocation expanded rows, and comparison still listed excluded holdings. Same swipe Hide; comparison omits those rows.',
+    ru: 'Скрытие со Сводки (#146) не работало на развёрнутых строках распределения, а сравнение всё ещё показывало excluded. Тот же свайп «Скрыть»; сравнение эти строки не берёт.',
+  },
+  {
     issue: 149,
     title: {
       en: 'Quick add: House chip on Add asset',

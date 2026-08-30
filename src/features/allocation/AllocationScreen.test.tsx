@@ -309,4 +309,56 @@ describe('AllocationScreen', () => {
     )
     expect(await screen.findByText('Your share: 1/2')).toBeInTheDocument()
   })
+
+  it('hides an expanded holding from Allocation without removing the row (#150)', async () => {
+    const user = userEvent.setup()
+    await useAssetStore.getState().saveAsset(
+      {
+        id: 'other',
+        name: 'Savings',
+        assetClass: 'money',
+        type: 'bank',
+        currency: 'EUR',
+        trackingStatus: 'included',
+        valuationMethod: 'account_balance',
+        updateFrequency: 'weekly',
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        assetId: 'other',
+        date: '2026-08-17',
+        amount: 200,
+        currency: 'EUR',
+      },
+    )
+    const settings = {
+      ...DEFAULT_SETTINGS,
+      currencyDisplayMode: 'native' as const,
+      baseCurrency: 'EUR',
+    }
+    await db.settings.put(settings)
+    useSettingsStore.setState({ settings, loaded: true })
+    render(
+      <MemoryRouter>
+        <AllocationScreen />
+      </MemoryRouter>,
+    )
+    await user.click(await screen.findByRole('button', { name: 'Type' }))
+    await user.click(
+      await screen.findByRole('button', {
+        name: 'Bank account · EUR · Holdings',
+      }),
+    )
+    expect(await screen.findByText('Revolut')).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Hide Revolut' }))
+    expect(useAssetStore.getState().assets.find((a) => a.id === 'a1')?.trackingStatus).toBe(
+      'excluded',
+    )
+    expect(await screen.findByText('Revolut')).toBeInTheDocument()
+    expect(
+      screen.getByText('Revolut').closest('[data-excluded]'),
+    ).toHaveAttribute('data-excluded', 'true')
+    expect(screen.getByText('Savings')).toBeInTheDocument()
+  })
 })

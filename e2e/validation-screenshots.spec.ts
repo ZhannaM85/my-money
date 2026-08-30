@@ -74,6 +74,27 @@ test('capture Allocation Type expanded holdings (#123)', async ({ page }) => {
   })
 })
 
+test('capture Allocation expanded swipe Hide (#150)', async ({ page }) => {
+  await seedValidationFixture(page, { currencyDisplayMode: 'base' })
+  await page.goto('/allocation')
+  await expect(page.getByRole('heading', { name: 'Allocation' })).toBeVisible()
+  const slice = page.getByRole('button', { name: 'Money · Holdings' })
+  await slice.click()
+  await expect(page.getByText('Euro cash')).toBeVisible()
+  await page.getByRole('button', { name: 'Hide Euro cash' }).evaluate((el) =>
+    (el as HTMLButtonElement).click(),
+  )
+  await page.reload()
+  await expect(page.getByRole('heading', { name: 'Allocation' })).toBeVisible()
+  await slice.click()
+  await expect(page.getByText('Euro cash')).toBeVisible()
+  await expect(page.locator('[data-excluded="true"]')).toBeVisible()
+  await page.screenshot({
+    path: join(outDir, '150-allocation-swipe-hide.png'),
+    fullPage: true,
+  })
+})
+
 test('capture Dashboard chart controls and As of (#111, #112, #116, #117)', async ({
   page,
 }) => {

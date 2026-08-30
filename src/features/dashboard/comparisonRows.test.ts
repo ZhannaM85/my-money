@@ -72,4 +72,34 @@ describe('comparisonRows (#137)', () => {
     ])
     expect(rows[0]?.ownershipShare).toBe('1/2')
   })
+
+  it('omits excluded holdings from comparison rows (#150)', () => {
+    const rows = comparisonRows([
+      {
+        date: '2026-08-25',
+        total: 100,
+        missingRates: [],
+        holdings: [
+          {
+            assetId: 'cash',
+            name: 'Cash',
+            currency: 'EUR',
+            nativeAmount: 100,
+            convertedAmount: 100,
+            conversionAvailable: true,
+          },
+          {
+            assetId: 'house',
+            name: 'Sosnovo',
+            currency: 'EUR',
+            nativeAmount: 5_000_000,
+            convertedAmount: 5_000_000,
+            conversionAvailable: true,
+            excluded: true,
+          },
+        ],
+      },
+    ])
+    expect(rows.map((row) => row.name)).toEqual(['Cash'])
+  })
 })

@@ -98,6 +98,7 @@ export type AllocationHolding = {
   amount: number
   currency: string
   ownershipShare?: string
+  excluded?: boolean
 }
 
 /** Assets that belong in one Allocation Class, Currency, or Type slice (#122, #123). */
@@ -108,7 +109,7 @@ export function allocationSliceHoldings(
 ): AllocationHolding[] {
   const rows: AllocationHolding[] = []
   for (const asset of assets) {
-    if (!contributesToNetWorth(asset)) continue
+    if (!isListedOnDashboard(asset)) continue
     const snapshot = latestSnapshot(snapshots, asset.id)
     if (!snapshot) continue
     if (!match(asset, snapshot)) continue
@@ -122,6 +123,7 @@ export function allocationSliceHoldings(
       amount: signed,
       currency: snapshot.currency,
       ...(ownershipShare ? { ownershipShare } : {}),
+      ...(asset.trackingStatus === 'excluded' ? { excluded: true } : {}),
     })
   }
   return rows.sort((a, b) => a.name.localeCompare(b.name))

@@ -316,4 +316,56 @@ describe('ComparisonScreen (#137)', () => {
     expect(await screen.findByText('Sosnovo')).toBeInTheDocument()
     expect(screen.getByText('Your share: 1/2')).toBeInTheDocument()
   })
+
+  it('omits excluded assets from the comparison table (#150)', async () => {
+    const now = '2026-08-17T00:00:00.000Z'
+    await useAssetStore.getState().saveAsset(
+      {
+        id: 'cash',
+        name: 'Cash',
+        assetClass: 'money',
+        type: 'cash',
+        currency: 'EUR',
+        trackingStatus: 'included',
+        valuationMethod: 'account_balance',
+        updateFrequency: 'weekly',
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        assetId: 'cash',
+        date: '2026-08-25',
+        amount: 100,
+        currency: 'EUR',
+      },
+    )
+    await useAssetStore.getState().saveAsset(
+      {
+        id: 'house',
+        name: 'Sosnovo',
+        assetClass: 'property',
+        type: 'house',
+        currency: 'EUR',
+        trackingStatus: 'excluded',
+        valuationMethod: 'account_balance',
+        updateFrequency: 'yearly',
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        assetId: 'house',
+        date: '2026-08-25',
+        amount: 5_000_000,
+        currency: 'EUR',
+      },
+    )
+    useComparisonStore.setState({ dates: ['2026-08-25', '2026-08-29'] })
+    render(
+      <MemoryRouter>
+        <ComparisonScreen />
+      </MemoryRouter>,
+    )
+    expect(await screen.findByText('Cash')).toBeInTheDocument()
+    expect(screen.queryByText('Sosnovo')).not.toBeInTheDocument()
+  })
 })

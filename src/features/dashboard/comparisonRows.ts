@@ -20,6 +20,7 @@ export function comparisonRows(
   >()
   for (const point of points) {
     for (const holding of point.holdings) {
+      if (holding.excluded) continue
       let row = byAsset.get(holding.assetId)
       if (!row) {
         row = {

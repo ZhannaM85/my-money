@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 161,
+    issue: 150,
+    date: '2026-08-30T12:50:00+03:00',
+    en: 'On Allocation, swipe left on an expanded asset to Hide it. Hidden assets stay greyed there and drop out of the comparison table.',
+    ru: 'В распределении свайп влево по развёрнутому активу скрывает его. Скрытый остаётся серым там и не попадает в таблицу сравнения.',
+  },
+  {
     version: 160,
     issue: 147,
     date: '2026-08-30T12:35:00+03:00',
