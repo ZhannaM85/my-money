@@ -101,6 +101,60 @@ describe('AssetsScreen', () => {
     ])
     await user.click(screen.getByRole('button', { name: 'Hidden' }))
     expect(listedAssetHrefs()).toEqual(['/assets/old'])
+    expect(
+      screen.queryByRole('button', { name: 'Hide Old cash' }),
+    ).not.toBeInTheDocument()
+  })
+
+  it('hides from a trailing control and greys the row without opening details (#158)', async () => {
+    const user = userEvent.setup()
+    await addNamedAsset('cash', 'Cash', 50, 'EUR')
+    render(
+      <MemoryRouter>
+        <AssetsScreen />
+      </MemoryRouter>,
+    )
+    expect(await screen.findByRole('link', { name: /Broker/ })).toHaveAttribute(
+      'href',
+      '/assets/a1',
+    )
+    await user.click(screen.getByRole('button', { name: 'Hide Broker' }))
+    await waitFor(() => {
+      expect(useAssetStore.getState().assets.find((a) => a.id === 'a1')
+        ?.trackingStatus).toBe('excluded')
+    })
+    expect(screen.getByRole('heading', { name: 'Assets' })).toBeInTheDocument()
+    const hidden = screen.getByText('Broker').closest('[data-excluded]')
+    expect(hidden).toHaveAttribute('data-excluded', 'true')
+    expect(hidden).toHaveClass('opacity-60')
+    const show = screen.getByRole('button', { name: 'Show Broker' })
+    expect(show).toHaveAttribute('data-action-tone', 'positive')
+    expect(listedAssetHrefs()).toEqual(['/assets/cash', '/assets/a1'])
+    await user.click(show)
+    await waitFor(() => {
+      expect(useAssetStore.getState().assets.find((a) => a.id === 'a1')
+        ?.trackingStatus).toBe('included')
+    })
+    expect(
+      screen.getByText('Broker').closest('[data-excluded]'),
+    ).toHaveAttribute('data-excluded', 'false')
+  })
+
+  it('hides the trailing Hide control while reordering (#158)', async () => {
+    const user = userEvent.setup()
+    await addNamedAsset('cash', 'Cash', 50, 'EUR')
+    render(
+      <MemoryRouter>
+        <AssetsScreen />
+      </MemoryRouter>,
+    )
+    expect(
+      await screen.findByRole('button', { name: 'Hide Broker' }),
+    ).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Reorder' }))
+    expect(
+      screen.queryByRole('button', { name: 'Hide Broker' }),
+    ).not.toBeInTheDocument()
   })
 
   it('shows type and institution on the muted Assets subtitle (#109)', async () => {

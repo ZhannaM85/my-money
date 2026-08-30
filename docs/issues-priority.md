@@ -26,7 +26,7 @@ _After the four web flows feel good. Android wraps this app; iOS does not._
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
 | [#157](https://github.com/ZhannaM85/my-money/issues/157) | 🔲 Open | Allocation: Show/Hide needs three or four taps (Dashboard is one tap) | Still 3 taps on device after first fix. Tap log via Settings FX debug (Copy). Related #150 / #154. |
-| [#158](https://github.com/ZhannaM85/my-money/issues/158) | 🔲 Open | Assets list: Hide/Show like Dashboard Positions | Row is a link to details — same first-tap reveal would steal open. Discuss shape before implementing. |
+| [#158](https://github.com/ZhannaM85/my-money/issues/158) | 🔍 Pending validation | Assets list: Hide/Show like Dashboard Positions | Option 2: trailing Hide/Show, tap still opens details. Excluded rows greyed. `excluded`, not archive. |
 | [#159](https://github.com/ZhannaM85/my-money/issues/159) | 🔍 Pending validation | Show action should be green (Hide stays red) | SwipeRevealRow uses destructive red for both. Show = restore, should be green. |
 | [#160](https://github.com/ZhannaM85/my-money/issues/160) | 🔍 Pending validation | Assets list: show excluded assets at the bottom | Included first; excluded after, still sorted within the group. Archived stays on its chip. |
 

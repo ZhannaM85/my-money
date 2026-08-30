@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 172,
+    issue: 158,
+    date: '2026-08-30T17:35:00+03:00',
+    en: 'On Assets, Hide and Show sit on the trailing edge of each row so a tap still opens details. Hidden rows are greyed, like Dashboard and Allocation.',
+    ru: 'На экране активов «Скрыть» и «Показать» справа в строке, поэтому нажатие по-прежнему открывает карточку. Скрытые строки серые, как на Сводке и в распределении.',
+  },
+  {
     version: 171,
     issue: 160,
     date: '2026-08-30T17:20:00+03:00',

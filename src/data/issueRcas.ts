@@ -29,6 +29,15 @@ export const issueRcas: IssueRca[] = [
     ru: 'SwipeRevealRow всегда был красным destructive. «Показать» — восстановление, поэтому зелёный токен investments; «Скрыть» остаётся красным.',
   },
   {
+    issue: 158,
+    title: {
+      en: 'Assets list: Hide/Show like Dashboard Positions',
+      ru: 'Список активов: «Скрыть»/«Показать» как в позициях на Сводке',
+    },
+    en: 'The whole Assets row was a details link, so Dashboard tap-to-reveal would steal open. Trailing Hide/Show is a sibling of the link; excluded rows use the same greyed opacity as Positions.',
+    ru: 'Вся строка активов была ссылкой на карточку, поэтому нажатие как на Сводке перехватывало бы открытие. «Скрыть»/«Показать» справа рядом со ссылкой; excluded те же серые, что позиции.',
+  },
+  {
     issue: 157,
     title: {
       en: 'Allocation: Show/Hide needs three or four taps (Dashboard is one tap)',

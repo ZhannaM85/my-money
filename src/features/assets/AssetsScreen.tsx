@@ -110,6 +110,7 @@ export function AssetsScreen() {
   const t = useTranslation()
   const locale = useLocale()
   const loadAssets = useAssetStore((state) => state.load)
+  const setTrackingStatus = useAssetStore((state) => state.setTrackingStatus)
   const assets = useAssetStore((state) => state.assets)
   const snapshots = useAssetStore((state) => state.snapshots)
   const loaded = useAssetStore((state) => state.loaded)
@@ -334,14 +335,21 @@ export function AssetsScreen() {
                 const secondaryLabel = sameCurrency
                   ? (snapshot?.currency ?? asset.currency)
                   : t.common.native(snapshot?.currency ?? asset.currency)
+                const excluded = asset.trackingStatus === 'excluded'
+                const showRowAction =
+                  !reorder.reordering && filter !== 'archived'
                 const inner = (
                   <Link
                     to={`/assets/${asset.id}`}
+                    data-excluded={excluded ? 'true' : 'false'}
                     className={cn(
                       'flex min-w-0 items-center justify-between gap-3',
                       reorder.reordering
                         ? 'flex-1 py-3 pr-4'
-                        : 'rounded-xl bg-card px-4 py-3 ring-1 ring-foreground/10',
+                        : showRowAction
+                          ? 'min-w-0 flex-1 px-4 py-3'
+                          : 'rounded-xl bg-card px-4 py-3 ring-1 ring-foreground/10',
+                      excluded && 'opacity-60 text-muted-foreground',
                     )}
                   >
                     <span className="flex min-w-0 flex-col">
@@ -353,7 +361,7 @@ export function AssetsScreen() {
                         ]
                           .filter(Boolean)
                           .join(' · ')}
-                        {asset.trackingStatus === 'excluded'
+                        {excluded
                           ? ` · ${t.asset.notCountedInNetWorth}`
                           : ''}
                         {estimated
@@ -380,16 +388,52 @@ export function AssetsScreen() {
                     </span>
                   </Link>
                 )
-                return reorder.reordering ? (
-                  <SortableAssetRow
+                if (reorder.reordering) {
+                  return (
+                    <SortableAssetRow
+                      key={asset.id}
+                      id={asset.id}
+                      reorderLabel={t.assets.reorderAria(asset.name)}
+                    >
+                      {inner}
+                    </SortableAssetRow>
+                  )
+                }
+                if (!showRowAction) {
+                  return <li key={asset.id}>{inner}</li>
+                }
+                return (
+                  <li
                     key={asset.id}
-                    id={asset.id}
-                    reorderLabel={t.assets.reorderAria(asset.name)}
+                    className="flex items-stretch overflow-hidden rounded-xl bg-card ring-1 ring-foreground/10"
                   >
                     {inner}
-                  </SortableAssetRow>
-                ) : (
-                  <li key={asset.id}>{inner}</li>
+                    <button
+                      type="button"
+                      className={cn(
+                        'flex w-24 shrink-0 items-center justify-center text-sm font-medium text-white',
+                        excluded
+                          ? 'bg-[var(--chart-investments)]'
+                          : 'bg-destructive',
+                      )}
+                      data-action-tone={excluded ? 'positive' : 'destructive'}
+                      aria-label={
+                        excluded
+                          ? t.dashboard.showOnPositionsAria(asset.name)
+                          : t.dashboard.hideFromPositionsAria(asset.name)
+                      }
+                      onClick={() =>
+                        void setTrackingStatus(
+                          asset.id,
+                          excluded ? 'included' : 'excluded',
+                        )
+                      }
+                    >
+                      {excluded
+                        ? t.dashboard.showOnPositions
+                        : t.dashboard.hideFromPositions}
+                    </button>
+                  </li>
                 )
               })}
             </ul>
