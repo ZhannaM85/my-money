@@ -1185,8 +1185,12 @@ describe('DashboardScreen', () => {
     await act(async () => {
       screen.getByRole('button', { name: 'Hide Sosnovo' }).click()
     })
-    const hidden = (await screen.findByText('Sosnovo')).closest('[data-excluded]')
-    expect(hidden).toHaveAttribute('data-excluded', 'true')
+    await waitFor(() => {
+      expect(
+        screen.getByText('Sosnovo').closest('[data-excluded]'),
+      ).toHaveAttribute('data-excluded', 'true')
+    })
+    const hidden = screen.getByText('Sosnovo').closest('[data-excluded]')
     expect(hidden).toHaveClass('opacity-60')
   })
 
