@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 183,
+    title: {
+      en: 'Update Save icon while reordering',
+      ru: 'Иконка сохранения при порядке на «Обновить»',
+    },
+    en: 'The #179 toggle kept the numbered-list glyph after entering reorder, so the save tap still looked like “list.” Reordering now shows Save; idle stays ListOrdered.',
+    ru: 'Переключатель #179 оставлял иконку нумерованного списка после входа в порядок, поэтому сохранение выглядело как «список». В режиме порядка теперь Save; в покое — ListOrdered.',
+  },
+  {
     issue: 182,
     title: {
       en: 'Comparison date columns clip amounts',

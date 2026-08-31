@@ -14,7 +14,7 @@ import {
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
-import { GripVertical, ListOrdered, Pencil } from 'lucide-react'
+import { GripVertical, ListOrdered, Pencil, Save } from 'lucide-react'
 import { isSuggestedUpdate } from '@/domain/asset'
 import { latestSnapshot, snapshotBeforeDate, snapshotOnDate } from '@/domain/snapshot'
 import { sortAssets } from '@/features/assets/assetListOrder'
@@ -350,7 +350,11 @@ export function UpdateFinancesScreen() {
                 }
                 onClick={toggleReorder}
               >
-                <ListOrdered className="size-5" aria-hidden />
+                {reorder.reordering ? (
+                  <Save className="size-5" aria-hidden />
+                ) : (
+                  <ListOrdered className="size-5" aria-hidden />
+                )}
               </Button>
             </div>
           ) : null}

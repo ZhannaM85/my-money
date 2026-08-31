@@ -275,6 +275,47 @@ describe('UpdateFinancesScreen', () => {
     ).toBeInTheDocument()
   })
 
+  it('shows a Save icon on the reorder toggle while reordering (#183)', async () => {
+    const user = userEvent.setup()
+    await useAssetStore.getState().saveAsset(
+      {
+        id: 'a2',
+        name: 'Cash',
+        assetClass: 'money',
+        type: 'cash',
+        currency: 'EUR',
+        trackingStatus: 'included',
+        valuationMethod: 'account_balance',
+        updateFrequency: 'yearly',
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        assetId: 'a2',
+        date: '2026-08-01',
+        amount: 200,
+        currency: 'EUR',
+      },
+    )
+    render(
+      <MemoryRouter>
+        <UpdateFinancesScreen />
+      </MemoryRouter>,
+    )
+    const enter = await screen.findByRole('button', { name: 'Reorder' })
+    expect(enter.querySelector('.lucide-list-ordered')).toBeTruthy()
+    await user.click(enter)
+    const save = await screen.findByRole('button', { name: 'Save order' })
+    expect(save.querySelector('.lucide-save')).toBeTruthy()
+    expect(save.querySelector('.lucide-list-ordered')).toBeFalsy()
+    await user.click(save)
+    expect(
+      (await screen.findByRole('button', { name: 'Reorder' })).querySelector(
+        '.lucide-list-ordered',
+      ),
+    ).toBeTruthy()
+  })
+
   it('follows the Assets custom order and keeps Suggested now as a badge (#179)', async () => {
     await useAssetStore.getState().saveAsset(
       {

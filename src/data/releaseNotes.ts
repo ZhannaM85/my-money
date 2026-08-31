@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 191,
+    issue: 183,
+    date: '2026-08-31T23:20:00+03:00',
+    en: 'On Update, the reorder button becomes a Save icon while you are rearranging holdings, so the second tap is clearly save, not another list action.',
+    ru: 'На «Обновить» кнопка порядка становится иконкой сохранения, пока вы переставляете позиции — второе нажатие явно сохраняет, а не снова «список».',
+  },
+  {
     version: 190,
     issue: 182,
     date: '2026-08-31T23:35:00+03:00',

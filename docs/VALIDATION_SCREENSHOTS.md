@@ -64,6 +64,7 @@ gh issue edit 108 --add-label validation
 | `180-update-prefill-previous.png` | Update · past As of placeholder from prior snapshot, not later latest (#180) |
 | `181-update-stay-view.png` | Update · after Save, same As of, locked amounts (#181) |
 | `182-comparison-column-width.png` | Comparison · date columns grow with the amount (#182) |
+| `183-update-reorder-save-icon.png` | Update · Save icon while reordering (#183) |
 | `147-positions-hidden-from-total.png` | Dashboard · hidden asset dropped from total (#147) |
 | `150-allocation-swipe-hide.png` | Allocation · tap expanded holding to reveal Hide (#150) |
 | `148-positions-hidden-disabled.png` | Dashboard Positions · hidden row disabled (#148) |

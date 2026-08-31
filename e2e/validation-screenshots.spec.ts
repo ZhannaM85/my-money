@@ -954,3 +954,16 @@ test('capture Comparison date columns sized to amounts (#182)', async ({
   })
 })
 
+test('capture Update Save icon while reordering (#183)', async ({ page }) => {
+  await seedValidationFixture(page)
+  await page.goto('/update')
+  await expect(page.getByRole('heading', { name: 'Update' })).toBeVisible()
+  await page.getByRole('button', { name: 'Reorder', exact: true }).click()
+  await expect(page.getByRole('button', { name: 'Save order' })).toBeVisible()
+  await expect(page.locator('.lucide-save')).toBeVisible()
+  await page.screenshot({
+    path: join(outDir, '183-update-reorder-save-icon.png'),
+    fullPage: true,
+  })
+})
+
