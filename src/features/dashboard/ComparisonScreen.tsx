@@ -1,6 +1,6 @@
-import { useEffect, useLayoutEffect, useMemo, useRef } from 'react'
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { ArrowDown, ArrowUp, Trash2, X } from 'lucide-react'
+import { ArrowDown, ArrowUp, Check, Pencil, Trash2, X } from 'lucide-react'
 import { historicalNetWorth } from '@/domain/netWorth'
 import type { HoldingConversion } from '@/domain/netWorth'
 import {
@@ -9,13 +9,18 @@ import {
   comparisonTotalDelta,
 } from '@/features/dashboard/comparisonRows'
 import { useLocale, useTranslation } from '@/i18n'
+import { snapshotOnDate, snapshotsOnOrBefore } from '@/domain/snapshot'
 import {
   formatAmount,
   formatChartAxisDate,
+  formatEditableAmount,
   formatSignedAmount,
+  parseAmount,
+  reformatAmountInput,
 } from '@/shared/lib/money'
 import { Button } from '@/shared/ui/button'
 import { EmptyState } from '@/shared/ui/empty-state'
+import { Input } from '@/shared/ui/input'
 import { PageHeader } from '@/shared/ui/page-header'
 import { useAssetStore } from '@/stores/assetStore'
 import { useComparisonStore } from '@/stores/comparisonStore'
@@ -86,7 +91,7 @@ function ComparisonDelta({
   )
 }
 
-function ComparisonCell({
+function ComparisonAmountDisplay({
   holding,
   baseline,
   baseCurrency,
@@ -131,6 +136,127 @@ function ComparisonCell({
           {formatAmount(holding.nativeAmount, holding.currency, locale)}
         </span>
       ) : null}
+    </span>
+  )
+}
+
+function ComparisonCell({
+  assetId,
+  name,
+  date,
+  holding,
+  baseline,
+  baseCurrency,
+}: {
+  assetId: string
+  name: string
+  date: string
+  holding: HoldingConversion | undefined
+  baseline: HoldingConversion | undefined
+  baseCurrency: string
+}) {
+  const t = useTranslation()
+  const locale = useLocale()
+  const snapshots = useAssetStore((state) => state.snapshots)
+  const assets = useAssetStore((state) => state.assets)
+  const saveSnapshots = useAssetStore((state) => state.saveSnapshots)
+  const updateSnapshot = useAssetStore((state) => state.updateSnapshot)
+  const asset = assets.find((row) => row.id === assetId)
+  const onDate = snapshotOnDate(snapshots, assetId, date)
+  const [editing, setEditing] = useState(false)
+  const [draft, setDraft] = useState('')
+
+  async function commit() {
+    if (!asset) return
+    const trimmed = draft.trim()
+    if (trimmed === '') {
+      setEditing(false)
+      return
+    }
+    const amount = parseAmount(trimmed)
+    if (amount === undefined) return
+    if (onDate) {
+      await updateSnapshot({ ...onDate, amount })
+    } else {
+      await saveSnapshots([
+        {
+          assetId,
+          date,
+          amount,
+          currency: asset.currency,
+        },
+      ])
+    }
+    setEditing(false)
+  }
+
+  if (!asset) {
+    return (
+      <ComparisonAmountDisplay
+        holding={holding}
+        baseline={baseline}
+        baseCurrency={baseCurrency}
+      />
+    )
+  }
+
+  if (editing) {
+    return (
+      <span className="flex flex-col items-end gap-1">
+        <Input
+          aria-label={t.dashboard.comparisonAmountAria(name, date)}
+          inputMode="decimal"
+          value={draft}
+          className="h-10 w-full text-right"
+          onChange={(event) => setDraft(event.target.value)}
+          onBlur={() => {
+            setDraft(reformatAmountInput(draft, locale, asset.currency))
+          }}
+        />
+        <Button
+          type="button"
+          variant="outline"
+          size="icon"
+          aria-label={t.dashboard.saveComparisonAmount(name, date)}
+          onClick={() => void commit()}
+        >
+          <Check className="size-4" aria-hidden />
+        </Button>
+      </span>
+    )
+  }
+
+  return (
+    <span className="flex items-start justify-end gap-0.5">
+      <ComparisonAmountDisplay
+        holding={holding}
+        baseline={baseline}
+        baseCurrency={baseCurrency}
+      />
+      <Button
+        type="button"
+        variant="ghost"
+        size="icon"
+        className="size-8 shrink-0"
+        aria-label={t.dashboard.editComparisonAmount(name, date)}
+        onClick={(event) => {
+          event.stopPropagation()
+          const prior = snapshotsOnOrBefore(snapshots, assetId, date)
+          const source = onDate ?? prior
+          setDraft(
+            source
+              ? formatEditableAmount(
+                  source.amount,
+                  locale,
+                  source.currency,
+                )
+              : '',
+          )
+          setEditing(true)
+        }}
+      >
+        <Pencil className="size-3.5" aria-hidden />
+      </Button>
     </span>
   )
 }
@@ -340,6 +466,9 @@ export function ComparisonScreen() {
                       className={`px-2 py-3 text-right align-top ${COMPARISON_DATE_COL_CLASS}`}
                     >
                       <ComparisonCell
+                        assetId={row.assetId}
+                        name={row.name}
+                        date={date}
                         holding={row.byDate[date]}
                         baseline={
                           date === baselineDate

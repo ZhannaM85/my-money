@@ -38,7 +38,7 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 |---|--------|-------|-------|
 | [#175](https://github.com/ZhannaM85/my-money/issues/175) | 🔍 Pending validation | Update page: shared As of date for bulk snapshots | Header date, default today; Save writes all rows on that day. Read-only existing amounts → #176. |
 | [#176](https://github.com/ZhannaM85/my-money/issues/176) | 🔍 Pending validation | Update: existing As of amount is read-only with edit icon | Follow-up to #175. Snapshot on that date → read-only + pencil; missing → input. |
-| [#177](https://github.com/ZhannaM85/my-money/issues/177) | 🔲 Open | Comparison: edit a cell amount (inline preferred, not any-click) | Empty dash (e.g. BOG-GEL 5 Jan). Pencil, not whole-cell tap. Prefer inline over navigate. Related #176. |
+| [#177](https://github.com/ZhannaM85/my-money/issues/177) | 🔍 Pending validation | Comparison: edit a cell amount (inline preferred, not any-click) | Empty dash (e.g. BOG-GEL 5 Jan). Pencil, not whole-cell tap. Prefer inline over navigate. Related #176. |
 
 ---
 

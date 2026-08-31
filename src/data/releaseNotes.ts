@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 185,
+    issue: 177,
+    date: '2026-08-31T22:45:00+03:00',
+    en: 'On Comparison, a pencil on each amount cell lets you add or change that day’s figure without leaving the table. The cell itself is not a tap target.',
+    ru: 'На Сравнении карандаш у ячейки позволяет добавить или изменить сумму на эту дату, не уходя со страницы. Сама ячейка не нажимается целиком.',
+  },
+  {
     version: 184,
     issue: 176,
     date: '2026-08-31T22:35:00+03:00',

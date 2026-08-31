@@ -766,3 +766,27 @@ test('capture Update locked As of amount with edit (#176)', async ({
     fullPage: true,
   })
 })
+
+test('capture comparison cell edit pencil (#177)', async ({ page }) => {
+  await seedValidationFixture(page, { currencyDisplayMode: 'base' })
+  await page.evaluate(() => {
+    localStorage.setItem(
+      'my-money-comparison',
+      JSON.stringify({
+        state: { dates: ['2026-08-01', '2026-08-17'] },
+        version: 0,
+      }),
+    )
+  })
+  await page.reload()
+  await page.goto('/compare')
+  await expect(page.getByRole('heading', { name: 'Comparison' })).toBeVisible()
+  await expect(page.getByTestId('comparison-table')).toBeVisible()
+  await expect(
+    page.getByRole('button', { name: 'Edit Euro cash on 2026-08-01' }),
+  ).toBeVisible()
+  await page.screenshot({
+    path: join(outDir, '177-comparison-cell-edit.png'),
+    fullPage: true,
+  })
+})

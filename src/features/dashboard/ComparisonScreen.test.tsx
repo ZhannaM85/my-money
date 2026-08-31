@@ -1,5 +1,5 @@
 import 'fake-indexeddb/auto'
-import { render, screen } from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router-dom'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
@@ -501,5 +501,62 @@ describe('ComparisonScreen (#137)', () => {
     expect(
       screen.queryByLabelText(`Down ${formatSignedAmount(-70, 'EUR')}`),
     ).not.toBeInTheDocument()
+  })
+
+  it('edits an empty comparison cell inline via the pencil, not any-click (#177)', async () => {
+    const user = userEvent.setup()
+    const now = '2026-08-17T00:00:00.000Z'
+    await useAssetStore.getState().saveAsset(
+      {
+        id: 'bog',
+        name: 'GEL card',
+        assetClass: 'money',
+        type: 'debit_card',
+        currency: 'EUR',
+        trackingStatus: 'included',
+        valuationMethod: 'account_balance',
+        updateFrequency: 'weekly',
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        assetId: 'bog',
+        date: '2026-08-29',
+        amount: 80,
+        currency: 'EUR',
+      },
+    )
+    useComparisonStore.setState({ dates: ['2026-08-25', '2026-08-29'] })
+    render(
+      <MemoryRouter>
+        <ComparisonScreen />
+      </MemoryRouter>,
+    )
+    expect(await screen.findByTestId('comparison-table')).toBeInTheDocument()
+    expect(
+      screen.queryByLabelText('GEL card amount on 2026-08-25'),
+    ).not.toBeInTheDocument()
+    await user.click(
+      screen.getByRole('button', { name: 'Edit GEL card on 2026-08-25' }),
+    )
+    const input = await screen.findByLabelText(
+      'GEL card amount on 2026-08-25',
+    )
+    await user.type(input, '50')
+    await user.click(
+      screen.getByRole('button', { name: 'Save GEL card on 2026-08-25' }),
+    )
+    await waitFor(() => {
+      expect(
+        useAssetStore
+          .getState()
+          .snapshots.some(
+            (row) =>
+              row.assetId === 'bog' &&
+              row.date === '2026-08-25' &&
+              row.amount === 50,
+          ),
+      ).toBe(true)
+    })
   })
 })

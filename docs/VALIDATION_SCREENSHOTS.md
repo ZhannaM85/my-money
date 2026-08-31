@@ -58,6 +58,7 @@ gh issue edit 108 --add-label validation
 | `174-comparison-deltas.png` | Comparison · green/red arrows + delta vs first date (#174) |
 | `175-update-as-of.png` | Update · shared As of date, default today (#175) |
 | `176-update-locked-edit.png` | Update · existing As of amount read-only + pencil (#176) |
+| `177-comparison-cell-edit.png` | Comparison · pencil to edit a cell amount (#177) |
 | `147-positions-hidden-from-total.png` | Dashboard · hidden asset dropped from total (#147) |
 | `150-allocation-swipe-hide.png` | Allocation · tap expanded holding to reveal Hide (#150) |
 | `148-positions-hidden-disabled.png` | Dashboard Positions · hidden row disabled (#148) |

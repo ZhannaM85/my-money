@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 177,
+    title: {
+      en: 'Comparison inline cell edit',
+      ru: 'Правка ячейки на Сравнении',
+    },
+    en: 'Empty comparison cells were a dash with no way to fill that date without opening the asset. A pencil (not a whole-cell tap) opens an inline native amount; save writes that asset+date.',
+    ru: 'Пустые ячейки сравнения были тире, без способа заполнить дату, не открывая актив. Карандаш (не нажатие на всю ячейку) открывает сумму в оригинале; сохранение пишет этот актив и дату.',
+  },
+  {
     issue: 176,
     title: {
       en: 'Update: existing As of amount is read-only with edit',

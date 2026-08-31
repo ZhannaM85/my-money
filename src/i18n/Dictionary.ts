@@ -52,6 +52,9 @@ export interface Dictionary {
     comparisonChangeHint: string
     comparisonIncreased: (amount: string) => string
     comparisonDecreased: (amount: string) => string
+    editComparisonAmount: (name: string, date: string) => string
+    saveComparisonAmount: (name: string, date: string) => string
+    comparisonAmountAria: (name: string, date: string) => string
     removeFromComparison: (date: string) => string
     removeFromComparisonConfirm: (date: string) => string
     removeAllFromComparison: string
