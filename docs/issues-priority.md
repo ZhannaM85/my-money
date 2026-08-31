@@ -36,7 +36,6 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
-| [#177](https://github.com/ZhannaM85/my-money/issues/177) | 🔍 Pending validation | Comparison: edit a cell amount (inline preferred, not any-click) | Empty dash (e.g. BOG-GEL 5 Jan). Pencil, not whole-cell tap. Prefer inline over navigate. Related #176. |
 | [#178](https://github.com/ZhannaM85/my-money/issues/178) | 🔍 Pending validation | Update header: description wraps beside the As of date | Hint is a full-width row under title + As of, not in the leftover column. |
 | [#179](https://github.com/ZhannaM85/my-money/issues/179) | 🔍 Pending validation | Update page: reorder holdings via icon (toggle save) | Same custom order as Assets. Icon on → grips; icon again saves. Suggested now is a badge. |
 | [#180](https://github.com/ZhannaM85/my-money/issues/180) | 🔍 Pending validation | Update: pre-fill from snapshot before As of, not latest | Placeholder + No change use last amount strictly before As of. |
