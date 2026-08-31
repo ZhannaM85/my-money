@@ -184,6 +184,7 @@ export interface Dictionary {
     needOneRow: string
     newAmountAria: (name: string) => string
     editAmountAria: (name: string) => string
+    saveOrder: string
   }
   history: {
     title: string

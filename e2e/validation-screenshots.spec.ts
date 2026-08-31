@@ -814,3 +814,18 @@ test('capture comparison cell edit pencil (#177)', async ({ page }) => {
     fullPage: true,
   })
 })
+
+test('capture Update reorder mode (#179)', async ({ page }) => {
+  await seedValidationFixture(page)
+  await page.goto('/update')
+  await expect(page.getByRole('heading', { name: 'Update' })).toBeVisible()
+  await page.getByRole('button', { name: 'Reorder', exact: true }).click()
+  await expect(page.getByRole('button', { name: 'Save order' })).toBeVisible()
+  await expect(
+    page.getByRole('button', { name: 'Reorder Euro cash' }),
+  ).toBeVisible()
+  await page.screenshot({
+    path: join(outDir, '179-update-reorder.png'),
+    fullPage: true,
+  })
+})

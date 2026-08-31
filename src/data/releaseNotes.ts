@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 187,
+    issue: 179,
+    date: '2026-08-31T23:05:00+03:00',
+    en: 'On Update, a list-order icon turns on drag-to-reorder. Tap the same icon again to save. The sequence is the same custom order as Assets; Suggested now stays a badge.',
+    ru: 'На «Обновить» иконка порядка включает перетаскивание. Повторное нажатие сохраняет. Порядок тот же, что на «Активах»; «Пора обновить» остаётся меткой.',
+  },
+  {
     version: 186,
     issue: 178,
     date: '2026-08-31T22:50:00+03:00',

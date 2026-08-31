@@ -6,7 +6,9 @@ import { beforeEach, describe, expect, it } from 'vitest'
 import { db } from '@/infrastructure/persistence/indexeddb'
 import { addDaysIso } from '@/shared/lib/dates'
 import { todayIsoDate } from '@/shared/lib/money'
+import { DEFAULT_SETTINGS } from '@/domain/settings'
 import { useAssetStore } from '@/stores/assetStore'
+import { useSettingsStore } from '@/stores/settingsStore'
 import { UpdateFinancesScreen } from './UpdateFinancesScreen'
 
 const now = '2026-08-01T00:00:00.000Z'
@@ -24,7 +26,12 @@ function setDateField(input: HTMLElement, value: string) {
 beforeEach(async () => {
   await db.assets.clear()
   await db.snapshots.clear()
+  await db.settings.clear()
   useAssetStore.setState({ assets: [], snapshots: [], loaded: false })
+  useSettingsStore.setState({
+    settings: DEFAULT_SETTINGS,
+    loaded: true,
+  })
   await useAssetStore.getState().saveAsset(
     {
       id: 'a1',
@@ -177,5 +184,107 @@ describe('UpdateFinancesScreen', () => {
     expect(hint.parentElement).not.toBe(title.parentElement)
     expect(hint).toHaveTextContent(/Previous amounts/)
     expect(screen.getByLabelText('As of')).toBeInTheDocument()
+  })
+
+  it('hides the reorder icon when there is only one holding (#179)', async () => {
+    render(
+      <MemoryRouter>
+        <UpdateFinancesScreen />
+      </MemoryRouter>,
+    )
+    await screen.findByRole('button', { name: 'No change' })
+    expect(
+      screen.queryByRole('button', { name: 'Reorder' }),
+    ).not.toBeInTheDocument()
+  })
+
+  it('toggles reorder mode on the same icon and saves custom order (#179)', async () => {
+    const user = userEvent.setup()
+    await useAssetStore.getState().saveAsset(
+      {
+        id: 'a2',
+        name: 'Cash',
+        assetClass: 'money',
+        type: 'cash',
+        currency: 'EUR',
+        trackingStatus: 'included',
+        valuationMethod: 'account_balance',
+        updateFrequency: 'yearly',
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        assetId: 'a2',
+        date: '2026-08-01',
+        amount: 200,
+        currency: 'EUR',
+      },
+    )
+    render(
+      <MemoryRouter>
+        <UpdateFinancesScreen />
+      </MemoryRouter>,
+    )
+    await user.click(await screen.findByRole('button', { name: 'Reorder' }))
+    expect(
+      await screen.findByRole('button', { name: 'Save order' }),
+    ).toBeInTheDocument()
+    expect(
+      screen.getByRole('button', { name: 'Reorder Revolut' }),
+    ).toBeInTheDocument()
+    expect(
+      screen.getByRole('button', { name: 'Reorder Cash' }),
+    ).toBeInTheDocument()
+    expect(
+      screen.queryByRole('button', { name: 'Save updates' }),
+    ).not.toBeInTheDocument()
+    expect(
+      screen.queryByLabelText('Revolut new amount'),
+    ).not.toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Save order' }))
+    await waitFor(() => {
+      expect(useSettingsStore.getState().settings.assetListSort).toBe('custom')
+    })
+    expect(
+      screen.queryByRole('button', { name: 'Reorder Revolut' }),
+    ).not.toBeInTheDocument()
+    expect(
+      screen.getByRole('button', { name: 'Reorder' }),
+    ).toBeInTheDocument()
+  })
+
+  it('follows the Assets custom order and keeps Suggested now as a badge (#179)', async () => {
+    await useAssetStore.getState().saveAsset(
+      {
+        id: 'a2',
+        name: 'Cash',
+        assetClass: 'money',
+        type: 'cash',
+        currency: 'EUR',
+        trackingStatus: 'included',
+        valuationMethod: 'account_balance',
+        updateFrequency: 'yearly',
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        assetId: 'a2',
+        date: '2026-08-01',
+        amount: 200,
+        currency: 'EUR',
+      },
+    )
+    await useSettingsStore.getState().persistCustomAssetOrder(['a2', 'a1'])
+    render(
+      <MemoryRouter>
+        <UpdateFinancesScreen />
+      </MemoryRouter>,
+    )
+    await screen.findByText('Cash')
+    const list = screen.getByRole('list')
+    expect(list.textContent!.indexOf('Cash')).toBeLessThan(
+      list.textContent!.indexOf('Revolut'),
+    )
+    expect(screen.getByText(/Suggested now/)).toBeInTheDocument()
   })
 })

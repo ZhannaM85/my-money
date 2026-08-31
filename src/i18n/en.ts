@@ -240,6 +240,7 @@ export const en: Dictionary = {
     needOneRow: 'Mark no change or enter an amount for at least one asset.',
     newAmountAria: (name) => `${name} new amount`,
     editAmountAria: (name) => `Edit ${name}`,
+    saveOrder: 'Save order',
   },
   history: {
     title: 'History',

@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 179,
+    title: {
+      en: 'Update page reorder via toggle icon',
+      ru: 'Порядок на «Обновить» через иконку',
+    },
+    en: 'Update always listed suggested-now first, with no way to match Assets. One icon enters reorder (custom sequence, grips); the same icon saves via persistCustomAssetOrder. No Cancel.',
+    ru: '«Обновить» всегда ставило «пора обновить» первыми, без совпадения с Активами. Одна иконка включает порядок (своя последовательность, ручки); она же сохраняет через persistCustomAssetOrder. Без «Отмена».',
+  },
+  {
     issue: 178,
     title: {
       en: 'Update header description wrap',

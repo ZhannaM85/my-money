@@ -246,6 +246,7 @@ export const ru: Dictionary = {
       'Отметьте «Без изменений» или введите сумму хотя бы для одного актива.',
     newAmountAria: (name) => `Новая сумма для ${name}`,
     editAmountAria: (name) => `Изменить ${name}`,
+    saveOrder: 'Сохранить порядок',
   },
   history: {
     title: 'История',
