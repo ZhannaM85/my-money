@@ -242,6 +242,7 @@ export const ru: Dictionary = {
     needOneRow:
       'Отметьте «Без изменений» или введите сумму хотя бы для одного актива.',
     newAmountAria: (name) => `Новая сумма для ${name}`,
+    editAmountAria: (name) => `Изменить ${name}`,
   },
   history: {
     title: 'История',

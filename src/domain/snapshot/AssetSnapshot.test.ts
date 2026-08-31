@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { hasDuplicateSnapshot, optionalSnapshotNote } from './AssetSnapshot'
+import { hasDuplicateSnapshot, optionalSnapshotNote, snapshotOnDate } from './AssetSnapshot'
 
 describe('optionalSnapshotNote', () => {
   it('trims text and drops empty notes so they do not persist', () => {
@@ -61,5 +61,22 @@ describe('hasDuplicateSnapshot (#115)', () => {
         excludeId: 's1',
       }),
     ).toBe(false)
+  })
+})
+
+describe('snapshotOnDate (#176)', () => {
+  it('returns only an exact date, not an earlier carry-forward', () => {
+    const rows = [
+      {
+        id: 's1',
+        assetId: 'a1',
+        date: '2026-08-01',
+        amount: 1000,
+        currency: 'EUR',
+        createdAt: '2026-08-01T00:00:00.000Z',
+      },
+    ]
+    expect(snapshotOnDate(rows, 'a1', '2026-08-01')?.amount).toBe(1000)
+    expect(snapshotOnDate(rows, 'a1', '2026-08-31')).toBeUndefined()
   })
 })

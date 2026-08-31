@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 184,
+    issue: 176,
+    date: '2026-08-31T22:35:00+03:00',
+    en: 'On Update, if the As of date already has an amount, it shows read-only with a pencil. Dates with no value still get an input.',
+    ru: 'На «Обновить», если на выбранную дату сумма уже есть, она показывается только для чтения с карандашом. Если суммы нет — остаётся поле ввода.',
+  },
+  {
     version: 183,
     issue: 175,
     date: '2026-08-31T22:20:00+03:00',

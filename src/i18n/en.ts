@@ -236,6 +236,7 @@ export const en: Dictionary = {
     enterNumberFor: (name) => `Enter a number for ${name}`,
     needOneRow: 'Mark no change or enter an amount for at least one asset.',
     newAmountAria: (name) => `${name} new amount`,
+    editAmountAria: (name) => `Edit ${name}`,
   },
   history: {
     title: 'History',

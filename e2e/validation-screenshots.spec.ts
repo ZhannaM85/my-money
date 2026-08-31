@@ -749,3 +749,20 @@ test('capture Update As of date (#175)', async ({ page }) => {
     fullPage: true,
   })
 })
+
+test('capture Update locked As of amount with edit (#176)', async ({
+  page,
+}) => {
+  await seedValidationFixture(page)
+  await page.goto('/update')
+  await expect(page.getByRole('heading', { name: 'Update' })).toBeVisible()
+  const asOf = page.getByLabel('As of')
+  await asOf.fill('2026-08-17')
+  await expect(
+    page.getByRole('button', { name: 'Edit Euro cash' }),
+  ).toBeVisible()
+  await page.screenshot({
+    path: join(outDir, '176-update-locked-edit.png'),
+    fullPage: true,
+  })
+})

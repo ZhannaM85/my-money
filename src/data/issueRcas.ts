@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 176,
+    title: {
+      en: 'Update: existing As of amount is read-only with edit',
+      ru: 'Обновить: существующая сумма на дату — только чтение с правкой',
+    },
+    en: 'The shared As of date (#175) still showed a live input even when that day already had a snapshot, so it was easy to duplicate. That day is now read-only with a pencil; missing days stay an input.',
+    ru: 'Общая дата (#175) всё равно показывала поле ввода, даже если на этот день снимок уже был — легко задублировать. Теперь эта сумма только для чтения с карандашом; если снимка нет — поле ввода.',
+  },
+  {
     issue: 175,
     title: {
       en: 'Update page shared As of date',

@@ -180,6 +180,7 @@ export interface Dictionary {
     enterNumberFor: (name: string) => string
     needOneRow: string
     newAmountAria: (name: string) => string
+    editAmountAria: (name: string) => string
   }
   history: {
     title: string

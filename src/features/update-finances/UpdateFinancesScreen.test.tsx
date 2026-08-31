@@ -138,4 +138,31 @@ describe('UpdateFinancesScreen', () => {
       useAssetStore.getState().snapshots.filter((row) => row.assetId === 'a1'),
     ).toHaveLength(1)
   })
+
+  it('shows a locked amount with edit when As of already has a snapshot (#176)', async () => {
+    const user = userEvent.setup()
+    render(
+      <MemoryRouter>
+        <UpdateFinancesScreen />
+      </MemoryRouter>,
+    )
+    const asOf = await screen.findByLabelText('As of')
+    setDateField(asOf, '2026-08-01')
+    expect(
+      await screen.findByRole('button', { name: 'Edit Revolut' }),
+    ).toBeInTheDocument()
+    expect(
+      screen.queryByLabelText('Revolut new amount'),
+    ).not.toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Edit Revolut' }))
+    const input = await screen.findByLabelText('Revolut new amount')
+    await user.clear(input)
+    await user.type(input, '1500')
+    await user.click(screen.getByRole('button', { name: 'Save updates' }))
+    await waitFor(() => {
+      expect(useAssetStore.getState().snapshots[0]?.amount).toBe(1500)
+    })
+    expect(useAssetStore.getState().snapshots).toHaveLength(1)
+    expect(useAssetStore.getState().snapshots[0]?.date).toBe('2026-08-01')
+  })
 })
