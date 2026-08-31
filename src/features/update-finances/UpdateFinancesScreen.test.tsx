@@ -173,6 +173,28 @@ describe('UpdateFinancesScreen', () => {
     expect(useAssetStore.getState().snapshots[0]?.date).toBe('2026-08-01')
   })
 
+  it('stays on Update in view mode after Save (#181)', async () => {
+    const user = userEvent.setup()
+    render(
+      <MemoryRouter>
+        <UpdateFinancesScreen />
+      </MemoryRouter>,
+    )
+    await user.click(await screen.findByRole('button', { name: 'No change' }))
+    await user.click(screen.getByRole('button', { name: 'Save updates' }))
+    expect(
+      await screen.findByRole('button', { name: 'Edit Revolut' }),
+    ).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Update' })).toBeInTheDocument()
+    expect(screen.getByLabelText('As of')).toHaveValue(todayIsoDate())
+    expect(
+      screen.queryByRole('button', { name: 'No change' }),
+    ).not.toBeInTheDocument()
+    expect(
+      screen.queryByLabelText('Revolut new amount'),
+    ).not.toBeInTheDocument()
+  })
+
   it('renders the hint full width below the title, not beside the date (#178)', async () => {
     render(
       <MemoryRouter>

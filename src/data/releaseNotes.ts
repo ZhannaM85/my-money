@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 189,
+    issue: 181,
+    date: '2026-08-31T23:25:00+03:00',
+    en: 'Saving on Update keeps you on that page and the same As of date, with the new amounts in view mode (read-only plus a pencil) instead of jumping to Dashboard.',
+    ru: 'Сохранение на «Обновить» оставляет вас на той же странице и дате; новые суммы в режиме просмотра (только чтение и карандаш), а не переход на Сводку.',
+  },
+  {
     version: 188,
     issue: 180,
     date: '2026-08-31T23:15:00+03:00',

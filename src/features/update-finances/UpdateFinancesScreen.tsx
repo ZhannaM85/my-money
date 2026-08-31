@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState, type ReactNode } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import {
   DndContext,
   PointerSensor,
@@ -83,7 +83,6 @@ function SortableUpdateRow({
 export function UpdateFinancesScreen() {
   const t = useTranslation()
   const locale = useLocale()
-  const navigate = useNavigate()
   const load = useAssetStore((state) => state.load)
   const saveSnapshots = useAssetStore((state) => state.saveSnapshots)
   const updateSnapshot = useAssetStore((state) => state.updateSnapshot)
@@ -279,7 +278,9 @@ export function UpdateFinancesScreen() {
       for (const snapshot of toUpdate) {
         await updateSnapshot(snapshot)
       }
-      navigate('/', { replace: true })
+      setDrafts({})
+      setUnchanged({})
+      setEditing({})
     } finally {
       setSaving(false)
     }

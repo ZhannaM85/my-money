@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 181,
+    title: {
+      en: 'Update stays in view mode after Save',
+      ru: '«Обновить» остаётся в просмотре после сохранения',
+    },
+    en: 'Save navigated to Dashboard, so you lost the date you had just filled. Save now stays on Update, same As of, and shows locked amounts (#176) for the rows you wrote.',
+    ru: 'Сохранение уводило на Сводку, и выбранная дата терялась. Теперь остаётесь на «Обновить» с той же датой, и сохранённые строки показываются только для чтения (#176).',
+  },
+  {
     issue: 180,
     title: {
       en: 'Update pre-fill from snapshot before As of',

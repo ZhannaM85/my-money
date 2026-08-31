@@ -874,3 +874,27 @@ test('capture Update prefill from snapshot before As of (#180)', async ({
   })
 })
 
+test('capture Update stay in view mode after Save (#181)', async ({ page }) => {
+  await seedValidationFixture(page)
+  await page.goto('/update')
+  await expect(page.getByRole('heading', { name: 'Update' })).toBeVisible()
+  const noChange = page.getByRole('button', { name: 'No change' })
+  await expect(noChange.first()).toBeVisible()
+  const count = await noChange.count()
+  for (let i = 0; i < count; i += 1) {
+    await noChange.nth(i).click()
+  }
+  await page.getByRole('button', { name: 'Save updates' }).click()
+  await expect(page.getByRole('heading', { name: 'Update' })).toBeVisible()
+  await expect(
+    page.getByRole('button', { name: 'Edit Euro cash' }),
+  ).toBeVisible()
+  await expect(
+    page.getByRole('button', { name: 'No change' }),
+  ).toHaveCount(0)
+  await page.screenshot({
+    path: join(outDir, '181-update-stay-view.png'),
+    fullPage: true,
+  })
+})
+

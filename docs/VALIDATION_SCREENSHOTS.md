@@ -62,6 +62,7 @@ gh issue edit 108 --add-label validation
 | `178-update-header-hint.png` | Update · full-width hint under title + As of (RU, #178) |
 | `179-update-reorder.png` | Update · reorder icon on, drag grips (#179) |
 | `180-update-prefill-previous.png` | Update · past As of placeholder from prior snapshot, not later latest (#180) |
+| `181-update-stay-view.png` | Update · after Save, same As of, locked amounts (#181) |
 | `147-positions-hidden-from-total.png` | Dashboard · hidden asset dropped from total (#147) |
 | `150-allocation-swipe-hide.png` | Allocation · tap expanded holding to reveal Hide (#150) |
 | `148-positions-hidden-disabled.png` | Dashboard Positions · hidden row disabled (#148) |
