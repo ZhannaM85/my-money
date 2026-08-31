@@ -43,6 +43,7 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 | [#179](https://github.com/ZhannaM85/my-money/issues/179) | 🔍 Pending validation | Update page: reorder holdings via icon (toggle save) | Same custom order as Assets. Icon on → grips; icon again saves. Suggested now is a badge. |
 | [#180](https://github.com/ZhannaM85/my-money/issues/180) | 🔲 Open | Update: pre-fill from snapshot before As of, not latest | Inputs use overall latest. Should use last amount strictly before the selected date. Related #175/#176. |
 | [#181](https://github.com/ZhannaM85/my-money/issues/181) | 🔲 Open | Update: stay on same As of in view mode after Save | Save currently goes to Dashboard. Stay on Update, same date, just-saved amounts read-only (#176). |
+| [#182](https://github.com/ZhannaM85/my-money/issues/182) | 🔲 Open | Comparison: date columns clip amounts; width should follow the number | Large ₽ + delta + pencil overflow. Size columns to content; scroll (#139) rather than clip. Related #138/#174/#177. |
 
 ---
 
