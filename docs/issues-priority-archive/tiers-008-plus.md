@@ -187,3 +187,9 @@ Closed live-feedback rows from Tier 8 onward. Open / pending items stay in [`../
 | [#160](https://github.com/ZhannaM85/my-money/issues/160) | ✅ Done | Assets list: show excluded assets at the bottom | Included first; excluded after, still sorted within the group. Archived stays on its chip. Validated on-device 2026-08-30. |
 | [#161](https://github.com/ZhannaM85/my-money/issues/161) | ✅ Done | FX debug: save log as a .txt file | Copy is too big for Telegram/email. Download/share `my-money-debug.txt`. Validated on-device 2026-08-30. |
 | [#157](https://github.com/ZhannaM85/my-money/issues/157) | ✅ Done | Allocation: Show/Hide needs three or four taps (Dashboard is one tap) | Device log: pointerdown without click after Hide. Reveal now on pointerup. Validated on-device 2026-08-30. |
+
+## Tier 17 — Live feedback (2026-08-31)
+
+| # | Status | Issue | Notes |
+|---|--------|-------|-------|
+| [#174](https://github.com/ZhannaM85/my-money/issues/174) | ✅ Done | Comparison table: green/red arrows and delta vs first date | Later columns vs earliest date; delta under converted amount. Validated on-device 2026-08-31. |
