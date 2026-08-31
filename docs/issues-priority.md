@@ -46,7 +46,7 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 | [#182](https://github.com/ZhannaM85/my-money/issues/182) | 🔍 Pending validation | Comparison: date columns clip amounts; width should follow the number | Columns size to content; extra width scrolls (#139). |
 | [#183](https://github.com/ZhannaM85/my-money/issues/183) | 🔍 Pending validation | Update: show a Save icon on the reorder toggle while reordering | Idle = list icon; reordering = Save. Same toggle as #179. |
 | [#184](https://github.com/ZhannaM85/my-money/issues/184) | 🔍 Pending validation | Update: show institution under the holding title | Under the name when set; last-updated on the next line. Match #109. |
-| [#185](https://github.com/ZhannaM85/my-money/issues/185) | 🔲 Open | Dashboard: keep chart range when leaving and returning | Week/Month/Year/All/Custom resets on tab hop. Persist chip + Custom From/To. Related #126. |
+| [#185](https://github.com/ZhannaM85/my-money/issues/185) | 🔍 Pending validation | Dashboard: keep chart range when leaving and returning | Persist chip + Custom From/To (localStorage, like Comparison). Related #126. |
 
 ---
 

@@ -38,6 +38,7 @@ import { StatCard } from '@/shared/ui/stat-card'
 import { cn } from '@/shared/lib/utils'
 import { useAssetStore } from '@/stores/assetStore'
 import { useComparisonStore } from '@/stores/comparisonStore'
+import { useChartRangeStore } from '@/stores/chartRangeStore'
 import { useFxStore } from '@/stores/fxStore'
 import { useSettingsStore } from '@/stores/settingsStore'
 import { NetWorthChart } from './NetWorthChart'
@@ -63,10 +64,6 @@ export function DashboardScreen() {
   const quotes = useFxStore((state) => state.quotes)
   const ensureRange = useFxStore((state) => state.ensureRange)
   const fxLoading = useFxStore((state) => state.loading)
-  const [range, setRange] = useState<HistoryRange>('1M')
-  const [rangeEnd, setRangeEnd] = useState(todayIsoDate)
-  const [customStart, setCustomStart] = useState(todayIsoDate)
-  const [customEnd, setCustomEnd] = useState(todayIsoDate)
   const [currencyFilter, setCurrencyFilter] = useState<string>('all')
   const [holdingsOpen, setHoldingsOpen] = useState(false)
   const [selectedChartDate, setSelectedChartDate] = useState<string | null>(
@@ -79,6 +76,14 @@ export function DashboardScreen() {
   const [periodOpen, setPeriodOpen] = useState<'amount' | 'rate' | null>(null)
   const comparisonDates = useComparisonStore((state) => state.dates)
   const addComparisonDate = useComparisonStore((state) => state.addDate)
+  const range = useChartRangeStore((state) => state.range)
+  const rangeEnd = useChartRangeStore((state) => state.rangeEnd)
+  const customStart = useChartRangeStore((state) => state.customStart)
+  const customEnd = useChartRangeStore((state) => state.customEnd)
+  const setRange = useChartRangeStore((state) => state.setRange)
+  const setRangeEnd = useChartRangeStore((state) => state.setRangeEnd)
+  const setCustomStart = useChartRangeStore((state) => state.setCustomStart)
+  const setCustomEnd = useChartRangeStore((state) => state.setCustomEnd)
 
   const today = todayIsoDate()
   const chartEnd =
@@ -317,16 +322,16 @@ export function DashboardScreen() {
     if (!canPanEarlier) return
     setSelectedChartDate(null)
     setAsOfError(undefined)
-    setRangeEnd((end) =>
-      shiftHistoryRangeEnd(end, range, 'earlier', today, earliest),
+    setRangeEnd(
+      shiftHistoryRangeEnd(rangeEnd, range, 'earlier', today, earliest),
     )
   }
   const panLater = () => {
     if (!canPanLater) return
     setSelectedChartDate(null)
     setAsOfError(undefined)
-    setRangeEnd((end) =>
-      shiftHistoryRangeEnd(end, range, 'later', today, earliest),
+    setRangeEnd(
+      shiftHistoryRangeEnd(rangeEnd, range, 'later', today, earliest),
     )
   }
 

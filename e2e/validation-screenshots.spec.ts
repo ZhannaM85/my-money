@@ -1004,3 +1004,30 @@ test('capture Update Save icon while reordering (#183)', async ({ page }) => {
   })
 })
 
+test('capture Dashboard range kept after leaving and returning (#185)', async ({
+  page,
+}) => {
+  await seedValidationFixture(page, { currencyDisplayMode: 'base' })
+  await page.goto('/')
+  await expect(page.getByRole('heading', { name: 'Dashboard' })).toBeVisible()
+  const rangeGroup = page.getByRole('group', { name: 'Chart range' })
+  await rangeGroup.getByRole('button', { name: 'All' }).click()
+  await expect(rangeGroup.getByRole('button', { name: 'All' })).toHaveAttribute(
+    'aria-pressed',
+    'true',
+  )
+  await page.goto('/assets')
+  await expect(page.getByRole('heading', { name: 'Assets' })).toBeVisible()
+  await page.goto('/')
+  await expect(page.getByRole('heading', { name: 'Dashboard' })).toBeVisible()
+  await expect(
+    page.getByRole('group', { name: 'Chart range' }).getByRole('button', {
+      name: 'All',
+    }),
+  ).toHaveAttribute('aria-pressed', 'true')
+  await page.screenshot({
+    path: join(outDir, '185-dashboard-range-persist.png'),
+    fullPage: true,
+  })
+})
+

@@ -15,6 +15,10 @@ import { useAssetStore } from '@/stores/assetStore'
 import { useFxStore } from '@/stores/fxStore'
 import { useSettingsStore } from '@/stores/settingsStore'
 import { useComparisonStore } from '@/stores/comparisonStore'
+import {
+  CHART_RANGE_STORAGE_KEY,
+  useChartRangeStore,
+} from '@/stores/chartRangeStore'
 import { AllocationScreen } from '@/features/allocation'
 import { DashboardScreen } from './DashboardScreen'
 
@@ -37,6 +41,13 @@ beforeEach(async () => {
     loaded: false,
   })
   useComparisonStore.setState({ dates: [] })
+  localStorage.removeItem(CHART_RANGE_STORAGE_KEY)
+  useChartRangeStore.setState({
+    range: '1M',
+    rangeEnd: todayIsoDate(),
+    customStart: todayIsoDate(),
+    customEnd: todayIsoDate(),
+  })
 })
 
 describe('DashboardScreen', () => {
@@ -167,6 +178,52 @@ describe('DashboardScreen', () => {
     expect(await screen.findByText(/Chart range: Month/)).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: 'Zoom out' }))
     expect(screen.getByText(/Chart range: Year/)).toBeInTheDocument()
+  })
+
+  it('keeps the chart range chip after leaving and returning (#185)', async () => {
+    const user = userEvent.setup()
+    const now = '2026-08-17T00:00:00.000Z'
+    await useAssetStore.getState().saveAsset(
+      {
+        id: 'a1',
+        name: 'Revolut',
+        assetClass: 'money',
+        type: 'bank',
+        currency: 'EUR',
+        trackingStatus: 'included',
+        valuationMethod: 'account_balance',
+        updateFrequency: 'weekly',
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        assetId: 'a1',
+        date: '2026-08-17',
+        amount: 1000,
+        currency: 'EUR',
+      },
+    )
+    const { unmount } = render(
+      <MemoryRouter>
+        <DashboardScreen />
+      </MemoryRouter>,
+    )
+    await user.click(await screen.findByRole('button', { name: 'All' }))
+    expect(screen.getByRole('button', { name: 'All' })).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    )
+    unmount()
+    render(
+      <MemoryRouter>
+        <DashboardScreen />
+      </MemoryRouter>,
+    )
+    expect(await screen.findByRole('button', { name: 'All' })).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    )
+    expect(screen.getByText(/Chart range: All/)).toBeInTheDocument()
   })
 
   it('disables the currency filter in Converted mode', async () => {

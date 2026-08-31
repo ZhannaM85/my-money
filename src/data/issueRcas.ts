@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 185,
+    title: {
+      en: 'Dashboard chart range resets on navigation',
+      ru: 'Диапазон графика Сводки сбрасывается при навигации',
+    },
+    en: 'Range chips lived in component state, so a tab hop remounted Dashboard on the default Month. Range (and Custom From/To) now persist like Comparison dates.',
+    ru: 'Чипы диапазона жили в state компонента, поэтому уход на другую вкладку возвращал Сводку на Месяц. Диапазон (и Свой с–по) теперь сохраняется, как даты Сравнения.',
+  },
+  {
     issue: 184,
     title: {
       en: 'Update institution under the title',

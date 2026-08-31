@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 193,
+    issue: 185,
+    date: '2026-08-31T23:50:00+03:00',
+    en: 'Dashboard remembers Week / Month / Year / All / Custom (and custom dates) when you leave the tab and come back.',
+    ru: 'Сводка помнит Неделя / Месяц / Год / Все / Свой (и свои даты), если уйти с вкладки и вернуться.',
+  },
+  {
     version: 192,
     issue: 184,
     date: '2026-08-31T23:40:00+03:00',
