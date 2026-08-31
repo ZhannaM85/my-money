@@ -194,3 +194,4 @@ Closed live-feedback rows from Tier 8 onward. Open / pending items stay in [`../
 |---|--------|-------|-------|
 | [#174](https://github.com/ZhannaM85/my-money/issues/174) | ✅ Done | Comparison table: green/red arrows and delta vs first date | Later columns vs earliest date; delta under converted amount. Validated on-device 2026-08-31. |
 | [#175](https://github.com/ZhannaM85/my-money/issues/175) | ✅ Done | Update page: shared As of date for bulk snapshots | Header date, default today; Save writes all rows on that day. Validated on-device 2026-08-31. |
+| [#176](https://github.com/ZhannaM85/my-money/issues/176) | ✅ Done | Update: existing As of amount is read-only with edit icon | Snapshot on that date → read-only + pencil; missing → input. Validated on-device 2026-08-31. |
