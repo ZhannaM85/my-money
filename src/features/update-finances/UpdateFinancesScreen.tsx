@@ -5,6 +5,7 @@ import {
 } from '@/domain/asset'
 import { latestSnapshot } from '@/domain/snapshot'
 import { formatLastUpdated, useLocale, useTranslation } from '@/i18n'
+import { isIsoDateOnOrBefore } from '@/shared/lib/dates'
 import {
   formatAmount,
   formatEditableAmount,
@@ -13,6 +14,7 @@ import {
   todayIsoDate,
 } from '@/shared/lib/money'
 import { Button } from '@/shared/ui/button'
+import { DateField } from '@/shared/ui/date-field'
 import { EmptyState } from '@/shared/ui/empty-state'
 import { Input } from '@/shared/ui/input'
 import { PageHeader } from '@/shared/ui/page-header'
@@ -33,6 +35,8 @@ export function UpdateFinancesScreen() {
   const [error, setError] = useState<string | undefined>()
   const [saving, setSaving] = useState(false)
   const today = todayIsoDate()
+  const [asOf, setAsOf] = useState(today)
+  const [asOfError, setAsOfError] = useState<string | undefined>()
 
   useEffect(() => {
     void load()
@@ -69,6 +73,10 @@ export function UpdateFinancesScreen() {
   }
 
   async function handleSave() {
+    if (!isIsoDateOnOrBefore(asOf, today)) {
+      setAsOfError(t.asset.snapshotDateInvalid)
+      return
+    }
     const toWrite: {
       assetId: string
       date: string
@@ -85,7 +93,7 @@ export function UpdateFinancesScreen() {
         }
         toWrite.push({
           assetId: asset.id,
-          date: today,
+          date: asOf,
           amount,
           currency: asset.currency,
         })
@@ -94,7 +102,7 @@ export function UpdateFinancesScreen() {
       if (unchanged[asset.id] && snapshot) {
         toWrite.push({
           assetId: asset.id,
-          date: today,
+          date: asOf,
           amount: snapshot.amount,
           currency: snapshot.currency,
         })
@@ -119,6 +127,23 @@ export function UpdateFinancesScreen() {
       <PageHeader
         title={t.update.title}
         description={t.update.description}
+        action={
+          <DateField
+            label={t.asset.snapshotDate}
+            value={asOf}
+            max={today}
+            onChange={(event) => {
+              const next = event.target.value
+              setAsOf(next)
+              if (!next || !isIsoDateOnOrBefore(next, today)) {
+                setAsOfError(t.asset.snapshotDateInvalid)
+                return
+              }
+              setAsOfError(undefined)
+            }}
+            error={asOfError}
+          />
+        }
       />
       {!loaded ? (
         <p className="text-sm text-muted-foreground">{t.common.loading}</p>

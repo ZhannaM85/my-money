@@ -32,6 +32,14 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 
 ---
 
+## Tier 17 — Live feedback (2026-08-31)
+
+| # | Status | Issue | Notes |
+|---|--------|-------|-------|
+| [#175](https://github.com/ZhannaM85/my-money/issues/175) | 🔍 Pending validation | Update page: shared As of date for bulk snapshots | Header date, default today; Save writes all rows on that day. |
+
+---
+
 ## Explicitly not filed
 
 Out of scope for the MVP (`PROJECT_BRIEF.md` §20) — do not implement from chat:

@@ -736,3 +736,16 @@ test('capture comparison deltas vs first date (#174)', async ({ page }) => {
     fullPage: true,
   })
 })
+
+test('capture Update As of date (#175)', async ({ page }) => {
+  await seedValidationFixture(page)
+  await page.goto('/update')
+  await expect(page.getByRole('heading', { name: 'Update' })).toBeVisible()
+  const asOf = page.getByLabel('As of')
+  await expect(asOf).toBeVisible()
+  await expect(asOf).toHaveValue(new Date().toISOString().slice(0, 10))
+  await page.screenshot({
+    path: join(outDir, '175-update-as-of.png'),
+    fullPage: true,
+  })
+})

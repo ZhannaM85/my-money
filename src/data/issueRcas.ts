@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 175,
+    title: {
+      en: 'Update page shared As of date',
+      ru: 'Общая дата на странице «Обновить»',
+    },
+    en: 'Save always wrote today, so a past day meant opening each asset. One As of field (default today) now stamps every entered or No-change row with that date.',
+    ru: 'Сохранение всегда писало сегодня, поэтому прошлый день требовал открывать каждый актив. Одно поле «На дату» (по умолчанию сегодня) ставит эту дату на каждую введённую строку или «Без изменений».',
+  },
+  {
     issue: 174,
     title: {
       en: 'Comparison arrows and delta vs first date',

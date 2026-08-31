@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 183,
+    issue: 175,
+    date: '2026-08-31T22:20:00+03:00',
+    en: 'Update has an As of date (default today) so you can save every holding for one chosen day instead of editing assets one by one.',
+    ru: 'На «Обновить» есть дата «На дату» (по умолчанию сегодня), чтобы сохранить все позиции на выбранный день, а не править активы по одному.',
+  },
+  {
     version: 182,
     issue: 174,
     date: '2026-08-31T20:30:00+03:00',
