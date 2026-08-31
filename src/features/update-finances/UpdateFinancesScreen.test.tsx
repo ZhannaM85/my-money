@@ -165,4 +165,17 @@ describe('UpdateFinancesScreen', () => {
     expect(useAssetStore.getState().snapshots).toHaveLength(1)
     expect(useAssetStore.getState().snapshots[0]?.date).toBe('2026-08-01')
   })
+
+  it('renders the hint full width below the title, not beside the date (#178)', async () => {
+    render(
+      <MemoryRouter>
+        <UpdateFinancesScreen />
+      </MemoryRouter>,
+    )
+    const hint = await screen.findByTestId('update-description')
+    const title = screen.getByRole('heading', { name: 'Update' })
+    expect(hint.parentElement).not.toBe(title.parentElement)
+    expect(hint).toHaveTextContent(/Previous amounts/)
+    expect(screen.getByLabelText('As of')).toBeInTheDocument()
+  })
 })

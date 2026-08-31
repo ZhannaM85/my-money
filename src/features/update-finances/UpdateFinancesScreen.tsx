@@ -163,31 +163,38 @@ export function UpdateFinancesScreen() {
 
   return (
     <div className="flex flex-col gap-6">
-      <PageHeader
-        title={t.update.title}
-        description={t.update.description}
-        action={
-          <DateField
-            label={t.asset.snapshotDate}
-            value={asOf}
-            max={today}
-            onChange={(event) => {
-              const next = event.target.value
-              setAsOf(next)
-              setDrafts({})
-              setUnchanged({})
-              setEditing({})
-              setError(undefined)
-              if (!next || !isIsoDateOnOrBefore(next, today)) {
-                setAsOfError(t.asset.snapshotDateInvalid)
-                return
-              }
-              setAsOfError(undefined)
-            }}
-            error={asOfError}
-          />
-        }
-      />
+      <div className="flex flex-col gap-2">
+        <PageHeader
+          title={t.update.title}
+          action={
+            <DateField
+              label={t.asset.snapshotDate}
+              value={asOf}
+              max={today}
+              onChange={(event) => {
+                const next = event.target.value
+                setAsOf(next)
+                setDrafts({})
+                setUnchanged({})
+                setEditing({})
+                setError(undefined)
+                if (!next || !isIsoDateOnOrBefore(next, today)) {
+                  setAsOfError(t.asset.snapshotDateInvalid)
+                  return
+                }
+                setAsOfError(undefined)
+              }}
+              error={asOfError}
+            />
+          }
+        />
+        <p
+          data-testid="update-description"
+          className="text-sm text-muted-foreground"
+        >
+          {t.update.description}
+        </p>
+      </div>
       {!loaded ? (
         <p className="text-sm text-muted-foreground">{t.common.loading}</p>
       ) : rows.length === 0 ? (

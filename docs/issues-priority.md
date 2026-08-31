@@ -39,7 +39,7 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 | [#175](https://github.com/ZhannaM85/my-money/issues/175) | 🔍 Pending validation | Update page: shared As of date for bulk snapshots | Header date, default today; Save writes all rows on that day. Read-only existing amounts → #176. |
 | [#176](https://github.com/ZhannaM85/my-money/issues/176) | 🔍 Pending validation | Update: existing As of amount is read-only with edit icon | Follow-up to #175. Snapshot on that date → read-only + pencil; missing → input. |
 | [#177](https://github.com/ZhannaM85/my-money/issues/177) | 🔍 Pending validation | Comparison: edit a cell amount (inline preferred, not any-click) | Empty dash (e.g. BOG-GEL 5 Jan). Pencil, not whole-cell tap. Prefer inline over navigate. Related #176. |
-| [#178](https://github.com/ZhannaM85/my-money/issues/178) | 🔲 Open | Update header: description wraps beside the As of date | #175 put DateField in PageHeader action; hint squeezes. Full-width hint or date on its own row. |
+| [#178](https://github.com/ZhannaM85/my-money/issues/178) | 🔍 Pending validation | Update header: description wraps beside the As of date | Hint is a full-width row under title + As of, not in the leftover column. |
 | [#179](https://github.com/ZhannaM85/my-money/issues/179) | 🔲 Open | Update page: reorder holdings via icon (toggle save) | Icon on → reorder mode; icon again saves. Prefer same custom order as Assets. |
 
 ---

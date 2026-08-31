@@ -767,6 +767,30 @@ test('capture Update locked As of amount with edit (#176)', async ({
   })
 })
 
+test('capture Update header hint full width (#178)', async ({ page }) => {
+  await seedValidationFixture(page)
+  await page.goto('/settings')
+  await expect(page.getByRole('heading', { name: 'More' })).toBeVisible()
+  await page
+    .locator('label')
+    .filter({ hasText: 'Language' })
+    .locator('select')
+    .selectOption('ru')
+  await expect(
+    page
+      .locator('label')
+      .filter({ hasText: 'Язык' })
+      .locator('select'),
+  ).toHaveValue('ru')
+  await page.goto('/update')
+  await expect(page.getByRole('heading', { name: 'Обновить' })).toBeVisible()
+  await expect(page.getByTestId('update-description')).toBeVisible()
+  await page.screenshot({
+    path: join(outDir, '178-update-header-hint.png'),
+    fullPage: true,
+  })
+})
+
 test('capture comparison cell edit pencil (#177)', async ({ page }) => {
   await seedValidationFixture(page, { currencyDisplayMode: 'base' })
   await page.evaluate(() => {

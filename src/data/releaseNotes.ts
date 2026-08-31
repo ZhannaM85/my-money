@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 186,
+    issue: 178,
+    date: '2026-08-31T22:50:00+03:00',
+    en: 'On Update, the hint sits on its own full-width row under the title and As of date, so Russian (and other long) copy no longer wraps in a skinny column next to the date.',
+    ru: 'На «Обновить» подсказка идёт отдельной строкой на всю ширину под заголовком и датой, поэтому длинный русский текст больше не ломается в узком столбце рядом с датой.',
+  },
+  {
     version: 185,
     issue: 177,
     date: '2026-08-31T22:45:00+03:00',

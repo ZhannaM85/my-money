@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 178,
+    title: {
+      en: 'Update header description wrap',
+      ru: 'Перенос подсказки в шапке «Обновить»',
+    },
+    en: 'Putting As of in the PageHeader action left the hint in the leftover column (DateField is 13.5rem). The hint is now a full-width sibling under title + date.',
+    ru: 'Дата в action у PageHeader оставляла подсказку в узком столбце (DateField — 13.5rem). Теперь подсказка — соседний блок на всю ширину под заголовком и датой.',
+  },
+  {
     issue: 177,
     title: {
       en: 'Comparison inline cell edit',
