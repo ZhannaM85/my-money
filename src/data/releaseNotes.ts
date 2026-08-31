@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 182,
+    issue: 174,
+    date: '2026-08-31T20:30:00+03:00',
+    en: 'On Comparison, later date columns show a green up or red down arrow and the change versus the first (earliest) date. Unchanged amounts stay plain.',
+    ru: 'На Сравнении в следующих столбцах дат — зелёная стрелка вверх или красная вниз и изменение относительно первой (самой ранней) даты. Без изменения сумма остаётся обычной.',
+  },
+  {
     version: 181,
     issue: 169,
     date: '2026-08-30T17:55:00+03:00',

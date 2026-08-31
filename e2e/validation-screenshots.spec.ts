@@ -662,3 +662,77 @@ test('capture privacy policy page (#164)', async ({ page }) => {
     fullPage: true,
   })
 })
+
+test('capture comparison deltas vs first date (#174)', async ({ page }) => {
+  await seedValidationFixture(page, { currencyDisplayMode: 'base' })
+  await page.evaluate(async () => {
+    const now = '2026-08-17T00:00:00.000Z'
+    const version = await (async () => {
+      const listed = await indexedDB.databases?.()
+      const existing = listed?.find((row) => row.name === 'my-money')
+      return existing?.version && existing.version > 0 ? existing.version : 2
+    })()
+    await new Promise<void>((resolve, reject) => {
+      const open = indexedDB.open('my-money', version)
+      open.onerror = () => reject(open.error ?? new Error('idb open failed'))
+      open.onsuccess = () => {
+        const db = open.result
+        const tx = db.transaction(['assets', 'snapshots'], 'readwrite')
+        tx.objectStore('assets').put({
+          id: 'gel-card',
+          name: 'GEL card',
+          assetClass: 'money',
+          type: 'debit_card',
+          currency: 'EUR',
+          trackingStatus: 'included',
+          valuationMethod: 'account_balance',
+          updateFrequency: 'weekly',
+          createdAt: now,
+          updatedAt: now,
+        })
+        tx.objectStore('snapshots').put({
+          id: 's-eur-later',
+          assetId: 'eur-cash',
+          date: '2026-08-25',
+          amount: 1200,
+          currency: 'EUR',
+        })
+        tx.objectStore('snapshots').put({
+          id: 's-gel-early',
+          assetId: 'gel-card',
+          date: '2026-08-17',
+          amount: 200,
+          currency: 'EUR',
+        })
+        tx.objectStore('snapshots').put({
+          id: 's-gel-later',
+          assetId: 'gel-card',
+          date: '2026-08-25',
+          amount: 80,
+          currency: 'EUR',
+        })
+        tx.oncomplete = () => {
+          db.close()
+          resolve()
+        }
+        tx.onerror = () => reject(tx.error ?? new Error('idb tx failed'))
+      }
+    })
+    localStorage.setItem(
+      'my-money-comparison',
+      JSON.stringify({
+        state: { dates: ['2026-08-17', '2026-08-25'] },
+        version: 0,
+      }),
+    )
+  })
+  await page.reload()
+  await page.goto('/compare')
+  await expect(page.getByRole('heading', { name: 'Comparison' })).toBeVisible()
+  await expect(page.getByTestId('comparison-table')).toBeVisible()
+  await expect(page.getByTestId('comparison-delta').first()).toBeVisible()
+  await page.screenshot({
+    path: join(outDir, '174-comparison-deltas.png'),
+    fullPage: true,
+  })
+})

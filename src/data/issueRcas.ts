@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 174,
+    title: {
+      en: 'Comparison arrows and delta vs first date',
+      ru: 'Стрелки и дельта на Сравнении относительно первой даты',
+    },
+    en: 'The table showed each day’s amount with no cue for up or down. Later columns now show a green up / red down arrow and the signed base-currency change versus the first (earliest) date — not versus the previous neighbour. Unchanged or missing conversion stays plain.',
+    ru: 'Таблица показывала сумму на каждый день без подсказки, выросло это или упало. В следующих столбцах теперь зелёная стрелка вверх / красная вниз и изменение в базовой валюте относительно первой (самой ранней) даты — не относительно соседнего столбца. Без изменения или без курса строка остаётся обычной.',
+  },
+  {
     issue: 169,
     title: {
       en: 'Native backup and CSV via share sheet',

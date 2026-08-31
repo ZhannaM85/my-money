@@ -32,6 +32,14 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 
 ---
 
+## Tier 17 — Live feedback (2026-08-31)
+
+| # | Status | Issue | Notes |
+|---|--------|-------|-------|
+| [#174](https://github.com/ZhannaM85/my-money/issues/174) | 🔍 Pending validation | Comparison table: green/red arrows and delta vs first date | Later columns vs earliest date; delta under converted amount. |
+
+---
+
 ## Explicitly not filed
 
 Out of scope for the MVP (`PROJECT_BRIEF.md` §20) — do not implement from chat:

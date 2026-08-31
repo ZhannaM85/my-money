@@ -49,6 +49,9 @@ export interface Dictionary {
     comparisonTitle: string
     comparisonDescription: string
     comparisonNeedTwoDates: string
+    comparisonChangeHint: string
+    comparisonIncreased: (amount: string) => string
+    comparisonDecreased: (amount: string) => string
     removeFromComparison: (date: string) => string
     removeFromComparisonConfirm: (date: string) => string
     removeAllFromComparison: string

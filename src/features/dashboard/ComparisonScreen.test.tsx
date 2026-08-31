@@ -5,7 +5,7 @@ import { MemoryRouter } from 'react-router-dom'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { DEFAULT_SETTINGS } from '@/domain/settings'
 import { db } from '@/infrastructure/persistence/indexeddb'
-import { formatAmount } from '@/shared/lib/money'
+import { formatAmount, formatSignedAmount } from '@/shared/lib/money'
 import { useAssetStore } from '@/stores/assetStore'
 import { useComparisonStore } from '@/stores/comparisonStore'
 import { useFxStore } from '@/stores/fxStore'
@@ -367,5 +367,139 @@ describe('ComparisonScreen (#137)', () => {
     )
     expect(await screen.findByText('Cash')).toBeInTheDocument()
     expect(screen.queryByText('Sosnovo')).not.toBeInTheDocument()
+  })
+
+  it('shows a green up or red down delta vs the first date (#174)', async () => {
+    const now = '2026-08-17T00:00:00.000Z'
+    await useAssetStore.getState().saveAsset(
+      {
+        id: 'up',
+        name: 'EUR cash',
+        assetClass: 'money',
+        type: 'cash',
+        currency: 'EUR',
+        trackingStatus: 'included',
+        valuationMethod: 'account_balance',
+        updateFrequency: 'weekly',
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        assetId: 'up',
+        date: '2026-08-25',
+        amount: 100,
+        currency: 'EUR',
+      },
+    )
+    await useAssetStore.getState().saveAsset(
+      {
+        id: 'down',
+        name: 'GEL card',
+        assetClass: 'money',
+        type: 'debit_card',
+        currency: 'EUR',
+        trackingStatus: 'included',
+        valuationMethod: 'account_balance',
+        updateFrequency: 'weekly',
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        assetId: 'down',
+        date: '2026-08-25',
+        amount: 200,
+        currency: 'EUR',
+      },
+    )
+    await useAssetStore.getState().saveSnapshots([
+      {
+        assetId: 'up',
+        date: '2026-08-31',
+        amount: 150,
+        currency: 'EUR',
+      },
+      {
+        assetId: 'down',
+        date: '2026-08-31',
+        amount: 80,
+        currency: 'EUR',
+      },
+    ])
+    useComparisonStore.setState({ dates: ['2026-08-25', '2026-08-31'] })
+    render(
+      <MemoryRouter>
+        <ComparisonScreen />
+      </MemoryRouter>,
+    )
+    expect(await screen.findByTestId('comparison-table')).toBeInTheDocument()
+    expect(
+      screen.getByText(/Later columns show change versus the first date/),
+    ).toBeInTheDocument()
+    const up = await screen.findByLabelText(
+      `Up ${formatSignedAmount(50, 'EUR')}`,
+    )
+    expect(up).toHaveAttribute('data-direction', 'up')
+    const down = screen.getByLabelText(
+      `Down ${formatSignedAmount(-120, 'EUR')}`,
+    )
+    expect(down).toHaveAttribute('data-direction', 'down')
+    const deltas = screen.getAllByTestId('comparison-delta')
+    expect(deltas).toHaveLength(3)
+  })
+
+  it('compares a third date to the first column, not the previous (#174)', async () => {
+    const now = '2026-08-17T00:00:00.000Z'
+    await useAssetStore.getState().saveAsset(
+      {
+        id: 'a1',
+        name: 'Cash',
+        assetClass: 'money',
+        type: 'cash',
+        currency: 'EUR',
+        trackingStatus: 'included',
+        valuationMethod: 'account_balance',
+        updateFrequency: 'weekly',
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        assetId: 'a1',
+        date: '2026-08-25',
+        amount: 100,
+        currency: 'EUR',
+      },
+    )
+    await useAssetStore.getState().saveSnapshots([
+      {
+        assetId: 'a1',
+        date: '2026-08-27',
+        amount: 150,
+        currency: 'EUR',
+      },
+      {
+        assetId: 'a1',
+        date: '2026-08-29',
+        amount: 80,
+        currency: 'EUR',
+      },
+    ])
+    useComparisonStore.setState({
+      dates: ['2026-08-25', '2026-08-27', '2026-08-29'],
+    })
+    render(
+      <MemoryRouter>
+        <ComparisonScreen />
+      </MemoryRouter>,
+    )
+    expect(await screen.findByTestId('comparison-table')).toBeInTheDocument()
+    expect(
+      screen.getAllByLabelText(`Up ${formatSignedAmount(50, 'EUR')}`),
+    ).toHaveLength(2)
+    expect(
+      screen.getAllByLabelText(`Down ${formatSignedAmount(-20, 'EUR')}`),
+    ).toHaveLength(2)
+    expect(
+      screen.queryByLabelText(`Down ${formatSignedAmount(-70, 'EUR')}`),
+    ).not.toBeInTheDocument()
   })
 })

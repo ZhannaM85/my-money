@@ -43,6 +43,10 @@ export const ru: Dictionary = {
     comparisonTitle: 'Сравнение',
     comparisonDescription: 'Позиции на даты, которые вы добавили со Сводки.',
     comparisonNeedTwoDates: 'Добавьте хотя бы две даты со Сводки.',
+    comparisonChangeHint:
+      'В следующих столбцах — изменение относительно первой даты.',
+    comparisonIncreased: (amount) => `Рост ${amount}`,
+    comparisonDecreased: (amount) => `Снижение ${amount}`,
     removeFromComparison: (date) => `Убрать ${date}`,
     removeFromComparisonConfirm: (date) => `Убрать ${date} из сравнения?`,
     removeAllFromComparison: 'Убрать все даты',

@@ -7,6 +7,42 @@ export interface ComparisonRow {
   byDate: Readonly<Record<string, HoldingConversion | undefined>>
 }
 
+/** Half a cent — treat FX noise as unchanged (#174). */
+const ZERO_DELTA = 0.005
+
+/**
+ * Base-currency change of a later column vs the first (earliest) date.
+ * Null when either side is missing, unconverted, or unchanged.
+ */
+export function comparisonDelta(
+  current: HoldingConversion | undefined,
+  baseline: HoldingConversion | undefined,
+): number | null {
+  if (
+    current === undefined ||
+    baseline === undefined ||
+    !current.conversionAvailable ||
+    !baseline.conversionAvailable ||
+    current.convertedAmount === null ||
+    baseline.convertedAmount === null
+  ) {
+    return null
+  }
+  const delta = current.convertedAmount - baseline.convertedAmount
+  if (Math.abs(delta) < ZERO_DELTA) return null
+  return delta
+}
+
+export function comparisonTotalDelta(
+  current: number | undefined,
+  baseline: number | undefined,
+): number | null {
+  if (current === undefined || baseline === undefined) return null
+  const delta = current - baseline
+  if (Math.abs(delta) < ZERO_DELTA) return null
+  return delta
+}
+
 export function comparisonRows(
   points: readonly HistoricalPoint[],
 ): ComparisonRow[] {

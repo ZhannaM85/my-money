@@ -1,5 +1,9 @@
 import { describe, expect, it } from 'vitest'
-import { comparisonRows } from './comparisonRows'
+import {
+  comparisonDelta,
+  comparisonRows,
+  comparisonTotalDelta,
+} from './comparisonRows'
 
 describe('comparisonRows (#137)', () => {
   it('unions assets across dates and leaves missing days empty', () => {
@@ -101,5 +105,38 @@ describe('comparisonRows (#137)', () => {
       },
     ])
     expect(rows.map((row) => row.name)).toEqual(['Cash'])
+  })
+})
+
+describe('comparisonDelta (#174)', () => {
+  const holding = (
+    convertedAmount: number | null,
+    conversionAvailable = true,
+  ) => ({
+    assetId: 'cash',
+    name: 'Cash',
+    currency: 'EUR',
+    nativeAmount: convertedAmount ?? 0,
+    convertedAmount,
+    conversionAvailable,
+  })
+
+  it('returns later minus first when both sides convert', () => {
+    expect(comparisonDelta(holding(150), holding(100))).toBe(50)
+    expect(comparisonDelta(holding(80), holding(100))).toBe(-20)
+  })
+
+  it('is null when unchanged, missing, or unconverted', () => {
+    expect(comparisonDelta(holding(100), holding(100))).toBeNull()
+    expect(comparisonDelta(holding(100.001), holding(100))).toBeNull()
+    expect(comparisonDelta(undefined, holding(100))).toBeNull()
+    expect(comparisonDelta(holding(150), undefined)).toBeNull()
+    expect(comparisonDelta(holding(null, false), holding(100))).toBeNull()
+  })
+
+  it('totals follow the same rule', () => {
+    expect(comparisonTotalDelta(250, 100)).toBe(150)
+    expect(comparisonTotalDelta(100, 100)).toBeNull()
+    expect(comparisonTotalDelta(undefined, 100)).toBeNull()
   })
 })

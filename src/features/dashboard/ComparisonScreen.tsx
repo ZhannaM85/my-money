@@ -1,11 +1,19 @@
 import { useEffect, useLayoutEffect, useMemo, useRef } from 'react'
 import { Link } from 'react-router-dom'
-import { Trash2, X } from 'lucide-react'
+import { ArrowDown, ArrowUp, Trash2, X } from 'lucide-react'
 import { historicalNetWorth } from '@/domain/netWorth'
 import type { HoldingConversion } from '@/domain/netWorth'
-import { comparisonRows } from '@/features/dashboard/comparisonRows'
+import {
+  comparisonDelta,
+  comparisonRows,
+  comparisonTotalDelta,
+} from '@/features/dashboard/comparisonRows'
 import { useLocale, useTranslation } from '@/i18n'
-import { formatAmount, formatChartAxisDate } from '@/shared/lib/money'
+import {
+  formatAmount,
+  formatChartAxisDate,
+  formatSignedAmount,
+} from '@/shared/lib/money'
 import { Button } from '@/shared/ui/button'
 import { EmptyState } from '@/shared/ui/empty-state'
 import { PageHeader } from '@/shared/ui/page-header'
@@ -44,11 +52,47 @@ function syncComparisonRowHeights(
   }
 }
 
+function ComparisonDelta({
+  delta,
+  currency,
+}: {
+  delta: number | null
+  currency: string
+}) {
+  const t = useTranslation()
+  const locale = useLocale()
+  if (delta === null) return null
+  const up = delta > 0
+  const Icon = up ? ArrowUp : ArrowDown
+  const amount = formatSignedAmount(delta, currency, locale)
+  return (
+    <span
+      className={
+        up
+          ? 'inline-flex items-center justify-end gap-0.5 text-xs tabular-nums text-[var(--chart-investments)]'
+          : 'inline-flex items-center justify-end gap-0.5 text-xs tabular-nums text-destructive'
+      }
+      data-testid="comparison-delta"
+      data-direction={up ? 'up' : 'down'}
+      aria-label={
+        up
+          ? t.dashboard.comparisonIncreased(amount)
+          : t.dashboard.comparisonDecreased(amount)
+      }
+    >
+      <Icon className="size-3 shrink-0" aria-hidden />
+      {amount}
+    </span>
+  )
+}
+
 function ComparisonCell({
   holding,
+  baseline,
   baseCurrency,
 }: {
   holding: HoldingConversion | undefined
+  baseline: HoldingConversion | undefined
   baseCurrency: string
 }) {
   const t = useTranslation()
@@ -60,12 +104,13 @@ function ComparisonCell({
     holding.conversionAvailable &&
     holding.convertedAmount !== null &&
     holding.currency !== baseCurrency
+  const delta = comparisonDelta(holding, baseline)
   if (
     !holding.conversionAvailable ||
     holding.convertedAmount === null
   ) {
     return (
-      <span className="flex flex-col gap-0.5">
+      <span className="flex flex-col items-end gap-0.5">
         <span className="tabular-nums">
           {formatAmount(holding.nativeAmount, holding.currency, locale)}
         </span>
@@ -76,10 +121,11 @@ function ComparisonCell({
     )
   }
   return (
-    <span className="flex flex-col gap-0.5">
+    <span className="flex flex-col items-end gap-0.5">
       <span className="tabular-nums font-medium">
         {formatAmount(holding.convertedAmount, baseCurrency, locale)}
       </span>
+      <ComparisonDelta delta={delta} currency={baseCurrency} />
       {showNative ? (
         <span className="tabular-nums text-xs text-muted-foreground">
           {formatAmount(holding.nativeAmount, holding.currency, locale)}
@@ -185,11 +231,13 @@ export function ComparisonScreen() {
     )
   }
 
+  const baselineDate = dates[0] ?? ''
+
   return (
     <div className="flex w-full min-w-0 flex-col gap-6 overflow-x-hidden">
       <PageHeader
         title={t.dashboard.comparisonTitle}
-        description={t.dashboard.comparisonDescription}
+        description={`${t.dashboard.comparisonDescription} ${t.dashboard.comparisonChangeHint}`}
         action={
           <Button
             type="button"
@@ -293,6 +341,11 @@ export function ComparisonScreen() {
                     >
                       <ComparisonCell
                         holding={row.byDate[date]}
+                        baseline={
+                          date === baselineDate
+                            ? undefined
+                            : row.byDate[baselineDate]
+                        }
                         baseCurrency={baseCurrency}
                       />
                     </td>
@@ -307,7 +360,26 @@ export function ComparisonScreen() {
                     key={date}
                     className={`px-2 py-3 text-right font-semibold tabular-nums ${COMPARISON_DATE_COL_CLASS}`}
                   >
-                    {formatAmount(totals[date] ?? 0, baseCurrency, locale)}
+                    <span className="flex flex-col items-end gap-0.5">
+                      <span>
+                        {formatAmount(
+                          totals[date] ?? 0,
+                          baseCurrency,
+                          locale,
+                        )}
+                      </span>
+                      <ComparisonDelta
+                        delta={
+                          date === baselineDate
+                            ? null
+                            : comparisonTotalDelta(
+                                totals[date],
+                                totals[baselineDate],
+                              )
+                        }
+                        currency={baseCurrency}
+                      />
+                    </span>
                   </td>
                 ))}
               </tr>
