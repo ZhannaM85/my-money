@@ -316,6 +316,30 @@ describe('UpdateFinancesScreen', () => {
     ).toBeTruthy()
   })
 
+  it('shows institution under the holding title when set (#184)', async () => {
+    await useAssetStore.getState().saveAsset({
+      id: 'a1',
+      name: 'Revolut',
+      assetClass: 'money',
+      type: 'bank',
+      currency: 'EUR',
+      trackingStatus: 'included',
+      valuationMethod: 'account_balance',
+      updateFrequency: 'weekly',
+      institution: 'BOG',
+      createdAt: now,
+      updatedAt: now,
+    })
+    render(
+      <MemoryRouter>
+        <UpdateFinancesScreen />
+      </MemoryRouter>,
+    )
+    await screen.findByText('Revolut')
+    expect(screen.getByText('BOG')).toBeInTheDocument()
+    expect(screen.getByText(/Updated/)).toBeInTheDocument()
+  })
+
   it('follows the Assets custom order and keeps Suggested now as a badge (#179)', async () => {
     await useAssetStore.getState().saveAsset(
       {

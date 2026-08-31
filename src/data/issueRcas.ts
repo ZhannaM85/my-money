@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 184,
+    title: {
+      en: 'Update institution under the title',
+      ru: 'Учреждение под названием на «Обновить»',
+    },
+    en: 'Update only showed the name, so two BOG cards looked the same. Institution now sits under the title when set, matching Assets/Dashboard (#109).',
+    ru: 'На «Обновить» было только имя, поэтому две карты BOG выглядели одинаково. Учреждение теперь под названием, как на Активах/Сводке (#109).',
+  },
+  {
     issue: 183,
     title: {
       en: 'Update Save icon while reordering',

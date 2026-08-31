@@ -954,6 +954,43 @@ test('capture Comparison date columns sized to amounts (#182)', async ({
   })
 })
 
+test('capture Update institution under title (#184)', async ({ page }) => {
+  await seedValidationFixture(page)
+  await page.evaluate(async () => {
+    const listed = await indexedDB.databases?.()
+    const existing = listed?.find((row) => row.name === 'my-money')
+    const version =
+      existing?.version && existing.version > 0 ? existing.version : 2
+    await new Promise<void>((resolve, reject) => {
+      const open = indexedDB.open('my-money', version)
+      open.onerror = () => reject(open.error ?? new Error('idb open failed'))
+      open.onsuccess = () => {
+        const db = open.result
+        const tx = db.transaction(['assets'], 'readwrite')
+        const store = tx.objectStore('assets')
+        const get = store.get('usd-cash')
+        get.onsuccess = () => {
+          const row = get.result as Record<string, unknown> | undefined
+          if (row) store.put({ ...row, institution: 'BOG' })
+        }
+        tx.oncomplete = () => {
+          db.close()
+          resolve()
+        }
+        tx.onerror = () => reject(tx.error ?? new Error('idb write failed'))
+      }
+    })
+  })
+  await page.reload()
+  await page.goto('/update')
+  await expect(page.getByRole('heading', { name: 'Update' })).toBeVisible()
+  await expect(page.getByText('BOG')).toBeVisible()
+  await page.screenshot({
+    path: join(outDir, '184-update-institution.png'),
+    fullPage: true,
+  })
+})
+
 test('capture Update Save icon while reordering (#183)', async ({ page }) => {
   await seedValidationFixture(page)
   await page.goto('/update')

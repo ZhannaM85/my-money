@@ -365,8 +365,15 @@ export function UpdateFinancesScreen() {
                   const locked = Boolean(onDate) && !editing[asset.id]
                   const meta = (
                     <>
-                      <div className="flex items-baseline justify-between gap-3">
-                        <span className="font-medium">{asset.name}</span>
+                      <div className="flex items-start justify-between gap-3">
+                        <span className="flex min-w-0 flex-col">
+                          <span className="font-medium">{asset.name}</span>
+                          {asset.institution?.trim() ? (
+                            <span className="text-xs text-muted-foreground">
+                              {asset.institution.trim()}
+                            </span>
+                          ) : null}
+                        </span>
                         {!reorder.reordering ? (
                           <span className="text-sm text-muted-foreground">
                             {latest

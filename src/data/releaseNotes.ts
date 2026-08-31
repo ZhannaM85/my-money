@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 192,
+    issue: 184,
+    date: '2026-08-31T23:40:00+03:00',
+    en: 'Update cards show the institution under the holding name when it is set, so similar names are easier to tell apart. Last-updated stays on the next line.',
+    ru: 'На «Обновить» под именем позиции показывается учреждение, если оно задано — похожие названия проще различить. «Обновлено» остаётся на следующей строке.',
+  },
+  {
     version: 191,
     issue: 183,
     date: '2026-08-31T23:20:00+03:00',
