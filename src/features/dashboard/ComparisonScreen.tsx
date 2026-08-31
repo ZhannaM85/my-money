@@ -30,8 +30,8 @@ import { useSettingsStore } from '@/stores/settingsStore'
 /** Narrow wrapping name column so two date columns fit a phone (#138). */
 export const COMPARISON_NAME_COL_CLASS =
   'w-24 max-w-24 min-w-24 whitespace-normal break-words [overflow-wrap:anywhere]'
-export const COMPARISON_DATE_COL_CLASS =
-  'min-w-[8.25rem] w-[8.25rem] max-w-[8.25rem]'
+/** Date columns grow with the longest amount; extra width scrolls (#182). */
+export const COMPARISON_DATE_COL_CLASS = 'whitespace-nowrap min-w-[8.25rem]'
 
 /** Match name-column row heights to date-column rows (#139). */
 function syncComparisonRowHeights(
@@ -115,7 +115,7 @@ function ComparisonAmountDisplay({
     holding.convertedAmount === null
   ) {
     return (
-      <span className="flex flex-col items-end gap-0.5">
+      <span className="flex flex-col items-end gap-0.5 whitespace-nowrap">
         <span className="tabular-nums">
           {formatAmount(holding.nativeAmount, holding.currency, locale)}
         </span>
@@ -126,7 +126,7 @@ function ComparisonAmountDisplay({
     )
   }
   return (
-    <span className="flex flex-col items-end gap-0.5">
+    <span className="flex flex-col items-end gap-0.5 whitespace-nowrap">
       <span className="tabular-nums font-medium">
         {formatAmount(holding.convertedAmount, baseCurrency, locale)}
       </span>
@@ -227,7 +227,7 @@ function ComparisonCell({
   }
 
   return (
-    <span className="flex items-start justify-end gap-0.5">
+    <span className="flex items-start justify-end gap-1 whitespace-nowrap">
       <ComparisonAmountDisplay
         holding={holding}
         baseline={baseline}
@@ -428,13 +428,8 @@ export function ComparisonScreen() {
         >
           <table
             ref={dateTableRef}
-            className="w-max table-fixed border-separate border-spacing-0 text-sm"
+            className="w-max border-separate border-spacing-0 text-sm"
           >
-            <colgroup>
-              {dates.map((date) => (
-                <col key={date} className="w-[8.25rem]" />
-              ))}
-            </colgroup>
             <thead>
               <tr>
                 {dates.map((date) => (
@@ -489,7 +484,7 @@ export function ComparisonScreen() {
                     key={date}
                     className={`px-2 py-3 text-right font-semibold tabular-nums ${COMPARISON_DATE_COL_CLASS}`}
                   >
-                    <span className="flex flex-col items-end gap-0.5">
+                    <span className="flex flex-col items-end gap-0.5 whitespace-nowrap">
                       <span>
                         {formatAmount(
                           totals[date] ?? 0,

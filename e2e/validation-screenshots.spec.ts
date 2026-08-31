@@ -898,3 +898,59 @@ test('capture Update stay in view mode after Save (#181)', async ({ page }) => {
   })
 })
 
+test('capture Comparison date columns sized to amounts (#182)', async ({
+  page,
+}) => {
+  await seedValidationFixture(page, { currencyDisplayMode: 'base' })
+  await page.evaluate(async () => {
+    const listed = await indexedDB.databases?.()
+    const existing = listed?.find((row) => row.name === 'my-money')
+    const version =
+      existing?.version && existing.version > 0 ? existing.version : 2
+    await new Promise<void>((resolve, reject) => {
+      const open = indexedDB.open('my-money', version)
+      open.onerror = () => reject(open.error ?? new Error('idb open failed'))
+      open.onsuccess = () => {
+        const db = open.result
+        const tx = db.transaction(['snapshots'], 'readwrite')
+        const store = tx.objectStore('snapshots')
+        store.put({
+          id: 's-eur',
+          assetId: 'eur-cash',
+          date: '2026-08-17',
+          amount: 1_042_317.11,
+          currency: 'EUR',
+        })
+        store.put({
+          id: 's-eur-jan',
+          assetId: 'eur-cash',
+          date: '2026-08-25',
+          amount: 220_509.5,
+          currency: 'EUR',
+        })
+        tx.oncomplete = () => {
+          db.close()
+          resolve()
+        }
+        tx.onerror = () => reject(tx.error ?? new Error('idb write failed'))
+      }
+    })
+    localStorage.setItem(
+      'my-money-comparison',
+      JSON.stringify({
+        state: { dates: ['2026-08-17', '2026-08-25'] },
+        version: 0,
+      }),
+    )
+  })
+  await page.reload()
+  await page.goto('/compare')
+  await expect(page.getByRole('heading', { name: 'Comparison' })).toBeVisible()
+  await expect(page.getByTestId('comparison-table')).toBeVisible()
+  await expect(page.getByText('€1,042,317.11').first()).toBeVisible()
+  await page.screenshot({
+    path: join(outDir, '182-comparison-column-width.png'),
+    fullPage: true,
+  })
+})
+

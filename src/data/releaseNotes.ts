@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 190,
+    issue: 182,
+    date: '2026-08-31T23:35:00+03:00',
+    en: 'Comparison date columns grow with the longest amount and delta instead of clipping digits. Extra width scrolls; names stay put.',
+    ru: 'Столбцы дат на Сравнении растут с самой длинной суммой и дельтой, а не обрезают цифры. Лишняя ширина прокручивается; имена остаются на месте.',
+  },
+  {
     version: 189,
     issue: 181,
     date: '2026-08-31T23:25:00+03:00',

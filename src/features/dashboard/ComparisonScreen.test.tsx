@@ -236,7 +236,47 @@ describe('ComparisonScreen (#137)', () => {
     expect(nameCol).toHaveClass('break-words')
     const dateHeader = screen.getByRole('columnheader', { name: '25 Aug' })
     expect(dateHeader.className).toContain('min-w-[8.25rem]')
-    expect(dateHeader.className).toContain('w-[8.25rem]')
+    expect(dateHeader.className).toContain('whitespace-nowrap')
+    expect(dateHeader.className).not.toContain('max-w-[8.25rem]')
+  })
+
+  it('sizes date columns to the amount instead of clipping (#182)', async () => {
+    const now = '2026-08-17T00:00:00.000Z'
+    await useAssetStore.getState().saveAsset(
+      {
+        id: 'a1',
+        name: 'USD cash',
+        assetClass: 'money',
+        type: 'cash',
+        currency: 'EUR',
+        trackingStatus: 'included',
+        valuationMethod: 'account_balance',
+        updateFrequency: 'weekly',
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        assetId: 'a1',
+        date: '2026-08-25',
+        amount: 1_042_317.11,
+        currency: 'EUR',
+      },
+    )
+    useComparisonStore.setState({ dates: ['2026-08-25', '2026-08-29'] })
+    render(
+      <MemoryRouter>
+        <ComparisonScreen />
+      </MemoryRouter>,
+    )
+    expect(
+      await screen.findAllByText(formatAmount(1_042_317.11, 'EUR')),
+    ).not.toHaveLength(0)
+    const scroller = screen.getByTestId('comparison-h-scroll')
+    const dateTable = scroller.querySelector('table')
+    expect(dateTable?.className).not.toContain('table-fixed')
+    const dateHeader = screen.getByRole('columnheader', { name: '25 Aug' })
+    expect(dateHeader.className).toContain('whitespace-nowrap')
+    expect(dateHeader.className).not.toContain('max-w-[8.25rem]')
   })
 
   it('scrolls date columns inside the table, not the page; names stay sticky (#139)', async () => {

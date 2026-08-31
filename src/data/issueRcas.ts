@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 182,
+    title: {
+      en: 'Comparison date columns clip amounts',
+      ru: 'Столбцы дат на Сравнении обрезают суммы',
+    },
+    en: 'Fixed 8.25rem date columns (from #138) plus delta (#174) and pencil (#177) hid leading/trailing digits. Columns now size to content; overflow scrolls (#139).',
+    ru: 'Фиксированные 8.25rem столбцы (#138) плюс дельта (#174) и карандаш (#177) прятали цифры. Теперь ширина по содержимому; лишнее прокручивается (#139).',
+  },
+  {
     issue: 181,
     title: {
       en: 'Update stays in view mode after Save',
