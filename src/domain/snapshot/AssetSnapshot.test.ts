@@ -1,5 +1,10 @@
 import { describe, expect, it } from 'vitest'
-import { hasDuplicateSnapshot, optionalSnapshotNote, snapshotOnDate } from './AssetSnapshot'
+import {
+  hasDuplicateSnapshot,
+  optionalSnapshotNote,
+  snapshotBeforeDate,
+  snapshotOnDate,
+} from './AssetSnapshot'
 
 describe('optionalSnapshotNote', () => {
   it('trims text and drops empty notes so they do not persist', () => {
@@ -78,5 +83,36 @@ describe('snapshotOnDate (#176)', () => {
     ]
     expect(snapshotOnDate(rows, 'a1', '2026-08-01')?.amount).toBe(1000)
     expect(snapshotOnDate(rows, 'a1', '2026-08-31')).toBeUndefined()
+  })
+})
+
+describe('snapshotBeforeDate (#180)', () => {
+  const rows = [
+    {
+      id: 's1',
+      assetId: 'a1',
+      date: '2026-08-01',
+      amount: 1000,
+      currency: 'EUR',
+      createdAt: '2026-08-01T00:00:00.000Z',
+    },
+    {
+      id: 's2',
+      assetId: 'a1',
+      date: '2026-08-25',
+      amount: 2000,
+      currency: 'EUR',
+      createdAt: '2026-08-25T00:00:00.000Z',
+    },
+  ]
+
+  it('returns the last snapshot strictly before the date, not overall latest', () => {
+    expect(snapshotBeforeDate(rows, 'a1', '2026-08-10')?.amount).toBe(1000)
+    expect(snapshotBeforeDate(rows, 'a1', '2026-08-25')?.amount).toBe(1000)
+    expect(snapshotBeforeDate(rows, 'a1', '2026-08-31')?.amount).toBe(2000)
+  })
+
+  it('returns undefined when nothing is earlier', () => {
+    expect(snapshotBeforeDate(rows, 'a1', '2026-08-01')).toBeUndefined()
   })
 })

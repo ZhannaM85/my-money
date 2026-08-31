@@ -287,4 +287,36 @@ describe('UpdateFinancesScreen', () => {
     )
     expect(screen.getByText(/Suggested now/)).toBeInTheDocument()
   })
+
+  it('pre-fills and No-change uses the snapshot before As of, not a later latest (#180)', async () => {
+    const user = userEvent.setup()
+    await useAssetStore.getState().saveSnapshots([
+      {
+        assetId: 'a1',
+        date: todayIsoDate(),
+        amount: 9999,
+        currency: 'EUR',
+      },
+    ])
+    render(
+      <MemoryRouter>
+        <UpdateFinancesScreen />
+      </MemoryRouter>,
+    )
+    const asOf = await screen.findByLabelText('As of')
+    const past = addDaysIso(todayIsoDate(), -3)
+    setDateField(asOf, past)
+    const input = await screen.findByLabelText('Revolut new amount')
+    expect(input).toHaveAttribute('placeholder', '1,000.00')
+    await user.click(screen.getByRole('button', { name: 'No change' }))
+    await user.click(screen.getByRole('button', { name: 'Save updates' }))
+    await waitFor(() => {
+      expect(
+        useAssetStore
+          .getState()
+          .snapshots.find((row) => row.assetId === 'a1' && row.date === past)
+          ?.amount,
+      ).toBe(1000)
+    })
+  })
 })

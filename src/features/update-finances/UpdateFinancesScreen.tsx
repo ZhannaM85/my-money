@@ -16,7 +16,7 @@ import {
 import { CSS } from '@dnd-kit/utilities'
 import { GripVertical, ListOrdered, Pencil } from 'lucide-react'
 import { isSuggestedUpdate } from '@/domain/asset'
-import { latestSnapshot, snapshotOnDate } from '@/domain/snapshot'
+import { latestSnapshot, snapshotBeforeDate, snapshotOnDate } from '@/domain/snapshot'
 import { sortAssets } from '@/features/assets/assetListOrder'
 import { useAssetReorder } from '@/features/assets/useAssetReorder'
 import { formatLastUpdated, useLocale, useTranslation } from '@/i18n'
@@ -123,6 +123,7 @@ export function UpdateFinancesScreen() {
       .map((asset) => {
         const latest = latestSnapshot(snapshots, asset.id)
         const onDate = snapshotOnDate(snapshots, asset.id, asOf)
+        const previous = snapshotBeforeDate(snapshots, asset.id, asOf)
         return {
           id: asset.id,
           name: asset.name,
@@ -130,6 +131,7 @@ export function UpdateFinancesScreen() {
           asset,
           latest,
           onDate,
+          previous,
           suggested: isSuggestedUpdate(
             asset.updateFrequency,
             latest?.date,
@@ -231,7 +233,7 @@ export function UpdateFinancesScreen() {
       createdAt: string
       note?: string
     }[] = []
-    for (const { asset, latest, onDate } of rows) {
+    for (const { asset, previous, onDate } of rows) {
       const raw = drafts[asset.id]?.trim() ?? ''
       if (onDate && !editing[asset.id]) continue
       if (raw !== '') {
@@ -257,12 +259,12 @@ export function UpdateFinancesScreen() {
         }
         continue
       }
-      if (!onDate && unchanged[asset.id] && latest) {
+      if (!onDate && unchanged[asset.id] && previous) {
         toWrite.push({
           assetId: asset.id,
           date: asOf,
-          amount: latest.amount,
-          currency: latest.currency,
+          amount: previous.amount,
+          currency: previous.currency,
         })
       }
     }
@@ -354,7 +356,7 @@ export function UpdateFinancesScreen() {
           {(() => {
             const list = (
               <ul className="flex flex-col gap-4">
-                {rows.map(({ asset, latest, onDate, suggested }) => {
+                {rows.map(({ asset, latest, onDate, previous, suggested }) => {
                   const locked = Boolean(onDate) && !editing[asset.id]
                   const meta = (
                     <>
@@ -440,11 +442,11 @@ export function UpdateFinancesScreen() {
                                         locale,
                                         onDate.currency,
                                       )
-                                    : latest
+                                    : previous
                                       ? formatEditableAmount(
-                                          latest.amount,
+                                          previous.amount,
                                           locale,
-                                          latest.currency,
+                                          previous.currency,
                                         )
                                       : t.asset.amountPlaceholder
                                 }
@@ -488,12 +490,12 @@ export function UpdateFinancesScreen() {
                                   unchanged[asset.id] ? 'default' : 'outline'
                                 }
                                 className={cn('h-12 shrink-0')}
-                                disabled={!latest}
+                                disabled={!previous}
                                 onClick={() =>
                                   markUnchanged(
                                     asset.id,
-                                    latest?.amount,
-                                    latest?.currency ?? asset.currency,
+                                    previous?.amount,
+                                    previous?.currency ?? asset.currency,
                                   )
                                 }
                               >

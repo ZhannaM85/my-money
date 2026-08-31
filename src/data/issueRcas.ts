@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 180,
+    title: {
+      en: 'Update pre-fill from snapshot before As of',
+      ru: 'Подстановка суммы до даты на «Обновить»',
+    },
+    en: 'Inputs used the overall latest snapshot, so a past As of showed a later amount. Placeholder and No change now use the last snapshot strictly before As of.',
+    ru: 'Поля брали самый поздний снимок, поэтому прошлая дата показывала более позднюю сумму. Подсказка и «Без изменений» теперь берут последний снимок строго до выбранной даты.',
+  },
+  {
     issue: 179,
     title: {
       en: 'Update page reorder via toggle icon',

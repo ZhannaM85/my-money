@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 188,
+    issue: 180,
+    date: '2026-08-31T23:15:00+03:00',
+    en: 'On Update, the amount hint and No change use the last figure before the As of date, not a later latest — so backfilling a past day does not start from today’s number.',
+    ru: 'На «Обновить» подсказка суммы и «Без изменений» берут последнюю цифру до выбранной даты, а не более позднюю — заполняя прошлый день, вы не начинаете с сегодняшней суммы.',
+  },
+  {
     version: 187,
     issue: 179,
     date: '2026-08-31T23:05:00+03:00',

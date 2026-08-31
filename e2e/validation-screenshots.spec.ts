@@ -829,3 +829,48 @@ test('capture Update reorder mode (#179)', async ({ page }) => {
     fullPage: true,
   })
 })
+
+test('capture Update prefill from snapshot before As of (#180)', async ({
+  page,
+}) => {
+  await seedValidationFixture(page)
+  await page.evaluate(async () => {
+    const listed = await indexedDB.databases?.()
+    const existing = listed?.find((row) => row.name === 'my-money')
+    const version =
+      existing?.version && existing.version > 0 ? existing.version : 2
+    await new Promise<void>((resolve, reject) => {
+      const open = indexedDB.open('my-money', version)
+      open.onerror = () => reject(open.error ?? new Error('idb open failed'))
+      open.onsuccess = () => {
+        const db = open.result
+        const tx = db.transaction(['snapshots'], 'readwrite')
+        tx.objectStore('snapshots').put({
+          id: 's-eur-later',
+          assetId: 'eur-cash',
+          date: '2026-08-25',
+          amount: 9999,
+          currency: 'EUR',
+        })
+        tx.oncomplete = () => {
+          db.close()
+          resolve()
+        }
+        tx.onerror = () => reject(tx.error ?? new Error('idb write failed'))
+      }
+    })
+  })
+  await page.reload()
+  await page.goto('/update')
+  await expect(page.getByRole('heading', { name: 'Update' })).toBeVisible()
+  await page.getByLabel('As of').fill('2026-08-20')
+  await expect(page.getByLabel('Euro cash new amount')).toHaveAttribute(
+    'placeholder',
+    '1,000.00',
+  )
+  await page.screenshot({
+    path: join(outDir, '180-update-prefill-previous.png'),
+    fullPage: true,
+  })
+})
+

@@ -61,6 +61,7 @@ gh issue edit 108 --add-label validation
 | `177-comparison-cell-edit.png` | Comparison · pencil to edit a cell amount (#177) |
 | `178-update-header-hint.png` | Update · full-width hint under title + As of (RU, #178) |
 | `179-update-reorder.png` | Update · reorder icon on, drag grips (#179) |
+| `180-update-prefill-previous.png` | Update · past As of placeholder from prior snapshot, not later latest (#180) |
 | `147-positions-hidden-from-total.png` | Dashboard · hidden asset dropped from total (#147) |
 | `150-allocation-swipe-hide.png` | Allocation · tap expanded holding to reveal Hide (#150) |
 | `148-positions-hidden-disabled.png` | Dashboard Positions · hidden row disabled (#148) |

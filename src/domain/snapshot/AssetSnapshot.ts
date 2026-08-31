@@ -38,6 +38,23 @@ export function snapshotsOnOrBefore(
   })
 }
 
+/** Last snapshot strictly before `date` — not overall latest (#180). */
+export function snapshotBeforeDate(
+  snapshots: readonly AssetSnapshot[],
+  assetId: string,
+  date: string,
+): AssetSnapshot | undefined {
+  const matching = snapshots.filter(
+    (snapshot) => snapshot.assetId === assetId && snapshot.date < date,
+  )
+  if (matching.length === 0) return undefined
+  return matching.reduce((best, current) => {
+    if (current.date > best.date) return current
+    if (current.date < best.date) return best
+    return current.createdAt > best.createdAt ? current : best
+  })
+}
+
 /** Exact calendar day only — not carry-forward (#176, #177). */
 export function snapshotOnDate(
   snapshots: readonly AssetSnapshot[],
