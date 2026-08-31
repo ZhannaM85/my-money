@@ -32,14 +32,6 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 
 ---
 
-## Tier 17 — Live feedback (2026-08-31)
-
-| # | Status | Issue | Notes |
-|---|--------|-------|-------|
-| [#185](https://github.com/ZhannaM85/my-money/issues/185) | 🔍 Pending validation | Dashboard: keep chart range when leaving and returning | Persist chip + Custom From/To (localStorage, like Comparison). Related #126. |
-
----
-
 ## Explicitly not filed
 
 Out of scope for the MVP (`PROJECT_BRIEF.md` §20) — do not implement from chat:
