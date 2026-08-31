@@ -1,5 +1,5 @@
 ---
-description: Live-feedback chats are log/reopen only. Never write product code. If a message looks like a fix request, ask first.
+description: Live-feedback chats are log/reopen only. Never write product code. Same-chat history does not unlock implement.
 alwaysApply: true
 ---
 
@@ -7,7 +7,9 @@ alwaysApply: true
 
 This project’s live-feedback conversations are **issue logging**, not a build session.
 
-Once the user is reporting bugs, sending screenshots, or saying “log issues”, the **only** allowed work is:
+**Default: log and stop.** A screenshot, a new feature idea, or “let’s add X” is still logging. Do not open `src/`.
+
+Once the user is reporting bugs, sending screenshots, or proposing product changes from the phone, the **only** allowed work is:
 
 1. `gh issue create` / `comment` / `reopen` / `edit` (with labels)
 2. A row or note in `docs/issues-priority.md`
@@ -21,22 +23,29 @@ These phrases are **not** permission to implement. Log or comment on the issue i
 - “apply” / “update the design”
 - “create a theme and apply”
 - “check how X was done and do it here”
+- “let’s add …” / “let’s implement …”
+- “this will allow …” / “should default to …”
+- “once you log the issue, address it” (that is a later-pass reminder, not “code now”)
+
+**Same chat does not unlock code.** Implementing #N earlier, or a previous “address it after you log”, does **not** authorize implementing the next screenshot. Each new report is log-only again.
+
+A separate implement pass is only: a message with **no new screenshot/report**, that names the issue(s) to build (e.g. “implement #175 now”). If mixed with a new report, log the report and ask.
 
 If there is **any** doubt, **stop and ask**: “Log only, or implement?” Wait. Do not code.
 
 ```
 # ❌ BAD
-User: “Date input is broken. Turtle fixed this. Fix it here.”
-Agent: edits DateField
+User: “Let’s add a date on Update. Should default to today.” + screenshot
+Agent: files #175 and edits UpdateFinancesScreen
 
 # ✅ GOOD
 User: same
-Agent: files or comments the issue; asks whether to implement
+Agent: files #175 and the priority row; stops; does not touch src/
 
 # ❌ BAD
-User: “For #78 don’t change existing themes, add Fresh and apply.”
-Agent: writes CSS
+Earlier in chat the user said “address it after you log.” Next message is a new screenshot.
+Agent: logs and implements
 
 # ✅ GOOD
-Agent: comments on #78 with that constraint; does not touch src/
+Agent: logs only. Same-chat history never starts an implement pass.
 ```
