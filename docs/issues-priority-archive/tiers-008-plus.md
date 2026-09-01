@@ -204,3 +204,9 @@ Closed live-feedback rows from Tier 8 onward. Open / pending items stay in [`../
 | [#183](https://github.com/ZhannaM85/my-money/issues/183) | ✅ Done | Update: show a Save icon on the reorder toggle while reordering | Idle = list icon; reordering = Save. Same toggle as #179. Validated on-device 2026-08-31. |
 | [#184](https://github.com/ZhannaM85/my-money/issues/184) | ✅ Done | Update: show institution under the holding title | Under the name when set; last-updated on the next line. Match #109. Validated on-device 2026-08-31. |
 | [#185](https://github.com/ZhannaM85/my-money/issues/185) | ✅ Done | Dashboard: keep chart range when leaving and returning | Persist chip + Custom From/To (localStorage, like Comparison). Related #126. Validated on-device 2026-08-31. |
+
+## Tier 18 — Live feedback (2026-09-01)
+
+| # | Status | Issue | Notes |
+|---|--------|-------|-------|
+| [#187](https://github.com/ZhannaM85/my-money/issues/187) | ✅ Done | CI: History snapshot-day test fails when Month window excludes 1 Aug | Deploy of #186. Month is 30 days; on 2026-09-01, 1 Aug is outside the default range. Validated in CI 2026-09-01. Follow-up: #188. |
