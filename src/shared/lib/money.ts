@@ -183,6 +183,19 @@ export function uniqueChartAxisDates(dates: readonly string[]): string[] {
   return [...new Set(dates)]
 }
 
+/** Local date + time for “last updated” stamps (#188). */
+export function formatDateTime(
+  iso: string,
+  locale: Locale = 'en',
+): string {
+  const date = new Date(iso)
+  if (Number.isNaN(date.getTime())) return iso
+  return new Intl.DateTimeFormat(locale === 'ru' ? 'ru-RU' : 'en-GB', {
+    dateStyle: 'medium',
+    timeStyle: 'short',
+  }).format(date)
+}
+
 /** Day + month, UTC, so `2026-08-18` is not just `18`. */
 export function formatChartAxisDate(
   isoDate: string,

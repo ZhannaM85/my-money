@@ -19,10 +19,30 @@ import {
   StaticRubRateClient,
 } from '@/infrastructure/fx/rubStatic'
 
+export const FX_LAST_FETCHED_KEY = 'my-money-fx-last-fetched'
+
 const fxRepository = new IndexedDbFxRateRepository()
 const manualRepository = new IndexedDbManualFxRateRepository()
 const frankfurter = new FrankfurterFxClient()
 const staticRub = new StaticRubRateClient()
+
+function readLastFetchedAt(): string | undefined {
+  if (typeof localStorage === 'undefined') return undefined
+  try {
+    return localStorage.getItem(FX_LAST_FETCHED_KEY) ?? undefined
+  } catch {
+    return undefined
+  }
+}
+
+function writeLastFetchedAt(iso: string): void {
+  if (typeof localStorage === 'undefined') return
+  try {
+    localStorage.setItem(FX_LAST_FETCHED_KEY, iso)
+  } catch {
+    // Quota / private mode: keep the in-memory stamp only.
+  }
+}
 
 async function loadMergedQuotes(): Promise<{
   quotes: RateTable
@@ -43,6 +63,7 @@ interface FxStoreState {
   manualQuotes: RateTable
   loading: boolean
   error?: string
+  lastFetchedAt?: string
   loadCached: () => Promise<void>
   ensureRates: (requests: readonly RateRequest[]) => Promise<void>
   ensureRange: (
@@ -52,6 +73,7 @@ interface FxStoreState {
     symbols: readonly string[],
     options?: { force?: boolean },
   ) => Promise<void>
+  markRatesFetched: (at?: string) => void
   saveManualRates: (quotes: readonly FxRateQuote[]) => Promise<void>
   clearManualRatesForDate: (date: string) => Promise<void>
 }
@@ -60,13 +82,19 @@ export const useFxStore = create<FxStoreState>((set) => ({
   quotes: [],
   manualQuotes: [],
   loading: false,
+  lastFetchedAt: readLastFetchedAt(),
   loadCached: async () => {
     const { quotes, manualQuotes } = await loadMergedQuotes()
     fxDebug('loadCached', {
       systemAndManual: quotes.length,
       manual: manualQuotes.length,
     })
-    set({ quotes, manualQuotes })
+    set({ quotes, manualQuotes, lastFetchedAt: readLastFetchedAt() })
+  },
+  markRatesFetched: (at) => {
+    const lastFetchedAt = at ?? new Date().toISOString()
+    writeLastFetchedAt(lastFetchedAt)
+    set({ lastFetchedAt })
   },
   ensureRates: async (requests) => {
     set({ loading: true, error: undefined })

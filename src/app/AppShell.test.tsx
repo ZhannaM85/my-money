@@ -39,6 +39,7 @@ beforeEach(async () => {
     manualQuotes: [],
     loading: false,
     error: undefined,
+    lastFetchedAt: undefined,
     loadCached: fxApi.loadCached,
     ensureRates: fxApi.ensureRates,
     ensureRange: fxApi.ensureRange,

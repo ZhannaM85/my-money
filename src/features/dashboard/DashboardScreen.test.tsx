@@ -7,12 +7,13 @@ import { DEFAULT_SETTINGS } from '@/domain/settings'
 import { db } from '@/infrastructure/persistence/indexeddb'
 import {
   formatAmount,
+  formatDateTime,
   formatSignedAmount,
   todayIsoDate,
 } from '@/shared/lib/money'
 import { addDaysIso, monthStartIso } from '@/shared/lib/dates'
 import { useAssetStore } from '@/stores/assetStore'
-import { useFxStore } from '@/stores/fxStore'
+import { useFxStore, FX_LAST_FETCHED_KEY } from '@/stores/fxStore'
 import { useSettingsStore } from '@/stores/settingsStore'
 import { useComparisonStore } from '@/stores/comparisonStore'
 import {
@@ -35,7 +36,9 @@ beforeEach(async () => {
     manualQuotes: [],
     loading: false,
     error: undefined,
+    lastFetchedAt: undefined,
   })
+  localStorage.removeItem(FX_LAST_FETCHED_KEY)
   useSettingsStore.setState({
     settings: DEFAULT_SETTINGS,
     loaded: false,
@@ -324,6 +327,98 @@ describe('DashboardScreen', () => {
       })
       useFxStore.setState({ ensureRange: originalEnsureRange })
     }
+  })
+
+  it('makes Update rates a large full-width control and shows last-updated time (#188)', async () => {
+    const user = userEvent.setup()
+    const originalEnsureRange = useFxStore.getState().ensureRange
+    const ensureRange = vi.fn(async () => {})
+    useFxStore.setState({ ensureRange })
+    const now = '2026-08-17T00:00:00.000Z'
+    await useAssetStore.getState().saveAsset(
+      {
+        id: 'a1',
+        name: 'Revolut',
+        assetClass: 'money',
+        type: 'bank',
+        currency: 'EUR',
+        trackingStatus: 'included',
+        valuationMethod: 'account_balance',
+        updateFrequency: 'weekly',
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        assetId: 'a1',
+        date: '2026-08-17',
+        amount: 1000,
+        currency: 'EUR',
+      },
+    )
+    try {
+      render(
+        <MemoryRouter>
+          <DashboardScreen />
+        </MemoryRouter>,
+      )
+      const button = await screen.findByRole('button', { name: 'Update rates' })
+      expect(button.className).toMatch(/\bh-12\b/)
+      expect(button.className).toMatch(/\bw-full\b/)
+      await user.click(button)
+      const fetched = useFxStore.getState().lastFetchedAt
+      expect(fetched).toBeTruthy()
+      const status = await screen.findByRole('status')
+      expect(status).toHaveTextContent('Rates updated')
+      expect(status).toHaveTextContent(formatDateTime(fetched!, 'en'))
+    } finally {
+      useFxStore.setState({ ensureRange: originalEnsureRange })
+    }
+  })
+
+  it('keeps the last rate-fetch time after leaving Dashboard (#188)', async () => {
+    const stamp = '2026-09-01T11:29:00.000Z'
+    localStorage.setItem(FX_LAST_FETCHED_KEY, stamp)
+    useFxStore.setState({ lastFetchedAt: stamp })
+    const now = '2026-08-17T00:00:00.000Z'
+    await useAssetStore.getState().saveAsset(
+      {
+        id: 'a1',
+        name: 'Revolut',
+        assetClass: 'money',
+        type: 'bank',
+        currency: 'EUR',
+        trackingStatus: 'included',
+        valuationMethod: 'account_balance',
+        updateFrequency: 'weekly',
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        assetId: 'a1',
+        date: '2026-08-17',
+        amount: 1000,
+        currency: 'EUR',
+      },
+    )
+    const { unmount } = render(
+      <MemoryRouter>
+        <DashboardScreen />
+      </MemoryRouter>,
+    )
+    expect(await screen.findByRole('status')).toHaveTextContent(
+      formatDateTime(stamp, 'en'),
+    )
+    unmount()
+    useFxStore.setState({ lastFetchedAt: undefined })
+    await useFxStore.getState().loadCached()
+    render(
+      <MemoryRouter>
+        <DashboardScreen />
+      </MemoryRouter>,
+    )
+    expect(await screen.findByRole('status')).toHaveTextContent(
+      formatDateTime(stamp, 'en'),
+    )
   })
 
   it('disables the currency filter in Converted mode', async () => {

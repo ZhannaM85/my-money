@@ -68,6 +68,7 @@ gh issue edit 108 --add-label validation
 | `184-update-institution.png` | Update · institution under holding title (#184) |
 | `185-dashboard-range-persist.png` | Dashboard · All range still selected after a tab hop (#185) |
 | `186-dashboard-update-rates.png` | Dashboard · Update rates shows a result after tap (#186) |
+| `188-dashboard-update-rates-time.png` | Dashboard · larger Update rates + last-updated time (#188) |
 | `147-positions-hidden-from-total.png` | Dashboard · hidden asset dropped from total (#147) |
 | `150-allocation-swipe-hide.png` | Allocation · tap expanded holding to reveal Hide (#150) |
 | `148-positions-hidden-disabled.png` | Dashboard Positions · hidden row disabled (#148) |

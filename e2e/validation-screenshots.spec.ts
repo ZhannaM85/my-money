@@ -1043,3 +1043,20 @@ test('capture Dashboard Update rates result (#186)', async ({ page }) => {
   })
 })
 
+test('capture Dashboard Update rates size and last-updated time (#188)', async ({
+  page,
+}) => {
+  await seedValidationFixture(page, { currencyDisplayMode: 'base' })
+  await page.goto('/')
+  await expect(page.getByRole('heading', { name: 'Dashboard' })).toBeVisible()
+  const updateRates = page.getByRole('button', { name: 'Update rates' })
+  await expect(updateRates).toBeVisible()
+  await updateRates.click()
+  await expect(page.getByRole('status')).toContainText('Rates updated')
+  await expect(page.getByRole('status').locator('time')).toBeVisible()
+  await page.screenshot({
+    path: join(outDir, '188-dashboard-update-rates-time.png'),
+    fullPage: true,
+  })
+})
+

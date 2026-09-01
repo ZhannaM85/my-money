@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 188,
+    title: {
+      en: 'Update rates is small and has no last-updated time',
+      ru: '«Обновить курсы» мелкое и без времени обновления',
+    },
+    en: 'The #186 control stayed a short outline pill, and “Rates updated” had no clock. The button is now full-width xl; a successful fetch stamps lastFetchedAt (persisted) and shows it beside the status.',
+    ru: 'Кнопка #186 оставалась короткой, а «Курсы обновлены» было без времени. Теперь кнопка на всю ширину (xl); успешный запрос пишет lastFetchedAt (сохраняется) и показывает его рядом со статусом.',
+  },
+  {
     issue: 187,
     title: {
       en: 'History snapshot-day test fails in September',

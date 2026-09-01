@@ -3,6 +3,7 @@ import {
   chartAxisScale,
   compactAxisFractionDigits,
   formatChartAxisDate,
+  formatDateTime,
   formatCompactNumber,
   formatEditableAmount,
   formatEditableRate,
@@ -133,6 +134,16 @@ describe('chart X-axis dates', () => {
       '2026-08-21',
     ]).map((date) => formatChartAxisDate(date, 'en'))
     expect(new Set(labels).size).toBe(labels.length)
+  })
+})
+
+describe('formatDateTime', () => {
+  it('includes a calendar day and a clock time (#188)', () => {
+    const label = formatDateTime('2026-09-01T11:29:00.000Z', 'en')
+    expect(label).toMatch(/2026/)
+    expect(label).toMatch(/1|01/)
+    expect(label).toMatch(/\d/)
+    expect(label.length).toBeGreaterThan(8)
   })
 })
 

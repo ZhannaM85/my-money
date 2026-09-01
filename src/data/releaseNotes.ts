@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 195,
+    issue: 188,
+    date: '2026-09-01T14:40:00+03:00',
+    en: 'On Dashboard, Update rates is a larger full-width button, and the last successful fetch time sits next to Rates updated.',
+    ru: 'На Сводке «Обновить курсы» — более крупная кнопка на всю ширину, а время последнего успешного запроса стоит рядом с «Курсы обновлены».',
+  },
+  {
     version: 194,
     issue: 186,
     date: '2026-09-01T11:50:00+03:00',

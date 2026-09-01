@@ -14,6 +14,7 @@ import { useLocale, useTranslation } from '@/i18n'
 import { fxDebug } from '@/infrastructure/fx/fxDebug'
 import {
   formatAmount,
+  formatDateTime,
   formatPercent,
   formatSignedAmount,
   todayIsoDate,
@@ -63,6 +64,8 @@ export function DashboardScreen() {
   )
   const quotes = useFxStore((state) => state.quotes)
   const ensureRange = useFxStore((state) => state.ensureRange)
+  const markRatesFetched = useFxStore((state) => state.markRatesFetched)
+  const lastFetchedAt = useFxStore((state) => state.lastFetchedAt)
   const fxLoading = useFxStore((state) => state.loading)
   const [currencyFilter, setCurrencyFilter] = useState<string>('all')
   const [holdingsOpen, setHoldingsOpen] = useState(false)
@@ -608,7 +611,8 @@ export function DashboardScreen() {
               <Button
                 type="button"
                 variant="outline"
-                className="gap-2"
+                size="xl"
+                className="w-full gap-2"
                 disabled={fxLoading || ratesStatus === 'loading'}
                 aria-busy={ratesStatus === 'loading'}
                 onClick={() => {
@@ -631,6 +635,7 @@ export function DashboardScreen() {
                       setRatesStatus('error')
                       return
                     }
+                    markRatesFetched()
                     setRatesStatus('updated')
                   })()
                 }}
@@ -640,21 +645,29 @@ export function DashboardScreen() {
                 )}
                 {t.dashboard.updateRates}
               </Button>
-              {ratesStatus === 'updated' && (
-                <p role="status" className="text-xs text-muted-foreground">
-                  {t.dashboard.ratesUpdated}
-                </p>
-              )}
-              {ratesStatus === 'offline' && (
+              {ratesStatus === 'offline' ? (
                 <p role="status" className="text-xs text-muted-foreground">
                   {t.dashboard.ratesUpdateOffline}
                 </p>
-              )}
-              {ratesStatus === 'error' && (
+              ) : ratesStatus === 'error' ? (
                 <p role="status" className="text-xs text-muted-foreground">
                   {t.dashboard.ratesUpdateFailed}
                 </p>
-              )}
+              ) : lastFetchedAt ? (
+                <p
+                  role="status"
+                  className="flex justify-between gap-3 text-xs text-muted-foreground"
+                >
+                  <span>{t.dashboard.ratesUpdated}</span>
+                  <time dateTime={lastFetchedAt}>
+                    {formatDateTime(lastFetchedAt, locale)}
+                  </time>
+                </p>
+              ) : ratesStatus === 'updated' ? (
+                <p role="status" className="text-xs text-muted-foreground">
+                  {t.dashboard.ratesUpdated}
+                </p>
+              ) : null}
             </div>
           )}
           {(convertedHoldingsToday.length > 0 ||
