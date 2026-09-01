@@ -1031,3 +1031,15 @@ test('capture Dashboard range kept after leaving and returning (#185)', async ({
   })
 })
 
+test('capture Dashboard Update rates result (#186)', async ({ page }) => {
+  await seedValidationFixture(page, { currencyDisplayMode: 'base' })
+  await page.goto('/')
+  await expect(page.getByRole('heading', { name: 'Dashboard' })).toBeVisible()
+  await page.getByRole('button', { name: 'Update rates' }).click()
+  await expect(page.getByRole('status')).toBeVisible()
+  await page.screenshot({
+    path: join(outDir, '186-dashboard-update-rates.png'),
+    fullPage: true,
+  })
+})
+

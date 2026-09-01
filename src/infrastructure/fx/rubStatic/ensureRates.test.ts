@@ -71,4 +71,52 @@ describe('ensureStaticRubRates', () => {
     expect(fetchFn).toHaveBeenCalledTimes(1)
     expect(lookupRate(quotes, 'RUB', 'EUR', '2026-08-15')).toBeCloseTo(1 / 98)
   })
+
+  it('refetches a cached RUB series when force is set (#186)', async () => {
+    const fetchFn = vi.fn(async () => {
+      return new Response(
+        JSON.stringify({
+          base: 'EUR',
+          quote: 'RUB',
+          quotes: [
+            { date: '2026-08-14', rate: 98 },
+            { date: '2026-08-16', rate: 100 },
+          ],
+        }),
+        { headers: { 'Content-Type': 'application/json' } },
+      )
+    })
+    const client = new StaticRubRateClient(fetchFn)
+
+    await ensureStaticRubRange(
+      '2026-08-14',
+      '2026-08-16',
+      'RUB',
+      ['EUR'],
+      repo,
+      client,
+    )
+    expect(fetchFn).toHaveBeenCalledTimes(1)
+
+    await ensureStaticRubRange(
+      '2026-08-14',
+      '2026-08-16',
+      'RUB',
+      ['EUR'],
+      repo,
+      client,
+    )
+    expect(fetchFn).toHaveBeenCalledTimes(1)
+
+    await ensureStaticRubRange(
+      '2026-08-14',
+      '2026-08-16',
+      'RUB',
+      ['EUR'],
+      repo,
+      client,
+      { force: true },
+    )
+    expect(fetchFn).toHaveBeenCalledTimes(2)
+  })
 })

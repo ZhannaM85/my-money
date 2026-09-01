@@ -74,6 +74,7 @@ export async function ensureFxRange(
   symbols: readonly string[],
   repository: FxRateRepository,
   client: FrankfurterFxClient,
+  options?: { force?: boolean },
 ): Promise<RateTable> {
   const wanted = [
     ...new Set(
@@ -90,7 +91,7 @@ export async function ensureFxRange(
   const missing = wanted.some((symbol) =>
     dates.some((date) => lookupRate(cached, symbol, base, date) === undefined),
   )
-  if (!missing) return cached
+  if (!missing && !options?.force) return cached
   const quotes = await client.timeseries(start, end, base, wanted)
   if (quotes.length > 0) await repository.put(quotes)
   return repository.getAll()

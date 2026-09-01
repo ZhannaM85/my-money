@@ -56,6 +56,7 @@ export async function ensureStaticRubRange(
   symbols: readonly string[],
   repository: FxRateRepository,
   client: StaticRubRateClient,
+  options?: { force?: boolean },
 ): Promise<RateTable> {
   const rubInvolved = base === 'RUB' || symbols.includes('RUB')
   if (!rubInvolved) return repository.getAll()
@@ -69,17 +70,20 @@ export async function ensureStaticRubRange(
       lookupRate(cached, code, 'RUB', start) === undefined ||
       lookupRate(cached, code, 'RUB', end) === undefined,
   )
+  const toFetch = options?.force ? foreign : missingForeign
   fxDebug('ensureStaticRubRange', {
     start,
     end,
     base,
     symbols,
     missingForeign,
+    force: Boolean(options?.force),
+    toFetch,
   })
-  if (missingForeign.length === 0) return cached
+  if (toFetch.length === 0) return cached
 
   const fetched = await Promise.all(
-    missingForeign.map((code) => client.onCode(code)),
+    toFetch.map((code) => client.onCode(code)),
   )
   const quotes = fetched.flat()
   if (quotes.length > 0) {

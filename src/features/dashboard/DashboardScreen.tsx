@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { ChevronDown, ChevronLeft, ChevronRight, Plus } from 'lucide-react'
+import { ChevronDown, ChevronLeft, ChevronRight, Plus, RefreshCw } from 'lucide-react'
 import {
   decomposeConvertedPeriodChange,
   historicalNativeNetWorth,
@@ -74,6 +74,9 @@ export function DashboardScreen() {
     null,
   )
   const [periodOpen, setPeriodOpen] = useState<'amount' | 'rate' | null>(null)
+  const [ratesStatus, setRatesStatus] = useState<
+    'idle' | 'loading' | 'updated' | 'offline' | 'error'
+  >('idle')
   const comparisonDates = useComparisonStore((state) => state.dates)
   const addComparisonDate = useComparisonStore((state) => state.addDate)
   const range = useChartRangeStore((state) => state.range)
@@ -605,13 +608,53 @@ export function DashboardScreen() {
               <Button
                 type="button"
                 variant="outline"
-                disabled={fxLoading}
-                onClick={() =>
-                  void ensureRange(start, chartEnd, baseCurrency, fxSymbols)
-                }
+                className="gap-2"
+                disabled={fxLoading || ratesStatus === 'loading'}
+                aria-busy={ratesStatus === 'loading'}
+                onClick={() => {
+                  void (async () => {
+                    setRatesStatus('loading')
+                    const online =
+                      typeof navigator === 'undefined' ? true : navigator.onLine
+                    await ensureRange(
+                      start,
+                      chartEnd,
+                      baseCurrency,
+                      fxSymbols,
+                      { force: true },
+                    )
+                    if (!online) {
+                      setRatesStatus('offline')
+                      return
+                    }
+                    if (useFxStore.getState().error) {
+                      setRatesStatus('error')
+                      return
+                    }
+                    setRatesStatus('updated')
+                  })()
+                }}
               >
+                {ratesStatus === 'loading' && (
+                  <RefreshCw className="size-4 animate-spin" aria-hidden />
+                )}
                 {t.dashboard.updateRates}
               </Button>
+              {ratesStatus === 'updated' && (
+                <p role="status" className="text-xs text-muted-foreground">
+                  {t.dashboard.ratesUpdated}
+                </p>
+              )}
+              {ratesStatus === 'offline' && (
+                <p role="status" className="text-xs text-muted-foreground">
+                  {t.dashboard.ratesUpdateOffline}
+                </p>
+              )}
+              {ratesStatus === 'error' && (
+                <p role="status" className="text-xs text-muted-foreground">
+                  {t.dashboard.ratesUpdateFailed}
+                </p>
+              )}
             </div>
           )}
           {(convertedHoldingsToday.length > 0 ||

@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 186,
+    title: {
+      en: 'Dashboard Update rates does nothing',
+      ru: '«Обновить курсы» на Сводке ничего не делает',
+    },
+    en: 'Update rates called ensureRange, which skipped the network when quotes were already cached, and showed no spinner or result. A tap now force-fetches and reports updated, offline, or failed.',
+    ru: '«Обновить курсы» вызывало ensureRange, которое не ходило в сеть при кэше, и не показывало ни спиннер, ни результат. Нажатие теперь принудительно запрашивает котировки и сообщает: обновлено, нет сети или ошибка.',
+  },
+  {
     issue: 185,
     title: {
       en: 'Dashboard chart range resets on navigation',

@@ -36,7 +36,7 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
-| [#186](https://github.com/ZhannaM85/my-money/issues/186) | 🔲 Open | Dashboard: Update rates button does nothing | Screenshot: Сводка Converted/RUB, **Обновить курсы** circled. Tap has no spinner, toast, error, or quote change. |
+| [#186](https://github.com/ZhannaM85/my-money/issues/186) | 🔍 Pending validation | Dashboard: Update rates button does nothing | Screenshot: Сводка Converted/RUB, **Обновить курсы** circled. Tap has no spinner, toast, error, or quote change. |
 
 ---
 

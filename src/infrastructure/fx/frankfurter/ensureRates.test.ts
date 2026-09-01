@@ -5,7 +5,7 @@ import {
   IndexedDbFxRateRepository,
 } from '@/infrastructure/persistence/indexeddb'
 import { FrankfurterFxClient } from './client'
-import { ensureFxRates } from './ensureRates'
+import { ensureFxRates, ensureFxRange } from './ensureRates'
 
 const repo = new IndexedDbFxRateRepository()
 
@@ -64,5 +64,50 @@ describe('ensureFxRates', () => {
 
     expect(fetchFn).not.toHaveBeenCalled()
     expect(quotes).toEqual([])
+  })
+})
+
+describe('ensureFxRange', () => {
+  it('refetches cached quotes when force is set (#186)', async () => {
+    const fetchFn = vi.fn(async () => {
+      return new Response(
+        JSON.stringify([
+          { date: '2026-08-17', base: 'EUR', quote: 'USD', rate: 1.1 },
+        ]),
+        { headers: { 'Content-Type': 'application/json' } },
+      )
+    })
+    const client = new FrankfurterFxClient(fetchFn)
+
+    await ensureFxRange(
+      '2026-08-17',
+      '2026-08-17',
+      'EUR',
+      ['USD'],
+      repo,
+      client,
+    )
+    expect(fetchFn).toHaveBeenCalledTimes(1)
+
+    await ensureFxRange(
+      '2026-08-17',
+      '2026-08-17',
+      'EUR',
+      ['USD'],
+      repo,
+      client,
+    )
+    expect(fetchFn).toHaveBeenCalledTimes(1)
+
+    await ensureFxRange(
+      '2026-08-17',
+      '2026-08-17',
+      'EUR',
+      ['USD'],
+      repo,
+      client,
+      { force: true },
+    )
+    expect(fetchFn).toHaveBeenCalledTimes(2)
   })
 })

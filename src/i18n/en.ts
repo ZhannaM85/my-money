@@ -74,6 +74,9 @@ export const en: Dictionary = {
     amountChange: 'From amounts',
     rateChange: 'From rates',
     updateRates: 'Update rates',
+    ratesUpdated: 'Rates updated',
+    ratesUpdateOffline: 'Offline — using saved rates',
+    ratesUpdateFailed: 'Could not update rates; using saved rates',
     periodChangeHint:
       'From amounts is what you added or reduced, valued at the latest rate. From rates is the same starting balances when the reference rate moved — including dollars you already held. Together they equal the period total.',
     chartTooltip: 'Chart tooltip',

@@ -2,7 +2,7 @@ import 'fake-indexeddb/auto'
 import { act, render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router-dom'
-import { beforeEach, describe, expect, it } from 'vitest'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { DEFAULT_SETTINGS } from '@/domain/settings'
 import { db } from '@/infrastructure/persistence/indexeddb'
 import {
@@ -224,6 +224,106 @@ describe('DashboardScreen', () => {
       'true',
     )
     expect(screen.getByText(/Chart range: All/)).toBeInTheDocument()
+  })
+
+  it('forces a quote refresh and reports the result (#186)', async () => {
+    const user = userEvent.setup()
+    const originalEnsureRange = useFxStore.getState().ensureRange
+    const ensureRange = vi.fn(async () => {})
+    useFxStore.setState({ ensureRange })
+    const now = '2026-08-17T00:00:00.000Z'
+    await useAssetStore.getState().saveAsset(
+      {
+        id: 'a1',
+        name: 'Revolut',
+        assetClass: 'money',
+        type: 'bank',
+        currency: 'EUR',
+        trackingStatus: 'included',
+        valuationMethod: 'account_balance',
+        updateFrequency: 'weekly',
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        assetId: 'a1',
+        date: '2026-08-17',
+        amount: 1000,
+        currency: 'EUR',
+      },
+    )
+    try {
+      render(
+        <MemoryRouter>
+          <DashboardScreen />
+        </MemoryRouter>,
+      )
+      const button = await screen.findByRole('button', { name: 'Update rates' })
+      await user.click(button)
+      expect(ensureRange).toHaveBeenCalledWith(
+        expect.any(String),
+        expect.any(String),
+        'EUR',
+        expect.any(Array),
+        { force: true },
+      )
+      expect(await screen.findByRole('status')).toHaveTextContent(
+        'Rates updated',
+      )
+    } finally {
+      useFxStore.setState({ ensureRange: originalEnsureRange })
+    }
+  })
+
+  it('explains when Update rates cannot fetch because the device is offline (#186)', async () => {
+    const user = userEvent.setup()
+    const originalEnsureRange = useFxStore.getState().ensureRange
+    const ensureRange = vi.fn(async () => {})
+    useFxStore.setState({ ensureRange })
+    Object.defineProperty(navigator, 'onLine', {
+      configurable: true,
+      value: false,
+    })
+    const now = '2026-08-17T00:00:00.000Z'
+    await useAssetStore.getState().saveAsset(
+      {
+        id: 'a1',
+        name: 'Revolut',
+        assetClass: 'money',
+        type: 'bank',
+        currency: 'EUR',
+        trackingStatus: 'included',
+        valuationMethod: 'account_balance',
+        updateFrequency: 'weekly',
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        assetId: 'a1',
+        date: '2026-08-17',
+        amount: 1000,
+        currency: 'EUR',
+      },
+    )
+    try {
+      render(
+        <MemoryRouter>
+          <DashboardScreen />
+        </MemoryRouter>,
+      )
+      await user.click(
+        await screen.findByRole('button', { name: 'Update rates' }),
+      )
+      expect(await screen.findByRole('status')).toHaveTextContent(
+        'Offline — using saved rates',
+      )
+    } finally {
+      Object.defineProperty(navigator, 'onLine', {
+        configurable: true,
+        value: true,
+      })
+      useFxStore.setState({ ensureRange: originalEnsureRange })
+    }
   })
 
   it('disables the currency filter in Converted mode', async () => {

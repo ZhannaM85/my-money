@@ -50,6 +50,7 @@ interface FxStoreState {
     end: string,
     base: string,
     symbols: readonly string[],
+    options?: { force?: boolean },
   ) => Promise<void>
   saveManualRates: (quotes: readonly FxRateQuote[]) => Promise<void>
   clearManualRatesForDate: (date: string) => Promise<void>
@@ -102,15 +103,29 @@ export const useFxStore = create<FxStoreState>((set) => ({
       error: failed ? 'cached_rates' : undefined,
     })
   },
-  ensureRange: async (start, end, base, symbols) => {
+  ensureRange: async (start, end, base, symbols, options) => {
     set({ loading: true, error: undefined })
     let failed = false
-    fxDebug('ensureRange start', { start, end, base, symbols: [...symbols] })
+    fxDebug('ensureRange start', {
+      start,
+      end,
+      base,
+      symbols: [...symbols],
+      force: Boolean(options?.force),
+    })
     const online =
       typeof navigator === 'undefined' ? true : navigator.onLine
     if (shouldFetchFrankfurter(online)) {
       try {
-        await ensureFxRange(start, end, base, symbols, fxRepository, frankfurter)
+        await ensureFxRange(
+          start,
+          end,
+          base,
+          symbols,
+          fxRepository,
+          frankfurter,
+          options,
+        )
       } catch (error) {
         failed = true
         fxDebug('ensureRange frankfurter failed', { error: String(error) })
@@ -126,6 +141,7 @@ export const useFxStore = create<FxStoreState>((set) => ({
         symbols,
         fxRepository,
         staticRub,
+        options,
       )
     } catch (error) {
       failed = true

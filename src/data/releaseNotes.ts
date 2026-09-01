@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 194,
+    issue: 186,
+    date: '2026-09-01T11:50:00+03:00',
+    en: 'On Dashboard, Update rates now fetches quotes again and tells you the result — updated, offline, or could not update — instead of a silent tap.',
+    ru: 'На Сводке «Обновить курсы» снова запрашивает котировки и показывает результат — обновлено, нет сети или не удалось — а не молчит при нажатии.',
+  },
+  {
     version: 193,
     issue: 185,
     date: '2026-08-31T23:50:00+03:00',
