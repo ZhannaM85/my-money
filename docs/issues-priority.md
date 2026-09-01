@@ -32,6 +32,14 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 
 ---
 
+## Tier 18 — Live feedback (2026-09-01)
+
+| # | Status | Issue | Notes |
+|---|--------|-------|-------|
+| [#186](https://github.com/ZhannaM85/my-money/issues/186) | 🔲 Open | Dashboard: Update rates button does nothing | Screenshot: Сводка Converted/RUB, **Обновить курсы** circled. Tap has no spinner, toast, error, or quote change. |
+
+---
+
 ## Explicitly not filed
 
 Out of scope for the MVP (`PROJECT_BRIEF.md` §20) — do not implement from chat:
