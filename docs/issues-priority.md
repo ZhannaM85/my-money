@@ -37,6 +37,7 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
 | [#186](https://github.com/ZhannaM85/my-money/issues/186) | 🔍 Pending validation | Dashboard: Update rates button does nothing | Screenshot: Сводка Converted/RUB, **Обновить курсы** circled. Tap has no spinner, toast, error, or quote change. |
+| [#187](https://github.com/ZhannaM85/my-money/issues/187) | 🔍 Pending validation | CI: History snapshot-day test fails when Month window excludes 1 Aug | Deploy of #186. Month is 30 days; on 2026-09-01, 1 Aug is outside the default range. |
 
 ---
 

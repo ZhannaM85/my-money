@@ -260,13 +260,15 @@ describe('HistoryScreen', () => {
     expect(await screen.findByText('Salary landed')).toBeInTheDocument()
   })
 
-  it('lists only days the user added a snapshot, not carry-forward calendar days', async () => {
+  it('lists only days the user added a snapshot, not carry-forward calendar days (#187)', async () => {
+    const user = userEvent.setup()
     render(
       <MemoryRouter>
         <HistoryScreen />
       </MemoryRouter>,
     )
 
+    await user.click(await screen.findByRole('button', { name: 'All' }))
     expect(
       await screen.findByRole('button', { name: 'Holdings on 2026-08-17' }),
     ).toBeInTheDocument()

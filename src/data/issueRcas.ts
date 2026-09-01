@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 187,
+    title: {
+      en: 'History snapshot-day test fails in September',
+      ru: 'Тест дней истории падает в сентябре',
+    },
+    en: 'The test looked for 1 Aug while History defaulted to Month (30 days). On 1 Sep that window starts 2 Aug, so 1 Aug was missing. It now selects All first so both seeded snapshot days stay in range.',
+    ru: 'Тест искал 1 августа при диапазоне «Месяц» (30 дней). 1 сентября окно начинается 2 августа, поэтому 1 августа пропадало. Теперь сначала выбирается «Все», и оба дня снимков остаются в диапазоне.',
+  },
+  {
     issue: 186,
     title: {
       en: 'Dashboard Update rates does nothing',
