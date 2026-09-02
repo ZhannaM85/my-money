@@ -38,7 +38,7 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 | [#193](https://github.com/ZhannaM85/my-money/issues/193) | 🔍 Pending validation | Update: after save, show green/red delta vs previous snapshot date | Comparison arrows vs last snapshot before As of. |
 | [#195](https://github.com/ZhannaM85/my-money/issues/195) | 🔍 Pending validation | Android: Dashboard Zoom out (Уменьшить) is clipped at the right edge | Toolbar wraps; same strip on History and details. |
 | [#196](https://github.com/ZhannaM85/my-money/issues/196) | 🔍 Pending validation | Android: conversion unavailable needs an on-device FX debugger, not a silent fallback | Tap badge → FX debug log with pair+date+window. No invented rate. |
-| [#198](https://github.com/ZhannaM85/my-money/issues/198) | 🔲 Open | JSON import should replace a non-empty book after confirm | Screenshot: Import JSON greyed out. Confirm then replace, not merge. CSV stays merge. Related #197. |
+| [#198](https://github.com/ZhannaM85/my-money/issues/198) | 🔍 Pending validation | JSON import should replace a non-empty book after confirm | Screenshot: Import JSON greyed out. Confirm then replace, not merge. CSV stays merge. Related #197. |
 | [#197](https://github.com/ZhannaM85/my-money/issues/197) | 🔲 Open | Delete all data on this device | One-tap wipe behind confirm. Makes Import JSON available without deleting each asset. Related #198. |
 
 ---

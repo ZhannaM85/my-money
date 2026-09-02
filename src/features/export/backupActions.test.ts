@@ -4,7 +4,6 @@ import { DEFAULT_SETTINGS } from '@/domain/settings'
 import { buildBackupBundle } from '@/domain/backup'
 import { db } from '@/infrastructure/persistence/indexeddb'
 import {
-  BookNotEmptyError,
   exportBackup,
   importBackupJson,
   InvalidBackupError,
@@ -93,17 +92,29 @@ describe('JSON backup', () => {
     expect(exported.assets).toEqual([asset])
   })
 
-  it('refuses to import when the book already has assets', async () => {
-    await db.assets.put(asset)
-    await expect(
-      importBackupJson(JSON.stringify(bundle)),
-    ).rejects.toBeInstanceOf(BookNotEmptyError)
+  it('replaces a non-empty book instead of merging (#198)', async () => {
+    const leftover = {
+      ...asset,
+      id: 'old',
+      name: 'Leftover',
+    }
+    await db.assets.put(leftover)
+    await db.snapshots.put({
+      ...snapshot,
+      id: 'old-s',
+      assetId: 'old',
+    })
+    await importBackupJson(JSON.stringify(bundle))
+    expect(await db.assets.toArray()).toEqual([asset])
+    expect(await db.snapshots.toArray()).toEqual([snapshot])
   })
 
-  it('rejects invalid JSON and orphan snapshots', async () => {
+  it('rejects invalid JSON without wiping existing assets (#198)', async () => {
+    await db.assets.put(asset)
     await expect(importBackupJson('not-json')).rejects.toBeInstanceOf(
       InvalidBackupError,
     )
+    expect(await db.assets.toArray()).toEqual([asset])
     const orphan = {
       ...bundle,
       snapshots: [{ ...snapshot, assetId: 'missing' }],
@@ -111,5 +122,6 @@ describe('JSON backup', () => {
     await expect(
       importBackupJson(JSON.stringify(orphan)),
     ).rejects.toBeInstanceOf(InvalidBackupError)
+    expect(await db.assets.toArray()).toEqual([asset])
   })
 })

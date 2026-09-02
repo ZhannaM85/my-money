@@ -365,7 +365,7 @@ interface BackupBundle {
 
 CSV is a tabular view of snapshots (date, asset id/name, amount, currency, class, type, note), not a second source of truth. JSON is the backup format. Import maps those four fields, appends snapshots to assets that already exist, and lists unmatched or invalid rows instead of dropping them. A `note` column is restored when present (#194).
 
-Restore is empty-book only: if any asset already exists, import is refused rather than merged. Settings, assets, snapshots, cached FX quotes, and manual FX rates are the contract (#194). New exports are version 2; version 1 files still import.
+JSON restore replaces the local book after confirm when assets already exist; it does not merge (#198). Invalid files error before any wipe. Settings, assets, snapshots, cached FX quotes, and manual FX rates are the contract (#194). New exports are version 2; version 1 files still import.
 
 ---
 

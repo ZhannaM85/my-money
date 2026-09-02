@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 198,
+    title: {
+      en: 'JSON import should replace a non-empty book after confirm',
+      ru: 'Импорт JSON должен заменять непустую книгу после подтверждения',
+    },
+    en: 'Import JSON was disabled whenever assets existed (#13 empty-book rule), so a restore after test data needed a wipe. The button stays enabled. A valid file on a non-empty book asks to replace, not merge; Cancel leaves the book. Invalid JSON errors before any wipe. Empty-book import has no extra confirm. CSV still appends.',
+    ru: 'Импорт JSON был выключен, пока есть активы (правило пустой книги #13), и восстановление после тестовых данных требовало очистки. Кнопка остаётся доступной. Действительный файл в непустой книге спрашивает замену, не слияние; Отмена оставляет книгу. Неверный JSON ошибается до любой очистки. В пустую книгу — без лишнего подтверждения. CSV по-прежнему добавляет строки.',
+  },
+  {
     issue: 196,
     title: {
       en: 'Android: conversion unavailable needs an on-device FX debugger',

@@ -404,18 +404,19 @@ export const en: Dictionary = {
   backup: {
     title: 'Backup',
     description:
-      'JSON is the backup format and the contract with the iOS app. It includes settings, assets, snapshots, and FX rates. Import restores into an empty book only.',
+      'JSON is the backup format and the contract with the iOS app. It includes settings, assets, snapshots, and FX rates. Import replaces this book after you confirm. It does not merge. CSV still adds rows.',
     exportJson: 'Export JSON',
     importJson: 'Import JSON',
     importAria: 'Import JSON backup',
-    onlyEmpty: 'Import is available only when this book has no assets.',
+    replaceHint:
+      'If this book already has assets, import asks before replacing them. It does not merge.',
+    replaceConfirm:
+      'This replaces every asset and snapshot on this device with the file. It does not merge. Cancel keeps what is here.',
     downloaded: 'Backup downloaded.',
     shared: 'Opened the share sheet.',
     restored: 'Backup restored.',
     exportFailed: 'Could not export the backup.',
     importFailed: 'Could not import this file.',
-    bookNotEmpty:
-      'Import only restores into an empty book. Export first if you need a copy of what is here.',
     invalidFile: 'This file is not a valid My Money backup.',
   },
   csv: {

@@ -1,15 +1,16 @@
 import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from '@/i18n'
+import { bookHasAssets } from '@/infrastructure/persistence/indexeddb/backupStore'
 import { pickImportFile } from '@/shared/lib/pickNativeTextFile'
 import { Button } from '@/shared/ui/button'
 import { useAssetStore } from '@/stores/assetStore'
 import { useFxStore } from '@/stores/fxStore'
 import { useSettingsStore } from '@/stores/settingsStore'
 import {
-  BookNotEmptyError,
   exportBackup,
   importBackupJson,
   InvalidBackupError,
+  parseBackupJson,
 } from './backupActions'
 import { shareOrDownloadBackupJson } from './downloadBackup'
 
@@ -22,14 +23,10 @@ export function BackupSection() {
   const loadAssets = useAssetStore((state) => state.load)
   const loadSettings = useSettingsStore((state) => state.load)
   const loadFx = useFxStore((state) => state.loadCached)
-  const assetCount = useAssetStore((state) => state.assets.length)
-  const assetsLoaded = useAssetStore((state) => state.loaded)
 
   useEffect(() => {
     void loadAssets()
   }, [loadAssets])
-
-  const bookHasAssets = assetsLoaded && assetCount > 0
 
   async function handleExport() {
     setError(undefined)
@@ -55,13 +52,18 @@ export function BackupSection() {
     setBusy(true)
     try {
       const text = await file.text()
+      parseBackupJson(text)
+      if (
+        (await bookHasAssets()) &&
+        !window.confirm(t.backup.replaceConfirm)
+      ) {
+        return
+      }
       await importBackupJson(text)
       await Promise.all([loadAssets(), loadSettings(), loadFx()])
       setMessage(t.backup.restored)
     } catch (caught) {
-      if (caught instanceof BookNotEmptyError) {
-        setError(t.backup.bookNotEmpty)
-      } else if (caught instanceof InvalidBackupError) {
+      if (caught instanceof InvalidBackupError) {
         setError(t.backup.invalidFile)
       } else {
         setError(t.backup.importFailed)
@@ -91,7 +93,7 @@ export function BackupSection() {
         accept="application/json,.json"
         className="sr-only"
         aria-label={t.backup.importAria}
-        disabled={busy || bookHasAssets}
+        disabled={busy}
         onChange={(event) => {
           const file = event.target.files?.[0]
           if (file) void handleImport(file)
@@ -102,7 +104,7 @@ export function BackupSection() {
         variant="outline"
         size="xl"
         className="w-full"
-        disabled={busy || bookHasAssets}
+        disabled={busy}
         onClick={() => {
           void (async () => {
             const nativeFile = await pickImportFile(
@@ -115,9 +117,7 @@ export function BackupSection() {
       >
         {t.backup.importJson}
       </Button>
-      {bookHasAssets && (
-        <p className="text-sm text-muted-foreground">{t.backup.onlyEmpty}</p>
-      )}
+      <p className="text-sm text-muted-foreground">{t.backup.replaceHint}</p>
       {message && <p className="text-sm text-muted-foreground">{message}</p>}
       {error && <p className="text-sm text-destructive">{error}</p>}
     </section>

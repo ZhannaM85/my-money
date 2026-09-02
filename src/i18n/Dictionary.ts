@@ -321,13 +321,13 @@ export interface Dictionary {
     exportJson: string
     importJson: string
     importAria: string
-    onlyEmpty: string
+    replaceHint: string
+    replaceConfirm: string
     downloaded: string
     shared: string
     restored: string
     exportFailed: string
     importFailed: string
-    bookNotEmpty: string
     invalidFile: string
   }
   csv: {

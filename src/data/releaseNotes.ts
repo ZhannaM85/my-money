@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 205,
+    issue: 198,
+    date: '2026-09-02T23:55:00+03:00',
+    en: 'Import JSON stays available when the book already has assets. After confirm it replaces this book; it does not merge. Cancel or an invalid file leaves what is here. CSV still adds rows.',
+    ru: 'Импорт JSON доступен, даже если в книге уже есть активы. После подтверждения он заменяет книгу, не сливает. Отмена или неверный файл оставляют то, что здесь. CSV по-прежнему добавляет строки.',
+  },
+  {
     version: 204,
     issue: 190,
     date: '2026-09-02T23:40:00+03:00',
