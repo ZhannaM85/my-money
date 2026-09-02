@@ -429,4 +429,20 @@ describe('UpdateFinancesScreen', () => {
     const hint = await screen.findByTestId('suggested-from-date-a1')
     expect(hint).toHaveTextContent('From 1 Aug 2026')
   })
+
+  it('pins As of outside the scrolling holdings list (#191)', async () => {
+    render(
+      <MemoryRouter>
+        <UpdateFinancesScreen />
+      </MemoryRouter>,
+    )
+    const asOf = await screen.findByLabelText('As of')
+    const bar = screen.getByTestId('update-as-of-bar')
+    const scroll = screen.getByTestId('update-holdings-scroll')
+    expect(bar).toContainElement(asOf)
+    expect(bar.className).toMatch(/shrink-0/)
+    expect(scroll.className).toMatch(/overflow-y-auto/)
+    expect(scroll).not.toContainElement(asOf)
+    expect(scroll).toContainElement(screen.getByTestId('update-description'))
+  })
 })

@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 200,
+    issue: 191,
+    date: '2026-09-02T22:40:00+03:00',
+    en: 'On Update, As of stays at the top while you scroll holdings, so the date you are writing does not disappear.',
+    ru: 'На экране обновления «На дату» остаётся сверху, пока вы прокручиваете активы — выбранный день не пропадает.',
+  },
+  {
     version: 199,
     issue: 192,
     date: '2026-09-02T22:30:00+03:00',

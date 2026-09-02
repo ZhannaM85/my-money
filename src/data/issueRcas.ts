@@ -38,6 +38,15 @@ export const issueRcas: IssueRca[] = [
     ru: 'Прошлое «На дату» по-прежнему подставляет последний снимок до этого дня (#180), но карточка писала только «Обновлено N дней назад» относительно сегодня. На незаблокированной строке теперь стоит календарная дата этой подсказки рядом с полем.',
   },
   {
+    issue: 191,
+    title: {
+      en: 'Update: keep As of date visible while scrolling holdings',
+      ru: 'Обновление: «На дату» остаётся на экране при прокрутке',
+    },
+    en: 'As of sat in the same scroll as the holding list, so a long Update lost the date. Title + As of are now pinned above an inner scroller; the hint, reorder, and Save move with the list. Other screens unchanged.',
+    ru: '«На дату» ехало вместе со списком, и на длинном Обновить дата пропадала. Заголовок и дата закреплены над внутренней прокруткой; подсказка, сортировка и «Сохранить» едут со списком. Другие экраны без изменений.',
+  },
+  {
     issue: 188,
     title: {
       en: 'Update rates is small and has no last-updated time',

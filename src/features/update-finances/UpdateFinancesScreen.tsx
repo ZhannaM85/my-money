@@ -290,8 +290,11 @@ export function UpdateFinancesScreen() {
   const ready = loaded && settingsLoaded
 
   return (
-    <div className="flex flex-col gap-6">
-      <div className="flex flex-col gap-2">
+    <div className="flex min-h-0 flex-1 flex-col gap-4">
+      <div
+        data-testid="update-as-of-bar"
+        className="shrink-0 bg-background"
+      >
         <PageHeader
           title={t.update.title}
           action={
@@ -316,12 +319,6 @@ export function UpdateFinancesScreen() {
             />
           }
         />
-        <p
-          data-testid="update-description"
-          className="text-sm text-muted-foreground"
-        >
-          {t.update.description}
-        </p>
       </div>
       {!ready ? (
         <p className="text-sm text-muted-foreground">{t.common.loading}</p>
@@ -336,7 +333,16 @@ export function UpdateFinancesScreen() {
           }
         />
       ) : (
-        <>
+        <div
+          data-testid="update-holdings-scroll"
+          className="flex min-h-0 flex-1 flex-col gap-6 overflow-y-auto"
+        >
+          <p
+            data-testid="update-description"
+            className="text-sm text-muted-foreground"
+          >
+            {t.update.description}
+          </p>
           {rows.length > 1 ? (
             <div className="flex justify-end">
               <Button
@@ -561,7 +567,7 @@ export function UpdateFinancesScreen() {
               {t.update.saveUpdates}
             </Button>
           ) : null}
-        </>
+        </div>
       )}
     </div>
   )

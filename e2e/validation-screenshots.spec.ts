@@ -1104,3 +1104,15 @@ test('capture Update suggested-amount source date (#192)', async ({ page }) => {
   })
 })
 
+test('capture Update pinned As of (#191)', async ({ page }) => {
+  await seedValidationFixture(page)
+  await page.goto('/update')
+  await expect(page.getByRole('heading', { name: 'Update' })).toBeVisible()
+  await expect(page.getByTestId('update-as-of-bar')).toBeVisible()
+  await expect(page.getByLabel('As of')).toBeVisible()
+  await page.screenshot({
+    path: join(outDir, '191-update-as-of-pinned.png'),
+    fullPage: true,
+  })
+})
+
