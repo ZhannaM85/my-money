@@ -142,6 +142,35 @@ export function monthStartIso(isoDate: string): string {
   return `${isoDate.slice(0, 8)}01`
 }
 
+export function addMonthsIso(isoDate: string, delta: number): string {
+  const year = Number(isoDate.slice(0, 4))
+  const month = Number(isoDate.slice(5, 7)) - 1
+  const day = Number(isoDate.slice(8, 10))
+  const date = new Date(Date.UTC(year, month + delta, day))
+  return date.toISOString().slice(0, 10)
+}
+
+/** Monday-start 6-week grid covering `monthStart` (YYYY-MM-01). */
+export function monthGridCells(
+  monthStart: string,
+): { date: string; inMonth: boolean }[] {
+  const start = monthStartIso(monthStart)
+  const year = Number(start.slice(0, 4))
+  const month = Number(start.slice(5, 7)) - 1
+  const mondayOffset = (new Date(Date.UTC(year, month, 1)).getUTCDay() + 6) % 7
+  const origin = new Date(Date.UTC(year, month, 1 - mondayOffset))
+  const cells: { date: string; inMonth: boolean }[] = []
+  for (let i = 0; i < 42; i++) {
+    const cell = new Date(origin)
+    cell.setUTCDate(origin.getUTCDate() + i)
+    cells.push({
+      date: cell.toISOString().slice(0, 10),
+      inMonth: cell.getUTCMonth() === month,
+    })
+  }
+  return cells
+}
+
 export function isoDatesInclusive(from: string, to: string): string[] {
   if (from > to) return []
   const dates: string[] = []

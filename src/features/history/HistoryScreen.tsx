@@ -8,6 +8,7 @@ import {
   ChartRangeToolbar,
   CHART_ZOOM_PILL_CLASS,
 } from '@/features/dashboard/ChartRangeToolbar'
+import { HistoryCalendar } from './HistoryCalendar'
 import { useLocale, useTranslation } from '@/i18n'
 import {
   canZoomHistoryIn,
@@ -50,6 +51,7 @@ export function HistoryScreen() {
   const [customStart, setCustomStart] = useState(todayIsoDate)
   const [customEnd, setCustomEnd] = useState(todayIsoDate)
   const [openDates, setOpenDates] = useState<ReadonlySet<string>>(new Set())
+  const [viewMode, setViewMode] = useState<'list' | 'calendar'>('list')
   const today = todayIsoDate()
   const canZoomIn = canZoomHistoryIn(range)
   const canZoomOut = canZoomHistoryOut(range)
@@ -85,6 +87,10 @@ export function HistoryScreen() {
       ),
     ].sort()
   }, [snapshots, start, chartEnd])
+  const allSnapshotDates = useMemo(
+    () => [...new Set(snapshots.map((snapshot) => snapshot.date))],
+    [snapshots],
+  )
 
   useEffect(() => {
     const symbols = [...new Set(snapshots.map((snapshot) => snapshot.currency))]
@@ -294,6 +300,41 @@ export function HistoryScreen() {
               </ChartRangeToolbar>
             </>
           )}
+          <div
+            className="flex gap-2"
+            role="group"
+            aria-label={t.history.viewModeLabel}
+          >
+            <button
+              type="button"
+              className={cn(
+                'rounded-full px-3 py-1.5 text-sm font-medium',
+                viewMode === 'list'
+                  ? 'bg-primary text-primary-foreground'
+                  : 'bg-muted text-muted-foreground',
+              )}
+              aria-pressed={viewMode === 'list'}
+              onClick={() => setViewMode('list')}
+            >
+              {t.history.listViewLabel}
+            </button>
+            <button
+              type="button"
+              className={cn(
+                'rounded-full px-3 py-1.5 text-sm font-medium',
+                viewMode === 'calendar'
+                  ? 'bg-primary text-primary-foreground'
+                  : 'bg-muted text-muted-foreground',
+              )}
+              aria-pressed={viewMode === 'calendar'}
+              onClick={() => setViewMode('calendar')}
+            >
+              {t.history.calendarViewLabel}
+            </button>
+          </div>
+          {viewMode === 'calendar' ? (
+            <HistoryCalendar snapshotDates={allSnapshotDates} />
+          ) : (
           <ul className="flex flex-col gap-2">
             {(isOriginal ? originalList : convertedList).map((row) => {
               const open = openDates.has(row.date)
@@ -372,6 +413,7 @@ export function HistoryScreen() {
               )
             })}
           </ul>
+          )}
         </>
       )}
     </div>

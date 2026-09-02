@@ -268,6 +268,12 @@ export const en: Dictionary = {
     rangeCustom: 'Custom',
     rangeFrom: 'From',
     rangeTo: 'To',
+    viewModeLabel: 'View mode',
+    listViewLabel: 'List',
+    calendarViewLabel: 'Calendar',
+    calendarPrevMonth: 'Previous month',
+    calendarNextMonth: 'Next month',
+    calendarDayWithSnapshot: (date) => `Snapshot on ${date}`,
   },
   allocation: {
     title: 'Allocation',

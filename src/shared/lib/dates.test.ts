@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import {
   addDaysIso,
+  addMonthsIso,
   canPanHistoryEarlier,
   canPanHistoryLater,
   canZoomHistoryIn,
@@ -8,6 +9,7 @@ import {
   isoDatesInclusive,
   isIsoDate,
   isIsoDateOnOrBefore,
+  monthGridCells,
   monthStartIso,
   rangeStartIso,
   isRangeClampedToEarliest,
@@ -25,6 +27,17 @@ describe('date helpers', () => {
       '2026-08-31',
       '2026-09-01',
     ])
+  })
+
+  it('builds a Monday-start month grid (#189)', () => {
+    expect(addMonthsIso('2026-08-01', 1)).toBe('2026-09-01')
+    expect(addMonthsIso('2026-01-31', -1).startsWith('2025-12')).toBe(true)
+    const cells = monthGridCells('2026-08-01')
+    expect(cells).toHaveLength(42)
+    expect(cells[0]?.date).toBe('2026-07-27')
+    expect(cells[0]?.inMonth).toBe(false)
+    expect(cells.find((cell) => cell.date === '2026-08-01')?.inMonth).toBe(true)
+    expect(cells[5]?.date).toBe('2026-08-01')
   })
 
   it('clamps history ranges to the earliest snapshot (#90)', () => {

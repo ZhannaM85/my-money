@@ -1129,3 +1129,18 @@ test('capture Update post-save delta (#193)', async ({ page }) => {
   })
 })
 
+test('capture History calendar snapshot days (#189)', async ({ page }) => {
+  await seedValidationFixture(page)
+  await page.goto('/history')
+  await expect(page.getByRole('heading', { name: 'History' })).toBeVisible()
+  await page.getByRole('button', { name: 'Calendar' }).click()
+  await expect(page.getByTestId('history-calendar')).toBeVisible()
+  await expect(
+    page.getByTestId('history-calendar-mark-2026-08-17'),
+  ).toBeVisible()
+  await page.screenshot({
+    path: join(outDir, '189-history-calendar.png'),
+    fullPage: true,
+  })
+})
+

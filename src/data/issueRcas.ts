@@ -65,6 +65,15 @@ export const issueRcas: IssueRca[] = [
     ru: '«На дату» ехало вместе со списком, и на длинном Обновить дата пропадала. Заголовок и дата закреплены над внутренней прокруткой; подсказка, сортировка и «Сохранить» едут со списком. Другие экраны без изменений.',
   },
   {
+    issue: 189,
+    title: {
+      en: 'History: calendar view of days with manual snapshots',
+      ru: 'История: календарь дней с ручными снимками',
+    },
+    en: 'History only listed snapshot days. A List | Calendar toggle now shows a month grid with a marker on days that have a user-added snapshot — not carry-forward days. Default stays List. No extra marker types or tap-to-edit in this pass.',
+    ru: 'История показывала только список дней со снимками. Переключатель Список | Календарь открывает сетку месяца с меткой на днях, где есть ручной снимок — не дни переноса. По умолчанию список. Без лишних типов меток и без перехода по нажатию в этом проходе.',
+  },
+  {
     issue: 188,
     title: {
       en: 'Update rates is small and has no last-updated time',

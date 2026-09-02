@@ -233,6 +233,19 @@ export function formatCalendarDate(
   }).format(date)
 }
 
+export function formatMonthYear(
+  isoDate: string,
+  locale: Locale = 'en',
+): string {
+  const date = utcDateFromIso(isoDate)
+  if (!date) return isoDate
+  return new Intl.DateTimeFormat(locale === 'ru' ? 'ru-RU' : 'en-GB', {
+    month: 'long',
+    year: 'numeric',
+    timeZone: 'UTC',
+  }).format(date)
+}
+
 /**
  * Compact Y-axis digits so nearby million-scale ticks stay distinct
  * (1,97 млн vs 2 млн) instead of all rounding to the same label.

@@ -206,6 +206,12 @@ export interface Dictionary {
     rangeCustom: string
     rangeFrom: string
     rangeTo: string
+    viewModeLabel: string
+    listViewLabel: string
+    calendarViewLabel: string
+    calendarPrevMonth: string
+    calendarNextMonth: string
+    calendarDayWithSnapshot: (date: string) => string
   }
   allocation: {
     title: string

@@ -274,6 +274,12 @@ export const ru: Dictionary = {
     rangeCustom: 'Свой',
     rangeFrom: 'С',
     rangeTo: 'По',
+    viewModeLabel: 'Вид',
+    listViewLabel: 'Список',
+    calendarViewLabel: 'Календарь',
+    calendarPrevMonth: 'Предыдущий месяц',
+    calendarNextMonth: 'Следующий месяц',
+    calendarDayWithSnapshot: (date) => `Снимок ${date}`,
   },
   allocation: {
     title: 'Распределение',

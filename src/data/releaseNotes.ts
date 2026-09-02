@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 203,
+    issue: 189,
+    date: '2026-09-02T23:25:00+03:00',
+    en: 'History has a List | Calendar toggle. The calendar marks days where you actually saved a snapshot that month.',
+    ru: 'На Истории появился переключатель Список | Календарь. В календаре отмечены дни, когда в этом месяце сохранён снимок.',
+  },
+  {
     version: 202,
     issue: 196,
     date: '2026-09-02T23:10:00+03:00',

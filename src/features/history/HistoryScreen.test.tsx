@@ -332,4 +332,29 @@ describe('HistoryScreen', () => {
     expect(screen.getAllByText(/20,000/).length).toBeGreaterThan(0)
     expect(screen.queryByText(/€/)).not.toBeInTheDocument()
   })
+
+  it('switches to a month calendar that marks snapshot days only (#189)', async () => {
+    const user = userEvent.setup()
+    render(
+      <MemoryRouter>
+        <HistoryScreen />
+      </MemoryRouter>,
+    )
+    expect(await screen.findByRole('button', { name: 'List' })).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    )
+    expect(screen.queryByTestId('history-calendar')).not.toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Calendar' }))
+    expect(screen.getByTestId('history-calendar')).toBeInTheDocument()
+    expect(
+      screen.getByTestId('history-calendar-mark-2026-08-01'),
+    ).toBeInTheDocument()
+    expect(
+      screen.getByTestId('history-calendar-mark-2026-08-17'),
+    ).toBeInTheDocument()
+    expect(
+      screen.queryByTestId('history-calendar-mark-2026-08-02'),
+    ).not.toBeInTheDocument()
+  })
 })
