@@ -39,6 +39,7 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 | [#190](https://github.com/ZhannaM85/my-money/issues/190) | 🔲 Open | Android: home-screen glance widget behind a Settings toggle | Turtle 2×2 pattern. Off by default. Content not settled — starter: net worth + as-of. Depends on #162. |
 | [#191](https://github.com/ZhannaM85/my-money/issues/191) | 🔲 Open | Update: keep As of date visible while scrolling holdings | Sticky or pin header outside the list. Update only; other dates later. |
 | [#192](https://github.com/ZhannaM85/my-money/issues/192) | 🔲 Open | Update: show the date the suggested amount comes from | Prefill is already last snapshot before As of (#180). Show that calendar date. |
+| [#193](https://github.com/ZhannaM85/my-money/issues/193) | 🔲 Open | Update: after save, show green/red delta vs previous snapshot date | Comparison-style arrows (#174). Amount + compared-to date. |
 
 ---
 
