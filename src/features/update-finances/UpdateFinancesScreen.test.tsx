@@ -395,6 +395,9 @@ describe('UpdateFinancesScreen', () => {
     setDateField(asOf, past)
     const input = await screen.findByLabelText('Revolut new amount')
     expect(input).toHaveAttribute('placeholder', '1,000.00')
+    expect(screen.getByTestId('suggested-from-date-a1')).toHaveTextContent(
+      'From 1 Aug 2026',
+    )
     await user.click(screen.getByRole('button', { name: 'No change' }))
     await user.click(screen.getByRole('button', { name: 'Save updates' }))
     await waitFor(() => {
@@ -405,5 +408,25 @@ describe('UpdateFinancesScreen', () => {
           ?.amount,
       ).toBe(1000)
     })
+  })
+
+  it('shows the calendar date the suggested amount comes from (#192)', async () => {
+    await useAssetStore.getState().saveSnapshots([
+      {
+        assetId: 'a1',
+        date: todayIsoDate(),
+        amount: 9999,
+        currency: 'EUR',
+      },
+    ])
+    render(
+      <MemoryRouter>
+        <UpdateFinancesScreen />
+      </MemoryRouter>,
+    )
+    const asOf = await screen.findByLabelText('As of')
+    setDateField(asOf, addDaysIso(todayIsoDate(), -3))
+    const hint = await screen.findByTestId('suggested-from-date-a1')
+    expect(hint).toHaveTextContent('From 1 Aug 2026')
   })
 })

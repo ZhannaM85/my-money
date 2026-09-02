@@ -29,6 +29,15 @@ export const issueRcas: IssueRca[] = [
     ru: 'Копия от 2026-09-02 содержала все снимки (сегодняшний converted совпадал со Сводкой), но без fxRates/manualFxRates. После импорта USD/GEL не конвертировались, и Итого расходился. Теперь backup v2 с обеими таблицами курсов; v1 по-прежнему импортируется. В CSV добавлена колонка note.',
   },
   {
+    issue: 192,
+    title: {
+      en: 'Update: show the date the suggested amount comes from',
+      ru: 'Обновление: показать дату, откуда берётся предложенная сумма',
+    },
+    en: 'A past As of still pre-fills the last snapshot before that day (#180), but the card only said “Updated N days ago” vs today. Each unlocked row now shows the suggestion’s calendar date next to the input.',
+    ru: 'Прошлое «На дату» по-прежнему подставляет последний снимок до этого дня (#180), но карточка писала только «Обновлено N дней назад» относительно сегодня. На незаблокированной строке теперь стоит календарная дата этой подсказки рядом с полем.',
+  },
+  {
     issue: 188,
     title: {
       en: 'Update rates is small and has no last-updated time',

@@ -250,6 +250,7 @@ export const ru: Dictionary = {
     newAmountAria: (name) => `Новая сумма для ${name}`,
     editAmountAria: (name) => `Изменить ${name}`,
     saveOrder: 'Сохранить порядок',
+    suggestedFromDate: (date) => `С ${date}`,
   },
   history: {
     title: 'История',

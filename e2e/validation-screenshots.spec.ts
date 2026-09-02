@@ -1060,3 +1060,47 @@ test('capture Dashboard Update rates size and last-updated time (#188)', async (
   })
 })
 
+test('capture Update suggested-amount source date (#192)', async ({ page }) => {
+  await seedValidationFixture(page)
+  await page.evaluate(async () => {
+    const listed = await indexedDB.databases?.()
+    const existing = listed?.find((row) => row.name === 'my-money')
+    const version =
+      existing?.version && existing.version > 0 ? existing.version : 2
+    await new Promise<void>((resolve, reject) => {
+      const open = indexedDB.open('my-money', version)
+      open.onerror = () => reject(open.error ?? new Error('idb open failed'))
+      open.onsuccess = () => {
+        const db = open.result
+        const tx = db.transaction(['snapshots'], 'readwrite')
+        tx.objectStore('snapshots').put({
+          id: 's-eur-later',
+          assetId: 'eur-cash',
+          date: '2026-08-25',
+          amount: 9999,
+          currency: 'EUR',
+        })
+        tx.oncomplete = () => {
+          db.close()
+          resolve()
+        }
+        tx.onerror = () => reject(tx.error ?? new Error('idb write failed'))
+      }
+    })
+  })
+  await page.reload()
+  await page.goto('/update')
+  await expect(page.getByRole('heading', { name: 'Update' })).toBeVisible()
+  await page.getByLabel('As of').fill('2026-08-20')
+  await expect(page.getByTestId('suggested-from-date-eur-cash')).toContainText(
+    'From',
+  )
+  await expect(page.getByTestId('suggested-from-date-eur-cash')).toContainText(
+    '2026',
+  )
+  await page.screenshot({
+    path: join(outDir, '192-update-suggested-from-date.png'),
+    fullPage: true,
+  })
+})
+

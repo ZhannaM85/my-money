@@ -196,19 +196,39 @@ export function formatDateTime(
   }).format(date)
 }
 
+function utcDateFromIso(isoDate: string): Date | undefined {
+  const match = /^(\d{4})-(\d{2})-(\d{2})/.exec(isoDate)
+  if (!match) return undefined
+  return new Date(
+    Date.UTC(Number(match[1]), Number(match[2]) - 1, Number(match[3])),
+  )
+}
+
 /** Day + month, UTC, so `2026-08-18` is not just `18`. */
 export function formatChartAxisDate(
   isoDate: string,
   locale: Locale = 'en',
 ): string {
-  const match = /^(\d{4})-(\d{2})-(\d{2})/.exec(isoDate)
-  if (!match) return isoDate
-  const date = new Date(
-    Date.UTC(Number(match[1]), Number(match[2]) - 1, Number(match[3])),
-  )
+  const date = utcDateFromIso(isoDate)
+  if (!date) return isoDate
   return new Intl.DateTimeFormat(locale === 'ru' ? 'ru-RU' : 'en-GB', {
     day: 'numeric',
     month: 'short',
+    timeZone: 'UTC',
+  }).format(date)
+}
+
+/** Calendar day with year — Update suggestion / delta source (#192). */
+export function formatCalendarDate(
+  isoDate: string,
+  locale: Locale = 'en',
+): string {
+  const date = utcDateFromIso(isoDate)
+  if (!date) return isoDate
+  return new Intl.DateTimeFormat(locale === 'ru' ? 'ru-RU' : 'en-GB', {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
     timeZone: 'UTC',
   }).format(date)
 }

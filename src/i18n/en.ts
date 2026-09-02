@@ -244,6 +244,7 @@ export const en: Dictionary = {
     newAmountAria: (name) => `${name} new amount`,
     editAmountAria: (name) => `Edit ${name}`,
     saveOrder: 'Save order',
+    suggestedFromDate: (date) => `From ${date}`,
   },
   history: {
     title: 'History',

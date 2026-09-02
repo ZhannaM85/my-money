@@ -23,6 +23,7 @@ import { formatLastUpdated, useLocale, useTranslation } from '@/i18n'
 import { isIsoDateOnOrBefore } from '@/shared/lib/dates'
 import {
   formatAmount,
+  formatCalendarDate,
   formatEditableAmount,
   parseAmount,
   reformatAmountInput,
@@ -517,6 +518,16 @@ export function UpdateFinancesScreen() {
                           </>
                         )}
                       </div>
+                      {!locked && previous && !onDate ? (
+                        <p
+                          className="text-xs text-muted-foreground"
+                          data-testid={`suggested-from-date-${asset.id}`}
+                        >
+                          {t.update.suggestedFromDate(
+                            formatCalendarDate(previous.date, locale),
+                          )}
+                        </p>
+                      ) : null}
                     </li>
                   )
                 })}

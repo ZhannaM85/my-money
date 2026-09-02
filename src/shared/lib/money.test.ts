@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 import {
   chartAxisScale,
   compactAxisFractionDigits,
+  formatCalendarDate,
   formatChartAxisDate,
   formatDateTime,
   formatCompactNumber,
@@ -134,6 +135,18 @@ describe('chart X-axis dates', () => {
       '2026-08-21',
     ]).map((date) => formatChartAxisDate(date, 'en'))
     expect(new Set(labels).size).toBe(labels.length)
+  })
+})
+
+describe('formatCalendarDate (#192)', () => {
+  it('includes day, month, and year', () => {
+    const en = formatCalendarDate('2025-11-22', 'en')
+    const ru = formatCalendarDate('2025-11-22', 'ru')
+    expect(en).toMatch(/22/)
+    expect(en).toMatch(/Nov/i)
+    expect(en).toMatch(/2025/)
+    expect(ru).toMatch(/22/)
+    expect(ru).toMatch(/2025/)
   })
 })
 

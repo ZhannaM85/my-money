@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 199,
+    issue: 192,
+    date: '2026-09-02T22:30:00+03:00',
+    en: 'On Update, a suggested amount now names the calendar date it comes from — the last snapshot before As of.',
+    ru: 'На экране обновления у предложенной суммы теперь указана календарная дата — последний снимок до «На дату».',
+  },
+  {
     version: 198,
     issue: 195,
     date: '2026-09-02T22:20:00+03:00',
