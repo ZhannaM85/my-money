@@ -44,6 +44,10 @@ import { useFxStore } from '@/stores/fxStore'
 import { useSettingsStore } from '@/stores/settingsStore'
 import { NetWorthChart } from './NetWorthChart'
 import { ChartRangePicker } from './ChartRangePicker'
+import {
+  ChartRangeToolbar,
+  CHART_ZOOM_PILL_CLASS,
+} from './ChartRangeToolbar'
 import { dashboardNeedsRemoteFx } from './dashboardFx'
 import { asOfHasLoggedData } from './asOfHasLoggedData'
 import { holdingsForSelectedChartDay } from './holdingsForSelectedChartDay'
@@ -783,10 +787,9 @@ export function DashboardScreen() {
                       if (date) setHoldingsOpen(true)
                     }}
                   />
-                  <div className="flex items-center justify-between gap-2">
-                    <span className="text-sm text-muted-foreground">
-                      {t.dashboard.zoomRange}:{' '}
-                      {range === '1W'
+                  <ChartRangeToolbar
+                    rangeLabel={`${t.dashboard.zoomRange}: ${
+                      range === '1W'
                         ? t.history.rangeWeek
                         : range === '1M'
                           ? t.history.rangeMonth
@@ -794,79 +797,78 @@ export function DashboardScreen() {
                             ? t.history.rangeYear
                             : range === 'All'
                               ? t.history.rangeAll
-                              : t.history.rangeCustom}
-                    </span>
-                    <div className="flex gap-2">
-                      <button
-                        type="button"
-                        className={cn(
-                          'inline-flex size-9 items-center justify-center rounded-full',
-                          canPanEarlier
-                            ? 'bg-muted text-foreground'
-                            : 'bg-muted text-muted-foreground',
-                        )}
-                        disabled={!canPanEarlier}
-                        aria-label={t.dashboard.panEarlier}
-                        onClick={panEarlier}
-                      >
-                        <ChevronLeft className="size-5" aria-hidden />
-                      </button>
-                      <button
-                        type="button"
-                        className={cn(
-                          'inline-flex size-9 items-center justify-center rounded-full',
-                          canPanLater
-                            ? 'bg-muted text-foreground'
-                            : 'bg-muted text-muted-foreground',
-                        )}
-                        disabled={!canPanLater}
-                        aria-label={t.dashboard.panLater}
-                        onClick={panLater}
-                      >
-                        <ChevronRight className="size-5" aria-hidden />
-                      </button>
-                      <button
-                        type="button"
-                        className={cn(
-                          'rounded-full px-3 py-1.5 text-sm font-medium',
-                          canZoomIn
-                            ? 'bg-muted text-foreground'
-                            : 'bg-muted text-muted-foreground',
-                        )}
-                        disabled={!canZoomIn}
-                        onClick={() => {
-                          if (!canZoomIn) return
-                          setSelectedChartDate(null)
-                          setAsOfError(undefined)
-                          const next = stepHistoryRange(range, 'in')
-                          setRange(next)
-                          if (next === 'All') setRangeEnd(today)
-                        }}
-                      >
-                        {t.dashboard.zoomIn}
-                      </button>
-                      <button
-                        type="button"
-                        className={cn(
-                          'rounded-full px-3 py-1.5 text-sm font-medium',
-                          canZoomOut
-                            ? 'bg-muted text-foreground'
-                            : 'bg-muted text-muted-foreground',
-                        )}
-                        disabled={!canZoomOut}
-                        onClick={() => {
-                          if (!canZoomOut) return
-                          setSelectedChartDate(null)
-                          setAsOfError(undefined)
-                          const next = stepHistoryRange(range, 'out')
-                          setRange(next)
-                          if (next === 'All') setRangeEnd(today)
-                        }}
-                      >
-                        {t.dashboard.zoomOut}
-                      </button>
-                    </div>
-                  </div>
+                              : t.history.rangeCustom
+                    }`}
+                  >
+                    <button
+                      type="button"
+                      className={cn(
+                        'inline-flex size-9 items-center justify-center rounded-full',
+                        canPanEarlier
+                          ? 'bg-muted text-foreground'
+                          : 'bg-muted text-muted-foreground',
+                      )}
+                      disabled={!canPanEarlier}
+                      aria-label={t.dashboard.panEarlier}
+                      onClick={panEarlier}
+                    >
+                      <ChevronLeft className="size-5" aria-hidden />
+                    </button>
+                    <button
+                      type="button"
+                      className={cn(
+                        'inline-flex size-9 items-center justify-center rounded-full',
+                        canPanLater
+                          ? 'bg-muted text-foreground'
+                          : 'bg-muted text-muted-foreground',
+                      )}
+                      disabled={!canPanLater}
+                      aria-label={t.dashboard.panLater}
+                      onClick={panLater}
+                    >
+                      <ChevronRight className="size-5" aria-hidden />
+                    </button>
+                    <button
+                      type="button"
+                      className={cn(
+                        CHART_ZOOM_PILL_CLASS,
+                        canZoomIn
+                          ? 'bg-muted text-foreground'
+                          : 'bg-muted text-muted-foreground',
+                      )}
+                      disabled={!canZoomIn}
+                      onClick={() => {
+                        if (!canZoomIn) return
+                        setSelectedChartDate(null)
+                        setAsOfError(undefined)
+                        const next = stepHistoryRange(range, 'in')
+                        setRange(next)
+                        if (next === 'All') setRangeEnd(today)
+                      }}
+                    >
+                      {t.dashboard.zoomIn}
+                    </button>
+                    <button
+                      type="button"
+                      className={cn(
+                        CHART_ZOOM_PILL_CLASS,
+                        canZoomOut
+                          ? 'bg-muted text-foreground'
+                          : 'bg-muted text-muted-foreground',
+                      )}
+                      disabled={!canZoomOut}
+                      onClick={() => {
+                        if (!canZoomOut) return
+                        setSelectedChartDate(null)
+                        setAsOfError(undefined)
+                        const next = stepHistoryRange(range, 'out')
+                        setRange(next)
+                        if (next === 'All') setRangeEnd(today)
+                      }}
+                    >
+                      {t.dashboard.zoomOut}
+                    </button>
+                  </ChartRangeToolbar>
                 </>
               ) : (
                 <EmptyState

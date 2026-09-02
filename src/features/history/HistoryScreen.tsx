@@ -4,6 +4,10 @@ import { decomposeConvertedPeriodChange, historicalNetWorth, holdingsWithConvers
 import { HoldingBreakdownList } from '@/features/dashboard/HoldingBreakdownList'
 import { ChartRangePicker } from '@/features/dashboard/ChartRangePicker'
 import { NetWorthChart } from '@/features/dashboard/NetWorthChart'
+import {
+  ChartRangeToolbar,
+  CHART_ZOOM_PILL_CLASS,
+} from '@/features/dashboard/ChartRangeToolbar'
 import { useLocale, useTranslation } from '@/i18n'
 import {
   canZoomHistoryIn,
@@ -242,10 +246,9 @@ export function HistoryScreen() {
                   setRange((current) => stepHistoryRange(current, 'out'))
                 }
               />
-              <div className="flex items-center justify-between gap-2">
-                <span className="text-sm text-muted-foreground">
-                  {t.dashboard.zoomRange}:{' '}
-                  {range === '1W'
+              <ChartRangeToolbar
+                rangeLabel={`${t.dashboard.zoomRange}: ${
+                  range === '1W'
                     ? t.history.rangeWeek
                     : range === '1M'
                       ? t.history.rangeMonth
@@ -253,43 +256,42 @@ export function HistoryScreen() {
                         ? t.history.rangeYear
                         : range === 'All'
                           ? t.history.rangeAll
-                          : t.history.rangeCustom}
-                </span>
-                <div className="flex gap-2">
-                  <button
-                    type="button"
-                    className={cn(
-                      'rounded-full px-3 py-1.5 text-sm font-medium',
-                      canZoomIn
-                        ? 'bg-muted text-foreground'
-                        : 'bg-muted text-muted-foreground',
-                    )}
-                    disabled={!canZoomIn}
-                    onClick={() => {
-                      if (canZoomIn)
-                        setRange((current) => stepHistoryRange(current, 'in'))
-                    }}
-                  >
-                    {t.dashboard.zoomIn}
-                  </button>
-                  <button
-                    type="button"
-                    className={cn(
-                      'rounded-full px-3 py-1.5 text-sm font-medium',
-                      canZoomOut
-                        ? 'bg-muted text-foreground'
-                        : 'bg-muted text-muted-foreground',
-                    )}
-                    disabled={!canZoomOut}
-                    onClick={() => {
-                      if (canZoomOut)
-                        setRange((current) => stepHistoryRange(current, 'out'))
-                    }}
-                  >
-                    {t.dashboard.zoomOut}
-                  </button>
-                </div>
-              </div>
+                          : t.history.rangeCustom
+                }`}
+              >
+                <button
+                  type="button"
+                  className={cn(
+                    CHART_ZOOM_PILL_CLASS,
+                    canZoomIn
+                      ? 'bg-muted text-foreground'
+                      : 'bg-muted text-muted-foreground',
+                  )}
+                  disabled={!canZoomIn}
+                  onClick={() => {
+                    if (canZoomIn)
+                      setRange((current) => stepHistoryRange(current, 'in'))
+                  }}
+                >
+                  {t.dashboard.zoomIn}
+                </button>
+                <button
+                  type="button"
+                  className={cn(
+                    CHART_ZOOM_PILL_CLASS,
+                    canZoomOut
+                      ? 'bg-muted text-foreground'
+                      : 'bg-muted text-muted-foreground',
+                  )}
+                  disabled={!canZoomOut}
+                  onClick={() => {
+                    if (canZoomOut)
+                      setRange((current) => stepHistoryRange(current, 'out'))
+                  }}
+                >
+                  {t.dashboard.zoomOut}
+                </button>
+              </ChartRangeToolbar>
             </>
           )}
           <ul className="flex flex-col gap-2">

@@ -183,6 +183,51 @@ describe('DashboardScreen', () => {
     expect(screen.getByText(/Chart range: Year/)).toBeInTheDocument()
   })
 
+  it('wraps the chart zoom row so Russian Zoom out stays fully labeled (#195)', async () => {
+    const now = '2026-08-17T00:00:00.000Z'
+    await db.settings.put({
+      ...DEFAULT_SETTINGS,
+      locale: 'ru',
+    })
+    useSettingsStore.setState({
+      settings: { ...DEFAULT_SETTINGS, locale: 'ru' },
+      loaded: false,
+    })
+    await useAssetStore.getState().saveAsset(
+      {
+        id: 'a1',
+        name: 'Revolut',
+        assetClass: 'money',
+        type: 'bank',
+        currency: 'EUR',
+        trackingStatus: 'included',
+        valuationMethod: 'account_balance',
+        updateFrequency: 'weekly',
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        assetId: 'a1',
+        date: '2026-08-17',
+        amount: 1000,
+        currency: 'EUR',
+      },
+    )
+
+    render(
+      <MemoryRouter>
+        <DashboardScreen />
+      </MemoryRouter>,
+    )
+
+    const zoomOut = await screen.findByRole('button', { name: 'Уменьшить' })
+    expect(zoomOut).toBeInTheDocument()
+    expect(zoomOut.className).toMatch(/whitespace-nowrap/)
+    expect(screen.getByTestId('chart-range-toolbar').className).toMatch(
+      /flex-wrap/,
+    )
+  })
+
   it('keeps the chart range chip after leaving and returning (#185)', async () => {
     const user = userEvent.setup()
     const now = '2026-08-17T00:00:00.000Z'

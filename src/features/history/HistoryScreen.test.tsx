@@ -77,6 +77,9 @@ describe('HistoryScreen', () => {
     expect(screen.getByRole('button', { name: 'Custom' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Zoom in' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Zoom out' })).toBeInTheDocument()
+    expect(screen.getByTestId('chart-range-toolbar').className).toMatch(
+      /flex-wrap/,
+    )
     expect(
       screen.getAllByText(formatAmount(1000, 'EUR')).length,
     ).toBeGreaterThan(0)

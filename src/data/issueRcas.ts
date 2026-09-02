@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 195,
+    title: {
+      en: 'Android: Dashboard Zoom out is clipped at the right edge',
+      ru: 'Android: «Уменьшить» на сводке обрезано справа',
+    },
+    en: 'Russian Zoom out plus pan arrows sat in one nowrap row, so the last pill ran off the Android WebView. The range toolbar now wraps; zoom labels do not wrap inside the pill. Same strip on History and asset details.',
+    ru: 'Русское «Уменьшить» и стрелки панорамы стояли в одном ряду без переноса, поэтому последняя кнопка уезжала за край Android WebView. Панель диапазона теперь переносится; подписи зума не ломаются внутри пилюли. Та же полоска на Истории и карточке актива.',
+  },
+  {
     issue: 194,
     title: {
       en: 'JSON backup omits FX so restored today total differs',

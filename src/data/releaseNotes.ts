@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 198,
+    issue: 195,
+    date: '2026-09-02T22:20:00+03:00',
+    en: 'Chart Zoom in / Zoom out wrap to the next line on a narrow phone, so Russian Zoom out is no longer clipped.',
+    ru: '«Увеличить» / «Уменьшить» на графике переносятся на узком телефоне, поэтому русское «Уменьшить» больше не обрезается.',
+  },
+  {
     version: 197,
     issue: 194,
     date: '2026-09-02T21:40:00+03:00',
