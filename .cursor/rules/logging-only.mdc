@@ -13,7 +13,7 @@ Once the user is reporting bugs, sending screenshots, or proposing product chang
 
 1. `gh issue create` / `comment` / `reopen` / `edit` (with labels)
 2. A row or note in `docs/issues-priority.md`
-3. Commit **that doc** (and this rule, if they asked for it)
+3. Commit **and `git push`** that doc (and this rule, if they asked for it). Do not leave the logging commit local.
 
 **Forbidden until the user clearly starts a new, separate implement pass:** any `src/` edit, CSS, i18n product copy, design-system application, new themes, “match Turtle”, tests, commits of app code, push of app code.
 

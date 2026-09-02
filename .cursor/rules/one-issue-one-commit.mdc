@@ -24,6 +24,10 @@ After each issue is implemented and the local checks for that issue pass:
 
 Do **not** wait for on-device confirmation to add `validation`. Closing / `validated` / archive still wait for the user.
 
+After the user confirms on-device (close + `validated` + move the row to the archive), **commit and `git push`** that archive doc change. Do not leave it local.
+
+The same for **logging-only** batches: after `gh issue create` + the `docs/issues-priority.md` row, commit that doc and **`git push`**. Do not wait for the user to ask.
+
 ```
 # ❌ BAD
 Implement #23–#33, then one commit / one push “so it shows up on the phone”
