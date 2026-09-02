@@ -31,6 +31,14 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 
 ---
 
+## Tier 19 — Live feedback (2026-09-02)
+
+| # | Status | Issue | Notes |
+|---|--------|-------|-------|
+| [#189](https://github.com/ZhannaM85/my-money/issues/189) | 🔲 Open | History: calendar view of days with manual snapshots | List \| Calendar toggle on History (Turtle pattern). v1: mark snapshot days only. Extra markers later. |
+
+---
+
 ## Explicitly not filed
 
 Out of scope for the MVP (`PROJECT_BRIEF.md` §20) — do not implement from chat:
