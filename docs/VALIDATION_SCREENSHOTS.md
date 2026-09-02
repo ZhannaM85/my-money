@@ -72,6 +72,7 @@ gh issue edit 108 --add-label validation
 | `192-update-suggested-from-date.png` | Update · suggested amount shows source calendar date (#192) |
 | `191-update-as-of-pinned.png` | Update · As of pinned above scrolling holdings (#191) |
 | `193-update-post-save-delta.png` | Update · green/red delta vs previous snapshot after Save (#193) |
+| `196-fx-debug-conversion-unavailable.png` | Settings · FX debug after tapping Conversion not available (#196) |
 | `147-positions-hidden-from-total.png` | Dashboard · hidden asset dropped from total (#147) |
 | `150-allocation-swipe-hide.png` | Allocation · tap expanded holding to reveal Hide (#150) |
 | `148-positions-hidden-disabled.png` | Dashboard Positions · hidden row disabled (#148) |

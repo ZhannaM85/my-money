@@ -1,9 +1,15 @@
+import type { ReactElement } from 'react'
 import { render, screen } from '@testing-library/react'
+import { MemoryRouter } from 'react-router-dom'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { DEFAULT_SETTINGS } from '@/domain/settings'
 import { formatAmount } from '@/shared/lib/money'
 import { useSettingsStore } from '@/stores/settingsStore'
 import { NetWorthChart, NetWorthChartTooltip } from './NetWorthChart'
+
+function renderWithRouter(ui: ReactElement) {
+  return render(<MemoryRouter>{ui}</MemoryRouter>)
+}
 
 afterEach(() => {
   useSettingsStore.setState({ settings: DEFAULT_SETTINGS, loaded: true })
@@ -11,7 +17,7 @@ afterEach(() => {
 
 describe('NetWorthChartTooltip', () => {
   it('lists holdings for the active chart point', () => {
-    render(
+    renderWithRouter(
       <NetWorthChartTooltip
         active
         currency="EUR"
@@ -70,7 +76,7 @@ describe('NetWorthChartTooltip', () => {
       conversionAvailable: true,
     }))
 
-    render(
+    renderWithRouter(
       <NetWorthChartTooltip
         active
         currency="RUB"
@@ -88,7 +94,7 @@ describe('NetWorthChartTooltip', () => {
   })
 
   it('shows muted native amount under converted net worth (#136)', () => {
-    render(
+    renderWithRouter(
       <NetWorthChartTooltip
         active
         currency="RUB"
@@ -113,7 +119,7 @@ describe('NetWorthChartTooltip', () => {
   })
 
   it('does not duplicate native when it is already the display currency (#136)', () => {
-    render(
+    renderWithRouter(
       <NetWorthChartTooltip
         active
         currency="USD"
@@ -134,7 +140,7 @@ describe('NetWorthChartTooltip', () => {
   })
 
   it('omits the holdings card when the tooltip is turned off (#141)', () => {
-    render(
+    renderWithRouter(
       <NetWorthChartTooltip
         active
         showHoldings={false}
@@ -168,7 +174,7 @@ describe('NetWorthChartTooltip', () => {
 describe('NetWorthChart', () => {
   it('wires onSelectDate and renders the chart for day selection (#112)', () => {
     const onSelectDate = vi.fn()
-    render(
+    renderWithRouter(
       <div style={{ width: 400, height: 200 }}>
         <NetWorthChart
           points={[
@@ -213,7 +219,7 @@ describe('NetWorthChart', () => {
       settings: { ...DEFAULT_SETTINGS, showChartTooltip: false },
       loaded: true,
     })
-    render(
+    renderWithRouter(
       <div style={{ width: 400, height: 200 }}>
         <NetWorthChart
           points={[{ date: '2026-08-14', total: 1_000 }]}

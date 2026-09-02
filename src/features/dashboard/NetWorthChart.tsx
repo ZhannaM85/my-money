@@ -117,6 +117,7 @@ export function NetWorthChartTooltip({
                 holdings={point.holdings}
                 baseCurrency={currency}
                 compact
+                asOfDate={point.date}
               />
             </div>
           )}

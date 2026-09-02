@@ -11,7 +11,7 @@ import {
   periodChange,
 } from '@/domain/netWorth'
 import { useLocale, useTranslation } from '@/i18n'
-import { fxDebug } from '@/infrastructure/fx/fxDebug'
+import { fxDebug, getFxRuntimeContext } from '@/infrastructure/fx/fxDebug'
 import {
   formatAmount,
   formatDateTime,
@@ -181,6 +181,7 @@ export function DashboardScreen() {
       quoteCount: quotes.length,
       total: convertedResult.total,
       missingRates: convertedResult.missingRates,
+      ...getFxRuntimeContext(),
       holdings: convertedHoldings.map((row) => ({
         name: row.name,
         currency: row.currency,
@@ -931,6 +932,7 @@ export function DashboardScreen() {
                         row={row}
                         isOriginal={isOriginal}
                         baseCurrency={baseCurrency}
+                        asOfDate={selectedChartDate ?? today}
                       />
                     </li>
                   ))}

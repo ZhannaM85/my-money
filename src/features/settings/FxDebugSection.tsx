@@ -1,4 +1,5 @@
 import { useEffect, useState, useSyncExternalStore } from 'react'
+import { useLocation } from 'react-router-dom'
 import { useTranslation } from '@/i18n'
 import { shareOrDownloadDebugTxt } from '@/infrastructure/debug/downloadDebugTxt'
 import {
@@ -12,6 +13,7 @@ import { Button } from '@/shared/ui/button'
 
 export function FxDebugSection() {
   const t = useTranslation()
+  const { hash } = useLocation()
   const { enabled, entries } = useSyncExternalStore(
     subscribeFxDebugLog,
     getFxDebugSnapshot,
@@ -23,6 +25,13 @@ export function FxDebugSection() {
   const [saveState, setSaveState] = useState<
     'idle' | 'saved' | 'shared' | 'failed'
   >('idle')
+
+  useEffect(() => {
+    if (hash !== '#fx-debug') return
+    document.getElementById('fx-debug')?.scrollIntoView?.({
+      block: 'start',
+    })
+  }, [hash])
 
   useEffect(() => {
     if (copyState === 'idle') return
@@ -58,7 +67,7 @@ export function FxDebugSection() {
   }
 
   return (
-    <section className="flex flex-col gap-3">
+    <section id="fx-debug" className="flex flex-col gap-3">
       <div className="flex flex-col gap-1">
         <h2 className="text-lg font-semibold">{t.settings.fxDebugTitle}</h2>
         <p className="text-sm text-muted-foreground">

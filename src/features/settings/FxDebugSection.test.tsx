@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { MemoryRouter } from 'react-router-dom'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import {
   clearFxDebugLog,
@@ -19,7 +20,11 @@ describe('FxDebugSection', () => {
   it('enables debug and shows recorded events on screen', async () => {
     const user = userEvent.setup()
     vi.spyOn(console, 'info').mockImplementation(() => undefined)
-    render(<FxDebugSection />)
+    render(
+      <MemoryRouter>
+        <FxDebugSection />
+      </MemoryRouter>,
+    )
 
     await user.click(screen.getByRole('button', { name: 'Turn on FX debug' }))
     fxDebug('ensureRange done', { quoteCount: 3 })
@@ -36,7 +41,11 @@ describe('FxDebugSection', () => {
       share,
       canShare: () => true,
     })
-    render(<FxDebugSection />)
+    render(
+      <MemoryRouter>
+        <FxDebugSection />
+      </MemoryRouter>,
+    )
 
     expect(screen.getByRole('button', { name: 'Save .txt' })).toBeDisabled()
     await user.click(screen.getByRole('button', { name: 'Turn on FX debug' }))

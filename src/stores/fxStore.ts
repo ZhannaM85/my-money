@@ -11,7 +11,7 @@ import {
   FrankfurterFxClient,
   type RateRequest,
 } from '@/infrastructure/fx/frankfurter'
-import { fxDebug } from '@/infrastructure/fx/fxDebug'
+import { fxDebug, recordEnsureRangeWindow } from '@/infrastructure/fx/fxDebug'
 import { shouldFetchFrankfurter } from '@/features/dashboard/dashboardFx'
 import {
   ensureStaticRubRates,
@@ -141,6 +141,7 @@ export const useFxStore = create<FxStoreState>((set) => ({
       symbols: [...symbols],
       force: Boolean(options?.force),
     })
+    recordEnsureRangeWindow({ start, end, base, symbols: [...symbols] })
     const online =
       typeof navigator === 'undefined' ? true : navigator.onLine
     if (shouldFetchFrankfurter(online)) {

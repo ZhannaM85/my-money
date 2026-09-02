@@ -9,6 +9,7 @@ import {
   comparisonTotalDelta,
 } from '@/features/dashboard/comparisonRows'
 import { ComparisonDelta } from '@/features/dashboard/ComparisonDelta'
+import { ConversionUnavailableButton } from '@/features/dashboard/ConversionUnavailableButton'
 import { useLocale, useTranslation } from '@/i18n'
 import { snapshotOnDate, snapshotsOnOrBefore } from '@/domain/snapshot'
 import {
@@ -61,12 +62,13 @@ function ComparisonAmountDisplay({
   holding,
   baseline,
   baseCurrency,
+  date,
 }: {
   holding: HoldingConversion | undefined
   baseline: HoldingConversion | undefined
   baseCurrency: string
+  date: string
 }) {
-  const t = useTranslation()
   const locale = useLocale()
   if (!holding) {
     return <span className="text-muted-foreground">—</span>
@@ -85,9 +87,12 @@ function ComparisonAmountDisplay({
         <span className="tabular-nums">
           {formatAmount(holding.nativeAmount, holding.currency, locale)}
         </span>
-        <span className="text-xs text-muted-foreground">
-          {t.dashboard.conversionUnavailable}
-        </span>
+        <ConversionUnavailableButton
+          from={holding.currency}
+          to={baseCurrency}
+          date={date}
+          assetId={holding.assetId}
+        />
       </span>
     )
   }
@@ -162,6 +167,7 @@ function ComparisonCell({
         holding={holding}
         baseline={baseline}
         baseCurrency={baseCurrency}
+        date={date}
       />
     )
   }
@@ -198,6 +204,7 @@ function ComparisonCell({
         holding={holding}
         baseline={baseline}
         baseCurrency={baseCurrency}
+        date={date}
       />
       <Button
         type="button"

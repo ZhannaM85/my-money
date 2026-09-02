@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 196,
+    title: {
+      en: 'Android: conversion unavailable needs an on-device FX debugger',
+      ru: 'Android: «конвертация недоступна» — отладчик на устройстве, не молчаливая подстановка',
+    },
+    en: 'Converted Dashboard omitted USD/GEL with no pair, date, or fetch trace. FX debug now records missingRates plus last ensureRange window, online, and Capacitor vs PWA. Tapping Conversion not available turns the log on and opens Settings. Totals still omit missing quotes.',
+    ru: 'Пересчитанная Сводка отбрасывала USD/GEL без пары, даты и следа запроса. Отладка FX теперь пишет missingRates, окно ensureRange, сеть и Capacitor/PWA. Нажатие «Конвертация недоступна» включает журнал и открывает Настройки. Итого по-прежнему без выдуманного курса.',
+  },
+  {
     issue: 195,
     title: {
       en: 'Android: Dashboard Zoom out is clipped at the right edge',

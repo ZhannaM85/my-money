@@ -1,4 +1,5 @@
 import type { HoldingConversion } from '@/domain/netWorth'
+import { ConversionUnavailableButton } from '@/features/dashboard/ConversionUnavailableButton'
 import { useLocale, useTranslation } from '@/i18n'
 import { formatAmount } from '@/shared/lib/money'
 import { cn } from '@/shared/lib/utils'
@@ -8,11 +9,13 @@ export function HoldingBreakdownList({
   baseCurrency,
   compact = false,
   nativeOnly = false,
+  asOfDate,
 }: {
   holdings: readonly HoldingConversion[]
   baseCurrency: string
   compact?: boolean
   nativeOnly?: boolean
+  asOfDate?: string
 }) {
   const t = useTranslation()
   const locale = useLocale()
@@ -53,9 +56,12 @@ export function HoldingBreakdownList({
                   {row.currency}
                 </span>
               ) : !row.conversionAvailable ? (
-                <span className="text-xs text-muted-foreground">
-                  {t.dashboard.conversionUnavailable}
-                </span>
+                <ConversionUnavailableButton
+                  from={row.currency}
+                  to={baseCurrency}
+                  date={asOfDate}
+                  assetId={row.assetId}
+                />
               ) : row.currency !== baseCurrency ? (
                 <span className="text-xs text-muted-foreground">
                   {formatAmount(row.nativeAmount, row.currency, locale)}

@@ -364,6 +364,7 @@ export function HistoryScreen() {
                         holdings={row.holdings}
                         baseCurrency={baseCurrency}
                         nativeOnly={isOriginal}
+                        asOfDate={row.date}
                       />
                     </div>
                   )}

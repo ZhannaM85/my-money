@@ -1,4 +1,5 @@
 import type { HoldingConversion } from '@/domain/netWorth'
+import { ConversionUnavailableButton } from '@/features/dashboard/ConversionUnavailableButton'
 import { useLocale, useTranslation } from '@/i18n'
 import { formatAmount } from '@/shared/lib/money'
 import { cn } from '@/shared/lib/utils'
@@ -10,11 +11,13 @@ export function PositionsHoldingRow({
   isOriginal,
   baseCurrency,
   compact = false,
+  asOfDate,
 }: {
   row: HoldingConversion
   isOriginal: boolean
   baseCurrency: string
   compact?: boolean
+  asOfDate?: string
 }) {
   const t = useTranslation()
   const locale = useLocale()
@@ -65,9 +68,12 @@ export function PositionsHoldingRow({
             </span>
           ) : null}
           {!isOriginal && !row.conversionAvailable ? (
-            <span className="text-xs text-muted-foreground">
-              {t.dashboard.conversionUnavailable}
-            </span>
+            <ConversionUnavailableButton
+              from={row.currency}
+              to={baseCurrency}
+              date={asOfDate}
+              assetId={row.assetId}
+            />
           ) : !isOriginal && row.currency !== baseCurrency ? (
             <span className="text-xs text-muted-foreground">
               {formatAmount(row.nativeAmount, row.currency, locale)}

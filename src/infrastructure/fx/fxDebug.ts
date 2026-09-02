@@ -1,3 +1,5 @@
+import { isNativePlatform } from '@/shared/lib/registerServiceWorker'
+
 const FLAG = 'my-money:fx-debug'
 const MAX_ENTRIES = 80
 
@@ -12,8 +14,23 @@ export interface FxDebugSnapshot {
   entries: readonly FxDebugEntry[]
 }
 
+export interface EnsureRangeWindow {
+  start: string
+  end: string
+  base: string
+  symbols: readonly string[]
+  at: string
+}
+
+export interface FxRuntimeContext {
+  online: boolean | undefined
+  platform: 'capacitor' | 'pwa'
+  lastEnsureRange: EnsureRangeWindow | undefined
+}
+
 const entries: FxDebugEntry[] = []
 const listeners = new Set<() => void>()
+let lastEnsureRange: EnsureRangeWindow | undefined
 
 let snapshot: FxDebugSnapshot = {
   enabled: false,
@@ -90,6 +107,28 @@ export function formatFxDebugLog(
 /** Sync snapshot.enabled with localStorage (e.g. after tests or cold start). */
 export function refreshFxDebugFromStorage(): void {
   publish()
+}
+
+export function recordEnsureRangeWindow(window: {
+  start: string
+  end: string
+  base: string
+  symbols: readonly string[]
+}): void {
+  lastEnsureRange = {
+    ...window,
+    at: new Date().toISOString(),
+  }
+}
+
+export function getFxRuntimeContext(): FxRuntimeContext {
+  const online =
+    typeof navigator === 'undefined' ? undefined : navigator.onLine
+  return {
+    online,
+    platform: isNativePlatform() ? 'capacitor' : 'pwa',
+    lastEnsureRange,
+  }
 }
 
 export function fxDebug(message: string, details?: unknown): void {

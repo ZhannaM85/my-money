@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 202,
+    issue: 196,
+    date: '2026-09-02T23:10:00+03:00',
+    en: 'Tap Conversion not available to turn on FX debug and jump to the log. The log names the missing pair and date, last fetch window, online/offline, and whether you are on Capacitor or the PWA. Converted totals still skip missing quotes.',
+    ru: 'Нажмите «Конвертация недоступна», чтобы включить отладку FX и открыть журнал. В нём пара и дата, окно запроса, сеть и Capacitor или PWA. Пересчитанный итог по-прежнему без выдуманного курса.',
+  },
+  {
     version: 201,
     issue: 193,
     date: '2026-09-02T22:50:00+03:00',

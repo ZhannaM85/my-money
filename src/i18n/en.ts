@@ -357,7 +357,7 @@ export const en: Dictionary = {
     fxDebugCopyFailed: 'Could not copy the log.',
     fxDebugSaveFailed: 'Could not save the log.',
     fxDebugEmpty:
-      'No events yet. Open Dashboard or tap an Allocation holding while debug is on.',
+      'No events yet. Turn on, open Dashboard, or tap Conversion not available. Then save a .txt.',
     readPrivacyPolicyLabel: 'Privacy policy',
   },
   privacyPolicy: {
