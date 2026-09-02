@@ -40,6 +40,7 @@ describe('guessCsvMapping', () => {
       'currency',
       'assetClass',
       'type',
+      'note',
     ])
     expect(mapping).toEqual({ date: 0, asset: 1, amount: 3, currency: 4 })
     expect(mappingIsComplete(mapping)).toBe(true)
@@ -94,6 +95,26 @@ describe('previewCsvImport', () => {
     expect(preview.snapshots).toEqual([])
     expect(preview.issues).toEqual([
       { rowNumber: 2, reason: 'ambiguous_asset', asset: 'Cash' },
+    ])
+  })
+
+  it('imports a note column when the export header is present (#194)', () => {
+    const rows = parseCsv(
+      'date,asset,amount,currency,note\n2026-08-17,a1,1000,EUR,Salary landed',
+    )
+    const preview = previewCsvImport(
+      rows,
+      { date: 0, asset: 1, amount: 2, currency: 3 },
+      [revolut],
+    )
+    expect(preview.snapshots).toEqual([
+      {
+        assetId: 'a1',
+        date: '2026-08-17',
+        amount: 1000,
+        currency: 'EUR',
+        note: 'Salary landed',
+      },
     ])
   })
 })

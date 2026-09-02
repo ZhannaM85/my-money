@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest'
 import { DEFAULT_SETTINGS } from '@/domain/settings'
-import { buildBackupBundle } from './BackupBundle'
+import { BACKUP_VERSION, buildBackupBundle } from './BackupBundle'
 
 describe('buildBackupBundle', () => {
-  it('wraps settings, assets, and snapshots as version 1', () => {
+  it('wraps settings, assets, snapshots, and FX quotes as version 2 (#194)', () => {
     const now = '2026-08-17T00:00:00.000Z'
     const asset = {
       id: 'a1',
@@ -25,13 +25,28 @@ describe('buildBackupBundle', () => {
       currency: 'EUR',
       createdAt: now,
     }
-    const bundle = buildBackupBundle(DEFAULT_SETTINGS, [asset], [snapshot], now)
+    const fxRates = [
+      { date: '2026-08-17', base: 'EUR', quote: 'RUB', rate: 90 },
+    ]
+    const manualFxRates = [
+      { date: '2026-08-17', base: 'USD', quote: 'RUB', rate: 80 },
+    ]
+    const bundle = buildBackupBundle(
+      DEFAULT_SETTINGS,
+      [asset],
+      [snapshot],
+      now,
+      fxRates,
+      manualFxRates,
+    )
     expect(bundle).toEqual({
-      version: 1,
+      version: BACKUP_VERSION,
       exportedAt: now,
       settings: DEFAULT_SETTINGS,
       assets: [asset],
       snapshots: [snapshot],
+      fxRates,
+      manualFxRates,
     })
   })
 })

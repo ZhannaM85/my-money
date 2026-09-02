@@ -16,8 +16,16 @@ export class BookNotEmptyError extends Error {
 }
 
 export async function exportBackup(): Promise<BackupBundle> {
-  const { settings, assets, snapshots } = await readBook()
-  return buildBackupBundle(settings, assets, snapshots)
+  const { settings, assets, snapshots, fxRates, manualFxRates } =
+    await readBook()
+  return buildBackupBundle(
+    settings,
+    assets,
+    snapshots,
+    new Date().toISOString(),
+    fxRates,
+    manualFxRates,
+  )
 }
 
 export async function importBackupJson(text: string): Promise<BackupBundle> {

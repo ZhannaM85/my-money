@@ -6,7 +6,7 @@ import {
   UPDATE_FREQUENCIES,
   VALUATION_METHODS,
 } from '@/domain/asset'
-import { BACKUP_VERSION, type BackupBundle } from '@/domain/backup'
+import type { BackupBundle } from '@/domain/backup'
 
 const settingsSchema = z.object({
   id: z.literal('singleton'),
@@ -49,13 +49,22 @@ const snapshotSchema = z.object({
   note: z.string().min(1).optional(),
 })
 
+const fxQuoteSchema = z.object({
+  date: z.string().min(1),
+  base: z.string().min(1),
+  quote: z.string().min(1),
+  rate: z.number(),
+})
+
 export const backupBundleSchema = z
   .object({
-    version: z.literal(BACKUP_VERSION),
+    version: z.union([z.literal(1), z.literal(2)]),
     exportedAt: z.string().min(1),
     settings: settingsSchema,
     assets: z.array(assetSchema),
     snapshots: z.array(snapshotSchema),
+    fxRates: z.array(fxQuoteSchema).default([]),
+    manualFxRates: z.array(fxQuoteSchema).default([]),
   })
   .superRefine((bundle, ctx) => {
     const ids = new Set(bundle.assets.map((asset) => asset.id))

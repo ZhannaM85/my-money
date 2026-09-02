@@ -9,13 +9,18 @@ export async function readBook(): Promise<{
   settings: BackupBundle['settings']
   assets: BackupBundle['assets']
   snapshots: BackupBundle['snapshots']
+  fxRates: BackupBundle['fxRates']
+  manualFxRates: BackupBundle['manualFxRates']
 }> {
-  const [settings, assets, snapshots] = await Promise.all([
-    settingsRepository.get(),
-    db.assets.toArray(),
-    db.snapshots.toArray(),
-  ])
-  return { settings, assets, snapshots }
+  const [settings, assets, snapshots, fxRates, manualFxRates] =
+    await Promise.all([
+      settingsRepository.get(),
+      db.assets.toArray(),
+      db.snapshots.toArray(),
+      db.fxRates.toArray(),
+      db.manualFxRates.toArray(),
+    ])
+  return { settings, assets, snapshots, fxRates, manualFxRates }
 }
 
 export async function bookHasAssets(): Promise<boolean> {
@@ -23,17 +28,31 @@ export async function bookHasAssets(): Promise<boolean> {
 }
 
 export async function replaceBook(bundle: BackupBundle): Promise<void> {
-  await db.transaction('rw', db.settings, db.assets, db.snapshots, async () => {
-    await db.assets.clear()
-    await db.snapshots.clear()
-    await db.settings.put({
-      ...DEFAULT_SETTINGS,
-      ...bundle.settings,
-      id: SETTINGS_ID,
-    })
-    if (bundle.assets.length > 0) await db.assets.bulkPut(bundle.assets)
-    if (bundle.snapshots.length > 0) {
-      await db.snapshots.bulkPut(bundle.snapshots)
-    }
-  })
+  await db.transaction(
+    'rw',
+    db.settings,
+    db.assets,
+    db.snapshots,
+    db.fxRates,
+    db.manualFxRates,
+    async () => {
+      await db.assets.clear()
+      await db.snapshots.clear()
+      await db.fxRates.clear()
+      await db.manualFxRates.clear()
+      await db.settings.put({
+        ...DEFAULT_SETTINGS,
+        ...bundle.settings,
+        id: SETTINGS_ID,
+      })
+      if (bundle.assets.length > 0) await db.assets.bulkPut(bundle.assets)
+      if (bundle.snapshots.length > 0) {
+        await db.snapshots.bulkPut(bundle.snapshots)
+      }
+      if (bundle.fxRates.length > 0) await db.fxRates.bulkPut(bundle.fxRates)
+      if (bundle.manualFxRates.length > 0) {
+        await db.manualFxRates.bulkPut(bundle.manualFxRates)
+      }
+    },
+  )
 }

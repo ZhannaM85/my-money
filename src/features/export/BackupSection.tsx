@@ -3,6 +3,7 @@ import { useTranslation } from '@/i18n'
 import { pickImportFile } from '@/shared/lib/pickNativeTextFile'
 import { Button } from '@/shared/ui/button'
 import { useAssetStore } from '@/stores/assetStore'
+import { useFxStore } from '@/stores/fxStore'
 import { useSettingsStore } from '@/stores/settingsStore'
 import {
   BookNotEmptyError,
@@ -20,6 +21,7 @@ export function BackupSection() {
   const [busy, setBusy] = useState(false)
   const loadAssets = useAssetStore((state) => state.load)
   const loadSettings = useSettingsStore((state) => state.load)
+  const loadFx = useFxStore((state) => state.loadCached)
   const assetCount = useAssetStore((state) => state.assets.length)
   const assetsLoaded = useAssetStore((state) => state.loaded)
 
@@ -54,7 +56,7 @@ export function BackupSection() {
     try {
       const text = await file.text()
       await importBackupJson(text)
-      await Promise.all([loadAssets(), loadSettings()])
+      await Promise.all([loadAssets(), loadSettings(), loadFx()])
       setMessage(t.backup.restored)
     } catch (caught) {
       if (caught instanceof BookNotEmptyError) {

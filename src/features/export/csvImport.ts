@@ -32,6 +32,7 @@ const DATE_KEYS = new Set(['date', 'asof', 'asofdate', 'snapshotdate'])
 const ASSET_KEYS = new Set(['asset', 'assetname', 'name', 'assetid', 'id'])
 const AMOUNT_KEYS = new Set(['amount', 'value', 'balance'])
 const CURRENCY_KEYS = new Set(['currency', 'ccy', 'curr'])
+const NOTE_KEYS = new Set(['note', 'comment', 'memo'])
 const FIELD_KEYS: Record<CsvField, Set<string>> = {
   date: DATE_KEYS,
   asset: ASSET_KEYS,
@@ -92,6 +93,13 @@ function cell(row: string[], index: number): string {
   return row[index] ?? ''
 }
 
+function noteColumnIndex(headers: string[]): number | undefined {
+  const index = headers.findIndex((header) =>
+    NOTE_KEYS.has(normalizeHeader(header)),
+  )
+  return index >= 0 ? index : undefined
+}
+
 export function previewCsvImport(
   rows: string[][],
   mapping: CsvColumnMapping,
@@ -100,6 +108,7 @@ export function previewCsvImport(
   const snapshots: Omit<AssetSnapshot, 'id' | 'createdAt'>[] = []
   const issues: CsvRowIssue[] = []
   const data = rows.slice(1)
+  const noteIndex = noteColumnIndex(rows[0] ?? [])
 
   for (let i = 0; i < data.length; i += 1) {
     const row = data[i]
@@ -154,11 +163,14 @@ export function previewCsvImport(
       continue
     }
 
+    const note =
+      noteIndex === undefined ? undefined : cell(row, noteIndex).trim()
     snapshots.push({
       assetId: resolved.id,
       date,
       amount,
       currency: currencyRaw.trim().toUpperCase(),
+      ...(note ? { note } : {}),
     })
   }
 

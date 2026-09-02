@@ -353,17 +353,19 @@ The web, Android, and iOS clients must round-trip the same backup:
 
 ```ts
 interface BackupBundle {
-  version: 1;
+  version: 1 | 2;
   exportedAt: string;
   settings: Settings;
   assets: Asset[];
   snapshots: AssetSnapshot[];
+  fxRates: FxRateQuote[];       // #194 — empty when reading v1
+  manualFxRates: FxRateQuote[]; // #194 — empty when reading v1
 }
 ```
 
-CSV is a tabular view of snapshots (date, asset id/name, amount, currency, class, type), not a second source of truth. JSON is the backup format. Import maps those four fields, appends snapshots to assets that already exist, and lists unmatched or invalid rows instead of dropping them.
+CSV is a tabular view of snapshots (date, asset id/name, amount, currency, class, type, note), not a second source of truth. JSON is the backup format. Import maps those four fields, appends snapshots to assets that already exist, and lists unmatched or invalid rows instead of dropping them. A `note` column is restored when present (#194).
 
-Restore is empty-book only: if any asset already exists, import is refused rather than merged. Settings, assets, and snapshots are the contract; FX cache is not part of the backup.
+Restore is empty-book only: if any asset already exists, import is refused rather than merged. Settings, assets, snapshots, cached FX quotes, and manual FX rates are the contract (#194). New exports are version 2; version 1 files still import.
 
 ---
 

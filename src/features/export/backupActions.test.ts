@@ -34,28 +34,63 @@ const snapshot = {
   createdAt: now,
 }
 
+const fxRate = {
+  date: '2026-08-17',
+  base: 'EUR',
+  quote: 'USD',
+  rate: 1.1,
+}
+
+const manualFxRate = {
+  date: '2026-08-17',
+  base: 'USD',
+  quote: 'RUB',
+  rate: 80,
+}
+
 const bundle = buildBackupBundle(
   { ...DEFAULT_SETTINGS, baseCurrency: 'USD', onboardingCompleted: true },
   [asset],
   [snapshot],
   now,
+  [fxRate],
+  [manualFxRate],
 )
 
 beforeEach(async () => {
   await db.assets.clear()
   await db.snapshots.clear()
   await db.settings.clear()
+  await db.fxRates.clear()
+  await db.manualFxRates.clear()
 })
 
 describe('JSON backup', () => {
-  it('round-trips settings, assets, and snapshots through an empty book', async () => {
+  it('round-trips settings, assets, snapshots, and FX quotes through an empty book (#194)', async () => {
     await importBackupJson(JSON.stringify(bundle))
     const exported = await exportBackup()
-    expect(exported.version).toBe(1)
+    expect(exported.version).toBe(2)
     expect(exported.settings.baseCurrency).toBe('USD')
     expect(exported.settings.onboardingCompleted).toBe(true)
     expect(exported.assets).toEqual([asset])
     expect(exported.snapshots).toEqual([snapshot])
+    expect(exported.fxRates).toEqual([fxRate])
+    expect(exported.manualFxRates).toEqual([manualFxRate])
+  })
+
+  it('imports a v1 JSON file with empty FX tables (#194)', async () => {
+    const v1 = {
+      version: 1 as const,
+      exportedAt: now,
+      settings: bundle.settings,
+      assets: [asset],
+      snapshots: [snapshot],
+    }
+    await importBackupJson(JSON.stringify(v1))
+    const exported = await exportBackup()
+    expect(exported.fxRates).toEqual([])
+    expect(exported.manualFxRates).toEqual([])
+    expect(exported.assets).toEqual([asset])
   })
 
   it('refuses to import when the book already has assets', async () => {

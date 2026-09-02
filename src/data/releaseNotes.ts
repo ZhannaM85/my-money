@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 197,
+    issue: 194,
+    date: '2026-09-02T21:40:00+03:00',
+    en: 'JSON backup now includes FX quotes and manual rates, so a restore keeps the same converted today total. CSV export includes snapshot notes.',
+    ru: 'JSON-копия теперь включает курсы и ручные ставки, поэтому после восстановления совпадает сегодняшний пересчитанный итог. CSV-экспорт включает заметки к снимкам.',
+  },
+  {
     version: 195,
     issue: 188,
     date: '2026-09-01T14:40:00+03:00',

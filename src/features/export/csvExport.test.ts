@@ -52,8 +52,8 @@ describe('buildSnapshotsCsv', () => {
     ])
     const lines = csv.split('\r\n')
     expect(lines[0]).toBe(CSV_HEADERS.join(','))
-    expect(lines[1]).toBe('2026-07-01,a1,Revolut,1000,EUR,money,bank')
-    expect(lines[2]).toBe('2026-08-17,a2,Broker,500,USD,investments,brokerage')
+    expect(lines[1]).toBe('2026-07-01,a1,Revolut,1000,EUR,money,bank,')
+    expect(lines[2]).toBe('2026-08-17,a2,Broker,500,USD,investments,brokerage,')
   })
 
   it('quotes asset names that contain commas', () => {
@@ -71,5 +71,22 @@ describe('buildSnapshotsCsv', () => {
       ],
     )
     expect(csv).toContain('"Cash, EUR"')
+  })
+
+  it('writes snapshot notes (#194)', () => {
+    const csv = buildSnapshotsCsv(assets, [
+      {
+        id: 's1',
+        assetId: 'a1',
+        date: '2026-08-17',
+        amount: 10,
+        currency: 'EUR',
+        createdAt: now,
+        note: 'Salary landed',
+      },
+    ])
+    expect(csv.split('\r\n')[1]).toBe(
+      '2026-08-17,a1,Revolut,10,EUR,money,bank,Salary landed',
+    )
   })
 })

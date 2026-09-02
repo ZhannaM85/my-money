@@ -10,6 +10,7 @@ export const CSV_HEADERS = [
   'currency',
   'assetClass',
   'type',
+  'note',
 ] as const
 
 export function buildSnapshotsCsv(
@@ -36,6 +37,7 @@ export function buildSnapshotsCsv(
         snapshot.currency,
         asset?.assetClass ?? '',
         asset?.type ?? '',
+        snapshot.note ?? '',
       ]
     }),
   )

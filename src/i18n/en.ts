@@ -391,7 +391,7 @@ export const en: Dictionary = {
   backup: {
     title: 'Backup',
     description:
-      'JSON is the backup format and the contract with the iOS app. Import restores into an empty book only.',
+      'JSON is the backup format and the contract with the iOS app. It includes settings, assets, snapshots, and FX rates. Import restores into an empty book only.',
     exportJson: 'Export JSON',
     importJson: 'Import JSON',
     importAria: 'Import JSON backup',
@@ -408,7 +408,7 @@ export const en: Dictionary = {
   csv: {
     title: 'CSV',
     description:
-      'Spreadsheet of snapshots. JSON remains the backup. Import adds balances to assets that already exist; unmatched rows are listed, not dropped.',
+      'Spreadsheet of snapshots, including notes. JSON remains the backup. Import adds balances to assets that already exist; unmatched rows are listed, not dropped.',
     exportCsv: 'Export CSV',
     importCsv: 'Import CSV',
     importAria: 'Import CSV',

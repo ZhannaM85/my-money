@@ -1,2 +1,2 @@
-export { BACKUP_VERSION, buildBackupBundle } from './BackupBundle'
-export type { BackupBundle } from './BackupBundle'
+export { BACKUP_VERSION, BACKUP_VERSIONS, buildBackupBundle } from './BackupBundle'
+export type { BackupBundle, BackupVersion } from './BackupBundle'

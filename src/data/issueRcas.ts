@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 194,
+    title: {
+      en: 'JSON backup omits FX so restored today total differs',
+      ru: 'JSON-копия без курсов — восстановленный итог другой',
+    },
+    en: 'The 2026-09-02 backup had every snapshot (converted today matched Positions) but no fxRates/manualFxRates. Import could not convert USD/GEL, so Итого disagreed. Backup is now v2 with both rate tables; v1 still imports. CSV gained a note column.',
+    ru: 'Копия от 2026-09-02 содержала все снимки (сегодняшний converted совпадал со Сводкой), но без fxRates/manualFxRates. После импорта USD/GEL не конвертировались, и Итого расходился. Теперь backup v2 с обеими таблицами курсов; v1 по-прежнему импортируется. В CSV добавлена колонка note.',
+  },
+  {
     issue: 188,
     title: {
       en: 'Update rates is small and has no last-updated time',

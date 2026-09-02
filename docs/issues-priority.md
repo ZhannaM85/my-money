@@ -32,6 +32,7 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
+| [#194](https://github.com/ZhannaM85/my-money/issues/194) | 🔍 Pending validation | JSON backup omits FX rates so restored today total does not match | **Blocker.** v2 include fxRates + manualFxRates. CSV notes. |
 | [#189](https://github.com/ZhannaM85/my-money/issues/189) | 🔲 Open | History: calendar view of days with manual snapshots | List \| Calendar toggle on History (Turtle pattern). v1: mark snapshot days only. Extra markers later. |
 | [#190](https://github.com/ZhannaM85/my-money/issues/190) | 🔲 Open | Android: home-screen glance widget behind a Settings toggle | Turtle 2×2 pattern. Off by default. Content not settled — starter: net worth + as-of. Depends on #162. |
 | [#191](https://github.com/ZhannaM85/my-money/issues/191) | 🔲 Open | Update: keep As of date visible while scrolling holdings | Sticky or pin header outside the list. Update only; other dates later. |
