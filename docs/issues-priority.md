@@ -32,15 +32,6 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 
 ---
 
-## Tier 18 — Live feedback (2026-09-01)
-
-| # | Status | Issue | Notes |
-|---|--------|-------|-------|
-| [#186](https://github.com/ZhannaM85/my-money/issues/186) | 🔍 Pending validation | Dashboard: Update rates button does nothing | Screenshot: Сводка Converted/RUB, **Обновить курсы** circled. Tap has no spinner, toast, error, or quote change. |
-| [#188](https://github.com/ZhannaM85/my-money/issues/188) | 🔍 Pending validation | Dashboard: larger Update rates button and last-updated time | Follow-up to #186. Screenshot: **Обновить курсы** still a short pill; **Курсы обновлены** has no timestamp. |
-
----
-
 ## Explicitly not filed
 
 Out of scope for the MVP (`PROJECT_BRIEF.md` §20) — do not implement from chat:
