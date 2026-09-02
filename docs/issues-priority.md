@@ -19,7 +19,6 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 | [#19](https://github.com/ZhannaM85/my-money/issues/19) | 🔲 Open | Epic 18 — Android and iOS via Capacitor | Tracking only. Children below. |
 | [#162](https://github.com/ZhannaM85/my-money/issues/162) | 🔍 Pending validation | Adopt Capacitor to wrap the app for native iOS/Android builds | Shared foundation. Native `/` base, not GitHub Pages `/my-money/`. |
 | [#166](https://github.com/ZhannaM85/my-money/issues/166) | 🔍 Pending validation | Native status bar / safe-area / system theming pass (iOS + Android) | Depends on #162. |
-| [#165](https://github.com/ZhannaM85/my-money/issues/165) | 🔍 Pending validation | Android: hardware/gesture back-button navigation handling | Depends on #162. |
 | [#169](https://github.com/ZhannaM85/my-money/issues/169) | 🔍 Pending validation | Native: backup and CSV export/import via share sheet | `<a download>` often fails in WebView. Depends on #162. |
 | [#167](https://github.com/ZhannaM85/my-money/issues/167) | 🔲 Open | iOS: App Store Connect app record + signing (Developer Program enrolled) | Account step. Enrollment is done; Connect record is not. |
 | [#168](https://github.com/ZhannaM85/my-money/issues/168) | 🔲 Open | iOS: code signing + first TestFlight beta build | Depends on #162 + #167. Requires a Mac. |
