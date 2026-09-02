@@ -286,6 +286,10 @@ export interface Dictionary {
     fxDebugCopyFailed: string
     fxDebugSaveFailed: string
     fxDebugEmpty: string
+    homeScreenWidget: string
+    homeScreenWidgetHint: string
+    homeScreenWidgetOn: string
+    homeScreenWidgetOff: string
     readPrivacyPolicyLabel: string
   }
   /** #164 — full privacy policy at `/privacy` (store listings need a stable URL). */

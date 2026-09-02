@@ -132,4 +132,21 @@ describe('SettingsScreen', () => {
     const link = await screen.findByRole('link', { name: 'Privacy policy' })
     expect(link).toHaveAttribute('href', '/privacy')
   })
+
+  it('keeps the home-screen widget off until the user turns it on (#190)', async () => {
+    const user = userEvent.setup()
+    await db.settings.put(DEFAULT_SETTINGS)
+    render(
+      <MemoryRouter>
+        <SettingsScreen />
+      </MemoryRouter>,
+    )
+    const toggle = await screen.findByRole('button', { name: 'Widget off' })
+    expect(toggle).toHaveAttribute('aria-pressed', 'false')
+    await user.click(toggle)
+    expect(
+      await screen.findByRole('button', { name: 'Widget on' }),
+    ).toHaveAttribute('aria-pressed', 'true')
+    expect(useSettingsStore.getState().settings.homeScreenWidget).toBe(true)
+  })
 })

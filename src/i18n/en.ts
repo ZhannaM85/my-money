@@ -364,6 +364,11 @@ export const en: Dictionary = {
     fxDebugSaveFailed: 'Could not save the log.',
     fxDebugEmpty:
       'No events yet. Turn on, open Dashboard, or tap Conversion not available. Then save a .txt.',
+    homeScreenWidget: 'Home screen widget',
+    homeScreenWidgetHint:
+      'Android only. Off by default. Converted net worth and as-of date on a 2×2 glance. Add it from the home-screen widget picker after you turn this on.',
+    homeScreenWidgetOn: 'Widget on',
+    homeScreenWidgetOff: 'Widget off',
     readPrivacyPolicyLabel: 'Privacy policy',
   },
   privacyPolicy: {

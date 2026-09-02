@@ -371,6 +371,11 @@ export const ru: Dictionary = {
     fxDebugSaveFailed: 'Не удалось сохранить лог.',
     fxDebugEmpty:
       'Пока нет событий. Включите отладку, откройте Сводку или нажмите «Конвертация недоступна», затем сохраните .txt.',
+    homeScreenWidget: 'Виджет на экране',
+    homeScreenWidgetHint:
+      'Только Android. По умолчанию выкл. Пересчитанный итог и дата на плитке 2×2. После включения добавьте виджет с домашнего экрана.',
+    homeScreenWidgetOn: 'Виджет включён',
+    homeScreenWidgetOff: 'Виджет выключен',
     readPrivacyPolicyLabel: 'Политика конфиденциальности',
   },
   privacyPolicy: {

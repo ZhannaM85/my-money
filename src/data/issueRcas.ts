@@ -65,6 +65,15 @@ export const issueRcas: IssueRca[] = [
     ru: '«На дату» ехало вместе со списком, и на длинном Обновить дата пропадала. Заголовок и дата закреплены над внутренней прокруткой; подсказка, сортировка и «Сохранить» едут со списком. Другие экраны без изменений.',
   },
   {
+    issue: 190,
+    title: {
+      en: 'Android: home-screen glance widget behind a Settings toggle',
+      ru: 'Android: виджет на домашнем экране за переключателем в Настройках',
+    },
+    en: 'There was no home-screen glance. A 2×2 widget now shows converted net worth and as-of date, written through Capacitor Preferences like Turtle. Settings toggle is off by default and disables the Android provider so it is not a live product surface until turned on.',
+    ru: 'Виджет на домашнем экране отсутствовал. Плитка 2×2 показывает пересчитанный итог и дату, через Capacitor Preferences как в Turtle. Переключатель в Настройках выкл. по умолчанию и отключает провайдер Android, пока его не включат.',
+  },
+  {
     issue: 189,
     title: {
       en: 'History: calendar view of days with manual snapshots',

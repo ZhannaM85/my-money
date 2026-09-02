@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 204,
+    issue: 190,
+    date: '2026-09-02T23:40:00+03:00',
+    en: 'Android can show a 2×2 home-screen widget with converted net worth and as-of date. It stays off in Settings until you turn it on.',
+    ru: 'На Android можно добавить виджет 2×2 с пересчитанным итогом и датой. В Настройках он выключен, пока вы его не включите.',
+  },
+  {
     version: 203,
     issue: 189,
     date: '2026-09-02T23:25:00+03:00',

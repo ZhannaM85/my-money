@@ -30,6 +30,9 @@ export function SettingsScreen() {
     (state) => state.setCurrencyDisplayMode,
   )
   const setLocale = useSettingsStore((state) => state.setLocale)
+  const setHomeScreenWidget = useSettingsStore(
+    (state) => state.setHomeScreenWidget,
+  )
   const completeOnboarding = useSettingsStore(
     (state) => state.completeOnboarding,
   )
@@ -193,6 +196,25 @@ export function SettingsScreen() {
         </div>
       )}
       <ManualRatesSection />
+      <div className="flex flex-col gap-2">
+        <span className="text-sm font-medium">
+          {t.settings.homeScreenWidget}
+        </span>
+        <p className="text-sm text-muted-foreground">
+          {t.settings.homeScreenWidgetHint}
+        </p>
+        <Button
+          type="button"
+          variant={settings.homeScreenWidget ? 'default' : 'outline'}
+          disabled={!loaded}
+          aria-pressed={settings.homeScreenWidget}
+          onClick={() => void setHomeScreenWidget(!settings.homeScreenWidget)}
+        >
+          {settings.homeScreenWidget
+            ? t.settings.homeScreenWidgetOn
+            : t.settings.homeScreenWidgetOff}
+        </Button>
+      </div>
       <FxDebugSection />
       <Button asChild variant="outline" size="xl" className="w-full">
         <Link to="/allocation">{t.settings.allocation}</Link>

@@ -6,9 +6,11 @@ import '@/stores/themeStore'
 import { router } from '@/app/router'
 import { registerServiceWorker } from '@/shared/lib/registerServiceWorker'
 import { initBackButtonHandler } from '@/shared/native/backButtonHandler'
+import { initWidgetDataSync } from '@/shared/native/widgetDataSync'
 
 registerServiceWorker()
 initBackButtonHandler()
+initWidgetDataSync()
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
