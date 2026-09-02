@@ -1116,3 +1116,16 @@ test('capture Update pinned As of (#191)', async ({ page }) => {
   })
 })
 
+test('capture Update post-save delta (#193)', async ({ page }) => {
+  await seedValidationFixture(page)
+  await page.goto('/update')
+  await expect(page.getByRole('heading', { name: 'Update' })).toBeVisible()
+  await page.getByLabel('Euro cash new amount').fill('1500')
+  await page.getByRole('button', { name: 'Save updates' }).click()
+  await expect(page.getByTestId('update-delta-eur-cash')).toBeVisible()
+  await page.screenshot({
+    path: join(outDir, '193-update-post-save-delta.png'),
+    fullPage: true,
+  })
+})
+

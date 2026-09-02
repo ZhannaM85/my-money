@@ -1,6 +1,6 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { ArrowDown, ArrowUp, Check, Pencil, Trash2, X } from 'lucide-react'
+import { Check, Pencil, Trash2, X } from 'lucide-react'
 import { historicalNetWorth } from '@/domain/netWorth'
 import type { HoldingConversion } from '@/domain/netWorth'
 import {
@@ -8,13 +8,13 @@ import {
   comparisonRows,
   comparisonTotalDelta,
 } from '@/features/dashboard/comparisonRows'
+import { ComparisonDelta } from '@/features/dashboard/ComparisonDelta'
 import { useLocale, useTranslation } from '@/i18n'
 import { snapshotOnDate, snapshotsOnOrBefore } from '@/domain/snapshot'
 import {
   formatAmount,
   formatChartAxisDate,
   formatEditableAmount,
-  formatSignedAmount,
   parseAmount,
   reformatAmountInput,
 } from '@/shared/lib/money'
@@ -55,40 +55,6 @@ function syncComparisonRowHeights(
     nameRow.style.height = `${height}px`
     dateRow.style.height = `${height}px`
   }
-}
-
-function ComparisonDelta({
-  delta,
-  currency,
-}: {
-  delta: number | null
-  currency: string
-}) {
-  const t = useTranslation()
-  const locale = useLocale()
-  if (delta === null) return null
-  const up = delta > 0
-  const Icon = up ? ArrowUp : ArrowDown
-  const amount = formatSignedAmount(delta, currency, locale)
-  return (
-    <span
-      className={
-        up
-          ? 'inline-flex items-center justify-end gap-0.5 text-xs tabular-nums text-[var(--chart-investments)]'
-          : 'inline-flex items-center justify-end gap-0.5 text-xs tabular-nums text-destructive'
-      }
-      data-testid="comparison-delta"
-      data-direction={up ? 'up' : 'down'}
-      aria-label={
-        up
-          ? t.dashboard.comparisonIncreased(amount)
-          : t.dashboard.comparisonDecreased(amount)
-      }
-    >
-      <Icon className="size-3 shrink-0" aria-hidden />
-      {amount}
-    </span>
-  )
 }
 
 function ComparisonAmountDisplay({

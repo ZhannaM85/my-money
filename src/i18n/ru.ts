@@ -251,6 +251,7 @@ export const ru: Dictionary = {
     editAmountAria: (name) => `Изменить ${name}`,
     saveOrder: 'Сохранить порядок',
     suggestedFromDate: (date) => `С ${date}`,
+    deltaVsDate: (date) => `сравн. с ${date}`,
   },
   history: {
     title: 'История',

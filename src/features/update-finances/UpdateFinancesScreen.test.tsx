@@ -193,6 +193,7 @@ describe('UpdateFinancesScreen', () => {
     expect(
       screen.queryByLabelText('Revolut new amount'),
     ).not.toBeInTheDocument()
+    expect(screen.queryByTestId('update-delta-a1')).not.toBeInTheDocument()
   })
 
   it('renders the hint full width below the title, not beside the date (#178)', async () => {
@@ -444,5 +445,38 @@ describe('UpdateFinancesScreen', () => {
     expect(scroll.className).toMatch(/overflow-y-auto/)
     expect(scroll).not.toContainElement(asOf)
     expect(scroll).toContainElement(screen.getByTestId('update-description'))
+  })
+
+  it('shows a Comparison-style delta vs the previous snapshot after save (#193)', async () => {
+    const user = userEvent.setup()
+    render(
+      <MemoryRouter>
+        <UpdateFinancesScreen />
+      </MemoryRouter>,
+    )
+    const input = await screen.findByLabelText('Revolut new amount')
+    await user.type(input, '1500')
+    await user.click(screen.getByRole('button', { name: 'Save updates' }))
+    const delta = await screen.findByTestId('update-delta-a1')
+    expect(delta).toHaveTextContent('vs 1 Aug 2026')
+    const arrow = screen.getByTestId('comparison-delta')
+    expect(arrow).toHaveAttribute('data-direction', 'up')
+    expect(arrow).toHaveClass('text-[var(--chart-investments)]')
+    expect(arrow).toHaveTextContent('+')
+  })
+
+  it('shows a red down delta when the saved amount is lower (#193)', async () => {
+    const user = userEvent.setup()
+    render(
+      <MemoryRouter>
+        <UpdateFinancesScreen />
+      </MemoryRouter>,
+    )
+    const input = await screen.findByLabelText('Revolut new amount')
+    await user.type(input, '400')
+    await user.click(screen.getByRole('button', { name: 'Save updates' }))
+    const arrow = await screen.findByTestId('comparison-delta')
+    expect(arrow).toHaveAttribute('data-direction', 'down')
+    expect(arrow).toHaveClass('text-destructive')
   })
 })

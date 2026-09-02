@@ -29,6 +29,15 @@ export const issueRcas: IssueRca[] = [
     ru: 'Копия от 2026-09-02 содержала все снимки (сегодняшний converted совпадал со Сводкой), но без fxRates/manualFxRates. После импорта USD/GEL не конвертировались, и Итого расходился. Теперь backup v2 с обеими таблицами курсов; v1 по-прежнему импортируется. В CSV добавлена колонка note.',
   },
   {
+    issue: 193,
+    title: {
+      en: 'Update: after save, show green/red delta vs previous snapshot date',
+      ru: 'Обновление: после сохранения зелёная/красная дельта к прошлому снимку',
+    },
+    en: 'Locked Update rows showed the saved amount with no up/down vs the last snapshot before As of. They now reuse Comparison arrows (#174): green up / red down, signed native delta, and that previous calendar date. Unchanged or mixed currency: no arrow.',
+    ru: 'Заблокированные строки Обновить показывали сумму без роста/падения к последнему снимку до «На дату». Теперь те же стрелки, что в Сравнении (#174): зелёный вверх / красный вниз, подписанная дельта в валюте актива и календарная дата прошлого снимка. Без изменений или разная валюта — без стрелки.',
+  },
+  {
     issue: 192,
     title: {
       en: 'Update: show the date the suggested amount comes from',

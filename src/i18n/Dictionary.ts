@@ -189,6 +189,7 @@ export interface Dictionary {
     editAmountAria: (name: string) => string
     saveOrder: string
     suggestedFromDate: (date: string) => string
+    deltaVsDate: (date: string) => string
   }
   history: {
     title: string

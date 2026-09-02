@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 201,
+    issue: 193,
+    date: '2026-09-02T22:50:00+03:00',
+    en: 'After Save on Update, a holding that moved shows a green up or red down amount versus the previous snapshot date, like Comparison.',
+    ru: 'После сохранения на Обновить по активу, который изменился, показывается зелёный рост или красное снижение к дате прошлого снимка — как в Сравнении.',
+  },
+  {
     version: 200,
     issue: 191,
     date: '2026-09-02T22:40:00+03:00',

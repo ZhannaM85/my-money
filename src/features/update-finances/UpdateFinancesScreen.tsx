@@ -19,6 +19,7 @@ import { isSuggestedUpdate } from '@/domain/asset'
 import { latestSnapshot, snapshotBeforeDate, snapshotOnDate } from '@/domain/snapshot'
 import { sortAssets } from '@/features/assets/assetListOrder'
 import { useAssetReorder } from '@/features/assets/useAssetReorder'
+import { ComparisonDelta } from '@/features/dashboard/ComparisonDelta'
 import { formatLastUpdated, useLocale, useTranslation } from '@/i18n'
 import { isIsoDateOnOrBefore } from '@/shared/lib/dates'
 import {
@@ -532,6 +533,26 @@ export function UpdateFinancesScreen() {
                           {t.update.suggestedFromDate(
                             formatCalendarDate(previous.date, locale),
                           )}
+                        </p>
+                      ) : null}
+                      {locked &&
+                      onDate &&
+                      previous &&
+                      onDate.currency === previous.currency &&
+                      onDate.amount !== previous.amount ? (
+                        <p
+                          className="flex flex-wrap items-center justify-end gap-1.5"
+                          data-testid={`update-delta-${asset.id}`}
+                        >
+                          <ComparisonDelta
+                            delta={onDate.amount - previous.amount}
+                            currency={onDate.currency}
+                          />
+                          <span className="text-xs text-muted-foreground">
+                            {t.update.deltaVsDate(
+                              formatCalendarDate(previous.date, locale),
+                            )}
+                          </span>
                         </p>
                       ) : null}
                     </li>
