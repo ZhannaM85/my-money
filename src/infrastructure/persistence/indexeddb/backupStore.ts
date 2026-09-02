@@ -27,6 +27,30 @@ export async function bookHasAssets(): Promise<boolean> {
   return (await db.assets.count()) > 0
 }
 
+export async function clearBook(): Promise<void> {
+  await db.transaction(
+    'rw',
+    db.settings,
+    db.assets,
+    db.snapshots,
+    db.fxRates,
+    db.manualFxRates,
+    async () => {
+      await db.assets.clear()
+      await db.snapshots.clear()
+      await db.fxRates.clear()
+      await db.manualFxRates.clear()
+      const current = await settingsRepository.get()
+      await db.settings.put({
+        ...current,
+        onboardingCompleted: false,
+        assetListOrder: [],
+        updatedAt: new Date().toISOString(),
+      })
+    },
+  )
+}
+
 export async function replaceBook(bundle: BackupBundle): Promise<void> {
   await db.transaction(
     'rw',

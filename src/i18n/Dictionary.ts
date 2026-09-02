@@ -323,6 +323,11 @@ export interface Dictionary {
     importAria: string
     replaceHint: string
     replaceConfirm: string
+    deleteAll: string
+    deleteAllConfirm: string
+    deleteAllConfirmEmpty: string
+    deleted: string
+    deleteFailed: string
     downloaded: string
     shared: string
     restored: string

@@ -20,6 +20,15 @@ export const issueRcas: IssueRca[] = [
     ru: 'Импорт JSON был выключен, пока есть активы (правило пустой книги #13), и восстановление после тестовых данных требовало очистки. Кнопка остаётся доступной. Действительный файл в непустой книге спрашивает замену, не слияние; Отмена оставляет книгу. Неверный JSON ошибается до любой очистки. В пустую книгу — без лишнего подтверждения. CSV по-прежнему добавляет строки.',
   },
   {
+    issue: 197,
+    title: {
+      en: 'Delete all data on this device',
+      ru: 'Удалить все данные на этом устройстве',
+    },
+    en: 'There was no one-tap wipe, so restoring a JSON backup after test data meant deleting each asset or clearing app storage. More / Backup now has Delete all data behind confirm, with an export-first prompt when the book is not empty. Cancel leaves the book. Wipe clears assets, snapshots, and FX cache; the next JSON export is empty. Nothing is uploaded.',
+    ru: 'Не было одношаговой очистки, и восстановление JSON после тестовых данных требовало удаления каждого актива или сброса хранилища. На Ещё / Резервная копия теперь «Удалить все данные» за подтверждением, с напоминанием сначала экспортировать, если книга не пуста. Отмена оставляет книгу. Очистка снимает активы, снимки и кэш курсов; следующий JSON-экспорт пустой. Ничего не загружается.',
+  },
+  {
     issue: 196,
     title: {
       en: 'Android: conversion unavailable needs an on-device FX debugger',

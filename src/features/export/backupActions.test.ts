@@ -3,7 +3,9 @@ import { beforeEach, describe, expect, it } from 'vitest'
 import { DEFAULT_SETTINGS } from '@/domain/settings'
 import { buildBackupBundle } from '@/domain/backup'
 import { db } from '@/infrastructure/persistence/indexeddb'
+import { FX_LAST_FETCHED_KEY } from '@/stores/fxStore'
 import {
+  deleteAllLocalData,
   exportBackup,
   importBackupJson,
   InvalidBackupError,
@@ -123,5 +125,25 @@ describe('JSON backup', () => {
       importBackupJson(JSON.stringify(orphan)),
     ).rejects.toBeInstanceOf(InvalidBackupError)
     expect(await db.assets.toArray()).toEqual([asset])
+  })
+})
+
+describe('delete all local data', () => {
+  it('clears assets, snapshots, and FX so the next export is empty (#197)', async () => {
+    await importBackupJson(JSON.stringify(bundle))
+    localStorage.setItem(FX_LAST_FETCHED_KEY, now)
+    await deleteAllLocalData()
+    expect(await db.assets.count()).toBe(0)
+    expect(await db.snapshots.count()).toBe(0)
+    expect(await db.fxRates.count()).toBe(0)
+    expect(await db.manualFxRates.count()).toBe(0)
+    expect(localStorage.getItem(FX_LAST_FETCHED_KEY)).toBeNull()
+    const exported = await exportBackup()
+    expect(exported.assets).toEqual([])
+    expect(exported.snapshots).toEqual([])
+    expect(exported.fxRates).toEqual([])
+    expect(exported.manualFxRates).toEqual([])
+    expect(exported.settings.onboardingCompleted).toBe(false)
+    expect(exported.settings.baseCurrency).toBe('USD')
   })
 })

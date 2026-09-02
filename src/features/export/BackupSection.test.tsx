@@ -133,4 +133,50 @@ describe('BackupSection', () => {
     expect(confirm).not.toHaveBeenCalled()
     expect(await db.assets.toArray()).toEqual([asset])
   })
+
+  it('shows Delete all data and leaves the book when confirm is cancelled (#197)', async () => {
+    const user = userEvent.setup()
+    vi.spyOn(window, 'confirm').mockReturnValue(false)
+    await db.assets.put(asset)
+    await db.snapshots.put({
+      id: 's1',
+      assetId: 'a1',
+      date: '2026-08-17',
+      amount: 1000,
+      currency: 'EUR',
+      createdAt: now,
+    })
+    render(<BackupSection />)
+    await user.click(screen.getByRole('button', { name: 'Delete all data' }))
+    expect(window.confirm).toHaveBeenCalled()
+    expect(await db.assets.toArray()).toEqual([asset])
+    expect(await db.snapshots.count()).toBe(1)
+    expect(
+      screen.queryByText('All data on this device was deleted.'),
+    ).not.toBeInTheDocument()
+  })
+
+  it('wipes assets and snapshots after confirm (#197)', async () => {
+    const user = userEvent.setup()
+    vi.spyOn(window, 'confirm').mockReturnValue(true)
+    await db.assets.put(asset)
+    await db.snapshots.put({
+      id: 's1',
+      assetId: 'a1',
+      date: '2026-08-17',
+      amount: 1000,
+      currency: 'EUR',
+      createdAt: now,
+    })
+    render(<BackupSection />)
+    await user.click(screen.getByRole('button', { name: 'Delete all data' }))
+    await waitFor(() => {
+      expect(
+        screen.getByText('All data on this device was deleted.'),
+      ).toBeInTheDocument()
+    })
+    expect(await db.assets.count()).toBe(0)
+    expect(await db.snapshots.count()).toBe(0)
+    expect(screen.getByRole('button', { name: 'Import JSON' })).toBeEnabled()
+  })
 })

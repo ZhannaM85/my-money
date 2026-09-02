@@ -4,9 +4,11 @@ import { bookHasAssets } from '@/infrastructure/persistence/indexeddb/backupStor
 import { pickImportFile } from '@/shared/lib/pickNativeTextFile'
 import { Button } from '@/shared/ui/button'
 import { useAssetStore } from '@/stores/assetStore'
+import { useComparisonStore } from '@/stores/comparisonStore'
 import { useFxStore } from '@/stores/fxStore'
 import { useSettingsStore } from '@/stores/settingsStore'
 import {
+  deleteAllLocalData,
   exportBackup,
   importBackupJson,
   InvalidBackupError,
@@ -74,6 +76,27 @@ export function BackupSection() {
     }
   }
 
+  async function handleDeleteAll() {
+    setError(undefined)
+    setMessage(undefined)
+    const hasAssets = await bookHasAssets()
+    const confirmed = window.confirm(
+      hasAssets ? t.backup.deleteAllConfirm : t.backup.deleteAllConfirmEmpty,
+    )
+    if (!confirmed) return
+    setBusy(true)
+    try {
+      await deleteAllLocalData()
+      useComparisonStore.getState().clearDates()
+      await Promise.all([loadAssets(), loadSettings(), loadFx()])
+      setMessage(t.backup.deleted)
+    } catch {
+      setError(t.backup.deleteFailed)
+    } finally {
+      setBusy(false)
+    }
+  }
+
   return (
     <section className="flex flex-col gap-3">
       <h2 className="text-lg font-semibold">{t.backup.title}</h2>
@@ -118,6 +141,16 @@ export function BackupSection() {
         {t.backup.importJson}
       </Button>
       <p className="text-sm text-muted-foreground">{t.backup.replaceHint}</p>
+      <Button
+        type="button"
+        variant="destructive"
+        size="xl"
+        className="w-full"
+        disabled={busy}
+        onClick={() => void handleDeleteAll()}
+      >
+        {t.backup.deleteAll}
+      </Button>
       {message && <p className="text-sm text-muted-foreground">{message}</p>}
       {error && <p className="text-sm text-destructive">{error}</p>}
     </section>

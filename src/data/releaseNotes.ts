@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 206,
+    issue: 197,
+    date: '2026-09-03T00:05:00+03:00',
+    en: 'More / Backup can delete all data on this device after confirm. If the book is not empty, it asks you to export JSON first. Cancel leaves everything. The next export of that empty book has no leftover snapshots.',
+    ru: 'На Ещё / Резервная копия можно удалить все данные на этом устройстве после подтверждения. Если книга не пуста, сначала предлагается экспорт JSON. Отмена ничего не меняет. Следующий экспорт пустой книги без оставшихся снимков.',
+  },
+  {
     version: 205,
     issue: 198,
     date: '2026-09-02T23:55:00+03:00',

@@ -412,6 +412,13 @@ export const en: Dictionary = {
       'If this book already has assets, import asks before replacing them. It does not merge.',
     replaceConfirm:
       'This replaces every asset and snapshot on this device with the file. It does not merge. Cancel keeps what is here.',
+    deleteAll: 'Delete all data',
+    deleteAllConfirm:
+      'This removes every asset, snapshot, and FX rate on this device. It cannot be undone. Export JSON first if you want a copy. Cancel keeps what is here.',
+    deleteAllConfirmEmpty:
+      'This clears remaining FX cache on this device. Cancel leaves everything.',
+    deleted: 'All data on this device was deleted.',
+    deleteFailed: 'Could not delete data on this device.',
     downloaded: 'Backup downloaded.',
     shared: 'Opened the share sheet.',
     restored: 'Backup restored.',
