@@ -44,7 +44,7 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 |---|--------|-------|-------|
 | [#209](https://github.com/ZhannaM85/my-money/issues/209) | 🔍 Pending validation | History: shared expand/collapse day row on List and Calendar | Calendar detail now reuses the List accordion; tap day opens expanded. |
 | [#210](https://github.com/ZhannaM85/my-money/issues/210) | 🔍 Pending validation | Dashboard chart can stay stuck before today until All is selected | Week/Month/Year default to today; `rangeEndPinned` after pan. |
-| [#211](https://github.com/ZhannaM85/my-money/issues/211) | 🔲 Open | Android: JSON backup export also saves a stray .txt file | Capacitor Share `title` becomes EXTRA_TEXT (~31 B filename). Pass `files` only. |
+| [#211](https://github.com/ZhannaM85/my-money/issues/211) | 🔍 Pending validation | Android: JSON backup export also saves a stray .txt file | Capacitor Share passes `files` only; no `title` EXTRA_TEXT. |
 
 ---
 

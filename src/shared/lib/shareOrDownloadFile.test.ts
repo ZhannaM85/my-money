@@ -63,7 +63,6 @@ describe('shareOrDownloadFile (#169)', () => {
       encoding: Encoding.UTF8,
     })
     expect(Share.share).toHaveBeenCalledWith({
-      title: 'my-money-backup.json',
       files: ['file://cache/note.json'],
     })
   })

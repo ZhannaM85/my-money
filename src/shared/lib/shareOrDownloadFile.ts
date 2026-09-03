@@ -28,7 +28,6 @@ async function shareViaCapacitor(file: File): Promise<void> {
     directory: Directory.Cache,
   })
   await Share.share({
-    title: file.name,
     files: [uri],
   })
 }
@@ -42,7 +41,7 @@ export async function shareOrDownloadFile(
 ): Promise<ShareOrDownloadResult> {
   const nav = globalThis.navigator
   if (typeof nav?.share === 'function' && nav.canShare?.({ files: [file] })) {
-    await nav.share({ files: [file], title: file.name })
+    await nav.share({ files: [file] })
     return 'shared'
   }
 
