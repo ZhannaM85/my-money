@@ -32,9 +32,7 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 |---|--------|-------|-------|
 | [#194](https://github.com/ZhannaM85/my-money/issues/194) | 🔍 Pending validation | JSON backup omits FX rates so restored today total does not match | **Blocker.** v2 include fxRates + manualFxRates. CSV notes. |
 | [#190](https://github.com/ZhannaM85/my-money/issues/190) | 🔍 Pending validation | Android: home-screen glance widget behind a Settings toggle | Off by default. 2×2 net worth + as-of. Provider disabled until on. |
-| [#191](https://github.com/ZhannaM85/my-money/issues/191) | 🔍 Pending validation | Update: keep As of date visible while scrolling holdings | Title + As of pinned; holdings list scrolls. Update only. |
 | [#192](https://github.com/ZhannaM85/my-money/issues/192) | 🔍 Pending validation | Update: show the date the suggested amount comes from | Prefill is last snapshot before As of (#180); calendar date shown on the row. |
-| [#193](https://github.com/ZhannaM85/my-money/issues/193) | 🔍 Pending validation | Update: after save, show green/red delta vs previous snapshot date | Comparison arrows vs last snapshot before As of. |
 | [#195](https://github.com/ZhannaM85/my-money/issues/195) | 🔍 Pending validation | Android: Dashboard Zoom out (Уменьшить) is clipped at the right edge | Toolbar wraps; same strip on History and details. |
 | [#196](https://github.com/ZhannaM85/my-money/issues/196) | 🔍 Pending validation | Android: conversion unavailable needs an on-device FX debugger, not a silent fallback | Tap badge → FX debug log with pair+date+window. No invented rate. |
 | [#198](https://github.com/ZhannaM85/my-money/issues/198) | 🔍 Pending validation | JSON import should replace a non-empty book after confirm | Screenshot: Import JSON greyed out. Confirm then replace, not merge. CSV stays merge. Related #197. |
@@ -46,6 +44,7 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
 | [#205](https://github.com/ZhannaM85/my-money/issues/205) | 🔲 Open | History calendar: tap a date to show that day's snapshot entries | Follow-up to #189. Tap dot-date → show entries for that day. |
+| [#206](https://github.com/ZhannaM85/my-money/issues/206) | 🔲 Open | Update: show green/red delta while editing amount | Live up/down vs previous snapshot while typing; extends #193. |
 
 ---
 
