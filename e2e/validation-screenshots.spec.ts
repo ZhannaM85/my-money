@@ -1155,6 +1155,58 @@ test('capture Update without No change button (#201)', async ({ page }) => {
   })
 })
 
+test('capture Update excluded holdings (#202)', async ({ page }) => {
+  await seedValidationFixture(page)
+  await page.evaluate(async () => {
+    const listed = await indexedDB.databases?.()
+    const existing = listed?.find((row) => row.name === 'my-money')
+    const version =
+      existing?.version && existing.version > 0 ? existing.version : 2
+    await new Promise<void>((resolve, reject) => {
+      const open = indexedDB.open('my-money', version)
+      open.onerror = () => reject(open.error ?? new Error('idb open failed'))
+      open.onsuccess = () => {
+        const db = open.result
+        const tx = db.transaction(['assets', 'snapshots'], 'readwrite')
+        tx.objectStore('assets').put({
+          id: 'sosnovo',
+          name: 'Sosnovo house',
+          assetClass: 'property',
+          type: 'house',
+          currency: 'EUR',
+          trackingStatus: 'excluded',
+          valuationMethod: 'market_price',
+          updateFrequency: 'yearly',
+          createdAt: '2026-08-17T00:00:00.000Z',
+          updatedAt: '2026-08-17T00:00:00.000Z',
+        })
+        tx.objectStore('snapshots').put({
+          id: 's-sosnovo',
+          assetId: 'sosnovo',
+          date: '2026-08-17',
+          amount: 200_000,
+          currency: 'EUR',
+        })
+        tx.oncomplete = () => {
+          db.close()
+          resolve()
+        }
+        tx.onerror = () => reject(tx.error ?? new Error('idb write failed'))
+      }
+    })
+  })
+  await page.reload()
+  await page.goto('/update')
+  await expect(page.getByRole('heading', { name: 'Update' })).toBeVisible()
+  await expect(page.getByText('Sosnovo house')).toBeVisible()
+  await expect(page.getByText('Not counted in net worth')).toBeVisible()
+  await expect(page.getByLabel('Sosnovo house new amount')).toBeVisible()
+  await page.screenshot({
+    path: join(outDir, '202-update-excluded-holdings.png'),
+    fullPage: true,
+  })
+})
+
 test('capture History calendar snapshot days (#189)', async ({ page }) => {
   await seedValidationFixture(page)
   await page.goto('/history')

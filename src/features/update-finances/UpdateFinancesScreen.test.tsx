@@ -527,4 +527,81 @@ describe('UpdateFinancesScreen', () => {
     expect(arrow).toHaveAttribute('data-direction', 'down')
     expect(arrow).toHaveClass('text-destructive')
   })
+
+  it('lists excluded holdings so a new amount can be saved (#202)', async () => {
+    const user = userEvent.setup()
+    await useAssetStore.getState().saveAsset(
+      {
+        id: 'house',
+        name: 'Sosnovo',
+        assetClass: 'property',
+        type: 'house',
+        currency: 'EUR',
+        trackingStatus: 'excluded',
+        valuationMethod: 'market_price',
+        updateFrequency: 'yearly',
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        assetId: 'house',
+        date: '2026-08-01',
+        amount: 200_000,
+        currency: 'EUR',
+      },
+    )
+    render(
+      <MemoryRouter>
+        <UpdateFinancesScreen />
+      </MemoryRouter>,
+    )
+    expect(await screen.findByText('Sosnovo')).toBeInTheDocument()
+    expect(screen.getByText('Not counted in net worth')).toBeInTheDocument()
+    const input = screen.getByLabelText('Sosnovo new amount')
+    await user.type(input, '250000')
+    await user.click(screen.getByRole('button', { name: 'Save updates' }))
+    await waitFor(() => {
+      expect(
+        useAssetStore
+          .getState()
+          .snapshots.find(
+            (row) => row.assetId === 'house' && row.date === todayIsoDate(),
+          )?.amount,
+      ).toBe(250_000)
+    })
+    expect(
+      useAssetStore.getState().assets.find((row) => row.id === 'house')
+        ?.trackingStatus,
+    ).toBe('excluded')
+  })
+
+  it('omits archived holdings from Update (#202)', async () => {
+    await useAssetStore.getState().saveAsset(
+      {
+        id: 'old',
+        name: 'Archived cash',
+        assetClass: 'money',
+        type: 'cash',
+        currency: 'EUR',
+        trackingStatus: 'archived',
+        valuationMethod: 'account_balance',
+        updateFrequency: 'manual',
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        assetId: 'old',
+        date: '2026-08-01',
+        amount: 50,
+        currency: 'EUR',
+      },
+    )
+    render(
+      <MemoryRouter>
+        <UpdateFinancesScreen />
+      </MemoryRouter>,
+    )
+    await screen.findByLabelText('Revolut new amount')
+    expect(screen.queryByText('Archived cash')).not.toBeInTheDocument()
+  })
 })

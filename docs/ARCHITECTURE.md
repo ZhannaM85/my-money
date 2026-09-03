@@ -73,10 +73,10 @@ sequenceDiagram
     participant FX as FxRateRepository
     participant DS as DashboardScreen
 
-    UF->>AS: draft amounts (or "no change")
-    UF->>SR: append snapshots for changed assets
+    UF->>AS: typed amounts (empty rows skipped)
+    UF->>SR: append snapshots for filled rows
     SR->>DB: assetSnapshots.add
-    Note over SR,DB: Unchanged assets get a same-amount snapshot<br/>when the user taps No change and saves
+    Note over UF: Update lists included and excluded holdings<br/>so valuations can change (#202). Archived stay off.
 
     DS->>AR: list included assets
     DS->>SR: latest snapshot per asset

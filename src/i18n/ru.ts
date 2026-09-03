@@ -241,7 +241,7 @@ export const ru: Dictionary = {
     description:
       'Прошлая сумма, затем новое число. Пустые строки пропускаются. Ежегодные и ручные активы остаются необязательными.',
     emptyTitle: 'Нечего обновлять',
-    emptyDescription: 'Сначала добавьте учитываемый актив.',
+    emptyDescription: 'Сначала добавьте актив.',
     saveUpdates: 'Сохранить обновления',
     enterNumberFor: (name) => `Введите число для «${name}»`,
     newAmountAria: (name) => `Новая сумма для ${name}`,

@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 202,
+    title: {
+      en: 'Update: show excluded holdings so their valuation can still change',
+      ru: 'Обновление: показывать исключённые активы, чтобы оценка могла меняться',
+    },
+    en: 'Update filtered to included only, so greyed Assets rows (Не учитывается в капитале) had no place to record a new amount. Excluded holdings are listed (hint: Not counted in net worth), pinned last like Assets. Saving does not put them back into totals. Archived stay off Update.',
+    ru: 'Обновить брал только included, поэтому серые строки Активов («Не учитывается в капитале») нельзя было переоценить. Исключённые активы снова в списке (подсказка «Не учитывается в капитале»), внизу как на Активах. Сохранение не возвращает их в итог. Архив по-прежнему вне Обновить.',
+  },
+  {
     issue: 201,
     title: {
       en: 'Update: remove the No changes (Без изменений) button',

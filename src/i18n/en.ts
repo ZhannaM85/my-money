@@ -236,7 +236,7 @@ export const en: Dictionary = {
     description:
       'Previous amounts, then a new number. Empty rows are skipped. Yearly and manual assets stay optional.',
     emptyTitle: 'Nothing to update',
-    emptyDescription: 'Add an included asset first.',
+    emptyDescription: 'Add an asset first.',
     saveUpdates: 'Save updates',
     enterNumberFor: (name) => `Enter a number for ${name}`,
     newAmountAria: (name) => `${name} new amount`,

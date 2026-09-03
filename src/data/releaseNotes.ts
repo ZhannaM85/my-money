@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 209,
+    issue: 202,
+    date: '2026-09-03T13:55:00+03:00',
+    en: 'Update lists holdings that are hidden from the total (excluded) so you can still save a new valuation. Archived stay off that screen. Totals are unchanged.',
+    ru: 'На Обновить видны активы, скрытые из итога (не учитываются), чтобы можно было сохранить новую оценку. Архив на этот экран не попадает. Итоги не меняются.',
+  },
+  {
     version: 208,
     issue: 201,
     date: '2026-09-03T13:40:00+03:00',

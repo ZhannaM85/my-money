@@ -119,7 +119,7 @@ export function UpdateFinancesScreen() {
 
   const rows = useMemo(() => {
     const tracked = assets
-      .filter((asset) => asset.trackingStatus === 'included')
+      .filter((asset) => asset.trackingStatus !== 'archived')
       .map((asset) => {
         const latest = latestSnapshot(snapshots, asset.id)
         const onDate = snapshotOnDate(snapshots, asset.id, asOf)
@@ -358,6 +358,11 @@ export function UpdateFinancesScreen() {
                           {asset.institution?.trim() ? (
                             <span className="text-xs text-muted-foreground">
                               {asset.institution.trim()}
+                            </span>
+                          ) : null}
+                          {asset.trackingStatus === 'excluded' ? (
+                            <span className="text-xs text-muted-foreground">
+                              {t.asset.notCountedInNetWorth}
                             </span>
                           ) : null}
                         </span>
