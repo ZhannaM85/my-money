@@ -53,7 +53,7 @@ describe('holdingsForSelectedChartDay (#112)', () => {
     expect(holdings[0]?.nativeAmount).toBe(116_420)
   })
 
-  it('falls back to latest when nothing is selected', () => {
+  it('uses fallback when nothing is selected (#112, #208)', () => {
     const { point, holdings } = holdingsForSelectedChartDay(
       series,
       null,
@@ -61,6 +61,26 @@ describe('holdingsForSelectedChartDay (#112)', () => {
     )
     expect(point).toBeUndefined()
     expect(holdings[0]?.nativeAmount).toBe(101_100)
+  })
+
+  it('prefers fallback over a stale visible range end when As of is today (#208)', () => {
+    const staleRange = [series[0]!]
+    const todayHoldings = [
+      {
+        assetId: 'cash',
+        name: 'Cash',
+        currency: 'RUB',
+        nativeAmount: 3100,
+        convertedAmount: 3100,
+        conversionAvailable: true,
+      },
+    ]
+    const { holdings } = holdingsForSelectedChartDay(
+      staleRange,
+      null,
+      todayHoldings,
+    )
+    expect(holdings[0]?.nativeAmount).toBe(3100)
   })
 
   it('uses an outside-series point from the date field (#117)', () => {
