@@ -101,7 +101,6 @@ export function UpdateFinancesScreen() {
     (state) => state.persistCustomAssetOrder,
   )
   const [drafts, setDrafts] = useState<Record<string, string>>({})
-  const [unchanged, setUnchanged] = useState<Record<string, boolean>>({})
   const [editing, setEditing] = useState<Record<string, boolean>>({})
   const [error, setError] = useState<string | undefined>()
   const [saving, setSaving] = useState(false)
@@ -156,16 +155,6 @@ export function UpdateFinancesScreen() {
     snapshots,
     today,
   ])
-
-  function markUnchanged(assetId: string, previous?: number, currency?: string) {
-    setUnchanged((current) => ({ ...current, [assetId]: true }))
-    if (previous !== undefined) {
-      setDrafts((current) => ({
-        ...current,
-        [assetId]: formatEditableAmount(previous, locale, currency),
-      }))
-    }
-  }
 
   function startEdit(assetId: string, amount: number, currency: string) {
     setEditing((current) => ({ ...current, [assetId]: true }))
@@ -234,7 +223,7 @@ export function UpdateFinancesScreen() {
       createdAt: string
       note?: string
     }[] = []
-    for (const { asset, previous, onDate } of rows) {
+    for (const { asset, onDate } of rows) {
       const raw = drafts[asset.id]?.trim() ?? ''
       if (onDate && !editing[asset.id]) continue
       if (raw !== '') {
@@ -260,14 +249,6 @@ export function UpdateFinancesScreen() {
         }
         continue
       }
-      if (!onDate && unchanged[asset.id] && previous) {
-        toWrite.push({
-          assetId: asset.id,
-          date: asOf,
-          amount: previous.amount,
-          currency: previous.currency,
-        })
-      }
     }
     if (toWrite.length === 0 && toUpdate.length === 0) {
       setError(undefined)
@@ -281,7 +262,6 @@ export function UpdateFinancesScreen() {
         await updateSnapshot(snapshot)
       }
       setDrafts({})
-      setUnchanged({})
       setEditing({})
     } finally {
       setSaving(false)
@@ -307,7 +287,6 @@ export function UpdateFinancesScreen() {
                 const next = event.target.value
                 setAsOf(next)
                 setDrafts({})
-                setUnchanged({})
                 setEditing({})
                 setError(undefined)
                 if (!next || !isIsoDateOnOrBefore(next, today)) {
@@ -477,12 +456,6 @@ export function UpdateFinancesScreen() {
                                     ...current,
                                     [asset.id]: value,
                                   }))
-                                  if (unchanged[asset.id]) {
-                                    setUnchanged((current) => ({
-                                      ...current,
-                                      [asset.id]: false,
-                                    }))
-                                  }
                                 }}
                                 onBlur={() => {
                                   setDrafts((current) => {
@@ -503,25 +476,6 @@ export function UpdateFinancesScreen() {
                                 {asset.currency}
                               </span>
                             </div>
-                            {!onDate ? (
-                              <Button
-                                type="button"
-                                variant={
-                                  unchanged[asset.id] ? 'default' : 'outline'
-                                }
-                                className={cn('h-12 shrink-0')}
-                                disabled={!previous}
-                                onClick={() =>
-                                  markUnchanged(
-                                    asset.id,
-                                    previous?.amount,
-                                    previous?.currency ?? asset.currency,
-                                  )
-                                }
-                              >
-                                {t.update.noChange}
-                              </Button>
-                            ) : null}
                           </>
                         )}
                       </div>

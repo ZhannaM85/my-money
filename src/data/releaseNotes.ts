@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 208,
+    issue: 201,
+    date: '2026-09-03T13:40:00+03:00',
+    en: 'Update no longer has a No change button. Leave a row empty to skip it; only typed amounts are saved.',
+    ru: 'На Обновить больше нет кнопки «Без изменений». Пустая строка пропускается; сохраняются только введённые суммы.',
+  },
+  {
     version: 207,
     issue: 200,
     date: '2026-09-03T13:20:00+03:00',

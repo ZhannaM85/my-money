@@ -73,6 +73,7 @@ gh issue edit 108 --add-label validation
 | `191-update-as-of-pinned.png` | Update · As of pinned above scrolling holdings (#191) |
 | `193-update-post-save-delta.png` | Update · green/red delta vs previous snapshot after Save (#193) |
 | `200-update-save-nonempty.png` | Update · Save writes only filled rows; empty stays editable (#200) |
+| `201-update-no-change-removed.png` | Update · No change button gone; amount field only (#201) |
 | `196-fx-debug-conversion-unavailable.png` | Settings · FX debug after tapping Conversion not available (#196) |
 | `189-history-calendar.png` | History · Calendar marks snapshot days (#189) |
 | `147-positions-hidden-from-total.png` | Dashboard · hidden asset dropped from total (#147) |

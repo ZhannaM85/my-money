@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 201,
+    title: {
+      en: 'Update: remove the No changes (Без изменений) button',
+      ru: 'Обновление: убрать кнопку «Без изменений»',
+    },
+    en: 'Each unlocked Update row had a No change control that copied the previous amount into a snapshot. It looked inert and was not needed after #200 (empty rows skip). The button, unchanged state, and copy that told people to tap it are gone. Skip a holding by leaving the field empty.',
+    ru: 'У каждой незаблокированной строки Обновить была кнопка «Без изменений», которая копировала прошлую сумму в снимок. Она казалась бесполезной и не нужна после #200 (пустые строки пропускаются). Кнопка, состояние unchanged и текст про неё убраны. Пропуск актива — пустое поле.',
+  },
+  {
     issue: 200,
     title: {
       en: 'Update: save only non-empty fields; do not block save when fields are empty',

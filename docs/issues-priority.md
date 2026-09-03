@@ -48,7 +48,7 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
 | [#200](https://github.com/ZhannaM85/my-money/issues/200) | 🔍 Pending validation | Update: save only non-empty fields; do not block save when fields are empty | Empty rows skipped, not snapshotted. All-empty is a no-op. Related #201. |
-| [#201](https://github.com/ZhannaM85/my-money/issues/201) | 🔲 Open | Update: remove the No changes (Без изменений) button | Button does nothing useful. Drop copy that tells people to tap it. Related #200. |
+| [#201](https://github.com/ZhannaM85/my-money/issues/201) | 🔍 Pending validation | Update: remove the No changes (Без изменений) button | Button does nothing useful. Drop copy that tells people to tap it. Related #200. |
 | [#202](https://github.com/ZhannaM85/my-money/issues/202) | 🔲 Open | Update: show excluded holdings so their valuation can still change | Hidden from totals, still on Update. Archived unchanged. |
 
 ---

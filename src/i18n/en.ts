@@ -234,13 +234,11 @@ export const en: Dictionary = {
   update: {
     title: 'Update',
     description:
-      'Previous amounts, then a new number or No change. Yearly and manual assets stay optional.',
+      'Previous amounts, then a new number. Empty rows are skipped. Yearly and manual assets stay optional.',
     emptyTitle: 'Nothing to update',
     emptyDescription: 'Add an included asset first.',
-    noChange: 'No change',
     saveUpdates: 'Save updates',
     enterNumberFor: (name) => `Enter a number for ${name}`,
-    needOneRow: 'Mark no change or enter an amount for at least one asset.',
     newAmountAria: (name) => `${name} new amount`,
     editAmountAria: (name) => `Edit ${name}`,
     saveOrder: 'Save order',

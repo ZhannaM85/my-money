@@ -181,10 +181,8 @@ export interface Dictionary {
     description: string
     emptyTitle: string
     emptyDescription: string
-    noChange: string
     saveUpdates: string
     enterNumberFor: (name: string) => string
-    needOneRow: string
     newAmountAria: (name: string) => string
     editAmountAria: (name: string) => string
     saveOrder: string

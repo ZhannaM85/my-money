@@ -115,30 +115,19 @@ describe('UpdateFinancesScreen', () => {
     expect(screen.queryByText(/Mark no change/)).not.toBeInTheDocument()
   })
 
-  it('writes a same-amount snapshot when No change is saved', async () => {
-    const user = userEvent.setup()
+  it('does not show a No change button (#201)', async () => {
     render(
       <MemoryRouter>
         <UpdateFinancesScreen />
       </MemoryRouter>,
     )
-    await user.click(await screen.findByRole('button', { name: 'No change' }))
-    await user.click(screen.getByRole('button', { name: 'Save updates' }))
-    await waitFor(() => {
-      expect(
-        useAssetStore
-          .getState()
-          .snapshots.filter((row) => row.assetId === 'a1'),
-      ).toHaveLength(2)
-    })
-    const snapshots = useAssetStore
-      .getState()
-      .snapshots.filter((row) => row.assetId === 'a1')
-    expect(snapshots.some((row) => row.date === todayIsoDate())).toBe(true)
-    expect(snapshots.filter((row) => row.amount === 1000)).toHaveLength(2)
+    await screen.findByLabelText('Revolut new amount')
+    expect(
+      screen.queryByRole('button', { name: 'No change' }),
+    ).not.toBeInTheDocument()
   })
 
-  it('defaults As of to today and saves every row on a chosen past date (#175)', async () => {
+  it('defaults As of to today and saves typed amounts on a chosen past date (#175)', async () => {
     const user = userEvent.setup()
     await useAssetStore.getState().saveAsset(
       {
@@ -169,9 +158,8 @@ describe('UpdateFinancesScreen', () => {
     expect(asOf).toHaveValue(todayIsoDate())
     const past = addDaysIso(todayIsoDate(), -3)
     setDateField(asOf, past)
-    const noChange = await screen.findAllByRole('button', { name: 'No change' })
-    await user.click(noChange[0]!)
-    await user.click(noChange[1]!)
+    await user.type(await screen.findByLabelText('Revolut new amount'), '1000')
+    await user.type(screen.getByLabelText('Cash new amount'), '200')
     await user.click(screen.getByRole('button', { name: 'Save updates' }))
     await waitFor(() => {
       expect(
@@ -199,7 +187,6 @@ describe('UpdateFinancesScreen', () => {
     expect(
       await screen.findByText('Choose today or a past date'),
     ).toBeInTheDocument()
-    await user.click(screen.getByRole('button', { name: 'No change' }))
     await user.click(screen.getByRole('button', { name: 'Save updates' }))
     expect(
       useAssetStore.getState().snapshots.filter((row) => row.assetId === 'a1'),
@@ -240,7 +227,8 @@ describe('UpdateFinancesScreen', () => {
         <UpdateFinancesScreen />
       </MemoryRouter>,
     )
-    await user.click(await screen.findByRole('button', { name: 'No change' }))
+    const input = await screen.findByLabelText('Revolut new amount')
+    await user.type(input, '1000')
     await user.click(screen.getByRole('button', { name: 'Save updates' }))
     expect(
       await screen.findByRole('button', { name: 'Edit Revolut' }),
@@ -275,7 +263,7 @@ describe('UpdateFinancesScreen', () => {
         <UpdateFinancesScreen />
       </MemoryRouter>,
     )
-    await screen.findByRole('button', { name: 'No change' })
+    await screen.findByLabelText('Revolut new amount')
     expect(
       screen.queryByRole('button', { name: 'Reorder' }),
     ).not.toBeInTheDocument()
@@ -436,7 +424,7 @@ describe('UpdateFinancesScreen', () => {
     expect(screen.getByText(/Suggested now/)).toBeInTheDocument()
   })
 
-  it('pre-fills and No-change uses the snapshot before As of, not a later latest (#180)', async () => {
+  it('pre-fills from the snapshot before As of, not a later latest (#180)', async () => {
     const user = userEvent.setup()
     await useAssetStore.getState().saveSnapshots([
       {
@@ -459,7 +447,7 @@ describe('UpdateFinancesScreen', () => {
     expect(screen.getByTestId('suggested-from-date-a1')).toHaveTextContent(
       'From 1 Aug 2026',
     )
-    await user.click(screen.getByRole('button', { name: 'No change' }))
+    await user.type(input, '1000')
     await user.click(screen.getByRole('button', { name: 'Save updates' }))
     await waitFor(() => {
       expect(

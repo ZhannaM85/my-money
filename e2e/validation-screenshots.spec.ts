@@ -878,11 +878,9 @@ test('capture Update stay in view mode after Save (#181)', async ({ page }) => {
   await seedValidationFixture(page)
   await page.goto('/update')
   await expect(page.getByRole('heading', { name: 'Update' })).toBeVisible()
-  const noChange = page.getByRole('button', { name: 'No change' })
-  await expect(noChange.first()).toBeVisible()
-  const count = await noChange.count()
+  const count = await page.getByLabel(/new amount$/).count()
   for (let i = 0; i < count; i += 1) {
-    await noChange.nth(i).click()
+    await page.getByLabel(/new amount$/).nth(i).fill('1500')
   }
   await page.getByRole('button', { name: 'Save updates' }).click()
   await expect(page.getByRole('heading', { name: 'Update' })).toBeVisible()
@@ -1141,6 +1139,18 @@ test('capture Update save only filled rows (#200)', async ({ page }) => {
   await expect(page.getByLabel('USD cash new amount')).toBeVisible()
   await page.screenshot({
     path: join(outDir, '200-update-save-nonempty.png'),
+    fullPage: true,
+  })
+})
+
+test('capture Update without No change button (#201)', async ({ page }) => {
+  await seedValidationFixture(page)
+  await page.goto('/update')
+  await expect(page.getByRole('heading', { name: 'Update' })).toBeVisible()
+  await expect(page.getByLabel('Euro cash new amount')).toBeVisible()
+  await expect(page.getByRole('button', { name: 'No change' })).toHaveCount(0)
+  await page.screenshot({
+    path: join(outDir, '201-update-no-change-removed.png'),
     fullPage: true,
   })
 })
