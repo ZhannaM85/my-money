@@ -38,7 +38,7 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
 | [#209](https://github.com/ZhannaM85/my-money/issues/209) | 🔍 Pending validation | History: shared expand/collapse day row on List and Calendar | Calendar now reuses the exact List row data, including daily delta and formatting. |
-| [#212](https://github.com/ZhannaM85/my-money/issues/212) | 🔲 Open | Dashboard: collapse title while keeping As of date sticky | Title + description scroll away; date row stays pinned. Follow-up to #207. |
+| [#212](https://github.com/ZhannaM85/my-money/issues/212) | 🔍 Pending validation | Dashboard: collapse title while keeping As of date sticky | Dashboard uses one scroll area; title scrolls away while As of stays pinned. |
 
 ---
 

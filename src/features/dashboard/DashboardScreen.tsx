@@ -389,7 +389,10 @@ export function DashboardScreen() {
     !(isOriginal && activeCurrencyFilter === 'all')
 
   return (
-    <div className="flex min-h-0 min-w-0 w-full flex-1 flex-col gap-4 overflow-x-clip">
+    <div
+      data-testid="dashboard-scroll"
+      className="flex min-h-0 min-w-0 w-full flex-1 flex-col gap-4 overflow-x-clip overflow-y-auto overscroll-y-contain touch-pan-y"
+    >
       <PageHeader
         title={t.dashboard.title}
         description={t.dashboard.description}
@@ -411,7 +414,7 @@ export function DashboardScreen() {
           {showAsOfBar ? (
             <div
               data-testid="dashboard-as-of-bar"
-              className="flex w-full min-w-0 shrink-0 flex-col gap-2 bg-background"
+              className="sticky top-0 z-10 flex w-full min-w-0 shrink-0 flex-col gap-2 bg-background pb-2"
             >
               <div className="flex min-w-0 flex-wrap items-end gap-2">
                 <DateField
@@ -471,10 +474,7 @@ export function DashboardScreen() {
               ) : null}
             </div>
           ) : null}
-          <div
-            data-testid="dashboard-scroll"
-            className="flex min-h-0 min-w-0 w-full flex-1 flex-col gap-6 overflow-x-clip overflow-y-auto overscroll-y-contain touch-pan-y"
-          >
+          <div className="flex min-w-0 w-full flex-col gap-6">
           <div className="flex flex-col gap-1.5">
             <label
               className="flex flex-col gap-1.5"

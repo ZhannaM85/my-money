@@ -1185,7 +1185,7 @@ describe('DashboardScreen', () => {
     ).toBeTruthy()
   })
 
-  it('pins As of above a scrollable dashboard body (#207)', async () => {
+  it('scrolls the title away while keeping As of sticky (#207, #212)', async () => {
     const today = todayIsoDate()
     const now = `${today}T00:00:00.000Z`
     await useAssetStore.getState().saveAsset(
@@ -1217,8 +1217,12 @@ describe('DashboardScreen', () => {
     const scroll = screen.getByTestId('dashboard-scroll')
     const asOf = screen.getByLabelText('As of')
     expect(bar).toContainElement(asOf)
-    expect(scroll).not.toContainElement(asOf)
+    expect(scroll).toContainElement(screen.getByRole('heading', { name: 'Dashboard' }))
+    expect(scroll).toContainElement(asOf)
+    expect(bar.className).toContain('sticky')
+    expect(bar.className).toContain('top-0')
     expect(scroll.className).toContain('overflow-x-clip')
+    expect(scroll.className).toContain('overflow-y-auto')
     expect(scroll.className).toContain('min-w-0')
   })
 

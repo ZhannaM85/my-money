@@ -274,6 +274,29 @@ test('capture Dashboard chart controls and As of (#111, #112, #116, #117)', asyn
   })
 })
 
+test('capture Dashboard collapsed header with sticky As of (#212)', async ({
+  page,
+}) => {
+  await seedValidationFixture(page, { currencyDisplayMode: 'base' })
+  await page.goto('/')
+  const scroll = page.getByTestId('dashboard-scroll')
+  const title = page.getByRole('heading', { name: 'Dashboard' })
+  const asOf = page.getByLabel('As of')
+  await expect(title).toBeVisible()
+  await expect(asOf).toBeVisible()
+  await scroll.evaluate((element) => element.scrollTo({ top: 220 }))
+  await expect(title).not.toBeInViewport()
+  await expect(asOf).toBeInViewport()
+  await page.screenshot({
+    path: join(
+      'docs',
+      'validation-proof',
+      'dashboard',
+      '212-dashboard-collapsed-header.png',
+    ),
+  })
+})
+
 test('capture Dashboard Positions total for As of (#124)', async ({ page }) => {
   await seedValidationFixture(page, { currencyDisplayMode: 'base' })
   await page.goto('/')
