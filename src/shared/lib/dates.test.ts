@@ -12,6 +12,7 @@ import {
   monthGridCells,
   monthStartIso,
   rangeStartIso,
+  resolveDashboardChartEnd,
   isRangeClampedToEarliest,
   shiftHistoryRangeEnd,
   unclampedRangeStartIso,
@@ -125,5 +126,20 @@ describe('date helpers', () => {
     expect(isIsoDate('2026-08-32')).toBe(false)
     expect(isIsoDateOnOrBefore('2026-08-17', '2026-08-18')).toBe(true)
     expect(isIsoDateOnOrBefore('2026-08-19', '2026-08-18')).toBe(false)
+  })
+
+  it('defaults the dashboard chart end to today unless pinned (#210)', () => {
+    expect(
+      resolveDashboardChartEnd('1M', '2026-08-28', '2026-09-03', '2026-09-03', false),
+    ).toBe('2026-09-03')
+    expect(
+      resolveDashboardChartEnd('1M', '2026-08-28', '2026-09-03', '2026-09-03', true),
+    ).toBe('2026-08-28')
+    expect(
+      resolveDashboardChartEnd('All', '2026-08-28', '2026-09-03', '2026-09-03', true),
+    ).toBe('2026-09-03')
+    expect(
+      resolveDashboardChartEnd('Custom', '2026-08-28', '2026-09-03', '2026-08-20', false),
+    ).toBe('2026-08-20')
   })
 })

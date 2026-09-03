@@ -138,6 +138,22 @@ export function canZoomHistoryOut(range: HistoryRange): boolean {
   return index >= 0 && index < ZOOM_HISTORY_RANGES.length - 1
 }
 
+/** Dashboard chart right edge: today by default; pinned end after pan (#210). */
+export function resolveDashboardChartEnd(
+  range: HistoryRange,
+  rangeEnd: string,
+  today: string,
+  customEnd: string,
+  rangeEndPinned: boolean,
+): string {
+  if (range === 'Custom') {
+    return customEnd > today ? today : customEnd
+  }
+  if (range === 'All') return today
+  if (!rangeEndPinned) return today
+  return rangeEnd > today ? today : rangeEnd
+}
+
 export function monthStartIso(isoDate: string): string {
   return `${isoDate.slice(0, 8)}01`
 }

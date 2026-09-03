@@ -26,6 +26,7 @@ import {
   canZoomHistoryOut,
   isoDatesInclusive,
   rangeStartIso,
+  resolveDashboardChartEnd,
   shiftHistoryRangeEnd,
   stepHistoryRange,
   type HistoryRange,
@@ -88,24 +89,28 @@ export function DashboardScreen() {
   const addComparisonDate = useComparisonStore((state) => state.addDate)
   const range = useChartRangeStore((state) => state.range)
   const rangeEnd = useChartRangeStore((state) => state.rangeEnd)
+  const rangeEndPinned = useChartRangeStore((state) => state.rangeEndPinned)
   const customStart = useChartRangeStore((state) => state.customStart)
   const customEnd = useChartRangeStore((state) => state.customEnd)
   const setRange = useChartRangeStore((state) => state.setRange)
   const setRangeEnd = useChartRangeStore((state) => state.setRangeEnd)
+  const setRangeEndPinned = useChartRangeStore((state) => state.setRangeEndPinned)
   const setCustomStart = useChartRangeStore((state) => state.setCustomStart)
   const setCustomEnd = useChartRangeStore((state) => state.setCustomEnd)
 
   const today = todayIsoDate()
-  const chartEnd =
-    range === 'Custom'
-      ? customEnd > today
-        ? today
-        : customEnd
-      : range === 'All'
-        ? today
-        : rangeEnd > today
-          ? today
-          : rangeEnd
+  const chartEnd = resolveDashboardChartEnd(
+    range,
+    rangeEnd,
+    today,
+    customEnd,
+    rangeEndPinned,
+  )
+
+  useEffect(() => {
+    if (range === 'All' || range === 'Custom' || rangeEndPinned) return
+    if (rangeEnd !== today) setRangeEnd(today)
+  }, [range, rangeEnd, rangeEndPinned, setRangeEnd, today])
   const isOriginal = currencyDisplayMode === 'native'
   const activeCurrencyFilter = isOriginal ? currencyFilter : 'all'
 
@@ -326,13 +331,17 @@ export function DashboardScreen() {
       setCustomEnd(chartEnd)
     }
     setRange(next)
-    if (next === 'All' || next === 'Custom') setRangeEnd(today)
+    if (next === 'All' || next === 'Custom') {
+      setRangeEnd(today)
+      setRangeEndPinned(false)
+    }
   }
 
   const panEarlier = () => {
     if (!canPanEarlier) return
     setSelectedChartDate(null)
     setAsOfError(undefined)
+    setRangeEndPinned(true)
     setRangeEnd(
       shiftHistoryRangeEnd(rangeEnd, range, 'earlier', today, earliest),
     )
@@ -341,9 +350,10 @@ export function DashboardScreen() {
     if (!canPanLater) return
     setSelectedChartDate(null)
     setAsOfError(undefined)
-    setRangeEnd(
-      shiftHistoryRangeEnd(rangeEnd, range, 'later', today, earliest),
-    )
+    const next = shiftHistoryRangeEnd(rangeEnd, range, 'later', today, earliest)
+    setRangeEnd(next)
+    if (next === today) setRangeEndPinned(false)
+    else setRangeEndPinned(true)
   }
 
   const loaded = assetsLoaded && settingsLoaded
@@ -781,14 +791,20 @@ export function DashboardScreen() {
                       setAsOfError(undefined)
                       const next = stepHistoryRange(range, 'in')
                       setRange(next)
-                      if (next === 'All') setRangeEnd(today)
+                      if (next === 'All') {
+                        setRangeEnd(today)
+                        setRangeEndPinned(false)
+                      }
                     }}
                     onZoomOut={() => {
                       setSelectedChartDate(null)
                       setAsOfError(undefined)
                       const next = stepHistoryRange(range, 'out')
                       setRange(next)
-                      if (next === 'All') setRangeEnd(today)
+                      if (next === 'All') {
+                        setRangeEnd(today)
+                        setRangeEndPinned(false)
+                      }
                     }}
                     onPanEarlier={panEarlier}
                     onPanLater={panLater}
@@ -854,7 +870,10 @@ export function DashboardScreen() {
                         setAsOfError(undefined)
                         const next = stepHistoryRange(range, 'in')
                         setRange(next)
-                        if (next === 'All') setRangeEnd(today)
+                        if (next === 'All') {
+                        setRangeEnd(today)
+                        setRangeEndPinned(false)
+                      }
                       }}
                     >
                       {t.dashboard.zoomIn}
@@ -874,7 +893,10 @@ export function DashboardScreen() {
                         setAsOfError(undefined)
                         const next = stepHistoryRange(range, 'out')
                         setRange(next)
-                        if (next === 'All') setRangeEnd(today)
+                        if (next === 'All') {
+                        setRangeEnd(today)
+                        setRangeEndPinned(false)
+                      }
                       }}
                     >
                       {t.dashboard.zoomOut}

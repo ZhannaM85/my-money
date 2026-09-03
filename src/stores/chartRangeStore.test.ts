@@ -9,6 +9,7 @@ beforeEach(() => {
   useChartRangeStore.setState({
     range: '1M',
     rangeEnd: '2026-08-31',
+    rangeEndPinned: false,
     customStart: '2026-08-31',
     customEnd: '2026-08-31',
   })

@@ -48,6 +48,7 @@ beforeEach(async () => {
   useChartRangeStore.setState({
     range: '1M',
     rangeEnd: todayIsoDate(),
+    rangeEndPinned: false,
     customStart: todayIsoDate(),
     customEnd: todayIsoDate(),
   })
@@ -1081,6 +1082,67 @@ describe('DashboardScreen', () => {
     expect(screen.getByRole('button', { name: 'Later dates' })).toBeDisabled()
   })
 
+  it('anchors the chart on today when a stale range end was persisted (#210)', async () => {
+    const today = todayIsoDate()
+    const staleEnd = addDaysIso(today, -6)
+    const past = addDaysIso(today, -60)
+    const now = `${today}T00:00:00.000Z`
+    useChartRangeStore.setState({
+      range: '1M',
+      rangeEnd: staleEnd,
+      rangeEndPinned: false,
+      customStart: past,
+      customEnd: staleEnd,
+    })
+    const originalEnsureRange = useFxStore.getState().ensureRange
+    const ensureRange = vi.fn(async () => {})
+    useFxStore.setState({ ensureRange })
+    await useAssetStore.getState().saveAsset(
+      {
+        id: 'a1',
+        name: 'Cash',
+        assetClass: 'money',
+        type: 'cash',
+        currency: 'EUR',
+        trackingStatus: 'included',
+        valuationMethod: 'account_balance',
+        updateFrequency: 'weekly',
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        assetId: 'a1',
+        date: past,
+        amount: 800,
+        currency: 'EUR',
+      },
+    )
+    await useAssetStore.getState().saveSnapshots([
+      {
+        assetId: 'a1',
+        date: today,
+        amount: 1000,
+        currency: 'EUR',
+      },
+    ])
+    try {
+      render(
+        <MemoryRouter>
+          <DashboardScreen />
+        </MemoryRouter>,
+      )
+      await screen.findByText('Net worth')
+      await waitFor(() => {
+        expect(ensureRange).toHaveBeenCalled()
+      })
+      const lastCall = ensureRange.mock.calls.at(-1)
+      expect(lastCall?.[1]).toBe(today)
+      expect(useChartRangeStore.getState().rangeEnd).toBe(today)
+    } finally {
+      useFxStore.setState({ ensureRange: originalEnsureRange })
+    }
+  })
+
   it('renders Positions below the net-worth chart (#134)', async () => {
     const today = todayIsoDate()
     const now = `${today}T00:00:00.000Z`
@@ -1165,6 +1227,7 @@ describe('DashboardScreen', () => {
     useChartRangeStore.setState({
       range: '1M',
       rangeEnd,
+      rangeEndPinned: true,
       customStart: addDaysIso(today, -30),
       customEnd: rangeEnd,
     })

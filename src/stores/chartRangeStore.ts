@@ -8,10 +8,13 @@ export const CHART_RANGE_STORAGE_KEY = 'my-money-chart-range'
 interface ChartRangeState {
   range: HistoryRange
   rangeEnd: string
+  /** True after ←/→ pan; keeps an older end until reset (#210). */
+  rangeEndPinned: boolean
   customStart: string
   customEnd: string
   setRange: (range: HistoryRange) => void
   setRangeEnd: (rangeEnd: string) => void
+  setRangeEndPinned: (rangeEndPinned: boolean) => void
   setCustomStart: (customStart: string) => void
   setCustomEnd: (customEnd: string) => void
 }
@@ -25,10 +28,12 @@ export const useChartRangeStore = create<ChartRangeState>()(
     (set) => ({
       range: '1M',
       rangeEnd: initialToday(),
+      rangeEndPinned: false,
       customStart: initialToday(),
       customEnd: initialToday(),
       setRange: (range) => set({ range }),
       setRangeEnd: (rangeEnd) => set({ rangeEnd }),
+      setRangeEndPinned: (rangeEndPinned) => set({ rangeEndPinned }),
       setCustomStart: (customStart) => set({ customStart }),
       setCustomEnd: (customEnd) => set({ customEnd }),
     }),
@@ -38,6 +43,7 @@ export const useChartRangeStore = create<ChartRangeState>()(
       partialize: (state) => ({
         range: state.range,
         rangeEnd: state.rangeEnd,
+        rangeEndPinned: state.rangeEndPinned,
         customStart: state.customStart,
         customEnd: state.customEnd,
       }),
