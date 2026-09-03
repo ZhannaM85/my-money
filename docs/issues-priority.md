@@ -38,7 +38,7 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
 | [#212](https://github.com/ZhannaM85/my-money/issues/212) | 🔍 Pending validation | Dashboard: collapse title while keeping As of date sticky | Dashboard uses one scroll area; title scrolls away while As of stays pinned. |
-| [#213](https://github.com/ZhannaM85/my-money/issues/213) | 🔲 Open | Dashboard: keep Today on the same row as the date | Reduce Today footprint; date + comparison + Today must fit without overflow. |
+| [#213](https://github.com/ZhannaM85/my-money/issues/213) | 🔍 Pending validation | Dashboard: keep Today on the same row as the date | Compact Today button + no-wrap row; verified at 390px in Russian without overflow. |
 
 ---
 

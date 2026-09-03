@@ -3,12 +3,16 @@ import type { Page } from '@playwright/test'
 /** Seed IndexedDB so onboarding is skipped and Allocation has multi-currency Original data (#118). */
 export async function seedValidationFixture(
   page: Page,
-  options?: { currencyDisplayMode?: 'native' | 'base' },
+  options?: {
+    currencyDisplayMode?: 'native' | 'base'
+    locale?: 'en' | 'ru'
+  },
 ) {
   const currencyDisplayMode = options?.currencyDisplayMode ?? 'native'
+  const locale = options?.locale ?? 'en'
   await page.goto('/settings')
   await page.waitForFunction(() => document.readyState === 'complete')
-  await page.evaluate(async (mode) => {
+  await page.evaluate(async ({ mode, locale }) => {
     const now = '2026-08-17T00:00:00.000Z'
 
     const version = await (async () => {
@@ -34,7 +38,7 @@ export async function seedValidationFixture(
         tx.objectStore('settings').put({
           id: 'singleton',
           baseCurrency: 'EUR',
-          locale: 'en',
+          locale,
           currencyDisplayMode: mode,
           onboardingCompleted: true,
           assetListSort: 'custom',
@@ -88,7 +92,9 @@ export async function seedValidationFixture(
         tx.onerror = () => reject(tx.error ?? new Error('idb write failed'))
       }
     })
-  }, currencyDisplayMode)
+  }, { mode: currencyDisplayMode, locale })
   await page.reload()
-  await page.getByRole('heading', { name: 'More' }).waitFor({ timeout: 15_000 })
+  await page
+    .getByRole('heading', { name: locale === 'ru' ? 'Ещё' : 'More' })
+    .waitFor({ timeout: 15_000 })
 }

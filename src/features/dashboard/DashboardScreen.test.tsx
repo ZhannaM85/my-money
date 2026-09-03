@@ -1013,7 +1013,11 @@ describe('DashboardScreen', () => {
     expect(
       await screen.findByRole('button', { name: `Holdings on ${past}` }),
     ).toBeInTheDocument()
-    await user.click(screen.getByRole('button', { name: 'Today' }))
+    const todayButton = screen.getByRole('button', { name: 'Today' })
+    expect(todayButton.parentElement?.className).toContain('flex-nowrap')
+    expect(todayButton.className).toContain('px-1.5')
+    expect(todayButton.className).toContain('text-sm')
+    await user.click(todayButton)
     expect(
       await screen.findByRole('button', { name: 'Holdings' }),
     ).toBeInTheDocument()

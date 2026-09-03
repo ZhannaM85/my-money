@@ -416,7 +416,7 @@ export function DashboardScreen() {
               data-testid="dashboard-as-of-bar"
               className="sticky top-0 z-10 flex w-full min-w-0 shrink-0 flex-col gap-2 bg-background pb-2"
             >
-              <div className="flex min-w-0 flex-wrap items-end gap-2">
+              <div className="flex min-w-0 flex-nowrap items-end gap-1.5">
                 <DateField
                   label={t.dashboard.asOfDate}
                   value={selectedChartDate ?? today}
@@ -454,7 +454,7 @@ export function DashboardScreen() {
                     type="button"
                     variant="outline"
                     size="xl"
-                    className="mb-0 shrink-0"
+                  className="mb-0 h-12 shrink-0 px-1.5 text-sm"
                     onClick={() => {
                       setAsOfError(undefined)
                       setSelectedChartDate(null)

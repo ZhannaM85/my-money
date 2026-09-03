@@ -324,6 +324,38 @@ test('capture Dashboard As of Today button (#125)', async ({ page }) => {
   })
 })
 
+test('capture Dashboard Today on the date row in Russian (#213)', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 })
+  await seedValidationFixture(page, {
+    currencyDisplayMode: 'base',
+    locale: 'ru',
+  })
+  await page.goto('/')
+  await page.getByLabel('На дату').fill('2026-08-17')
+  const dateField = page.getByLabel('На дату')
+  const today = page.getByRole('button', { name: 'Сегодня' })
+  await expect(today).toBeVisible()
+  const dateBox = await dateField.boundingBox()
+  const todayBox = await today.boundingBox()
+  expect(dateBox).not.toBeNull()
+  expect(todayBox).not.toBeNull()
+  expect(Math.abs((dateBox?.y ?? 0) - (todayBox?.y ?? 0))).toBeLessThan(2)
+  const overflow = await page.evaluate(
+    () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
+  )
+  expect(overflow).toBeLessThanOrEqual(0)
+  await page.screenshot({
+    path: join(
+      'docs',
+      'validation-proof',
+      'dashboard',
+      '213-dashboard-today-same-row.png',
+    ),
+  })
+})
+
 test('capture Dashboard chart range picker (#126)', async ({ page }) => {
   await seedValidationFixture(page, { currencyDisplayMode: 'base' })
   await page.goto('/')
