@@ -213,6 +213,12 @@ Closed live-feedback rows from Tier 8 onward. Open / pending items stay in [`../
 | [#186](https://github.com/ZhannaM85/my-money/issues/186) | ✅ Done | Dashboard: Update rates button does nothing | Screenshot: Сводка Converted/RUB, **Обновить курсы** circled. Tap has no spinner, toast, error, or quote change. Validated on-device 2026-09-02. Follow-up: #188. |
 | [#188](https://github.com/ZhannaM85/my-money/issues/188) | ✅ Done | Dashboard: larger Update rates button and last-updated time | Follow-up to #186. Screenshot: **Обновить курсы** still a short pill; **Курсы обновлены** has no timestamp. Validated on-device 2026-09-02. |
 
+## Tier 19 — Live feedback (2026-09-02)
+
+| # | Status | Issue | Notes |
+|---|--------|-------|-------|
+| [#197](https://github.com/ZhannaM85/my-money/issues/197) | ✅ Done | Delete all data on this device | One-tap wipe behind confirm. Makes Import JSON available without deleting each asset. Related #198. Validated on-device 2026-09-03. |
+
 ## Tier 20 — Live feedback (2026-09-03)
 
 | # | Status | Issue | Notes |
