@@ -313,9 +313,10 @@ export function UpdateFinancesScreen() {
           }
         />
       ) : (
+        <>
         <div
           data-testid="update-holdings-scroll"
-          className="flex min-h-0 flex-1 flex-col gap-6 overflow-y-auto"
+          className="flex min-h-0 flex-1 flex-col gap-6 overflow-y-auto overscroll-y-contain touch-pan-y"
         >
           <p
             data-testid="update-description"
@@ -535,19 +536,25 @@ export function UpdateFinancesScreen() {
               </DndContext>
             )
           })()}
+        </div>
           {error && <p className="text-sm text-destructive">{error}</p>}
           {!reorder.reordering ? (
-            <Button
-              type="button"
-              size="xl"
-              className="w-full"
-              disabled={saving}
-              onClick={() => void handleSave()}
+            <div
+              data-testid="update-save-bar"
+              className="shrink-0 bg-background"
             >
-              {t.update.saveUpdates}
-            </Button>
+              <Button
+                type="button"
+                size="xl"
+                className="w-full"
+                disabled={saving}
+                onClick={() => void handleSave()}
+              >
+                {t.update.saveUpdates}
+              </Button>
+            </div>
           ) : null}
-        </div>
+        </>
       )}
     </div>
   )

@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 210,
+    issue: 203,
+    date: '2026-09-03T15:30:00+03:00',
+    en: 'On Update, Save updates stays at the bottom while holdings scroll, so reaching the last row no longer traps scroll-to-top.',
+    ru: 'На Обновить «Сохранить обновления» остаётся снизу, а список активов прокручивается отдельно — дойдя до последней строки, можно снова прокрутить вверх.',
+  },
+  {
     version: 209,
     issue: 202,
     date: '2026-09-03T13:55:00+03:00',

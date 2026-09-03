@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 203,
+    title: {
+      en: 'Update: scroll to top stops once Save updates is on screen',
+      ru: 'Обновление: прокрутка вверх ломается, когда видна «Сохранить обновления»',
+    },
+    en: 'Save sat inside the #191 inner scroller, nested in AppShell’s overflow-y-auto. On Android, reaching that button meant the inner scroller was at max; the next up-swipe chained to the parent and never came back. Save (and errors) are now pinned below the holdings list; the list uses overscroll-y-contain + touch-pan-y. As of stays pinned above.',
+    ru: 'Кнопка сохранения была внутри внутреннего скролла #191, вложенного в overflow-y-auto оболочки. На Android, когда кнопка видна, внутренний скролл на максимуме; свайп вверх уходит в родителя и не возвращается. Сохранить (и ошибки) закреплены под списком; список — overscroll-y-contain + touch-pan-y. «На дату» по-прежнему сверху.',
+  },
+  {
     issue: 202,
     title: {
       en: 'Update: show excluded holdings so their valuation can still change',

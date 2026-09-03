@@ -493,6 +493,25 @@ describe('UpdateFinancesScreen', () => {
     expect(scroll.className).toMatch(/overflow-y-auto/)
     expect(scroll).not.toContainElement(asOf)
     expect(scroll).toContainElement(screen.getByTestId('update-description'))
+    const save = screen.getByRole('button', { name: 'Save updates' })
+    const saveBar = screen.getByTestId('update-save-bar')
+    expect(saveBar).toContainElement(save)
+    expect(saveBar.className).toMatch(/shrink-0/)
+    expect(scroll).not.toContainElement(save)
+    expect(scroll.className).toMatch(/overscroll-y-contain/)
+    expect(scroll.className).toMatch(/touch-pan-y/)
+  })
+
+  it('keeps Save updates pinned below the holdings scroller (#203)', async () => {
+    render(
+      <MemoryRouter>
+        <UpdateFinancesScreen />
+      </MemoryRouter>,
+    )
+    const scroll = await screen.findByTestId('update-holdings-scroll')
+    const save = screen.getByRole('button', { name: 'Save updates' })
+    expect(screen.getByTestId('update-save-bar')).toContainElement(save)
+    expect(scroll).not.toContainElement(save)
   })
 
   it('shows a Comparison-style delta vs the previous snapshot after save (#193)', async () => {

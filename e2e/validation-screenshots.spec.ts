@@ -1207,6 +1207,21 @@ test('capture Update excluded holdings (#202)', async ({ page }) => {
   })
 })
 
+test('capture Update pinned Save below holdings (#203)', async ({ page }) => {
+  await seedValidationFixture(page)
+  await page.goto('/update')
+  await expect(page.getByRole('heading', { name: 'Update' })).toBeVisible()
+  const scroll = page.getByTestId('update-holdings-scroll')
+  const save = page.getByRole('button', { name: 'Save updates' })
+  await expect(page.getByTestId('update-save-bar')).toBeVisible()
+  await expect(save).toBeVisible()
+  await expect(scroll).not.toContainText('Save updates')
+  await page.screenshot({
+    path: join(outDir, '203-update-save-pinned.png'),
+    fullPage: true,
+  })
+})
+
 test('capture History calendar snapshot days (#189)', async ({ page }) => {
   await seedValidationFixture(page)
   await page.goto('/history')
