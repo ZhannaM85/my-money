@@ -235,3 +235,4 @@ Closed live-feedback rows from Tier 8 onward. Open / pending items stay in [`../
 | [#205](https://github.com/ZhannaM85/my-money/issues/205) | ✅ Done | History calendar: tap a date to show that day's snapshot entries | Follow-up to #189. Tap dot-date → show entries. Validated on-device 2026-09-03. Follow-up: #209. |
 | [#207](https://github.com/ZhannaM85/my-money/issues/207) | ✅ Done | Dashboard: keep As of date visible while scrolling | Pin As of row while chart + Positions scroll. Validated on-device 2026-09-03. |
 | [#206](https://github.com/ZhannaM85/my-money/issues/206) | ✅ Done | Update: show green/red delta while editing amount | Live up/down vs previous snapshot while typing; extends #193. Validated on-device 2026-09-03. |
+| [#208](https://github.com/ZhannaM85/my-money/issues/208) | ✅ Done | Dashboard Positions shows 0 after today's Update save | Today Positions now use latest holdings, not stale chart range end. Validated on-device 2026-09-03. |
