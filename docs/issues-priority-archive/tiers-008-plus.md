@@ -222,6 +222,7 @@ Closed live-feedback rows from Tier 8 onward. Open / pending items stay in [`../
 | [#191](https://github.com/ZhannaM85/my-money/issues/191) | ✅ Done | Update: keep As of date visible while scrolling holdings | Title + As of pinned; holdings list scrolls. Update only. Validated on-device 2026-09-03. |
 | [#192](https://github.com/ZhannaM85/my-money/issues/192) | ✅ Done | Update: show the date the suggested amount comes from | Prefill is last snapshot before As of (#180); calendar date shown on the row. Validated on-device 2026-09-03. |
 | [#193](https://github.com/ZhannaM85/my-money/issues/193) | ✅ Done | Update: after save, show green/red delta vs previous snapshot date | Comparison arrows vs last snapshot before As of. Validated on-device 2026-09-03. Follow-up: #206. |
+| [#195](https://github.com/ZhannaM85/my-money/issues/195) | ✅ Done | Android: Dashboard Zoom out (Уменьшить) is clipped at the right edge | Toolbar wraps; same strip on History and details. Validated on-device 2026-09-03. |
 
 ## Tier 20 — Live feedback (2026-09-03)
 
