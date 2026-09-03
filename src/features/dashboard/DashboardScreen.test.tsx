@@ -1133,10 +1133,13 @@ describe('DashboardScreen', () => {
       )
       await screen.findByText('Net worth')
       await waitFor(() => {
-        expect(ensureRange).toHaveBeenCalled()
+        expect(ensureRange).toHaveBeenCalledWith(
+          expect.any(String),
+          today,
+          expect.any(String),
+          expect.any(Array),
+        )
       })
-      const lastCall = ensureRange.mock.calls.at(-1)
-      expect(lastCall?.[1]).toBe(today)
       expect(useChartRangeStore.getState().rangeEnd).toBe(today)
     } finally {
       useFxStore.setState({ ensureRange: originalEnsureRange })
