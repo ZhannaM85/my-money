@@ -360,6 +360,21 @@ export function UpdateFinancesScreen() {
               <ul className="flex flex-col gap-4">
                 {rows.map(({ asset, latest, onDate, previous, suggested }) => {
                   const locked = Boolean(onDate) && !editing[asset.id]
+                  const draftRaw = drafts[asset.id]
+                  const draftAmount =
+                    !locked &&
+                    draftRaw !== undefined &&
+                    draftRaw.trim() !== ''
+                      ? parseAmount(draftRaw)
+                      : undefined
+                  const editDelta =
+                    !locked &&
+                    previous &&
+                    previous.currency === asset.currency &&
+                    draftAmount !== undefined &&
+                    draftAmount !== previous.amount
+                      ? draftAmount - previous.amount
+                      : null
                   const meta = (
                     <>
                       <div className="flex items-start justify-between gap-3">
@@ -502,6 +517,22 @@ export function UpdateFinancesScreen() {
                           {t.update.suggestedFromDate(
                             formatCalendarDate(previous.date, locale),
                           )}
+                        </p>
+                      ) : null}
+                      {editDelta !== null && previous ? (
+                        <p
+                          className="flex flex-wrap items-center justify-end gap-1.5"
+                          data-testid={`update-edit-delta-${asset.id}`}
+                        >
+                          <ComparisonDelta
+                            delta={editDelta}
+                            currency={previous.currency}
+                          />
+                          <span className="text-xs text-muted-foreground">
+                            {t.update.deltaVsDate(
+                              formatCalendarDate(previous.date, locale),
+                            )}
+                          </span>
                         </p>
                       ) : null}
                       {locked &&

@@ -560,6 +560,22 @@ describe('UpdateFinancesScreen', () => {
     expect(arrow).toHaveClass('text-destructive')
   })
 
+  it('shows live green/red delta while typing (#206)', async () => {
+    const user = userEvent.setup()
+    render(
+      <MemoryRouter>
+        <UpdateFinancesScreen />
+      </MemoryRouter>,
+    )
+    const input = await screen.findByLabelText('Revolut new amount')
+    await user.type(input, '1500')
+    const delta = await screen.findByTestId('update-edit-delta-a1')
+    expect(delta).toHaveTextContent('vs 1 Aug 2026')
+    const arrow = delta.querySelector('[data-testid="comparison-delta"]')
+    expect(arrow).toHaveAttribute('data-direction', 'up')
+    expect(arrow).toHaveClass('text-[var(--chart-investments)]')
+  })
+
   it('lists excluded holdings so a new amount can be saved (#202)', async () => {
     const user = userEvent.setup()
     await useAssetStore.getState().saveAsset(
