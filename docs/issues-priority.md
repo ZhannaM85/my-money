@@ -46,7 +46,6 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
-| [#200](https://github.com/ZhannaM85/my-money/issues/200) | 🔲 Open | Update: save only non-empty fields; do not block save when fields are empty | On-device: Save no-op if nothing typed. Enable-when-dirty is #204. |
 
 
 ---
