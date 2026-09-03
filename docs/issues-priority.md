@@ -43,6 +43,15 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 
 ---
 
+## Tier 20 — Live feedback (2026-09-03)
+
+| # | Status | Issue | Notes |
+|---|--------|-------|-------|
+| [#200](https://github.com/ZhannaM85/my-money/issues/200) | 🔲 Open | Update: save only non-empty fields; do not block save when fields are empty | Empty rows skipped, not snapshotted. All-empty is a no-op. Related #201. |
+| [#201](https://github.com/ZhannaM85/my-money/issues/201) | 🔲 Open | Update: remove the No changes (Без изменений) button | Button does nothing useful. Drop copy that tells people to tap it. Related #200. |
+
+---
+
 ## Explicitly not filed
 
 Out of scope for the MVP (`PROJECT_BRIEF.md` §20) — do not implement from chat:
