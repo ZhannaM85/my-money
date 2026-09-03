@@ -1222,6 +1222,22 @@ test('capture Update pinned Save below holdings (#203)', async ({ page }) => {
   })
 })
 
+test('capture Update Save disabled until an amount is typed (#204)', async ({
+  page,
+}) => {
+  await seedValidationFixture(page)
+  await page.goto('/update')
+  await expect(page.getByRole('heading', { name: 'Update' })).toBeVisible()
+  const save = page.getByRole('button', { name: 'Save updates' })
+  await expect(save).toBeDisabled()
+  await page.screenshot({
+    path: join(outDir, '204-update-save-disabled.png'),
+    fullPage: true,
+  })
+  await page.getByLabel('Euro cash new amount').fill('1500')
+  await expect(save).toBeEnabled()
+})
+
 test('capture History calendar snapshot days (#189)', async ({ page }) => {
   await seedValidationFixture(page)
   await page.goto('/history')

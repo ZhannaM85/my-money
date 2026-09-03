@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 212,
+    issue: 204,
+    date: '2026-09-03T16:20:00+03:00',
+    en: 'On Update, Save updates stays off until you type an amount. Empty placeholders do not count as a change.',
+    ru: 'На Обновить «Сохранить обновления» выключена, пока вы не введёте сумму. Пустые подсказки не считаются изменением.',
+  },
+  {
     version: 211,
     issue: 203,
     date: '2026-09-03T16:10:00+03:00',

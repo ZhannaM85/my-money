@@ -76,6 +76,7 @@ gh issue edit 108 --add-label validation
 | `201-update-no-change-removed.png` | Update · No change button gone; amount field only (#201) |
 | `202-update-excluded-holdings.png` | Update · excluded holding listed with not-counted hint (#202) |
 | `203-update-save-pinned.png` | Update · Save pinned below scrolling holdings (#203) |
+| `204-update-save-disabled.png` | Update · Save disabled until an amount is typed (#204) |
 | `196-fx-debug-conversion-unavailable.png` | Settings · FX debug after tapping Conversion not available (#196) |
 | `189-history-calendar.png` | History · Calendar marks snapshot days (#189) |
 | `147-positions-hidden-from-total.png` | Dashboard · hidden asset dropped from total (#147) |

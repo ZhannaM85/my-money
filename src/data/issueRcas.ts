@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 204,
+    title: {
+      en: 'Update: enable Save updates only when an amount has been typed',
+      ru: 'Обновление: включать «Сохранить обновления» только когда введена сумма',
+    },
+    en: 'Save stayed enabled with empty fields. #200 made all-empty Save a silent no-op, so on-device it looked broken. The button is disabled until at least one unlocked (or pencil-edited) field has a trimmed typed value. Placeholders are not values. Unblocks validating #200.',
+    ru: 'Сохранить было включено при пустых полях. #200 делал пустое сохранение пустой операцией, на устройстве казалось, что кнопка сломана. Теперь она выключена, пока хотя бы в одном разблокированном (или после карандаша) поле нет введённой суммы. Подсказки не считаются. Разблокирует проверку #200.',
+  },
+  {
     issue: 203,
     title: {
       en: 'Update: scroll to top stops once Save updates is on screen',

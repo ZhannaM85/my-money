@@ -268,6 +268,15 @@ export function UpdateFinancesScreen() {
     }
   }
 
+  const canSave = useMemo(
+    () =>
+      rows.some(({ asset, onDate }) => {
+        if (onDate && !editing[asset.id]) return false
+        return (drafts[asset.id]?.trim() ?? '') !== ''
+      }),
+    [drafts, editing, rows],
+  )
+
   const ready = loaded && settingsLoaded
 
   return (
@@ -547,7 +556,7 @@ export function UpdateFinancesScreen() {
                 type="button"
                 size="xl"
                 className="w-full"
-                disabled={saving}
+                disabled={saving || !canSave}
                 onClick={() => void handleSave()}
               >
                 {t.update.saveUpdates}

@@ -101,18 +101,32 @@ describe('UpdateFinancesScreen', () => {
   })
 
   it('does not write when every amount is empty (#200)', async () => {
-    const user = userEvent.setup()
     render(
       <MemoryRouter>
         <UpdateFinancesScreen />
       </MemoryRouter>,
     )
     await screen.findByLabelText('Revolut new amount')
-    await user.click(screen.getByRole('button', { name: 'Save updates' }))
+    expect(screen.getByRole('button', { name: 'Save updates' })).toBeDisabled()
     expect(
       useAssetStore.getState().snapshots.filter((row) => row.assetId === 'a1'),
     ).toHaveLength(1)
-    expect(screen.queryByText(/Mark no change/)).not.toBeInTheDocument()
+  })
+
+  it('enables Save only after an amount is typed (#204)', async () => {
+    const user = userEvent.setup()
+    render(
+      <MemoryRouter>
+        <UpdateFinancesScreen />
+      </MemoryRouter>,
+    )
+    const input = await screen.findByLabelText('Revolut new amount')
+    const save = screen.getByRole('button', { name: 'Save updates' })
+    expect(save).toBeDisabled()
+    await user.type(input, '1500')
+    expect(save).toBeEnabled()
+    await user.clear(input)
+    expect(save).toBeDisabled()
   })
 
   it('does not show a No change button (#201)', async () => {
@@ -176,7 +190,6 @@ describe('UpdateFinancesScreen', () => {
   })
 
   it('rejects a future As of date (#175)', async () => {
-    const user = userEvent.setup()
     render(
       <MemoryRouter>
         <UpdateFinancesScreen />
@@ -187,7 +200,7 @@ describe('UpdateFinancesScreen', () => {
     expect(
       await screen.findByText('Choose today or a past date'),
     ).toBeInTheDocument()
-    await user.click(screen.getByRole('button', { name: 'Save updates' }))
+    expect(screen.getByRole('button', { name: 'Save updates' })).toBeDisabled()
     expect(
       useAssetStore.getState().snapshots.filter((row) => row.assetId === 'a1'),
     ).toHaveLength(1)
