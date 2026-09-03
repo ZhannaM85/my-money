@@ -1154,6 +1154,8 @@ describe('DashboardScreen', () => {
     const asOf = screen.getByLabelText('As of')
     expect(bar).toContainElement(asOf)
     expect(scroll).not.toContainElement(asOf)
+    expect(scroll.className).toContain('overflow-x-clip')
+    expect(scroll.className).toContain('min-w-0')
   })
 
   it('shows today Positions after save when the visible chart range ends earlier (#208)', async () => {
