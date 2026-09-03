@@ -217,4 +217,5 @@ Closed live-feedback rows from Tier 8 onward. Open / pending items stay in [`../
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
+| [#201](https://github.com/ZhannaM85/my-money/issues/201) | ✅ Done | Update: remove the No changes (Без изменений) button | Button does nothing useful. Drop copy that tells people to tap it. Related #200. Validated on-device 2026-09-03. |
 | [#202](https://github.com/ZhannaM85/my-money/issues/202) | ✅ Done | Update: show excluded holdings so their valuation can still change | Hidden from totals, still on Update. Archived unchanged. Validated on-device 2026-09-03. |

@@ -48,7 +48,6 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
 | [#200](https://github.com/ZhannaM85/my-money/issues/200) | 🔍 Pending validation | Update: save only non-empty fields; do not block save when fields are empty | Empty rows skipped, not snapshotted. All-empty is a no-op. Related #201. |
-| [#201](https://github.com/ZhannaM85/my-money/issues/201) | 🔍 Pending validation | Update: remove the No changes (Без изменений) button | Button does nothing useful. Drop copy that tells people to tap it. Related #200. |
 | [#203](https://github.com/ZhannaM85/my-money/issues/203) | 🔍 Pending validation | Update: scroll to top stops once Save updates is on screen | PTR ignored inner list scroll; swipe up reloaded. Related #191 / #39. |
 
 ---
