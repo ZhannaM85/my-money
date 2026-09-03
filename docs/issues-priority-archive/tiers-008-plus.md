@@ -212,3 +212,9 @@ Closed live-feedback rows from Tier 8 onward. Open / pending items stay in [`../
 | [#187](https://github.com/ZhannaM85/my-money/issues/187) | ✅ Done | CI: History snapshot-day test fails when Month window excludes 1 Aug | Deploy of #186. Month is 30 days; on 2026-09-01, 1 Aug is outside the default range. Validated in CI 2026-09-01. Follow-up: #188. |
 | [#186](https://github.com/ZhannaM85/my-money/issues/186) | ✅ Done | Dashboard: Update rates button does nothing | Screenshot: Сводка Converted/RUB, **Обновить курсы** circled. Tap has no spinner, toast, error, or quote change. Validated on-device 2026-09-02. Follow-up: #188. |
 | [#188](https://github.com/ZhannaM85/my-money/issues/188) | ✅ Done | Dashboard: larger Update rates button and last-updated time | Follow-up to #186. Screenshot: **Обновить курсы** still a short pill; **Курсы обновлены** has no timestamp. Validated on-device 2026-09-02. |
+
+## Tier 20 — Live feedback (2026-09-03)
+
+| # | Status | Issue | Notes |
+|---|--------|-------|-------|
+| [#202](https://github.com/ZhannaM85/my-money/issues/202) | ✅ Done | Update: show excluded holdings so their valuation can still change | Hidden from totals, still on Update. Archived unchanged. Validated on-device 2026-09-03. |
