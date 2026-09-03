@@ -1121,6 +1121,101 @@ describe('DashboardScreen', () => {
     ).toBeTruthy()
   })
 
+  it('pins As of above a scrollable dashboard body (#207)', async () => {
+    const today = todayIsoDate()
+    const now = `${today}T00:00:00.000Z`
+    await useAssetStore.getState().saveAsset(
+      {
+        id: 'a1',
+        name: 'Cash',
+        assetClass: 'money',
+        type: 'cash',
+        currency: 'EUR',
+        trackingStatus: 'included',
+        valuationMethod: 'account_balance',
+        updateFrequency: 'weekly',
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        assetId: 'a1',
+        date: today,
+        amount: 1000,
+        currency: 'EUR',
+      },
+    )
+    render(
+      <MemoryRouter>
+        <DashboardScreen />
+      </MemoryRouter>,
+    )
+    const bar = await screen.findByTestId('dashboard-as-of-bar')
+    const scroll = screen.getByTestId('dashboard-scroll')
+    const asOf = screen.getByLabelText('As of')
+    expect(bar).toContainElement(asOf)
+    expect(scroll).not.toContainElement(asOf)
+  })
+
+  it('shows today Positions after save when the visible chart range ends earlier (#208)', async () => {
+    const user = userEvent.setup()
+    const today = todayIsoDate()
+    const rangeEnd = addDaysIso(today, -10)
+    useChartRangeStore.setState({
+      range: '1M',
+      rangeEnd,
+      customStart: addDaysIso(today, -30),
+      customEnd: rangeEnd,
+    })
+    const past = addDaysIso(today, -30)
+    const now = `${today}T00:00:00.000Z`
+    await useFxStore.getState().saveManualRates([
+      { date: past, base: 'USD', quote: 'EUR', rate: 0.9 },
+      { date: rangeEnd, base: 'USD', quote: 'EUR', rate: 0.9 },
+      { date: today, base: 'USD', quote: 'EUR', rate: 0.9 },
+    ])
+    await useAssetStore.getState().saveAsset(
+      {
+        id: 'dep',
+        name: 'USD Deposit',
+        assetClass: 'money',
+        type: 'deposit',
+        currency: 'USD',
+        institution: 'Bank of Georgia',
+        trackingStatus: 'included',
+        valuationMethod: 'account_balance',
+        updateFrequency: 'monthly',
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        assetId: 'dep',
+        date: past,
+        amount: 0,
+        currency: 'USD',
+      },
+    )
+    await useAssetStore.getState().saveSnapshots([
+      {
+        assetId: 'dep',
+        date: today,
+        amount: 3100,
+        currency: 'USD',
+      },
+    ])
+    render(
+      <MemoryRouter>
+        <DashboardScreen />
+      </MemoryRouter>,
+    )
+    await user.click(
+      await screen.findByRole('button', { name: /Holdings/i }),
+    )
+    expect(await screen.findByText('USD Deposit')).toBeInTheDocument()
+    expect(
+      screen.getAllByText(formatAmount(3100, 'USD')).length,
+    ).toBeGreaterThan(0)
+  })
+
   it('adds As of dates to comparison and shows a banner after two (#137)', async () => {
     const today = todayIsoDate()
     const past = addDaysIso(today, -4)

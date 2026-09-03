@@ -274,7 +274,7 @@ export function DashboardScreen() {
     holdingsForSelectedChartDay(
       series,
       selectedChartDate,
-      series[series.length - 1]?.holdings ?? convertedHoldings,
+      convertedHoldings,
       outsideSelectedPoint,
     )
   const asOfHasData = asOfHasLoggedData(selectedChartDate, earliest)
@@ -375,9 +375,12 @@ export function DashboardScreen() {
       : change.percent === null
         ? `${formatSignedAmount(change.absolute, changeCurrency, locale)} ${range === '1M' ? t.dashboard.thisMonth : t.history.overRange(range)}`
         : `${formatSignedAmount(change.absolute, changeCurrency, locale)} (${formatPercent(change.percent, locale)}) ${range === '1M' ? t.dashboard.thisMonth : t.history.overRange(range)}`
+  const showAsOfBar =
+    (convertedHoldingsToday.length > 0 || selectedChartDate !== null) &&
+    !(isOriginal && activeCurrencyFilter === 'all')
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex min-h-0 flex-1 flex-col gap-4">
       <PageHeader
         title={t.dashboard.title}
         description={t.dashboard.description}
@@ -396,6 +399,73 @@ export function DashboardScreen() {
         />
       ) : (
         <>
+          {showAsOfBar ? (
+            <div
+              data-testid="dashboard-as-of-bar"
+              className="flex shrink-0 flex-col gap-2 bg-background"
+            >
+              <div className="flex items-end gap-2">
+                <DateField
+                  label={t.dashboard.asOfDate}
+                  value={selectedChartDate ?? today}
+                  min={earliest}
+                  max={today}
+                  onChange={(event) => {
+                    const next = event.target.value
+                    if (!next || next > today) {
+                      setAsOfError(t.dashboard.asOfDateInvalid)
+                      return
+                    }
+                    setAsOfError(undefined)
+                    if (next >= today) {
+                      setSelectedChartDate(null)
+                      return
+                    }
+                    setSelectedChartDate(next)
+                    setHoldingsOpen(true)
+                  }}
+                  error={asOfError}
+                />
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="icon-xl"
+                  className="mb-0 shrink-0"
+                  aria-label={t.dashboard.addToComparison}
+                  disabled={comparisonDates.includes(selectedChartDate ?? today)}
+                  onClick={() => addComparisonDate(selectedChartDate ?? today)}
+                >
+                  <Plus className="size-5" aria-hidden />
+                </Button>
+                {selectedChartDate !== null && selectedChartDate < today ? (
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="xl"
+                    className="mb-0 shrink-0"
+                    onClick={() => {
+                      setAsOfError(undefined)
+                      setSelectedChartDate(null)
+                    }}
+                  >
+                    {t.dashboard.jumpToToday}
+                  </Button>
+                ) : null}
+              </div>
+              {comparisonDates.length >= 2 ? (
+                <Link
+                  to="/compare"
+                  className="flex items-center justify-center rounded-xl bg-muted px-4 py-3 text-sm font-medium text-foreground"
+                >
+                  {t.dashboard.navigateToComparison}
+                </Link>
+              ) : null}
+            </div>
+          ) : null}
+          <div
+            data-testid="dashboard-scroll"
+            className="flex min-h-0 flex-1 flex-col gap-6 overflow-y-auto overscroll-y-contain touch-pan-y"
+          >
           <div className="flex flex-col gap-1.5">
             <label
               className="flex flex-col gap-1.5"
@@ -675,66 +745,6 @@ export function DashboardScreen() {
               ) : null}
             </div>
           )}
-          {(convertedHoldingsToday.length > 0 ||
-            selectedChartDate !== null) &&
-            !(isOriginal && activeCurrencyFilter === 'all') && (
-            <div className="flex items-end gap-2">
-              <DateField
-                label={t.dashboard.asOfDate}
-                value={selectedChartDate ?? today}
-                min={earliest}
-                max={today}
-                onChange={(event) => {
-                  const next = event.target.value
-                  if (!next || next > today) {
-                    setAsOfError(t.dashboard.asOfDateInvalid)
-                    return
-                  }
-                  setAsOfError(undefined)
-                  if (next >= today) {
-                    setSelectedChartDate(null)
-                    return
-                  }
-                  setSelectedChartDate(next)
-                  setHoldingsOpen(true)
-                }}
-                error={asOfError}
-              />
-              <Button
-                type="button"
-                variant="outline"
-                size="icon-xl"
-                className="mb-0 shrink-0"
-                aria-label={t.dashboard.addToComparison}
-                disabled={comparisonDates.includes(selectedChartDate ?? today)}
-                onClick={() => addComparisonDate(selectedChartDate ?? today)}
-              >
-                <Plus className="size-5" aria-hidden />
-              </Button>
-              {selectedChartDate !== null && selectedChartDate < today ? (
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="xl"
-                  className="mb-0 shrink-0"
-                  onClick={() => {
-                    setAsOfError(undefined)
-                    setSelectedChartDate(null)
-                  }}
-                >
-                  {t.dashboard.jumpToToday}
-                </Button>
-              ) : null}
-            </div>
-          )}
-          {comparisonDates.length >= 2 ? (
-            <Link
-              to="/compare"
-              className="flex items-center justify-center rounded-xl bg-muted px-4 py-3 text-sm font-medium text-foreground"
-            >
-              {t.dashboard.navigateToComparison}
-            </Link>
-          ) : null}
           {isOriginal && activeCurrencyFilter === 'all' ? (
             <p className="text-sm text-muted-foreground">
               {t.dashboard.originalChartHint}
@@ -943,6 +953,7 @@ export function DashboardScreen() {
           <Button asChild variant="outline">
             <Link to="/allocation">{t.dashboard.allocation}</Link>
           </Button>
+          </div>
         </>
       )}
     </div>
