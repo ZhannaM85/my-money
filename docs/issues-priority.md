@@ -31,7 +31,6 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
 | [#194](https://github.com/ZhannaM85/my-money/issues/194) | 🔍 Pending validation | JSON backup omits FX rates so restored today total does not match | **Blocker.** v2 include fxRates + manualFxRates. CSV notes. |
-| [#189](https://github.com/ZhannaM85/my-money/issues/189) | 🔍 Pending validation | History: calendar view of days with manual snapshots | List \| Calendar; v1 marks snapshot days only. |
 | [#190](https://github.com/ZhannaM85/my-money/issues/190) | 🔍 Pending validation | Android: home-screen glance widget behind a Settings toggle | Off by default. 2×2 net worth + as-of. Provider disabled until on. |
 | [#191](https://github.com/ZhannaM85/my-money/issues/191) | 🔍 Pending validation | Update: keep As of date visible while scrolling holdings | Title + As of pinned; holdings list scrolls. Update only. |
 | [#192](https://github.com/ZhannaM85/my-money/issues/192) | 🔍 Pending validation | Update: show the date the suggested amount comes from | Prefill is last snapshot before As of (#180); calendar date shown on the row. |
@@ -46,7 +45,7 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
-
+| [#205](https://github.com/ZhannaM85/my-money/issues/205) | 🔲 Open | History calendar: tap a date to show that day's snapshot entries | Follow-up to #189. Tap dot-date → show entries for that day. |
 
 ---
 

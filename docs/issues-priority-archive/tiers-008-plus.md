@@ -218,6 +218,7 @@ Closed live-feedback rows from Tier 8 onward. Open / pending items stay in [`../
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
 | [#197](https://github.com/ZhannaM85/my-money/issues/197) | ✅ Done | Delete all data on this device | One-tap wipe behind confirm. Makes Import JSON available without deleting each asset. Related #198. Validated on-device 2026-09-03. |
+| [#189](https://github.com/ZhannaM85/my-money/issues/189) | ✅ Done | History: calendar view of days with manual snapshots | List \| Calendar; v1 marks snapshot days only. Validated on-device 2026-09-03. Follow-up: #205. |
 
 ## Tier 20 — Live feedback (2026-09-03)
 
