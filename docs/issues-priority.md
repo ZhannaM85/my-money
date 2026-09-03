@@ -47,7 +47,8 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
-| [#200](https://github.com/ZhannaM85/my-money/issues/200) | 🔍 Pending validation | Update: save only non-empty fields; do not block save when fields are empty | Empty rows skipped, not snapshotted. All-empty is a no-op. Related #201. |
+| [#200](https://github.com/ZhannaM85/my-money/issues/200) | 🔲 Open | Update: save only non-empty fields; do not block save when fields are empty | On-device: Save no-op if nothing typed. Enable-when-dirty is #204. |
+| [#204](https://github.com/ZhannaM85/my-money/issues/204) | 🔲 Open | Update: enable Save updates only when an amount has been typed | Disabled until a field has a typed amount. Unblocks #200. |
 | [#203](https://github.com/ZhannaM85/my-money/issues/203) | 🔍 Pending validation | Update: scroll to top stops once Save updates is on screen | PTR ignored inner list scroll; swipe up reloaded. Related #191 / #39. |
 
 ---
