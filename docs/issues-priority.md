@@ -42,7 +42,7 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
-| [#209](https://github.com/ZhannaM85/my-money/issues/209) | 🔲 Open | History: shared expand/collapse day row on List and Calendar | Calendar detail should match List accordion; follow-up to #205. |
+| [#209](https://github.com/ZhannaM85/my-money/issues/209) | 🔍 Pending validation | History: shared expand/collapse day row on List and Calendar | Calendar detail now reuses the List accordion; tap day opens expanded. |
 
 ---
 

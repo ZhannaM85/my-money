@@ -1,7 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { ChevronDown } from 'lucide-react'
 import { decomposeConvertedPeriodChange, historicalNetWorth, holdingsWithConversion, nativeTotalsByCurrency, periodChange } from '@/domain/netWorth'
-import { HoldingBreakdownList } from '@/features/dashboard/HoldingBreakdownList'
 import { ChartRangePicker } from '@/features/dashboard/ChartRangePicker'
 import { NetWorthChart } from '@/features/dashboard/NetWorthChart'
 import {
@@ -9,6 +7,7 @@ import {
   CHART_ZOOM_PILL_CLASS,
 } from '@/features/dashboard/ChartRangeToolbar'
 import { HistoryCalendar } from './HistoryCalendar'
+import { HistoryDayRow } from './HistoryDayRow'
 import { useLocale, useTranslation } from '@/i18n'
 import {
   canZoomHistoryIn,
@@ -32,6 +31,19 @@ import { useAssetStore } from '@/stores/assetStore'
 import { useFxStore } from '@/stores/fxStore'
 import { useSettingsStore } from '@/stores/settingsStore'
 import { cn } from '@/shared/lib/utils'
+
+type HistoryDayDetail =
+  | {
+      date: string
+      totals: ReturnType<typeof nativeTotalsByCurrency>
+      holdings: ReturnType<typeof holdingsWithConversion>
+    }
+  | {
+      date: string
+      total: number
+      delta: number | null
+      holdings: ReturnType<typeof holdingsWithConversion>
+    }
 
 export function HistoryScreen() {
   const t = useTranslation()
@@ -156,12 +168,7 @@ export function HistoryScreen() {
     })
   }, [assets, baseCurrency, quotes, snapshotDays, snapshots])
 
-  const selectedCalendarDay = useMemo((): {
-    date: string
-    totals?: ReturnType<typeof nativeTotalsByCurrency>
-    total?: number
-    holdings: ReturnType<typeof holdingsWithConversion>
-  } | null => {
+  const selectedCalendarDay = useMemo((): HistoryDayDetail | null => {
     if (!selectedCalendarDate) return null
     if (isOriginal) {
       const asOf = snapshots.filter(
@@ -181,19 +188,31 @@ export function HistoryScreen() {
       baseCurrency,
     )[0]
     if (!point) return null
+    const older = convertedList.find((row) => row.date > selectedCalendarDate)
     return {
       date: selectedCalendarDate,
       total: point.total,
+      delta: older ? point.total - older.total : null,
       holdings: point.holdings,
     }
   }, [
     assets,
     baseCurrency,
+    convertedList,
     isOriginal,
     quotes,
     selectedCalendarDate,
     snapshots,
   ])
+
+  const toggleOpenDate = (date: string) => {
+    setOpenDates((current) => {
+      const next = new Set(current)
+      if (next.has(date)) next.delete(date)
+      else next.add(date)
+      return next
+    })
+  }
 
   return (
     <div className="flex flex-col gap-6">
@@ -382,125 +401,45 @@ export function HistoryScreen() {
               <HistoryCalendar
                 snapshotDates={allSnapshotDates}
                 selectedDate={selectedCalendarDate}
-                onSelectDate={setSelectedCalendarDate}
+                onSelectDate={(date) => {
+                  setSelectedCalendarDate(date)
+                  setOpenDates((current) => {
+                    const next = new Set(current)
+                    next.add(date)
+                    return next
+                  })
+                }}
               />
               {selectedCalendarDay ? (
-                <div
-                  className="flex flex-col gap-2 rounded-xl bg-card ring-1 ring-foreground/10"
+                <ul
+                  className="flex flex-col gap-2"
                   data-testid="history-calendar-day-detail"
                 >
-                  <div className="flex items-center justify-between gap-3 border-b border-border px-4 py-3">
-                    <span className="text-sm text-muted-foreground">
-                      {t.history.holdingsOn(selectedCalendarDay.date)}
-                    </span>
-                    {isOriginal ? (
-                      (selectedCalendarDay.totals ?? []).map((total) => (
-                        <span
-                          key={total.currency}
-                          className="tabular-nums text-sm font-semibold"
-                        >
-                          {formatAmount(total.amount, total.currency, locale)}
-                        </span>
-                      ))
-                    ) : (
-                      <span className="tabular-nums text-sm font-semibold">
-                        {formatAmount(
-                          selectedCalendarDay.total ?? 0,
-                          baseCurrency,
-                          locale,
-                        )}
-                      </span>
-                    )}
-                  </div>
-                  {selectedCalendarDay.holdings.length > 0 ? (
-                    <div className="px-4 py-3">
-                      <HoldingBreakdownList
-                        holdings={selectedCalendarDay.holdings}
-                        baseCurrency={baseCurrency}
-                        nativeOnly={isOriginal}
-                        asOfDate={selectedCalendarDay.date}
-                      />
-                    </div>
-                  ) : null}
-                </div>
+                  <HistoryDayRow
+                    row={selectedCalendarDay}
+                    open={openDates.has(selectedCalendarDay.date)}
+                    baseCurrency={baseCurrency}
+                    nativeOnly={isOriginal}
+                    label={t.history.holdingsOn(selectedCalendarDay.date)}
+                    onToggle={() => toggleOpenDate(selectedCalendarDay.date)}
+                  />
+                </ul>
               ) : null}
             </>
           ) : (
           <ul className="flex flex-col gap-2">
             {(isOriginal ? originalList : convertedList).map((row) => {
-              const open = openDates.has(row.date)
               return (
-                <li
+                <HistoryDayRow
                   key={row.date}
-                  className="rounded-xl bg-card ring-1 ring-foreground/10"
-                >
-                  <button
-                    type="button"
-                    className="flex w-full items-center justify-between gap-3 px-4 py-3 text-left"
-                    aria-expanded={open}
-                    aria-label={t.history.holdingsOn(row.date)}
-                    onClick={() =>
-                      setOpenDates((current) => {
-                        const next = new Set(current)
-                        if (next.has(row.date)) next.delete(row.date)
-                        else next.add(row.date)
-                        return next
-                      })
-                    }
-                  >
-                    <span className="flex items-center gap-1 text-sm text-muted-foreground">
-                      {row.date}
-                      <ChevronDown
-                        className={cn(
-                          'size-4 transition-transform',
-                          open && 'rotate-180',
-                        )}
-                        aria-hidden
-                      />
-                    </span>
-                    <span className="text-right">
-                      {isOriginal && 'totals' in row ? (
-                        row.totals.map((total) => (
-                          <span
-                            key={total.currency}
-                            className="block tabular-nums text-sm"
-                          >
-                            {formatAmount(total.amount, total.currency, locale)}
-                          </span>
-                        ))
-                      ) : (
-                        <>
-                          <span className="block tabular-nums text-sm">
-                            {formatAmount(
-                              'total' in row ? row.total : 0,
-                              baseCurrency,
-                              locale,
-                            )}
-                          </span>
-                          {'delta' in row && row.delta !== null && (
-                            <span className="text-xs text-muted-foreground">
-                              {formatSignedAmount(
-                                row.delta,
-                                baseCurrency,
-                                locale,
-                              )}
-                            </span>
-                          )}
-                        </>
-                      )}
-                    </span>
-                  </button>
-                  {open && row.holdings.length > 0 && (
-                    <div className="border-t border-border px-4 py-3">
-                      <HoldingBreakdownList
-                        holdings={row.holdings}
-                        baseCurrency={baseCurrency}
-                        nativeOnly={isOriginal}
-                        asOfDate={row.date}
-                      />
-                    </div>
-                  )}
-                </li>
+                  row={row}
+                  open={openDates.has(row.date)}
+                  baseCurrency={baseCurrency}
+                  nativeOnly={isOriginal}
+                  label={t.history.holdingsOn(row.date)}
+                  onToggle={() => toggleOpenDate(row.date)}
+                  testId={`history-day-row-${row.date}`}
+                />
               )
             })}
           </ul>

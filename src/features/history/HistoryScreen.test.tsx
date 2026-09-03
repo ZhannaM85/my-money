@@ -370,8 +370,32 @@ describe('HistoryScreen', () => {
       screen.getByTestId('history-calendar-mark-2026-08-17'),
     )
     const detail = await screen.findByTestId('history-calendar-day-detail')
-    expect(detail).toHaveTextContent('Holdings on 2026-08-17')
+    expect(
+      screen.getByRole('button', { name: 'Holdings on 2026-08-17' }),
+    ).toBeInTheDocument()
     expect(detail).toHaveTextContent('Revolut')
     expect(detail).toHaveTextContent(formatAmount(1000, 'EUR'))
+  })
+
+  it('uses the same expandable day row on calendar view (#209)', async () => {
+    const user = userEvent.setup()
+    render(
+      <MemoryRouter>
+        <HistoryScreen />
+      </MemoryRouter>,
+    )
+    await user.click(await screen.findByRole('button', { name: 'Calendar' }))
+    await user.click(screen.getByTestId('history-calendar-mark-2026-08-17'))
+    const rowButton = screen.getByRole('button', {
+      name: 'Holdings on 2026-08-17',
+    })
+    expect(rowButton).toHaveAttribute('aria-expanded', 'true')
+    expect(await screen.findByText('Revolut')).toBeInTheDocument()
+    await user.click(rowButton)
+    expect(rowButton).toHaveAttribute('aria-expanded', 'false')
+    expect(screen.queryByText('Revolut')).not.toBeInTheDocument()
+    await user.click(rowButton)
+    expect(rowButton).toHaveAttribute('aria-expanded', 'true')
+    expect(await screen.findByText('Revolut')).toBeInTheDocument()
   })
 })
