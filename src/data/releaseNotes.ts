@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 211,
+    issue: 203,
+    date: '2026-09-03T16:10:00+03:00',
+    en: 'Scrolling Update holdings back up no longer reloads the app. Pull-to-refresh only runs at the real top of the page, not when an inner list has moved.',
+    ru: 'Прокрутка списка Обновить обратно вверх больше не перезагружает приложение. Pull-to-refresh срабатывает только на самом верху страницы, а не когда прокручен внутренний список.',
+  },
+  {
     version: 210,
     issue: 203,
     date: '2026-09-03T15:30:00+03:00',

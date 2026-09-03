@@ -1,12 +1,15 @@
 import { useEffect, useRef, useState } from 'react'
+import { isAtRefreshableTop } from '@/shared/lib/isAtRefreshableTop'
 import { reloadForUpdate } from '@/shared/lib/reloadForUpdate'
 
 const PULL_THRESHOLD = 70
 const MAX_PULL = 100
 
 /**
- * Drag-down-to-refresh gesture (#39). Only activates when scrolled to the
- * very top. Triggers `reloadForUpdate()` so the reload picks up a new SW.
+ * Drag-down-to-refresh gesture (#39). Only activates when every vertical
+ * scroller under the touch is at the top — not merely `#main-content`, which
+ * stays at 0 while Update’s inner holdings list scrolls (#203).
+ * Triggers `reloadForUpdate()` so the reload picks up a new SW.
  */
 export function usePullToRefresh(): {
   pullDistance: number
@@ -19,13 +22,8 @@ export function usePullToRefresh(): {
   const currentPull = useRef(0)
 
   useEffect(() => {
-    function scrollTop() {
-      const main = document.getElementById('main-content')
-      return main ? main.scrollTop : window.scrollY
-    }
-
     function onTouchStart(event: TouchEvent) {
-      if (scrollTop() > 0) return
+      if (!isAtRefreshableTop(event.target)) return
       startY.current = event.touches[0].clientY
       pulling.current = true
     }
@@ -33,7 +31,7 @@ export function usePullToRefresh(): {
     function onTouchMove(event: TouchEvent) {
       if (!pulling.current || startY.current === null) return
       const delta = event.touches[0].clientY - startY.current
-      if (delta <= 0 || scrollTop() > 0) {
+      if (delta <= 0 || !isAtRefreshableTop(event.target)) {
         pulling.current = false
         currentPull.current = 0
         setPullDistance(0)
