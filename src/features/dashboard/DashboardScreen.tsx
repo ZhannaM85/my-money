@@ -26,7 +26,6 @@ import {
   canZoomHistoryOut,
   isoDatesInclusive,
   rangeStartIso,
-  resolveDashboardChartEnd,
   shiftHistoryRangeEnd,
   stepHistoryRange,
   type HistoryRange,
@@ -99,18 +98,18 @@ export function DashboardScreen() {
   const setCustomEnd = useChartRangeStore((state) => state.setCustomEnd)
 
   const today = todayIsoDate()
-  const chartEnd = resolveDashboardChartEnd(
-    range,
-    rangeEnd,
-    today,
-    customEnd,
-    rangeEndPinned,
-  )
-
-  useEffect(() => {
-    if (range === 'All' || range === 'Custom' || rangeEndPinned) return
-    if (rangeEnd !== today) setRangeEnd(today)
-  }, [range, rangeEnd, rangeEndPinned, setRangeEnd, today])
+  const chartEnd =
+    range === 'Custom'
+      ? customEnd > today
+        ? today
+        : customEnd
+      : range === 'All'
+        ? today
+        : rangeEndPinned
+          ? rangeEnd > today
+            ? today
+            : rangeEnd
+          : today
   const isOriginal = currencyDisplayMode === 'native'
   const activeCurrencyFilter = isOriginal ? currencyFilter : 'all'
 
@@ -120,12 +119,12 @@ export function DashboardScreen() {
   }, [loadAssets, loadSettings])
 
   const earliest = useMemo(() => {
-    if (snapshots.length === 0) return today
+    if (snapshots.length === 0) return todayIsoDate()
     return snapshots.reduce(
       (min, snapshot) => (snapshot.date < min ? snapshot.date : min),
       snapshots[0].date,
     )
-  }, [snapshots, today])
+  }, [snapshots])
 
   const start = rangeStartIso(range, chartEnd, earliest, customStart)
   const dates = useMemo(
@@ -343,14 +342,14 @@ export function DashboardScreen() {
     setAsOfError(undefined)
     setRangeEndPinned(true)
     setRangeEnd(
-      shiftHistoryRangeEnd(rangeEnd, range, 'earlier', today, earliest),
+      shiftHistoryRangeEnd(chartEnd, range, 'earlier', today, earliest),
     )
   }
   const panLater = () => {
     if (!canPanLater) return
     setSelectedChartDate(null)
     setAsOfError(undefined)
-    const next = shiftHistoryRangeEnd(rangeEnd, range, 'later', today, earliest)
+    const next = shiftHistoryRangeEnd(chartEnd, range, 'later', today, earliest)
     setRangeEnd(next)
     if (next === today) setRangeEndPinned(false)
     else setRangeEndPinned(true)

@@ -1140,7 +1140,6 @@ describe('DashboardScreen', () => {
           expect.any(Array),
         )
       })
-      expect(useChartRangeStore.getState().rangeEnd).toBe(today)
     } finally {
       useFxStore.setState({ ensureRange: originalEnsureRange })
     }
