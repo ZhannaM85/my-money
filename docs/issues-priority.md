@@ -45,6 +45,7 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 | [#205](https://github.com/ZhannaM85/my-money/issues/205) | 🔲 Open | History calendar: tap a date to show that day's snapshot entries | Follow-up to #189. Tap dot-date → show entries for that day. |
 | [#206](https://github.com/ZhannaM85/my-money/issues/206) | 🔲 Open | Update: show green/red delta while editing amount | Live up/down vs previous snapshot while typing; extends #193. |
 | [#207](https://github.com/ZhannaM85/my-money/issues/207) | 🔲 Open | Dashboard: keep As of date visible while scrolling | Pin As of row while chart + Positions scroll; like Update #191. |
+| [#208](https://github.com/ZhannaM85/my-money/issues/208) | 🔲 Open | Dashboard Positions shows 0 after today's Update save | USD Deposit 3 100 $ on Update; 0,00 on Dashboard same day. |
 
 ---
 
