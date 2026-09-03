@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 200,
+    title: {
+      en: 'Update: save only non-empty fields; do not block save when fields are empty',
+      ru: 'Обновление: сохранять только непустые поля; не блокировать сохранение из‑за пустых',
+    },
+    en: 'Save required No change or an amount on at least one row (needOneRow). Empty fields now skip — no snapshot — and an all-empty Save is a no-op. Typed amounts still write. Companion: #201 removes the No change button.',
+    ru: 'Сохранение требовало «Без изменений» или сумму хотя бы в одной строке (needOneRow). Пустые поля теперь пропускаются — без снимка — а полностью пустое Сохранить ничего не пишет. Введённые суммы по-прежнему сохраняются. Пара: #201 убирает кнопку «Без изменений».',
+  },
+  {
     issue: 198,
     title: {
       en: 'JSON import should replace a non-empty book after confirm',

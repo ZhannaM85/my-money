@@ -270,7 +270,7 @@ export function UpdateFinancesScreen() {
       }
     }
     if (toWrite.length === 0 && toUpdate.length === 0) {
-      setError(t.update.needOneRow)
+      setError(undefined)
       return
     }
     setError(undefined)

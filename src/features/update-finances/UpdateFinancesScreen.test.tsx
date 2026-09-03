@@ -55,6 +55,66 @@ beforeEach(async () => {
 })
 
 describe('UpdateFinancesScreen', () => {
+  it('saves only filled rows and skips empty ones (#200)', async () => {
+    const user = userEvent.setup()
+    await useAssetStore.getState().saveAsset(
+      {
+        id: 'a2',
+        name: 'Cash',
+        assetClass: 'money',
+        type: 'cash',
+        currency: 'EUR',
+        trackingStatus: 'included',
+        valuationMethod: 'account_balance',
+        updateFrequency: 'weekly',
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        assetId: 'a2',
+        date: '2026-08-01',
+        amount: 200,
+        currency: 'EUR',
+      },
+    )
+    render(
+      <MemoryRouter>
+        <UpdateFinancesScreen />
+      </MemoryRouter>,
+    )
+    const revolut = await screen.findByLabelText('Revolut new amount')
+    await user.type(revolut, '1500')
+    await user.click(screen.getByRole('button', { name: 'Save updates' }))
+    await waitFor(() => {
+      expect(
+        useAssetStore
+          .getState()
+          .snapshots.filter((row) => row.assetId === 'a1' && row.date === todayIsoDate()),
+      ).toHaveLength(1)
+    })
+    expect(
+      useAssetStore
+        .getState()
+        .snapshots.filter((row) => row.assetId === 'a2' && row.date === todayIsoDate()),
+    ).toHaveLength(0)
+    expect(screen.queryByText(/Mark no change/)).not.toBeInTheDocument()
+  })
+
+  it('does not write when every amount is empty (#200)', async () => {
+    const user = userEvent.setup()
+    render(
+      <MemoryRouter>
+        <UpdateFinancesScreen />
+      </MemoryRouter>,
+    )
+    await screen.findByLabelText('Revolut new amount')
+    await user.click(screen.getByRole('button', { name: 'Save updates' }))
+    expect(
+      useAssetStore.getState().snapshots.filter((row) => row.assetId === 'a1'),
+    ).toHaveLength(1)
+    expect(screen.queryByText(/Mark no change/)).not.toBeInTheDocument()
+  })
+
   it('writes a same-amount snapshot when No change is saved', async () => {
     const user = userEvent.setup()
     render(

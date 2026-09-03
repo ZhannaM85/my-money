@@ -1129,6 +1129,22 @@ test('capture Update post-save delta (#193)', async ({ page }) => {
   })
 })
 
+test('capture Update save only filled rows (#200)', async ({ page }) => {
+  await seedValidationFixture(page)
+  await page.goto('/update')
+  await expect(page.getByRole('heading', { name: 'Update' })).toBeVisible()
+  await page.getByLabel('Euro cash new amount').fill('1500')
+  await page.getByRole('button', { name: 'Save updates' }).click()
+  await expect(
+    page.getByRole('button', { name: 'Edit Euro cash' }),
+  ).toBeVisible()
+  await expect(page.getByLabel('USD cash new amount')).toBeVisible()
+  await page.screenshot({
+    path: join(outDir, '200-update-save-nonempty.png'),
+    fullPage: true,
+  })
+})
+
 test('capture History calendar snapshot days (#189)', async ({ page }) => {
   await seedValidationFixture(page)
   await page.goto('/history')

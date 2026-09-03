@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 207,
+    issue: 200,
+    date: '2026-09-03T13:20:00+03:00',
+    en: 'On Update, Save writes only rows with an amount. Empty fields are skipped and no longer block save.',
+    ru: 'На Обновить сохраняются только строки с суммой. Пустые поля пропускаются и больше не мешают сохранить.',
+  },
+  {
     version: 206,
     issue: 197,
     date: '2026-09-03T00:05:00+03:00',
