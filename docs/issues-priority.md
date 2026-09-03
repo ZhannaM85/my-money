@@ -42,7 +42,7 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
-| [#209](https://github.com/ZhannaM85/my-money/issues/209) | 🔍 Pending validation | History: shared expand/collapse day row on List and Calendar | Calendar detail now reuses the List accordion; tap day opens expanded. |
+| [#209](https://github.com/ZhannaM85/my-money/issues/209) | 🔲 Open | History: shared expand/collapse day row on List and Calendar | Validation failed: Calendar-selected row omits the daily delta shown in List; match sign, color, formatting, and basis. |
 | [#212](https://github.com/ZhannaM85/my-money/issues/212) | 🔲 Open | Dashboard: collapse title while keeping As of date sticky | Title + description scroll away; date row stays pinned. Follow-up to #207. |
 
 ---
