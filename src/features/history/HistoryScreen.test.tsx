@@ -378,6 +378,16 @@ describe('HistoryScreen', () => {
   })
 
   it('uses the same expandable day row on calendar view (#209)', async () => {
+    await db.settings.put(DEFAULT_SETTINGS)
+    useSettingsStore.setState({ settings: DEFAULT_SETTINGS, loaded: false })
+    await useAssetStore.getState().saveSnapshots([
+      {
+        assetId: 'a1',
+        date: '2026-08-10',
+        amount: 900,
+        currency: 'EUR',
+      },
+    ])
     const user = userEvent.setup()
     render(
       <MemoryRouter>
@@ -390,6 +400,9 @@ describe('HistoryScreen', () => {
       name: 'Holdings on 2026-08-17',
     })
     expect(rowButton).toHaveAttribute('aria-expanded', 'true')
+    expect(
+      screen.getByTestId('history-calendar-day-detail'),
+    ).toHaveTextContent(formatSignedAmount(100, 'EUR'))
     expect(await screen.findByText('Revolut')).toBeInTheDocument()
     await user.click(rowButton)
     expect(rowButton).toHaveAttribute('aria-expanded', 'false')

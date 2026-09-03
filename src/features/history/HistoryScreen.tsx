@@ -180,15 +180,27 @@ export function HistoryScreen() {
         holdings: holdingsWithConversion(assets, asOf, quotes, baseCurrency),
       }
     }
-    const point = historicalNetWorth(
+    const visibleRow = convertedList.find(
+      (row) => row.date === selectedCalendarDate,
+    )
+    if (visibleRow) return visibleRow
+
+    const previousDate = allSnapshotDates
+      .filter((date) => date < selectedCalendarDate)
+      .sort()
+      .at(-1)
+    const points = historicalNetWorth(
       assets,
       snapshots,
       quotes,
-      [selectedCalendarDate],
+      previousDate
+        ? [previousDate, selectedCalendarDate]
+        : [selectedCalendarDate],
       baseCurrency,
-    )[0]
+    )
+    const point = points.at(-1)
     if (!point) return null
-    const older = convertedList.find((row) => row.date > selectedCalendarDate)
+    const older = previousDate ? points[0] : undefined
     return {
       date: selectedCalendarDate,
       total: point.total,
@@ -196,6 +208,7 @@ export function HistoryScreen() {
       holdings: point.holdings,
     }
   }, [
+    allSnapshotDates,
     assets,
     baseCurrency,
     convertedList,
