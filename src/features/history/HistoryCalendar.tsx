@@ -11,8 +11,12 @@ import { cn } from '@/shared/lib/utils'
 
 export function HistoryCalendar({
   snapshotDates,
+  selectedDate,
+  onSelectDate,
 }: {
   snapshotDates: readonly string[]
+  selectedDate: string | null
+  onSelectDate: (date: string) => void
 }) {
   const t = useTranslation()
   const locale = useLocale()
@@ -23,7 +27,7 @@ export function HistoryCalendar({
     return snapshotDates.reduce((max, date) => (date > max ? date : max))
   }, [snapshotDates, today])
   const [monthStart, setMonthStart] = useState(() =>
-    monthStartIso(latestMarked),
+    monthStartIso(selectedDate ?? latestMarked),
   )
   const cells = useMemo(() => monthGridCells(monthStart), [monthStart])
   const weekdays = useMemo(() => {
@@ -67,9 +71,12 @@ export function HistoryCalendar({
       <div className="grid grid-cols-7 gap-1">
         {cells.map((cell) => {
           const hasSnapshot = marked.has(cell.date)
+          const selected = selectedDate === cell.date
           return (
-            <div
+            <button
               key={cell.date}
+              type="button"
+              disabled={!hasSnapshot}
               data-testid={
                 hasSnapshot ? `history-calendar-mark-${cell.date}` : undefined
               }
@@ -78,10 +85,17 @@ export function HistoryCalendar({
                   ? t.history.calendarDayWithSnapshot(cell.date)
                   : cell.date
               }
+              aria-pressed={hasSnapshot ? selected : undefined}
+              onClick={() => {
+                if (hasSnapshot) onSelectDate(cell.date)
+              }}
               className={cn(
                 'flex flex-col items-center gap-0.5 rounded-md py-1.5 text-sm',
                 cell.inMonth ? 'text-foreground' : 'text-muted-foreground/40',
                 cell.date === today && 'font-semibold text-primary',
+                hasSnapshot && 'enabled:hover:bg-muted',
+                selected && 'bg-primary/10 ring-1 ring-primary',
+                !hasSnapshot && 'cursor-default',
               )}
             >
               {Number(cell.date.slice(8, 10))}
@@ -92,7 +106,7 @@ export function HistoryCalendar({
                   hasSnapshot ? 'bg-primary' : 'bg-transparent',
                 )}
               />
-            </div>
+            </button>
           )
         })}
       </div>

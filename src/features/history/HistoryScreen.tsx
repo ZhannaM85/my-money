@@ -52,6 +52,9 @@ export function HistoryScreen() {
   const [customEnd, setCustomEnd] = useState(todayIsoDate)
   const [openDates, setOpenDates] = useState<ReadonlySet<string>>(new Set())
   const [viewMode, setViewMode] = useState<'list' | 'calendar'>('list')
+  const [selectedCalendarDate, setSelectedCalendarDate] = useState<
+    string | null
+  >(null)
   const today = todayIsoDate()
   const canZoomIn = canZoomHistoryIn(range)
   const canZoomOut = canZoomHistoryOut(range)
@@ -152,6 +155,45 @@ export function HistoryScreen() {
       }
     })
   }, [assets, baseCurrency, quotes, snapshotDays, snapshots])
+
+  const selectedCalendarDay = useMemo((): {
+    date: string
+    totals?: ReturnType<typeof nativeTotalsByCurrency>
+    total?: number
+    holdings: ReturnType<typeof holdingsWithConversion>
+  } | null => {
+    if (!selectedCalendarDate) return null
+    if (isOriginal) {
+      const asOf = snapshots.filter(
+        (snapshot) => snapshot.date <= selectedCalendarDate,
+      )
+      return {
+        date: selectedCalendarDate,
+        totals: nativeTotalsByCurrency(assets, asOf),
+        holdings: holdingsWithConversion(assets, asOf, quotes, baseCurrency),
+      }
+    }
+    const point = historicalNetWorth(
+      assets,
+      snapshots,
+      quotes,
+      [selectedCalendarDate],
+      baseCurrency,
+    )[0]
+    if (!point) return null
+    return {
+      date: selectedCalendarDate,
+      total: point.total,
+      holdings: point.holdings,
+    }
+  }, [
+    assets,
+    baseCurrency,
+    isOriginal,
+    quotes,
+    selectedCalendarDate,
+    snapshots,
+  ])
 
   return (
     <div className="flex flex-col gap-6">
@@ -314,7 +356,10 @@ export function HistoryScreen() {
                   : 'bg-muted text-muted-foreground',
               )}
               aria-pressed={viewMode === 'list'}
-              onClick={() => setViewMode('list')}
+              onClick={() => {
+                setViewMode('list')
+                setSelectedCalendarDate(null)
+              }}
             >
               {t.history.listViewLabel}
             </button>
@@ -333,7 +378,53 @@ export function HistoryScreen() {
             </button>
           </div>
           {viewMode === 'calendar' ? (
-            <HistoryCalendar snapshotDates={allSnapshotDates} />
+            <>
+              <HistoryCalendar
+                snapshotDates={allSnapshotDates}
+                selectedDate={selectedCalendarDate}
+                onSelectDate={setSelectedCalendarDate}
+              />
+              {selectedCalendarDay ? (
+                <div
+                  className="flex flex-col gap-2 rounded-xl bg-card ring-1 ring-foreground/10"
+                  data-testid="history-calendar-day-detail"
+                >
+                  <div className="flex items-center justify-between gap-3 border-b border-border px-4 py-3">
+                    <span className="text-sm text-muted-foreground">
+                      {t.history.holdingsOn(selectedCalendarDay.date)}
+                    </span>
+                    {isOriginal ? (
+                      (selectedCalendarDay.totals ?? []).map((total) => (
+                        <span
+                          key={total.currency}
+                          className="tabular-nums text-sm font-semibold"
+                        >
+                          {formatAmount(total.amount, total.currency, locale)}
+                        </span>
+                      ))
+                    ) : (
+                      <span className="tabular-nums text-sm font-semibold">
+                        {formatAmount(
+                          selectedCalendarDay.total ?? 0,
+                          baseCurrency,
+                          locale,
+                        )}
+                      </span>
+                    )}
+                  </div>
+                  {selectedCalendarDay.holdings.length > 0 ? (
+                    <div className="px-4 py-3">
+                      <HoldingBreakdownList
+                        holdings={selectedCalendarDay.holdings}
+                        baseCurrency={baseCurrency}
+                        nativeOnly={isOriginal}
+                        asOfDate={selectedCalendarDay.date}
+                      />
+                    </div>
+                  ) : null}
+                </div>
+              ) : null}
+            </>
           ) : (
           <ul className="flex flex-col gap-2">
             {(isOriginal ? originalList : convertedList).map((row) => {

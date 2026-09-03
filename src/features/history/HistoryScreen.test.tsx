@@ -357,4 +357,21 @@ describe('HistoryScreen', () => {
       screen.queryByTestId('history-calendar-mark-2026-08-02'),
     ).not.toBeInTheDocument()
   })
+
+  it('shows snapshot entries when tapping a marked calendar day (#205)', async () => {
+    const user = userEvent.setup()
+    render(
+      <MemoryRouter>
+        <HistoryScreen />
+      </MemoryRouter>,
+    )
+    await user.click(await screen.findByRole('button', { name: 'Calendar' }))
+    await user.click(
+      screen.getByTestId('history-calendar-mark-2026-08-17'),
+    )
+    const detail = await screen.findByTestId('history-calendar-day-detail')
+    expect(detail).toHaveTextContent('Holdings on 2026-08-17')
+    expect(detail).toHaveTextContent('Revolut')
+    expect(detail).toHaveTextContent(formatAmount(1000, 'EUR'))
+  })
 })
