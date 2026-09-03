@@ -225,6 +225,7 @@ Closed live-feedback rows from Tier 8 onward. Open / pending items stay in [`../
 | [#195](https://github.com/ZhannaM85/my-money/issues/195) | ✅ Done | Android: Dashboard Zoom out (Уменьшить) is clipped at the right edge | Toolbar wraps; same strip on History and details. Validated on-device 2026-09-03. |
 | [#196](https://github.com/ZhannaM85/my-money/issues/196) | ✅ Done | Android: conversion unavailable needs an on-device FX debugger, not a silent fallback | Tap badge → FX debug log with pair+date+window. No invented rate. Validated on-device 2026-09-03. |
 | [#198](https://github.com/ZhannaM85/my-money/issues/198) | ✅ Done | JSON import should replace a non-empty book after confirm | Confirm then replace, not merge; CSV remains merge. Related #197. Validated on-device 2026-09-03. |
+| [#194](https://github.com/ZhannaM85/my-money/issues/194) | ✅ Done | JSON backup omits FX rates so restored today total does not match | Backup v2 includes FX quotes and manual rates; CSV includes snapshot notes. Validated on-device 2026-09-03. |
 
 ## Tier 20 — Live feedback (2026-09-03)
 

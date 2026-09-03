@@ -30,7 +30,6 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
-| [#194](https://github.com/ZhannaM85/my-money/issues/194) | 🔍 Pending validation | JSON backup omits FX rates so restored today total does not match | **Blocker.** v2 include fxRates + manualFxRates. CSV notes. |
 | [#190](https://github.com/ZhannaM85/my-money/issues/190) | 🔍 Pending validation | Android: home-screen glance widget behind a Settings toggle | Off by default. 2×2 net worth + as-of. Provider disabled until on. |
 
 ---
