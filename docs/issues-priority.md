@@ -46,6 +46,7 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 |---|--------|-------|-------|
 | [#214](https://github.com/ZhannaM85/my-money/issues/214) | 🔲 Open | Dashboard: vertical scrollbar is partially cut off | iPhone: thumb gapped/clipped vs continuous Turtle edge scroll; likely sticky As of (#207/#212). |
 | [#215](https://github.com/ZhannaM85/my-money/issues/215) | 🔲 Open | Tap top of page does not scroll to top (Turtle parity) | Status-bar / top tap should scroll active content to top; works in Turtle. |
+| [#216](https://github.com/ZhannaM85/my-money/issues/216) | 🔲 Open | iOS: scroll indicator unnatural; pull-to-refresh too easy | Custom web PTR (#39) fires too soon; Capacitor alone won’t fix — tune threshold / indicator. |
 
 ---
 
