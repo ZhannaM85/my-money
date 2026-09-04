@@ -82,7 +82,8 @@ describe('AppShell', () => {
     expect(main.className).toContain('flex')
     expect(main.className).toContain('flex-col')
     expect(main.className).toContain('overflow-y-auto')
-    expect(main.className).toContain('overflow-x-clip')
+    expect(main.className).toContain('overflow-x-hidden')
+    expect(main.className).not.toContain('overflow-x-clip')
     expect(main.compareDocumentPosition(nav) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
   })
 

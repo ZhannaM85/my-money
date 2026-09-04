@@ -391,7 +391,7 @@ export function DashboardScreen() {
   return (
     <div
       data-testid="dashboard-scroll"
-      className="flex min-h-0 min-w-0 w-full flex-1 flex-col gap-4 overflow-x-clip overflow-y-auto overscroll-y-contain touch-pan-y"
+      className="flex min-w-0 w-full flex-col gap-4"
     >
       <PageHeader
         title={t.dashboard.title}
