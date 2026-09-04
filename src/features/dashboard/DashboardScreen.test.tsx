@@ -1229,6 +1229,13 @@ describe('DashboardScreen', () => {
     // iOS scrollbar. Sticky As of still sticks to that single scrollport.
     expect(scroll.className).not.toContain('overflow-y-auto')
     expect(scroll.className).toContain('min-w-0')
+    // #217: As of stacks above the scrolling body so chart/cards cannot bleed over it.
+    expect(bar.className).toContain('z-30')
+    expect(bar.className).toContain('isolate')
+    const body = screen.getByTestId('dashboard-scroll-body')
+    expect(body.className).toContain('relative')
+    expect(body.className).toContain('z-0')
+    expect(scroll).toContainElement(body)
   })
 
   it('shows today Positions after save when the visible chart range ends earlier (#208)', async () => {

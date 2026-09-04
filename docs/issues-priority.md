@@ -45,7 +45,7 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
 | [#216](https://github.com/ZhannaM85/my-money/issues/216) | 🔍 Pending validation | iOS: scroll indicator unnatural; pull-to-refresh too easy | Icon only after ~100px drag; then resisted pull to refresh. |
-| [#217](https://github.com/ZhannaM85/my-money/issues/217) | 🔲 Open | Dashboard: scrolling content bleeds over sticky As of date | Follow-up to #214; IMG_1053 — pin As of above content without nested scrollbar. |
+| [#217](https://github.com/ZhannaM85/my-money/issues/217) | 🔍 Pending validation | Dashboard: scrolling content bleeds over sticky As of date | As of `z-30 isolate`; body `relative z-0` — no nested scrollbar regress. |
 
 ---
 
