@@ -10,6 +10,27 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 216,
+    issue: 216,
+    date: '2026-09-04T19:08:00+03:00',
+    en: 'Pull-to-refresh takes a long deliberate drag before the reload icon appears, so short flicks at the top of the page no longer reload the app.',
+    ru: 'Pull-to-refresh показывает значок перезагрузки только после долгого жеста вниз — короткие свайпы наверху больше не перезагружают приложение.',
+  },
+  {
+    version: 215,
+    issue: 215,
+    date: '2026-09-04T18:42:00+03:00',
+    en: 'Tap the My Money header (including the status-bar area) to scroll the current screen back to the top.',
+    ru: 'Нажмите на шапку My Money (включая область статус-бара), чтобы прокрутить текущий экран наверх.',
+  },
+  {
+    version: 214,
+    issue: 214,
+    date: '2026-09-04T18:40:00+03:00',
+    en: 'Dashboard uses one page scroll again, so the iOS scrollbar is a continuous strip instead of a clipped/gapped thumb.',
+    ru: 'Сводка снова прокручивается одним скроллом — полоса прокрутки iOS сплошная, без обрезки и разрывов.',
+  },
+  {
     version: 213,
     issue: 217,
     date: '2026-09-04T21:30:00+03:00',

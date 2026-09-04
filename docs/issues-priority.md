@@ -46,7 +46,7 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 |---|--------|-------|-------|
 | [#216](https://github.com/ZhannaM85/my-money/issues/216) | 🔍 Pending validation | iOS: scroll indicator unnatural; pull-to-refresh too easy | Icon only after ~100px drag; then resisted pull to refresh. |
 | [#217](https://github.com/ZhannaM85/my-money/issues/217) | 🔍 Pending validation | Dashboard: scrolling content bleeds over sticky As of date | Padding off scrollport; full-bleed sticky As of flush under header. |
-| [#218](https://github.com/ZhannaM85/my-money/issues/218) | 🔲 Open | What's new stuck at v212 after #214–#217 deploys | releaseNotes not bumped; phone changelog still v212. |
+| [#218](https://github.com/ZhannaM85/my-money/issues/218) | 🔍 Pending validation | What's new stuck at v212 after #214–#217 deploys | Added v214–v216 release notes for #214–#216 (#217 already v213). |
 
 ---
 
