@@ -37,7 +37,6 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
-| [#213](https://github.com/ZhannaM85/my-money/issues/213) | 🔍 Pending validation | Dashboard: keep Today on the same row as the date | Compact Today button + no-wrap row; verified at 390px in Russian without overflow. |
 
 ---
 
