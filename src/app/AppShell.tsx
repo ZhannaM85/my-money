@@ -108,14 +108,20 @@ export function AppShell() {
       <main
         ref={mainRef}
         id="main-content"
-        className="relative z-20 mx-auto flex w-full min-h-0 min-w-0 max-w-3xl flex-1 flex-col overflow-x-hidden overflow-y-auto overscroll-x-none px-4 py-6"
+        className="relative z-20 mx-auto flex w-full min-h-0 min-w-0 max-w-3xl flex-1 flex-col overflow-x-hidden overflow-y-auto overscroll-x-none px-4"
       >
-        {fxError && (
-          <p className="mb-4 text-sm text-muted-foreground">
-            {t.fx.usingCachedRates}
-          </p>
-        )}
-        <Outlet />
+        {/*
+          #217: vertical padding must not live on the scrollport — sticky As of
+          left a gap under the app header where scrolling content bled through.
+        */}
+        <div className="flex min-h-0 w-full flex-1 flex-col py-6">
+          {fxError && (
+            <p className="mb-4 text-sm text-muted-foreground">
+              {t.fx.usingCachedRates}
+            </p>
+          )}
+          <Outlet />
+        </div>
       </main>
       {!hideTabBar && <BottomNav />}
     </div>

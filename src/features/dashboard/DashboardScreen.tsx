@@ -414,7 +414,7 @@ export function DashboardScreen() {
           {showAsOfBar ? (
             <div
               data-testid="dashboard-as-of-bar"
-              className="sticky top-0 z-30 isolate flex w-full min-w-0 shrink-0 flex-col gap-2 bg-background pb-2"
+              className="sticky top-0 z-30 isolate -mx-4 flex w-[calc(100%+2rem)] min-w-0 shrink-0 flex-col gap-2 bg-background px-4 pt-1 pb-2"
             >
               <div className="flex min-w-0 flex-nowrap items-end gap-1.5">
                 <DateField

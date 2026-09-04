@@ -88,6 +88,21 @@ describe('AppShell', () => {
     expect(main.scrollTop).toBe(0)
   })
 
+  it('keeps vertical padding off the scrollport so sticky As of sits flush (#217)', async () => {
+    render(
+      <MemoryRouter>
+        <AppShell />
+      </MemoryRouter>,
+    )
+    const main = await screen.findByRole('main')
+    expect(main.className).toContain('overflow-y-auto')
+    expect(main.className).toContain('px-4')
+    expect(main.className).not.toContain('py-6')
+    const pad = main.firstElementChild
+    expect(pad).not.toBeNull()
+    expect(pad!.className).toContain('py-6')
+  })
+
   it('pins the tab bar in the shell so iOS 26 cannot shift a position:fixed footer (#106, #91)', async () => {
     render(
       <MemoryRouter>

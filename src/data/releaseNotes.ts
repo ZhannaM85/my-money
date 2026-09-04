@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 213,
+    issue: 217,
+    date: '2026-09-04T21:30:00+03:00',
+    en: 'Dashboard As of stays flush under the app header while you scroll — holdings and the chart no longer slide through a gap over the date.',
+    ru: 'На Сводке «На дату» остаётся вплотную под шапкой при прокрутке — активы и график больше не проходят сквозь щель поверх даты.',
+  },
+  {
     version: 212,
     issue: 204,
     date: '2026-09-03T16:20:00+03:00',

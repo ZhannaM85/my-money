@@ -1229,9 +1229,11 @@ describe('DashboardScreen', () => {
     // iOS scrollbar. Sticky As of still sticks to that single scrollport.
     expect(scroll.className).not.toContain('overflow-y-auto')
     expect(scroll.className).toContain('min-w-0')
-    // #217: As of stacks above the scrolling body so chart/cards cannot bleed over it.
+    // #217: As of stacks above the scrolling body; full-bleed sticky so content
+    // cannot show in a gap under the app header (#main-content has no py).
     expect(bar.className).toContain('z-30')
     expect(bar.className).toContain('isolate')
+    expect(bar.className).toContain('-mx-4')
     const body = screen.getByTestId('dashboard-scroll-body')
     expect(body.className).toContain('relative')
     expect(body.className).toContain('z-0')
