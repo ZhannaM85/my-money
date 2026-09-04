@@ -67,6 +67,27 @@ describe('AppShell', () => {
     )
   })
 
+  it('scrolls to top when the app chrome header is tapped (#215)', async () => {
+    const user = userEvent.setup()
+    const scrollTo = vi.spyOn(window, 'scrollTo').mockImplementation(() => {})
+    render(
+      <MemoryRouter>
+        <AppShell />
+      </MemoryRouter>,
+    )
+    const main = await screen.findByRole('main')
+    Object.defineProperty(main, 'scrollTop', {
+      configurable: true,
+      writable: true,
+      value: 240,
+    })
+
+    await user.click(screen.getByRole('button', { name: 'Scroll to top' }))
+
+    expect(scrollTo).toHaveBeenCalledWith(0, 0)
+    expect(main.scrollTop).toBe(0)
+  })
+
   it('pins the tab bar in the shell so iOS 26 cannot shift a position:fixed footer (#106, #91)', async () => {
     render(
       <MemoryRouter>

@@ -12,6 +12,7 @@ export const ru: Dictionary = {
     continue: 'Продолжить',
     skipForNow: 'Пропустить пока',
     skipToContent: 'К содержанию',
+    scrollToTop: 'Прокрутить наверх',
     estimated: (amount) => `оценка ${amount}`,
     native: (currency) => `в ${currency}`,
     owe: ' (долг)',

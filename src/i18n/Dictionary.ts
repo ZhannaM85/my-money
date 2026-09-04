@@ -18,6 +18,7 @@ export interface Dictionary {
     continue: string
     skipForNow: string
     skipToContent: string
+    scrollToTop: string
     estimated: (amount: string) => string
     native: (currency: string) => string
     owe: string

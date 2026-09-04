@@ -11,6 +11,7 @@ export const en: Dictionary = {
     continue: 'Continue',
     skipForNow: 'Skip for now',
     skipToContent: 'Skip to content',
+    scrollToTop: 'Scroll to top',
     estimated: (amount) => `est. ${amount}`,
     native: (currency) => `native ${currency}`,
     owe: ' (owe)',

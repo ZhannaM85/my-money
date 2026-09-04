@@ -6,6 +6,7 @@ import { PullToRefreshIndicator } from '@/app/PullToRefreshIndicator'
 import { shouldShowOnboarding } from '@/domain/settings'
 import { useTranslation } from '@/i18n'
 import { useIsTextInputFocused } from '@/shared/hooks'
+import { scrollAppToTop } from '@/shared/lib/scrollAppToTop'
 import { BottomNav } from '@/shared/ui/bottom-nav'
 import { useAssetStore } from '@/stores/assetStore'
 import { useFxStore } from '@/stores/fxStore'
@@ -92,11 +93,17 @@ export function AppShell() {
       <OfflineBanner />
       <AppUpdateBanner />
       <header className="shrink-0 border-b border-border bg-background">
-        <div className="mx-auto flex max-w-3xl items-center px-4 pt-[calc(env(safe-area-inset-top)+0.75rem)] pb-3">
+        <button
+          type="button"
+          data-testid="scroll-to-top"
+          aria-label={t.common.scrollToTop}
+          onClick={() => scrollAppToTop()}
+          className="mx-auto flex w-full max-w-3xl cursor-pointer items-center px-4 pt-[calc(env(safe-area-inset-top)+0.75rem)] pb-3 text-left"
+        >
           <span className="text-sm font-semibold text-foreground">
             {t.appName}
           </span>
-        </div>
+        </button>
       </header>
       <main
         ref={mainRef}
