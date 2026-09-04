@@ -44,7 +44,6 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
-| [#216](https://github.com/ZhannaM85/my-money/issues/216) | 🔍 Pending validation | iOS: scroll indicator unnatural; pull-to-refresh too easy | Icon only after ~100px drag; then resisted pull to refresh. |
 
 ---
 
