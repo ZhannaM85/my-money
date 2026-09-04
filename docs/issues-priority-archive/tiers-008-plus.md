@@ -253,3 +253,4 @@ Closed live-feedback rows from Tier 8 onward. Open / pending items stay in [`../
 |---|--------|-------|-------|
 | [#214](https://github.com/ZhannaM85/my-money/issues/214) | ✅ Done | Dashboard: vertical scrollbar is partially cut off | Single `#main-content` scroll (no nested dashboard overflow). Validated on-device 2026-09-04. |
 | [#215](https://github.com/ZhannaM85/my-money/issues/215) | ✅ Done | Tap top of page does not scroll to top (Turtle parity) | App chrome (safe-area header) calls `scrollAppToTop` — body scroll is locked unlike Turtle. Validated on-device 2026-09-04. |
+| [#219](https://github.com/ZhannaM85/my-money/issues/219) | ❌ Won't fix | More: page content bleeds under the tab bar | Misread of More screenshot; real bleed is Dashboard #217 (IMG_1063). Closed 2026-09-04. |

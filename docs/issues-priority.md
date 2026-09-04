@@ -45,9 +45,8 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
 | [#216](https://github.com/ZhannaM85/my-money/issues/216) | 🔍 Pending validation | iOS: scroll indicator unnatural; pull-to-refresh too easy | Icon only after ~100px drag; then resisted pull to refresh. |
-| [#217](https://github.com/ZhannaM85/my-money/issues/217) | 🔍 Pending validation | Dashboard: scrolling content bleeds over sticky As of date | As of `z-30 isolate`; body `relative z-0` — no nested scrollbar regress. |
+| [#217](https://github.com/ZhannaM85/my-money/issues/217) | 🔲 Open | Dashboard: scrolling content bleeds over sticky As of date | Still on device (IMG_1063): gap under global header + bleed over As of; z-index fix insufficient. |
 | [#218](https://github.com/ZhannaM85/my-money/issues/218) | 🔲 Open | What's new stuck at v212 after #214–#217 deploys | releaseNotes not bumped; phone changelog still v212. |
-| [#219](https://github.com/ZhannaM85/my-money/issues/219) | 🔲 Open | More: page content bleeds under the tab bar | Root causes text visible through tab bar (screenshot). |
 
 ---
 
