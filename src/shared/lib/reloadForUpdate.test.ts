@@ -88,4 +88,21 @@ describe('reloadForUpdate', () => {
     await reloadForUpdate({ force: true })
     expect(reload).toHaveBeenCalledTimes(1)
   })
+
+  it('reloads after SW update timeout when update() never settles (#220)', async () => {
+    vi.useFakeTimers()
+    const update = vi.fn(() => new Promise<void>(() => {}))
+    stubServiceWorkerRegistration({
+      update,
+      installing: null,
+      waiting: null,
+    })
+
+    const done = reloadForUpdate()
+    await vi.advanceTimersByTimeAsync(3000)
+    await done
+
+    expect(update).toHaveBeenCalledTimes(1)
+    expect(reload).toHaveBeenCalledTimes(1)
+  })
 })

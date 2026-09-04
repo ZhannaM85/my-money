@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 217,
+    issue: 220,
+    date: '2026-09-04T22:25:00+03:00',
+    en: 'Pull-to-refresh no longer spins for a long time on a slow network — it stops waiting on the service-worker check and reloads within a few seconds.',
+    ru: 'Pull-to-refresh больше не крутит значок долго на медленной сети — ожидание проверки service worker обрывается, и страница перезагружается за несколько секунд.',
+  },
+  {
     version: 216,
     issue: 216,
     date: '2026-09-04T19:08:00+03:00',
