@@ -40,6 +40,14 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 
 ---
 
+## Tier 21 — Live feedback (2026-09-04)
+
+| # | Status | Issue | Notes |
+|---|--------|-------|-------|
+| [#214](https://github.com/ZhannaM85/my-money/issues/214) | 🔲 Open | Dashboard: vertical scrollbar is partially cut off | iPhone: thumb gapped/clipped vs continuous Turtle edge scroll; likely sticky As of (#207/#212). |
+
+---
+
 ## Explicitly not filed
 
 Out of scope for the MVP (`PROJECT_BRIEF.md` §20) — do not implement from chat:
