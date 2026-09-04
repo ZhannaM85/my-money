@@ -44,7 +44,6 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
-| [#215](https://github.com/ZhannaM85/my-money/issues/215) | 🔍 Pending validation | Tap top of page does not scroll to top (Turtle parity) | App chrome (safe-area header) calls `scrollAppToTop` — body scroll is locked unlike Turtle. |
 | [#216](https://github.com/ZhannaM85/my-money/issues/216) | 🔍 Pending validation | iOS: scroll indicator unnatural; pull-to-refresh too easy | Resisted PTR (0.5×, threshold 120) + hide forced main scrollbar; Capacitor won’t fix alone. |
 
 ---
