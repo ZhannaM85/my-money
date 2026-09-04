@@ -13,8 +13,8 @@ import { reloadForUpdate } from '@/shared/lib/reloadForUpdate'
  * stays at 0 while Update’s inner holdings list scrolls (#203).
  * Triggers `reloadForUpdate()` so the reload picks up a new SW.
  *
- * #216: resisted pull + higher threshold so accidental short drags do not
- * reload (Capacitor alone will not change this — same web gesture).
+ * #216: icon stays hidden until ~100px of drag; resisted travel after that
+ * so refresh still needs a long deliberate pull (Capacitor will not change this).
  */
 export function usePullToRefresh(): {
   pullDistance: number
