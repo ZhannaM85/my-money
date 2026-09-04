@@ -246,3 +246,9 @@ Closed live-feedback rows from Tier 8 onward. Open / pending items stay in [`../
 | [#209](https://github.com/ZhannaM85/my-money/issues/209) | ✅ Done | History: shared expand/collapse day row on List and Calendar | Calendar reuses the List row, including daily delta and formatting. Validated on-device 2026-09-03. |
 | [#212](https://github.com/ZhannaM85/my-money/issues/212) | ✅ Done | Dashboard: collapse title while keeping As of date sticky | Dashboard uses one scroll area; title scrolls away while As of stays pinned. Validated on-device 2026-09-04. |
 | [#213](https://github.com/ZhannaM85/my-money/issues/213) | ✅ Done | Dashboard: keep Today on the same row as the date | Compact Today button + no-wrap row; verified at 390px in Russian without overflow. Validated on-device 2026-09-04. |
+
+## Tier 21 — Live feedback (2026-09-04)
+
+| # | Status | Issue | Notes |
+|---|--------|-------|-------|
+| [#214](https://github.com/ZhannaM85/my-money/issues/214) | ✅ Done | Dashboard: vertical scrollbar is partially cut off | Single `#main-content` scroll (no nested dashboard overflow). Validated on-device 2026-09-04. |
