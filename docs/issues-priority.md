@@ -44,7 +44,6 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
-| [#220](https://github.com/ZhannaM85/my-money/issues/220) | 🔍 Pending validation | Pull-to-refresh spinner can hang on serviceWorker.update() | Cap SW `update()` wait at 3s, then always reload. |
 
 ---
 
