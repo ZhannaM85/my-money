@@ -355,6 +355,15 @@
   body {
     @apply bg-background text-foreground;
   }
+  /* #216: page scroller keeps iOS overlay indicators — no forced gutter/thin bar. */
+  #main-content {
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  #main-content::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+  }
 }
 
 /* Overlay the native glyph so the whole field still opens the picker (#68).

@@ -46,7 +46,7 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 |---|--------|-------|-------|
 | [#214](https://github.com/ZhannaM85/my-money/issues/214) | 🔍 Pending validation | Dashboard: vertical scrollbar is partially cut off | Single `#main-content` scroll (no nested dashboard overflow); `overflow-x-hidden` not clip. |
 | [#215](https://github.com/ZhannaM85/my-money/issues/215) | 🔍 Pending validation | Tap top of page does not scroll to top (Turtle parity) | App chrome (safe-area header) calls `scrollAppToTop` — body scroll is locked unlike Turtle. |
-| [#216](https://github.com/ZhannaM85/my-money/issues/216) | 🔲 Open | iOS: scroll indicator unnatural; pull-to-refresh too easy | Custom web PTR (#39) fires too soon; Capacitor alone won’t fix — tune threshold / indicator. |
+| [#216](https://github.com/ZhannaM85/my-money/issues/216) | 🔍 Pending validation | iOS: scroll indicator unnatural; pull-to-refresh too easy | Resisted PTR (0.5×, threshold 120) + hide forced main scrollbar; Capacitor won’t fix alone. |
 
 ---
 

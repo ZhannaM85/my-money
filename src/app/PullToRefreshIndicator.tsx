@@ -1,9 +1,8 @@
 import { RefreshCw } from 'lucide-react'
 import { useTranslation } from '@/i18n'
 import { usePullToRefresh } from '@/shared/hooks'
+import { PULL_THRESHOLD } from '@/shared/lib/pullToRefresh'
 import { cn } from '@/shared/lib/utils'
-
-const PULL_THRESHOLD = 70
 
 export function PullToRefreshIndicator() {
   const t = useTranslation()
