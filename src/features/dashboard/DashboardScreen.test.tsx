@@ -55,6 +55,42 @@ beforeEach(async () => {
 })
 
 describe('DashboardScreen', () => {
+  it('shows assets minus debts as the dashboard subtitle (#221)', async () => {
+    render(
+      <MemoryRouter>
+        <DashboardScreen />
+      </MemoryRouter>,
+    )
+    expect(
+      await screen.findByText('Assets minus debts, in your base currency.'),
+    ).toBeInTheDocument()
+    expect(
+      screen.queryByText('What you own minus what you owe, in your base currency.'),
+    ).not.toBeInTheDocument()
+  })
+
+  it('shows the Russian assets-minus-debts subtitle (#221)', async () => {
+    await db.settings.put({
+      ...DEFAULT_SETTINGS,
+      locale: 'ru',
+    })
+    useSettingsStore.setState({
+      settings: { ...DEFAULT_SETTINGS, locale: 'ru' },
+      loaded: false,
+    })
+    render(
+      <MemoryRouter>
+        <DashboardScreen />
+      </MemoryRouter>,
+    )
+    expect(
+      await screen.findByText('Активы минус долги, в базовой валюте.'),
+    ).toBeInTheDocument()
+    expect(
+      screen.queryByText('Что у вас есть минус что вы должны, в базовой валюте.'),
+    ).not.toBeInTheDocument()
+  })
+
   it('shows calculated net worth from the latest snapshots', async () => {
     const now = '2026-08-17T00:00:00.000Z'
     await useAssetStore.getState().saveAsset(

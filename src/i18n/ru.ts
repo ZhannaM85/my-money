@@ -28,7 +28,7 @@ export const ru: Dictionary = {
   },
   dashboard: {
     title: 'Сводка',
-    description: 'Что у вас есть минус что вы должны, в базовой валюте.',
+    description: 'Активы минус долги, в базовой валюте.',
     netWorth: 'Чистый капитал',
     thisMonth: 'за этот месяц',
     zoomRange: 'Диапазон графика',

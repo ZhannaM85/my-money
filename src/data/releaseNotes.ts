@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 218,
+    issue: 221,
+    date: '2026-09-09T12:10:00+03:00',
+    en: 'Dashboard subtitle now says assets minus debts, in your base currency — not “what you own minus what you owe.”',
+    ru: 'Подзаголовок Сводки теперь «Активы минус долги, в базовой валюте» — без формулировки «что у вас есть минус что вы должны».',
+  },
+  {
     version: 217,
     issue: 220,
     date: '2026-09-04T22:25:00+03:00',

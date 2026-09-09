@@ -356,6 +356,32 @@ test('capture Dashboard Today on the date row in Russian (#213)', async ({
   })
 })
 
+test('capture Dashboard net-worth subtitle in Russian (#221)', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 })
+  await seedValidationFixture(page, {
+    currencyDisplayMode: 'base',
+    locale: 'ru',
+  })
+  await page.goto('/')
+  await expect(page.getByRole('heading', { name: 'Сводка' })).toBeVisible()
+  await expect(
+    page.getByText('Активы минус долги, в базовой валюте.'),
+  ).toBeVisible()
+  await expect(
+    page.getByText('Что у вас есть минус что вы должны, в базовой валюте.'),
+  ).toHaveCount(0)
+  await page.screenshot({
+    path: join(
+      'docs',
+      'validation-proof',
+      '221',
+      '221-dashboard-subtitle.png',
+    ),
+  })
+})
+
 test('capture Dashboard chart range picker (#126)', async ({ page }) => {
   await seedValidationFixture(page, { currencyDisplayMode: 'base' })
   await page.goto('/')

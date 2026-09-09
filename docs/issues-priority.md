@@ -51,7 +51,7 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
-| [#221](https://github.com/ZhannaM85/my-money/issues/221) | ⬜ Open | Dashboard: rephrase the net-worth subtitle (assets minus debts) | Screenshot: **Сводка** subtitle circled. RU «Что у вас есть минус что вы должны…» is unclear. Proposed: «Активы минус долги, в базовой валюте.» / EN “Assets minus debts, in your base currency.” Not spendings. |
+| [#221](https://github.com/ZhannaM85/my-money/issues/221) | 🔍 Pending validation | Dashboard: rephrase the net-worth subtitle (assets minus debts) | Screenshot: **Сводка** subtitle circled. RU «Что у вас есть минус что вы должны…» is unclear. Proposed: «Активы минус долги, в базовой валюте.» / EN “Assets minus debts, in your base currency.” Not spendings. |
 
 ---
 

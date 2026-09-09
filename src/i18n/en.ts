@@ -27,7 +27,7 @@ export const en: Dictionary = {
   },
   dashboard: {
     title: 'Dashboard',
-    description: 'What you own minus what you owe, in your base currency.',
+    description: 'Assets minus debts, in your base currency.',
     netWorth: 'Net worth',
     thisMonth: 'this month',
     zoomRange: 'Chart range',
