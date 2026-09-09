@@ -20,7 +20,7 @@ Confirm each issue on a device before it is closed.
 
 Start at [`docs/issues-priority.md`](docs/issues-priority.md).
 
-## What it will do
+## What it does
 
 - Track assets and liabilities across categories and currencies.
 - Convert everything into a user-chosen base currency (Frankfurter / ECB rates).
@@ -41,12 +41,12 @@ Start at [`docs/issues-priority.md`](docs/issues-priority.md).
 
 - React 19 + TypeScript (strict) + Vite
 - Tailwind CSS + shadcn/ui
-- IndexedDB via Dexie, behind repository interfaces (see `docs/ARCHITECTURE.md`) — not wired yet
-- Zustand for UI/session state — not wired yet
-- React Hook Form + Zod — not wired yet
-- Recharts — not wired yet
+- IndexedDB via Dexie, behind repository interfaces (see `docs/ARCHITECTURE.md`)
+- Zustand for UI/session state
+- Zod for backup and FX payload validation
+- Recharts for net-worth history
 - Vitest + React Testing Library
-- English and Russian localization — not wired yet
+- English and Russian localization
 
 ## Development
 
