@@ -47,6 +47,14 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 
 ---
 
+## Tier 22 — Live feedback (2026-09-09)
+
+| # | Status | Issue | Notes |
+|---|--------|-------|-------|
+| [#221](https://github.com/ZhannaM85/my-money/issues/221) | ⬜ Open | Dashboard: rephrase the net-worth subtitle (assets minus debts) | Screenshot: **Сводка** subtitle circled. RU «Что у вас есть минус что вы должны…» is unclear. Proposed: «Активы минус долги, в базовой валюте.» / EN “Assets minus debts, in your base currency.” Not spendings. |
+
+---
+
 ## Explicitly not filed
 
 Out of scope for the MVP (`PROJECT_BRIEF.md` §20) — do not implement from chat:
