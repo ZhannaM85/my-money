@@ -258,3 +258,9 @@ Closed live-feedback rows from Tier 8 onward. Open / pending items stay in [`../
 | [#216](https://github.com/ZhannaM85/my-money/issues/216) | ✅ Done | iOS: scroll indicator unnatural; pull-to-refresh too easy | Icon only after ~100px drag; then resisted pull to refresh. Validated on-device 2026-09-04. |
 | [#220](https://github.com/ZhannaM85/my-money/issues/220) | ✅ Done | Pull-to-refresh spinner can hang on serviceWorker.update() | Cap SW `update()` wait at 3s, then always reload. Validated on-device 2026-09-04. |
 | [#219](https://github.com/ZhannaM85/my-money/issues/219) | ❌ Won't fix | More: page content bleeds under the tab bar | Misread of More screenshot; real bleed is Dashboard #217 (IMG_1063). Closed 2026-09-04. |
+
+## Tier 22 — Live feedback (2026-09-09)
+
+| # | Status | Issue | Notes |
+|---|--------|-------|-------|
+| [#221](https://github.com/ZhannaM85/my-money/issues/221) | ✅ Done | Dashboard: rephrase the net-worth subtitle (assets minus debts) | Confirmed on-device 2026-09-09 — subtitle is assets minus debts in RU/EN, still mentions base currency. |
