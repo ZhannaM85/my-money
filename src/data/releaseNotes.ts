@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 219,
+    issue: 225,
+    date: '2026-09-10T13:30:00+03:00',
+    en: 'Summary now shows the latest net worth as soon as you open it after an update. Scrolling the chart no longer changes the total or opens Holdings.',
+    ru: 'Сводка сразу показывает актуальный чистый капитал после обновления актива. Прокрутка графика больше не меняет итог и не раскрывает позиции.',
+  },
+  {
     version: 218,
     issue: 221,
     date: '2026-09-09T12:10:00+03:00',

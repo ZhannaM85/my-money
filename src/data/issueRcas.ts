@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 225,
+    title: {
+      en: 'Dashboard shows stale net worth after an asset edit until scroll',
+      ru: 'Сводка держит старый чистый капитал после правки актива, пока не прокрутить',
+    },
+    en: 'Two paths. (1) Concurrent Dexie load()s: an older read could finish last and overwrite a newer book, and AppShell only loaded on mount — not on tab change or resume. load() now drops stale generations; the book refetches on navigation and when the app is visible. (2) Today’s headline used the last visible chart point, so a pinned range could hide today’s Update. It now uses latest holdings. Chart hover/scroll only remembers a day; As of commits on tap/click, and Holdings stay collapsed.',
+    ru: 'Два пути. (1) Параллельные load() из Dexie: старое чтение могло закончиться позже и затереть новую книгу, а AppShell грузил только при старте — не при смене вкладки и не при возврате. Теперь load() отбрасывает устаревшие поколения; книга перечитывается при навигации и когда приложение видно. (2) Заголовок «сегодня» брал последнюю точку видимого графика, и закреплённый диапазон прятал сегодняшнее Обновить. Теперь — последние активы. Наведение/прокрутка графика только запоминает день; «На дату» ставится по тапу, позиции остаются свёрнутыми.',
+  },
+  {
     issue: 204,
     title: {
       en: 'Update: enable Save updates only when an amount has been typed',

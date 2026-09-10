@@ -5,6 +5,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import { DEFAULT_SETTINGS } from '@/domain/settings'
 import { formatAmount } from '@/shared/lib/money'
 import { useSettingsStore } from '@/stores/settingsStore'
+import { isChartDateTap } from './chartDateTap'
 import { NetWorthChart, NetWorthChartTooltip } from './NetWorthChart'
 
 function renderWithRouter(ui: ReactElement) {
@@ -139,6 +140,36 @@ describe('NetWorthChartTooltip', () => {
     expect(screen.queryByTestId('chart-tooltip-native')).not.toBeInTheDocument()
   })
 
+  it('tracks the hovered day without committing As of (#225)', () => {
+    const onHoverDate = vi.fn()
+    renderWithRouter(
+      <NetWorthChartTooltip
+        active
+        onHoverDate={onHoverDate}
+        currency="EUR"
+        payload={[
+          {
+            payload: {
+              date: '2026-09-03',
+              total: 2_800_894,
+              holdings: [
+                {
+                  assetId: 'cash',
+                  name: 'Cash',
+                  currency: 'RUB',
+                  nativeAmount: 232_500,
+                  convertedAmount: 232_500,
+                  conversionAvailable: true,
+                },
+              ],
+            },
+          },
+        ]}
+      />,
+    )
+    expect(onHoverDate).toHaveBeenCalledWith('2026-09-03')
+  })
+
   it('omits the holdings card when the tooltip is turned off (#141)', () => {
     renderWithRouter(
       <NetWorthChartTooltip
@@ -237,5 +268,12 @@ describe('NetWorthChart', () => {
       'aria-pressed',
       'false',
     )
+  })
+
+  it('treats a small finger move as a tap and a scroll as not (#225)', () => {
+    expect(isChartDateTap(0, 4)).toBe(true)
+    expect(isChartDateTap(3, 8)).toBe(true)
+    expect(isChartDateTap(0, 40)).toBe(false)
+    expect(isChartDateTap(30, 30)).toBe(false)
   })
 })

@@ -27,6 +27,7 @@ import { useLocale, useTranslation } from '@/i18n'
 import { cn } from '@/shared/lib/utils'
 import { useSettingsStore } from '@/stores/settingsStore'
 import { HoldingBreakdownList } from './HoldingBreakdownList'
+import { isChartDateTap } from './chartDateTap'
 
 export const NET_WORTH_CHART_TESTID = 'net-worth-chart'
 export const CHART_TOOLTIP_SCROLL_CLASS = 'chart-tooltip-scroll'
@@ -40,20 +41,20 @@ export interface NetWorthChartPoint {
   nativeCurrency?: string
 }
 
-/** Sync Positions / As of when Recharts has an active point (incl. iOS tap). #112 */
-function ChartDaySelect({
+/** Remember the hovered/active day; commit only on tap/click (#112, #225). */
+function ChartDayHover({
   active,
   payload,
-  onSelectDate,
+  onHoverDate,
 }: {
   active?: boolean
   payload?: ReadonlyArray<{ payload?: NetWorthChartPoint }>
-  onSelectDate?: (date: string | null) => void
+  onHoverDate?: (date: string | null) => void
 }) {
-  const onSelectDateRef = useRef(onSelectDate)
+  const onHoverDateRef = useRef(onHoverDate)
   useEffect(() => {
-    onSelectDateRef.current = onSelectDate
-  }, [onSelectDate])
+    onHoverDateRef.current = onHoverDate
+  }, [onHoverDate])
 
   const date =
     active && typeof payload?.[0]?.payload?.date === 'string'
@@ -61,7 +62,7 @@ function ChartDaySelect({
       : null
 
   useEffect(() => {
-    if (date) onSelectDateRef.current?.(date)
+    onHoverDateRef.current?.(date)
   }, [date])
 
   return null
@@ -71,14 +72,15 @@ export function NetWorthChartTooltip({
   active,
   payload,
   currency,
-  onSelectDate,
+  onHoverDate,
   showHoldings = true,
 }: {
   active?: boolean
   payload?: ReadonlyArray<{ payload?: NetWorthChartPoint }>
   currency: string
-  onSelectDate?: (date: string | null) => void
-  /** When false, still selects the day (#112) without covering the plot (#141). */
+  /** Hover/active day only — does not commit As of (#225). */
+  onHoverDate?: (date: string | null) => void
+  /** When false, still tracks the day (#112) without covering the plot (#141). */
   showHoldings?: boolean
 }) {
   const t = useTranslation()
@@ -96,10 +98,10 @@ export function NetWorthChartTooltip({
 
   return (
     <>
-      <ChartDaySelect
+      <ChartDayHover
         active={active}
         payload={payload}
-        onSelectDate={onSelectDate}
+        onHoverDate={onHoverDate}
       />
       {point && showHoldings ? (
         <div
@@ -181,6 +183,8 @@ export function NetWorthChart({
   const pinchRef = usePinchZoom(onZoomIn, onZoomOut)
   const panRef = useChartPan(onPanEarlier, onPanLater)
   const onSelectDateRef = useRef(onSelectDate)
+  const pendingDateRef = useRef<string | null>(null)
+  const pointerStartRef = useRef<{ x: number; y: number } | null>(null)
   const showChartTooltip = useSettingsStore(
     (state) => state.settings.showChartTooltip,
   )
@@ -191,6 +195,15 @@ export function NetWorthChart({
   useEffect(() => {
     onSelectDateRef.current = onSelectDate
   }, [onSelectDate])
+
+  const rememberHoverDate = useCallback((date: string | null) => {
+    pendingDateRef.current = date
+  }, [])
+
+  const commitPendingDate = useCallback(() => {
+    const date = pendingDateRef.current
+    if (date) onSelectDateRef.current?.(date)
+  }, [])
 
   const name = seriesName ?? t.dashboard.netWorth
   if (points.length === 0) return null
@@ -242,13 +255,29 @@ export function NetWorthChart({
         }}
         className="h-48 w-full touch-pan-y"
         data-testid={NET_WORTH_CHART_TESTID}
+        onPointerDown={(event) => {
+          if (event.pointerType === 'mouse') return
+          pointerStartRef.current = { x: event.clientX, y: event.clientY }
+        }}
+        onPointerUp={(event) => {
+          const start = pointerStartRef.current
+          pointerStartRef.current = null
+          if (!start) return
+          if (!isChartDateTap(event.clientX - start.x, event.clientY - start.y)) {
+            return
+          }
+          commitPendingDate()
+        }}
+        onPointerCancel={() => {
+          pointerStartRef.current = null
+        }}
       >
       <ResponsiveContainer width="100%" height="100%">
         <LineChart
           data={[...points]}
           margin={{ top: 8, right: 8, left: 0, bottom: 0 }}
           onMouseMove={(state) =>
-            selectDateFromChartState(state, onSelectDateRef.current)
+            selectDateFromChartState(state, rememberHoverDate)
           }
           onClick={(state) =>
             selectDateFromChartState(state, onSelectDateRef.current)
@@ -280,7 +309,7 @@ export function NetWorthChart({
             content={
               <NetWorthChartTooltip
                 currency={currency}
-                onSelectDate={onSelectDate}
+                onHoverDate={rememberHoverDate}
                 showHoldings={showChartTooltip}
               />
             }

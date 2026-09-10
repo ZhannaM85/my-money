@@ -46,10 +46,26 @@ export function AppShell() {
   }, [pathname])
 
   useEffect(() => {
-    void loadAssets()
     void loadSettings()
     void loadCachedRates()
-  }, [loadAssets, loadCachedRates, loadSettings])
+  }, [loadCachedRates, loadSettings])
+
+  useEffect(() => {
+    void loadAssets()
+  }, [loadAssets, pathname])
+
+  useEffect(() => {
+    function refreshBook() {
+      if (document.visibilityState !== 'visible') return
+      void loadAssets()
+    }
+    document.addEventListener('visibilitychange', refreshBook)
+    window.addEventListener('pageshow', refreshBook)
+    return () => {
+      document.removeEventListener('visibilitychange', refreshBook)
+      window.removeEventListener('pageshow', refreshBook)
+    }
+  }, [loadAssets])
 
   useEffect(() => {
     if (!assetsLoaded || !settingsLoaded) return

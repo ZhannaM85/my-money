@@ -191,6 +191,57 @@ describe('AppShell', () => {
     expect(await screen.findByText('Privacy Policy')).toBeInTheDocument()
     expect(screen.queryByText('Onboarding welcome')).not.toBeInTheDocument()
   })
+
+  it('reloads the book when the route changes or the app is visible (#225)', async () => {
+    const load = vi.fn(async () => {})
+    useAssetStore.setState({ load, loaded: true })
+    const router = createMemoryRouter(
+      [
+        {
+          element: <AppShell />,
+          children: [
+            { path: '/', element: <div>Dashboard page</div> },
+            { path: '/update', element: <div>Update page</div> },
+          ],
+        },
+      ],
+      { initialEntries: ['/update'] },
+    )
+    render(<RouterProvider router={router} />)
+    await screen.findByText('Update page')
+    const afterMount = load.mock.calls.length
+    expect(afterMount).toBeGreaterThan(0)
+    await act(async () => {
+      await router.navigate('/')
+    })
+    expect(load.mock.calls.length).toBeGreaterThan(afterMount)
+    const afterNav = load.mock.calls.length
+    const visibility =
+      Object.getOwnPropertyDescriptor(Document.prototype, 'visibilityState') ??
+      Object.getOwnPropertyDescriptor(document, 'visibilityState')
+    try {
+      act(() => {
+        Object.defineProperty(document, 'visibilityState', {
+          configurable: true,
+          value: 'hidden',
+        })
+        document.dispatchEvent(new Event('visibilitychange'))
+      })
+      expect(load.mock.calls.length).toBe(afterNav)
+      act(() => {
+        Object.defineProperty(document, 'visibilityState', {
+          configurable: true,
+          value: 'visible',
+        })
+        document.dispatchEvent(new Event('visibilitychange'))
+      })
+      expect(load.mock.calls.length).toBeGreaterThan(afterNav)
+    } finally {
+      if (visibility) {
+        Object.defineProperty(document, 'visibilityState', visibility)
+      }
+    }
+  })
 })
 
 function renderShellWithInput(onConfirm?: () => void) {

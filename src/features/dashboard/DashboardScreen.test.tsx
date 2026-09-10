@@ -1337,6 +1337,64 @@ describe('DashboardScreen', () => {
     ).toBeGreaterThan(0)
   })
 
+  it('shows latest net worth on open when the chart range ends earlier (#225)', async () => {
+    const today = todayIsoDate()
+    const rangeEnd = addDaysIso(today, -10)
+    useChartRangeStore.setState({
+      range: '1M',
+      rangeEnd,
+      rangeEndPinned: true,
+      customStart: addDaysIso(today, -30),
+      customEnd: rangeEnd,
+    })
+    const past = addDaysIso(today, -30)
+    const now = `${today}T00:00:00.000Z`
+    await useAssetStore.getState().saveAsset(
+      {
+        id: 'cash',
+        name: 'Cash',
+        assetClass: 'money',
+        type: 'cash',
+        currency: 'EUR',
+        trackingStatus: 'included',
+        valuationMethod: 'account_balance',
+        updateFrequency: 'weekly',
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        assetId: 'cash',
+        date: past,
+        amount: 800,
+        currency: 'EUR',
+      },
+    )
+    await useAssetStore.getState().saveSnapshots([
+      {
+        assetId: 'cash',
+        date: today,
+        amount: 1000,
+        currency: 'EUR',
+      },
+    ])
+    render(
+      <MemoryRouter>
+        <DashboardScreen />
+      </MemoryRouter>,
+    )
+    expect(await screen.findByText('Net worth')).toBeInTheDocument()
+    expect(
+      screen.getAllByText(formatAmount(1000, 'EUR')).length,
+    ).toBeGreaterThan(0)
+    expect(screen.getByTestId('positions-total')).toHaveTextContent(
+      formatAmount(1000, 'EUR'),
+    )
+    expect(screen.getByRole('button', { name: /Holdings/i })).toHaveAttribute(
+      'aria-expanded',
+      'false',
+    )
+  })
+
   it('adds As of dates to comparison and shows a banner after two (#137)', async () => {
     const today = todayIsoDate()
     const past = addDaysIso(today, -4)

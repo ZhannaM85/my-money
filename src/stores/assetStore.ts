@@ -9,6 +9,9 @@ import {
 const assetRepository = new IndexedDbAssetRepository()
 const snapshotRepository = new IndexedDbSnapshotRepository()
 
+/** Only the latest in-flight `load()` may write the store (#225). */
+let loadGeneration = 0
+
 interface AssetStoreState {
   assets: Asset[]
   snapshots: AssetSnapshot[]
@@ -41,12 +44,14 @@ export const useAssetStore = create<AssetStoreState>((set, get) => ({
   snapshots: [],
   loaded: false,
   load: async () => {
+    const generation = ++loadGeneration
     const assets = await assetRepository.getAll()
     const snapshots = (
       await Promise.all(
         assets.map((asset) => snapshotRepository.getByAsset(asset.id)),
       )
     ).flat()
+    if (generation !== loadGeneration) return
     set({ assets, snapshots, loaded: true })
   },
   saveAsset: async (asset, snapshot) => {

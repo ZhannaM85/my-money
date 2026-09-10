@@ -283,8 +283,26 @@ export function DashboardScreen() {
     )
   const asOfHasData = asOfHasLoggedData(selectedChartDate, earliest)
   const convertedTodayPoint = convertedSeries[convertedSeries.length - 1]
+  const todayConvertedPoint = useMemo(() => {
+    if (isOriginal) return undefined
+    return historicalNetWorth(
+      filteredAssets,
+      filteredSnapshots,
+      quotes,
+      [today],
+      baseCurrency,
+    )[0]
+  }, [
+    baseCurrency,
+    filteredAssets,
+    filteredSnapshots,
+    isOriginal,
+    quotes,
+    today,
+  ])
+  /** Today’s book at today’s rate — not a pinned chart-end point (#208, #225). */
   const convertedTodayTotal =
-    convertedTodayPoint?.total ?? convertedResult.total
+    todayConvertedPoint?.total ?? convertedResult.total
   const convertedBreakdown = useMemo(() => {
     const startHoldings = convertedSeries[0]?.holdings
     const endHoldings = convertedTodayPoint?.holdings
@@ -813,7 +831,6 @@ export function DashboardScreen() {
                     onSelectDate={(date) => {
                       setAsOfError(undefined)
                       setSelectedChartDate(date)
-                      if (date) setHoldingsOpen(true)
                     }}
                   />
                   <ChartRangeToolbar

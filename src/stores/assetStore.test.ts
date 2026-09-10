@@ -1,6 +1,9 @@
 import 'fake-indexeddb/auto'
-import { beforeEach, describe, expect, it } from 'vitest'
-import { db } from '@/infrastructure/persistence/indexeddb'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
+import {
+  db,
+  IndexedDbSnapshotRepository,
+} from '@/infrastructure/persistence/indexeddb'
 import { useAssetStore } from './assetStore'
 
 beforeEach(async () => {
@@ -206,5 +209,65 @@ describe('assetStore', () => {
       note: 'Raised',
     })
     expect(useAssetStore.getState().snapshots[0]?.note).toBe('Raised')
+  })
+
+  it('does not apply a stale book load after a newer one (#225)', async () => {
+    await useAssetStore.getState().saveAsset(
+      {
+        id: 'a1',
+        name: 'Cash',
+        assetClass: 'money',
+        type: 'cash',
+        currency: 'RUB',
+        trackingStatus: 'included',
+        valuationMethod: 'account_balance',
+        updateFrequency: 'weekly',
+        createdAt: '2026-08-17T00:00:00.000Z',
+        updatedAt: '2026-08-17T00:00:00.000Z',
+      },
+      {
+        assetId: 'a1',
+        date: '2026-08-17',
+        amount: 100,
+        currency: 'RUB',
+      },
+    )
+    const originalGetByAsset = IndexedDbSnapshotRepository.prototype.getByAsset
+    let releaseStale!: (
+      rows: Awaited<ReturnType<typeof originalGetByAsset>>,
+    ) => void
+    const staleRows = new Promise<
+      Awaited<ReturnType<typeof originalGetByAsset>>
+    >((resolve) => {
+      releaseStale = resolve
+    })
+    const spy = vi
+      .spyOn(IndexedDbSnapshotRepository.prototype, 'getByAsset')
+      .mockImplementationOnce(async () => staleRows)
+      .mockImplementation(function (
+        this: IndexedDbSnapshotRepository,
+        assetId: string,
+      ) {
+        return originalGetByAsset.call(this, assetId)
+      })
+    const oldRows = await originalGetByAsset.call(
+      new IndexedDbSnapshotRepository(),
+      'a1',
+    )
+    const staleLoad = useAssetStore.getState().load()
+    await useAssetStore.getState().saveSnapshots([
+      {
+        assetId: 'a1',
+        date: '2026-09-10',
+        amount: 232_500,
+        currency: 'RUB',
+      },
+    ])
+    releaseStale(oldRows)
+    await staleLoad
+    const amounts = useAssetStore.getState().snapshots.map((row) => row.amount)
+    expect(amounts).toContain(232_500)
+    expect(amounts).toHaveLength(2)
+    spy.mockRestore()
   })
 })
