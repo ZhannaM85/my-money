@@ -60,7 +60,7 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 |---|--------|-------|-------|
 | [#223](https://github.com/ZhannaM85/my-money/issues/223) | 🔍 Pending validation | CI: History #209 calendar delta test fails when 1M no longer includes 2026-08-10 | History #209 test now selects All so the 2026-08-10 previous snapshot stays in-range for the daily delta. Unblocks Dependabot PR #222. |
 | [#225](https://github.com/ZhannaM85/my-money/issues/225) | 🔍 Pending validation | Dashboard shows stale net worth / cash after asset edit until scroll | Refetch book on navigation/visibility; ignore stale load(); today headline uses latest holdings; chart hover no longer changes As of or opens Holdings. |
-| [#226](https://github.com/ZhannaM85/my-money/issues/226) | 🔲 Open | chore: upgrade Vitest 4 → 5 (unblock Dependabot #224) | Proper Vitest 5 bump + jest-dom matcher types; Dependabot #224 alone breaks CI. |
+| [#226](https://github.com/ZhannaM85/my-money/issues/226) | 🔍 Pending validation | chore: upgrade Vitest 4 → 5 (unblock Dependabot #224) | vitest@5 + local Matchers shim for jest-dom; `tsc -b` / tests green. |
 
 ---
 
