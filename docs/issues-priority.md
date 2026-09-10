@@ -58,7 +58,6 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
-| [#228](https://github.com/ZhannaM85/my-money/issues/228) | 🔍 Pending validation | chore: clear open Dependabot security alerts (sharp, tar, uuid) | Root overrides: sharp@0.35.4, tar@7.5.22, uuid@11.1.1 (Capacitor tooling transitive). |
 
 ---
 
