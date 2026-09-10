@@ -394,6 +394,9 @@ describe('HistoryScreen', () => {
         <HistoryScreen />
       </MemoryRouter>,
     )
+    // All keeps 2026-08-10 in the visible series so the Aug 17 row still has a
+    // daily delta once 1M (30 days from today) no longer includes that date (#223).
+    await user.click(await screen.findByRole('button', { name: 'All' }))
     await user.click(await screen.findByRole('button', { name: 'Calendar' }))
     await user.click(screen.getByTestId('history-calendar-mark-2026-08-17'))
     const rowButton = screen.getByRole('button', {
