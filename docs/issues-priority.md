@@ -58,7 +58,6 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
-| [#223](https://github.com/ZhannaM85/my-money/issues/223) | 🔍 Pending validation | CI: History #209 calendar delta test fails when 1M no longer includes 2026-08-10 | History #209 test now selects All so the 2026-08-10 previous snapshot stays in-range for the daily delta. Unblocks Dependabot PR #222. |
 
 ---
 
