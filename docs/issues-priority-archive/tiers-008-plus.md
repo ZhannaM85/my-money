@@ -264,3 +264,9 @@ Closed live-feedback rows from Tier 8 onward. Open / pending items stay in [`../
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
 | [#221](https://github.com/ZhannaM85/my-money/issues/221) | ✅ Done | Dashboard: rephrase the net-worth subtitle (assets minus debts) | Confirmed on-device 2026-09-09 — subtitle is assets minus debts in RU/EN, still mentions base currency. |
+
+## Tier 23 — CI (2026-09-10)
+
+| # | Status | Issue | Notes |
+|---|--------|-------|-------|
+| [#226](https://github.com/ZhannaM85/my-money/issues/226) | ✅ Done | chore: upgrade Vitest 4 → 5 (unblock Dependabot #224) | vitest@5 + jest-dom Matchers shim; eslint ignores `.d.ts`. Validated 2026-09-10 — Pages deploy green; Dependabot #224 closed, #227 (js-yaml) merged. |
