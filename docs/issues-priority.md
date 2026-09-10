@@ -58,6 +58,7 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
+| [#228](https://github.com/ZhannaM85/my-money/issues/228) | 🔲 Open | chore: clear open Dependabot security alerts (sharp, tar, uuid) | Transitive via Capacitor tooling; fix package groups one by one (overrides if parents stay pinned). |
 
 ---
 
