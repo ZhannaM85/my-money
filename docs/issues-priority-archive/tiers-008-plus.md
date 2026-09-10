@@ -270,3 +270,4 @@ Closed live-feedback rows from Tier 8 onward. Open / pending items stay in [`../
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
 | [#226](https://github.com/ZhannaM85/my-money/issues/226) | ✅ Done | chore: upgrade Vitest 4 → 5 (unblock Dependabot #224) | vitest@5 + jest-dom Matchers shim; eslint ignores `.d.ts`. Validated 2026-09-10 — Pages deploy green; Dependabot #224 closed, #227 (js-yaml) merged. |
+| [#225](https://github.com/ZhannaM85/my-money/issues/225) | ✅ Done | Dashboard shows stale net worth / cash after asset edit until scroll | Refetch book on navigation/visibility; ignore stale load(); today headline uses latest holdings; chart hover no longer changes As of or opens Holdings. Validated on-device 2026-09-10. |
