@@ -278,5 +278,6 @@ Closed live-feedback rows from Tier 8 onward. Open / pending items stay in [`../
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
+| [#230](https://github.com/ZhannaM85/my-money/issues/230) | ✅ Done | Сводка: remove grey helper subheaders / filler blurbs | Title subtitle, currency-filter inactive hint, and FX converted disclaimer removed. Из сумм / Из курсов rows kept. Same grey-under-title filler dropped on History, Comparison, Allocation, Settings. Validated on-device 2026-09-11. |
 | [#231](https://github.com/ZhannaM85/my-money/issues/231) | ✅ Done | Asset detail: move refresh + Сведения to top; make overview collapsible | Refresh/save near the top, then collapsible Сведения (collapsed by default). Chart and history stay below. Validated on-device 2026-09-11. |
 | [#232](https://github.com/ZhannaM85/my-money/issues/232) | ✅ Done | Unify button and input sizes across pages (shared design tokens) | `--control-height` / compact tokens; Button, Input, Select, Chip. Pages drop one-off `h-12` / pill classes. Validated on-device 2026-09-11. |
