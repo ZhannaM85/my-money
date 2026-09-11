@@ -61,6 +61,14 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 
 ---
 
+## Tier 24 — Live feedback (2026-09-11)
+
+| # | Status | Issue | Notes |
+|---|--------|-------|-------|
+| [#229](https://github.com/ZhannaM85/my-money/issues/229) | 🔍 Pending validation | Missing bottom spacing between last content and tab bar (most pages) | Shared AppShell content-flow inset above the tab bar so last cards/controls are not flush. |
+
+---
+
 ## Explicitly not filed
 
 Out of scope for the MVP (`PROJECT_BRIEF.md` §20) — do not implement from chat:

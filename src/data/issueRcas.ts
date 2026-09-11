@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 229,
+    title: {
+      en: 'Missing bottom spacing between last content and tab bar (most pages)',
+      ru: 'Нет нижнего отступа между последним контентом и панелью вкладок',
+    },
+    en: 'The shell content wrapper is flex-1 min-h-0 so Update can nested-scroll. py-6 on that viewport-tall box sits in the visible frame; overflowing page content paints through the bottom padding and ends flush with the tab bar (and can clip rounded corners). A shrink-0 spacer after the outlet is in the content flow, so scroll-to-end keeps a shared gap on every tab.',
+    ru: 'Обёртка контента в оболочке — flex-1 min-h-0, чтобы Обновить мог крутиться внутри. py-6 на этой высоте экрана остаётся в видимой рамке; вылезающий контент страницы рисуется сквозь нижний padding и упирается в таббар (и может обрезать скругления). Спейсер shrink-0 после outlet идёт в потоке контента — при прокрутке до конца на всех вкладках общий зазор.',
+  },
+  {
     issue: 225,
     title: {
       en: 'Dashboard shows stale net worth after an asset edit until scroll',

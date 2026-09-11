@@ -86,5 +86,9 @@ gh issue edit 108 --add-label validation
 | `151-positions-ownership-share.png` | Dashboard Positions · ownership share cue (#151) |
 | `152-positions-property-full-share.png` | Dashboard Positions · property Your share: 1/1 (#152) |
 | `153-assets-filter-chips-wrap.png` | Assets · filter chips wrap to extra rows (#153) |
+| `229-dashboard-tab-bar-inset.png` | Dashboard · Allocation control above tab bar (#229) |
+| `229-assets-tab-bar-inset.png` | Assets · last row above tab bar (#229) |
+| `229-history-tab-bar-inset.png` | History · last day card above tab bar (#229) |
+| `229-settings-tab-bar-inset.png` | More · last section above tab bar (#229) |
 
 Fixtures are seeded in IndexedDB (`e2e/seed.ts`). Local only — no user balances leave the device.

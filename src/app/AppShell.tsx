@@ -129,14 +129,23 @@ export function AppShell() {
         {/*
           #217: vertical padding must not live on the scrollport — sticky As of
           left a gap under the app header where scrolling content bled through.
+          #229: this wrapper is flex-1 min-h-0 (viewport-tall so Update can
+          nested-scroll). Bottom padding here sits in that box and overflowing
+          page content paints through it, flush with the tab bar. A shrink-0
+          spacer after the outlet stays in the content flow.
         */}
-        <div className="flex min-h-0 w-full flex-1 flex-col py-6">
+        <div className="flex min-h-0 w-full flex-1 flex-col pt-6">
           {fxError && (
             <p className="mb-4 text-sm text-muted-foreground">
               {t.fx.usingCachedRates}
             </p>
           )}
           <Outlet />
+          <div
+            data-testid="main-bottom-inset"
+            className="h-8 shrink-0"
+            aria-hidden="true"
+          />
         </div>
       </main>
       {!hideTabBar && <BottomNav />}

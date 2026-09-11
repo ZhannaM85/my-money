@@ -1,7 +1,11 @@
 import 'fake-indexeddb/auto'
 import { act, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { createMemoryRouter, MemoryRouter, RouterProvider } from 'react-router-dom'
+import {
+  createMemoryRouter,
+  MemoryRouter,
+  RouterProvider,
+} from 'react-router-dom'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { DEFAULT_SETTINGS } from '@/domain/settings'
 import { db } from '@/infrastructure/persistence/indexeddb'
@@ -61,10 +65,9 @@ describe('AppShell', () => {
     ).toBeInTheDocument()
     expect(screen.getByRole('link', { name: 'Dashboard' })).toBeInTheDocument()
     expect(screen.getByRole('link', { name: 'Update' })).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: 'Skip to content' })).toHaveAttribute(
-      'href',
-      '#main-content',
-    )
+    expect(
+      screen.getByRole('link', { name: 'Skip to content' }),
+    ).toHaveAttribute('href', '#main-content')
   })
 
   it('scrolls to top when the app chrome header is tapped (#215)', async () => {
@@ -98,9 +101,31 @@ describe('AppShell', () => {
     expect(main.className).toContain('overflow-y-auto')
     expect(main.className).toContain('px-4')
     expect(main.className).not.toContain('py-6')
+    expect(main.className).not.toContain('pt-6')
     const pad = main.firstElementChild
     expect(pad).not.toBeNull()
-    expect(pad!.className).toContain('py-6')
+    expect(pad!.className).toContain('pt-6')
+    expect(pad!.className).not.toContain('py-6')
+  })
+
+  it('keeps a content-flow gap above the tab bar so last blocks are not flush (#229)', async () => {
+    render(
+      <MemoryRouter>
+        <AppShell />
+      </MemoryRouter>,
+    )
+    const main = await screen.findByRole('main')
+    const pad = main.firstElementChild
+    expect(pad).not.toBeNull()
+    const inset = screen.getByTestId('main-bottom-inset')
+    expect(pad!.lastElementChild).toBe(inset)
+    expect(inset).toHaveAttribute('aria-hidden', 'true')
+    expect(inset.className).toContain('shrink-0')
+    expect(inset.className).toMatch(/\bh-8\b/)
+    const nav = await screen.findByRole('navigation', { name: 'Tabs' })
+    expect(
+      main.compareDocumentPosition(nav) & Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy()
   })
 
   it('pins the tab bar in the shell so iOS 26 cannot shift a position:fixed footer (#106, #91)', async () => {
@@ -120,7 +145,9 @@ describe('AppShell', () => {
     expect(main.className).toContain('overflow-y-auto')
     expect(main.className).toContain('overflow-x-hidden')
     expect(main.className).not.toContain('overflow-x-clip')
-    expect(main.compareDocumentPosition(nav) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+    expect(
+      main.compareDocumentPosition(nav) & Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy()
   })
 
   it('stacks main above the tab bar so chart tooltips are not covered (#131)', async () => {
@@ -144,7 +171,9 @@ describe('AppShell', () => {
 
     const main = await screen.findByRole('main')
     expect(main.className).toContain('overflow-y-auto')
-    expect(main.className).not.toContain('pb-[calc(env(safe-area-inset-bottom)+9rem)]')
+    expect(main.className).not.toContain(
+      'pb-[calc(env(safe-area-inset-bottom)+9rem)]',
+    )
   })
 
   it('keeps the shell usable and shows cached FX copy when rates cannot refresh', async () => {

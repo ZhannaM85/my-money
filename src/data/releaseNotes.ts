@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 220,
+    issue: 229,
+    date: '2026-09-11T18:05:00+03:00',
+    en: 'Lists and cards keep a gap above the tab bar, so the last block is not flush against the footer.',
+    ru: 'Списки и карточки держат отступ над панелью вкладок — последний блок больше не прижат к футеру.',
+  },
+  {
     version: 219,
     issue: 225,
     date: '2026-09-10T13:30:00+03:00',
