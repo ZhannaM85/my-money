@@ -65,7 +65,6 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
-| [#229](https://github.com/ZhannaM85/my-money/issues/229) | 🔍 Pending validation | Missing bottom spacing between last content and tab bar (most pages) | Shared AppShell content-flow inset above the tab bar so last cards/controls are not flush. |
 
 ---
 
