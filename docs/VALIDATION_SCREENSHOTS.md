@@ -91,5 +91,7 @@ gh issue edit 108 --add-label validation
 | `229-assets-tab-bar-inset.png` | Assets · last row above tab bar (#229) |
 | `229-history-tab-bar-inset.png` | History · last day card above tab bar (#229) |
 | `229-settings-tab-bar-inset.png` | More · last section above tab bar (#229) |
+| `231-asset-details-refresh-top-collapsed.png` | Asset details · Update this asset + collapsed Сведения near top (RU, #231) |
+| `231-asset-details-svedeniya-expanded.png` | Asset details · Сведения expanded (RU, #231) |
 
 Fixtures are seeded in IndexedDB (`e2e/seed.ts`). Local only — no user balances leave the device.

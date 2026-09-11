@@ -1,10 +1,14 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import { Pencil, Trash2 } from 'lucide-react'
+import { ChevronDown, Pencil, Trash2 } from 'lucide-react'
 import { convertAmount, lookupRate } from '@/domain/fx'
 import { assetPerformance } from '@/domain/netWorth'
 import { BASE_CURRENCIES } from '@/domain/settings'
-import { latestSnapshot, optionalSnapshotNote, hasDuplicateSnapshot } from '@/domain/snapshot'
+import {
+  latestSnapshot,
+  optionalSnapshotNote,
+  hasDuplicateSnapshot,
+} from '@/domain/snapshot'
 import { NetWorthChart } from '@/features/dashboard/NetWorthChart'
 import { ChartRangePicker } from '@/features/dashboard/ChartRangePicker'
 import {
@@ -13,10 +17,7 @@ import {
 } from '@/features/dashboard/ChartRangeToolbar'
 import { assetChartPoints } from './assetChartPoints'
 import { formatLastUpdated, useLocale, useTranslation } from '@/i18n'
-import {
-  formatOwnershipShare,
-  ownershipMultiplier,
-} from '@/domain/asset'
+import { formatOwnershipShare, ownershipMultiplier } from '@/domain/asset'
 import {
   formatAmount,
   formatEditableAmount,
@@ -94,6 +95,7 @@ export function AssetDetailsScreen() {
   const [editNote, setEditNote] = useState('')
   const [editError, setEditError] = useState<string | undefined>()
   const [editingDetails, setEditingDetails] = useState(false)
+  const [detailsOpen, setDetailsOpen] = useState(false)
   const [range, setRange] = useState<HistoryRange>('All')
   const [customStart, setCustomStart] = useState(todayIsoDate)
   const [customEnd, setCustomEnd] = useState(todayIsoDate)
@@ -305,7 +307,9 @@ export function AssetDetailsScreen() {
         </Button>
       </div>
       <StatCard
-        label={mode === 'native' ? t.asset.currentValue : t.asset.inBaseCurrency}
+        label={
+          mode === 'native' ? t.asset.currentValue : t.asset.inBaseCurrency
+        }
         value={
           snapshot
             ? formatAmount(
@@ -343,6 +347,175 @@ export function AssetDetailsScreen() {
           {t.asset.noRateOnDate(snapshot.currency, snapshot.date)}
         </p>
       )}
+      <section className="flex flex-col gap-3">
+        <InfoHint
+          hint={t.asset.updateThisAssetHint}
+          label={t.common.aboutField(t.asset.updateThisAsset)}
+        >
+          <h2 className="text-lg font-semibold">{t.asset.updateThisAsset}</h2>
+        </InfoHint>
+        <DateField
+          label={t.asset.snapshotDate}
+          value={amountDate}
+          max={today}
+          onChange={(event) => setAmountDate(event.target.value)}
+          error={
+            amountError === t.asset.snapshotDateInvalid
+              ? amountError
+              : undefined
+          }
+        />
+        <TextField
+          label={t.asset.snapshotNote}
+          value={amountNote}
+          onChange={(event) => setAmountNote(event.target.value)}
+        />
+        <div className="flex min-w-0 flex-col gap-2">
+          <div className="relative min-w-0">
+            <Input
+              aria-label={t.asset.newAmount}
+              inputMode="decimal"
+              value={amountDraft}
+              placeholder={
+                snapshot
+                  ? formatEditableAmount(
+                      snapshot.amount,
+                      locale,
+                      snapshot.currency,
+                    )
+                  : t.asset.amountPlaceholder
+              }
+              className="h-12 min-w-0 pr-12"
+              onChange={(event) => setAmountDraft(event.target.value)}
+              onBlur={() =>
+                setAmountDraft((current) =>
+                  reformatAmountInput(current, locale, asset.currency),
+                )
+              }
+            />
+            <span className="pointer-events-none absolute inset-y-0 right-2.5 flex items-center text-sm text-muted-foreground">
+              {asset.currency}
+            </span>
+          </div>
+          <Button
+            type="button"
+            className="h-12 w-full"
+            onClick={() => void saveAmount()}
+          >
+            {t.common.save}
+          </Button>
+        </div>
+        {duplicateAmountHint && (
+          <p className="text-sm text-warning" role="status">
+            {t.asset.duplicateSnapshotHint}
+          </p>
+        )}
+        {amountError && amountError !== t.asset.snapshotDateInvalid && (
+          <p className="text-sm text-destructive">{amountError}</p>
+        )}
+      </section>
+      <section className="flex flex-col gap-3">
+        <h2 className="text-lg font-semibold">
+          <button
+            type="button"
+            className="flex w-full items-center justify-between gap-2 text-left"
+            aria-expanded={detailsOpen}
+            onClick={() => setDetailsOpen((open) => !open)}
+          >
+            {t.asset.details}
+            <ChevronDown
+              className={cn(
+                'size-5 shrink-0 text-muted-foreground transition-transform',
+                detailsOpen && 'rotate-180',
+              )}
+              aria-hidden
+            />
+          </button>
+        </h2>
+        {detailsOpen ? (
+          editingDetails ? (
+            <>
+              <AssetForm
+                initial={asset}
+                requireAmount={false}
+                submitLabel={t.asset.saveDetails}
+                onSubmit={async ({
+                  asset: next,
+                  amount,
+                  snapshotDate,
+                  note,
+                }) => {
+                  await saveAsset(
+                    next,
+                    amount === undefined
+                      ? undefined
+                      : {
+                          assetId: next.id,
+                          date: snapshotDate ?? todayIsoDate(),
+                          amount,
+                          currency: next.currency,
+                          ...(note ? { note } : {}),
+                        },
+                  )
+                  setEditingDetails(false)
+                }}
+              />
+              <Button
+                type="button"
+                variant="outline"
+                size="xl"
+                className="w-full"
+                onClick={() => setEditingDetails(false)}
+              >
+                {t.common.cancel}
+              </Button>
+            </>
+          ) : (
+            <>
+              <dl className="divide-y divide-border rounded-xl bg-card px-4 ring-1 ring-foreground/10">
+                <DetailRow label={t.asset.name} value={asset.name} />
+                <DetailRow
+                  label={t.asset.class}
+                  value={t.asset.classes[asset.assetClass]}
+                />
+                <DetailRow
+                  label={t.asset.type}
+                  value={t.asset.types[asset.type]}
+                />
+                <DetailRow label={t.asset.currency} value={asset.currency} />
+                {asset.institution ? (
+                  <DetailRow
+                    label={t.asset.institutionOptional}
+                    value={asset.institution}
+                  />
+                ) : null}
+                <DetailRow
+                  label={t.asset.valuationLabel}
+                  value={t.asset.valuation[asset.valuationMethod]}
+                />
+                <DetailRow
+                  label={t.asset.updateFrequency}
+                  value={t.asset.frequency[asset.updateFrequency]}
+                />
+                <DetailRow label={t.asset.ownershipShare} value={shareLabel} />
+                <DetailRow
+                  label={t.asset.trackingLabel}
+                  value={t.asset.tracking[asset.trackingStatus]}
+                />
+              </dl>
+              <Button
+                type="button"
+                variant="outline"
+                size="xl"
+                className="w-full"
+                onClick={() => setEditingDetails(true)}
+              >
+                {t.asset.editDetails}
+              </Button>
+            </>
+          )
+        ) : null}
+      </section>
       <ChartRangePicker
         range={range}
         onRangeChange={selectRange}
@@ -361,9 +534,7 @@ export function AssetDetailsScreen() {
         points={points}
         currency={displayCurrency ?? asset.currency}
         seriesName={asset.name}
-        onZoomIn={() =>
-          setRange((current) => stepHistoryRange(current, 'in'))
-        }
+        onZoomIn={() => setRange((current) => stepHistoryRange(current, 'in'))}
         onZoomOut={() =>
           setRange((current) => stepHistoryRange(current, 'out'))
         }
@@ -391,7 +562,8 @@ export function AssetDetailsScreen() {
           )}
           disabled={!canZoomIn}
           onClick={() => {
-            if (canZoomIn) setRange((current) => stepHistoryRange(current, 'in'))
+            if (canZoomIn)
+              setRange((current) => stepHistoryRange(current, 'in'))
           }}
         >
           {t.dashboard.zoomIn}
@@ -451,7 +623,9 @@ export function AssetDetailsScreen() {
                   }
                 />
                 <label className="flex min-w-0 flex-col gap-1.5">
-                  <span className="text-sm font-medium">{t.asset.currency}</span>
+                  <span className="text-sm font-medium">
+                    {t.asset.currency}
+                  </span>
                   <select
                     className="h-12 min-w-0 rounded-lg border border-input bg-background px-2.5 text-base"
                     value={editCurrency}
@@ -464,12 +638,11 @@ export function AssetDetailsScreen() {
                       )
                     }}
                   >
-                    {(
-                      (BASE_CURRENCIES as readonly string[]).includes(
-                        editCurrency,
-                      )
-                        ? BASE_CURRENCIES
-                        : [editCurrency, ...BASE_CURRENCIES]
+                    {((BASE_CURRENCIES as readonly string[]).includes(
+                      editCurrency,
+                    )
+                      ? BASE_CURRENCIES
+                      : [editCurrency, ...BASE_CURRENCIES]
                     ).map((code) => (
                       <option key={code} value={code}>
                         {code}
@@ -569,7 +742,8 @@ export function AssetDetailsScreen() {
                       size="icon"
                       aria-label={t.asset.deleteSnapshotAria(row.date)}
                       onClick={() => {
-                        if (!window.confirm(t.asset.deleteSnapshotConfirm)) return
+                        if (!window.confirm(t.asset.deleteSnapshotConfirm))
+                          return
                         void deleteSnapshot(row.id)
                       }}
                     >
@@ -586,150 +760,6 @@ export function AssetDetailsScreen() {
             )
           })}
         </ul>
-      )}
-      <section className="flex flex-col gap-3">
-        <InfoHint
-          hint={t.asset.updateThisAssetHint}
-          label={t.common.aboutField(t.asset.updateThisAsset)}
-        >
-          <h2 className="text-lg font-semibold">{t.asset.updateThisAsset}</h2>
-        </InfoHint>
-        <DateField
-          label={t.asset.snapshotDate}
-          value={amountDate}
-          max={today}
-          onChange={(event) => setAmountDate(event.target.value)}
-          error={
-            amountError === t.asset.snapshotDateInvalid
-              ? amountError
-              : undefined
-          }
-        />
-        <TextField
-          label={t.asset.snapshotNote}
-          value={amountNote}
-          onChange={(event) => setAmountNote(event.target.value)}
-        />
-        <div className="flex min-w-0 flex-col gap-2">
-          <div className="relative min-w-0">
-            <Input
-              aria-label={t.asset.newAmount}
-              inputMode="decimal"
-              value={amountDraft}
-              placeholder={
-                snapshot
-                  ? formatEditableAmount(
-                      snapshot.amount,
-                      locale,
-                      snapshot.currency,
-                    )
-                  : t.asset.amountPlaceholder
-              }
-              className="h-12 min-w-0 pr-12"
-              onChange={(event) => setAmountDraft(event.target.value)}
-              onBlur={() =>
-                setAmountDraft((current) =>
-                  reformatAmountInput(current, locale, asset.currency),
-                )
-              }
-            />
-            <span className="pointer-events-none absolute inset-y-0 right-2.5 flex items-center text-sm text-muted-foreground">
-              {asset.currency}
-            </span>
-          </div>
-          <Button
-            type="button"
-            className="h-12 w-full"
-            onClick={() => void saveAmount()}
-          >
-            {t.common.save}
-          </Button>
-        </div>
-        {duplicateAmountHint && (
-          <p className="text-sm text-warning" role="status">
-            {t.asset.duplicateSnapshotHint}
-          </p>
-        )}
-        {amountError && amountError !== t.asset.snapshotDateInvalid && (
-          <p className="text-sm text-destructive">{amountError}</p>
-        )}
-      </section>
-      <h2 className="text-lg font-semibold">{t.asset.details}</h2>
-      {editingDetails ? (
-        <>
-          <AssetForm
-            initial={asset}
-            requireAmount={false}
-            submitLabel={t.asset.saveDetails}
-            onSubmit={async ({ asset: next, amount, snapshotDate, note }) => {
-              await saveAsset(
-                next,
-                amount === undefined
-                  ? undefined
-                  : {
-                      assetId: next.id,
-                      date: snapshotDate ?? todayIsoDate(),
-                      amount,
-                      currency: next.currency,
-                      ...(note ? { note } : {}),
-                    },
-              )
-              setEditingDetails(false)
-            }}
-          />
-          <Button
-            type="button"
-            variant="outline"
-            size="xl"
-            className="w-full"
-            onClick={() => setEditingDetails(false)}
-          >
-            {t.common.cancel}
-          </Button>
-        </>
-      ) : (
-        <>
-          <dl className="divide-y divide-border rounded-xl bg-card px-4 ring-1 ring-foreground/10">
-            <DetailRow label={t.asset.name} value={asset.name} />
-            <DetailRow
-              label={t.asset.class}
-              value={t.asset.classes[asset.assetClass]}
-            />
-            <DetailRow
-              label={t.asset.type}
-              value={t.asset.types[asset.type]}
-            />
-            <DetailRow label={t.asset.currency} value={asset.currency} />
-            {asset.institution ? (
-              <DetailRow
-                label={t.asset.institutionOptional}
-                value={asset.institution}
-              />
-            ) : null}
-            <DetailRow
-              label={t.asset.valuationLabel}
-              value={t.asset.valuation[asset.valuationMethod]}
-            />
-            <DetailRow
-              label={t.asset.updateFrequency}
-              value={t.asset.frequency[asset.updateFrequency]}
-            />
-            <DetailRow label={t.asset.ownershipShare} value={shareLabel} />
-            <DetailRow
-              label={t.asset.trackingLabel}
-              value={t.asset.tracking[asset.trackingStatus]}
-            />
-          </dl>
-          <Button
-            type="button"
-            variant="outline"
-            size="xl"
-            className="w-full"
-            onClick={() => setEditingDetails(true)}
-          >
-            {t.asset.editDetails}
-          </Button>
-        </>
       )}
       {asset.trackingStatus === 'included' && (
         <Button
@@ -778,18 +808,18 @@ export function AssetDetailsScreen() {
           {t.asset.restore}
         </Button>
       )}
-        <Button
-          type="button"
-          variant="destructive"
-          size="xl"
-          className="w-full"
-          onClick={() => {
-            if (!window.confirm(t.asset.deleteConfirm)) return
-            void deleteAsset(asset.id).then(() => navigate('/assets'))
-          }}
-        >
-          {t.asset.deleteAsset}
-        </Button>
+      <Button
+        type="button"
+        variant="destructive"
+        size="xl"
+        className="w-full"
+        onClick={() => {
+          if (!window.confirm(t.asset.deleteConfirm)) return
+          void deleteAsset(asset.id).then(() => navigate('/assets'))
+        }}
+      >
+        {t.asset.deleteAsset}
+      </Button>
     </div>
   )
 }

@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 231,
+    title: {
+      en: 'Asset detail: move refresh + Details to top; make overview collapsible',
+      ru: 'Карточка актива: перенести обновление и Сведения наверх; сделать обзор сворачиваемым',
+    },
+    en: 'Update this asset (date / note / amount / Save) and Details sat below the chart and history, so refreshing meant a long scroll. Those blocks now sit under the current-value card. Details is a disclosure, collapsed by default, so the refresh form stays primary.',
+    ru: '«Обновить этот актив» (дата / комментарий / сумма / Сохранить) и «Сведения» стояли под графиком и историей — чтобы обновить, нужно было далеко скроллить. Эти блоки теперь под карточкой текущей стоимости. «Сведения» — раскрываемый блок, по умолчанию свёрнут, чтобы форма обновления оставалась главной.',
+  },
+  {
     issue: 230,
     title: {
       en: 'Summary: remove grey helper subheaders / filler blurbs',

@@ -67,6 +67,7 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 |---|--------|-------|-------|
 | [#229](https://github.com/ZhannaM85/my-money/issues/229) | 🔍 Pending validation | Missing bottom spacing between last content and tab bar (most pages) | Shared AppShell content-flow inset above the tab bar so last cards/controls are not flush. |
 | [#230](https://github.com/ZhannaM85/my-money/issues/230) | 🔍 Pending validation | Сводка: remove grey helper subheaders / filler blurbs | Title subtitle, currency-filter inactive hint, and FX converted disclaimer removed. Из сумм / Из курсов rows kept. Same grey-under-title filler dropped on History, Comparison, Allocation, Settings. |
+| [#231](https://github.com/ZhannaM85/my-money/issues/231) | 🔍 Pending validation | Asset detail: move refresh + Сведения to top; make overview collapsible | Refresh/save near the top, then collapsible Сведения (collapsed by default). Chart and history stay below. |
 
 ---
 

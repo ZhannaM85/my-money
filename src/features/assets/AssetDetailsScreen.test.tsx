@@ -1,5 +1,5 @@
 import 'fake-indexeddb/auto'
-import { render, screen, waitFor } from '@testing-library/react'
+import { render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter, Route, Routes } from 'react-router-dom'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
@@ -143,7 +143,22 @@ describe('AssetDetailsScreen', () => {
     expect(
       screen.queryByRole('button', { name: 'Save details' }),
     ).not.toBeInTheDocument()
-    expect(screen.getByRole('button', { name: 'Edit details' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /^Details$/ })).toHaveAttribute(
+      'aria-expanded',
+      'false',
+    )
+    expect(
+      screen.queryByRole('button', { name: 'Edit details' }),
+    ).not.toBeInTheDocument()
+    expect(screen.queryByText('Account balance')).not.toBeInTheDocument()
+    await userEvent.click(screen.getByRole('button', { name: /^Details$/ }))
+    expect(screen.getByRole('button', { name: /^Details$/ })).toHaveAttribute(
+      'aria-expanded',
+      'true',
+    )
+    expect(
+      screen.getByRole('button', { name: 'Edit details' }),
+    ).toBeInTheDocument()
     expect(screen.getByText('Account balance')).toBeInTheDocument()
   })
 
@@ -165,6 +180,7 @@ describe('AssetDetailsScreen', () => {
         'Saves a new snapshot for the chosen date (defaults to today). It does not change older history rows.',
       ),
     ).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: /^Details$/ }))
     await user.click(screen.getByRole('button', { name: 'Edit details' }))
     await user.click(
       screen.getByRole('button', { name: 'About New amount (optional)' }),
@@ -311,6 +327,7 @@ describe('AssetDetailsScreen', () => {
     expect(
       screen.queryByRole('button', { name: 'Save details' }),
     ).not.toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: /^Details$/ }))
     await user.click(screen.getByRole('button', { name: 'Edit details' }))
     const asOfFields = screen.getAllByLabelText('As of')
     setDateField(asOfFields[asOfFields.length - 1]!, past)
@@ -392,7 +409,9 @@ describe('AssetDetailsScreen', () => {
     })
     expect(useAssetStore.getState().assets).toHaveLength(1)
     expect(
-      useAssetStore.getState().snapshots.some((row) => row.date === '2026-08-01'),
+      useAssetStore
+        .getState()
+        .snapshots.some((row) => row.date === '2026-08-01'),
     ).toBe(false)
   })
 
@@ -416,7 +435,13 @@ describe('AssetDetailsScreen', () => {
     const amountInput = screen.getByLabelText('Snapshot amount')
     await user.clear(amountInput)
     await user.type(amountInput, '900')
-    await user.click(screen.getAllByRole('button', { name: 'Save' })[0])
+    const snapshotEditor = screen
+      .getByRole('button', { name: 'Cancel' })
+      .closest('li')
+    expect(snapshotEditor).toBeTruthy()
+    await user.click(
+      within(snapshotEditor!).getByRole('button', { name: 'Save' }),
+    )
     await waitFor(() => {
       const rows = useAssetStore
         .getState()
@@ -443,7 +468,13 @@ describe('AssetDetailsScreen', () => {
       screen.getByRole('button', { name: 'Edit snapshot from 2026-08-01' }),
     )
     await user.selectOptions(screen.getByLabelText('Currency'), 'RUB')
-    await user.click(screen.getAllByRole('button', { name: 'Save' })[0])
+    const snapshotEditor = screen
+      .getByRole('button', { name: 'Cancel' })
+      .closest('li')
+    expect(snapshotEditor).toBeTruthy()
+    await user.click(
+      within(snapshotEditor!).getByRole('button', { name: 'Save' }),
+    )
     await waitFor(() => {
       expect(
         useAssetStore.getState().snapshots.find((row) => row.id === originalId)
@@ -487,7 +518,9 @@ describe('AssetDetailsScreen', () => {
       </MemoryRouter>,
     )
     await screen.findByRole('heading', { name: 'Revolut' })
-    expect(await screen.findByRole('button', { name: 'RUB' })).toBeInTheDocument()
+    expect(
+      await screen.findByRole('button', { name: 'RUB' }),
+    ).toBeInTheDocument()
     expect(
       screen.getAllByText(
         (_, node) =>
@@ -502,5 +535,50 @@ describe('AssetDetailsScreen', () => {
         node.className.includes('text-muted-foreground'),
     )
     expect(native).toBeInTheDocument()
+  })
+
+  it('puts Update this asset and collapsed Details above the chart (#231)', async () => {
+    render(
+      <MemoryRouter initialEntries={['/assets/a1']}>
+        <Routes>
+          <Route path="/assets/:id" element={<AssetDetailsScreen />} />
+        </Routes>
+      </MemoryRouter>,
+    )
+    await screen.findByRole('heading', { name: 'Revolut' })
+    const update = screen.getByRole('heading', { name: 'Update this asset' })
+    const details = screen.getByRole('button', { name: /^Details$/ })
+    const chartRange = await screen.findByText(/Chart range:/)
+    expect(details).toHaveAttribute('aria-expanded', 'false')
+    expect(
+      update.compareDocumentPosition(details) &
+        Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBe(Node.DOCUMENT_POSITION_FOLLOWING)
+    expect(
+      details.compareDocumentPosition(chartRange) &
+        Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBe(Node.DOCUMENT_POSITION_FOLLOWING)
+  })
+
+  it('expands Details to show the overview and edit action (#231)', async () => {
+    const user = userEvent.setup()
+    render(
+      <MemoryRouter initialEntries={['/assets/a1']}>
+        <Routes>
+          <Route path="/assets/:id" element={<AssetDetailsScreen />} />
+        </Routes>
+      </MemoryRouter>,
+    )
+    await screen.findByRole('heading', { name: 'Revolut' })
+    const details = screen.getByRole('button', { name: /^Details$/ })
+    await user.click(details)
+    expect(details).toHaveAttribute('aria-expanded', 'true')
+    expect(screen.getByText('Account balance')).toBeInTheDocument()
+    expect(
+      screen.getByRole('button', { name: 'Edit details' }),
+    ).toBeInTheDocument()
+    await user.click(details)
+    expect(details).toHaveAttribute('aria-expanded', 'false')
+    expect(screen.queryByText('Account balance')).not.toBeInTheDocument()
   })
 })

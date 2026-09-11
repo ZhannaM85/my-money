@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 222,
+    issue: 231,
+    date: '2026-09-11T18:30:00+03:00',
+    en: 'On asset details, Update this asset and Save sit near the top. Details is a collapsible section under that, collapsed by default so you can refresh without scrolling past the chart.',
+    ru: 'На карточке актива «Обновить этот актив» и «Сохранить» стоят вверху. «Сведения» — сворачиваемый блок под ними, по умолчанию свёрнут, чтобы обновить сумму без прокрутки мимо графика.',
+  },
+  {
     version: 221,
     issue: 230,
     date: '2026-09-11T18:15:00+03:00',
