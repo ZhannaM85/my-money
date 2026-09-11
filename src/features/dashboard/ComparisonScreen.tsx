@@ -314,10 +314,7 @@ export function ComparisonScreen() {
   if (dates.length < 2) {
     return (
       <div className="flex flex-col gap-6">
-        <PageHeader
-          title={t.dashboard.comparisonTitle}
-          description={t.dashboard.comparisonDescription}
-        />
+        <PageHeader title={t.dashboard.comparisonTitle} />
         <EmptyState
           title={t.dashboard.comparisonNeedTwoDates}
           action={
@@ -336,7 +333,6 @@ export function ComparisonScreen() {
     <div className="flex w-full min-w-0 flex-col gap-6 overflow-x-hidden">
       <PageHeader
         title={t.dashboard.comparisonTitle}
-        description={`${t.dashboard.comparisonDescription} ${t.dashboard.comparisonChangeHint}`}
         action={
           <Button
             type="button"

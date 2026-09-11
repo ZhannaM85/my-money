@@ -68,7 +68,6 @@ export function SettingsScreen() {
     <div className="flex flex-col gap-6">
       <PageHeader
         title={t.settings.title}
-        description={t.settings.description}
         action={
           currentVersion !== undefined && (
             <a
@@ -126,7 +125,9 @@ export function SettingsScreen() {
         )}
       </div>
       <div className="flex flex-col gap-2">
-        <span className="text-sm font-medium">{t.settings.currencyDisplay}</span>
+        <span className="text-sm font-medium">
+          {t.settings.currencyDisplay}
+        </span>
         <div className="flex flex-wrap gap-2">
           {displayModes.map((item) => (
             <button
@@ -228,7 +229,9 @@ export function SettingsScreen() {
       <BackupSection />
       <CsvSection />
       <section id="release-notes" className="flex flex-col gap-3">
-        <h2 className="text-lg font-semibold">{t.settings.releaseNotesLabel}</h2>
+        <h2 className="text-lg font-semibold">
+          {t.settings.releaseNotesLabel}
+        </h2>
         <ReleaseNotesSection />
       </section>
       <section id="root-causes" className="flex flex-col gap-3">

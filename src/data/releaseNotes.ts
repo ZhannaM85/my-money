@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 221,
+    issue: 230,
+    date: '2026-09-11T18:15:00+03:00',
+    en: 'Summary no longer shows grey helper blurbs under the title, currency filter, or net-worth total. From amounts / From rates rows stay.',
+    ru: 'На Сводке больше нет серых подсказок под заголовком, фильтром валюты и итогом. Строки «Из сумм» и «Из курсов» остаются.',
+  },
+  {
     version: 220,
     issue: 229,
     date: '2026-09-11T18:05:00+03:00',

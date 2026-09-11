@@ -473,8 +473,8 @@ describe('ComparisonScreen (#137)', () => {
     )
     expect(await screen.findByTestId('comparison-table')).toBeInTheDocument()
     expect(
-      screen.getByText(/Later columns show change versus the first date/),
-    ).toBeInTheDocument()
+      screen.queryByText(/Later columns show change versus the first date/),
+    ).not.toBeInTheDocument()
     const up = await screen.findByLabelText(
       `Up ${formatSignedAmount(50, 'EUR')}`,
     )

@@ -374,9 +374,6 @@ export function DashboardScreen() {
   }
 
   const loaded = assetsLoaded && settingsLoaded
-  const converted = filteredSnapshots.some(
-    (snapshot) => snapshot.currency !== baseCurrency,
-  )
   const missingCodes = [
     ...new Set(
       (convertedTodayPoint?.missingRates ?? convertedResult.missingRates).map(
@@ -384,13 +381,10 @@ export function DashboardScreen() {
       ),
     ),
   ]
-  const fxNote = isOriginal
-    ? undefined
-    : missingCodes.length > 0
+  const fxNote =
+    !isOriginal && missingCodes.length > 0
       ? t.dashboard.fxMissing(missingCodes.join(', '))
-      : converted
-        ? t.dashboard.fxConverted
-        : undefined
+      : undefined
   const changeCurrency = isOriginal
     ? activeCurrencyFilter === 'all'
       ? null
@@ -411,10 +405,7 @@ export function DashboardScreen() {
       data-testid="dashboard-scroll"
       className="flex min-w-0 w-full flex-col gap-4"
     >
-      <PageHeader
-        title={t.dashboard.title}
-        description={t.dashboard.description}
-      />
+      <PageHeader title={t.dashboard.title} />
       {!loaded ? (
         <p className="text-sm text-muted-foreground">{t.common.loading}</p>
       ) : assets.length === 0 ? (
@@ -496,44 +487,37 @@ export function DashboardScreen() {
             data-testid="dashboard-scroll-body"
             className="relative z-0 flex min-w-0 w-full flex-col gap-6"
           >
-          <div className="flex flex-col gap-1.5">
-            <label
-              className="flex flex-col gap-1.5"
-              htmlFor="dashboard-currency-filter"
+          <label
+            className="flex flex-col gap-1.5"
+            htmlFor="dashboard-currency-filter"
+          >
+            <span className="text-sm font-medium">{t.asset.currency}</span>
+            <select
+              id="dashboard-currency-filter"
+              className={cn(
+                'h-12 rounded-lg border border-input bg-background px-2.5 text-base',
+                !isOriginal && 'text-muted-foreground opacity-60',
+              )}
+              value={isOriginal ? activeCurrencyFilter : baseCurrency}
+              disabled={!isOriginal}
+              onChange={(event) => {
+                setSelectedChartDate(null)
+                setCurrencyFilter(event.target.value)
+              }}
             >
-              <span className="text-sm font-medium">{t.asset.currency}</span>
-              <select
-                id="dashboard-currency-filter"
-                className={cn(
-                  'h-12 rounded-lg border border-input bg-background px-2.5 text-base',
-                  !isOriginal && 'text-muted-foreground opacity-60',
-                )}
-                value={isOriginal ? activeCurrencyFilter : baseCurrency}
-                disabled={!isOriginal}
-                onChange={(event) => {
-                  setSelectedChartDate(null)
-                  setCurrencyFilter(event.target.value)
-                }}
-              >
-                {isOriginal && (
-                  <option value="all">{t.assets.filterAll}</option>
-                )}
-                {(isOriginal
-                  ? availableCurrencies
-                  : [baseCurrency]
-                ).map((code) => (
-                  <option key={code} value={code}>
-                    {code}
-                  </option>
-                ))}
-              </select>
-            </label>
-            {!isOriginal && (
-              <span className="text-xs text-muted-foreground">
-                {t.dashboard.currencyFilterDisabledHint}
-              </span>
-            )}
-          </div>
+              {isOriginal && (
+                <option value="all">{t.assets.filterAll}</option>
+              )}
+              {(isOriginal
+                ? availableCurrencies
+                : [baseCurrency]
+              ).map((code) => (
+                <option key={code} value={code}>
+                  {code}
+                </option>
+              ))}
+            </select>
+          </label>
           {isOriginal && activeCurrencyFilter === 'all' ? (
             <div className="flex flex-col gap-2">
               <span className="text-sm text-muted-foreground">
@@ -775,11 +759,7 @@ export function DashboardScreen() {
               ) : null}
             </div>
           )}
-          {isOriginal && activeCurrencyFilter === 'all' ? (
-            <p className="text-sm text-muted-foreground">
-              {t.dashboard.originalChartHint}
-            </p>
-          ) : (
+          {!(isOriginal && activeCurrencyFilter === 'all') && (
             <>
               <ChartRangePicker
                 range={range}

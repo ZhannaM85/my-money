@@ -98,10 +98,7 @@ describe('AllocationScreen', () => {
         <AllocationScreen />
       </MemoryRouter>,
     )
-    expect(
-      await screen.findByText(/Native amounts by class or type/),
-    ).toBeInTheDocument()
-    expect(screen.getByTestId('allocation-chart')).toBeInTheDocument()
+    expect(await screen.findByTestId('allocation-chart')).toBeInTheDocument()
     expect(screen.getByText('Money · USD')).toBeInTheDocument()
     expect(screen.getByText('Money · EUR')).toBeInTheDocument()
     expect(screen.getByText(formatAmount(8000, 'USD'))).toBeInTheDocument()
@@ -117,10 +114,7 @@ describe('AllocationScreen', () => {
     expect(screen.getByText(formatAmount(1000, 'EUR'))).toBeInTheDocument()
 
     await user.click(screen.getByRole('button', { name: 'Currency' }))
-    expect(
-      await screen.findByText(/Native amounts by currency/),
-    ).toBeInTheDocument()
-    expect(screen.getByText(formatAmount(8000, 'USD'))).toBeInTheDocument()
+    expect(await screen.findByText(formatAmount(8000, 'USD'))).toBeInTheDocument()
     expect(screen.getByText(formatAmount(1000, 'EUR'))).toBeInTheDocument()
   })
 

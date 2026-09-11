@@ -28,7 +28,6 @@ export const ru: Dictionary = {
   },
   dashboard: {
     title: 'Сводка',
-    description: 'Активы минус долги, в базовой валюте.',
     netWorth: 'Чистый капитал',
     thisMonth: 'за этот месяц',
     zoomRange: 'Диапазон графика',
@@ -42,10 +41,7 @@ export const ru: Dictionary = {
     addToComparison: 'Добавить к сравнению',
     navigateToComparison: 'Перейти к сравнению',
     comparisonTitle: 'Сравнение',
-    comparisonDescription: 'Позиции на даты, которые вы добавили со Сводки.',
     comparisonNeedTwoDates: 'Добавьте хотя бы две даты со Сводки.',
-    comparisonChangeHint:
-      'В следующих столбцах — изменение относительно первой даты.',
     comparisonIncreased: (amount) => `Рост ${amount}`,
     comparisonDecreased: (amount) => `Снижение ${amount}`,
     editComparisonAmount: (name, date) => `Изменить ${name} на ${date}`,
@@ -61,14 +57,8 @@ export const ru: Dictionary = {
       'Добавьте то, чем владеете или что должны, чтобы увидеть первый чистый капитал.',
     fxMissing: (codes) =>
       `Нет справочного курса для ${codes} на дату снимка. Где курс есть, это справочная оценка, а не исполняемая котировка.`,
-    fxConverted:
-      'Пересчитано по справочным курсам. Это оценки, а не исполняемые котировки.',
     allocation: 'Распределение',
     nativeHoldings: 'Суммы по валютам',
-    originalChartHint:
-      'Общий график доступен в режиме «В пересчёте». Выберите одну валюту, чтобы увидеть её историю в оригинале.',
-    currencyFilterDisabledHint:
-      'Фильтр валюты неактивен в режиме «В пересчёте». Базовую валюту меняйте в настройках.',
     conversionUnavailable: 'Конвертация недоступна',
     holdings: 'Позиции',
     hideFromPositions: 'Скрыть',
@@ -253,8 +243,6 @@ export const ru: Dictionary = {
   },
   history: {
     title: 'История',
-    description:
-      'Чистый капитал во времени. Каждый день использует курс той даты, а не сегодняшний.',
     emptyTitle: 'Истории пока нет',
     emptyDescription: 'Снимки из обновлений становятся линией истории.',
     overRange: (range) =>
@@ -281,17 +269,6 @@ export const ru: Dictionary = {
   },
   allocation: {
     title: 'Распределение',
-    description:
-      'Доля картины в базовой валюте. Обязательства — отрицательный сектор: график берёт размер, список показывает знак.',
-    descriptionOriginalCurrency:
-      'Нативные суммы по валютам. Доли считаются скрытым пересчётом в рубли.',
-    descriptionOriginalCompared: (currency) =>
-      `Доли по классу и типу сравниваются в ${currency}. Откройте «Валюта» для нативных сумм или включите «В пересчёте» для одного итога.`,
-    descriptionOriginalClassType:
-      'Нативные суммы по классу или типу — каждая строка в своей валюте. Доли считаются скрытым пересчётом в рубли.',
-    descriptionOriginalSingle: (currency) =>
-      `Нативные суммы в ${currency}. Для смешанных валют включите «В пересчёте».`,
-    originalClassTypeTitle: 'Выберите «Валюта» или «В пересчёте»',
     byClass: 'Класс',
     byCurrency: 'Валюта',
     byType: 'Тип',
@@ -312,8 +289,6 @@ export const ru: Dictionary = {
   },
   settings: {
     title: 'Ещё',
-    description:
-      'Одна базовая валюта пересчитывает итоги. «Показать все валюты» оставляет суммы в оригинале. Смена не переписывает прошлые суммы.',
     baseCurrency: 'Базовая валюта',
     showAllCurrencies: 'Показать все валюты',
     currencyDisplay: 'Показ активов',

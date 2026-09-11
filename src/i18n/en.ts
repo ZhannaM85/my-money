@@ -27,7 +27,6 @@ export const en: Dictionary = {
   },
   dashboard: {
     title: 'Dashboard',
-    description: 'Assets minus debts, in your base currency.',
     netWorth: 'Net worth',
     thisMonth: 'this month',
     zoomRange: 'Chart range',
@@ -41,9 +40,7 @@ export const en: Dictionary = {
     addToComparison: 'Add to comparison',
     navigateToComparison: 'Go to comparison',
     comparisonTitle: 'Comparison',
-    comparisonDescription: 'Holdings on the dates you added from Dashboard.',
     comparisonNeedTwoDates: 'Add at least two dates from Dashboard.',
-    comparisonChangeHint: 'Later columns show change versus the first date.',
     comparisonIncreased: (amount) => `Up ${amount}`,
     comparisonDecreased: (amount) => `Down ${amount}`,
     editComparisonAmount: (name, date) => `Edit ${name} on ${date}`,
@@ -58,14 +55,8 @@ export const en: Dictionary = {
     emptyDescription: 'Add what you own or owe to see your first net worth.',
     fxMissing: (codes) =>
       `No reference rate for ${codes} on the snapshot date. Where a rate exists it is a reference estimate, not an executable quote.`,
-    fxConverted:
-      'Converted with reference exchange rates. Estimates, not executable quotes.',
     allocation: 'Allocation',
     nativeHoldings: 'Holdings by currency',
-    originalChartHint:
-      'A combined chart needs Converted mode. Pick one currency to see its native history.',
-    currencyFilterDisabledHint:
-      'Currency filter is inactive in Converted mode. Change the base currency in Settings.',
     conversionUnavailable: 'Conversion not available',
     holdings: 'Holdings',
     hideFromPositions: 'Hide',
@@ -248,8 +239,6 @@ export const en: Dictionary = {
   },
   history: {
     title: 'History',
-    description:
-      'Net worth over time. Each day uses that date’s reference rate, not today’s.',
     emptyTitle: 'No history yet',
     emptyDescription: 'Snapshots from updates become the history line.',
     overRange: (range) =>
@@ -276,17 +265,6 @@ export const en: Dictionary = {
   },
   allocation: {
     title: 'Allocation',
-    description:
-      'Share of the picture in your base currency. Liabilities are a negative slice — the chart uses size, the list shows the sign.',
-    descriptionOriginalCurrency:
-      'Native amounts by currency. Shares convert to rubles behind the scenes.',
-    descriptionOriginalCompared: (currency) =>
-      `Class and type shares are compared in ${currency}. Open Currency for native amounts, or switch to Converted for one total.`,
-    descriptionOriginalClassType:
-      'Native amounts by class or type — each row in its own currency. Shares convert to rubles behind the scenes.',
-    descriptionOriginalSingle: (currency) =>
-      `Native amounts in ${currency}. Switch to Converted to compare mixed currencies in one total.`,
-    originalClassTypeTitle: 'Pick Currency or Converted',
     byClass: 'Class',
     byCurrency: 'Currency',
     byType: 'Type',
@@ -306,8 +284,6 @@ export const en: Dictionary = {
   },
   settings: {
     title: 'More',
-    description:
-      'Pick one base currency to convert totals, or Show all currencies to keep native amounts. Changing this does not rewrite past balances.',
     baseCurrency: 'Base currency',
     showAllCurrencies: 'Show all currencies',
     currencyDisplay: 'Asset display',

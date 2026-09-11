@@ -34,7 +34,6 @@ export interface Dictionary {
   }
   dashboard: {
     title: string
-    description: string
     netWorth: string
     thisMonth: string
     zoomRange: string
@@ -48,9 +47,7 @@ export interface Dictionary {
     addToComparison: string
     navigateToComparison: string
     comparisonTitle: string
-    comparisonDescription: string
     comparisonNeedTwoDates: string
-    comparisonChangeHint: string
     comparisonIncreased: (amount: string) => string
     comparisonDecreased: (amount: string) => string
     editComparisonAmount: (name: string, date: string) => string
@@ -64,11 +61,8 @@ export interface Dictionary {
     emptyTitle: string
     emptyDescription: string
     fxMissing: (codes: string) => string
-    fxConverted: string
     allocation: string
     nativeHoldings: string
-    originalChartHint: string
-    currencyFilterDisabledHint: string
     conversionUnavailable: string
     holdings: string
     hideFromPositions: string
@@ -192,7 +186,6 @@ export interface Dictionary {
   }
   history: {
     title: string
-    description: string
     emptyTitle: string
     emptyDescription: string
     overRange: (range: HistoryRange) => string
@@ -214,12 +207,6 @@ export interface Dictionary {
   }
   allocation: {
     title: string
-    description: string
-    descriptionOriginalCurrency: string
-    descriptionOriginalCompared: (currency: string) => string
-    descriptionOriginalClassType: string
-    descriptionOriginalSingle: (currency: string) => string
-    originalClassTypeTitle: string
     byClass: string
     byCurrency: string
     byType: string
@@ -238,7 +225,6 @@ export interface Dictionary {
   }
   settings: {
     title: string
-    description: string
     baseCurrency: string
     showAllCurrencies: string
     currencyDisplay: string

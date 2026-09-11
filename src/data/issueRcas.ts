@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 230,
+    title: {
+      en: 'Summary: remove grey helper subheaders / filler blurbs',
+      ru: 'Сводка: убрать серые подзаголовки / пустые подсказки',
+    },
+    en: 'Grey muted copy under Summary (and the same under-title/filter pattern on History, Comparison, Allocation, Settings) explained the UI instead of showing data. Removed the title subtitle, inactive currency-filter hint, FX converted disclaimer, and original-mode chart hint. From amounts / From rates rows and missing-rate warnings stay.',
+    ru: 'Серый текст под Сводкой (и тот же шаблон под заголовками/фильтрами на Истории, Сравнении, Распределении, Ещё) объяснял интерфейс, а не показывал данные. Убраны подзаголовок, подсказка неактивного фильтра валюты, дисклеймер пересчёта и подсказка графика в оригинале. Строки «Из сумм» / «Из курсов» и предупреждения об отсутствии курса остаются.',
+  },
+  {
     issue: 229,
     title: {
       en: 'Missing bottom spacing between last content and tab bar (most pages)',

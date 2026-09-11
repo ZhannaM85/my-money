@@ -229,10 +229,7 @@ export function HistoryScreen() {
 
   return (
     <div className="flex flex-col gap-6">
-      <PageHeader
-        title={t.history.title}
-        description={t.history.description}
-      />
+      <PageHeader title={t.history.title} />
       <ChartRangePicker
         range={range}
         onRangeChange={selectRange}
@@ -310,11 +307,7 @@ export function HistoryScreen() {
               </li>
             </ul>
           )}
-          {isOriginal ? (
-            <p className="text-sm text-muted-foreground">
-              {t.dashboard.originalChartHint}
-            </p>
-          ) : (
+          {!isOriginal && (
             <>
               <NetWorthChart
                 points={series}

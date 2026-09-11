@@ -46,9 +46,10 @@ export function AllocationScreen() {
   ]
 
   function labelFor(id: string): string {
-    const key = isOriginal && (view === 'class' || view === 'type')
-      ? nativeRowLabelKey(id)
-      : id
+    const key =
+      isOriginal && (view === 'class' || view === 'type')
+        ? nativeRowLabelKey(id)
+        : id
     if (view === 'class')
       return t.asset.classes[key as keyof typeof t.asset.classes] ?? key
     if (view === 'type')
@@ -64,9 +65,7 @@ export function AllocationScreen() {
 
   useEffect(() => {
     if (!isOriginal || snapshots.length === 0) return
-    const symbols = [
-      ...new Set(snapshots.map((snapshot) => snapshot.currency)),
-    ]
+    const symbols = [...new Set(snapshots.map((snapshot) => snapshot.currency))]
     const dates = snapshots.map((snapshot) => snapshot.date).sort()
     const start = dates[0]
     const end = dates[dates.length - 1]
@@ -147,16 +146,9 @@ export function AllocationScreen() {
 
   const chartCurrency = baseCurrency
 
-  const description =
-    isOriginal && view === 'currency'
-      ? t.allocation.descriptionOriginalCurrency
-      : isOriginal && (view === 'class' || view === 'type')
-        ? t.allocation.descriptionOriginalClassType
-        : t.allocation.description
-
   return (
     <div className="flex flex-col gap-6">
-      <PageHeader title={t.allocation.title} description={description} />
+      <PageHeader title={t.allocation.title} />
       <div className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1">
         {views.map((item) => (
           <button

@@ -55,21 +55,30 @@ beforeEach(async () => {
 })
 
 describe('DashboardScreen', () => {
-  it('shows assets minus debts as the dashboard subtitle (#221)', async () => {
+  it('does not show grey helper blurbs on Dashboard (#230)', async () => {
     render(
       <MemoryRouter>
         <DashboardScreen />
       </MemoryRouter>,
     )
     expect(
-      await screen.findByText('Assets minus debts, in your base currency.'),
+      await screen.findByRole('heading', { name: 'Dashboard' }),
     ).toBeInTheDocument()
+    expect(
+      screen.queryByText('Assets minus debts, in your base currency.'),
+    ).not.toBeInTheDocument()
     expect(
       screen.queryByText('What you own minus what you owe, in your base currency.'),
     ).not.toBeInTheDocument()
+    expect(
+      screen.queryByText(/Currency filter is inactive/),
+    ).not.toBeInTheDocument()
+    expect(
+      screen.queryByText(/Converted with reference exchange rates/),
+    ).not.toBeInTheDocument()
   })
 
-  it('shows the Russian assets-minus-debts subtitle (#221)', async () => {
+  it('does not show Russian helper blurbs on Сводка (#230)', async () => {
     await db.settings.put({
       ...DEFAULT_SETTINGS,
       locale: 'ru',
@@ -84,10 +93,19 @@ describe('DashboardScreen', () => {
       </MemoryRouter>,
     )
     expect(
-      await screen.findByText('Активы минус долги, в базовой валюте.'),
+      await screen.findByRole('heading', { name: 'Сводка' }),
     ).toBeInTheDocument()
     expect(
+      screen.queryByText('Активы минус долги, в базовой валюте.'),
+    ).not.toBeInTheDocument()
+    expect(
       screen.queryByText('Что у вас есть минус что вы должны, в базовой валюте.'),
+    ).not.toBeInTheDocument()
+    expect(
+      screen.queryByText(/Фильтр валюты неактивен/),
+    ).not.toBeInTheDocument()
+    expect(
+      screen.queryByText(/Пересчитано по справочным курсам/),
     ).not.toBeInTheDocument()
   })
 
@@ -560,6 +578,14 @@ describe('DashboardScreen', () => {
     expect(currency).toBeDisabled()
     expect(currency).toHaveValue('EUR')
     expect(screen.queryByRole('option', { name: 'All' })).not.toBeInTheDocument()
+    expect(
+      screen.queryByText(/Currency filter is inactive/),
+    ).not.toBeInTheDocument()
+    expect(
+      screen.queryByText(/Converted with reference exchange rates/),
+    ).not.toBeInTheDocument()
+    expect(screen.getByText('From amounts')).toBeInTheDocument()
+    expect(screen.getByText('From rates')).toBeInTheDocument()
   })
 
   it('shows every native holding in Original + All', async () => {

@@ -39,7 +39,8 @@ gh issue edit 108 --add-label validation
 | `122-allocation-currency-expanded.png` | Allocation · Currency row expanded to assets (#122) |
 | `123-allocation-type-expanded.png` | Allocation · Type row expanded to assets (#123) |
 | `dashboard-chart-and-asof.png` | Dashboard · arrows + As of (#111/#112/#116/#117) |
-| `221-dashboard-subtitle.png` | Dashboard · subtitle “Активы минус долги…” (RU, #221) |
+| `221-dashboard-subtitle.png` | Dashboard · subtitle “Активы минус долги…” (RU, #221; superseded by #230) |
+| `230-dashboard-no-helper-blurbs.png` | Dashboard · no grey helper blurbs; Из сумм / Из курсов remain (RU, #230) |
 | `124-dashboard-positions-total.png` | Dashboard · Positions Total for As of (#124) |
 | `125-dashboard-asof-today.png` | Dashboard · Today button next to As of (#125) |
 | `126-dashboard-range-picker.png` | Dashboard · Week/Month/Year/All/Custom chips (#126) |

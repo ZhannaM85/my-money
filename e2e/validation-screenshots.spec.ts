@@ -15,9 +15,6 @@ test('capture Allocation Original Class/Currency (#108, #118, #121)', async ({
   await seedValidationFixture(page)
   await page.goto('/allocation')
   await expect(page.getByRole('heading', { name: 'Allocation' })).toBeVisible()
-  await expect(
-    page.getByText(/Native amounts by class or type/),
-  ).toBeVisible()
   await expect(page.getByTestId('allocation-chart')).toBeVisible()
   await page.screenshot({
     path: join(outDir, '108-allocation-original-class.png'),
@@ -28,7 +25,7 @@ test('capture Allocation Original Class/Currency (#108, #118, #121)', async ({
     fullPage: true,
   })
   await page.getByRole('button', { name: 'Currency' }).click()
-  await expect(page.getByText(/Native amounts by currency/)).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'Allocation' })).toBeVisible()
   await page.screenshot({
     path: join(outDir, '108-allocation-original-currency.png'),
     fullPage: true,
@@ -52,7 +49,6 @@ test('capture Allocation Class/Currency expanded holdings (#122)', async ({
     fullPage: true,
   })
   await page.getByRole('button', { name: 'Currency' }).click()
-  await expect(page.getByText(/Native amounts by currency/)).toBeVisible()
   await page.getByRole('button', { name: 'USD · Holdings' }).click()
   await expect(page.getByText('USD cash')).toBeVisible()
   await page.screenshot({
@@ -356,7 +352,7 @@ test('capture Dashboard Today on the date row in Russian (#213)', async ({
   })
 })
 
-test('capture Dashboard net-worth subtitle in Russian (#221)', async ({
+test('capture Dashboard without grey helper blurbs in Russian (#230)', async ({
   page,
 }) => {
   await page.setViewportSize({ width: 390, height: 844 })
@@ -368,16 +364,19 @@ test('capture Dashboard net-worth subtitle in Russian (#221)', async ({
   await expect(page.getByRole('heading', { name: 'Сводка' })).toBeVisible()
   await expect(
     page.getByText('Активы минус долги, в базовой валюте.'),
-  ).toBeVisible()
-  await expect(
-    page.getByText('Что у вас есть минус что вы должны, в базовой валюте.'),
   ).toHaveCount(0)
+  await expect(page.getByText(/Фильтр валюты неактивен/)).toHaveCount(0)
+  await expect(page.getByText(/Пересчитано по справочным курсам/)).toHaveCount(
+    0,
+  )
+  await expect(page.getByText('Из сумм')).toBeVisible()
+  await expect(page.getByText('Из курсов')).toBeVisible()
   await page.screenshot({
     path: join(
       'docs',
       'validation-proof',
-      '221',
-      '221-dashboard-subtitle.png',
+      '230',
+      '230-dashboard-no-helper-blurbs.png',
     ),
   })
 })
