@@ -78,10 +78,7 @@ function ComparisonAmountDisplay({
     holding.convertedAmount !== null &&
     holding.currency !== baseCurrency
   const delta = comparisonDelta(holding, baseline)
-  if (
-    !holding.conversionAvailable ||
-    holding.convertedAmount === null
-  ) {
+  if (!holding.conversionAvailable || holding.convertedAmount === null) {
     return (
       <span className="flex flex-col items-end gap-0.5 whitespace-nowrap">
         <span className="tabular-nums">
@@ -179,7 +176,8 @@ function ComparisonCell({
           aria-label={t.dashboard.comparisonAmountAria(name, date)}
           inputMode="decimal"
           value={draft}
-          className="h-10 w-full text-right"
+          className="w-full text-right"
+          density="compact"
           onChange={(event) => setDraft(event.target.value)}
           onBlur={() => {
             setDraft(reformatAmountInput(draft, locale, asset.currency))
@@ -218,11 +216,7 @@ function ComparisonCell({
           const source = onDate ?? prior
           setDraft(
             source
-              ? formatEditableAmount(
-                  source.amount,
-                  locale,
-                  source.currency,
-                )
+              ? formatEditableAmount(source.amount, locale, source.currency)
               : '',
           )
           setEditing(true)
@@ -272,14 +266,7 @@ export function ComparisonScreen() {
         symbols.map((from) => ({ from, to: baseCurrency, date })),
       ),
     )
-  }, [
-    baseCurrency,
-    dates,
-    ensureRates,
-    loaded,
-    settingsLoaded,
-    snapshots,
-  ])
+  }, [baseCurrency, dates, ensureRates, loaded, settingsLoaded, snapshots])
 
   const points = useMemo(
     () =>
@@ -345,10 +332,7 @@ export function ComparisonScreen() {
           </Button>
         }
       />
-      <div
-        className="flex w-full min-w-0"
-        data-testid="comparison-table"
-      >
+      <div className="flex w-full min-w-0" data-testid="comparison-table">
         <table
           ref={nameTableRef}
           className="w-24 max-w-24 shrink-0 table-fixed border-separate border-spacing-0 text-sm"
@@ -455,11 +439,7 @@ export function ComparisonScreen() {
                   >
                     <span className="flex flex-col items-end gap-0.5 whitespace-nowrap">
                       <span>
-                        {formatAmount(
-                          totals[date] ?? 0,
-                          baseCurrency,
-                          locale,
-                        )}
+                        {formatAmount(totals[date] ?? 0, baseCurrency, locale)}
                       </span>
                       <ComparisonDelta
                         delta={

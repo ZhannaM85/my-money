@@ -1,11 +1,14 @@
 import { useEffect, useMemo, useState } from 'react'
-import { decomposeConvertedPeriodChange, historicalNetWorth, holdingsWithConversion, nativeTotalsByCurrency, periodChange } from '@/domain/netWorth'
+import {
+  decomposeConvertedPeriodChange,
+  historicalNetWorth,
+  holdingsWithConversion,
+  nativeTotalsByCurrency,
+  periodChange,
+} from '@/domain/netWorth'
 import { ChartRangePicker } from '@/features/dashboard/ChartRangePicker'
 import { NetWorthChart } from '@/features/dashboard/NetWorthChart'
-import {
-  ChartRangeToolbar,
-  CHART_ZOOM_PILL_CLASS,
-} from '@/features/dashboard/ChartRangeToolbar'
+import { ChartRangeToolbar } from '@/features/dashboard/ChartRangeToolbar'
 import { HistoryCalendar } from './HistoryCalendar'
 import { HistoryDayRow } from './HistoryDayRow'
 import { useLocale, useTranslation } from '@/i18n'
@@ -24,13 +27,13 @@ import {
   formatSignedAmount,
   todayIsoDate,
 } from '@/shared/lib/money'
+import { Chip } from '@/shared/ui/chip'
 import { EmptyState } from '@/shared/ui/empty-state'
 import { PageHeader } from '@/shared/ui/page-header'
 import { StatCard } from '@/shared/ui/stat-card'
 import { useAssetStore } from '@/stores/assetStore'
 import { useFxStore } from '@/stores/fxStore'
 import { useSettingsStore } from '@/stores/settingsStore'
-import { cn } from '@/shared/lib/utils'
 
 type HistoryDayDetail =
   | {
@@ -55,8 +58,7 @@ export function HistoryScreen() {
   const loadSettings = useSettingsStore((state) => state.load)
   const baseCurrency = useSettingsStore((state) => state.settings.baseCurrency)
   const isOriginal =
-    useSettingsStore((state) => state.settings.currencyDisplayMode) ===
-    'native'
+    useSettingsStore((state) => state.settings.currencyDisplayMode) === 'native'
   const quotes = useFxStore((state) => state.quotes)
   const ensureRange = useFxStore((state) => state.ensureRange)
   const [range, setRange] = useState<HistoryRange>('1M')
@@ -148,7 +150,9 @@ export function HistoryScreen() {
     const byDate = new Map(series.map((point) => [point.date, point]))
     const points = snapshotDays
       .map((date) => byDate.get(date))
-      .filter((point): point is NonNullable<typeof point> => point !== undefined)
+      .filter(
+        (point): point is NonNullable<typeof point> => point !== undefined,
+      )
     return [...points].reverse().map((point, index, rows) => {
       const older = rows[index + 1]
       return {
@@ -275,7 +279,11 @@ export function HistoryScreen() {
           ) : (
             <StatCard
               label={t.dashboard.netWorth}
-              value={formatAmount(latestPoint?.total ?? 0, baseCurrency, locale)}
+              value={formatAmount(
+                latestPoint?.total ?? 0,
+                baseCurrency,
+                locale,
+              )}
               description={`${formatSignedAmount(change.absolute, baseCurrency, locale)} ${rangeLabel}`}
             />
           )}
@@ -332,14 +340,7 @@ export function HistoryScreen() {
                           : t.history.rangeCustom
                 }`}
               >
-                <button
-                  type="button"
-                  className={cn(
-                    CHART_ZOOM_PILL_CLASS,
-                    canZoomIn
-                      ? 'bg-muted text-foreground'
-                      : 'bg-muted text-muted-foreground',
-                  )}
+                <Chip
                   disabled={!canZoomIn}
                   onClick={() => {
                     if (canZoomIn)
@@ -347,15 +348,8 @@ export function HistoryScreen() {
                   }}
                 >
                   {t.dashboard.zoomIn}
-                </button>
-                <button
-                  type="button"
-                  className={cn(
-                    CHART_ZOOM_PILL_CLASS,
-                    canZoomOut
-                      ? 'bg-muted text-foreground'
-                      : 'bg-muted text-muted-foreground',
-                  )}
+                </Chip>
+                <Chip
                   disabled={!canZoomOut}
                   onClick={() => {
                     if (canZoomOut)
@@ -363,7 +357,7 @@ export function HistoryScreen() {
                   }}
                 >
                   {t.dashboard.zoomOut}
-                </button>
+                </Chip>
               </ChartRangeToolbar>
             </>
           )}
@@ -372,35 +366,21 @@ export function HistoryScreen() {
             role="group"
             aria-label={t.history.viewModeLabel}
           >
-            <button
-              type="button"
-              className={cn(
-                'rounded-full px-3 py-1.5 text-sm font-medium',
-                viewMode === 'list'
-                  ? 'bg-primary text-primary-foreground'
-                  : 'bg-muted text-muted-foreground',
-              )}
-              aria-pressed={viewMode === 'list'}
+            <Chip
+              pressed={viewMode === 'list'}
               onClick={() => {
                 setViewMode('list')
                 setSelectedCalendarDate(null)
               }}
             >
               {t.history.listViewLabel}
-            </button>
-            <button
-              type="button"
-              className={cn(
-                'rounded-full px-3 py-1.5 text-sm font-medium',
-                viewMode === 'calendar'
-                  ? 'bg-primary text-primary-foreground'
-                  : 'bg-muted text-muted-foreground',
-              )}
-              aria-pressed={viewMode === 'calendar'}
+            </Chip>
+            <Chip
+              pressed={viewMode === 'calendar'}
               onClick={() => setViewMode('calendar')}
             >
               {t.history.calendarViewLabel}
-            </button>
+            </Chip>
           </div>
           {viewMode === 'calendar' ? (
             <>
@@ -433,22 +413,22 @@ export function HistoryScreen() {
               ) : null}
             </>
           ) : (
-          <ul className="flex flex-col gap-2">
-            {(isOriginal ? originalList : convertedList).map((row) => {
-              return (
-                <HistoryDayRow
-                  key={row.date}
-                  row={row}
-                  open={openDates.has(row.date)}
-                  baseCurrency={baseCurrency}
-                  nativeOnly={isOriginal}
-                  label={t.history.holdingsOn(row.date)}
-                  onToggle={() => toggleOpenDate(row.date)}
-                  testId={`history-day-row-${row.date}`}
-                />
-              )
-            })}
-          </ul>
+            <ul className="flex flex-col gap-2">
+              {(isOriginal ? originalList : convertedList).map((row) => {
+                return (
+                  <HistoryDayRow
+                    key={row.date}
+                    row={row}
+                    open={openDates.has(row.date)}
+                    baseCurrency={baseCurrency}
+                    nativeOnly={isOriginal}
+                    label={t.history.holdingsOn(row.date)}
+                    onToggle={() => toggleOpenDate(row.date)}
+                    testId={`history-day-row-${row.date}`}
+                  />
+                )
+              })}
+            </ul>
           )}
         </>
       )}

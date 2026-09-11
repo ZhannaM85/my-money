@@ -30,7 +30,7 @@ describe('DateField', () => {
     )
     const input = screen.getByLabelText('As of')
     expect(input).toHaveClass('w-[13.5rem]')
-    expect(input).toHaveClass('h-12')
+    expect(input).toHaveClass('h-control')
     expect(input).not.toHaveClass('w-full')
     expect(input).not.toHaveClass('max-w-full')
   })

@@ -11,10 +11,7 @@ import {
 } from '@/domain/snapshot'
 import { NetWorthChart } from '@/features/dashboard/NetWorthChart'
 import { ChartRangePicker } from '@/features/dashboard/ChartRangePicker'
-import {
-  ChartRangeToolbar,
-  CHART_ZOOM_PILL_CLASS,
-} from '@/features/dashboard/ChartRangeToolbar'
+import { ChartRangeToolbar } from '@/features/dashboard/ChartRangeToolbar'
 import { assetChartPoints } from './assetChartPoints'
 import { formatLastUpdated, useLocale, useTranslation } from '@/i18n'
 import { formatOwnershipShare, ownershipMultiplier } from '@/domain/asset'
@@ -38,10 +35,12 @@ import {
 } from '@/shared/lib/dates'
 import { cn } from '@/shared/lib/utils'
 import { Button } from '@/shared/ui/button'
+import { Chip } from '@/shared/ui/chip'
 import { DateField } from '@/shared/ui/date-field'
 import { InfoHint } from '@/shared/ui/info-hint'
 import { Input } from '@/shared/ui/input'
 import { PageHeader } from '@/shared/ui/page-header'
+import { SelectField } from '@/shared/ui/select-field'
 import { StatCard } from '@/shared/ui/stat-card'
 import { TextField } from '@/shared/ui/text-field'
 import { useAssetStore } from '@/stores/assetStore'
@@ -291,20 +290,12 @@ export function AssetDetailsScreen() {
         </p>
       )}
       <div className="flex gap-2">
-        <Button
-          type="button"
-          variant={mode === 'native' ? 'default' : 'outline'}
-          onClick={() => setMode('native')}
-        >
+        <Chip pressed={mode === 'native'} onClick={() => setMode('native')}>
           {t.asset.native}
-        </Button>
-        <Button
-          type="button"
-          variant={mode === 'base' ? 'default' : 'outline'}
-          onClick={() => setMode('base')}
-        >
+        </Chip>
+        <Chip pressed={mode === 'base'} onClick={() => setMode('base')}>
           {baseCurrency}
-        </Button>
+        </Chip>
       </div>
       <StatCard
         label={
@@ -385,7 +376,7 @@ export function AssetDetailsScreen() {
                     )
                   : t.asset.amountPlaceholder
               }
-              className="h-12 min-w-0 pr-12"
+              className="min-w-0 pr-12"
               onChange={(event) => setAmountDraft(event.target.value)}
               onBlur={() =>
                 setAmountDraft((current) =>
@@ -399,7 +390,8 @@ export function AssetDetailsScreen() {
           </div>
           <Button
             type="button"
-            className="h-12 w-full"
+            size="xl"
+            className="w-full"
             onClick={() => void saveAmount()}
           >
             {t.common.save}
@@ -552,14 +544,7 @@ export function AssetDetailsScreen() {
                   : t.history.rangeCustom
         }`}
       >
-        <button
-          type="button"
-          className={cn(
-            CHART_ZOOM_PILL_CLASS,
-            canZoomIn
-              ? 'bg-muted text-foreground'
-              : 'bg-muted text-muted-foreground',
-          )}
+        <Chip
           disabled={!canZoomIn}
           onClick={() => {
             if (canZoomIn)
@@ -567,15 +552,8 @@ export function AssetDetailsScreen() {
           }}
         >
           {t.dashboard.zoomIn}
-        </button>
-        <button
-          type="button"
-          className={cn(
-            CHART_ZOOM_PILL_CLASS,
-            canZoomOut
-              ? 'bg-muted text-foreground'
-              : 'bg-muted text-muted-foreground',
-          )}
+        </Chip>
+        <Chip
           disabled={!canZoomOut}
           onClick={() => {
             if (canZoomOut)
@@ -583,7 +561,7 @@ export function AssetDetailsScreen() {
           }}
         >
           {t.dashboard.zoomOut}
-        </button>
+        </Chip>
       </ChartRangeToolbar>
       {history.length > 0 && (
         <ul className="flex flex-col gap-2">
@@ -622,39 +600,32 @@ export function AssetDetailsScreen() {
                       : undefined
                   }
                 />
-                <label className="flex min-w-0 flex-col gap-1.5">
-                  <span className="text-sm font-medium">
-                    {t.asset.currency}
-                  </span>
-                  <select
-                    className="h-12 min-w-0 rounded-lg border border-input bg-background px-2.5 text-base"
-                    value={editCurrency}
-                    aria-label={t.asset.currency}
-                    onChange={(event) => {
-                      const next = event.target.value
-                      setEditCurrency(next)
-                      setEditAmount((current) =>
-                        reformatAmountInput(current, locale, next),
-                      )
-                    }}
-                  >
-                    {((BASE_CURRENCIES as readonly string[]).includes(
-                      editCurrency,
+                <SelectField
+                  label={t.asset.currency}
+                  value={editCurrency}
+                  onChange={(event) => {
+                    const next = event.target.value
+                    setEditCurrency(next)
+                    setEditAmount((current) =>
+                      reformatAmountInput(current, locale, next),
                     )
-                      ? BASE_CURRENCIES
-                      : [editCurrency, ...BASE_CURRENCIES]
-                    ).map((code) => (
-                      <option key={code} value={code}>
-                        {code}
-                      </option>
-                    ))}
-                  </select>
-                </label>
+                  }}
+                >
+                  {((BASE_CURRENCIES as readonly string[]).includes(
+                    editCurrency,
+                  )
+                    ? BASE_CURRENCIES
+                    : [editCurrency, ...BASE_CURRENCIES]
+                  ).map((code) => (
+                    <option key={code} value={code}>
+                      {code}
+                    </option>
+                  ))}
+                </SelectField>
                 <Input
                   aria-label={t.asset.editSnapshotAmount}
                   inputMode="decimal"
                   value={editAmount}
-                  className="h-12"
                   onChange={(event) => setEditAmount(event.target.value)}
                   onBlur={() =>
                     setEditAmount((current) =>
@@ -678,7 +649,8 @@ export function AssetDetailsScreen() {
                 <div className="flex gap-2">
                   <Button
                     type="button"
-                    className="h-12 flex-1"
+                    size="xl"
+                    className="flex-1"
                     onClick={() => void saveEditedSnapshot()}
                   >
                     {t.common.save}
@@ -686,7 +658,8 @@ export function AssetDetailsScreen() {
                   <Button
                     type="button"
                     variant="outline"
-                    className="h-12 flex-1"
+                    size="xl"
+                    className="flex-1"
                     onClick={() => {
                       setEditingId(null)
                       setEditError(undefined)

@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from '@/i18n'
 import { pickImportFile } from '@/shared/lib/pickNativeTextFile'
 import { Button } from '@/shared/ui/button'
+import { SelectField } from '@/shared/ui/select-field'
 import { useAssetStore } from '@/stores/assetStore'
 import { exportCsv, importCsv, InvalidCsvError } from './csvActions'
 import {
@@ -157,30 +158,28 @@ export function CsvSection() {
         <div className="flex flex-col gap-3 rounded-lg border border-border p-3">
           <p className="text-sm font-medium">{t.csv.mapColumns}</p>
           {CSV_FIELDS.map((field) => (
-            <label key={field} className="flex flex-col gap-1.5">
-              <span className="text-sm font-medium">{t.csv.fields[field]}</span>
-              <select
-                className="h-12 rounded-lg border border-input bg-background px-2.5 text-base"
-                value={draft.mapping[field] ?? ''}
-                onChange={(event) => {
-                  const value = event.target.value
-                  setDraft({
-                    ...draft,
-                    mapping: {
-                      ...draft.mapping,
-                      [field]: value === '' ? undefined : Number(value),
-                    },
-                  })
-                }}
-              >
-                <option value="">{t.csv.selectColumn}</option>
-                {headers.map((header, index) => (
-                  <option key={`${header}-${index}`} value={index}>
-                    {header || t.csv.columnN(index + 1)}
-                  </option>
-                ))}
-              </select>
-            </label>
+            <SelectField
+              key={field}
+              label={t.csv.fields[field]}
+              value={draft.mapping[field] ?? ''}
+              onChange={(event) => {
+                const value = event.target.value
+                setDraft({
+                  ...draft,
+                  mapping: {
+                    ...draft.mapping,
+                    [field]: value === '' ? undefined : Number(value),
+                  },
+                })
+              }}
+            >
+              <option value="">{t.csv.selectColumn}</option>
+              {headers.map((header, index) => (
+                <option key={`${header}-${index}`} value={index}>
+                  {header || t.csv.columnN(index + 1)}
+                </option>
+              ))}
+            </SelectField>
           ))}
           {preview && (
             <p className="text-sm text-muted-foreground">

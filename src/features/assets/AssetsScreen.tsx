@@ -30,8 +30,10 @@ import { latestSnapshot, type AssetSnapshot } from '@/domain/snapshot'
 import { useLocale, useTranslation } from '@/i18n'
 import { formatAmount } from '@/shared/lib/money'
 import { Button } from '@/shared/ui/button'
+import { Chip } from '@/shared/ui/chip'
 import { EmptyState } from '@/shared/ui/empty-state'
 import { PageHeader } from '@/shared/ui/page-header'
+import { Select } from '@/shared/ui/select'
 import { useAssetStore } from '@/stores/assetStore'
 import { useFxStore } from '@/stores/fxStore'
 import { useSettingsStore } from '@/stores/settingsStore'
@@ -282,27 +284,20 @@ export function AssetsScreen() {
       />
       <div className="flex flex-wrap gap-2" data-testid="asset-filters">
         {filters.map((item) => (
-          <button
+          <Chip
             key={item.id}
-            type="button"
+            pressed={filter === item.id}
             onClick={() => setFilter(item.id)}
-            className={cn(
-              'rounded-full px-3 py-1.5 text-sm font-medium',
-              filter === item.id
-                ? 'bg-primary text-primary-foreground'
-                : 'bg-muted text-muted-foreground',
-            )}
-            aria-pressed={filter === item.id}
           >
             {item.label}
-          </button>
+          </Chip>
         ))}
       </div>
       {loaded && assets.length > 0 && (
         <div className="flex gap-2">
-          <select
+          <Select
             aria-label={t.assets.sortLabel}
-            className="h-12 min-w-0 flex-1 rounded-lg border border-input bg-background px-2.5 text-base"
+            className="flex-1"
             value={assetListSort}
             onChange={(event) => {
               const next = event.target.value as AssetListSort
@@ -315,12 +310,13 @@ export function AssetsScreen() {
                 {sortLabels[id]}
               </option>
             ))}
-          </select>
+          </Select>
           {visible.length > 1 && !reorder.reordering ? (
             <Button
               type="button"
               variant="outline"
-              className="h-12 shrink-0"
+              size="xl"
+              className="shrink-0"
               onClick={() =>
                 reorder.enter(
                   visible.map((asset) => asset.id),
@@ -336,14 +332,16 @@ export function AssetsScreen() {
               <Button
                 type="button"
                 variant="outline"
-                className="h-12 shrink-0"
+                size="xl"
+                className="shrink-0"
                 onClick={() => reorder.cancel()}
               >
                 {t.common.cancel}
               </Button>
               <Button
                 type="button"
-                className="h-12 shrink-0"
+                size="xl"
+                className="shrink-0"
                 onClick={() =>
                   void reorder.save(
                     persistCustomAssetOrder,
@@ -424,15 +422,10 @@ export function AssetsScreen() {
                     <span className="flex min-w-0 flex-col">
                       <span className="truncate font-medium">{asset.name}</span>
                       <span className="text-sm text-muted-foreground">
-                        {[
-                          t.asset.types[asset.type],
-                          asset.institution?.trim(),
-                        ]
+                        {[t.asset.types[asset.type], asset.institution?.trim()]
                           .filter(Boolean)
                           .join(' · ')}
-                        {excluded
-                          ? ` · ${t.asset.notCountedInNetWorth}`
-                          : ''}
+                        {excluded ? ` · ${t.asset.notCountedInNetWorth}` : ''}
                         {estimated
                           ? ` · ${t.asset.valuation[asset.valuationMethod]}`
                           : ''}

@@ -24,7 +24,7 @@ import {
 import { useChartPan } from '@/shared/hooks/useChartPan'
 import { usePinchZoom } from '@/shared/hooks/usePinchZoom'
 import { useLocale, useTranslation } from '@/i18n'
-import { cn } from '@/shared/lib/utils'
+import { Chip } from '@/shared/ui/chip'
 import { useSettingsStore } from '@/stores/settingsStore'
 import { HoldingBreakdownList } from './HoldingBreakdownList'
 import { isChartDateTap } from './chartDateTap'
@@ -208,11 +208,11 @@ export function NetWorthChart({
   const name = seriesName ?? t.dashboard.netWorth
   if (points.length === 0) return null
   const totals = points.map((point) => point.total)
-  const { domain, ticks, digits: axisDigits } = chartAxisScale(
-    Math.min(...totals),
-    Math.max(...totals),
-    locale,
-  )
+  const {
+    domain,
+    ticks,
+    digits: axisDigits,
+  } = chartAxisScale(Math.min(...totals), Math.max(...totals), locale)
   const xTicks = uniqueChartAxisDates(points.map((point) => point.date))
 
   return (
@@ -231,20 +231,13 @@ export function NetWorthChart({
               { on: false, label: t.dashboard.chartTooltipHide },
             ] as const
           ).map((item) => (
-            <button
+            <Chip
               key={item.label}
-              type="button"
-              className={cn(
-                'rounded-full px-3 py-1.5 text-sm font-medium',
-                showChartTooltip === item.on
-                  ? 'bg-primary text-primary-foreground'
-                  : 'bg-muted text-muted-foreground',
-              )}
-              aria-pressed={showChartTooltip === item.on}
+              pressed={showChartTooltip === item.on}
               onClick={() => void setShowChartTooltip(item.on)}
             >
               {item.label}
-            </button>
+            </Chip>
           ))}
         </div>
       </div>
@@ -263,7 +256,9 @@ export function NetWorthChart({
           const start = pointerStartRef.current
           pointerStartRef.current = null
           if (!start) return
-          if (!isChartDateTap(event.clientX - start.x, event.clientY - start.y)) {
+          if (
+            !isChartDateTap(event.clientX - start.x, event.clientY - start.y)
+          ) {
             return
           }
           commitPendingDate()
@@ -272,78 +267,80 @@ export function NetWorthChart({
           pointerStartRef.current = null
         }}
       >
-      <ResponsiveContainer width="100%" height="100%">
-        <LineChart
-          data={[...points]}
-          margin={{ top: 8, right: 8, left: 0, bottom: 0 }}
-          onMouseMove={(state) =>
-            selectDateFromChartState(state, rememberHoverDate)
-          }
-          onClick={(state) =>
-            selectDateFromChartState(state, onSelectDateRef.current)
-          }
-        >
-          <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
-          <XAxis
-            dataKey="date"
-            ticks={xTicks}
-            tick={{ fontSize: 11, fill: 'var(--muted-foreground)' }}
-            tickFormatter={(date: string) => formatChartAxisDate(date, locale)}
-            axisLine={{ stroke: 'var(--border)' }}
-            tickLine={false}
-            minTickGap={24}
-          />
-          <YAxis
-            width={68}
-            tick={{ fontSize: 11, fill: 'var(--muted-foreground)' }}
-            tickFormatter={(value: number) =>
-              formatCompactNumber(value, locale, axisDigits)
+        <ResponsiveContainer width="100%" height="100%">
+          <LineChart
+            data={[...points]}
+            margin={{ top: 8, right: 8, left: 0, bottom: 0 }}
+            onMouseMove={(state) =>
+              selectDateFromChartState(state, rememberHoverDate)
             }
-            ticks={ticks}
-            domain={domain}
-            interval={0}
-            axisLine={false}
-            tickLine={false}
-          />
-          <Tooltip
-            content={
-              <NetWorthChartTooltip
-                currency={currency}
-                onHoverDate={rememberHoverDate}
-                showHoldings={showChartTooltip}
-              />
+            onClick={(state) =>
+              selectDateFromChartState(state, onSelectDateRef.current)
             }
-            wrapperStyle={
-              showChartTooltip
-                ? { zIndex: 50, pointerEvents: 'auto' }
-                : { display: 'none' }
-            }
-          />
-          <Line
-            type="monotone"
-            dataKey="total"
-            stroke="var(--primary)"
-            strokeWidth={2}
-            dot={false}
-            name={name}
-            activeDot={{
-              r: 4,
-              onClick: (_event, payload) => {
-                const date =
-                  payload &&
-                  typeof payload === 'object' &&
-                  'payload' in payload &&
-                  payload.payload &&
-                  typeof payload.payload === 'object' &&
-                  'date' in payload.payload
-                    ? (payload.payload as { date?: string }).date
-                    : undefined
-                if (typeof date === 'string') onSelectDateRef.current?.(date)
-              },
-            }}
-          />
-        </LineChart>
-      </ResponsiveContainer>
+          >
+            <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
+            <XAxis
+              dataKey="date"
+              ticks={xTicks}
+              tick={{ fontSize: 11, fill: 'var(--muted-foreground)' }}
+              tickFormatter={(date: string) =>
+                formatChartAxisDate(date, locale)
+              }
+              axisLine={{ stroke: 'var(--border)' }}
+              tickLine={false}
+              minTickGap={24}
+            />
+            <YAxis
+              width={68}
+              tick={{ fontSize: 11, fill: 'var(--muted-foreground)' }}
+              tickFormatter={(value: number) =>
+                formatCompactNumber(value, locale, axisDigits)
+              }
+              ticks={ticks}
+              domain={domain}
+              interval={0}
+              axisLine={false}
+              tickLine={false}
+            />
+            <Tooltip
+              content={
+                <NetWorthChartTooltip
+                  currency={currency}
+                  onHoverDate={rememberHoverDate}
+                  showHoldings={showChartTooltip}
+                />
+              }
+              wrapperStyle={
+                showChartTooltip
+                  ? { zIndex: 50, pointerEvents: 'auto' }
+                  : { display: 'none' }
+              }
+            />
+            <Line
+              type="monotone"
+              dataKey="total"
+              stroke="var(--primary)"
+              strokeWidth={2}
+              dot={false}
+              name={name}
+              activeDot={{
+                r: 4,
+                onClick: (_event, payload) => {
+                  const date =
+                    payload &&
+                    typeof payload === 'object' &&
+                    'payload' in payload &&
+                    payload.payload &&
+                    typeof payload.payload === 'object' &&
+                    'date' in payload.payload
+                      ? (payload.payload as { date?: string }).date
+                      : undefined
+                  if (typeof date === 'string') onSelectDateRef.current?.(date)
+                },
+              }}
+            />
+          </LineChart>
+        </ResponsiveContainer>
       </div>
     </div>
   )

@@ -1,4 +1,5 @@
 export { Button, buttonVariants } from './button'
+export { Chip } from './chip'
 export {
   Card,
   CardHeader,
@@ -6,7 +7,16 @@ export {
   CardDescription,
   CardContent,
 } from './card'
+export {
+  controlFieldClass,
+  controlFieldChromeClass,
+  controlHeightClass,
+  controlHeightCompactClass,
+  controlUnitPadClass,
+} from './control'
 export { Input } from './input'
+export { Select } from './select'
+export { SelectField } from './select-field'
 export { EmptyState } from './empty-state'
 export { PageHeader } from './page-header'
 export { StatCard } from './stat-card'

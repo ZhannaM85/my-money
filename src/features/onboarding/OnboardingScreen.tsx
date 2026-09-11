@@ -6,6 +6,7 @@ import { useTranslation } from '@/i18n'
 import { todayIsoDate } from '@/shared/lib/money'
 import { Button } from '@/shared/ui/button'
 import { PageHeader } from '@/shared/ui/page-header'
+import { SelectField } from '@/shared/ui/select-field'
 import { useAssetStore } from '@/stores/assetStore'
 import { useSettingsStore } from '@/stores/settingsStore'
 
@@ -107,22 +108,19 @@ export function OnboardingScreen() {
         title={t.onboarding.welcomeTitle}
         description={t.onboarding.welcomeDescription}
       />
-      <label className="flex flex-col gap-1.5">
-        <span className="text-sm font-medium">{t.settings.baseCurrency}</span>
-        <select
-          className="h-12 rounded-lg border border-input bg-background px-2.5 text-base"
-          value={settings.baseCurrency}
-          onChange={(event) => {
-            void setBaseCurrency(event.target.value)
-          }}
-        >
-          {BASE_CURRENCIES.map((code) => (
-            <option key={code} value={code}>
-              {code}
-            </option>
-          ))}
-        </select>
-      </label>
+      <SelectField
+        label={t.settings.baseCurrency}
+        value={settings.baseCurrency}
+        onChange={(event) => {
+          void setBaseCurrency(event.target.value)
+        }}
+      >
+        {BASE_CURRENCIES.map((code) => (
+          <option key={code} value={code}>
+            {code}
+          </option>
+        ))}
+      </SelectField>
       <Button
         type="button"
         size="xl"

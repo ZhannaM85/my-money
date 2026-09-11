@@ -1,5 +1,4 @@
 import * as React from 'react'
-import { cn } from '@/shared/lib/utils'
 import { Input } from '@/shared/ui/input'
 
 export interface TextFieldProps extends React.ComponentProps<'input'> {
@@ -23,7 +22,7 @@ export const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
           id={inputId}
           aria-invalid={error ? true : undefined}
           aria-describedby={errorId}
-          className={cn('h-12', className)}
+          className={className}
           {...props}
         />
         {error && (

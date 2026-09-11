@@ -1,5 +1,6 @@
 import * as React from 'react'
 import { cn } from '@/shared/lib/utils'
+import { controlUnitPadClass } from '@/shared/ui/control'
 import { InfoHint } from '@/shared/ui/info-hint'
 import { Input } from '@/shared/ui/input'
 
@@ -42,7 +43,7 @@ export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
             inputMode="decimal"
             aria-invalid={error ? true : undefined}
             aria-describedby={errorId}
-            className={cn('h-12', unit && 'pr-10', className)}
+            className={cn(unit && controlUnitPadClass, className)}
             {...props}
           />
           {unit && (

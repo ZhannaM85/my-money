@@ -8,12 +8,12 @@ import {
 } from '@/domain/netWorth'
 import { ALLOCATION_ALL_SHARE_BASE } from '@/domain/settings'
 import { useTranslation } from '@/i18n'
+import { Chip } from '@/shared/ui/chip'
 import { EmptyState } from '@/shared/ui/empty-state'
 import { PageHeader } from '@/shared/ui/page-header'
 import { useAssetStore } from '@/stores/assetStore'
 import { useFxStore } from '@/stores/fxStore'
 import { useSettingsStore } from '@/stores/settingsStore'
-import { cn } from '@/shared/lib/utils'
 import { AllocationChart } from './AllocationChart'
 
 type View = 'class' | 'currency' | 'type'
@@ -151,20 +151,13 @@ export function AllocationScreen() {
       <PageHeader title={t.allocation.title} />
       <div className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1">
         {views.map((item) => (
-          <button
+          <Chip
             key={item.id}
-            type="button"
+            pressed={view === item.id}
             onClick={() => setView(item.id)}
-            className={cn(
-              'rounded-full px-3 py-1.5 text-sm font-medium',
-              view === item.id
-                ? 'bg-primary text-primary-foreground'
-                : 'bg-muted text-muted-foreground',
-            )}
-            aria-pressed={view === item.id}
           >
             {item.label}
-          </button>
+          </Chip>
         ))}
       </div>
       {!loaded ? (

@@ -42,7 +42,7 @@ export const DateField = React.forwardRef<HTMLInputElement, DateFieldProps>(
             aria-invalid={error ? true : undefined}
             aria-describedby={errorId}
             className={cn(
-              'h-12 w-[13.5rem] cursor-pointer bg-background pr-10',
+              'w-[13.5rem] cursor-pointer bg-background pr-10',
               className,
             )}
             onClick={(event) => {

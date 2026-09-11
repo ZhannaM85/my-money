@@ -226,6 +226,20 @@ Avoid arbitrary spacing values.
 
 ---
 
+## Control sizes (#232)
+
+Shared CSS tokens in `src/index.css`. Use `Button`, `Input`, `Select` / `SelectField`, `DateField`, `TextField`, `NumberInput`, and `Chip` instead of one-off height classes.
+
+| Token | Value | Tailwind | Used for |
+|---|---|---|---|
+| `--control-height` | 48px (`3rem`) | `h-control`, `size-control` | Text / date / number / select fields; primary and secondary buttons (`Button` default / `xl`); icon buttons beside fields (`icon-xl`) |
+| `--control-height-compact` | 36px (`2.25rem`) | `h-control-compact`, `size-control-compact` | Chips / compact toggles (`Button` `chip`, `Chip`); chart pan and calendar chevrons (`icon-compact`); banner actions (`sm`) |
+| `--control-padding-x` | 10px (`0.625rem`) | `px-control-x` | Horizontal padding on text inputs and selects |
+
+Icon-only in dense lists (snapshot pencil, comparison cell) stays `Button` `icon` at 32px so table rows do not grow.
+
+---
+
 ## Border Radius
 
 | Element | Radius |

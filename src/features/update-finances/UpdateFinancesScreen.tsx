@@ -16,7 +16,11 @@ import {
 import { CSS } from '@dnd-kit/utilities'
 import { GripVertical, ListOrdered, Pencil, Save } from 'lucide-react'
 import { isSuggestedUpdate } from '@/domain/asset'
-import { latestSnapshot, snapshotBeforeDate, snapshotOnDate } from '@/domain/snapshot'
+import {
+  latestSnapshot,
+  snapshotBeforeDate,
+  snapshotOnDate,
+} from '@/domain/snapshot'
 import { sortAssets } from '@/features/assets/assetListOrder'
 import { useAssetReorder } from '@/features/assets/useAssetReorder'
 import { ComparisonDelta } from '@/features/dashboard/ComparisonDelta'
@@ -93,7 +97,9 @@ export function UpdateFinancesScreen() {
   const loaded = useAssetStore((state) => state.loaded)
   const loadSettings = useSettingsStore((state) => state.load)
   const settingsLoaded = useSettingsStore((state) => state.loaded)
-  const assetListSort = useSettingsStore((state) => state.settings.assetListSort)
+  const assetListSort = useSettingsStore(
+    (state) => state.settings.assetListSort,
+  )
   const assetListOrder = useSettingsStore(
     (state) => state.settings.assetListOrder,
   )
@@ -281,10 +287,7 @@ export function UpdateFinancesScreen() {
 
   return (
     <div className="flex min-h-0 flex-1 flex-col gap-4">
-      <div
-        data-testid="update-as-of-bar"
-        className="shrink-0 bg-background"
-      >
+      <div data-testid="update-as-of-bar" className="shrink-0 bg-background">
         <PageHeader
           title={t.update.title}
           action={
@@ -323,260 +326,266 @@ export function UpdateFinancesScreen() {
         />
       ) : (
         <>
-        <div
-          data-testid="update-holdings-scroll"
-          className="flex min-h-0 flex-1 flex-col gap-6 overflow-y-auto overscroll-y-contain touch-pan-y"
-        >
-          <p
-            data-testid="update-description"
-            className="text-sm text-muted-foreground"
+          <div
+            data-testid="update-holdings-scroll"
+            className="flex min-h-0 flex-1 flex-col gap-6 overflow-y-auto overscroll-y-contain touch-pan-y"
           >
-            {t.update.description}
-          </p>
-          {rows.length > 1 ? (
-            <div className="flex justify-end">
-              <Button
-                type="button"
-                variant={reorder.reordering ? 'default' : 'outline'}
-                size="icon-xl"
-                aria-pressed={reorder.reordering}
-                aria-label={
-                  reorder.reordering
-                    ? t.update.saveOrder
-                    : t.assets.enterReorderMode
-                }
-                onClick={toggleReorder}
-              >
-                {reorder.reordering ? (
-                  <Save className="size-5" aria-hidden />
-                ) : (
-                  <ListOrdered className="size-5" aria-hidden />
-                )}
-              </Button>
-            </div>
-          ) : null}
-          {(() => {
-            const list = (
-              <ul className="flex flex-col gap-4">
-                {rows.map(({ asset, latest, onDate, previous, suggested }) => {
-                  const locked = Boolean(onDate) && !editing[asset.id]
-                  const draftRaw = drafts[asset.id]
-                  const draftAmount =
-                    !locked &&
-                    draftRaw !== undefined &&
-                    draftRaw.trim() !== ''
-                      ? parseAmount(draftRaw)
-                      : undefined
-                  const editDelta =
-                    !locked &&
-                    previous &&
-                    previous.currency === asset.currency &&
-                    draftAmount !== undefined &&
-                    draftAmount !== previous.amount
-                      ? draftAmount - previous.amount
-                      : null
-                  const meta = (
-                    <>
-                      <div className="flex items-start justify-between gap-3">
-                        <span className="flex min-w-0 flex-col">
-                          <span className="font-medium">{asset.name}</span>
-                          {asset.institution?.trim() ? (
-                            <span className="text-xs text-muted-foreground">
-                              {asset.institution.trim()}
-                            </span>
-                          ) : null}
-                          {asset.trackingStatus === 'excluded' ? (
-                            <span className="text-xs text-muted-foreground">
-                              {t.asset.notCountedInNetWorth}
-                            </span>
-                          ) : null}
-                        </span>
-                        {!reorder.reordering ? (
-                          <span className="text-sm text-muted-foreground">
-                            {latest
-                              ? formatAmount(
-                                  latest.amount,
-                                  latest.currency,
-                                  locale,
-                                )
-                              : t.asset.noValueYet}
-                          </span>
-                        ) : null}
-                      </div>
-                      <p className="text-xs text-muted-foreground">
-                        {formatLastUpdated(latest?.date, today, t)}
-                        {' · '}
-                        {suggested
-                          ? t.asset.suggestedNow
-                          : t.asset.frequency[asset.updateFrequency]}
-                      </p>
-                    </>
-                  )
-                  if (reorder.reordering) {
-                    return (
-                      <SortableUpdateRow
-                        key={asset.id}
-                        id={asset.id}
-                        reorderLabel={t.assets.reorderAria(asset.name)}
-                      >
-                        <div className="flex min-w-0 flex-1 flex-col gap-2 py-3 pr-4">
-                          {meta}
-                        </div>
-                      </SortableUpdateRow>
-                    )
+            <p
+              data-testid="update-description"
+              className="text-sm text-muted-foreground"
+            >
+              {t.update.description}
+            </p>
+            {rows.length > 1 ? (
+              <div className="flex justify-end">
+                <Button
+                  type="button"
+                  variant={reorder.reordering ? 'default' : 'outline'}
+                  size="icon-xl"
+                  aria-pressed={reorder.reordering}
+                  aria-label={
+                    reorder.reordering
+                      ? t.update.saveOrder
+                      : t.assets.enterReorderMode
                   }
-                  return (
-                    <li
-                      key={asset.id}
-                      className="flex flex-col gap-2 rounded-xl bg-card px-4 py-3 ring-1 ring-foreground/10"
-                    >
-                      {meta}
-                      <div className="flex gap-2">
-                        {locked && onDate ? (
-                          <>
-                            <span className="flex h-12 min-w-0 flex-1 items-center justify-end tabular-nums font-medium">
-                              {formatAmount(
-                                onDate.amount,
-                                onDate.currency,
-                                locale,
-                              )}
-                            </span>
-                            <Button
-                              type="button"
-                              variant="outline"
-                              size="icon-xl"
-                              aria-label={t.update.editAmountAria(asset.name)}
-                              onClick={() =>
-                                startEdit(
-                                  asset.id,
-                                  onDate.amount,
-                                  onDate.currency,
-                                )
-                              }
-                            >
-                              <Pencil className="size-5" aria-hidden />
-                            </Button>
-                          </>
-                        ) : (
-                          <>
-                            <div className="relative min-w-0 flex-1">
-                              <Input
-                                aria-label={t.update.newAmountAria(asset.name)}
-                                inputMode="decimal"
-                                value={drafts[asset.id] ?? ''}
-                                placeholder={
-                                  onDate
-                                    ? formatEditableAmount(
-                                        onDate.amount,
-                                        locale,
-                                        onDate.currency,
-                                      )
-                                    : previous
-                                      ? formatEditableAmount(
-                                          previous.amount,
-                                          locale,
-                                          previous.currency,
-                                        )
-                                      : t.asset.amountPlaceholder
-                                }
-                                className="h-12 pr-12"
-                                onChange={(event) => {
-                                  const value = event.target.value
-                                  setDrafts((current) => ({
-                                    ...current,
-                                    [asset.id]: value,
-                                  }))
-                                }}
-                                onBlur={() => {
-                                  setDrafts((current) => {
-                                    const raw = current[asset.id]
-                                    if (raw === undefined) return current
-                                    return {
-                                      ...current,
-                                      [asset.id]: reformatAmountInput(
-                                        raw,
-                                        locale,
-                                        asset.currency,
-                                      ),
-                                    }
-                                  })
-                                }}
-                              />
-                              <span className="pointer-events-none absolute inset-y-0 right-2.5 flex items-center text-sm text-muted-foreground">
-                                {asset.currency}
-                              </span>
-                            </div>
-                          </>
-                        )}
-                      </div>
-                      {!locked && previous && !onDate ? (
-                        <p
-                          className="text-xs text-muted-foreground"
-                          data-testid={`suggested-from-date-${asset.id}`}
-                        >
-                          {t.update.suggestedFromDate(
-                            formatCalendarDate(previous.date, locale),
-                          )}
-                        </p>
-                      ) : null}
-                      {editDelta !== null && previous ? (
-                        <p
-                          className="flex flex-wrap items-center justify-end gap-1.5"
-                          data-testid={`update-edit-delta-${asset.id}`}
-                        >
-                          <ComparisonDelta
-                            delta={editDelta}
-                            currency={previous.currency}
-                          />
-                          <span className="text-xs text-muted-foreground">
-                            {t.update.deltaVsDate(
-                              formatCalendarDate(previous.date, locale),
-                            )}
-                          </span>
-                        </p>
-                      ) : null}
-                      {locked &&
-                      onDate &&
-                      previous &&
-                      onDate.currency === previous.currency &&
-                      onDate.amount !== previous.amount ? (
-                        <p
-                          className="flex flex-wrap items-center justify-end gap-1.5"
-                          data-testid={`update-delta-${asset.id}`}
-                        >
-                          <ComparisonDelta
-                            delta={onDate.amount - previous.amount}
-                            currency={onDate.currency}
-                          />
-                          <span className="text-xs text-muted-foreground">
-                            {t.update.deltaVsDate(
-                              formatCalendarDate(previous.date, locale),
-                            )}
-                          </span>
-                        </p>
-                      ) : null}
-                    </li>
-                  )
-                })}
-              </ul>
-            )
-            if (!reorder.reordering) return list
-            return (
-              <DndContext
-                sensors={sensors}
-                collisionDetection={closestCenter}
-                onDragEnd={onDragEnd}
-              >
-                <SortableContext
-                  items={rows.map((row) => row.asset.id)}
-                  strategy={verticalListSortingStrategy}
+                  onClick={toggleReorder}
                 >
-                  {list}
-                </SortableContext>
-              </DndContext>
-            )
-          })()}
-        </div>
+                  {reorder.reordering ? (
+                    <Save className="size-5" aria-hidden />
+                  ) : (
+                    <ListOrdered className="size-5" aria-hidden />
+                  )}
+                </Button>
+              </div>
+            ) : null}
+            {(() => {
+              const list = (
+                <ul className="flex flex-col gap-4">
+                  {rows.map(
+                    ({ asset, latest, onDate, previous, suggested }) => {
+                      const locked = Boolean(onDate) && !editing[asset.id]
+                      const draftRaw = drafts[asset.id]
+                      const draftAmount =
+                        !locked &&
+                        draftRaw !== undefined &&
+                        draftRaw.trim() !== ''
+                          ? parseAmount(draftRaw)
+                          : undefined
+                      const editDelta =
+                        !locked &&
+                        previous &&
+                        previous.currency === asset.currency &&
+                        draftAmount !== undefined &&
+                        draftAmount !== previous.amount
+                          ? draftAmount - previous.amount
+                          : null
+                      const meta = (
+                        <>
+                          <div className="flex items-start justify-between gap-3">
+                            <span className="flex min-w-0 flex-col">
+                              <span className="font-medium">{asset.name}</span>
+                              {asset.institution?.trim() ? (
+                                <span className="text-xs text-muted-foreground">
+                                  {asset.institution.trim()}
+                                </span>
+                              ) : null}
+                              {asset.trackingStatus === 'excluded' ? (
+                                <span className="text-xs text-muted-foreground">
+                                  {t.asset.notCountedInNetWorth}
+                                </span>
+                              ) : null}
+                            </span>
+                            {!reorder.reordering ? (
+                              <span className="text-sm text-muted-foreground">
+                                {latest
+                                  ? formatAmount(
+                                      latest.amount,
+                                      latest.currency,
+                                      locale,
+                                    )
+                                  : t.asset.noValueYet}
+                              </span>
+                            ) : null}
+                          </div>
+                          <p className="text-xs text-muted-foreground">
+                            {formatLastUpdated(latest?.date, today, t)}
+                            {' · '}
+                            {suggested
+                              ? t.asset.suggestedNow
+                              : t.asset.frequency[asset.updateFrequency]}
+                          </p>
+                        </>
+                      )
+                      if (reorder.reordering) {
+                        return (
+                          <SortableUpdateRow
+                            key={asset.id}
+                            id={asset.id}
+                            reorderLabel={t.assets.reorderAria(asset.name)}
+                          >
+                            <div className="flex min-w-0 flex-1 flex-col gap-2 py-3 pr-4">
+                              {meta}
+                            </div>
+                          </SortableUpdateRow>
+                        )
+                      }
+                      return (
+                        <li
+                          key={asset.id}
+                          className="flex flex-col gap-2 rounded-xl bg-card px-4 py-3 ring-1 ring-foreground/10"
+                        >
+                          {meta}
+                          <div className="flex gap-2">
+                            {locked && onDate ? (
+                              <>
+                                <span className="flex h-control min-w-0 flex-1 items-center justify-end tabular-nums font-medium">
+                                  {formatAmount(
+                                    onDate.amount,
+                                    onDate.currency,
+                                    locale,
+                                  )}
+                                </span>
+                                <Button
+                                  type="button"
+                                  variant="outline"
+                                  size="icon-xl"
+                                  aria-label={t.update.editAmountAria(
+                                    asset.name,
+                                  )}
+                                  onClick={() =>
+                                    startEdit(
+                                      asset.id,
+                                      onDate.amount,
+                                      onDate.currency,
+                                    )
+                                  }
+                                >
+                                  <Pencil className="size-5" aria-hidden />
+                                </Button>
+                              </>
+                            ) : (
+                              <>
+                                <div className="relative min-w-0 flex-1">
+                                  <Input
+                                    aria-label={t.update.newAmountAria(
+                                      asset.name,
+                                    )}
+                                    inputMode="decimal"
+                                    value={drafts[asset.id] ?? ''}
+                                    placeholder={
+                                      onDate
+                                        ? formatEditableAmount(
+                                            onDate.amount,
+                                            locale,
+                                            onDate.currency,
+                                          )
+                                        : previous
+                                          ? formatEditableAmount(
+                                              previous.amount,
+                                              locale,
+                                              previous.currency,
+                                            )
+                                          : t.asset.amountPlaceholder
+                                    }
+                                    className="pr-12"
+                                    onChange={(event) => {
+                                      const value = event.target.value
+                                      setDrafts((current) => ({
+                                        ...current,
+                                        [asset.id]: value,
+                                      }))
+                                    }}
+                                    onBlur={() => {
+                                      setDrafts((current) => {
+                                        const raw = current[asset.id]
+                                        if (raw === undefined) return current
+                                        return {
+                                          ...current,
+                                          [asset.id]: reformatAmountInput(
+                                            raw,
+                                            locale,
+                                            asset.currency,
+                                          ),
+                                        }
+                                      })
+                                    }}
+                                  />
+                                  <span className="pointer-events-none absolute inset-y-0 right-2.5 flex items-center text-sm text-muted-foreground">
+                                    {asset.currency}
+                                  </span>
+                                </div>
+                              </>
+                            )}
+                          </div>
+                          {!locked && previous && !onDate ? (
+                            <p
+                              className="text-xs text-muted-foreground"
+                              data-testid={`suggested-from-date-${asset.id}`}
+                            >
+                              {t.update.suggestedFromDate(
+                                formatCalendarDate(previous.date, locale),
+                              )}
+                            </p>
+                          ) : null}
+                          {editDelta !== null && previous ? (
+                            <p
+                              className="flex flex-wrap items-center justify-end gap-1.5"
+                              data-testid={`update-edit-delta-${asset.id}`}
+                            >
+                              <ComparisonDelta
+                                delta={editDelta}
+                                currency={previous.currency}
+                              />
+                              <span className="text-xs text-muted-foreground">
+                                {t.update.deltaVsDate(
+                                  formatCalendarDate(previous.date, locale),
+                                )}
+                              </span>
+                            </p>
+                          ) : null}
+                          {locked &&
+                          onDate &&
+                          previous &&
+                          onDate.currency === previous.currency &&
+                          onDate.amount !== previous.amount ? (
+                            <p
+                              className="flex flex-wrap items-center justify-end gap-1.5"
+                              data-testid={`update-delta-${asset.id}`}
+                            >
+                              <ComparisonDelta
+                                delta={onDate.amount - previous.amount}
+                                currency={onDate.currency}
+                              />
+                              <span className="text-xs text-muted-foreground">
+                                {t.update.deltaVsDate(
+                                  formatCalendarDate(previous.date, locale),
+                                )}
+                              </span>
+                            </p>
+                          ) : null}
+                        </li>
+                      )
+                    },
+                  )}
+                </ul>
+              )
+              if (!reorder.reordering) return list
+              return (
+                <DndContext
+                  sensors={sensors}
+                  collisionDetection={closestCenter}
+                  onDragEnd={onDragEnd}
+                >
+                  <SortableContext
+                    items={rows.map((row) => row.asset.id)}
+                    strategy={verticalListSortingStrategy}
+                  >
+                    {list}
+                  </SortableContext>
+                </DndContext>
+              )
+            })()}
+          </div>
           {error && <p className="text-sm text-destructive">{error}</p>}
           {!reorder.reordering ? (
             <div

@@ -8,6 +8,10 @@
 :root[data-mood='fresh'] {
   color-scheme: light;
   --radius: 1rem;
+  /* Shared control sizes (#232): form fields, CTAs, chips, icon buttons. */
+  --control-height: 3rem;
+  --control-height-compact: 2.25rem;
+  --control-padding-x: 0.625rem;
   --background: #f8f9fb;
   --foreground: #17243a;
   --card: #ffffff;
@@ -321,6 +325,11 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+  --height-control: var(--control-height);
+  --height-control-compact: var(--control-height-compact);
+  --size-control: var(--control-height);
+  --size-control-compact: var(--control-height-compact);
+  --spacing-control-x: var(--control-padding-x);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);

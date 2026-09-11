@@ -10,11 +10,12 @@ import { BackupSection, CsvSection } from '@/features/export'
 import { releaseNotes } from '@/data/releaseNotes'
 import { useTranslation } from '@/i18n'
 import { Button } from '@/shared/ui/button'
+import { Chip } from '@/shared/ui/chip'
 import { PageHeader } from '@/shared/ui/page-header'
+import { SelectField } from '@/shared/ui/select-field'
 import { useAssetStore } from '@/stores/assetStore'
 import { useSettingsStore } from '@/stores/settingsStore'
 import { useThemeStore, MOODS, type Mood } from '@/stores/themeStore'
-import { cn } from '@/shared/lib/utils'
 import { ManualRatesSection } from './ManualRatesSection'
 import { FxDebugSection } from './FxDebugSection'
 import { RcaSection } from './RcaSection'
@@ -80,44 +81,38 @@ export function SettingsScreen() {
         }
       />
       <div className="flex flex-col gap-1.5">
-        <label
-          className="flex flex-col gap-1.5"
-          htmlFor="settings-base-currency"
+        <SelectField
+          label={t.settings.baseCurrency}
+          id="settings-base-currency"
+          value={
+            settings.currencyDisplayMode === 'native'
+              ? SHOW_ALL_CURRENCIES
+              : settings.baseCurrency
+          }
+          disabled={!loaded}
+          onChange={(event) => {
+            const value = event.target.value
+            void (async () => {
+              if (value === SHOW_ALL_CURRENCIES) {
+                await setCurrencyDisplayMode('native')
+                return
+              }
+              await setBaseCurrency(value)
+              if (settings.currencyDisplayMode === 'native') {
+                await setCurrencyDisplayMode('base')
+              }
+            })()
+          }}
         >
-          <span className="text-sm font-medium">{t.settings.baseCurrency}</span>
-          <select
-            id="settings-base-currency"
-            className="h-12 rounded-lg border border-input bg-background px-2.5 text-base"
-            value={
-              settings.currencyDisplayMode === 'native'
-                ? SHOW_ALL_CURRENCIES
-                : settings.baseCurrency
-            }
-            disabled={!loaded}
-            onChange={(event) => {
-              const value = event.target.value
-              void (async () => {
-                if (value === SHOW_ALL_CURRENCIES) {
-                  await setCurrencyDisplayMode('native')
-                  return
-                }
-                await setBaseCurrency(value)
-                if (settings.currencyDisplayMode === 'native') {
-                  await setCurrencyDisplayMode('base')
-                }
-              })()
-            }}
-          >
-            <option value={SHOW_ALL_CURRENCIES}>
-              {t.settings.showAllCurrencies}
+          <option value={SHOW_ALL_CURRENCIES}>
+            {t.settings.showAllCurrencies}
+          </option>
+          {BASE_CURRENCIES.map((code) => (
+            <option key={code} value={code}>
+              {code}
             </option>
-            {BASE_CURRENCIES.map((code) => (
-              <option key={code} value={code}>
-                {code}
-              </option>
-            ))}
-          </select>
-        </label>
+          ))}
+        </SelectField>
         {settings.currencyDisplayMode === 'native' && (
           <span className="text-xs text-muted-foreground">
             {t.settings.showAllCurrenciesHint}
@@ -130,55 +125,38 @@ export function SettingsScreen() {
         </span>
         <div className="flex flex-wrap gap-2">
           {displayModes.map((item) => (
-            <button
+            <Chip
               key={item.id}
-              type="button"
-              className={cn(
-                'rounded-full px-3 py-1.5 text-sm font-medium',
-                settings.currencyDisplayMode === item.id
-                  ? 'bg-primary text-primary-foreground'
-                  : 'bg-muted text-muted-foreground',
-              )}
-              aria-pressed={settings.currencyDisplayMode === item.id}
+              pressed={settings.currencyDisplayMode === item.id}
               onClick={() => void setCurrencyDisplayMode(item.id)}
             >
               {item.label}
-            </button>
+            </Chip>
           ))}
         </div>
       </div>
-      <label className="flex flex-col gap-1.5">
-        <span className="text-sm font-medium">{t.settings.language}</span>
-        <select
-          className="h-12 rounded-lg border border-input bg-background px-2.5 text-base"
-          value={settings.locale}
-          disabled={!loaded}
-          onChange={(event) => {
-            void setLocale(event.target.value as Locale)
-          }}
-        >
-          <option value="en">{t.settings.languageEn}</option>
-          <option value="ru">{t.settings.languageRu}</option>
-        </select>
-      </label>
+      <SelectField
+        label={t.settings.language}
+        value={settings.locale}
+        disabled={!loaded}
+        onChange={(event) => {
+          void setLocale(event.target.value as Locale)
+        }}
+      >
+        <option value="en">{t.settings.languageEn}</option>
+        <option value="ru">{t.settings.languageRu}</option>
+      </SelectField>
       <div className="flex flex-col gap-2">
         <span className="text-sm font-medium">{t.settings.appearance}</span>
         <div className="flex flex-wrap gap-2">
           {moods.map((item) => (
-            <button
+            <Chip
               key={item.id}
-              type="button"
-              className={cn(
-                'rounded-full px-3 py-1.5 text-sm font-medium',
-                mood === item.id
-                  ? 'bg-primary text-primary-foreground'
-                  : 'bg-muted text-muted-foreground',
-              )}
-              aria-pressed={mood === item.id}
+              pressed={mood === item.id}
               onClick={() => setMood(item.id)}
             >
               {item.label}
-            </button>
+            </Chip>
           ))}
         </div>
       </div>

@@ -1,6 +1,12 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { ChevronDown, ChevronLeft, ChevronRight, Plus, RefreshCw } from 'lucide-react'
+import {
+  ChevronDown,
+  ChevronLeft,
+  ChevronRight,
+  Plus,
+  RefreshCw,
+} from 'lucide-react'
 import {
   decomposeConvertedPeriodChange,
   historicalNativeNetWorth,
@@ -31,10 +37,12 @@ import {
   type HistoryRange,
 } from '@/shared/lib/dates'
 import { Button } from '@/shared/ui/button'
+import { Chip } from '@/shared/ui/chip'
 import { DateField } from '@/shared/ui/date-field'
 import { EmptyState } from '@/shared/ui/empty-state'
 import { InfoHint } from '@/shared/ui/info-hint'
 import { PageHeader } from '@/shared/ui/page-header'
+import { SelectField } from '@/shared/ui/select-field'
 import { StatCard } from '@/shared/ui/stat-card'
 import { cn } from '@/shared/lib/utils'
 import { useAssetStore } from '@/stores/assetStore'
@@ -44,10 +52,7 @@ import { useFxStore } from '@/stores/fxStore'
 import { useSettingsStore } from '@/stores/settingsStore'
 import { NetWorthChart } from './NetWorthChart'
 import { ChartRangePicker } from './ChartRangePicker'
-import {
-  ChartRangeToolbar,
-  CHART_ZOOM_PILL_CLASS,
-} from './ChartRangeToolbar'
+import { ChartRangeToolbar } from './ChartRangeToolbar'
 import { dashboardNeedsRemoteFx } from './dashboardFx'
 import { asOfHasLoggedData } from './asOfHasLoggedData'
 import { holdingsForSelectedChartDay } from './holdingsForSelectedChartDay'
@@ -93,7 +98,9 @@ export function DashboardScreen() {
   const customEnd = useChartRangeStore((state) => state.customEnd)
   const setRange = useChartRangeStore((state) => state.setRange)
   const setRangeEnd = useChartRangeStore((state) => state.setRangeEnd)
-  const setRangeEndPinned = useChartRangeStore((state) => state.setRangeEndPinned)
+  const setRangeEndPinned = useChartRangeStore(
+    (state) => state.setRangeEndPinned,
+  )
   const setCustomStart = useChartRangeStore((state) => state.setCustomStart)
   const setCustomEnd = useChartRangeStore((state) => state.setCustomEnd)
 
@@ -145,7 +152,9 @@ export function DashboardScreen() {
   )
   const filteredSnapshots = useMemo(() => {
     if (activeCurrencyFilter === 'all') return snapshots
-    return snapshots.filter((snapshot) => filteredAssetIds.has(snapshot.assetId))
+    return snapshots.filter((snapshot) =>
+      filteredAssetIds.has(snapshot.assetId),
+    )
   }, [activeCurrencyFilter, filteredAssetIds, snapshots])
 
   useEffect(() => {
@@ -453,7 +462,9 @@ export function DashboardScreen() {
                   size="icon-xl"
                   className="mb-0 shrink-0"
                   aria-label={t.dashboard.addToComparison}
-                  disabled={comparisonDates.includes(selectedChartDate ?? today)}
+                  disabled={comparisonDates.includes(
+                    selectedChartDate ?? today,
+                  )}
                   onClick={() => addComparisonDate(selectedChartDate ?? today)}
                 >
                   <Plus className="size-5" aria-hidden />
@@ -463,7 +474,7 @@ export function DashboardScreen() {
                     type="button"
                     variant="outline"
                     size="xl"
-                  className="mb-0 h-12 shrink-0 px-1.5 text-sm"
+                    className="mb-0 shrink-0 px-1.5"
                     onClick={() => {
                       setAsOfError(undefined)
                       setSelectedChartDate(null)
@@ -487,17 +498,10 @@ export function DashboardScreen() {
             data-testid="dashboard-scroll-body"
             className="relative z-0 flex min-w-0 w-full flex-col gap-6"
           >
-          <label
-            className="flex flex-col gap-1.5"
-            htmlFor="dashboard-currency-filter"
-          >
-            <span className="text-sm font-medium">{t.asset.currency}</span>
-            <select
+            <SelectField
+              label={t.asset.currency}
               id="dashboard-currency-filter"
-              className={cn(
-                'h-12 rounded-lg border border-input bg-background px-2.5 text-base',
-                !isOriginal && 'text-muted-foreground opacity-60',
-              )}
+              className={cn(!isOriginal && 'text-muted-foreground opacity-60')}
               value={isOriginal ? activeCurrencyFilter : baseCurrency}
               disabled={!isOriginal}
               onChange={(event) => {
@@ -505,475 +509,461 @@ export function DashboardScreen() {
                 setCurrencyFilter(event.target.value)
               }}
             >
-              {isOriginal && (
-                <option value="all">{t.assets.filterAll}</option>
+              {isOriginal && <option value="all">{t.assets.filterAll}</option>}
+              {(isOriginal ? availableCurrencies : [baseCurrency]).map(
+                (code) => (
+                  <option key={code} value={code}>
+                    {code}
+                  </option>
+                ),
               )}
-              {(isOriginal
-                ? availableCurrencies
-                : [baseCurrency]
-              ).map((code) => (
-                <option key={code} value={code}>
-                  {code}
-                </option>
-              ))}
-            </select>
-          </label>
-          {isOriginal && activeCurrencyFilter === 'all' ? (
-            <div className="flex flex-col gap-2">
-              <span className="text-sm text-muted-foreground">
-                {t.dashboard.nativeHoldings}
-              </span>
-              <ul className="flex flex-col gap-2">
-                {nativeTotals.map((row) => {
-                  const open = openNativeCurrency === row.currency
-                  const holdings = convertedHoldings.filter(
-                    (holding) => holding.currency === row.currency,
-                  )
-                  return (
-                    <li
-                      key={row.currency}
-                      className="flex flex-col gap-2 rounded-xl bg-card px-4 py-3 ring-1 ring-foreground/10"
-                    >
+            </SelectField>
+            {isOriginal && activeCurrencyFilter === 'all' ? (
+              <div className="flex flex-col gap-2">
+                <span className="text-sm text-muted-foreground">
+                  {t.dashboard.nativeHoldings}
+                </span>
+                <ul className="flex flex-col gap-2">
+                  {nativeTotals.map((row) => {
+                    const open = openNativeCurrency === row.currency
+                    const holdings = convertedHoldings.filter(
+                      (holding) => holding.currency === row.currency,
+                    )
+                    return (
+                      <li
+                        key={row.currency}
+                        className="flex flex-col gap-2 rounded-xl bg-card px-4 py-3 ring-1 ring-foreground/10"
+                      >
+                        <button
+                          type="button"
+                          className="flex w-full items-center justify-between gap-3 text-left"
+                          aria-expanded={open}
+                          aria-label={`${row.currency} · ${t.dashboard.holdings}`}
+                          onClick={() =>
+                            setOpenNativeCurrency((current) =>
+                              current === row.currency ? null : row.currency,
+                            )
+                          }
+                        >
+                          <span className="text-sm font-medium">
+                            {row.currency}
+                          </span>
+                          <span className="flex items-center gap-1 tabular-nums text-base font-semibold">
+                            {formatAmount(row.amount, row.currency, locale)}
+                            <ChevronDown
+                              className={cn(
+                                'size-4 text-muted-foreground transition-transform',
+                                open && 'rotate-180',
+                              )}
+                              aria-hidden
+                            />
+                          </span>
+                        </button>
+                        {open &&
+                          holdings.map((holding) => (
+                            <PositionsHoldingRow
+                              key={holding.assetId}
+                              row={holding}
+                              isOriginal
+                              baseCurrency={baseCurrency}
+                              compact
+                            />
+                          ))}
+                      </li>
+                    )
+                  })}
+                </ul>
+              </div>
+            ) : (
+              <StatCard
+                label={t.dashboard.netWorth}
+                value={formatAmount(
+                  displayHeadlineTotal,
+                  isOriginal ? activeCurrencyFilter : baseCurrency,
+                  locale,
+                )}
+                description={
+                  selectedChartPoint
+                    ? t.history.holdingsOn(selectedChartPoint.date)
+                    : changeLabel
+                }
+              />
+            )}
+            {fxNote && (
+              <p className="text-sm text-muted-foreground">{fxNote}</p>
+            )}
+            {convertedBreakdown && (
+              <div className="flex flex-col gap-2">
+                <InfoHint
+                  hint={t.dashboard.periodChangeHint}
+                  label={t.common.aboutField(t.dashboard.thisMonth)}
+                >
+                  <ul className="flex flex-col gap-1 text-sm">
+                    <li>
                       <button
                         type="button"
                         className="flex w-full items-center justify-between gap-3 text-left"
-                        aria-expanded={open}
-                        aria-label={`${row.currency} · ${t.dashboard.holdings}`}
+                        aria-expanded={periodOpen === 'amount'}
                         onClick={() =>
-                          setOpenNativeCurrency((current) =>
-                            current === row.currency ? null : row.currency,
+                          setPeriodOpen((current) =>
+                            current === 'amount' ? null : 'amount',
                           )
                         }
                       >
-                        <span className="text-sm font-medium">{row.currency}</span>
-                        <span className="flex items-center gap-1 tabular-nums text-base font-semibold">
-                          {formatAmount(row.amount, row.currency, locale)}
+                        <span className="text-muted-foreground">
+                          {t.dashboard.amountChange}
+                        </span>
+                        <span className="flex items-center gap-1 tabular-nums">
+                          {formatSignedAmount(
+                            convertedBreakdown.amountChange,
+                            baseCurrency,
+                            locale,
+                          )}
                           <ChevronDown
                             className={cn(
                               'size-4 text-muted-foreground transition-transform',
-                              open && 'rotate-180',
+                              periodOpen === 'amount' && 'rotate-180',
                             )}
                             aria-hidden
                           />
                         </span>
                       </button>
-                      {open &&
-                        holdings.map((holding) => (
-                          <PositionsHoldingRow
-                            key={holding.assetId}
-                            row={holding}
-                            isOriginal
-                            baseCurrency={baseCurrency}
-                            compact
-                          />
-                        ))}
+                      {periodOpen === 'amount' &&
+                        convertedBreakdown.holdings
+                          .filter((row) => row.amountChange !== 0)
+                          .map((row) => (
+                            <div
+                              key={`amount-${row.assetId}`}
+                              className="flex justify-between gap-3 pt-1 text-xs"
+                            >
+                              <span className="truncate text-muted-foreground">
+                                {row.name}
+                              </span>
+                              <span className="tabular-nums">
+                                {formatSignedAmount(
+                                  row.amountChange,
+                                  baseCurrency,
+                                  locale,
+                                )}
+                              </span>
+                            </div>
+                          ))}
                     </li>
-                  )
-                })}
-              </ul>
-            </div>
-          ) : (
-            <StatCard
-              label={t.dashboard.netWorth}
-              value={formatAmount(
-                displayHeadlineTotal,
-                isOriginal ? activeCurrencyFilter : baseCurrency,
-                locale,
-              )}
-              description={
-                selectedChartPoint
-                  ? t.history.holdingsOn(selectedChartPoint.date)
-                  : changeLabel
-              }
-            />
-          )}
-          {fxNote && <p className="text-sm text-muted-foreground">{fxNote}</p>}
-          {convertedBreakdown && (
-            <div className="flex flex-col gap-2">
-              <InfoHint
-                hint={t.dashboard.periodChangeHint}
-                label={t.common.aboutField(t.dashboard.thisMonth)}
-              >
-                <ul className="flex flex-col gap-1 text-sm">
-                  <li>
-                    <button
-                      type="button"
-                      className="flex w-full items-center justify-between gap-3 text-left"
-                      aria-expanded={periodOpen === 'amount'}
-                      onClick={() =>
-                        setPeriodOpen((current) =>
-                          current === 'amount' ? null : 'amount',
-                        )
-                      }
-                    >
-                      <span className="text-muted-foreground">
-                        {t.dashboard.amountChange}
-                      </span>
-                      <span className="flex items-center gap-1 tabular-nums">
-                        {formatSignedAmount(
-                          convertedBreakdown.amountChange,
-                          baseCurrency,
-                          locale,
-                        )}
-                        <ChevronDown
-                          className={cn(
-                            'size-4 text-muted-foreground transition-transform',
-                            periodOpen === 'amount' && 'rotate-180',
+                    <li>
+                      <button
+                        type="button"
+                        className="flex w-full items-center justify-between gap-3 text-left"
+                        aria-expanded={periodOpen === 'rate'}
+                        onClick={() =>
+                          setPeriodOpen((current) =>
+                            current === 'rate' ? null : 'rate',
+                          )
+                        }
+                      >
+                        <span className="text-muted-foreground">
+                          {t.dashboard.rateChange}
+                        </span>
+                        <span className="flex items-center gap-1 tabular-nums">
+                          {formatSignedAmount(
+                            convertedBreakdown.rateChange,
+                            baseCurrency,
+                            locale,
                           )}
-                          aria-hidden
-                        />
-                      </span>
-                    </button>
-                    {periodOpen === 'amount' &&
-                      convertedBreakdown.holdings
-                        .filter((row) => row.amountChange !== 0)
-                        .map((row) => (
-                          <div
-                            key={`amount-${row.assetId}`}
-                            className="flex justify-between gap-3 pt-1 text-xs"
-                          >
-                            <span className="truncate text-muted-foreground">
-                              {row.name}
-                            </span>
-                            <span className="tabular-nums">
-                              {formatSignedAmount(
-                                row.amountChange,
-                                baseCurrency,
-                                locale,
-                              )}
-                            </span>
-                          </div>
-                        ))}
-                  </li>
-                  <li>
-                    <button
-                      type="button"
-                      className="flex w-full items-center justify-between gap-3 text-left"
-                      aria-expanded={periodOpen === 'rate'}
-                      onClick={() =>
-                        setPeriodOpen((current) =>
-                          current === 'rate' ? null : 'rate',
-                        )
+                          <ChevronDown
+                            className={cn(
+                              'size-4 text-muted-foreground transition-transform',
+                              periodOpen === 'rate' && 'rotate-180',
+                            )}
+                            aria-hidden
+                          />
+                        </span>
+                      </button>
+                      {periodOpen === 'rate' &&
+                        convertedBreakdown.holdings
+                          .filter((row) => row.rateChange !== 0)
+                          .map((row) => (
+                            <div
+                              key={`rate-${row.assetId}`}
+                              className="flex justify-between gap-3 pt-1 text-xs"
+                            >
+                              <span className="truncate text-muted-foreground">
+                                {row.name}
+                              </span>
+                              <span className="tabular-nums">
+                                {formatSignedAmount(
+                                  row.rateChange,
+                                  baseCurrency,
+                                  locale,
+                                )}
+                              </span>
+                            </div>
+                          ))}
+                    </li>
+                  </ul>
+                </InfoHint>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="xl"
+                  className="w-full gap-2"
+                  disabled={fxLoading || ratesStatus === 'loading'}
+                  aria-busy={ratesStatus === 'loading'}
+                  onClick={() => {
+                    void (async () => {
+                      setRatesStatus('loading')
+                      const online =
+                        typeof navigator === 'undefined'
+                          ? true
+                          : navigator.onLine
+                      await ensureRange(
+                        start,
+                        chartEnd,
+                        baseCurrency,
+                        fxSymbols,
+                        { force: true },
+                      )
+                      if (!online) {
+                        setRatesStatus('offline')
+                        return
                       }
-                    >
-                      <span className="text-muted-foreground">
-                        {t.dashboard.rateChange}
-                      </span>
-                      <span className="flex items-center gap-1 tabular-nums">
-                        {formatSignedAmount(
-                          convertedBreakdown.rateChange,
-                          baseCurrency,
-                          locale,
-                        )}
-                        <ChevronDown
-                          className={cn(
-                            'size-4 text-muted-foreground transition-transform',
-                            periodOpen === 'rate' && 'rotate-180',
-                          )}
-                          aria-hidden
-                        />
-                      </span>
-                    </button>
-                    {periodOpen === 'rate' &&
-                      convertedBreakdown.holdings
-                        .filter((row) => row.rateChange !== 0)
-                        .map((row) => (
-                          <div
-                            key={`rate-${row.assetId}`}
-                            className="flex justify-between gap-3 pt-1 text-xs"
-                          >
-                            <span className="truncate text-muted-foreground">
-                              {row.name}
-                            </span>
-                            <span className="tabular-nums">
-                              {formatSignedAmount(
-                                row.rateChange,
-                                baseCurrency,
-                                locale,
-                              )}
-                            </span>
-                          </div>
-                        ))}
-                  </li>
-                </ul>
-              </InfoHint>
-              <Button
-                type="button"
-                variant="outline"
-                size="xl"
-                className="w-full gap-2"
-                disabled={fxLoading || ratesStatus === 'loading'}
-                aria-busy={ratesStatus === 'loading'}
-                onClick={() => {
-                  void (async () => {
-                    setRatesStatus('loading')
-                    const online =
-                      typeof navigator === 'undefined' ? true : navigator.onLine
-                    await ensureRange(
-                      start,
-                      chartEnd,
-                      baseCurrency,
-                      fxSymbols,
-                      { force: true },
-                    )
-                    if (!online) {
-                      setRatesStatus('offline')
-                      return
-                    }
-                    if (useFxStore.getState().error) {
-                      setRatesStatus('error')
-                      return
-                    }
-                    markRatesFetched()
-                    setRatesStatus('updated')
-                  })()
-                }}
-              >
-                {ratesStatus === 'loading' && (
-                  <RefreshCw className="size-4 animate-spin" aria-hidden />
-                )}
-                {t.dashboard.updateRates}
-              </Button>
-              {ratesStatus === 'offline' ? (
-                <p role="status" className="text-xs text-muted-foreground">
-                  {t.dashboard.ratesUpdateOffline}
-                </p>
-              ) : ratesStatus === 'error' ? (
-                <p role="status" className="text-xs text-muted-foreground">
-                  {t.dashboard.ratesUpdateFailed}
-                </p>
-              ) : lastFetchedAt ? (
-                <p
-                  role="status"
-                  className="flex justify-between gap-3 text-xs text-muted-foreground"
+                      if (useFxStore.getState().error) {
+                        setRatesStatus('error')
+                        return
+                      }
+                      markRatesFetched()
+                      setRatesStatus('updated')
+                    })()
+                  }}
                 >
-                  <span>{t.dashboard.ratesUpdated}</span>
-                  <time dateTime={lastFetchedAt}>
-                    {formatDateTime(lastFetchedAt, locale)}
-                  </time>
-                </p>
-              ) : ratesStatus === 'updated' ? (
-                <p role="status" className="text-xs text-muted-foreground">
-                  {t.dashboard.ratesUpdated}
-                </p>
-              ) : null}
-            </div>
-          )}
-          {!(isOriginal && activeCurrencyFilter === 'all') && (
-            <>
-              <ChartRangePicker
-                range={range}
-                onRangeChange={selectRange}
-                customStart={customStart}
-                customEnd={customEnd}
-                onCustomStartChange={(value) => {
-                  setSelectedChartDate(null)
-                  setAsOfError(undefined)
-                  setCustomStart(value > customEnd ? customEnd : value)
-                }}
-                onCustomEndChange={(value) => {
-                  setSelectedChartDate(null)
-                  setAsOfError(undefined)
-                  setCustomEnd(value < customStart ? customStart : value)
-                }}
-                earliest={earliest}
-                latest={today}
-              />
-              {asOfHasData ? (
-                <>
-                  <NetWorthChart
-                    points={series}
-                    currency={
-                      isOriginal ? activeCurrencyFilter : baseCurrency
-                    }
-                    onZoomIn={() => {
-                      setSelectedChartDate(null)
-                      setAsOfError(undefined)
-                      const next = stepHistoryRange(range, 'in')
-                      setRange(next)
-                      if (next === 'All') {
-                        setRangeEnd(today)
-                        setRangeEndPinned(false)
-                      }
-                    }}
-                    onZoomOut={() => {
-                      setSelectedChartDate(null)
-                      setAsOfError(undefined)
-                      const next = stepHistoryRange(range, 'out')
-                      setRange(next)
-                      if (next === 'All') {
-                        setRangeEnd(today)
-                        setRangeEndPinned(false)
-                      }
-                    }}
-                    onPanEarlier={panEarlier}
-                    onPanLater={panLater}
-                    onSelectDate={(date) => {
-                      setAsOfError(undefined)
-                      setSelectedChartDate(date)
-                    }}
-                  />
-                  <ChartRangeToolbar
-                    rangeLabel={`${t.dashboard.zoomRange}: ${
-                      range === '1W'
-                        ? t.history.rangeWeek
-                        : range === '1M'
-                          ? t.history.rangeMonth
-                          : range === '1Y'
-                            ? t.history.rangeYear
-                            : range === 'All'
-                              ? t.history.rangeAll
-                              : t.history.rangeCustom
-                    }`}
+                  {ratesStatus === 'loading' && (
+                    <RefreshCw className="size-4 animate-spin" aria-hidden />
+                  )}
+                  {t.dashboard.updateRates}
+                </Button>
+                {ratesStatus === 'offline' ? (
+                  <p role="status" className="text-xs text-muted-foreground">
+                    {t.dashboard.ratesUpdateOffline}
+                  </p>
+                ) : ratesStatus === 'error' ? (
+                  <p role="status" className="text-xs text-muted-foreground">
+                    {t.dashboard.ratesUpdateFailed}
+                  </p>
+                ) : lastFetchedAt ? (
+                  <p
+                    role="status"
+                    className="flex justify-between gap-3 text-xs text-muted-foreground"
                   >
-                    <button
-                      type="button"
-                      className={cn(
-                        'inline-flex size-9 items-center justify-center rounded-full',
-                        canPanEarlier
-                          ? 'bg-muted text-foreground'
-                          : 'bg-muted text-muted-foreground',
-                      )}
-                      disabled={!canPanEarlier}
-                      aria-label={t.dashboard.panEarlier}
-                      onClick={panEarlier}
-                    >
-                      <ChevronLeft className="size-5" aria-hidden />
-                    </button>
-                    <button
-                      type="button"
-                      className={cn(
-                        'inline-flex size-9 items-center justify-center rounded-full',
-                        canPanLater
-                          ? 'bg-muted text-foreground'
-                          : 'bg-muted text-muted-foreground',
-                      )}
-                      disabled={!canPanLater}
-                      aria-label={t.dashboard.panLater}
-                      onClick={panLater}
-                    >
-                      <ChevronRight className="size-5" aria-hidden />
-                    </button>
-                    <button
-                      type="button"
-                      className={cn(
-                        CHART_ZOOM_PILL_CLASS,
-                        canZoomIn
-                          ? 'bg-muted text-foreground'
-                          : 'bg-muted text-muted-foreground',
-                      )}
-                      disabled={!canZoomIn}
-                      onClick={() => {
-                        if (!canZoomIn) return
+                    <span>{t.dashboard.ratesUpdated}</span>
+                    <time dateTime={lastFetchedAt}>
+                      {formatDateTime(lastFetchedAt, locale)}
+                    </time>
+                  </p>
+                ) : ratesStatus === 'updated' ? (
+                  <p role="status" className="text-xs text-muted-foreground">
+                    {t.dashboard.ratesUpdated}
+                  </p>
+                ) : null}
+              </div>
+            )}
+            {!(isOriginal && activeCurrencyFilter === 'all') && (
+              <>
+                <ChartRangePicker
+                  range={range}
+                  onRangeChange={selectRange}
+                  customStart={customStart}
+                  customEnd={customEnd}
+                  onCustomStartChange={(value) => {
+                    setSelectedChartDate(null)
+                    setAsOfError(undefined)
+                    setCustomStart(value > customEnd ? customEnd : value)
+                  }}
+                  onCustomEndChange={(value) => {
+                    setSelectedChartDate(null)
+                    setAsOfError(undefined)
+                    setCustomEnd(value < customStart ? customStart : value)
+                  }}
+                  earliest={earliest}
+                  latest={today}
+                />
+                {asOfHasData ? (
+                  <>
+                    <NetWorthChart
+                      points={series}
+                      currency={
+                        isOriginal ? activeCurrencyFilter : baseCurrency
+                      }
+                      onZoomIn={() => {
                         setSelectedChartDate(null)
                         setAsOfError(undefined)
                         const next = stepHistoryRange(range, 'in')
                         setRange(next)
                         if (next === 'All') {
-                        setRangeEnd(today)
-                        setRangeEndPinned(false)
-                      }
+                          setRangeEnd(today)
+                          setRangeEndPinned(false)
+                        }
                       }}
-                    >
-                      {t.dashboard.zoomIn}
-                    </button>
-                    <button
-                      type="button"
-                      className={cn(
-                        CHART_ZOOM_PILL_CLASS,
-                        canZoomOut
-                          ? 'bg-muted text-foreground'
-                          : 'bg-muted text-muted-foreground',
-                      )}
-                      disabled={!canZoomOut}
-                      onClick={() => {
-                        if (!canZoomOut) return
+                      onZoomOut={() => {
                         setSelectedChartDate(null)
                         setAsOfError(undefined)
                         const next = stepHistoryRange(range, 'out')
                         setRange(next)
                         if (next === 'All') {
-                        setRangeEnd(today)
-                        setRangeEndPinned(false)
-                      }
+                          setRangeEnd(today)
+                          setRangeEndPinned(false)
+                        }
                       }}
+                      onPanEarlier={panEarlier}
+                      onPanLater={panLater}
+                      onSelectDate={(date) => {
+                        setAsOfError(undefined)
+                        setSelectedChartDate(date)
+                      }}
+                    />
+                    <ChartRangeToolbar
+                      rangeLabel={`${t.dashboard.zoomRange}: ${
+                        range === '1W'
+                          ? t.history.rangeWeek
+                          : range === '1M'
+                            ? t.history.rangeMonth
+                            : range === '1Y'
+                              ? t.history.rangeYear
+                              : range === 'All'
+                                ? t.history.rangeAll
+                                : t.history.rangeCustom
+                      }`}
                     >
-                      {t.dashboard.zoomOut}
-                    </button>
-                  </ChartRangeToolbar>
-                </>
-              ) : (
-                <EmptyState
-                  title={t.dashboard.noHoldingsOnDateTitle}
-                  description={t.dashboard.noHoldingsOnDateDescription}
-                />
-              )}
-            </>
-          )}
-          {convertedHoldingsToday.length > 0 &&
-            !(isOriginal && activeCurrencyFilter === 'all') && (
-            <div className="flex flex-col gap-2" data-testid="dashboard-positions">
-              <button
-                type="button"
-                className="flex items-center justify-between gap-2 text-left"
-                aria-expanded={holdingsOpen}
-                aria-label={
-                  selectedChartPoint
-                    ? t.history.holdingsOn(selectedChartPoint.date)
-                    : t.dashboard.holdings
-                }
-                onClick={() => setHoldingsOpen((open) => !open)}
-              >
-                <span className="text-sm text-muted-foreground">
-                  {selectedChartPoint
-                    ? t.history.holdingsOn(selectedChartPoint.date)
-                    : t.dashboard.holdings}
-                </span>
-                <span className="flex items-center gap-1 text-sm text-muted-foreground" aria-hidden>
-                  {convertedHoldingsToday.length}
-                  <ChevronDown
-                    className={cn(
-                      'size-4 transition-transform',
-                      holdingsOpen && 'rotate-180',
-                    )}
-                    aria-hidden
+                      <Button
+                        type="button"
+                        variant="muted"
+                        size="icon-compact"
+                        disabled={!canPanEarlier}
+                        aria-label={t.dashboard.panEarlier}
+                        onClick={panEarlier}
+                      >
+                        <ChevronLeft className="size-5" aria-hidden />
+                      </Button>
+                      <Button
+                        type="button"
+                        variant="muted"
+                        size="icon-compact"
+                        disabled={!canPanLater}
+                        aria-label={t.dashboard.panLater}
+                        onClick={panLater}
+                      >
+                        <ChevronRight className="size-5" aria-hidden />
+                      </Button>
+                      <Chip
+                        disabled={!canZoomIn}
+                        onClick={() => {
+                          if (!canZoomIn) return
+                          setSelectedChartDate(null)
+                          setAsOfError(undefined)
+                          const next = stepHistoryRange(range, 'in')
+                          setRange(next)
+                          if (next === 'All') {
+                            setRangeEnd(today)
+                            setRangeEndPinned(false)
+                          }
+                        }}
+                      >
+                        {t.dashboard.zoomIn}
+                      </Chip>
+                      <Chip
+                        disabled={!canZoomOut}
+                        onClick={() => {
+                          if (!canZoomOut) return
+                          setSelectedChartDate(null)
+                          setAsOfError(undefined)
+                          const next = stepHistoryRange(range, 'out')
+                          setRange(next)
+                          if (next === 'All') {
+                            setRangeEnd(today)
+                            setRangeEndPinned(false)
+                          }
+                        }}
+                      >
+                        {t.dashboard.zoomOut}
+                      </Chip>
+                    </ChartRangeToolbar>
+                  </>
+                ) : (
+                  <EmptyState
+                    title={t.dashboard.noHoldingsOnDateTitle}
+                    description={t.dashboard.noHoldingsOnDateDescription}
                   />
-                </span>
-              </button>
-              <p
-                className="flex items-baseline justify-between gap-3 text-sm"
-                data-testid="positions-total"
-              >
-                <span className="text-muted-foreground">
-                  {t.dashboard.positionsTotal}
-                </span>
-                <span className="tabular-nums text-base font-semibold text-foreground">
-                  {formatAmount(
-                    displayHeadlineTotal,
-                    isOriginal ? activeCurrencyFilter : baseCurrency,
-                    locale,
-                  )}
-                </span>
-              </p>
-              {holdingsOpen && (
-                <ul className="flex flex-col gap-2">
-                  {convertedHoldingsToday.map((row) => (
-                    <li key={row.assetId}>
-                      <PositionsHoldingRow
-                        row={row}
-                        isOriginal={isOriginal}
-                        baseCurrency={baseCurrency}
-                        asOfDate={selectedChartDate ?? today}
+                )}
+              </>
+            )}
+            {convertedHoldingsToday.length > 0 &&
+              !(isOriginal && activeCurrencyFilter === 'all') && (
+                <div
+                  className="flex flex-col gap-2"
+                  data-testid="dashboard-positions"
+                >
+                  <button
+                    type="button"
+                    className="flex items-center justify-between gap-2 text-left"
+                    aria-expanded={holdingsOpen}
+                    aria-label={
+                      selectedChartPoint
+                        ? t.history.holdingsOn(selectedChartPoint.date)
+                        : t.dashboard.holdings
+                    }
+                    onClick={() => setHoldingsOpen((open) => !open)}
+                  >
+                    <span className="text-sm text-muted-foreground">
+                      {selectedChartPoint
+                        ? t.history.holdingsOn(selectedChartPoint.date)
+                        : t.dashboard.holdings}
+                    </span>
+                    <span
+                      className="flex items-center gap-1 text-sm text-muted-foreground"
+                      aria-hidden
+                    >
+                      {convertedHoldingsToday.length}
+                      <ChevronDown
+                        className={cn(
+                          'size-4 transition-transform',
+                          holdingsOpen && 'rotate-180',
+                        )}
+                        aria-hidden
                       />
-                    </li>
-                  ))}
-                </ul>
+                    </span>
+                  </button>
+                  <p
+                    className="flex items-baseline justify-between gap-3 text-sm"
+                    data-testid="positions-total"
+                  >
+                    <span className="text-muted-foreground">
+                      {t.dashboard.positionsTotal}
+                    </span>
+                    <span className="tabular-nums text-base font-semibold text-foreground">
+                      {formatAmount(
+                        displayHeadlineTotal,
+                        isOriginal ? activeCurrencyFilter : baseCurrency,
+                        locale,
+                      )}
+                    </span>
+                  </p>
+                  {holdingsOpen && (
+                    <ul className="flex flex-col gap-2">
+                      {convertedHoldingsToday.map((row) => (
+                        <li key={row.assetId}>
+                          <PositionsHoldingRow
+                            row={row}
+                            isOriginal={isOriginal}
+                            baseCurrency={baseCurrency}
+                            asOfDate={selectedChartDate ?? today}
+                          />
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
               )}
-            </div>
-          )}
-          <Button asChild variant="outline">
-            <Link to="/allocation">{t.dashboard.allocation}</Link>
-          </Button>
+            <Button asChild variant="outline" size="xl" className="w-full">
+              <Link to="/allocation">{t.dashboard.allocation}</Link>
+            </Button>
           </div>
         </>
       )}

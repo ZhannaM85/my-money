@@ -1,6 +1,6 @@
 import { HISTORY_RANGES, type HistoryRange } from '@/shared/lib/dates'
 import { useTranslation } from '@/i18n'
-import { cn } from '@/shared/lib/utils'
+import { Chip } from '@/shared/ui/chip'
 import { DateField } from '@/shared/ui/date-field'
 
 /** Week / Month / Year / All / Custom chips + optional custom dates (#126). */
@@ -40,20 +40,13 @@ export function ChartRangePicker({
         aria-label={t.dashboard.zoomRange}
       >
         {HISTORY_RANGES.map((item) => (
-          <button
+          <Chip
             key={item}
-            type="button"
+            pressed={range === item}
             onClick={() => onRangeChange(item)}
-            className={cn(
-              'shrink-0 rounded-full px-3 py-1.5 text-sm font-medium',
-              range === item
-                ? 'bg-primary text-primary-foreground'
-                : 'bg-muted text-muted-foreground',
-            )}
-            aria-pressed={range === item}
           >
             {labels[item]}
-          </button>
+          </Chip>
         ))}
       </div>
       {range === 'Custom' ? (

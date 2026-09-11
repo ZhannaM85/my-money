@@ -1,4 +1,4 @@
-import { useState, type FormEvent, type ReactNode } from 'react'
+import { useState, type FormEvent } from 'react'
 import {
   ASSET_CLASSES,
   ASSET_PRESETS,
@@ -18,38 +18,18 @@ import {
 import { BASE_CURRENCIES } from '@/domain/settings'
 import { optionalSnapshotNote } from '@/domain/snapshot'
 import { useLocale, useTranslation } from '@/i18n'
-import { formatEditableAmount, parseAmount, todayIsoDate } from '@/shared/lib/money'
+import {
+  formatEditableAmount,
+  parseAmount,
+  todayIsoDate,
+} from '@/shared/lib/money'
 import { isIsoDateOnOrBefore } from '@/shared/lib/dates'
 import { Button } from '@/shared/ui/button'
+import { Chip } from '@/shared/ui/chip'
 import { DateField } from '@/shared/ui/date-field'
 import { MoneyInput } from '@/shared/ui/money-input'
+import { SelectField } from '@/shared/ui/select-field'
 import { TextField } from '@/shared/ui/text-field'
-import { cn } from '@/shared/lib/utils'
-
-function SelectField({
-  label,
-  value,
-  onChange,
-  children,
-}: {
-  label: string
-  value: string
-  onChange: (value: string) => void
-  children: ReactNode
-}) {
-  return (
-    <label className="flex flex-col gap-1.5">
-      <span className="text-sm font-medium">{label}</span>
-      <select
-        className="h-12 rounded-lg border border-input bg-background px-2.5 text-base"
-        value={value}
-        onChange={(event) => onChange(event.target.value)}
-      >
-        {children}
-      </select>
-    </label>
-  )
-}
 
 export interface AssetFormValues {
   asset: Asset
@@ -201,22 +181,19 @@ export function AssetForm({
           <span className="text-sm font-medium">{t.asset.quickAdd}</span>
           <div className="flex flex-wrap gap-2">
             {ASSET_PRESETS.map((preset) => (
-              <button
+              <Chip
                 key={preset.id}
                 type="button"
-                className={cn(
-                  'rounded-full px-3 py-1.5 text-sm font-medium',
+                pressed={
                   assetClass === preset.assetClass && type === preset.type
-                    ? 'bg-primary text-primary-foreground'
-                    : 'bg-muted text-muted-foreground',
-                )}
+                }
                 onClick={() => {
                   setAssetClass(preset.assetClass)
                   setType(preset.type)
                 }}
               >
                 {t.asset.presets[preset.id as keyof typeof t.asset.presets]}
-              </button>
+              </Chip>
             ))}
           </div>
         </div>
@@ -230,8 +207,8 @@ export function AssetForm({
       <SelectField
         label={t.asset.class}
         value={assetClass}
-        onChange={(value) => {
-          const next = value as AssetClass
+        onChange={(event) => {
+          const next = event.target.value as AssetClass
           setAssetClass(next)
           setType(TYPES_BY_CLASS[next][0])
         }}
@@ -245,7 +222,7 @@ export function AssetForm({
       <SelectField
         label={t.asset.type}
         value={type}
-        onChange={(value) => setType(value as AssetType)}
+        onChange={(event) => setType(event.target.value as AssetType)}
       >
         {types.map((value) => (
           <option key={value} value={value}>
@@ -253,7 +230,11 @@ export function AssetForm({
           </option>
         ))}
       </SelectField>
-      <SelectField label={t.asset.currency} value={currency} onChange={setCurrency}>
+      <SelectField
+        label={t.asset.currency}
+        value={currency}
+        onChange={(event) => setCurrency(event.target.value)}
+      >
         {BASE_CURRENCIES.map((code) => (
           <option key={code} value={code}>
             {code}
@@ -268,7 +249,9 @@ export function AssetForm({
       <SelectField
         label={t.asset.valuationLabel}
         value={valuationMethod}
-        onChange={(value) => setValuationMethod(value as ValuationMethod)}
+        onChange={(event) =>
+          setValuationMethod(event.target.value as ValuationMethod)
+        }
       >
         {VALUATION_METHODS.map((value) => (
           <option key={value} value={value}>
@@ -288,7 +271,9 @@ export function AssetForm({
       <SelectField
         label={t.asset.updateFrequency}
         value={updateFrequency}
-        onChange={(value) => setUpdateFrequency(value as UpdateFrequency)}
+        onChange={(event) =>
+          setUpdateFrequency(event.target.value as UpdateFrequency)
+        }
       >
         {UPDATE_FREQUENCIES.map((value) => (
           <option key={value} value={value}>
@@ -300,15 +285,15 @@ export function AssetForm({
         label={t.asset.ownershipShare}
         value={ownershipShare}
         onChange={(event) => setOwnershipShare(event.target.value)}
-        error={
-          error === t.asset.ownershipShareInvalid ? error : undefined
-        }
+        error={error === t.asset.ownershipShareInvalid ? error : undefined}
       />
       {initial && (
         <SelectField
           label={t.asset.trackingLabel}
           value={trackingStatus}
-          onChange={(value) => setTrackingStatus(value as TrackingStatus)}
+          onChange={(event) =>
+            setTrackingStatus(event.target.value as TrackingStatus)
+          }
         >
           {TRACKING_STATUSES.map((value) => (
             <option key={value} value={value}>
@@ -318,14 +303,14 @@ export function AssetForm({
         </SelectField>
       )}
       <MoneyInput
-        label={requireAmount ? t.asset.currentAmount : t.asset.newAmountOptional}
+        label={
+          requireAmount ? t.asset.currentAmount : t.asset.newAmountOptional
+        }
         locale={locale}
         currency={currency}
         value={amount}
         onValueChange={setAmount}
-        hint={
-          requireAmount ? undefined : t.asset.newAmountOptionalHint
-        }
+        hint={requireAmount ? undefined : t.asset.newAmountOptionalHint}
         aboutLabel={
           requireAmount
             ? undefined
@@ -343,9 +328,7 @@ export function AssetForm({
         value={snapshotDate}
         max={todayIsoDate()}
         onChange={(event) => setSnapshotDate(event.target.value)}
-        error={
-          error === t.asset.snapshotDateInvalid ? error : undefined
-        }
+        error={error === t.asset.snapshotDateInvalid ? error : undefined}
       />
       <TextField
         label={t.asset.snapshotNote}

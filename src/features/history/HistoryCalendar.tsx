@@ -1,12 +1,9 @@
 import { useMemo, useState } from 'react'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { useLocale, useTranslation } from '@/i18n'
-import {
-  addMonthsIso,
-  monthGridCells,
-  monthStartIso,
-} from '@/shared/lib/dates'
+import { addMonthsIso, monthGridCells, monthStartIso } from '@/shared/lib/dates'
 import { formatMonthYear, todayIsoDate } from '@/shared/lib/money'
+import { Button } from '@/shared/ui/button'
 import { cn } from '@/shared/lib/utils'
 
 export function HistoryCalendar({
@@ -43,25 +40,27 @@ export function HistoryCalendar({
   return (
     <div className="flex flex-col gap-3" data-testid="history-calendar">
       <div className="flex items-center justify-between gap-2">
-        <button
+        <Button
           type="button"
-          className="inline-flex size-9 items-center justify-center rounded-full bg-muted text-foreground"
+          variant="muted"
+          size="icon-compact"
           aria-label={t.history.calendarPrevMonth}
           onClick={() => setMonthStart((current) => addMonthsIso(current, -1))}
         >
           <ChevronLeft className="size-5" aria-hidden />
-        </button>
+        </Button>
         <p className="text-sm font-medium">
           {formatMonthYear(monthStart, locale)}
         </p>
-        <button
+        <Button
           type="button"
-          className="inline-flex size-9 items-center justify-center rounded-full bg-muted text-foreground"
+          variant="muted"
+          size="icon-compact"
           aria-label={t.history.calendarNextMonth}
           onClick={() => setMonthStart((current) => addMonthsIso(current, 1))}
         >
           <ChevronRight className="size-5" aria-hidden />
-        </button>
+        </Button>
       </div>
       <div className="grid grid-cols-7 gap-1 text-center text-xs text-muted-foreground">
         {weekdays.map((label, index) => (

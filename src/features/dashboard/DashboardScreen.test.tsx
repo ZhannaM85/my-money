@@ -462,7 +462,7 @@ describe('DashboardScreen', () => {
         </MemoryRouter>,
       )
       const button = await screen.findByRole('button', { name: 'Update rates' })
-      expect(button.className).toMatch(/\bh-12\b/)
+      expect(button.className).toMatch(/\bh-control\b/)
       expect(button.className).toMatch(/\bw-full\b/)
       await user.click(button)
       const fetched = useFxStore.getState().lastFetchedAt
@@ -1078,7 +1078,8 @@ describe('DashboardScreen', () => {
     const todayButton = screen.getByRole('button', { name: 'Today' })
     expect(todayButton.parentElement?.className).toContain('flex-nowrap')
     expect(todayButton.className).toContain('px-1.5')
-    expect(todayButton.className).toContain('text-sm')
+    expect(todayButton.className).toContain('h-control')
+    expect(todayButton.className).toContain('text-base')
     await user.click(todayButton)
     expect(
       await screen.findByRole('button', { name: 'Holdings' }),

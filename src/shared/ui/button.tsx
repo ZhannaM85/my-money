@@ -13,18 +13,22 @@ const buttonVariants = cva(
           'border-border bg-background hover:bg-muted hover:text-foreground',
         secondary:
           'bg-secondary text-secondary-foreground hover:bg-secondary/80',
+        muted:
+          'bg-muted text-muted-foreground hover:bg-muted/80 hover:text-foreground',
         ghost: 'hover:bg-muted hover:text-foreground',
         destructive:
           'bg-destructive/10 text-destructive hover:bg-destructive/20',
         link: 'text-primary underline-offset-4 hover:underline',
       },
       size: {
-        default: 'h-8 gap-1.5 px-2.5',
-        sm: 'h-7 gap-1 px-2.5 text-[0.8rem]',
-        lg: 'h-9 gap-1.5 px-3',
-        xl: 'h-12 gap-1.5 px-3 text-base',
+        default: 'h-control gap-1.5 px-3 text-base',
+        sm: 'h-control-compact gap-1 px-2.5 text-sm',
+        lg: 'h-control gap-1.5 px-3 text-base',
+        xl: 'h-control gap-1.5 px-3 text-base',
+        chip: 'h-control-compact rounded-full px-3 text-sm whitespace-nowrap',
         icon: 'size-8',
-        'icon-xl': 'size-12',
+        'icon-compact': 'size-control-compact rounded-full',
+        'icon-xl': 'size-control',
       },
     },
     defaultVariants: {
