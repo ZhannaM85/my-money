@@ -225,8 +225,6 @@ export const en: Dictionary = {
   },
   update: {
     title: 'Update',
-    description:
-      'Previous amounts, then a new number. Empty rows are skipped. Yearly and manual assets stay optional.',
     emptyTitle: 'Nothing to update',
     emptyDescription: 'Add an asset first.',
     saveUpdates: 'Save updates',

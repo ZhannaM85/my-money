@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 238,
+    title: {
+      en: 'Update: remove leftover grey helper blurb',
+      ru: 'Обновить: убрать оставшуюся серую подсказку',
+    },
+    en: 'The same #230 class of muted under-title filler was still on Update (`t.update.description`). Removed it. Empty-state copy stays; no InfoHint — the rows and Save are self-explanatory.',
+    ru: 'Тот же класс серого текста под заголовком, что убрали в #230, оставался на «Обновить» (`t.update.description`). Убран. Текст пустого состояния остаётся; InfoHint не нужен — строки и «Сохранить» понятны сами.',
+  },
+  {
     issue: 235,
     title: {
       en: 'Reorganize Ещё into Preferences / Data / About / Developer',

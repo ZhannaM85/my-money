@@ -282,12 +282,6 @@ export function UpdateFinancesScreen() {
             data-testid="update-holdings-scroll"
             className="flex min-h-0 flex-1 flex-col gap-6 overflow-y-auto overscroll-y-contain touch-pan-y"
           >
-            <p
-              data-testid="update-description"
-              className="text-sm text-muted-foreground"
-            >
-              {t.update.description}
-            </p>
             {rows.length > 1 ? (
               <div className="flex justify-end">
                 <Button

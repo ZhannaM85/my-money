@@ -257,17 +257,34 @@ describe('UpdateFinancesScreen', () => {
     expect(screen.queryByTestId('update-delta-a1')).not.toBeInTheDocument()
   })
 
-  it('renders the hint full width below the title, not beside the date (#178)', async () => {
+  it('does not show the grey helper blurb under the title (#238)', async () => {
     render(
       <MemoryRouter>
         <UpdateFinancesScreen />
       </MemoryRouter>,
     )
-    const hint = await screen.findByTestId('update-description')
-    const title = screen.getByRole('heading', { name: 'Update' })
-    expect(hint.parentElement).not.toBe(title.parentElement)
-    expect(hint).toHaveTextContent(/Previous amounts/)
+    expect(
+      await screen.findByRole('heading', { name: 'Update' }),
+    ).toBeInTheDocument()
     expect(screen.getByLabelText('As of')).toBeInTheDocument()
+    expect(screen.queryByTestId('update-description')).not.toBeInTheDocument()
+    expect(
+      screen.queryByText(/Previous amounts, then a new number/),
+    ).not.toBeInTheDocument()
+  })
+
+  it('keeps empty-state copy when there are no assets (#238)', async () => {
+    await db.assets.clear()
+    await db.snapshots.clear()
+    useAssetStore.setState({ assets: [], snapshots: [], loaded: true })
+    render(
+      <MemoryRouter>
+        <UpdateFinancesScreen />
+      </MemoryRouter>,
+    )
+    expect(await screen.findByText('Nothing to update')).toBeInTheDocument()
+    expect(screen.getByText('Add an asset first.')).toBeInTheDocument()
+    expect(screen.queryByTestId('update-description')).not.toBeInTheDocument()
   })
 
   it('hides the reorder icon when there is only one holding (#179)', async () => {
@@ -505,7 +522,7 @@ describe('UpdateFinancesScreen', () => {
     expect(bar.className).toMatch(/shrink-0/)
     expect(scroll.className).toMatch(/overflow-y-auto/)
     expect(scroll).not.toContainElement(asOf)
-    expect(scroll).toContainElement(screen.getByTestId('update-description'))
+    expect(screen.queryByTestId('update-description')).not.toBeInTheDocument()
     const save = screen.getByRole('button', { name: 'Save updates' })
     const saveBar = screen.getByTestId('update-save-bar')
     expect(saveBar).toContainElement(save)

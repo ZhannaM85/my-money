@@ -848,27 +848,25 @@ test('capture Update locked As of amount with edit (#176)', async ({
   })
 })
 
-test('capture Update header hint full width (#178)', async ({ page }) => {
-  await seedValidationFixture(page)
-  await page.goto('/settings')
-  await expect(page.getByRole('heading', { name: 'More' })).toBeVisible()
-  await page
-    .locator('label')
-    .filter({ hasText: 'Language' })
-    .locator('select')
-    .selectOption('ru')
-  await expect(
-    page
-      .locator('label')
-      .filter({ hasText: 'Язык' })
-      .locator('select'),
-  ).toHaveValue('ru')
+test('capture Update without grey helper blurb in Russian (#238)', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 })
+  await seedValidationFixture(page, { locale: 'ru' })
   await page.goto('/update')
   await expect(page.getByRole('heading', { name: 'Обновить' })).toBeVisible()
-  await expect(page.getByTestId('update-description')).toBeVisible()
+  await expect(page.getByTestId('update-description')).toHaveCount(0)
+  await expect(
+    page.getByText(/Прошлая сумма, затем новое число/),
+  ).toHaveCount(0)
+  await expect(page.getByLabel('На дату')).toBeVisible()
   await page.screenshot({
-    path: join(outDir, '178-update-header-hint.png'),
-    fullPage: true,
+    path: join(
+      'docs',
+      'validation-proof',
+      '238',
+      '238-update-no-helper-blurb.png',
+    ),
   })
 })
 

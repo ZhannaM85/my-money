@@ -61,7 +61,8 @@ gh issue edit 108 --add-label validation
 | `175-update-as-of.png` | Update · shared As of date, default today (#175) |
 | `176-update-locked-edit.png` | Update · existing As of amount read-only + pencil (#176) |
 | `177-comparison-cell-edit.png` | Comparison · pencil to edit a cell amount (#177) |
-| `178-update-header-hint.png` | Update · full-width hint under title + As of (RU, #178) |
+| `178-update-header-hint.png` | Update · full-width hint under title + As of (RU, #178; superseded by #238) |
+| `238-update-no-helper-blurb.png` | Update · no grey helper blurb under title; As of remains (RU, #238) |
 | `179-update-reorder.png` | Update · reorder icon on, drag grips (#179) |
 | `180-update-prefill-previous.png` | Update · past As of placeholder from prior snapshot, not later latest (#180) |
 | `181-update-stay-view.png` | Update · after Save, same As of, locked amounts (#181) |

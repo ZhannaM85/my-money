@@ -173,7 +173,6 @@ export interface Dictionary {
   }
   update: {
     title: string
-    description: string
     emptyTitle: string
     emptyDescription: string
     saveUpdates: string

@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 224,
+    issue: 238,
+    date: '2026-09-12T23:55:00+03:00',
+    en: 'Update no longer shows the grey helper blurb under the title. Empty-state copy stays when there are no assets.',
+    ru: 'На «Обновить» больше нет серой подсказки под заголовком. Текст пустого состояния остаётся, если активов нет.',
+  },
+  {
     version: 223,
     issue: 235,
     date: '2026-09-12T23:45:00+03:00',
