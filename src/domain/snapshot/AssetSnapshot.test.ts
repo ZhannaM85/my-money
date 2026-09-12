@@ -4,7 +4,12 @@ import {
   optionalSnapshotNote,
   snapshotBeforeDate,
   snapshotOnDate,
+  snapshotsOnOrBefore,
 } from './AssetSnapshot'
+import {
+  indexSnapshotsByAssetId,
+  latestIndexedSnapshotOnOrBefore,
+} from './snapshotIndex'
 
 describe('optionalSnapshotNote', () => {
   it('trims text and drops empty notes so they do not persist', () => {
@@ -114,5 +119,59 @@ describe('snapshotBeforeDate (#180)', () => {
 
   it('returns undefined when nothing is earlier', () => {
     expect(snapshotBeforeDate(rows, 'a1', '2026-08-01')).toBeUndefined()
+  })
+})
+
+describe('indexSnapshotsByAssetId', () => {
+  it('picks the same on-or-before snapshot as a full scan (#240)', () => {
+    const rows = [
+      {
+        id: 'a-early',
+        assetId: 'a',
+        date: '2026-07-01',
+        amount: 10,
+        currency: 'EUR',
+        createdAt: '2026-07-01T00:00:00.000Z',
+      },
+      {
+        id: 'b-only',
+        assetId: 'b',
+        date: '2026-08-01',
+        amount: 99,
+        currency: 'USD',
+        createdAt: '2026-08-01T00:00:00.000Z',
+      },
+      {
+        id: 'a-late',
+        assetId: 'a',
+        date: '2026-08-01',
+        amount: 20,
+        currency: 'EUR',
+        createdAt: '2026-08-01T08:00:00.000Z',
+      },
+      {
+        id: 'a-same-day-newer',
+        assetId: 'a',
+        date: '2026-08-01',
+        amount: 21,
+        currency: 'EUR',
+        createdAt: '2026-08-01T12:00:00.000Z',
+      },
+    ]
+    const indexed = indexSnapshotsByAssetId(rows)
+    expect(indexed.get('a')?.map((row) => row.id)).toEqual([
+      'a-early',
+      'a-late',
+      'a-same-day-newer',
+    ])
+    expect(
+      latestIndexedSnapshotOnOrBefore(indexed.get('a'), '2026-08-01')?.id,
+    ).toBe(snapshotsOnOrBefore(rows, 'a', '2026-08-01')?.id)
+    expect(
+      latestIndexedSnapshotOnOrBefore(indexed.get('a'), '2026-07-15')?.id,
+    ).toBe('a-early')
+    expect(
+      latestIndexedSnapshotOnOrBefore(indexed.get('b'), '2026-07-15'),
+    ).toBeUndefined()
   })
 })

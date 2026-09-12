@@ -181,7 +181,7 @@ src/
     settings/
     backup/                # versioned BackupBundle — no I/O
     fx/                    # convertAmount, rate lookup types — no fetch
-    netWorth/              # netWorth, allocation, periodChange, history
+    netWorth/              # totals, holdings, allocation, periodChange, history
   infrastructure/
     persistence/
       indexeddb/           # Dexie schema + repository IMPLEMENTATIONS
@@ -326,7 +326,7 @@ Until later feature epics land, UI module tables below are still the intended ma
 | `domain/snapshot/` | `AssetSnapshot`, append-only history helpers, `SnapshotRepository` |
 | `domain/settings/` | Singleton settings (base currency, locale) |
 | `domain/fx/` | Pure conversion + quote types; no HTTP |
-| `domain/netWorth/` | Totals, allocation, period change, historical series |
+| `domain/netWorth/` | Totals, holdings, allocation, period change, historical series (snapshots pre-indexed by assetId) |
 
 ### Infrastructure
 

@@ -4,20 +4,24 @@ export type {
   HoldingConversion,
   HistoricalPoint,
   MissingRate,
+  NativeAllocationRow,
   NetWorthResult,
-} from './netWorth'
+} from './types'
+export { netWorth } from './netWorth'
 export {
-  netWorth,
+  allocationSliceHoldings,
   holdingsWithConversion,
   nativeTotalsByCurrency,
-  historicalNativeNetWorth,
-  historicalNetWorth,
+} from './holdings'
+export { historicalNativeNetWorth, historicalNetWorth } from './history'
+export {
   allocation,
+  attachConvertedSharePercents,
   breakdownBy,
   nativeBreakdownBy,
-  attachConvertedSharePercents,
-  allocationSliceHoldings,
-  periodChange,
+} from './allocation'
+export {
   assetPerformance,
   decomposeConvertedPeriodChange,
-} from './netWorth'
+  periodChange,
+} from './periodChange'
