@@ -1,35 +1,21 @@
-import 'fake-indexeddb/auto'
-import { render, screen, waitFor } from '@testing-library/react'
+import { screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { MemoryRouter } from 'react-router-dom'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { renderApp, resetAppStores } from '@test/renderApp'
 import { DEFAULT_SETTINGS } from '@/domain/settings'
-import { db } from '@/infrastructure/persistence/indexeddb'
 import { formatAmount, formatSignedAmount } from '@/shared/lib/money'
 import { useAssetStore } from '@/stores/assetStore'
 import { useComparisonStore } from '@/stores/comparisonStore'
-import { useFxStore } from '@/stores/fxStore'
 import { useSettingsStore } from '@/stores/settingsStore'
 import { ComparisonScreen } from './ComparisonScreen'
 
 beforeEach(async () => {
   vi.restoreAllMocks()
-  await db.assets.clear()
-  await db.snapshots.clear()
-  await db.settings.clear()
-  useAssetStore.setState({ assets: [], snapshots: [], loaded: false })
-  useFxStore.setState({
-    ...useFxStore.getState(),
-    quotes: [],
-    manualQuotes: [],
-    loading: false,
-    error: undefined,
-  })
+  await resetAppStores()
   useSettingsStore.setState({
     settings: DEFAULT_SETTINGS,
     loaded: true,
   })
-  useComparisonStore.setState({ dates: [] })
 })
 
 describe('ComparisonScreen (#137)', () => {
@@ -66,11 +52,7 @@ describe('ComparisonScreen (#137)', () => {
     useComparisonStore.setState({ dates: ['2026-08-25', '2026-08-29'] })
     vi.spyOn(window, 'confirm').mockReturnValue(true)
     const user = userEvent.setup()
-    render(
-      <MemoryRouter>
-        <ComparisonScreen />
-      </MemoryRouter>,
-    )
+    renderApp(<ComparisonScreen />)
     expect(await screen.findByTestId('comparison-table')).toBeInTheDocument()
     expect(screen.getByText('Cash')).toBeInTheDocument()
     expect(
@@ -79,9 +61,7 @@ describe('ComparisonScreen (#137)', () => {
     expect(
       screen.getAllByText(formatAmount(150, 'EUR')).length,
     ).toBeGreaterThan(0)
-    await user.click(
-      screen.getByRole('button', { name: 'Remove 2026-08-25' }),
-    )
+    await user.click(screen.getByRole('button', { name: 'Remove 2026-08-25' }))
     expect(useComparisonStore.getState().dates).toEqual(['2026-08-29'])
     expect(
       await screen.findByText('Add at least two dates from Dashboard.'),
@@ -121,24 +101,16 @@ describe('ComparisonScreen (#137)', () => {
     useComparisonStore.setState({ dates: ['2026-08-25', '2026-08-29'] })
     const confirm = vi.spyOn(window, 'confirm').mockReturnValue(false)
     const user = userEvent.setup()
-    render(
-      <MemoryRouter>
-        <ComparisonScreen />
-      </MemoryRouter>,
-    )
+    renderApp(<ComparisonScreen />)
     expect(await screen.findByTestId('comparison-table')).toBeInTheDocument()
-    await user.click(
-      screen.getByRole('button', { name: 'Remove 2026-08-25' }),
-    )
+    await user.click(screen.getByRole('button', { name: 'Remove 2026-08-25' }))
     expect(confirm).toHaveBeenCalledWith('Remove 2026-08-25 from comparison?')
     expect(useComparisonStore.getState().dates).toEqual([
       '2026-08-25',
       '2026-08-29',
     ])
     confirm.mockReturnValue(true)
-    await user.click(
-      screen.getByRole('button', { name: 'Remove 2026-08-25' }),
-    )
+    await user.click(screen.getByRole('button', { name: 'Remove 2026-08-25' }))
     expect(useComparisonStore.getState().dates).toEqual(['2026-08-29'])
   })
 
@@ -175,26 +147,16 @@ describe('ComparisonScreen (#137)', () => {
     useComparisonStore.setState({ dates: ['2026-08-25', '2026-08-29'] })
     const confirm = vi.spyOn(window, 'confirm').mockReturnValue(false)
     const user = userEvent.setup()
-    render(
-      <MemoryRouter>
-        <ComparisonScreen />
-      </MemoryRouter>,
-    )
+    renderApp(<ComparisonScreen />)
     expect(await screen.findByTestId('comparison-table')).toBeInTheDocument()
-    await user.click(
-      screen.getByRole('button', { name: 'Remove all dates' }),
-    )
-    expect(confirm).toHaveBeenCalledWith(
-      'Remove all dates from comparison?',
-    )
+    await user.click(screen.getByRole('button', { name: 'Remove all dates' }))
+    expect(confirm).toHaveBeenCalledWith('Remove all dates from comparison?')
     expect(useComparisonStore.getState().dates).toEqual([
       '2026-08-25',
       '2026-08-29',
     ])
     confirm.mockReturnValue(true)
-    await user.click(
-      screen.getByRole('button', { name: 'Remove all dates' }),
-    )
+    await user.click(screen.getByRole('button', { name: 'Remove all dates' }))
     expect(useComparisonStore.getState().dates).toEqual([])
     expect(
       await screen.findByText('Add at least two dates from Dashboard.'),
@@ -224,11 +186,7 @@ describe('ComparisonScreen (#137)', () => {
       },
     )
     useComparisonStore.setState({ dates: ['2026-08-25', '2026-08-29'] })
-    render(
-      <MemoryRouter>
-        <ComparisonScreen />
-      </MemoryRouter>,
-    )
+    renderApp(<ComparisonScreen />)
     const nameCol = await screen.findByTestId('comparison-name-col')
     expect(nameCol).toHaveClass('w-24')
     expect(nameCol).toHaveClass('max-w-24')
@@ -263,11 +221,7 @@ describe('ComparisonScreen (#137)', () => {
       },
     )
     useComparisonStore.setState({ dates: ['2026-08-25', '2026-08-29'] })
-    render(
-      <MemoryRouter>
-        <ComparisonScreen />
-      </MemoryRouter>,
-    )
+    renderApp(<ComparisonScreen />)
     expect(
       await screen.findAllByText(formatAmount(1_042_317.11, 'EUR')),
     ).not.toHaveLength(0)
@@ -304,11 +258,7 @@ describe('ComparisonScreen (#137)', () => {
     useComparisonStore.setState({
       dates: ['2026-08-25', '2026-08-26', '2026-08-28', '2026-08-29'],
     })
-    render(
-      <MemoryRouter>
-        <ComparisonScreen />
-      </MemoryRouter>,
-    )
+    renderApp(<ComparisonScreen />)
     const scroller = await screen.findByTestId('comparison-h-scroll')
     expect(scroller.className).toContain('overflow-x-auto')
     expect(scroller.className).toContain('overflow-y-hidden')
@@ -348,11 +298,7 @@ describe('ComparisonScreen (#137)', () => {
       },
     )
     useComparisonStore.setState({ dates: ['2026-08-25', '2026-08-29'] })
-    render(
-      <MemoryRouter>
-        <ComparisonScreen />
-      </MemoryRouter>,
-    )
+    renderApp(<ComparisonScreen />)
     expect(await screen.findByText('Sosnovo')).toBeInTheDocument()
     expect(screen.getByText('Your share: 1/2')).toBeInTheDocument()
   })
@@ -400,11 +346,7 @@ describe('ComparisonScreen (#137)', () => {
       },
     )
     useComparisonStore.setState({ dates: ['2026-08-25', '2026-08-29'] })
-    render(
-      <MemoryRouter>
-        <ComparisonScreen />
-      </MemoryRouter>,
-    )
+    renderApp(<ComparisonScreen />)
     expect(await screen.findByText('Cash')).toBeInTheDocument()
     expect(screen.queryByText('Sosnovo')).not.toBeInTheDocument()
   })
@@ -466,11 +408,7 @@ describe('ComparisonScreen (#137)', () => {
       },
     ])
     useComparisonStore.setState({ dates: ['2026-08-25', '2026-08-31'] })
-    render(
-      <MemoryRouter>
-        <ComparisonScreen />
-      </MemoryRouter>,
-    )
+    renderApp(<ComparisonScreen />)
     expect(await screen.findByTestId('comparison-table')).toBeInTheDocument()
     expect(
       screen.queryByText(/Later columns show change versus the first date/),
@@ -526,11 +464,7 @@ describe('ComparisonScreen (#137)', () => {
     useComparisonStore.setState({
       dates: ['2026-08-25', '2026-08-27', '2026-08-29'],
     })
-    render(
-      <MemoryRouter>
-        <ComparisonScreen />
-      </MemoryRouter>,
-    )
+    renderApp(<ComparisonScreen />)
     expect(await screen.findByTestId('comparison-table')).toBeInTheDocument()
     expect(
       screen.getAllByLabelText(`Up ${formatSignedAmount(50, 'EUR')}`),
@@ -567,11 +501,7 @@ describe('ComparisonScreen (#137)', () => {
       },
     )
     useComparisonStore.setState({ dates: ['2026-08-25', '2026-08-29'] })
-    render(
-      <MemoryRouter>
-        <ComparisonScreen />
-      </MemoryRouter>,
-    )
+    renderApp(<ComparisonScreen />)
     expect(await screen.findByTestId('comparison-table')).toBeInTheDocument()
     expect(
       screen.queryByLabelText('GEL card amount on 2026-08-25'),
@@ -579,9 +509,7 @@ describe('ComparisonScreen (#137)', () => {
     await user.click(
       screen.getByRole('button', { name: 'Edit GEL card on 2026-08-25' }),
     )
-    const input = await screen.findByLabelText(
-      'GEL card amount on 2026-08-25',
-    )
+    const input = await screen.findByLabelText('GEL card amount on 2026-08-25')
     await user.type(input, '50')
     await user.click(
       screen.getByRole('button', { name: 'Save GEL card on 2026-08-25' }),

@@ -83,6 +83,7 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 | [#241](https://github.com/ZhannaM85/my-money/issues/241) | 🔍 Pending validation | FX: document real pipeline; remove unused runtime CBR/NBG | `docs/FX.md` is canonical. Deleted unused `fx/cbr` + `fx/nbg` HTTP clients. Generate scripts kept. No third live fetch. |
 | [#248](https://github.com/ZhannaM85/my-money/issues/248) | 🔍 Pending validation | ESLint max-lines warn (≤500) for features/app | Warn on `src/features/**` + `src/app/**`. Tests and `src/data/**` ignored. Remaining offender `UpdateFinancesScreen` warns only. |
 | [#249](https://github.com/ZhannaM85/my-money/issues/249) | 🔍 Pending validation | ESLint import-boundary zones for domain/features | `domain/` ↛ React/Zustand/Dexie. Production features ↛ `infrastructure/persistence`. Backup/CSV I/O via `stores/backupBook`. |
+| [#251](https://github.com/ZhannaM85/my-money/issues/251) | 🔍 Pending validation | Shared test render helper + split god screen tests | `test/renderApp.tsx` resets IndexedDB + store defaults. Dashboard / Comparison suites use it; assertions unchanged. |
 
 ---
 

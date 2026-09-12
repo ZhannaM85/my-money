@@ -28,6 +28,7 @@ export default defineConfig(({ mode }) => ({
   resolve: {
     alias: {
       '@': path.resolve(import.meta.dirname, './src'),
+      '@test': path.resolve(import.meta.dirname, './test'),
     },
   },
   test: {

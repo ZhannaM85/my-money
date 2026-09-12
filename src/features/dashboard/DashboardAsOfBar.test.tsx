@@ -1,16 +1,14 @@
-import 'fake-indexeddb/auto'
-import { render, screen } from '@testing-library/react'
+import { screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { MemoryRouter } from 'react-router-dom'
 import { beforeEach, describe, expect, it } from 'vitest'
+import { renderApp, resetAppStores } from '@test/renderApp'
 import { formatAmount, todayIsoDate } from '@/shared/lib/money'
 import { addDaysIso } from '@/shared/lib/dates'
 import { useAssetStore } from '@/stores/assetStore'
 import { DashboardScreen } from './DashboardScreen'
-import { resetDashboardStores } from './dashboardTestSetup'
 
 beforeEach(async () => {
-  await resetDashboardStores()
+  await resetAppStores()
 })
 
 describe('DashboardAsOfBar', () => {
@@ -46,11 +44,7 @@ describe('DashboardAsOfBar', () => {
         currency: 'EUR',
       },
     ])
-    render(
-      <MemoryRouter>
-        <DashboardScreen />
-      </MemoryRouter>,
-    )
+    renderApp(<DashboardScreen />)
     expect(await screen.findByText('Net worth')).toBeInTheDocument()
     const asOf = screen.getByLabelText('As of')
     asOf.focus()
@@ -100,11 +94,7 @@ describe('DashboardAsOfBar', () => {
         currency: 'EUR',
       },
     ])
-    render(
-      <MemoryRouter>
-        <DashboardScreen />
-      </MemoryRouter>,
-    )
+    renderApp(<DashboardScreen />)
     expect(await screen.findByText('Net worth')).toBeInTheDocument()
     const asOf = screen.getByLabelText('As of')
     asOf.focus()
@@ -155,11 +145,7 @@ describe('DashboardAsOfBar', () => {
         currency: 'EUR',
       },
     ])
-    render(
-      <MemoryRouter>
-        <DashboardScreen />
-      </MemoryRouter>,
-    )
+    renderApp(<DashboardScreen />)
     expect(await screen.findByText('Net worth')).toBeInTheDocument()
     expect(
       screen.queryByRole('button', { name: 'Today' }),
@@ -213,11 +199,7 @@ describe('DashboardAsOfBar', () => {
         currency: 'EUR',
       },
     )
-    render(
-      <MemoryRouter>
-        <DashboardScreen />
-      </MemoryRouter>,
-    )
+    renderApp(<DashboardScreen />)
     const bar = await screen.findByTestId('dashboard-as-of-bar')
     const scroll = screen.getByTestId('dashboard-scroll')
     const asOf = screen.getByLabelText('As of')
@@ -276,11 +258,7 @@ describe('DashboardAsOfBar', () => {
       },
     ])
     const user = userEvent.setup()
-    render(
-      <MemoryRouter>
-        <DashboardScreen />
-      </MemoryRouter>,
-    )
+    renderApp(<DashboardScreen />)
     expect(await screen.findByText('Net worth')).toBeInTheDocument()
     expect(
       screen.queryByRole('link', { name: 'Go to comparison' }),
@@ -329,11 +307,7 @@ describe('DashboardAsOfBar', () => {
       },
     )
     const user = userEvent.setup()
-    render(
-      <MemoryRouter>
-        <DashboardScreen />
-      </MemoryRouter>,
-    )
+    renderApp(<DashboardScreen />)
     expect(await screen.findByTestId('net-worth-chart')).toBeInTheDocument()
     const asOf = screen.getByLabelText('As of')
     asOf.focus()

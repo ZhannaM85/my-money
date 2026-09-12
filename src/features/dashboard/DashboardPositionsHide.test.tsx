@@ -1,8 +1,7 @@
-import 'fake-indexeddb/auto'
-import { act, render, screen, waitFor } from '@testing-library/react'
+import { act, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { MemoryRouter } from 'react-router-dom'
 import { beforeEach, describe, expect, it } from 'vitest'
+import { renderApp, resetAppStores } from '@test/renderApp'
 import { DEFAULT_SETTINGS } from '@/domain/settings'
 import { db } from '@/infrastructure/persistence/indexeddb'
 import { formatAmount } from '@/shared/lib/money'
@@ -10,10 +9,9 @@ import { useAssetStore } from '@/stores/assetStore'
 import { useSettingsStore } from '@/stores/settingsStore'
 import { AllocationScreen } from '@/features/allocation'
 import { DashboardScreen } from './DashboardScreen'
-import { resetDashboardStores } from './dashboardTestSetup'
 
 beforeEach(async () => {
-  await resetDashboardStores()
+  await resetAppStores()
 })
 
 describe('DashboardPositions hide', () => {
@@ -39,11 +37,7 @@ describe('DashboardPositions hide', () => {
         currency: 'EUR',
       },
     )
-    render(
-      <MemoryRouter>
-        <DashboardScreen />
-      </MemoryRouter>,
-    )
+    renderApp(<DashboardScreen />)
     await userEvent.click(
       await screen.findByRole('button', { name: 'Holdings' }),
     )
@@ -96,11 +90,7 @@ describe('DashboardPositions hide', () => {
         currency: 'EUR',
       },
     )
-    render(
-      <MemoryRouter>
-        <DashboardScreen />
-      </MemoryRouter>,
-    )
+    renderApp(<DashboardScreen />)
     await userEvent.click(
       await screen.findByRole('button', { name: 'Holdings' }),
     )
@@ -160,11 +150,7 @@ describe('DashboardPositions hide', () => {
         currency: 'EUR',
       },
     )
-    render(
-      <MemoryRouter>
-        <DashboardScreen />
-      </MemoryRouter>,
-    )
+    renderApp(<DashboardScreen />)
     expect(await screen.findByTestId('positions-total')).toHaveTextContent(
       formatAmount(5_001_000, 'EUR'),
     )
@@ -226,11 +212,7 @@ describe('DashboardPositions hide', () => {
         currency: 'EUR',
       },
     )
-    const allocation = render(
-      <MemoryRouter>
-        <AllocationScreen />
-      </MemoryRouter>,
-    )
+    const allocation = renderApp(<AllocationScreen />)
     await user.click(
       await screen.findByRole('button', { name: 'Property · Holdings' }),
     )
@@ -247,11 +229,7 @@ describe('DashboardPositions hide', () => {
     })
     allocation.unmount()
 
-    const dashboard = render(
-      <MemoryRouter>
-        <DashboardScreen />
-      </MemoryRouter>,
-    )
+    const dashboard = renderApp(<DashboardScreen />)
     await user.click(await screen.findByRole('button', { name: 'Holdings' }))
     expect(await screen.findByText('Sosnovo')).toBeInTheDocument()
     expect(
@@ -267,11 +245,7 @@ describe('DashboardPositions hide', () => {
 
     useAssetStore.setState({ assets: [], snapshots: [], loaded: false })
     await useAssetStore.getState().load()
-    render(
-      <MemoryRouter>
-        <DashboardScreen />
-      </MemoryRouter>,
-    )
+    renderApp(<DashboardScreen />)
     await user.click(await screen.findByRole('button', { name: 'Holdings' }))
     const hidden = (await screen.findByText('Sosnovo')).closest(
       '[data-excluded]',
@@ -347,11 +321,7 @@ describe('DashboardPositions hide', () => {
     )
     useAssetStore.setState({ assets: [], snapshots: [], loaded: false })
     await useAssetStore.getState().load()
-    render(
-      <MemoryRouter>
-        <DashboardScreen />
-      </MemoryRouter>,
-    )
+    renderApp(<DashboardScreen />)
     expect(await screen.findByText('Holdings by currency')).toBeInTheDocument()
     await userEvent.click(
       screen.getByRole('button', { name: 'GEL · Holdings' }),

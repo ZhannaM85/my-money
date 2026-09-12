@@ -1,16 +1,14 @@
-import 'fake-indexeddb/auto'
-import { render, screen } from '@testing-library/react'
+import { screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { MemoryRouter } from 'react-router-dom'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { renderApp, resetAppStores } from '@test/renderApp'
 import { formatDateTime } from '@/shared/lib/money'
 import { useAssetStore } from '@/stores/assetStore'
 import { FX_LAST_FETCHED_KEY, useFxStore } from '@/stores/fxStore'
 import { DashboardScreen } from './DashboardScreen'
-import { resetDashboardStores } from './dashboardTestSetup'
 
 beforeEach(async () => {
-  await resetDashboardStores()
+  await resetAppStores()
 })
 
 describe('DashboardRates', () => {
@@ -41,11 +39,7 @@ describe('DashboardRates', () => {
       },
     )
     try {
-      render(
-        <MemoryRouter>
-          <DashboardScreen />
-        </MemoryRouter>,
-      )
+      renderApp(<DashboardScreen />)
       const button = await screen.findByRole('button', { name: 'Update rates' })
       await user.click(button)
       expect(ensureRange).toHaveBeenCalledWith(
@@ -94,11 +88,7 @@ describe('DashboardRates', () => {
       },
     )
     try {
-      render(
-        <MemoryRouter>
-          <DashboardScreen />
-        </MemoryRouter>,
-      )
+      renderApp(<DashboardScreen />)
       await user.click(
         await screen.findByRole('button', { name: 'Update rates' }),
       )
@@ -141,11 +131,7 @@ describe('DashboardRates', () => {
       },
     )
     try {
-      render(
-        <MemoryRouter>
-          <DashboardScreen />
-        </MemoryRouter>,
-      )
+      renderApp(<DashboardScreen />)
       const button = await screen.findByRole('button', { name: 'Update rates' })
       expect(button.className).toMatch(/\bh-control\b/)
       expect(button.className).toMatch(/\bw-full\b/)
@@ -185,22 +171,14 @@ describe('DashboardRates', () => {
         currency: 'EUR',
       },
     )
-    const { unmount } = render(
-      <MemoryRouter>
-        <DashboardScreen />
-      </MemoryRouter>,
-    )
+    const { unmount } = renderApp(<DashboardScreen />)
     expect(await screen.findByRole('status')).toHaveTextContent(
       formatDateTime(stamp, 'en'),
     )
     unmount()
     useFxStore.setState({ lastFetchedAt: undefined })
     await useFxStore.getState().loadCached()
-    render(
-      <MemoryRouter>
-        <DashboardScreen />
-      </MemoryRouter>,
-    )
+    renderApp(<DashboardScreen />)
     expect(await screen.findByRole('status')).toHaveTextContent(
       formatDateTime(stamp, 'en'),
     )

@@ -1,8 +1,7 @@
-import 'fake-indexeddb/auto'
-import { render, screen } from '@testing-library/react'
+import { screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { MemoryRouter } from 'react-router-dom'
 import { beforeEach, describe, expect, it } from 'vitest'
+import { renderApp, resetAppStores } from '@test/renderApp'
 import { DEFAULT_SETTINGS } from '@/domain/settings'
 import {
   renderAssetDetails,
@@ -10,7 +9,6 @@ import {
   seedRevolutAsset,
 } from '@/features/assets/assetDetailsTestSetup'
 import { DashboardScreen } from '@/features/dashboard/DashboardScreen'
-import { resetDashboardStores } from '@/features/dashboard/dashboardTestSetup'
 import { HistoryScreen } from '@/features/history/HistoryScreen'
 import { db } from '@/infrastructure/persistence/indexeddb'
 import { useAssetStore } from '@/stores/assetStore'
@@ -54,7 +52,7 @@ async function seedRevolutBook() {
 }
 
 beforeEach(async () => {
-  await resetDashboardStores()
+  await resetAppStores()
   useSettingsStore.setState({ settings: DEFAULT_SETTINGS, loaded: true })
   resetChartRangeStore()
 })
@@ -63,11 +61,7 @@ describe('ChartRangeControls (#239)', () => {
   it('keeps the Dashboard chip when History opens', async () => {
     await seedRevolutBook()
     const user = userEvent.setup()
-    const { unmount } = render(
-      <MemoryRouter>
-        <DashboardScreen />
-      </MemoryRouter>,
-    )
+    const { unmount } = renderApp(<DashboardScreen />)
     await user.click(await screen.findByRole('button', { name: 'All' }))
     expect(screen.getByRole('button', { name: 'All' })).toHaveAttribute(
       'aria-pressed',
@@ -75,11 +69,7 @@ describe('ChartRangeControls (#239)', () => {
     )
     unmount()
 
-    render(
-      <MemoryRouter>
-        <HistoryScreen />
-      </MemoryRouter>,
-    )
+    renderApp(<HistoryScreen />)
     expect(await screen.findByRole('button', { name: 'All' })).toHaveAttribute(
       'aria-pressed',
       'true',

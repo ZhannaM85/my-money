@@ -1,8 +1,7 @@
-import 'fake-indexeddb/auto'
-import { render, screen } from '@testing-library/react'
+import { screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { MemoryRouter } from 'react-router-dom'
 import { beforeEach, describe, expect, it } from 'vitest'
+import { renderApp, resetAppStores } from '@test/renderApp'
 import {
   formatAmount,
   formatSignedAmount,
@@ -13,10 +12,9 @@ import { useAssetStore } from '@/stores/assetStore'
 import { useFxStore } from '@/stores/fxStore'
 import { useChartRangeStore } from '@/stores/chartRangeStore'
 import { DashboardScreen } from './DashboardScreen'
-import { resetDashboardStores } from './dashboardTestSetup'
 
 beforeEach(async () => {
-  await resetDashboardStores()
+  await resetAppStores()
 })
 
 describe('DashboardHeadline', () => {
@@ -42,11 +40,7 @@ describe('DashboardHeadline', () => {
         currency: 'EUR',
       },
     )
-    render(
-      <MemoryRouter>
-        <DashboardScreen />
-      </MemoryRouter>,
-    )
+    renderApp(<DashboardScreen />)
     expect(await screen.findByText('Net worth')).toBeInTheDocument()
     expect(
       screen.getAllByText(formatAmount(1000, 'EUR')).length,
@@ -95,11 +89,7 @@ describe('DashboardHeadline', () => {
         currency: 'EUR',
       })
     }
-    render(
-      <MemoryRouter>
-        <DashboardScreen />
-      </MemoryRouter>,
-    )
+    renderApp(<DashboardScreen />)
     const expected =
       start === today
         ? /this month/
@@ -138,11 +128,7 @@ describe('DashboardHeadline', () => {
       },
     )
 
-    render(
-      <MemoryRouter>
-        <DashboardScreen />
-      </MemoryRouter>,
-    )
+    renderApp(<DashboardScreen />)
 
     expect(
       (await screen.findAllByText(formatAmount(110, 'EUR'))).length,
@@ -204,11 +190,7 @@ describe('DashboardHeadline', () => {
         currency: 'EUR',
       },
     ])
-    render(
-      <MemoryRouter>
-        <DashboardScreen />
-      </MemoryRouter>,
-    )
+    renderApp(<DashboardScreen />)
     expect(await screen.findByText('Net worth')).toBeInTheDocument()
     expect(
       screen.getAllByText(formatAmount(1000, 'EUR')).length,

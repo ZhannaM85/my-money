@@ -1,8 +1,7 @@
-import 'fake-indexeddb/auto'
-import { render, screen, waitFor } from '@testing-library/react'
+import { screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { MemoryRouter } from 'react-router-dom'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { renderApp, resetAppStores } from '@test/renderApp'
 import { DEFAULT_SETTINGS } from '@/domain/settings'
 import { db } from '@/infrastructure/persistence/indexeddb'
 import { todayIsoDate } from '@/shared/lib/money'
@@ -12,19 +11,14 @@ import { useFxStore } from '@/stores/fxStore'
 import { useSettingsStore } from '@/stores/settingsStore'
 import { useChartRangeStore } from '@/stores/chartRangeStore'
 import { DashboardScreen } from './DashboardScreen'
-import { resetDashboardStores } from './dashboardTestSetup'
 
 beforeEach(async () => {
-  await resetDashboardStores()
+  await resetAppStores()
 })
 
 describe('DashboardScreen', () => {
   it('does not show grey helper blurbs on Dashboard (#230)', async () => {
-    render(
-      <MemoryRouter>
-        <DashboardScreen />
-      </MemoryRouter>,
-    )
+    renderApp(<DashboardScreen />)
     expect(
       await screen.findByRole('heading', { name: 'Dashboard' }),
     ).toBeInTheDocument()
@@ -53,11 +47,7 @@ describe('DashboardScreen', () => {
       settings: { ...DEFAULT_SETTINGS, locale: 'ru' },
       loaded: false,
     })
-    render(
-      <MemoryRouter>
-        <DashboardScreen />
-      </MemoryRouter>,
-    )
+    renderApp(<DashboardScreen />)
     expect(
       await screen.findByRole('heading', { name: 'Сводка' }),
     ).toBeInTheDocument()
@@ -106,11 +96,7 @@ describe('DashboardScreen', () => {
       currency: 'EUR',
     })
 
-    render(
-      <MemoryRouter>
-        <DashboardScreen />
-      </MemoryRouter>,
-    )
+    renderApp(<DashboardScreen />)
 
     expect(await screen.findByText(/Chart range: Month/)).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: 'Zoom out' }))
@@ -148,11 +134,7 @@ describe('DashboardScreen', () => {
       },
     )
 
-    render(
-      <MemoryRouter>
-        <DashboardScreen />
-      </MemoryRouter>,
-    )
+    renderApp(<DashboardScreen />)
 
     const zoomOut = await screen.findByRole('button', { name: 'Уменьшить' })
     expect(zoomOut).toBeInTheDocument()
@@ -185,22 +167,14 @@ describe('DashboardScreen', () => {
         currency: 'EUR',
       },
     )
-    const { unmount } = render(
-      <MemoryRouter>
-        <DashboardScreen />
-      </MemoryRouter>,
-    )
+    const { unmount } = renderApp(<DashboardScreen />)
     await user.click(await screen.findByRole('button', { name: 'All' }))
     expect(screen.getByRole('button', { name: 'All' })).toHaveAttribute(
       'aria-pressed',
       'true',
     )
     unmount()
-    render(
-      <MemoryRouter>
-        <DashboardScreen />
-      </MemoryRouter>,
-    )
+    renderApp(<DashboardScreen />)
     expect(await screen.findByRole('button', { name: 'All' })).toHaveAttribute(
       'aria-pressed',
       'true',
@@ -241,11 +215,7 @@ describe('DashboardScreen', () => {
       },
     ])
     const user = userEvent.setup()
-    render(
-      <MemoryRouter>
-        <DashboardScreen />
-      </MemoryRouter>,
-    )
+    renderApp(<DashboardScreen />)
     expect(await screen.findByText('Net worth')).toBeInTheDocument()
     const chart = screen.getByTestId('net-worth-chart')
     const earlier = screen.getByRole('button', { name: 'Earlier dates' })
@@ -312,11 +282,7 @@ describe('DashboardScreen', () => {
       },
     ])
     try {
-      render(
-        <MemoryRouter>
-          <DashboardScreen />
-        </MemoryRouter>,
-      )
+      renderApp(<DashboardScreen />)
       await screen.findByText('Net worth')
       await waitFor(() => {
         expect(ensureRange).toHaveBeenCalledWith(
@@ -355,11 +321,7 @@ describe('DashboardScreen', () => {
       },
     )
     const user = userEvent.setup()
-    render(
-      <MemoryRouter>
-        <DashboardScreen />
-      </MemoryRouter>,
-    )
+    renderApp(<DashboardScreen />)
     expect(await screen.findByTestId('net-worth-chart')).toBeInTheDocument()
     const hide = screen.getByRole('button', { name: 'Hide' })
     expect(hide).toHaveAttribute('aria-pressed', 'false')

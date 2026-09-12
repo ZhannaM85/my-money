@@ -1,8 +1,7 @@
-import 'fake-indexeddb/auto'
-import { render, screen } from '@testing-library/react'
+import { screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { MemoryRouter } from 'react-router-dom'
 import { beforeEach, describe, expect, it } from 'vitest'
+import { renderApp, resetAppStores } from '@test/renderApp'
 import { DEFAULT_SETTINGS } from '@/domain/settings'
 import { db } from '@/infrastructure/persistence/indexeddb'
 import { formatAmount } from '@/shared/lib/money'
@@ -10,10 +9,9 @@ import { useAssetStore } from '@/stores/assetStore'
 import { useFxStore } from '@/stores/fxStore'
 import { useSettingsStore } from '@/stores/settingsStore'
 import { DashboardScreen } from './DashboardScreen'
-import { resetDashboardStores } from './dashboardTestSetup'
 
 beforeEach(async () => {
-  await resetDashboardStores()
+  await resetAppStores()
 })
 
 describe('DashboardHeadline holdings', () => {
@@ -65,11 +63,7 @@ describe('DashboardHeadline holdings', () => {
       },
     )
 
-    render(
-      <MemoryRouter>
-        <DashboardScreen />
-      </MemoryRouter>,
-    )
+    renderApp(<DashboardScreen />)
 
     expect(
       await screen.findAllByText(formatAmount(1100, 'EUR')),
@@ -141,11 +135,7 @@ describe('DashboardHeadline holdings', () => {
       },
     )
 
-    render(
-      <MemoryRouter>
-        <DashboardScreen />
-      </MemoryRouter>,
-    )
+    renderApp(<DashboardScreen />)
 
     expect(await screen.findByText('Holdings by currency')).toBeInTheDocument()
     expect(
@@ -222,11 +212,7 @@ describe('DashboardHeadline holdings', () => {
       },
     )
 
-    render(
-      <MemoryRouter>
-        <DashboardScreen />
-      </MemoryRouter>,
-    )
+    renderApp(<DashboardScreen />)
 
     expect(await screen.findByText('Holdings by currency')).toBeInTheDocument()
     await user.selectOptions(screen.getByLabelText('Currency'), 'EUR')
@@ -284,11 +270,7 @@ describe('DashboardHeadline holdings', () => {
       },
     )
 
-    render(
-      <MemoryRouter>
-        <DashboardScreen />
-      </MemoryRouter>,
-    )
+    renderApp(<DashboardScreen />)
 
     expect(
       await screen.findByRole('button', { name: 'Holdings' }),
@@ -357,11 +339,7 @@ describe('DashboardHeadline holdings', () => {
       },
     )
 
-    render(
-      <MemoryRouter>
-        <DashboardScreen />
-      </MemoryRouter>,
-    )
+    renderApp(<DashboardScreen />)
 
     await userEvent.click(
       await screen.findByRole('button', { name: 'Holdings' }),

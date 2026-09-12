@@ -1,18 +1,16 @@
-import 'fake-indexeddb/auto'
-import { render, screen } from '@testing-library/react'
+import { screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { MemoryRouter } from 'react-router-dom'
 import { beforeEach, describe, expect, it } from 'vitest'
+import { renderApp, resetAppStores } from '@test/renderApp'
 import { formatAmount, todayIsoDate } from '@/shared/lib/money'
 import { addDaysIso } from '@/shared/lib/dates'
 import { useAssetStore } from '@/stores/assetStore'
 import { useFxStore } from '@/stores/fxStore'
 import { useChartRangeStore } from '@/stores/chartRangeStore'
 import { DashboardScreen } from './DashboardScreen'
-import { resetDashboardStores } from './dashboardTestSetup'
 
 beforeEach(async () => {
-  await resetDashboardStores()
+  await resetAppStores()
 })
 
 describe('DashboardPositions', () => {
@@ -39,11 +37,7 @@ describe('DashboardPositions', () => {
         currency: 'EUR',
       },
     )
-    render(
-      <MemoryRouter>
-        <DashboardScreen />
-      </MemoryRouter>,
-    )
+    renderApp(<DashboardScreen />)
     const chart = await screen.findByTestId('net-worth-chart')
     const positions = screen.getByTestId('dashboard-positions')
     expect(
@@ -103,11 +97,7 @@ describe('DashboardPositions', () => {
         currency: 'USD',
       },
     ])
-    render(
-      <MemoryRouter>
-        <DashboardScreen />
-      </MemoryRouter>,
-    )
+    renderApp(<DashboardScreen />)
     await user.click(await screen.findByRole('button', { name: /Holdings/i }))
     expect(await screen.findByText('USD Deposit')).toBeInTheDocument()
     expect(
@@ -159,11 +149,7 @@ describe('DashboardPositions', () => {
         currency: 'EUR',
       },
     )
-    render(
-      <MemoryRouter>
-        <DashboardScreen />
-      </MemoryRouter>,
-    )
+    renderApp(<DashboardScreen />)
     await userEvent.click(
       await screen.findByRole('button', { name: 'Holdings' }),
     )
@@ -221,11 +207,7 @@ describe('DashboardPositions', () => {
         currency: 'EUR',
       },
     )
-    render(
-      <MemoryRouter>
-        <DashboardScreen />
-      </MemoryRouter>,
-    )
+    renderApp(<DashboardScreen />)
     await userEvent.click(
       await screen.findByRole('button', { name: 'Holdings' }),
     )

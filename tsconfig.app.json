@@ -14,12 +14,18 @@
     "jsx": "react-jsx",
     "strict": true,
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@test/*": ["./test/*"]
     },
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src", "test/vitest-jest-dom.d.ts"]
+  "include": [
+    "src",
+    "test/vitest-jest-dom.d.ts",
+    "test/renderApp.tsx",
+    "test/renderApp.test.tsx"
+  ]
 }
