@@ -53,7 +53,7 @@ flowchart TD
     style I18n fill:#fdf4ff,stroke:#a855f7
 ```
 
-**The one dependency rule that matters:** `domain/` imports nothing from React, Zustand, Dexie, or `fetch`. Features and stores talk to persistence and FX only through repository interfaces, so a future sync backend or a second FX provider means new implementations, not a rewrite of stores or screens.
+**The one dependency rule that matters:** `domain/` imports nothing from React, Zustand, Dexie, or `fetch`. Features and stores talk to persistence and FX only through repository interfaces, so a future sync backend or a second FX provider means new implementations, not a rewrite of stores or screens. ESLint enforces the zones (#249): `domain/` cannot import React/Zustand/Dexie; production `features/` cannot import `infrastructure/persistence` (tests and `*TestSetup*` stay exempt). Backup/CSV I/O goes `features/export` action modules → `stores/backupBook` → IndexedDB.
 
 **Liabilities are assets with a class.** The brief's "Assets vs Liabilities" split is a product concept, not two persistence trees. One `Asset` entity covers bank accounts, investments, cash, property, valuables, *and* loans. `assetClass: 'liabilities'` makes the amount subtract from net worth. Snapshots, FX, tracking status, archive, and export stay on one path. The UI still labels them as liabilities.
 
@@ -205,12 +205,12 @@ src/
     hooks/
     lib/
     native/                # Capacitor chrome, back button, share, widget
-  stores/                  # Zustand, UI/session only
+  stores/                  # Zustand, UI/session only; backupBook wraps IndexedDB book I/O
   i18n/
 test/
 ```
 
-Nothing outside `infrastructure/persistence/indexeddb/` imports Dexie. Feature screens and sections do not import IndexedDB; backup/CSV I/O goes through `features/export` action modules (`backupActions`, `csvActions`). Nothing outside `infrastructure/fx/` calls the network for rates. `fxStore` does not import features — Frankfurter online gating lives in `infrastructure/fx/shouldFetchFrankfurter`.
+Nothing outside `infrastructure/persistence/indexeddb/` imports Dexie. Feature screens and sections do not import IndexedDB; backup/CSV I/O goes through `features/export` action modules (`backupActions`, `csvActions`) which call `stores/backupBook`. Nothing outside `infrastructure/fx/` calls the network for rates. `fxStore` does not import features — Frankfurter online gating lives in `infrastructure/fx/shouldFetchFrankfurter`.
 
 GitHub Pages is a project site at `/my-money/`. Production builds pass `--base=/my-money/` so Vite rewrites `index.html` asset URLs and React Router uses that `basename`. SPA deep links copy `index.html` to `404.html`.
 

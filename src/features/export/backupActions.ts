@@ -4,7 +4,7 @@ import {
   clearBook,
   readBook,
   replaceBook,
-} from '@/infrastructure/persistence/indexeddb/backupStore'
+} from '@/stores/backupBook'
 import { FX_LAST_FETCHED_KEY } from '@/stores/fxStore'
 import { parseBackupJson } from './backupSchema'
 

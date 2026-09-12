@@ -1,5 +1,4 @@
-import { IndexedDbSnapshotRepository } from '@/infrastructure/persistence/indexeddb'
-import { readBook } from '@/infrastructure/persistence/indexeddb/backupStore'
+import { appendSnapshots, readBook } from '@/stores/backupBook'
 import { buildSnapshotsCsv } from './csvExport'
 import {
   mappingIsComplete,
@@ -11,8 +10,6 @@ import { InvalidCsvError, parseCsv } from './csvParse'
 
 export { InvalidCsvError }
 export type { CsvColumnMapping, CsvImportPreview }
-
-const snapshotRepository = new IndexedDbSnapshotRepository()
 
 export async function exportCsv(): Promise<string> {
   const { assets, snapshots } = await readBook()
@@ -29,12 +26,6 @@ export async function importCsv(
   const rows = parseCsv(text)
   const { assets } = await readBook()
   const preview = previewCsvImport(rows, mapping, assets)
-  for (const snapshot of preview.snapshots) {
-    await snapshotRepository.append({
-      id: crypto.randomUUID(),
-      createdAt: new Date().toISOString(),
-      ...snapshot,
-    })
-  }
+  await appendSnapshots(preview.snapshots)
   return preview
 }
