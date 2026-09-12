@@ -75,8 +75,22 @@ describe('IndexedDb repositories', () => {
     expect(
       (await snapshots.getOnOrBefore('asset-1', '2026-07-15'))?.amount,
     ).toBe(10)
+    await snapshots.append({
+      id: 's3',
+      assetId: 'asset-2',
+      date: '2026-06-01',
+      amount: 5,
+      currency: 'EUR',
+      createdAt: '2026-06-01T00:00:00.000Z',
+    })
+    expect((await snapshots.getAll()).map((row) => row.id)).toEqual([
+      's3',
+      's1',
+      's2',
+    ])
     await snapshots.deleteByAsset('asset-1')
     expect(await snapshots.getByAsset('asset-1')).toEqual([])
+    expect((await snapshots.getAll()).map((row) => row.id)).toEqual(['s3'])
   })
 
   it('returns default settings until saved', async () => {

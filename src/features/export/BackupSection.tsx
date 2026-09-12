@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import { useTranslation } from '@/i18n'
 import { bookHasAssets } from '@/infrastructure/persistence/indexeddb/backupStore'
 import { pickImportFile } from '@/shared/lib/pickNativeTextFile'
@@ -25,10 +25,6 @@ export function BackupSection() {
   const loadAssets = useAssetStore((state) => state.load)
   const loadSettings = useSettingsStore((state) => state.load)
   const loadFx = useFxStore((state) => state.loadCached)
-
-  useEffect(() => {
-    void loadAssets()
-  }, [loadAssets])
 
   async function handleExport() {
     setError(undefined)

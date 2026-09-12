@@ -211,6 +211,60 @@ describe('assetStore', () => {
     expect(useAssetStore.getState().snapshots[0]?.note).toBe('Raised')
   })
 
+  it('loads snapshots with one getAll instead of per-asset reads (#237)', async () => {
+    await useAssetStore.getState().saveAsset(
+      {
+        id: 'a1',
+        name: 'Cash',
+        assetClass: 'money',
+        type: 'cash',
+        currency: 'EUR',
+        trackingStatus: 'included',
+        valuationMethod: 'account_balance',
+        updateFrequency: 'weekly',
+        createdAt: '2026-08-17T00:00:00.000Z',
+        updatedAt: '2026-08-17T00:00:00.000Z',
+      },
+      {
+        assetId: 'a1',
+        date: '2026-08-17',
+        amount: 100,
+        currency: 'EUR',
+      },
+    )
+    await useAssetStore.getState().saveAsset(
+      {
+        id: 'a2',
+        name: 'Broker',
+        assetClass: 'investments',
+        type: 'brokerage',
+        currency: 'USD',
+        trackingStatus: 'included',
+        valuationMethod: 'account_balance',
+        updateFrequency: 'weekly',
+        createdAt: '2026-08-17T00:00:00.000Z',
+        updatedAt: '2026-08-17T00:00:00.000Z',
+      },
+      {
+        assetId: 'a2',
+        date: '2026-08-17',
+        amount: 200,
+        currency: 'USD',
+      },
+    )
+    const getAll = vi.spyOn(IndexedDbSnapshotRepository.prototype, 'getAll')
+    const getByAsset = vi.spyOn(
+      IndexedDbSnapshotRepository.prototype,
+      'getByAsset',
+    )
+    await useAssetStore.getState().load()
+    expect(getAll).toHaveBeenCalledTimes(1)
+    expect(getByAsset).not.toHaveBeenCalled()
+    expect(useAssetStore.getState().snapshots).toHaveLength(2)
+    getAll.mockRestore()
+    getByAsset.mockRestore()
+  })
+
   it('does not apply a stale book load after a newer one (#225)', async () => {
     await useAssetStore.getState().saveAsset(
       {
@@ -232,28 +286,22 @@ describe('assetStore', () => {
         currency: 'RUB',
       },
     )
-    const originalGetByAsset = IndexedDbSnapshotRepository.prototype.getByAsset
+    const originalGetAll = IndexedDbSnapshotRepository.prototype.getAll
     let releaseStale!: (
-      rows: Awaited<ReturnType<typeof originalGetByAsset>>,
+      rows: Awaited<ReturnType<typeof originalGetAll>>,
     ) => void
     const staleRows = new Promise<
-      Awaited<ReturnType<typeof originalGetByAsset>>
+      Awaited<ReturnType<typeof originalGetAll>>
     >((resolve) => {
       releaseStale = resolve
     })
     const spy = vi
-      .spyOn(IndexedDbSnapshotRepository.prototype, 'getByAsset')
+      .spyOn(IndexedDbSnapshotRepository.prototype, 'getAll')
       .mockImplementationOnce(async () => staleRows)
-      .mockImplementation(function (
-        this: IndexedDbSnapshotRepository,
-        assetId: string,
-      ) {
-        return originalGetByAsset.call(this, assetId)
+      .mockImplementation(function (this: IndexedDbSnapshotRepository) {
+        return originalGetAll.call(this)
       })
-    const oldRows = await originalGetByAsset.call(
-      new IndexedDbSnapshotRepository(),
-      'a1',
-    )
+    const oldRows = await originalGetAll.call(new IndexedDbSnapshotRepository())
     const staleLoad = useAssetStore.getState().load()
     await useAssetStore.getState().saveSnapshots([
       {

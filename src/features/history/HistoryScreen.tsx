@@ -51,7 +51,6 @@ type HistoryDayDetail =
 export function HistoryScreen() {
   const t = useTranslation()
   const locale = useLocale()
-  const loadAssets = useAssetStore((state) => state.load)
   const assets = useAssetStore((state) => state.assets)
   const snapshots = useAssetStore((state) => state.snapshots)
   const loaded = useAssetStore((state) => state.loaded)
@@ -74,9 +73,8 @@ export function HistoryScreen() {
   const canZoomOut = canZoomHistoryOut(range)
 
   useEffect(() => {
-    void loadAssets()
     void loadSettings()
-  }, [loadAssets, loadSettings])
+  }, [loadSettings])
 
   const earliest = useMemo(() => {
     if (snapshots.length === 0) return today

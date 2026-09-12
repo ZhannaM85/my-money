@@ -26,7 +26,6 @@ function nativeRowLabelKey(id: string): string {
 
 export function AllocationScreen() {
   const t = useTranslation()
-  const loadAssets = useAssetStore((state) => state.load)
   const assets = useAssetStore((state) => state.assets)
   const snapshots = useAssetStore((state) => state.snapshots)
   const loaded = useAssetStore((state) => state.loaded)
@@ -58,10 +57,9 @@ export function AllocationScreen() {
   }
 
   useEffect(() => {
-    void loadAssets()
     void loadSettings()
     void loadCachedFx()
-  }, [loadAssets, loadCachedFx, loadSettings])
+  }, [loadCachedFx, loadSettings])
 
   useEffect(() => {
     if (!isOriginal || snapshots.length === 0) return

@@ -75,6 +75,7 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 | [#233](https://github.com/ZhannaM85/my-money/issues/233) | 🔍 Pending validation | Split DashboardScreen into ≤500-line modules | Extracted `useDashboardScreen` / `useDashboardNetWorth`, As of bar, headline, period change, rates, and positions. Matching test slices moved. No behavior change. |
 | [#234](https://github.com/ZhannaM85/my-money/issues/234) | 🔍 Pending validation | Split AssetDetailsScreen into ≤500-line modules | Extracted `useAssetDetailsScreen`, update form, Сведения accordion, and snapshot list. Matching test slices moved. No behavior change. |
 | [#236](https://github.com/ZhannaM85/my-money/issues/236) | 🔍 Pending validation | Finish #232: MoneyInput + shared SortableRow on Update/detail | Update + asset-detail amounts use MoneyInput (locale blur, unit, a11y). Assets and Update share SortableRow. |
+| [#237](https://github.com/ZhannaM85/my-money/issues/237) | 🔍 Pending validation | Hydrate book once: SnapshotRepository.getAll + AppShell load | `getAll()` replaces per-asset snapshot reads. AppShell hydrates once + visibility resume. Screens read the store. Generation guard kept. |
 
 ---
 

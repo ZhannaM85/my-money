@@ -1,6 +1,7 @@
 import type { AssetSnapshot } from './AssetSnapshot'
 
 export interface SnapshotRepository {
+  getAll(): Promise<AssetSnapshot[]>
   getByAsset(assetId: string): Promise<AssetSnapshot[]>
   getLatestByAsset(assetId: string): Promise<AssetSnapshot | undefined>
   getOnOrBefore(

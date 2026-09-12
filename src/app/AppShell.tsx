@@ -51,8 +51,9 @@ export function AppShell() {
   }, [loadCachedRates, loadSettings])
 
   useEffect(() => {
+    // #237: hydrate the book once here. Screens read the store.
     void loadAssets()
-  }, [loadAssets, pathname])
+  }, [loadAssets])
 
   useEffect(() => {
     function refreshBook() {

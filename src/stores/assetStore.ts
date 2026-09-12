@@ -45,12 +45,10 @@ export const useAssetStore = create<AssetStoreState>((set, get) => ({
   loaded: false,
   load: async () => {
     const generation = ++loadGeneration
-    const assets = await assetRepository.getAll()
-    const snapshots = (
-      await Promise.all(
-        assets.map((asset) => snapshotRepository.getByAsset(asset.id)),
-      )
-    ).flat()
+    const [assets, snapshots] = await Promise.all([
+      assetRepository.getAll(),
+      snapshotRepository.getAll(),
+    ])
     if (generation !== loadGeneration) return
     set({ assets, snapshots, loaded: true })
   },

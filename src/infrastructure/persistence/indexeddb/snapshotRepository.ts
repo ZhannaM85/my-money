@@ -2,6 +2,10 @@ import type { AssetSnapshot, SnapshotRepository } from '@/domain/snapshot'
 import { db } from './db'
 
 export class IndexedDbSnapshotRepository implements SnapshotRepository {
+  async getAll(): Promise<AssetSnapshot[]> {
+    return db.snapshots.orderBy('date').toArray()
+  }
+
   async getByAsset(assetId: string): Promise<AssetSnapshot[]> {
     return db.snapshots.where('assetId').equals(assetId).sortBy('date')
   }

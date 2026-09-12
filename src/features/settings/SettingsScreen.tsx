@@ -37,7 +37,6 @@ export function SettingsScreen() {
   const completeOnboarding = useSettingsStore(
     (state) => state.completeOnboarding,
   )
-  const loadAssets = useAssetStore((state) => state.load)
   const assetCount = useAssetStore((state) => state.assets.length)
   const mood = useThemeStore((state) => state.mood)
   const setMood = useThemeStore((state) => state.setMood)
@@ -57,8 +56,7 @@ export function SettingsScreen() {
 
   useEffect(() => {
     void load()
-    void loadAssets()
-  }, [load, loadAssets])
+  }, [load])
 
   const canSkipWelcome =
     loaded && !settings.onboardingCompleted && assetCount === 0

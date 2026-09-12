@@ -266,6 +266,7 @@ describe('DashboardPositions hide', () => {
     dashboard.unmount()
 
     useAssetStore.setState({ assets: [], snapshots: [], loaded: false })
+    await useAssetStore.getState().load()
     render(
       <MemoryRouter>
         <DashboardScreen />
@@ -345,6 +346,7 @@ describe('DashboardPositions hide', () => {
       },
     )
     useAssetStore.setState({ assets: [], snapshots: [], loaded: false })
+    await useAssetStore.getState().load()
     render(
       <MemoryRouter>
         <DashboardScreen />

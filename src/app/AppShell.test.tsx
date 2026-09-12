@@ -221,7 +221,7 @@ describe('AppShell', () => {
     expect(screen.queryByText('Onboarding welcome')).not.toBeInTheDocument()
   })
 
-  it('reloads the book when the route changes or the app is visible (#225)', async () => {
+  it('hydrates the book once and reloads only when the app is visible (#237)', async () => {
     const load = vi.fn(async () => {})
     useAssetStore.setState({ load, loaded: true })
     const router = createMemoryRouter(
@@ -243,8 +243,7 @@ describe('AppShell', () => {
     await act(async () => {
       await router.navigate('/')
     })
-    expect(load.mock.calls.length).toBeGreaterThan(afterMount)
-    const afterNav = load.mock.calls.length
+    expect(load.mock.calls.length).toBe(afterMount)
     const visibility =
       Object.getOwnPropertyDescriptor(Document.prototype, 'visibilityState') ??
       Object.getOwnPropertyDescriptor(document, 'visibilityState')
@@ -256,7 +255,7 @@ describe('AppShell', () => {
         })
         document.dispatchEvent(new Event('visibilitychange'))
       })
-      expect(load.mock.calls.length).toBe(afterNav)
+      expect(load.mock.calls.length).toBe(afterMount)
       act(() => {
         Object.defineProperty(document, 'visibilityState', {
           configurable: true,
@@ -264,7 +263,7 @@ describe('AppShell', () => {
         })
         document.dispatchEvent(new Event('visibilitychange'))
       })
-      expect(load.mock.calls.length).toBeGreaterThan(afterNav)
+      expect(load.mock.calls.length).toBeGreaterThan(afterMount)
     } finally {
       if (visibility) {
         Object.defineProperty(document, 'visibilityState', visibility)

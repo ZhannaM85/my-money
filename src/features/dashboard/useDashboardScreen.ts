@@ -24,7 +24,6 @@ export type DashboardRatesStatus =
 export function useDashboardScreen() {
   const t = useTranslation()
   const locale = useLocale()
-  const loadAssets = useAssetStore((state) => state.load)
   const assets = useAssetStore((state) => state.assets)
   const snapshots = useAssetStore((state) => state.snapshots)
   const assetsLoaded = useAssetStore((state) => state.loaded)
@@ -82,9 +81,8 @@ export function useDashboardScreen() {
   const activeCurrencyFilter = isOriginal ? currencyFilter : 'all'
 
   useEffect(() => {
-    void loadAssets()
     void loadSettings()
-  }, [loadAssets, loadSettings])
+  }, [loadSettings])
 
   const earliest = useMemo(() => {
     if (snapshots.length === 0) return todayIsoDate()

@@ -136,7 +136,6 @@ function AssetRowMenu({
 export function AssetsScreen() {
   const t = useTranslation()
   const locale = useLocale()
-  const loadAssets = useAssetStore((state) => state.load)
   const setTrackingStatus = useAssetStore((state) => state.setTrackingStatus)
   const assets = useAssetStore((state) => state.assets)
   const snapshots = useAssetStore((state) => state.snapshots)
@@ -177,9 +176,8 @@ export function AssetsScreen() {
   }
 
   useEffect(() => {
-    void loadAssets()
     void loadSettings()
-  }, [loadAssets, loadSettings])
+  }, [loadSettings])
 
   const visible = useMemo(() => {
     const filtered = assets.filter((asset) => {

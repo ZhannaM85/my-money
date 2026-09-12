@@ -18,7 +18,6 @@ export function ManualRatesSection() {
   const locale = useLocale()
   const baseCurrency = useSettingsStore((state) => state.settings.baseCurrency)
   const assets = useAssetStore((state) => state.assets)
-  const loadAssets = useAssetStore((state) => state.load)
   const loadCached = useFxStore((state) => state.loadCached)
   const manualQuotes = useFxStore((state) => state.manualQuotes)
   const quotes = useFxStore((state) => state.quotes)
@@ -32,9 +31,8 @@ export function ManualRatesSection() {
   const today = todayIsoDate()
 
   useEffect(() => {
-    void loadAssets()
     void loadCached()
-  }, [loadAssets, loadCached])
+  }, [loadCached])
 
   const foreignCodes = useMemo(() => {
     const fromAssets = assets.map((asset) => asset.currency)

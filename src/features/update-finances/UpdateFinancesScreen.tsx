@@ -43,7 +43,6 @@ import { useSettingsStore } from '@/stores/settingsStore'
 export function UpdateFinancesScreen() {
   const t = useTranslation()
   const locale = useLocale()
-  const load = useAssetStore((state) => state.load)
   const saveSnapshots = useAssetStore((state) => state.saveSnapshots)
   const updateSnapshot = useAssetStore((state) => state.updateSnapshot)
   const assets = useAssetStore((state) => state.assets)
@@ -73,9 +72,8 @@ export function UpdateFinancesScreen() {
   )
 
   useEffect(() => {
-    void load()
     void loadSettings()
-  }, [load, loadSettings])
+  }, [loadSettings])
 
   const rows = useMemo(() => {
     const tracked = assets

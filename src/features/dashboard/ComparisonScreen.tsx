@@ -243,7 +243,6 @@ export function ComparisonScreen() {
     if (!window.confirm(t.dashboard.removeAllFromComparisonConfirm)) return
     clearDates()
   }
-  const loadAssets = useAssetStore((state) => state.load)
   const assets = useAssetStore((state) => state.assets)
   const snapshots = useAssetStore((state) => state.snapshots)
   const loaded = useAssetStore((state) => state.loaded)
@@ -254,9 +253,8 @@ export function ComparisonScreen() {
   const ensureRates = useFxStore((state) => state.ensureRates)
 
   useEffect(() => {
-    void loadAssets()
     void loadSettings()
-  }, [loadAssets, loadSettings])
+  }, [loadSettings])
 
   useEffect(() => {
     if (!loaded || !settingsLoaded || dates.length === 0) return

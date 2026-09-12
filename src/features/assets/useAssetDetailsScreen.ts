@@ -26,7 +26,6 @@ export function useAssetDetailsScreen() {
   const t = useTranslation()
   const { id } = useParams()
   const navigate = useNavigate()
-  const load = useAssetStore((state) => state.load)
   const saveAsset = useAssetStore((state) => state.saveAsset)
   const saveSnapshots = useAssetStore((state) => state.saveSnapshots)
   const setTrackingStatus = useAssetStore((state) => state.setTrackingStatus)
@@ -51,9 +50,8 @@ export function useAssetDetailsScreen() {
   const today = todayIsoDate()
 
   useEffect(() => {
-    void load()
     void loadSettings()
-  }, [load, loadSettings])
+  }, [loadSettings])
 
   const history = useMemo(() => {
     if (!asset) return []

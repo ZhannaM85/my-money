@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import { useTranslation } from '@/i18n'
 import { pickImportFile } from '@/shared/lib/pickNativeTextFile'
 import { Button } from '@/shared/ui/button'
@@ -32,10 +32,6 @@ export function CsvSection() {
   const [draft, setDraft] = useState<CsvDraft | undefined>()
   const assets = useAssetStore((state) => state.assets)
   const loadAssets = useAssetStore((state) => state.load)
-
-  useEffect(() => {
-    void loadAssets()
-  }, [loadAssets])
 
   const preview = useMemo(() => {
     if (!draft || !mappingIsComplete(draft.mapping)) return undefined

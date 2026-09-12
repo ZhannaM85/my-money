@@ -153,7 +153,7 @@ interface FxRateQuote {
 Repository interfaces (domain layer):
 
 - `AssetRepository` — `getAll()`, `getById(id)`, `upsert(asset)`, `delete(id)` (delete is rare; archive is the default)
-- `SnapshotRepository` — `getByAsset(assetId)`, `getLatestByAsset(assetId)`, `getOnOrBefore(assetId, date)`, `append(snapshot)`
+- `SnapshotRepository` — `getAll()`, `getByAsset(assetId)`, `getLatestByAsset(assetId)`, `getOnOrBefore(assetId, date)`, `append(snapshot)`
 - `SettingsRepository` — `get()`, `save(settings)`
 - `FxRateRepository` — `getRate(from, to, date)`, `getLatest(from, to)`, `put(quotes)` (cache)
 
@@ -237,6 +237,8 @@ Bottom nav from the starting mock: Dashboard, Assets, center **+** (update), His
 ## State management
 
 Zustand owns UI/session state only (update-flow drafts, list filters, selected range). It never owns persisted domain data as the source of truth — stores read/write through repository interfaces.
+
+`AppShell` hydrates the book once on mount (`assetStore.load` via `SnapshotRepository.getAll()`) and again when the document is visible. Screens read the store. Writes still reload through the generation guard so a stale in-flight read cannot overwrite a newer book (#225, #237).
 
 **No change** on the quick-update screen writes a same-amount snapshot for today. That keeps historical net worth and “last updated” on one path. There is no separate `lastConfirmedAt` field.
 
