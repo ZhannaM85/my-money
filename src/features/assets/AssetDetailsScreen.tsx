@@ -58,10 +58,16 @@ export function AssetDetailsScreen() {
         </p>
       )}
       <div className="flex gap-2">
-        <Chip pressed={d.mode === 'native'} onClick={() => d.setMode('native')}>
+        <Chip
+          pressed={d.mode === 'native'}
+          onClick={() => void d.setMode('native')}
+        >
           {t.asset.native}
         </Chip>
-        <Chip pressed={d.mode === 'base'} onClick={() => d.setMode('base')}>
+        <Chip
+          pressed={d.mode === 'base'}
+          onClick={() => void d.setMode('base')}
+        >
           {d.baseCurrency}
         </Chip>
       </div>
@@ -119,6 +125,15 @@ export function AssetDetailsScreen() {
         asset={asset}
         shareLabel={d.shareLabel}
         onSave={d.saveDetails}
+        onSetTracking={async (status) => {
+          await d.setTrackingStatus(asset.id, status)
+          if (status === 'archived') d.navigate('/assets')
+        }}
+        onDelete={async () => {
+          if (!window.confirm(t.asset.deleteConfirm)) return
+          await d.deleteAsset(asset.id)
+          d.navigate('/assets')
+        }}
       />
       <ChartRangeControls
         range={d.chartRange}
@@ -147,65 +162,6 @@ export function AssetDetailsScreen() {
         onSave={d.updateSnapshot}
         onDelete={d.deleteSnapshot}
       />
-      {asset.trackingStatus === 'included' && (
-        <Button
-          type="button"
-          variant="outline"
-          size="xl"
-          className="w-full"
-          onClick={() => void d.setTrackingStatus(asset.id, 'excluded')}
-        >
-          {t.asset.excludeFromNetWorth}
-        </Button>
-      )}
-      {asset.trackingStatus === 'excluded' && (
-        <Button
-          type="button"
-          variant="outline"
-          size="xl"
-          className="w-full"
-          onClick={() => void d.setTrackingStatus(asset.id, 'included')}
-        >
-          {t.asset.includeInNetWorth}
-        </Button>
-      )}
-      {asset.trackingStatus !== 'archived' ? (
-        <Button
-          type="button"
-          variant="outline"
-          size="xl"
-          className="w-full"
-          onClick={() => {
-            void d
-              .setTrackingStatus(asset.id, 'archived')
-              .then(() => d.navigate('/assets'))
-          }}
-        >
-          {t.asset.hide}
-        </Button>
-      ) : (
-        <Button
-          type="button"
-          variant="outline"
-          size="xl"
-          className="w-full"
-          onClick={() => void d.setTrackingStatus(asset.id, 'included')}
-        >
-          {t.asset.restore}
-        </Button>
-      )}
-      <Button
-        type="button"
-        variant="destructive"
-        size="xl"
-        className="w-full"
-        onClick={() => {
-          if (!window.confirm(t.asset.deleteConfirm)) return
-          void d.deleteAsset(asset.id).then(() => d.navigate('/assets'))
-        }}
-      >
-        {t.asset.deleteAsset}
-      </Button>
     </div>
   )
 }

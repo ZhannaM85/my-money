@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 226,
+    issue: 243,
+    date: '2026-09-13T00:45:00+03:00',
+    en: 'On asset details, exclude, hide, and delete are inside expanded Details instead of a long footer. Native / base chips use the same Original / Converted setting as the rest of the app.',
+    ru: 'На карточке актива «не учитывать», «скрыть» и «удалить» стоят внутри раскрытых Сведений, а не длинным подвалом. Чипы «в валюте актива» / база — тот же режим Оригинал / Пересчёт, что и в остальном приложении.',
+  },
+  {
     version: 225,
     issue: 239,
     date: '2026-09-12T23:59:00+03:00',

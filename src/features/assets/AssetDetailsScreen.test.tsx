@@ -4,6 +4,7 @@ import userEvent from '@testing-library/user-event'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { formatAmount } from '@/shared/lib/money'
 import { useAssetStore } from '@/stores/assetStore'
+import { useSettingsStore } from '@/stores/settingsStore'
 import {
   renderAssetDetails,
   resetAssetDetailsStores,
@@ -102,10 +103,43 @@ describe('AssetDetailsScreen', () => {
     ).toBe(Node.DOCUMENT_POSITION_FOLLOWING)
   })
 
+  it('keeps tracking and delete actions inside expanded Details (#243)', async () => {
+    renderAssetDetails()
+    await screen.findByRole('heading', { name: 'Revolut' })
+    expect(
+      screen.queryByRole('button', { name: 'Exclude from net worth' }),
+    ).not.toBeInTheDocument()
+    expect(
+      screen.queryByRole('button', { name: 'Hide asset' }),
+    ).not.toBeInTheDocument()
+    expect(
+      screen.queryByRole('button', { name: 'Delete asset' }),
+    ).not.toBeInTheDocument()
+  })
+
+  it('persists native/base chips to the settings display mode (#243)', async () => {
+    const user = userEvent.setup()
+    renderAssetDetails()
+    await screen.findByRole('heading', { name: 'Revolut' })
+    const native = screen.getByRole('button', { name: 'Native' })
+    const base = screen.getByRole('button', { name: 'EUR' })
+    expect(native).toHaveAttribute('aria-pressed', 'false')
+    expect(base).toHaveAttribute('aria-pressed', 'true')
+    await user.click(native)
+    await waitFor(() => {
+      expect(useSettingsStore.getState().settings.currencyDisplayMode).toBe(
+        'native',
+      )
+    })
+    expect(native).toHaveAttribute('aria-pressed', 'true')
+    expect(base).toHaveAttribute('aria-pressed', 'false')
+  })
+
   it('excludes and re-includes an asset from net worth', async () => {
     const user = userEvent.setup()
     renderAssetDetails()
     await screen.findByRole('heading', { name: 'Revolut' })
+    await user.click(screen.getByRole('button', { name: /^Details$/ }))
     await user.click(
       screen.getByRole('button', { name: 'Exclude from net worth' }),
     )
@@ -125,6 +159,7 @@ describe('AssetDetailsScreen', () => {
     const user = userEvent.setup()
     renderAssetDetails()
     await screen.findByRole('heading', { name: 'Revolut' })
+    await user.click(screen.getByRole('button', { name: /^Details$/ }))
     await user.click(screen.getByRole('button', { name: 'Hide asset' }))
     await waitFor(() => {
       expect(useAssetStore.getState().assets[0].trackingStatus).toBe('archived')
@@ -136,6 +171,7 @@ describe('AssetDetailsScreen', () => {
     vi.spyOn(window, 'confirm').mockReturnValue(true)
     renderAssetDetails()
     await screen.findByRole('heading', { name: 'Revolut' })
+    await user.click(screen.getByRole('button', { name: /^Details$/ }))
     await user.click(screen.getByRole('button', { name: 'Delete asset' }))
     await waitFor(() => {
       expect(useAssetStore.getState().assets).toHaveLength(0)

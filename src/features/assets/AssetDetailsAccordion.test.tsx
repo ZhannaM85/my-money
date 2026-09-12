@@ -78,8 +78,20 @@ describe('AssetDetailsAccordion', () => {
     expect(
       screen.getByRole('button', { name: 'Edit details' }),
     ).toBeInTheDocument()
+    expect(
+      screen.getByRole('button', { name: 'Exclude from net worth' }),
+    ).toBeInTheDocument()
+    expect(
+      screen.getByRole('button', { name: 'Hide asset' }),
+    ).toBeInTheDocument()
+    expect(
+      screen.getByRole('button', { name: 'Delete asset' }),
+    ).toBeInTheDocument()
     await user.click(details)
     expect(details).toHaveAttribute('aria-expanded', 'false')
     expect(screen.queryByText('Account balance')).not.toBeInTheDocument()
+    expect(
+      screen.queryByRole('button', { name: 'Exclude from net worth' }),
+    ).not.toBeInTheDocument()
   })
 })

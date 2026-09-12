@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 243,
+    title: {
+      en: 'Asset detail: fold tracking/destructive actions into Details',
+      ru: 'Карточка актива: убрать учёт / удаление в Сведения',
+    },
+    en: 'After #231 the chart and every snapshot still sat above exclude / hide / delete, so the page stayed long. Those actions now live inside expanded Details. Native / base chips write the same currency display mode as Settings, so this page is not a private override.',
+    ru: 'После #231 график и все снимки по-прежнему стояли над «не учитывать» / «скрыть» / «удалить» — страница оставалась длинной. Эти действия теперь внутри раскрытых Сведений. Чипы «в валюте актива» / база пишут тот же режим показа, что в Параметрах — отдельного режима только для этой страницы нет.',
+  },
+  {
     issue: 239,
     title: {
       en: 'Shared ChartRangeControls; share range Dashboard↔History',

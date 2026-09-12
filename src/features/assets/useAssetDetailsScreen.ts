@@ -1,11 +1,12 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
+import { formatOwnershipShare, ownershipMultiplier } from '@/domain/asset'
 import { convertAmount, lookupRate } from '@/domain/fx'
 import { assetPerformance } from '@/domain/netWorth'
+import type { CurrencyDisplayMode } from '@/domain/settings'
 import { latestSnapshot } from '@/domain/snapshot'
 import { useLocalChartRange } from '@/features/charts'
 import { assetChartPoints } from './assetChartPoints'
-import { formatOwnershipShare, ownershipMultiplier } from '@/domain/asset'
 import { todayIsoDate } from '@/shared/lib/money'
 import { isoDatesInclusive } from '@/shared/lib/dates'
 import { useAssetStore } from '@/stores/assetStore'
@@ -13,7 +14,7 @@ import { useFxStore } from '@/stores/fxStore'
 import { useSettingsStore } from '@/stores/settingsStore'
 import type { AssetFormValues } from './AssetForm'
 
-export type AssetDetailsDisplayMode = 'native' | 'base'
+export type AssetDetailsDisplayMode = CurrencyDisplayMode
 
 export function useAssetDetailsScreen() {
   const { id } = useParams()
@@ -31,11 +32,9 @@ export function useAssetDetailsScreen() {
   const loaded = useAssetStore((state) => state.loaded)
   const loadSettings = useSettingsStore((state) => state.load)
   const baseCurrency = useSettingsStore((state) => state.settings.baseCurrency)
-  const displayMode = useSettingsStore(
-    (state) => state.settings.currencyDisplayMode,
-  )
+  const mode = useSettingsStore((state) => state.settings.currencyDisplayMode)
+  const setMode = useSettingsStore((state) => state.setCurrencyDisplayMode)
   const quotes = useFxStore((state) => state.quotes)
-  const [mode, setMode] = useState<AssetDetailsDisplayMode>(displayMode)
   const today = todayIsoDate()
 
   useEffect(() => {

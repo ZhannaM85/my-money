@@ -1,9 +1,10 @@
 import { useState } from 'react'
 import { ChevronDown } from 'lucide-react'
-import type { Asset } from '@/domain/asset'
+import type { Asset, TrackingStatus } from '@/domain/asset'
 import { useTranslation } from '@/i18n'
 import { cn } from '@/shared/lib/utils'
 import { Button } from '@/shared/ui/button'
+import { AssetDetailsTrackingActions } from './AssetDetailsTrackingActions'
 import { AssetForm, type AssetFormValues } from './AssetForm'
 
 function DetailRow({ label, value }: { label: string; value: string }) {
@@ -19,10 +20,14 @@ export function AssetDetailsAccordion({
   asset,
   shareLabel,
   onSave,
+  onSetTracking,
+  onDelete,
 }: {
   asset: Asset
   shareLabel: string
   onSave: (values: AssetFormValues) => Promise<void>
+  onSetTracking: (status: TrackingStatus) => Promise<void>
+  onDelete: () => Promise<void>
 }) {
   const t = useTranslation()
   const [editingDetails, setEditingDetails] = useState(false)
@@ -111,6 +116,11 @@ export function AssetDetailsAccordion({
             >
               {t.asset.editDetails}
             </Button>
+            <AssetDetailsTrackingActions
+              trackingStatus={asset.trackingStatus}
+              onSetTracking={onSetTracking}
+              onDelete={onDelete}
+            />
           </>
         )
       ) : null}
