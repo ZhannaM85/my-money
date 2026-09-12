@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, type ReactNode } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import {
   DndContext,
@@ -10,11 +10,9 @@ import {
 } from '@dnd-kit/core'
 import {
   SortableContext,
-  useSortable,
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable'
-import { CSS } from '@dnd-kit/utilities'
-import { GripVertical, ListOrdered, Pencil, Save } from 'lucide-react'
+import { ListOrdered, Pencil, Save } from 'lucide-react'
 import { isSuggestedUpdate } from '@/domain/asset'
 import {
   latestSnapshot,
@@ -31,60 +29,16 @@ import {
   formatCalendarDate,
   formatEditableAmount,
   parseAmount,
-  reformatAmountInput,
   todayIsoDate,
 } from '@/shared/lib/money'
-import { cn } from '@/shared/lib/utils'
 import { Button } from '@/shared/ui/button'
 import { DateField } from '@/shared/ui/date-field'
 import { EmptyState } from '@/shared/ui/empty-state'
-import { Input } from '@/shared/ui/input'
+import { MoneyInput } from '@/shared/ui/money-input'
 import { PageHeader } from '@/shared/ui/page-header'
+import { SortableRow } from '@/shared/ui/sortable-row'
 import { useAssetStore } from '@/stores/assetStore'
 import { useSettingsStore } from '@/stores/settingsStore'
-
-function SortableUpdateRow({
-  id,
-  reorderLabel,
-  children,
-}: {
-  id: string
-  reorderLabel: string
-  children: ReactNode
-}) {
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    transition,
-    isDragging,
-  } = useSortable({ id })
-  return (
-    <li
-      ref={setNodeRef}
-      style={{
-        transform: CSS.Transform.toString(transform),
-        transition,
-      }}
-      className={cn(
-        'flex items-stretch rounded-xl bg-card ring-1 ring-foreground/10',
-        isDragging && 'z-10 opacity-80',
-      )}
-    >
-      <button
-        type="button"
-        className="flex w-10 shrink-0 items-center justify-center text-muted-foreground"
-        aria-label={reorderLabel}
-        {...attributes}
-        {...listeners}
-      >
-        <GripVertical className="size-4" />
-      </button>
-      {children}
-    </li>
-  )
-}
 
 export function UpdateFinancesScreen() {
   const t = useTranslation()
@@ -418,7 +372,7 @@ export function UpdateFinancesScreen() {
                       )
                       if (reorder.reordering) {
                         return (
-                          <SortableUpdateRow
+                          <SortableRow
                             key={asset.id}
                             id={asset.id}
                             reorderLabel={t.assets.reorderAria(asset.name)}
@@ -426,7 +380,7 @@ export function UpdateFinancesScreen() {
                             <div className="flex min-w-0 flex-1 flex-col gap-2 py-3 pr-4">
                               {meta}
                             </div>
-                          </SortableUpdateRow>
+                          </SortableRow>
                         )
                       }
                       return (
@@ -465,55 +419,35 @@ export function UpdateFinancesScreen() {
                               </>
                             ) : (
                               <>
-                                <div className="relative min-w-0 flex-1">
-                                  <Input
-                                    aria-label={t.update.newAmountAria(
-                                      asset.name,
-                                    )}
-                                    inputMode="decimal"
-                                    value={drafts[asset.id] ?? ''}
-                                    placeholder={
-                                      onDate
+                                <MoneyInput
+                                  aria-label={t.update.newAmountAria(
+                                    asset.name,
+                                  )}
+                                  locale={locale}
+                                  currency={asset.currency}
+                                  value={drafts[asset.id] ?? ''}
+                                  onValueChange={(value) => {
+                                    setDrafts((current) => ({
+                                      ...current,
+                                      [asset.id]: value,
+                                    }))
+                                  }}
+                                  placeholder={
+                                    onDate
+                                      ? formatEditableAmount(
+                                          onDate.amount,
+                                          locale,
+                                          onDate.currency,
+                                        )
+                                      : previous
                                         ? formatEditableAmount(
-                                            onDate.amount,
+                                            previous.amount,
                                             locale,
-                                            onDate.currency,
+                                            previous.currency,
                                           )
-                                        : previous
-                                          ? formatEditableAmount(
-                                              previous.amount,
-                                              locale,
-                                              previous.currency,
-                                            )
-                                          : t.asset.amountPlaceholder
-                                    }
-                                    className="pr-12"
-                                    onChange={(event) => {
-                                      const value = event.target.value
-                                      setDrafts((current) => ({
-                                        ...current,
-                                        [asset.id]: value,
-                                      }))
-                                    }}
-                                    onBlur={() => {
-                                      setDrafts((current) => {
-                                        const raw = current[asset.id]
-                                        if (raw === undefined) return current
-                                        return {
-                                          ...current,
-                                          [asset.id]: reformatAmountInput(
-                                            raw,
-                                            locale,
-                                            asset.currency,
-                                          ),
-                                        }
-                                      })
-                                    }}
-                                  />
-                                  <span className="pointer-events-none absolute inset-y-0 right-2.5 flex items-center text-sm text-muted-foreground">
-                                    {asset.currency}
-                                  </span>
-                                </div>
+                                        : t.asset.amountPlaceholder
+                                  }
+                                />
                               </>
                             )}
                           </div>

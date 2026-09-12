@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import {
   DndContext,
@@ -10,11 +10,9 @@ import {
 } from '@dnd-kit/core'
 import {
   SortableContext,
-  useSortable,
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable'
-import { CSS } from '@dnd-kit/utilities'
-import { EllipsisVertical, GripVertical } from 'lucide-react'
+import { EllipsisVertical } from 'lucide-react'
 import {
   ASSET_CLASSES,
   listOwnershipShare,
@@ -34,6 +32,7 @@ import { Chip } from '@/shared/ui/chip'
 import { EmptyState } from '@/shared/ui/empty-state'
 import { PageHeader } from '@/shared/ui/page-header'
 import { Select } from '@/shared/ui/select'
+import { SortableRow } from '@/shared/ui/sortable-row'
 import { useAssetStore } from '@/stores/assetStore'
 import { useFxStore } from '@/stores/fxStore'
 import { useSettingsStore } from '@/stores/settingsStore'
@@ -63,49 +62,6 @@ function shownAmount(
     }
   }
   return snapshot.amount
-}
-
-function SortableAssetRow({
-  id,
-  reorderLabel,
-  children,
-}: {
-  id: string
-  reorderLabel: string
-  children: ReactNode
-}) {
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    transition,
-    isDragging,
-  } = useSortable({ id })
-  return (
-    <li
-      ref={setNodeRef}
-      style={{
-        transform: CSS.Transform.toString(transform),
-        transition,
-      }}
-      className={cn(
-        'flex items-stretch rounded-xl bg-card ring-1 ring-foreground/10',
-        isDragging && 'z-10 opacity-80',
-      )}
-    >
-      <button
-        type="button"
-        className="flex w-10 shrink-0 items-center justify-center text-muted-foreground"
-        aria-label={reorderLabel}
-        {...attributes}
-        {...listeners}
-      >
-        <GripVertical className="size-4" />
-      </button>
-      {children}
-    </li>
-  )
 }
 
 function AssetRowMenu({
@@ -452,13 +408,13 @@ export function AssetsScreen() {
                 )
                 if (reorder.reordering) {
                   return (
-                    <SortableAssetRow
+                    <SortableRow
                       key={asset.id}
                       id={asset.id}
                       reorderLabel={t.assets.reorderAria(asset.name)}
                     >
                       {inner}
-                    </SortableAssetRow>
+                    </SortableRow>
                   )
                 }
                 if (!showRowAction) {

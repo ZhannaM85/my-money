@@ -228,7 +228,7 @@ Avoid arbitrary spacing values.
 
 ## Control sizes (#232)
 
-Shared CSS tokens in `src/index.css`. Use `Button`, `Input`, `Select` / `SelectField`, `DateField`, `TextField`, `NumberInput`, and `Chip` instead of one-off height classes.
+Shared CSS tokens in `src/index.css`. Use `Button`, `Input`, `Select` / `SelectField`, `DateField`, `TextField`, `NumberInput`, `MoneyInput`, and `Chip` instead of one-off height classes. Amount fields on Update, asset detail, and forms use `MoneyInput` (locale blur, currency unit, a11y) (#236). Assets and Update reorder lists share `SortableRow`.
 
 | Token | Value | Tailwind | Used for |
 |---|---|---|---|

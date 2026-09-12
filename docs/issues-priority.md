@@ -73,6 +73,7 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
 | [#233](https://github.com/ZhannaM85/my-money/issues/233) | 🔍 Pending validation | Split DashboardScreen into ≤500-line modules | Extracted `useDashboardScreen` / `useDashboardNetWorth`, As of bar, headline, period change, rates, and positions. Matching test slices moved. No behavior change. |
+| [#236](https://github.com/ZhannaM85/my-money/issues/236) | 🔍 Pending validation | Finish #232: MoneyInput + shared SortableRow on Update/detail | Update + asset-detail amounts use MoneyInput (locale blur, unit, a11y). Assets and Update share SortableRow. |
 
 ---
 

@@ -8,7 +8,8 @@ export interface NumberInputProps extends Omit<
   React.ComponentProps<'input'>,
   'type'
 > {
-  label: string
+  /** Visible field label. Omit when the caller supplies `aria-label` (#236). */
+  label?: string
   unit?: string
   error?: string
   hint?: string
@@ -20,15 +21,15 @@ export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
     const generatedId = React.useId()
     const inputId = id ?? generatedId
     const errorId = error ? `${inputId}-error` : undefined
-    const fieldLabel = (
+    const fieldLabel = label ? (
       <label htmlFor={inputId} className="text-sm font-medium">
         {label}
       </label>
-    )
+    ) : null
 
     return (
-      <div className="flex flex-col gap-1.5">
-        {hint && aboutLabel ? (
+      <div className="flex w-full min-w-0 flex-col gap-1.5">
+        {fieldLabel && hint && aboutLabel ? (
           <InfoHint hint={hint} label={aboutLabel}>
             {fieldLabel}
           </InfoHint>

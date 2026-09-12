@@ -38,7 +38,7 @@ import { Button } from '@/shared/ui/button'
 import { Chip } from '@/shared/ui/chip'
 import { DateField } from '@/shared/ui/date-field'
 import { InfoHint } from '@/shared/ui/info-hint'
-import { Input } from '@/shared/ui/input'
+import { MoneyInput } from '@/shared/ui/money-input'
 import { PageHeader } from '@/shared/ui/page-header'
 import { SelectField } from '@/shared/ui/select-field'
 import { StatCard } from '@/shared/ui/stat-card'
@@ -362,32 +362,22 @@ export function AssetDetailsScreen() {
           onChange={(event) => setAmountNote(event.target.value)}
         />
         <div className="flex min-w-0 flex-col gap-2">
-          <div className="relative min-w-0">
-            <Input
-              aria-label={t.asset.newAmount}
-              inputMode="decimal"
-              value={amountDraft}
-              placeholder={
-                snapshot
-                  ? formatEditableAmount(
-                      snapshot.amount,
-                      locale,
-                      snapshot.currency,
-                    )
-                  : t.asset.amountPlaceholder
-              }
-              className="min-w-0 pr-12"
-              onChange={(event) => setAmountDraft(event.target.value)}
-              onBlur={() =>
-                setAmountDraft((current) =>
-                  reformatAmountInput(current, locale, asset.currency),
-                )
-              }
-            />
-            <span className="pointer-events-none absolute inset-y-0 right-2.5 flex items-center text-sm text-muted-foreground">
-              {asset.currency}
-            </span>
-          </div>
+          <MoneyInput
+            aria-label={t.asset.newAmount}
+            locale={locale}
+            currency={asset.currency}
+            value={amountDraft}
+            onValueChange={setAmountDraft}
+            placeholder={
+              snapshot
+                ? formatEditableAmount(
+                    snapshot.amount,
+                    locale,
+                    snapshot.currency,
+                  )
+                : t.asset.amountPlaceholder
+            }
+          />
           <Button
             type="button"
             size="xl"
@@ -622,16 +612,12 @@ export function AssetDetailsScreen() {
                     </option>
                   ))}
                 </SelectField>
-                <Input
+                <MoneyInput
                   aria-label={t.asset.editSnapshotAmount}
-                  inputMode="decimal"
+                  locale={locale}
+                  currency={editCurrency}
                   value={editAmount}
-                  onChange={(event) => setEditAmount(event.target.value)}
-                  onBlur={() =>
-                    setEditAmount((current) =>
-                      reformatAmountInput(current, locale, editCurrency),
-                    )
-                  }
+                  onValueChange={setEditAmount}
                 />
                 <TextField
                   label={t.asset.snapshotNote}
