@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 235,
+    title: {
+      en: 'Reorganize Ещё into Preferences / Data / About / Developer',
+      ru: 'Собрать «Ещё» в Параметры / Данные / О приложении / Разработчику',
+    },
+    en: 'More was a flat scroll of currency, moods, rates, widget, FX debug, Allocation, privacy, backup, CSV, release notes, and RCA. Daily settings sat under diagnostics. Groups are Preferences, Data, About, and a collapsed Developer section. `#fx-debug` / `#root-causes` still open it. The widget toggle is Android-only. Store listing stays parked.',
+    ru: '«Ещё» было плоским списком: валюта, оформление, курсы, виджет, отладка FX, распределение, политика, копия, CSV, что нового и корневые причины. Ежедневные настройки тонули в диагностике. Теперь группы Параметры, Данные, О приложении и свёрнутый блок «Разработчику». `#fx-debug` / `#root-causes` по-прежнему открывают его. Виджет только на Android. Листинг магазинов остаётся отложенным.',
+  },
+  {
     issue: 231,
     title: {
       en: 'Asset detail: move refresh + Details to top; make overview collapsible',

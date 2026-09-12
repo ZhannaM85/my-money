@@ -2,13 +2,18 @@ import 'fake-indexeddb/auto'
 import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router-dom'
-import { beforeEach, describe, expect, it } from 'vitest'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { DEFAULT_SETTINGS } from '@/domain/settings'
 import { db } from '@/infrastructure/persistence/indexeddb'
+import { isAndroidNativePlatform } from '@/shared/native/platform'
 import { useAssetStore } from '@/stores/assetStore'
 import { applyTheme, useThemeStore } from '@/stores/themeStore'
 import { useSettingsStore } from '@/stores/settingsStore'
 import { SettingsScreen } from './SettingsScreen'
+
+vi.mock('@/shared/native/platform', () => ({
+  isAndroidNativePlatform: vi.fn(() => false),
+}))
 
 beforeEach(async () => {
   await db.assets.clear()
@@ -21,6 +26,7 @@ beforeEach(async () => {
   })
   useThemeStore.setState({ mood: 'ledger' })
   applyTheme('ledger')
+  vi.mocked(isAndroidNativePlatform).mockReturnValue(false)
 })
 
 describe('SettingsScreen', () => {
@@ -113,7 +119,9 @@ describe('SettingsScreen', () => {
       </MemoryRouter>,
     )
 
-    await user.click(await screen.findByRole('button', { name: 'Soft Finance' }))
+    await user.click(
+      await screen.findByRole('button', { name: 'Soft Finance' }),
+    )
     expect(document.documentElement.dataset.mood).toBe('soft')
     await user.click(screen.getByRole('button', { name: 'Neutral' }))
     expect(document.documentElement.dataset.mood).toBe('neutral')
@@ -133,8 +141,22 @@ describe('SettingsScreen', () => {
     expect(link).toHaveAttribute('href', '/privacy')
   })
 
+  it('hides the home-screen widget off Capacitor Android (#235)', async () => {
+    await db.settings.put(DEFAULT_SETTINGS)
+    render(
+      <MemoryRouter>
+        <SettingsScreen />
+      </MemoryRouter>,
+    )
+    await screen.findByRole('heading', { name: 'Preferences' })
+    expect(
+      screen.queryByRole('button', { name: 'Widget off' }),
+    ).not.toBeInTheDocument()
+  })
+
   it('keeps the home-screen widget off until the user turns it on (#190)', async () => {
     const user = userEvent.setup()
+    vi.mocked(isAndroidNativePlatform).mockReturnValue(true)
     await db.settings.put(DEFAULT_SETTINGS)
     render(
       <MemoryRouter>
@@ -148,5 +170,67 @@ describe('SettingsScreen', () => {
       await screen.findByRole('button', { name: 'Widget on' }),
     ).toHaveAttribute('aria-pressed', 'true')
     expect(useSettingsStore.getState().settings.homeScreenWidget).toBe(true)
+  })
+
+  it('groups More and keeps Developer collapsed (#235)', async () => {
+    const user = userEvent.setup()
+    render(
+      <MemoryRouter>
+        <SettingsScreen />
+      </MemoryRouter>,
+    )
+    await screen.findByRole('heading', { name: 'Preferences' })
+    expect(screen.getByRole('heading', { name: 'Data' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'About' })).toBeInTheDocument()
+    const developer = screen.getByRole('button', { name: 'Developer' })
+    expect(developer).toHaveAttribute('aria-expanded', 'false')
+    expect(
+      screen.queryByRole('heading', { name: 'FX debug' }),
+    ).not.toBeInTheDocument()
+    expect(
+      screen.queryByRole('heading', { name: 'Root causes' }),
+    ).not.toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Backup' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'CSV' })).toBeInTheDocument()
+    expect(
+      screen.getByRole('heading', { name: 'Release notes' }),
+    ).toBeInTheDocument()
+    await user.click(developer)
+    expect(developer).toHaveAttribute('aria-expanded', 'true')
+    expect(
+      screen.getByRole('heading', { name: 'FX debug' }),
+    ).toBeInTheDocument()
+    expect(
+      screen.getByRole('heading', { name: 'Root causes' }),
+    ).toBeInTheDocument()
+  })
+
+  it('opens Developer for #fx-debug (#235)', async () => {
+    render(
+      <MemoryRouter initialEntries={['/settings#fx-debug']}>
+        <SettingsScreen />
+      </MemoryRouter>,
+    )
+    expect(
+      await screen.findByRole('button', { name: 'Developer' }),
+    ).toHaveAttribute('aria-expanded', 'true')
+    expect(
+      screen.getByRole('heading', { name: 'FX debug' }),
+    ).toBeInTheDocument()
+  })
+
+  it('opens Developer for #root-causes (#235)', async () => {
+    render(
+      <MemoryRouter initialEntries={['/settings#root-causes']}>
+        <SettingsScreen />
+      </MemoryRouter>,
+    )
+    expect(
+      await screen.findByRole('heading', { name: 'Root causes' }),
+    ).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Developer' })).toHaveAttribute(
+      'aria-expanded',
+      'true',
+    )
   })
 })

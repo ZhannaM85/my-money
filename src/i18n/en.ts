@@ -284,6 +284,10 @@ export const en: Dictionary = {
   },
   settings: {
     title: 'More',
+    groupPreferences: 'Preferences',
+    groupData: 'Data',
+    groupAbout: 'About',
+    groupDeveloper: 'Developer',
     baseCurrency: 'Base currency',
     showAllCurrencies: 'Show all currencies',
     currencyDisplay: 'Asset display',

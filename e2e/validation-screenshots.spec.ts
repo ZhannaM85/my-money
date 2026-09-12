@@ -719,6 +719,7 @@ test('capture FX debug Save .txt (#161)', async ({ page }) => {
   await seedValidationFixture(page)
   await page.goto('/settings')
   await expect(page.getByRole('heading', { name: 'More' })).toBeVisible()
+  await page.getByRole('button', { name: 'Developer' }).click()
   const save = page.getByRole('button', { name: 'Save .txt' })
   await save.scrollIntoViewIfNeeded()
   await expect(save).toBeVisible()

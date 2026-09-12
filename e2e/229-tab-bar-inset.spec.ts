@@ -41,7 +41,7 @@ test('Settings last content keeps a gap above the tab bar (#229)', async ({
   await seedValidationFixture(page)
   await page.goto('/settings')
   await expect(page.getByRole('heading', { name: 'More' })).toBeVisible()
-  await expect(page.getByRole('heading', { name: 'Root causes' })).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'Developer' })).toBeVisible()
   await scrollMainToEnd(page)
   await expectInsetAboveTabBar(page)
   await page.screenshot({

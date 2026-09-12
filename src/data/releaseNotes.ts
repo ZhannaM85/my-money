@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 223,
+    issue: 235,
+    date: '2026-09-12T23:45:00+03:00',
+    en: 'More is grouped into Preferences, Data, About, and a collapsed Developer section. FX debug and Root causes stay one tap away; deep links still open them. The home-screen widget toggle only appears on Android.',
+    ru: '«Ещё» собрано в Параметры, Данные, О приложении и свёрнутый блок «Разработчику». Отладка FX и корневые причины — в одном нажатии; глубокие ссылки по-прежнему их открывают. Переключатель виджета только на Android.',
+  },
+  {
     version: 222,
     issue: 231,
     date: '2026-09-11T18:30:00+03:00',

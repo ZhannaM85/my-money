@@ -225,12 +225,12 @@ Copy goes through `src/i18n/` (English + Russian). Locale is `settings.locale` i
 | `/update` | Quick update flow |
 | `/allocation` | Donut + legend (by class / currency / type) |
 | `/history` | Net-worth history + range chips |
-| `/settings` | Base currency, locale, appearance, export/import |
+| `/settings` | More: Preferences, Data, About, collapsed Developer |
 | `/onboarding` | First-run: base currency + first assets |
 
 An empty book that has not skipped welcome is redirected to `/onboarding`. `/settings` stays reachable so Skip is available there too. Once any asset exists, or `settings.onboardingCompleted` is true, the gate does not run again. Dashboard already shows calculated net worth (identity FX for same-currency books); period change and the chart wait for later epics.
 
-Bottom nav from the starting mock: Dashboard, Assets, center **+** (update), History, More (Settings / Allocation / export). Allocation stays its own route (`/allocation`), linked from More and Dashboard — not a sixth tab.
+Bottom nav from the starting mock: Dashboard, Assets, center **+** (update), History, More. More is grouped as Preferences (currency, language, appearance; Android home-screen widget only in Capacitor), Data (JSON backup, CSV), About (privacy, release notes), and a collapsed Developer section (FX debug, RCA). `#fx-debug` and `#root-causes` open Developer. Allocation stays its own route (`/allocation`), linked from More and Dashboard — not a sixth tab. Store listing stays parked.
 
 ---
 

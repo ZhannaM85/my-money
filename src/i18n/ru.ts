@@ -289,6 +289,10 @@ export const ru: Dictionary = {
   },
   settings: {
     title: 'Ещё',
+    groupPreferences: 'Параметры',
+    groupData: 'Данные',
+    groupAbout: 'О приложении',
+    groupDeveloper: 'Разработчику',
     baseCurrency: 'Базовая валюта',
     showAllCurrencies: 'Показать все валюты',
     currencyDisplay: 'Показ активов',

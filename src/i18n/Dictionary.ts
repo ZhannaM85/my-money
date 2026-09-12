@@ -225,6 +225,10 @@ export interface Dictionary {
   }
   settings: {
     title: string
+    groupPreferences: string
+    groupData: string
+    groupAbout: string
+    groupDeveloper: string
     baseCurrency: string
     showAllCurrencies: string
     currencyDisplay: string
