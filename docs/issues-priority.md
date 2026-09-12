@@ -68,6 +68,14 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 
 ---
 
+## Tier 25 — Live feedback (2026-09-12)
+
+| # | Status | Issue | Notes |
+|---|--------|-------|-------|
+| [#233](https://github.com/ZhannaM85/my-money/issues/233) | 🔍 Pending validation | Split DashboardScreen into ≤500-line modules | Extracted `useDashboardScreen` / `useDashboardNetWorth`, As of bar, headline, period change, rates, and positions. Matching test slices moved. No behavior change. |
+
+---
+
 ## Explicitly not filed
 
 Out of scope for the MVP (`PROJECT_BRIEF.md` §20) — do not implement from chat:
