@@ -61,5 +61,12 @@ export default tseslint.config(
       ],
     },
   },
+  {
+    files: ['src/features/**/*.{ts,tsx}', 'src/app/**/*.{ts,tsx}'],
+    ignores: ['src/data/**', '**/*.test.*'],
+    rules: {
+      'max-lines': ['warn', { max: 500 }],
+    },
+  },
   eslintConfigPrettier,
 )
