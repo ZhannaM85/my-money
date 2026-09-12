@@ -6,21 +6,12 @@ import {
   nativeTotalsByCurrency,
   periodChange,
 } from '@/domain/netWorth'
-import { ChartRangePicker } from '@/features/dashboard/ChartRangePicker'
+import { ChartRangeControls, useSharedChartRange } from '@/features/charts'
 import { NetWorthChart } from '@/features/dashboard/NetWorthChart'
-import { ChartRangeToolbar } from '@/features/dashboard/ChartRangeToolbar'
 import { HistoryCalendar } from './HistoryCalendar'
 import { HistoryDayRow } from './HistoryDayRow'
 import { useLocale, useTranslation } from '@/i18n'
-import {
-  canZoomHistoryIn,
-  canZoomHistoryOut,
-  isoDatesInclusive,
-  isRangeClampedToEarliest,
-  rangeStartIso,
-  stepHistoryRange,
-  type HistoryRange,
-} from '@/shared/lib/dates'
+import { isoDatesInclusive, isRangeClampedToEarliest } from '@/shared/lib/dates'
 import {
   formatAmount,
   formatChartAxisDate,
@@ -60,17 +51,12 @@ export function HistoryScreen() {
     useSettingsStore((state) => state.settings.currencyDisplayMode) === 'native'
   const quotes = useFxStore((state) => state.quotes)
   const ensureRange = useFxStore((state) => state.ensureRange)
-  const [range, setRange] = useState<HistoryRange>('1M')
-  const [customStart, setCustomStart] = useState(todayIsoDate)
-  const [customEnd, setCustomEnd] = useState(todayIsoDate)
   const [openDates, setOpenDates] = useState<ReadonlySet<string>>(new Set())
   const [viewMode, setViewMode] = useState<'list' | 'calendar'>('list')
   const [selectedCalendarDate, setSelectedCalendarDate] = useState<
     string | null
   >(null)
   const today = todayIsoDate()
-  const canZoomIn = canZoomHistoryIn(range)
-  const canZoomOut = canZoomHistoryOut(range)
 
   useEffect(() => {
     void loadSettings()
@@ -84,8 +70,8 @@ export function HistoryScreen() {
     )
   }, [snapshots, today])
 
-  const chartEnd = range === 'Custom' ? customEnd : today
-  const start = rangeStartIso(range, chartEnd, earliest, customStart)
+  const chartRange = useSharedChartRange(earliest, today)
+  const { range, start, chartEnd } = chartRange
   const rangeLabel = isRangeClampedToEarliest(range, chartEnd, earliest)
     ? t.history.sinceDate(formatChartAxisDate(start, locale))
     : t.history.overRange(range)
@@ -111,14 +97,6 @@ export function HistoryScreen() {
     const symbols = [...new Set(snapshots.map((snapshot) => snapshot.currency))]
     void ensureRange(start, chartEnd, baseCurrency, symbols)
   }, [baseCurrency, chartEnd, ensureRange, snapshots, start])
-
-  const selectRange = (next: HistoryRange) => {
-    if (next === 'Custom' && range !== 'Custom') {
-      setCustomStart(start)
-      setCustomEnd(chartEnd)
-    }
-    setRange(next)
-  }
 
   const nativeTotals = useMemo(
     () => nativeTotalsByCurrency(assets, snapshots),
@@ -232,19 +210,11 @@ export function HistoryScreen() {
   return (
     <div className="flex flex-col gap-6">
       <PageHeader title={t.history.title} />
-      <ChartRangePicker
-        range={range}
-        onRangeChange={selectRange}
-        customStart={customStart}
-        customEnd={customEnd}
-        onCustomStartChange={(value) =>
-          setCustomStart(value > customEnd ? customEnd : value)
-        }
-        onCustomEndChange={(value) =>
-          setCustomEnd(value < customStart ? customStart : value)
-        }
+      <ChartRangeControls
+        range={chartRange}
         earliest={earliest}
         latest={today}
+        showToolbar={false}
       />
       {!loaded ? (
         <p className="text-sm text-muted-foreground">{t.common.loading}</p>
@@ -314,50 +284,22 @@ export function HistoryScreen() {
             </ul>
           )}
           {!isOriginal && (
-            <>
+            <ChartRangeControls
+              range={chartRange}
+              earliest={earliest}
+              latest={today}
+              showPicker={false}
+              showPan
+            >
               <NetWorthChart
                 points={series}
                 currency={baseCurrency}
-                onZoomIn={() =>
-                  setRange((current) => stepHistoryRange(current, 'in'))
-                }
-                onZoomOut={() =>
-                  setRange((current) => stepHistoryRange(current, 'out'))
-                }
+                onZoomIn={chartRange.zoomIn}
+                onZoomOut={chartRange.zoomOut}
+                onPanEarlier={chartRange.panEarlier}
+                onPanLater={chartRange.panLater}
               />
-              <ChartRangeToolbar
-                rangeLabel={`${t.dashboard.zoomRange}: ${
-                  range === '1W'
-                    ? t.history.rangeWeek
-                    : range === '1M'
-                      ? t.history.rangeMonth
-                      : range === '1Y'
-                        ? t.history.rangeYear
-                        : range === 'All'
-                          ? t.history.rangeAll
-                          : t.history.rangeCustom
-                }`}
-              >
-                <Chip
-                  disabled={!canZoomIn}
-                  onClick={() => {
-                    if (canZoomIn)
-                      setRange((current) => stepHistoryRange(current, 'in'))
-                  }}
-                >
-                  {t.dashboard.zoomIn}
-                </Chip>
-                <Chip
-                  disabled={!canZoomOut}
-                  onClick={() => {
-                    if (canZoomOut)
-                      setRange((current) => stepHistoryRange(current, 'out'))
-                  }}
-                >
-                  {t.dashboard.zoomOut}
-                </Chip>
-              </ChartRangeToolbar>
-            </>
+            </ChartRangeControls>
           )}
           <div
             className="flex gap-2"

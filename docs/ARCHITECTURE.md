@@ -187,6 +187,7 @@ src/
       frankfurter/         # HTTP client + cache writes through FxRateRepository
   features/
     onboarding/
+    charts/                # shared range chrome (#239)
     dashboard/
     assets/
     update-finances/
@@ -330,6 +331,7 @@ Until later feature epics land, UI module tables below are still the intended ma
 | Area | Purpose |
 |------|---------|
 | `features/onboarding/` | Flow 1 — first assets + base currency + first net worth |
+| `features/charts/` | Shared chart-range chrome + hook (#239). Dashboard↔History persist one range; asset details stay local. |
 | `features/dashboard/` | Flow 2 — net worth, allocation strip, chart, recent change |
 | `features/update-finances/` | Flow 3 — bulk update, no-change, suggested-by-frequency |
 | `features/asset-details/` | Flow 4 — one asset, history, native/base toggle |

@@ -3,6 +3,7 @@ import { MemoryRouter, Route, Routes } from 'react-router-dom'
 import { DEFAULT_SETTINGS } from '@/domain/settings'
 import { db } from '@/infrastructure/persistence/indexeddb'
 import { useAssetStore } from '@/stores/assetStore'
+import { resetChartRangeStore } from '@/stores/chartRangeStore'
 import { useFxStore } from '@/stores/fxStore'
 import { useSettingsStore } from '@/stores/settingsStore'
 import { AssetDetailsScreen } from './AssetDetailsScreen'
@@ -32,6 +33,7 @@ export async function resetAssetDetailsStores() {
     settings: DEFAULT_SETTINGS,
     loaded: true,
   })
+  resetChartRangeStore()
 }
 
 export async function seedRevolutAsset() {

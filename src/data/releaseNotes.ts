@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 225,
+    issue: 239,
+    date: '2026-09-12T23:59:00+03:00',
+    en: 'Chart range (Week / Month / Year / All / Custom, zoom, and pan) is the same control on Dashboard, History, and asset details. Dashboard and History now share the range you picked; a single asset’s chart stays independent.',
+    ru: 'Диапазон графика (неделя / месяц / год / всё / свой, масштаб и сдвиг) — один и тот же блок на Сводке, Истории и карточке актива. Сводка и История запоминают общий диапазон; график одного актива остаётся своим.',
+  },
+  {
     version: 224,
     issue: 238,
     date: '2026-09-12T23:55:00+03:00',

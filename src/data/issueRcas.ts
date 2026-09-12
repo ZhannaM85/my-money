@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 239,
+    title: {
+      en: 'Shared ChartRangeControls; share range Dashboard↔History',
+      ru: 'Общий ChartRangeControls; один диапазон Сводка↔История',
+    },
+    en: '#185 persist only helped Dashboard. History and asset details each kept their own chips / custom dates / zoom, so the three copies drifted (only Dashboard panned). One `ChartRangeControls` + `useSharedChartRange` / `useLocalChartRange`. Dashboard and History share the persisted store; asset details stay local.',
+    ru: '#185 сохранял диапазон только на Сводке. История и карточка актива держали свои чипы / свои даты / масштаб — три копии расходились (сдвиг был только на Сводке). Один `ChartRangeControls` и хуки `useSharedChartRange` / `useLocalChartRange`. Сводка и История делят сохранённый store; карточка актива остаётся локальной.',
+  },
+  {
     issue: 238,
     title: {
       en: 'Update: remove leftover grey helper blurb',

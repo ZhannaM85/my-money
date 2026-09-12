@@ -13,6 +13,7 @@ import {
   todayIsoDate,
 } from '@/shared/lib/money'
 import { useAssetStore } from '@/stores/assetStore'
+import { resetChartRangeStore } from '@/stores/chartRangeStore'
 import { useFxStore } from '@/stores/fxStore'
 import { useSettingsStore } from '@/stores/settingsStore'
 import { HistoryScreen } from './HistoryScreen'
@@ -33,6 +34,7 @@ beforeEach(async () => {
     error: undefined,
   })
   useSettingsStore.setState({ settings: DEFAULT_SETTINGS, loaded: true })
+  resetChartRangeStore()
   await useAssetStore.getState().saveAsset(
     {
       id: 'a1',
@@ -366,9 +368,7 @@ describe('HistoryScreen', () => {
       </MemoryRouter>,
     )
     await user.click(await screen.findByRole('button', { name: 'Calendar' }))
-    await user.click(
-      screen.getByTestId('history-calendar-mark-2026-08-17'),
-    )
+    await user.click(screen.getByTestId('history-calendar-mark-2026-08-17'))
     const detail = await screen.findByTestId('history-calendar-day-detail')
     expect(
       screen.getByRole('button', { name: 'Holdings on 2026-08-17' }),
@@ -403,9 +403,9 @@ describe('HistoryScreen', () => {
       name: 'Holdings on 2026-08-17',
     })
     expect(rowButton).toHaveAttribute('aria-expanded', 'true')
-    expect(
-      screen.getByTestId('history-calendar-day-detail'),
-    ).toHaveTextContent(formatSignedAmount(100, 'EUR'))
+    expect(screen.getByTestId('history-calendar-day-detail')).toHaveTextContent(
+      formatSignedAmount(100, 'EUR'),
+    )
     expect(await screen.findByText('Revolut')).toBeInTheDocument()
     await user.click(rowButton)
     expect(rowButton).toHaveAttribute('aria-expanded', 'false')

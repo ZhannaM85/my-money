@@ -5,6 +5,18 @@ import { todayIsoDate } from '@/shared/lib/money'
 
 export const CHART_RANGE_STORAGE_KEY = 'my-money-chart-range'
 
+export function resetChartRangeStore(): void {
+  const today = todayIsoDate()
+  localStorage.removeItem(CHART_RANGE_STORAGE_KEY)
+  useChartRangeStore.setState({
+    range: '1M',
+    rangeEnd: today,
+    rangeEndPinned: false,
+    customStart: today,
+    customEnd: today,
+  })
+}
+
 interface ChartRangeState {
   range: HistoryRange
   rangeEnd: string

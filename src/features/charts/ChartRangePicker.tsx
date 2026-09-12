@@ -2,6 +2,7 @@ import { HISTORY_RANGES, type HistoryRange } from '@/shared/lib/dates'
 import { useTranslation } from '@/i18n'
 import { Chip } from '@/shared/ui/chip'
 import { DateField } from '@/shared/ui/date-field'
+import { chartRangeDisplayName } from './chartRangeLabel'
 
 /** Week / Month / Year / All / Custom chips + optional custom dates (#126). */
 export function ChartRangePicker({
@@ -24,13 +25,6 @@ export function ChartRangePicker({
   latest: string
 }) {
   const t = useTranslation()
-  const labels: Record<HistoryRange, string> = {
-    '1W': t.history.rangeWeek,
-    '1M': t.history.rangeMonth,
-    '1Y': t.history.rangeYear,
-    All: t.history.rangeAll,
-    Custom: t.history.rangeCustom,
-  }
 
   return (
     <div className="flex flex-col gap-2">
@@ -45,7 +39,7 @@ export function ChartRangePicker({
             pressed={range === item}
             onClick={() => onRangeChange(item)}
           >
-            {labels[item]}
+            {chartRangeDisplayName(item, t)}
           </Chip>
         ))}
       </div>

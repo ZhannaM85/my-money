@@ -9,9 +9,8 @@ import { Button } from '@/shared/ui/button'
 import { Chip } from '@/shared/ui/chip'
 import { PageHeader } from '@/shared/ui/page-header'
 import { StatCard } from '@/shared/ui/stat-card'
+import { ChartRangeControls } from '@/features/charts'
 import { NetWorthChart } from '@/features/dashboard/NetWorthChart'
-import { ChartRangePicker } from '@/features/dashboard/ChartRangePicker'
-import { ChartRangeToolbar } from '@/features/dashboard/ChartRangeToolbar'
 import { AssetDetailsAccordion } from './AssetDetailsAccordion'
 import { AssetDetailsUpdateForm } from './AssetDetailsUpdateForm'
 import { AssetSnapshotList } from './AssetSnapshotList'
@@ -121,45 +120,22 @@ export function AssetDetailsScreen() {
         shareLabel={d.shareLabel}
         onSave={d.saveDetails}
       />
-      <ChartRangePicker
-        range={d.range}
-        onRangeChange={d.selectRange}
-        customStart={d.customStart}
-        customEnd={d.customEnd}
-        onCustomStartChange={(value) =>
-          d.setCustomStart(value > d.customEnd ? d.customEnd : value)
-        }
-        onCustomEndChange={(value) =>
-          d.setCustomEnd(value < d.customStart ? d.customStart : value)
-        }
+      <ChartRangeControls
+        range={d.chartRange}
         earliest={d.earliest}
         latest={d.today}
-      />
-      <NetWorthChart
-        points={d.points}
-        currency={d.displayCurrency ?? asset.currency}
-        seriesName={asset.name}
-        onZoomIn={d.zoomIn}
-        onZoomOut={d.zoomOut}
-      />
-      <ChartRangeToolbar rangeLabel={d.rangeLabel}>
-        <Chip
-          disabled={!d.canZoomIn}
-          onClick={() => {
-            if (d.canZoomIn) d.zoomIn()
-          }}
-        >
-          {t.dashboard.zoomIn}
-        </Chip>
-        <Chip
-          disabled={!d.canZoomOut}
-          onClick={() => {
-            if (d.canZoomOut) d.zoomOut()
-          }}
-        >
-          {t.dashboard.zoomOut}
-        </Chip>
-      </ChartRangeToolbar>
+        showPan
+      >
+        <NetWorthChart
+          points={d.points}
+          currency={d.displayCurrency ?? asset.currency}
+          seriesName={asset.name}
+          onZoomIn={d.chartRange.zoomIn}
+          onZoomOut={d.chartRange.zoomOut}
+          onPanEarlier={d.chartRange.panEarlier}
+          onPanLater={d.chartRange.panLater}
+        />
+      </ChartRangeControls>
       <AssetSnapshotList
         history={d.history}
         snapshots={d.snapshots}

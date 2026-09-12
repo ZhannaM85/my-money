@@ -1,13 +1,10 @@
 import { Link } from 'react-router-dom'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { ChartRangeControls } from '@/features/charts'
 import { useTranslation } from '@/i18n'
 import { Button } from '@/shared/ui/button'
-import { Chip } from '@/shared/ui/chip'
 import { EmptyState } from '@/shared/ui/empty-state'
 import { PageHeader } from '@/shared/ui/page-header'
 import { NetWorthChart } from './NetWorthChart'
-import { ChartRangePicker } from './ChartRangePicker'
-import { ChartRangeToolbar } from './ChartRangeToolbar'
 import { DashboardAsOfBar } from './DashboardAsOfBar'
 import { DashboardHeadline } from './DashboardHeadline'
 import { DashboardPeriodChange } from './DashboardPeriodChange'
@@ -87,78 +84,32 @@ export function DashboardScreen() {
               </div>
             )}
             {!d.showNativeAll && (
-              <>
-                <ChartRangePicker
-                  range={d.range}
-                  onRangeChange={d.selectRange}
-                  customStart={d.customStart}
-                  customEnd={d.customEnd}
-                  onCustomStartChange={d.onCustomStartChange}
-                  onCustomEndChange={d.onCustomEndChange}
-                  earliest={d.earliest}
-                  latest={d.today}
-                />
+              <ChartRangeControls
+                range={d.chartRange}
+                earliest={d.earliest}
+                latest={d.today}
+                showPan
+                showToolbar={d.asOfHasData}
+              >
                 {d.asOfHasData ? (
-                  <>
-                    <NetWorthChart
-                      points={d.series}
-                      currency={
-                        d.isOriginal ? d.activeCurrencyFilter : d.baseCurrency
-                      }
-                      onZoomIn={() => d.applyZoom('in')}
-                      onZoomOut={() => d.applyZoom('out')}
-                      onPanEarlier={d.panEarlier}
-                      onPanLater={d.panLater}
-                      onSelectDate={d.onSelectChartDate}
-                    />
-                    <ChartRangeToolbar rangeLabel={d.rangeLabel}>
-                      <Button
-                        type="button"
-                        variant="muted"
-                        size="icon-compact"
-                        disabled={!d.canPanEarlier}
-                        aria-label={t.dashboard.panEarlier}
-                        onClick={d.panEarlier}
-                      >
-                        <ChevronLeft className="size-5" aria-hidden />
-                      </Button>
-                      <Button
-                        type="button"
-                        variant="muted"
-                        size="icon-compact"
-                        disabled={!d.canPanLater}
-                        aria-label={t.dashboard.panLater}
-                        onClick={d.panLater}
-                      >
-                        <ChevronRight className="size-5" aria-hidden />
-                      </Button>
-                      <Chip
-                        disabled={!d.canZoomIn}
-                        onClick={() => {
-                          if (!d.canZoomIn) return
-                          d.applyZoom('in')
-                        }}
-                      >
-                        {t.dashboard.zoomIn}
-                      </Chip>
-                      <Chip
-                        disabled={!d.canZoomOut}
-                        onClick={() => {
-                          if (!d.canZoomOut) return
-                          d.applyZoom('out')
-                        }}
-                      >
-                        {t.dashboard.zoomOut}
-                      </Chip>
-                    </ChartRangeToolbar>
-                  </>
+                  <NetWorthChart
+                    points={d.series}
+                    currency={
+                      d.isOriginal ? d.activeCurrencyFilter : d.baseCurrency
+                    }
+                    onZoomIn={d.chartRange.zoomIn}
+                    onZoomOut={d.chartRange.zoomOut}
+                    onPanEarlier={d.chartRange.panEarlier}
+                    onPanLater={d.chartRange.panLater}
+                    onSelectDate={d.onSelectChartDate}
+                  />
                 ) : (
                   <EmptyState
                     title={t.dashboard.noHoldingsOnDateTitle}
                     description={t.dashboard.noHoldingsOnDateDescription}
                   />
                 )}
-              </>
+              </ChartRangeControls>
             )}
             {d.convertedHoldingsToday.length > 0 && !d.showNativeAll && (
               <DashboardPositions

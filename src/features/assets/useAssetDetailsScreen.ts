@@ -3,18 +3,11 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { convertAmount, lookupRate } from '@/domain/fx'
 import { assetPerformance } from '@/domain/netWorth'
 import { latestSnapshot } from '@/domain/snapshot'
+import { useLocalChartRange } from '@/features/charts'
 import { assetChartPoints } from './assetChartPoints'
-import { useTranslation } from '@/i18n'
 import { formatOwnershipShare, ownershipMultiplier } from '@/domain/asset'
 import { todayIsoDate } from '@/shared/lib/money'
-import {
-  canZoomHistoryIn,
-  canZoomHistoryOut,
-  type HistoryRange,
-  isoDatesInclusive,
-  rangeStartIso,
-  stepHistoryRange,
-} from '@/shared/lib/dates'
+import { isoDatesInclusive } from '@/shared/lib/dates'
 import { useAssetStore } from '@/stores/assetStore'
 import { useFxStore } from '@/stores/fxStore'
 import { useSettingsStore } from '@/stores/settingsStore'
@@ -23,7 +16,6 @@ import type { AssetFormValues } from './AssetForm'
 export type AssetDetailsDisplayMode = 'native' | 'base'
 
 export function useAssetDetailsScreen() {
-  const t = useTranslation()
   const { id } = useParams()
   const navigate = useNavigate()
   const saveAsset = useAssetStore((state) => state.saveAsset)
@@ -44,9 +36,6 @@ export function useAssetDetailsScreen() {
   )
   const quotes = useFxStore((state) => state.quotes)
   const [mode, setMode] = useState<AssetDetailsDisplayMode>(displayMode)
-  const [range, setRange] = useState<HistoryRange>('All')
-  const [customStart, setCustomStart] = useState(todayIsoDate)
-  const [customEnd, setCustomEnd] = useState(todayIsoDate)
   const today = todayIsoDate()
 
   useEffect(() => {
@@ -72,27 +61,13 @@ export function useAssetDetailsScreen() {
     : null
   const displayCurrency = mode === 'native' ? asset?.currency : baseCurrency
   const earliest = ordered[0]?.date ?? today
-  const chartEnd = range === 'Custom' ? customEnd : today
-  const chartStart = rangeStartIso(range, chartEnd, earliest, customStart)
-  const canZoomIn = canZoomHistoryIn(range)
-  const canZoomOut = canZoomHistoryOut(range)
-
-  const selectRange = (next: HistoryRange) => {
-    if (next === 'Custom' && range !== 'Custom') {
-      setCustomStart(chartStart)
-      setCustomEnd(chartEnd)
-    }
-    setRange(next)
-  }
-
-  const zoomIn = () => setRange((current) => stepHistoryRange(current, 'in'))
-  const zoomOut = () => setRange((current) => stepHistoryRange(current, 'out'))
+  const chartRange = useLocalChartRange(earliest, today, 'All')
 
   const points = asset
     ? assetChartPoints(
         asset.id,
         snapshots,
-        isoDatesInclusive(chartStart, chartEnd),
+        isoDatesInclusive(chartRange.start, chartRange.chartEnd),
         mode,
         quotes,
         baseCurrency,
@@ -130,18 +105,6 @@ export function useAssetDetailsScreen() {
             percent: performance.basePercent,
           }
         : null
-
-  const rangeName =
-    range === '1W'
-      ? t.history.rangeWeek
-      : range === '1M'
-        ? t.history.rangeMonth
-        : range === '1Y'
-          ? t.history.rangeYear
-          : range === 'All'
-            ? t.history.rangeAll
-            : t.history.rangeCustom
-  const rangeLabel = `${t.dashboard.zoomRange}: ${rangeName}`
 
   async function saveUpdate(input: {
     date: string
@@ -197,18 +160,8 @@ export function useAssetDetailsScreen() {
     hasPartialShare,
     today,
     earliest,
-    range,
-    customStart,
-    customEnd,
+    chartRange,
     points,
-    canZoomIn,
-    canZoomOut,
-    rangeLabel,
-    selectRange,
-    setCustomStart,
-    setCustomEnd,
-    zoomIn,
-    zoomOut,
     saveUpdate,
     saveDetails,
     updateSnapshot,

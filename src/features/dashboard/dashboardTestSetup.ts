@@ -1,11 +1,7 @@
 import { DEFAULT_SETTINGS } from '@/domain/settings'
 import { db } from '@/infrastructure/persistence/indexeddb'
-import { todayIsoDate } from '@/shared/lib/money'
 import { useAssetStore } from '@/stores/assetStore'
-import {
-  CHART_RANGE_STORAGE_KEY,
-  useChartRangeStore,
-} from '@/stores/chartRangeStore'
+import { resetChartRangeStore } from '@/stores/chartRangeStore'
 import { useComparisonStore } from '@/stores/comparisonStore'
 import { FX_LAST_FETCHED_KEY, useFxStore } from '@/stores/fxStore'
 import { useSettingsStore } from '@/stores/settingsStore'
@@ -31,12 +27,5 @@ export async function resetDashboardStores() {
     loaded: false,
   })
   useComparisonStore.setState({ dates: [] })
-  localStorage.removeItem(CHART_RANGE_STORAGE_KEY)
-  useChartRangeStore.setState({
-    range: '1M',
-    rangeEnd: todayIsoDate(),
-    rangeEndPinned: false,
-    customStart: todayIsoDate(),
-    customEnd: todayIsoDate(),
-  })
+  resetChartRangeStore()
 }
