@@ -173,6 +173,7 @@ Pure, unit-tested domain functions (no storage, no React, no network):
 ```
 src/
   app/                     # routing, app shell, providers
+  data/                    # static copy: release notes, issue RCAs
   domain/
     asset/
     snapshot/
@@ -185,27 +186,29 @@ src/
       indexeddb/           # Dexie schema + repository IMPLEMENTATIONS
     fx/
       frankfurter/         # HTTP client + cache writes through FxRateRepository
+      rubStatic/           # static RUB fallback quotes
+    debug/                 # tap / download debug text
   features/
     onboarding/
     charts/                # shared range chrome (#239)
     dashboard/
-    assets/
+    assets/                # list, create/edit, asset details (Flow 4)
     update-finances/
     allocation/
     history/
-    asset-details/
     settings/
-    export/
+    export/                # JSON backup + CSV via action modules
   shared/
     ui/                    # design-system primitives
     hooks/
     lib/
+    native/                # Capacitor chrome, back button, share, widget
   stores/                  # Zustand, UI/session only
   i18n/
 test/
 ```
 
-Nothing outside `infrastructure/persistence/indexeddb/` imports Dexie. Nothing outside `infrastructure/fx/` calls the network for rates.
+Nothing outside `infrastructure/persistence/indexeddb/` imports Dexie. Feature screens and sections do not import IndexedDB; backup/CSV I/O goes through `features/export` action modules (`backupActions`, `csvActions`). Nothing outside `infrastructure/fx/` calls the network for rates. `fxStore` does not import features — Frankfurter online gating lives in `infrastructure/fx/shouldFetchFrankfurter`.
 
 GitHub Pages is a project site at `/my-money/`. Production builds pass `--base=/my-money/` so Vite rewrites `index.html` asset URLs and React Router uses that `basename`. SPA deep links copy `index.html` to `404.html`.
 
@@ -334,8 +337,7 @@ Until later feature epics land, UI module tables below are still the intended ma
 | `features/charts/` | Shared chart-range chrome + hook (#239). Dashboard↔History persist one range; asset details stay local. |
 | `features/dashboard/` | Flow 2 — net worth, allocation strip, chart, recent change |
 | `features/update-finances/` | Flow 3 — bulk update, no-change, suggested-by-frequency |
-| `features/asset-details/` | Flow 4 — one asset, history, native/base toggle |
-| `features/assets/` | List, filters, create/edit |
+| `features/assets/` | List, filters, create/edit, and Flow 4 asset details (`AssetDetailsScreen`) |
 | `features/allocation/` | Donut + legend |
 | `features/history/` | Net-worth snapshots over ranges |
 | `features/settings/` | Base currency, locale, tracking, export/import, `/privacy` (#164) |

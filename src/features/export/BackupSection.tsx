@@ -1,6 +1,5 @@
 import { useRef, useState } from 'react'
 import { useTranslation } from '@/i18n'
-import { bookHasAssets } from '@/infrastructure/persistence/indexeddb/backupStore'
 import { pickImportFile } from '@/shared/lib/pickNativeTextFile'
 import { Button } from '@/shared/ui/button'
 import { useAssetStore } from '@/stores/assetStore'
@@ -8,6 +7,7 @@ import { useComparisonStore } from '@/stores/comparisonStore'
 import { useFxStore } from '@/stores/fxStore'
 import { useSettingsStore } from '@/stores/settingsStore'
 import {
+  bookHasAssets,
   deleteAllLocalData,
   exportBackup,
   importBackupJson,

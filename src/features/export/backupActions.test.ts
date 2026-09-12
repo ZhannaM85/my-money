@@ -5,6 +5,7 @@ import { buildBackupBundle } from '@/domain/backup'
 import { db } from '@/infrastructure/persistence/indexeddb'
 import { FX_LAST_FETCHED_KEY } from '@/stores/fxStore'
 import {
+  bookHasAssets,
   deleteAllLocalData,
   exportBackup,
   importBackupJson,
@@ -67,6 +68,12 @@ beforeEach(async () => {
 })
 
 describe('JSON backup', () => {
+  it('reports whether the book has assets without features importing IndexedDB (#242)', async () => {
+    expect(await bookHasAssets()).toBe(false)
+    await db.assets.put(asset)
+    expect(await bookHasAssets()).toBe(true)
+  })
+
   it('round-trips settings, assets, snapshots, and FX quotes through an empty book (#194)', async () => {
     await importBackupJson(JSON.stringify(bundle))
     const exported = await exportBackup()

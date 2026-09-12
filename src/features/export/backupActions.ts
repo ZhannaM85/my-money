@@ -1,5 +1,6 @@
 import { buildBackupBundle, type BackupBundle } from '@/domain/backup'
 import {
+  bookHasAssets,
   clearBook,
   readBook,
   replaceBook,
@@ -35,4 +36,5 @@ export async function deleteAllLocalData(): Promise<void> {
   }
 }
 
+export { bookHasAssets }
 export { parseBackupJson, InvalidBackupError } from './backupSchema'

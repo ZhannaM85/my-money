@@ -26,5 +26,40 @@ export default tseslint.config(
       'react-refresh/only-export-components': 'off',
     },
   },
+  {
+    files: ['src/features/**/*.{ts,tsx}'],
+    ignores: [
+      'src/features/**/*.test.ts',
+      'src/features/**/*.test.tsx',
+      'src/features/**/*TestSetup.ts',
+      'src/features/**/*TestSetup.tsx',
+      'src/features/export/backupActions.ts',
+      'src/features/export/csvActions.ts',
+    ],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          paths: [
+            {
+              name: 'dexie',
+              message:
+                'Features must not import Dexie. Use backup/csv action modules.',
+            },
+          ],
+          patterns: [
+            {
+              group: [
+                '@/infrastructure/persistence/indexeddb',
+                '@/infrastructure/persistence/indexeddb/**',
+              ],
+              message:
+                'Features must not import IndexedDB. Use backup/csv action modules.',
+            },
+          ],
+        },
+      ],
+    },
+  },
   eslintConfigPrettier,
 )

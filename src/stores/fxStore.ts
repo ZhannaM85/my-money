@@ -12,7 +12,7 @@ import {
   type RateRequest,
 } from '@/infrastructure/fx/frankfurter'
 import { fxDebug, recordEnsureRangeWindow } from '@/infrastructure/fx/fxDebug'
-import { shouldFetchFrankfurter } from '@/features/dashboard/dashboardFx'
+import { shouldFetchFrankfurter } from '@/infrastructure/fx/shouldFetchFrankfurter'
 import {
   ensureStaticRubRates,
   ensureStaticRubRange,
