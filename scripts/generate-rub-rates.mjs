@@ -1,3 +1,8 @@
+/**
+ * Generate-time only. Writes public/fx/rub/*.json from NBG.
+ * The app loads those files via rubStatic — it must not fetch NBG/CBR.
+ * See docs/FX.md.
+ */
 import { mkdir, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 import { addDaysIso, fillForward, isoDatesInclusive } from './lib/cbrSeries.mjs'

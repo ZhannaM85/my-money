@@ -23,7 +23,7 @@ Start at [`docs/issues-priority.md`](docs/issues-priority.md).
 ## What it does
 
 - Track assets and liabilities across categories and currencies.
-- Convert everything into a user-chosen base currency (Frankfurter / ECB rates).
+- Convert everything into a user-chosen base currency (Frankfurter online, static RUB from NBG at generate time, optional manual overrides). See [`docs/FX.md`](docs/FX.md).
 - Keep a snapshot history per asset, including historical FX.
 - Show net worth, allocation, and change over time.
 - Make a full-picture update take under a minute (previous value + “no change”).
@@ -64,6 +64,7 @@ Native device steps: [`docs/native-app-device-testing.md`](docs/native-app-devic
 ## More
 
 - [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) — how the codebase is structured and why.
+- [`docs/FX.md`](docs/FX.md) — real FX pipeline (Frankfurter, static RUB, manual).
 - [`docs/native-app-device-testing.md`](docs/native-app-device-testing.md) — Android/iOS debug installs.
 - [`docs/issues-priority.md`](docs/issues-priority.md) — the work queue, in order.
 - [`PROJECT_BRIEF.md`](PROJECT_BRIEF.md) — the original product brief.

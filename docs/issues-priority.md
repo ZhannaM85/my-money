@@ -80,6 +80,7 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 | [#238](https://github.com/ZhannaM85/my-money/issues/238) | 🔍 Pending validation | Update: remove leftover grey helper blurb (#230 follow-up) | Dropped `t.update.description` grey-under-title filler. Empty-state copy kept. No InfoHint. |
 | [#239](https://github.com/ZhannaM85/my-money/issues/239) | 🔍 Pending validation | Shared ChartRangeControls; share range Dashboard↔History | One chrome (chips / custom / zoom / pan). Dashboard and History share persisted range; asset-detail range stays local. |
 | [#242](https://github.com/ZhannaM85/my-money/issues/242) | 🔍 Pending validation | Layering: no Dexie in features; FX helper; dead folders | Backup UI uses `backupActions`. `shouldFetchFrankfurter` left dashboard. Empty `features/asset-details` removed. Folder map refreshed. |
+| [#241](https://github.com/ZhannaM85/my-money/issues/241) | 🔍 Pending validation | FX: document real pipeline; remove unused runtime CBR/NBG | `docs/FX.md` is canonical. Deleted unused `fx/cbr` + `fx/nbg` HTTP clients. Generate scripts kept. No third live fetch. |
 
 ---
 

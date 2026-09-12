@@ -2,7 +2,7 @@
 
 This document is updated after each issue is completed. It explains what every file does, why it exists, and how the pieces connect.
 
-Product context lives in `PROJECT_BRIEF.md`; the visual language lives in `docs/DESIGN_SYSTEM.md`; the active work queue lives in `docs/issues-priority.md` (closed history: `docs/issues-priority-archive/`); the public-facing overview lives in `README.md`.
+Product context lives in `PROJECT_BRIEF.md`; the visual language lives in `docs/DESIGN_SYSTEM.md`; the FX pipeline lives in `docs/FX.md`; the active work queue lives in `docs/issues-priority.md` (closed history: `docs/issues-priority-archive/`); the public-facing overview lives in `README.md`.
 
 **Status (2026-08-30):** Epics 0–17 plus GitHub Pages landed. Deployed at `https://zhannam85.github.io/my-money/`. Native wrap is #162 (Capacitor Android + iOS); store listing is later children of #19.
 
@@ -10,7 +10,7 @@ Product context lives in `PROJECT_BRIEF.md`; the visual language lives in `docs/
 
 ## System Overview
 
-My Money is a local-first personal balance sheet: the user manually records assets and liabilities, the app converts them into one base currency, and history is a first-class feature. Everything for the web/PWA/Android client runs in the browser — no backend, no accounts, no telemetry, no AI. User data lives in IndexedDB. The only expected network call in the MVP is a public FX API (Frankfurter / ECB reference rates).
+My Money is a local-first personal balance sheet: the user manually records assets and liabilities, the app converts them into one base currency, and history is a first-class feature. Everything for the web/PWA/Android client runs in the browser — no backend, no accounts, no telemetry, no AI. User data lives in IndexedDB. The only expected **runtime** FX network call is Frankfurter. RUB history is generated at deploy time from NBG and loaded same-origin. Manual overrides live in IndexedDB. See `docs/FX.md`.
 
 iOS is the **same Capacitor wrap** as Android (`ios/` next to `android/`), not a Swift rewrite. #20 (native Swift/SwiftUI) is won't-fix.
 
@@ -34,17 +34,18 @@ flowchart TD
     end
     subgraph Infra ["infrastructure/"]
         F["persistence/indexeddb/<br/>Dexie schema + IndexedDb*Repository"]
-        G["fx/frankfurter/<br/>FrankfurterFxClient"]
+        G["fx/frankfurter + rubStatic"]
     end
 
     A --> B
     A --> Z
     B --> E
     A --> D
-    G -. implements .-> E
+    G -. writes quotes via .-> E
     F -. implements .-> E
     F --> H[("IndexedDB<br/>in the browser")]
-    G --> I[("Frankfurter API<br/>rates only, no user data")]
+    G --> I[("Frankfurter API<br/>online only; no RUB/GEL")]
+    G --> J[("public/fx/rub/*.json<br/>NBG at generate time")]
 
     style Domain fill:#eff6ff,stroke:#3b82f6
     style Infra fill:#fef3c7,stroke:#d97706
@@ -185,8 +186,9 @@ src/
     persistence/
       indexeddb/           # Dexie schema + repository IMPLEMENTATIONS
     fx/
-      frankfurter/         # HTTP client + cache writes through FxRateRepository
-      rubStatic/           # static RUB fallback quotes
+      frankfurter/         # live Frankfurter; skips RUB/GEL
+      rubStatic/           # same-origin CODE→RUB JSON (NBG at generate time)
+      # no cbr/ or nbg/ clients — those APIs are generate-time only (docs/FX.md)
     debug/                 # tap / download debug text
   features/
     onboarding/
@@ -252,13 +254,17 @@ Base currency is stored in `Settings`. Changing it re-reads FX and re-renders; i
 
 ## FX
 
-- Provider: [Frankfurter](https://api.frankfurter.dev/) v2 (multi-provider reference rates, no API key). Client: `infrastructure/fx/frankfurter/`.
-- Cache quotes in IndexedDB via `FxRateRepository` so charts work offline after a fetch.
+Canonical detail: [`docs/FX.md`](./FX.md). `fxStore` is the only runtime orchestrator.
+
+- **Frankfurter** ([api.frankfurter.dev](https://api.frankfurter.dev/) v2, no API key) while online. Skips `RUB` and `GEL`. Client: `infrastructure/fx/frankfurter/`. Offline gate: `shouldFetchFrankfurter`.
+- **Static RUB** — same-origin `{BASE_URL}fx/rub/{CODE}.json`, generated at deploy from NBG (`npm run generate:rub-rates`). Client: `infrastructure/fx/rubStatic/`. Not a live NBG/CBR call.
+- **Manual overrides** — Settings → IndexedDB; `mergeRateTables` prefers them over system quotes for the same pair + date.
+- Cache system quotes in IndexedDB via `FxRateRepository` so charts work offline after a fetch or static load.
 - Converted values are estimates / reference rates, labeled as such — not executable quotes.
 - Same-currency pairs are rate `1` with no network.
 - Historical net worth **must** use the rate for that history date (weekend/holiday/missing-dataset dates reuse the previous quote via `lookupRateOnOrBefore`). A missing same-day quote must not drop the holding.
 - Only currency codes and dates are sent. User balances, names, and assets never leave the device.
-- `RUB` is supported through Frankfurter v2 as well, so the web app stays on one browser-safe FX provider instead of a separate RUB-only path.
+- Do **not** add `src/infrastructure/fx/cbr` or `nbg`, and do not add a third live fetch.
 
 ---
 
@@ -327,7 +333,9 @@ Until later feature epics land, UI module tables below are still the intended ma
 | Area | Purpose |
 |------|---------|
 | `infrastructure/persistence/indexeddb/` | Dexie schema, migrations, `IndexedDb*Repository` |
-| `infrastructure/fx/frankfurter/` | Fetch current + historical rates, write through `FxRateRepository` |
+| `infrastructure/fx/frankfurter/` | Live Frankfurter (skips RUB/GEL); write through `FxRateRepository` |
+| `infrastructure/fx/rubStatic/` | Same-origin generated CODE→RUB series |
+| `scripts/generate-rub-rates.mjs` | Deploy-time NBG fetch → `public/fx/rub/` |
 
 ### Features
 
