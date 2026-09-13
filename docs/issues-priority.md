@@ -96,7 +96,6 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 | [#254](https://github.com/ZhannaM85/my-money/issues/254) | 🔍 Pending validation | Pull-to-refresh reloads the app, not FX rates | Decision: pull = `reloadForUpdate` only. Rates stay on Dashboard Update rates. Documented in `docs/FX.md`. |
 | [#255](https://github.com/ZhannaM85/my-money/issues/255) | 🔍 Pending validation | Align CSS tokens/moods/charts with DESIGN_SYSTEM | Navy = heading; Tailwind primary = action. Allocation slices by class id. Net-worth series uses `--positive` + fill. Moods no longer recolor asset tokens. |
 | [#256](https://github.com/ZhannaM85/my-money/issues/256) | 🔍 Pending validation | Сводка: hero-first hierarchy; keep a number in Original+All | Hero + period change first. Original+All stacks native totals, largest first. Update rates moved to More. |
-| [#257](https://github.com/ZhannaM85/my-money/issues/257) | 🔍 Pending validation | iOS: 44pt touch targets; keep tab bar visible with keyboard | Icon / InfoHint / comparison ✕ / calendar days are 44px. Tab bar stays mounted while typing. Save bar uses keyboard-inset padding. |
 
 ---
 
@@ -104,6 +103,7 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
+| [#260](https://github.com/ZhannaM85/my-money/issues/260) | 🔲 Open | iOS: tab bar sometimes hidden when the keyboard is open | Follow-up to #257. Update amount + keyboard: footer missing on some opens. Tab bar must stay visible. |
 ---
 
 ## Explicitly not filed
