@@ -412,6 +412,21 @@ describe('AssetsScreen sort (#100)', () => {
     })
   })
 
+  it('saves reorder with the Update Save icon and has no Cancel (#268)', async () => {
+    const user = userEvent.setup()
+    await addNamedAsset('cash', 'Cash', 50, 'EUR')
+    render(
+      <MemoryRouter>
+        <AssetsScreen />
+      </MemoryRouter>,
+    )
+    await user.click(await screen.findByRole('button', { name: 'Reorder' }))
+    const save = await screen.findByRole('button', { name: 'Save order' })
+    expect(save).toHaveClass('size-control')
+    expect(save).not.toHaveTextContent('Save')
+    expect(screen.queryByRole('button', { name: 'Cancel' })).not.toBeInTheDocument()
+  })
+
   it('uses the same icon-only Order control as Update (#267)', async () => {
     await addNamedAsset('cash', 'Cash', 50, 'EUR')
     render(
@@ -441,7 +456,7 @@ describe('AssetsScreen sort (#100)', () => {
     expect(
       await screen.findByRole('button', { name: 'Reorder Broker' }),
     ).toBeInTheDocument()
-    await user.click(screen.getByRole('button', { name: 'Cancel' }))
+    await user.click(screen.getByRole('button', { name: 'Save order' }))
     expect(
       screen.queryByRole('button', { name: 'Reorder Broker' }),
     ).not.toBeInTheDocument()
@@ -480,20 +495,18 @@ describe('AssetsScreen sort (#100)', () => {
       </MemoryRouter>,
     )
     await user.click(await screen.findByRole('button', { name: 'Reorder' }))
-    expect(await screen.findByRole('button', { name: 'Save' })).toBeInTheDocument()
+    const save = await screen.findByRole('button', { name: 'Save order' })
+    expect(save).toHaveClass('size-control')
+    expect(screen.queryByRole('button', { name: 'Cancel' })).not.toBeInTheDocument()
+    expect(
+      screen.queryByRole('button', { name: /^Save$/ }),
+    ).not.toBeInTheDocument()
     expect(useSettingsStore.getState().settings.assetListOrder).toEqual([
       'cash',
       'a1',
       'alpha',
     ])
-    await user.click(screen.getByRole('button', { name: 'Cancel' }))
-    expect(useSettingsStore.getState().settings.assetListOrder).toEqual([
-      'cash',
-      'a1',
-      'alpha',
-    ])
-    await user.click(screen.getByRole('button', { name: 'Reorder' }))
-    await user.click(screen.getByRole('button', { name: 'Save' }))
+    await user.click(save)
     await waitFor(() => {
       expect(useSettingsStore.getState().settings.assetListSort).toBe('custom')
       expect(useSettingsStore.getState().settings.assetListOrder).toEqual([

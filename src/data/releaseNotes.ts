@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 238,
+    issue: 268,
+    date: '2026-09-13T21:00:00+03:00',
+    en: 'On Assets, the Order icon becomes Save while you rearrange — same as Update. There is no Cancel; picking another sort still discards.',
+    ru: 'На Активах иконка порядка становится «Сохранить» во время перестановки — как на «Обновить». Отмены нет; другой сорт по-прежнему сбрасывает.',
+  },
+  {
     version: 237,
     issue: 267,
     date: '2026-09-13T20:50:00+03:00',

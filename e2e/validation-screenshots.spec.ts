@@ -871,6 +871,32 @@ test('capture Assets and Update shared Order icon (#267)', async ({
   })
 })
 
+test('capture Assets Save-order icon without Cancel (#268)', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 })
+  await seedValidationFixture(page, { locale: 'ru' })
+  await page.goto('/assets')
+  await expect(page.getByRole('heading', { name: 'Активы' })).toBeVisible()
+  await page.getByRole('button', { name: 'Порядок' }).click()
+  const save = page.getByRole('button', { name: 'Сохранить порядок' })
+  await expect(save).toBeVisible()
+  await expect(save).toHaveClass(/size-control/)
+  await expect(save).toHaveText('')
+  await expect(page.getByRole('button', { name: 'Отмена' })).toHaveCount(0)
+  await expect(page.getByRole('button', { name: 'Сохранить', exact: true })).toHaveCount(
+    0,
+  )
+  await page.screenshot({
+    path: join(
+      'docs',
+      'validation-proof',
+      '268',
+      '268-assets-reorder-save-icon.png',
+    ),
+  })
+})
+
 test('capture Add asset Quick add House chip (#149)', async ({ page }) => {
   await seedValidationFixture(page)
   await page.goto('/assets/new')

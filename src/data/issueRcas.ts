@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 268,
+    title: {
+      en: 'Assets: Save reorder with the same icon as Update; drop Cancel',
+      ru: 'Активы: сохранить порядок той же иконкой; без Отмены',
+    },
+    en: '#267 matched idle Order icons. While dragging, Assets still showed Cancel + Save text (#105). Update already toggles the same icon to Save (#183). Assets now uses pressed ReorderIconButton. Named sort still cancels without writing.',
+    ru: '#267 выровнял иконки порядка в покое. При перетаскивании на Активах оставались Отмена + Сохранить (#105). На «Обновить» та же иконка уже становится Save (#183). Активы теперь используют pressed ReorderIconButton. Именованная сортировка по-прежнему сбрасывает без записи.',
+  },
+  {
     issue: 267,
     title: {
       en: 'Assets and Update: make Order / reorder controls consistent',

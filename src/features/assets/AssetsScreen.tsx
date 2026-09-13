@@ -194,40 +194,25 @@ export function AssetsScreen() {
               </option>
             ))}
           </Select>
-          {visible.length > 1 && !reorder.reordering ? (
+          {visible.length > 1 ? (
             <ReorderIconButton
+              pressed={reorder.reordering}
               idleLabel={t.assets.enterReorderMode}
-              onClick={() =>
-                reorder.enter(
-                  visible.map((asset) => asset.id),
-                  assets.map((asset) => asset.id),
-                )
-              }
-            />
-          ) : null}
-          {reorder.reordering ? (
-            <>
-              <Button
-                type="button"
-                variant="outline"
-                className="shrink-0"
-                onClick={() => reorder.cancel()}
-              >
-                {t.common.cancel}
-              </Button>
-              <Button
-                type="button"
-                className="shrink-0"
-                onClick={() =>
+              saveLabel={t.update.saveOrder}
+              onClick={() => {
+                if (reorder.reordering) {
                   void reorder.save(
                     persistCustomAssetOrder,
                     assets.map((asset) => asset.id),
                   )
+                  return
                 }
-              >
-                {t.common.save}
-              </Button>
-            </>
+                reorder.enter(
+                  visible.map((asset) => asset.id),
+                  assets.map((asset) => asset.id),
+                )
+              }}
+            />
           ) : null}
         </div>
       )}
