@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 230,
+    issue: 252,
+    date: '2026-09-13T09:40:00+03:00',
+    en: 'Comparison is on More, next to Allocation — you do not need two As-of pins on Dashboard to find it. Pin dates from Dashboard as before; with fewer than two dates the page still says so.',
+    ru: '«Сравнение» теперь в «Ещё», рядом с «Распределением» — не нужно дважды закреплять даты на Сводке, чтобы его найти. Даты по-прежнему добавляются со Сводки; если их меньше двух, страница так и пишет.',
+  },
+  {
     version: 229,
     issue: 246,
     date: '2026-09-13T09:20:00+03:00',

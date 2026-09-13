@@ -302,6 +302,7 @@ export const en: Dictionary = {
     skipWelcomeHint:
       'Welcome still wants a first asset. Skip it to use the app empty.',
     skipWelcome: 'Skip welcome',
+    comparison: 'Comparison',
     allocation: 'Allocation',
     appearance: 'Appearance',
     moodFresh: 'Fresh',

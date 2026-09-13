@@ -37,6 +37,9 @@ export function SettingsScreen() {
       />
       <PreferencesSection />
       <Button asChild variant="outline" size="xl" className="w-full">
+        <Link to="/compare">{t.settings.comparison}</Link>
+      </Button>
+      <Button asChild variant="outline" size="xl" className="w-full">
         <Link to="/allocation">{t.settings.allocation}</Link>
       </Button>
       <SettingsGroup title={t.settings.groupData}>

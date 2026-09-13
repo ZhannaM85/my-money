@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 252,
+    title: {
+      en: 'Make Comparison discoverable from More',
+      ru: 'Сделать Сравнение заметным из «Ещё»',
+    },
+    en: 'Comparison was a working table behind two Dashboard As-of pins, so people never found `/compare`. More now has the same full-width outline link as Allocation. The two-date empty state and the Dashboard shortcut after two pins stay.',
+    ru: 'Сравнение уже работало, но открывалось только после двух дат на Сводке — `/compare` оставался спрятан. В «Ещё» теперь такая же широкая ссылка, как у Распределения. Пустое состояние «нужны две даты» и ярлык на Сводке после двух пинов остаются.',
+  },
+  {
     issue: 246,
     title: {
       en: 'Shared Summary/History read models (keep tabs separate)',

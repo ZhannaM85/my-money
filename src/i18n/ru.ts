@@ -307,6 +307,7 @@ export const ru: Dictionary = {
     skipWelcomeHint:
       'Экран приветствия всё ещё ждёт первый актив. Пропустите его, чтобы пользоваться приложением пустым.',
     skipWelcome: 'Пропустить приветствие',
+    comparison: 'Сравнение',
     allocation: 'Распределение',
     appearance: 'Оформление',
     moodFresh: 'Свежее',

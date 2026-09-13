@@ -241,6 +241,7 @@ export interface Dictionary {
     languageRu: string
     skipWelcomeHint: string
     skipWelcome: string
+    comparison: string
     allocation: string
     appearance: string
     moodFresh: string

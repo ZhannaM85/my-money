@@ -138,6 +138,16 @@ describe('SettingsScreen', () => {
     expect(document.documentElement.dataset.mood).toBe('fresh')
   })
 
+  it('links to Comparison from More (#252)', async () => {
+    render(
+      <MemoryRouter>
+        <SettingsScreen />
+      </MemoryRouter>,
+    )
+    const link = await screen.findByRole('link', { name: 'Comparison' })
+    expect(link).toHaveAttribute('href', '/compare')
+  })
+
   it('links to the privacy policy page (#164)', async () => {
     render(
       <MemoryRouter>
