@@ -287,6 +287,7 @@ Closed live-feedback rows from Tier 8 onward. Open / pending items stay in [`../
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
+| [#245](https://github.com/ZhannaM85/my-money/issues/245) | ✅ Done | Clarify dual currency controls (Dashboard filter vs More) | Converted Dashboard filter stays visible + disabled; InfoHint points to More. Show all / Original / Converted unchanged. No new mode. Validated on-device 2026-09-13. |
 | [#247](https://github.com/ZhannaM85/my-money/issues/247) | ✅ Done | Shared confirm dialog instead of window.confirm | In-app `ConfirmDialog` / `useConfirm` for delete asset/snapshot, replace backup, wipe, and comparison date remove. Cancel / Escape / backdrop keep data. Validated on-device 2026-09-13. |
 | [#248](https://github.com/ZhannaM85/my-money/issues/248) | ✅ Done | ESLint max-lines warn (≤500) for features/app | Warn on `src/features/**` + `src/app/**`. Tests and `src/data/**` ignored. Remaining offender `UpdateFinancesScreen` warns only. Closed 2026-09-13 — lint-only; no on-device pass. |
 | [#249](https://github.com/ZhannaM85/my-money/issues/249) | ✅ Done | ESLint import-boundary zones for domain/features | `domain/` ↛ React/Zustand/Dexie. Production features ↛ `infrastructure/persistence`. Backup/CSV I/O via `stores/backupBook`. Closed 2026-09-13 — lint-only; no on-device pass. |
