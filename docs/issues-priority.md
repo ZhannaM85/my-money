@@ -79,7 +79,6 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
-| [#268](https://github.com/ZhannaM85/my-money/issues/268) | 🔍 Pending validation | Assets: Save reorder with the same icon as Update; drop Cancel | Follow-up to #267. Pressed Order icon saves. No Cancel. Named sort still discards. |
 ---
 
 ## Explicitly not filed
