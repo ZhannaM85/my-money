@@ -300,8 +300,8 @@ function renderShellWithInput(onConfirm?: () => void) {
   render(<RouterProvider router={router} />)
 }
 
-describe('AppShell bottom tab bar visibility (#25)', () => {
-  it('hides the bottom tab bar while a text input is focused', async () => {
+describe('AppShell bottom tab bar visibility (#257)', () => {
+  it('keeps the bottom tab bar visible while a text input is focused', async () => {
     const user = userEvent.setup()
     renderShellWithInput()
     expect(
@@ -310,28 +310,7 @@ describe('AppShell bottom tab bar visibility (#25)', () => {
 
     await user.click(screen.getByLabelText('Amount'))
 
-    expect(
-      screen.queryByRole('navigation', { name: 'Tabs' }),
-    ).not.toBeInTheDocument()
-  })
-
-  it('shows the bottom tab bar again once the text input blurs', async () => {
-    const user = userEvent.setup()
-    renderShellWithInput()
-    expect(
-      await screen.findByRole('navigation', { name: 'Tabs' }),
-    ).toBeInTheDocument()
-
-    await user.click(screen.getByLabelText('Amount'))
-    expect(
-      screen.queryByRole('navigation', { name: 'Tabs' }),
-    ).not.toBeInTheDocument()
-
-    await user.click(document.body)
-
-    expect(
-      await screen.findByRole('navigation', { name: 'Tabs' }),
-    ).toBeInTheDocument()
+    expect(screen.getByRole('navigation', { name: 'Tabs' })).toBeInTheDocument()
   })
 
   it('registers a click on a button right after a text input blurs', async () => {
@@ -346,9 +325,7 @@ describe('AppShell bottom tab bar visibility (#25)', () => {
     await user.click(screen.getByRole('button', { name: 'Confirm' }))
 
     expect(onConfirm).toHaveBeenCalledTimes(1)
-    expect(
-      await screen.findByRole('navigation', { name: 'Tabs' }),
-    ).toBeInTheDocument()
+    expect(screen.getByRole('navigation', { name: 'Tabs' })).toBeInTheDocument()
   })
 
   it('does not hide the bottom tab bar for non-text controls like checkboxes', async () => {

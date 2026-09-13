@@ -89,7 +89,7 @@ export function HistoryCalendar({
                 if (hasSnapshot) onSelectDate(cell.date)
               }}
               className={cn(
-                'flex flex-col items-center gap-0.5 rounded-md py-1.5 text-sm',
+                'flex min-h-11 min-w-0 flex-col items-center justify-center gap-0.5 rounded-md py-1.5 text-sm',
                 cell.inMonth ? 'text-foreground' : 'text-muted-foreground/40',
                 cell.date === today && 'font-semibold text-primary',
                 hasSnapshot && 'enabled:hover:bg-muted',

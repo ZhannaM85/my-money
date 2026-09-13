@@ -5,7 +5,6 @@ import { OfflineBanner } from '@/app/OfflineBanner'
 import { PullToRefreshIndicator } from '@/app/PullToRefreshIndicator'
 import { shouldShowOnboarding } from '@/domain/settings'
 import { useTranslation } from '@/i18n'
-import { useIsTextInputFocused } from '@/shared/hooks'
 import { scrollAppToTop } from '@/shared/lib/scrollAppToTop'
 import { BottomNav } from '@/shared/ui/bottom-nav'
 import { useAssetStore } from '@/stores/assetStore'
@@ -31,8 +30,7 @@ export function AppShell() {
   const t = useTranslation()
   const locale = useSettingsStore((state) => state.settings.locale)
   const onboarding = pathname === '/onboarding'
-  const isTextInputFocused = useIsTextInputFocused()
-  const hideTabBar = onboarding || isTextInputFocused
+  const hideTabBar = onboarding
   const mainRef = useRef<HTMLElement>(null)
 
   useEffect(() => {

@@ -19,7 +19,7 @@ export function InfoHint({
         <div className="min-w-0 flex-1">{children}</div>
         <button
           type="button"
-          className="inline-flex size-8 shrink-0 items-center justify-center rounded-md text-muted-foreground hover:bg-muted hover:text-foreground"
+          className="inline-flex size-11 shrink-0 items-center justify-center rounded-md text-muted-foreground hover:bg-muted hover:text-foreground"
           aria-label={label}
           aria-expanded={open}
           aria-controls={hintId}

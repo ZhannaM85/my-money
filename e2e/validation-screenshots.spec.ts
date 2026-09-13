@@ -1355,3 +1355,19 @@ test('capture locale dates on History and snapshot lists (#258)', async ({
   })
 })
 
+test('capture tab bar while Update amount is focused (#257)', async ({
+  page,
+}) => {
+  await seedValidationFixture(page)
+  await page.goto('/update')
+  await expect(page.getByRole('heading', { name: 'Update' })).toBeVisible()
+  await page.getByLabel('Euro cash new amount').click()
+  await expect(
+    page.getByRole('navigation', { name: 'Tabs' }),
+  ).toBeVisible()
+  await page.screenshot({
+    path: join(outDir, '257-update-tab-bar-with-keyboard.png'),
+    fullPage: true,
+  })
+})
+

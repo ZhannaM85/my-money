@@ -24,7 +24,7 @@ const buttonVariants = cva(
         default: 'h-control gap-1.5 px-3 text-base',
         sm: 'h-control-compact gap-1 px-2.5 text-sm',
         chip: 'h-control-compact rounded-full px-3 text-sm whitespace-nowrap',
-        icon: 'size-8',
+        icon: 'size-11',
         'icon-compact': 'size-control-compact rounded-full',
         'icon-xl': 'size-control',
       },

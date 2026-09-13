@@ -7,7 +7,10 @@ describe('InfoHint', () => {
   it('reveals the hint when the info button is tapped', async () => {
     const user = userEvent.setup()
     render(
-      <InfoHint hint="Saves a snapshot for today." label="About Update this asset">
+      <InfoHint
+        hint="Saves a snapshot for today."
+        label="About Update this asset"
+      >
         <h2>Update this asset</h2>
       </InfoHint>,
     )
@@ -19,5 +22,16 @@ describe('InfoHint', () => {
       screen.getByRole('button', { name: 'About Update this asset' }),
     )
     expect(screen.getByText('Saves a snapshot for today.')).toBeInTheDocument()
+  })
+
+  it('uses a 44px hit target on the hint button (#257)', () => {
+    render(
+      <InfoHint hint="Hint" label="About field">
+        <span>Label</span>
+      </InfoHint>,
+    )
+    expect(screen.getByRole('button', { name: 'About field' })).toHaveClass(
+      'size-11',
+    )
   })
 })

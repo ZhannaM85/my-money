@@ -96,7 +96,7 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 | [#254](https://github.com/ZhannaM85/my-money/issues/254) | 🔲 Open | Decide: pull-to-refresh should update rates (or document otherwise) | Product fork — pause before coding. |
 | [#255](https://github.com/ZhannaM85/my-money/issues/255) | 🔲 Open | Align CSS tokens/moods/charts with DESIGN_SYSTEM | Navy / action / emerald; allocation by class id. |
 | [#256](https://github.com/ZhannaM85/my-money/issues/256) | 🔲 Open | Сводка: hero-first hierarchy; keep a number in Original+All | Layout + Original+All hero. |
-| [#257](https://github.com/ZhannaM85/my-money/issues/257) | 🔲 Open | iOS: 44pt touch targets; keep tab bar visible with keyboard | Hit slop + keyboard inset, do not unmount nav. |
+| [#257](https://github.com/ZhannaM85/my-money/issues/257) | 🔍 Pending validation | iOS: 44pt touch targets; keep tab bar visible with keyboard | Icon / InfoHint / comparison ✕ / calendar days are 44px. Tab bar stays mounted while typing. Save bar uses keyboard-inset padding. |
 | [#258](https://github.com/ZhannaM85/my-money/issues/258) | 🔍 Pending validation | Locale-format dates on History and snapshot lists | List rows + a11y use `formatCalendarDate` (same as As of / Update). ISO stays in storage and calendar test ids. |
 
 ---

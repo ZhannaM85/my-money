@@ -209,7 +209,7 @@ function ComparisonCell({
         type="button"
         variant="ghost"
         size="icon"
-        className="size-8 shrink-0"
+        className="shrink-0"
         aria-label={t.dashboard.editComparisonAmount(name, date)}
         onClick={(event) => {
           event.stopPropagation()
@@ -396,7 +396,7 @@ export function ComparisonScreen() {
                       {formatChartAxisDate(date, locale)}
                       <button
                         type="button"
-                        className="inline-flex size-8 items-center justify-center rounded-full text-muted-foreground hover:bg-muted hover:text-foreground"
+                        className="inline-flex size-11 items-center justify-center rounded-full text-muted-foreground hover:bg-muted hover:text-foreground"
                         aria-label={t.dashboard.removeFromComparison(date)}
                         onClick={() => confirmRemoveDate(date)}
                       >

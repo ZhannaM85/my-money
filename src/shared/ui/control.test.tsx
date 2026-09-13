@@ -31,6 +31,13 @@ describe('shared control sizes (#232)', () => {
     expect(button).toHaveClass('w-full')
   })
 
+  it('gives default icon buttons a 44px hit target (#257)', () => {
+    render(<Button size="icon" aria-label="Delete snapshot" />)
+    expect(screen.getByRole('button', { name: 'Delete snapshot' })).toHaveClass(
+      'size-11',
+    )
+  })
+
   it('sizes chips and compact icon buttons on the compact token', () => {
     render(
       <>
