@@ -79,7 +79,6 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
-| [#266](https://github.com/ZhannaM85/my-money/issues/266) | 🔍 Pending validation | Assets list: show original amount under converted values | Follow-up to #129. Converted primary; muted native underneath (same as asset details). Same-currency / Original unchanged. |
 ---
 
 ## Explicitly not filed
