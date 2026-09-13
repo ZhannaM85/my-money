@@ -10,6 +10,7 @@ import {
 import { useLocale, useTranslation } from '@/i18n'
 import {
   formatAmount,
+  formatCalendarDate,
   formatEditableAmount,
   parseAmount,
   reformatAmountInput,
@@ -115,6 +116,7 @@ export function AssetSnapshotList({
             mode === 'base' &&
             rate !== undefined &&
             row.currency !== baseCurrency
+          const dateLabel = formatCalendarDate(row.date, locale)
           return editingId === row.id ? (
             <li
               key={row.id}
@@ -199,7 +201,7 @@ export function AssetSnapshotList({
             >
               <span className="flex items-start justify-between gap-2">
                 <span className="text-sm text-muted-foreground">
-                  {row.date}
+                  {dateLabel}
                 </span>
                 <span className="flex items-start gap-1">
                   <span className="flex flex-col items-end">
@@ -214,7 +216,7 @@ export function AssetSnapshotList({
                     type="button"
                     variant="ghost"
                     size="icon"
-                    aria-label={t.asset.editSnapshotAria(row.date)}
+                    aria-label={t.asset.editSnapshotAria(dateLabel)}
                     onClick={() => {
                       setEditingId(row.id)
                       setEditDate(row.date)
@@ -232,7 +234,7 @@ export function AssetSnapshotList({
                     type="button"
                     variant="ghost"
                     size="icon"
-                    aria-label={t.asset.deleteSnapshotAria(row.date)}
+                    aria-label={t.asset.deleteSnapshotAria(dateLabel)}
                     onClick={() => {
                       void confirm(t.asset.deleteSnapshotConfirm).then((ok) => {
                         if (ok) void onDelete(row.id)

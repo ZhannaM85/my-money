@@ -94,5 +94,7 @@ gh issue edit 108 --add-label validation
 | `229-settings-tab-bar-inset.png` | More · last section above tab bar (#229) |
 | `231-asset-details-refresh-top-collapsed.png` | Asset details · Update this asset + collapsed Сведения near top (RU, #231) |
 | `231-asset-details-svedeniya-expanded.png` | Asset details · Сведения expanded (RU, #231) |
+| `258-history-locale-dates.png` | History · list rows use locale dates (#258) |
+| `258-asset-snapshot-locale-dates.png` | Asset details · snapshot list locale dates (#258) |
 
 Fixtures are seeded in IndexedDB (`e2e/seed.ts`). Local only — no user balances leave the device.

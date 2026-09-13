@@ -2,7 +2,7 @@ import 'fake-indexeddb/auto'
 import { screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { beforeEach, describe, expect, it } from 'vitest'
-import { formatAmount } from '@/shared/lib/money'
+import { formatAmount, formatCalendarDate } from '@/shared/lib/money'
 import { useAssetStore } from '@/stores/assetStore'
 import { useSettingsStore } from '@/stores/settingsStore'
 import {
@@ -26,7 +26,9 @@ describe('AssetDetailsScreen', () => {
     expect(
       screen.getAllByText(formatAmount(1000, 'EUR')).length,
     ).toBeGreaterThan(0)
-    expect(screen.getByText('2026-08-01')).toBeInTheDocument()
+    expect(
+      screen.getByText(formatCalendarDate('2026-08-01', 'en')),
+    ).toBeInTheDocument()
     expect(screen.getByText(/Since first snapshot/)).toBeInTheDocument()
   })
 

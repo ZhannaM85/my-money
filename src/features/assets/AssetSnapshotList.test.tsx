@@ -2,7 +2,7 @@ import 'fake-indexeddb/auto'
 import { screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { beforeEach, describe, expect, it } from 'vitest'
-import { formatAmount } from '@/shared/lib/money'
+import { formatAmount, formatCalendarDate } from '@/shared/lib/money'
 import { useAssetStore } from '@/stores/assetStore'
 import { useFxStore } from '@/stores/fxStore'
 import { useSettingsStore } from '@/stores/settingsStore'
@@ -17,13 +17,26 @@ beforeEach(async () => {
   await seedRevolutAsset()
 })
 
+const snapshotFrom = (iso: string) => formatCalendarDate(iso, 'en')
+
 describe('AssetSnapshotList', () => {
+  it('shows locale dates on snapshot rows, not ISO (#258)', async () => {
+    renderAssetDetails()
+    await screen.findByRole('heading', { name: 'Revolut' })
+    expect(screen.getByText(snapshotFrom('2026-08-01'))).toBeInTheDocument()
+    expect(screen.getByText(snapshotFrom('2026-08-17'))).toBeInTheDocument()
+    expect(screen.queryByText('2026-08-01')).not.toBeInTheDocument()
+    expect(screen.queryByText('2026-08-17')).not.toBeInTheDocument()
+  })
+
   it('deletes one history snapshot after confirmation', async () => {
     const user = userEvent.setup()
     renderAssetDetails()
     await screen.findByRole('heading', { name: 'Revolut' })
     await user.click(
-      screen.getByRole('button', { name: 'Delete snapshot from 2026-08-01' }),
+      screen.getByRole('button', {
+        name: `Delete snapshot from ${snapshotFrom('2026-08-01')}`,
+      }),
     )
     const dialog = await screen.findByRole('dialog')
     expect(dialog).toHaveTextContent(
@@ -54,7 +67,9 @@ describe('AssetSnapshotList', () => {
       .snapshots.filter((row) => row.assetId === 'a1')
     const originalId = before.find((row) => row.date === '2026-08-01')?.id
     await user.click(
-      screen.getByRole('button', { name: 'Edit snapshot from 2026-08-01' }),
+      screen.getByRole('button', {
+        name: `Edit snapshot from ${snapshotFrom('2026-08-01')}`,
+      }),
     )
     const amountInput = screen.getByLabelText('Snapshot amount')
     await user.clear(amountInput)
@@ -83,7 +98,9 @@ describe('AssetSnapshotList', () => {
       .getState()
       .snapshots.find((row) => row.date === '2026-08-01')?.id
     await user.click(
-      screen.getByRole('button', { name: 'Edit snapshot from 2026-08-01' }),
+      screen.getByRole('button', {
+        name: `Edit snapshot from ${snapshotFrom('2026-08-01')}`,
+      }),
     )
     await user.selectOptions(screen.getByLabelText('Currency'), 'RUB')
     const snapshotEditor = screen

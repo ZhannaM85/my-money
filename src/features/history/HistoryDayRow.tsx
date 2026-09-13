@@ -1,7 +1,11 @@
 import { ChevronDown } from 'lucide-react'
 import { HoldingBreakdownList } from '@/features/dashboard/HoldingBreakdownList'
 import { useLocale } from '@/i18n'
-import { formatAmount, formatSignedAmount } from '@/shared/lib/money'
+import {
+  formatAmount,
+  formatCalendarDate,
+  formatSignedAmount,
+} from '@/shared/lib/money'
 import { cn } from '@/shared/lib/utils'
 
 type OriginalHistoryDayRow = {
@@ -49,7 +53,7 @@ export function HistoryDayRow({
         onClick={onToggle}
       >
         <span className="flex items-center gap-1 text-sm text-muted-foreground">
-          {row.date}
+          {formatCalendarDate(row.date, locale)}
           <ChevronDown
             className={cn('size-4 transition-transform', open && 'rotate-180')}
             aria-hidden
@@ -58,10 +62,7 @@ export function HistoryDayRow({
         <span className="text-right">
           {'totals' in row ? (
             row.totals.map((total) => (
-              <span
-                key={total.currency}
-                className="block tabular-nums text-sm"
-              >
+              <span key={total.currency} className="block tabular-nums text-sm">
                 {formatAmount(total.amount, total.currency, locale)}
               </span>
             ))

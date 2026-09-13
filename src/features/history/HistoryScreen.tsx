@@ -3,7 +3,11 @@ import { NetWorthChart } from '@/features/dashboard/NetWorthChart'
 import { HistoryCalendar } from './HistoryCalendar'
 import { HistoryDayRow } from './HistoryDayRow'
 import { useHistoryScreen } from './useHistoryScreen'
-import { formatAmount, formatSignedAmount } from '@/shared/lib/money'
+import {
+  formatAmount,
+  formatCalendarDate,
+  formatSignedAmount,
+} from '@/shared/lib/money'
 import { Chip } from '@/shared/ui/chip'
 import { EmptyState } from '@/shared/ui/empty-state'
 import { PageHeader } from '@/shared/ui/page-header'
@@ -139,7 +143,9 @@ export function HistoryScreen() {
                       open={h.openDates.has(day.date)}
                       baseCurrency={h.baseCurrency}
                       nativeOnly={h.isOriginal}
-                      label={t.history.holdingsOn(day.date)}
+                      label={t.history.holdingsOn(
+                        formatCalendarDate(day.date, locale),
+                      )}
                       onToggle={() => h.toggleOpenDate(day.date)}
                     />
                   </ul>
@@ -156,7 +162,9 @@ export function HistoryScreen() {
                     open={h.openDates.has(row.date)}
                     baseCurrency={h.baseCurrency}
                     nativeOnly={h.isOriginal}
-                    label={t.history.holdingsOn(row.date)}
+                    label={t.history.holdingsOn(
+                      formatCalendarDate(row.date, locale),
+                    )}
                     onToggle={() => h.toggleOpenDate(row.date)}
                     testId={`history-day-row-${row.date}`}
                   />

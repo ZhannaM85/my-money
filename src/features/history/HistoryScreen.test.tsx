@@ -8,6 +8,7 @@ import { db } from '@/infrastructure/persistence/indexeddb'
 import { addDaysIso } from '@/shared/lib/dates'
 import {
   formatAmount,
+  formatCalendarDate,
   formatChartAxisDate,
   formatSignedAmount,
   todayIsoDate,
@@ -19,6 +20,8 @@ import { useSettingsStore } from '@/stores/settingsStore'
 import { HistoryScreen } from './HistoryScreen'
 
 const now = '2026-08-17T00:00:00.000Z'
+const holdingsOn = (iso: string) =>
+  `Holdings on ${formatCalendarDate(iso, 'en')}`
 
 beforeEach(async () => {
   await db.assets.clear()
@@ -231,6 +234,25 @@ describe('HistoryScreen', () => {
     ).not.toBeInTheDocument()
   })
 
+  it('shows locale dates on list rows, not ISO (#258)', async () => {
+    const user = userEvent.setup()
+    render(
+      <MemoryRouter>
+        <HistoryScreen />
+      </MemoryRouter>,
+    )
+
+    await user.click(await screen.findByRole('button', { name: 'All' }))
+    expect(
+      await screen.findByText(formatCalendarDate('2026-08-17', 'en')),
+    ).toBeInTheDocument()
+    expect(
+      screen.getByText(formatCalendarDate('2026-08-01', 'en')),
+    ).toBeInTheDocument()
+    expect(screen.queryByText('2026-08-17')).not.toBeInTheDocument()
+    expect(screen.queryByText('2026-08-01')).not.toBeInTheDocument()
+  })
+
   it('expands a day to show the holdings behind that total', async () => {
     render(
       <MemoryRouter>
@@ -238,10 +260,10 @@ describe('HistoryScreen', () => {
       </MemoryRouter>,
     )
 
-    await screen.findByRole('button', { name: 'Holdings on 2026-08-17' })
+    await screen.findByRole('button', { name: holdingsOn('2026-08-17') })
     expect(screen.queryByText('Revolut')).not.toBeInTheDocument()
     await userEvent.click(
-      screen.getByRole('button', { name: 'Holdings on 2026-08-17' }),
+      screen.getByRole('button', { name: holdingsOn('2026-08-17') }),
     )
     expect(await screen.findByText('Revolut')).toBeInTheDocument()
   })
@@ -263,7 +285,7 @@ describe('HistoryScreen', () => {
     )
 
     await userEvent.click(
-      await screen.findByRole('button', { name: 'Holdings on 2026-08-17' }),
+      await screen.findByRole('button', { name: holdingsOn('2026-08-17') }),
     )
     expect(await screen.findByText('Salary landed')).toBeInTheDocument()
   })
@@ -278,15 +300,15 @@ describe('HistoryScreen', () => {
 
     await user.click(await screen.findByRole('button', { name: 'All' }))
     expect(
-      await screen.findByRole('button', { name: 'Holdings on 2026-08-17' }),
+      await screen.findByRole('button', { name: holdingsOn('2026-08-17') }),
     ).toBeInTheDocument()
     expect(
-      screen.getByRole('button', { name: 'Holdings on 2026-08-01' }),
+      screen.getByRole('button', { name: holdingsOn('2026-08-01') }),
     ).toBeInTheDocument()
     const today = todayIsoDate()
     if (today !== '2026-08-17' && today !== '2026-08-01') {
       expect(
-        screen.queryByRole('button', { name: `Holdings on ${today}` }),
+        screen.queryByRole('button', { name: holdingsOn(today) }),
       ).not.toBeInTheDocument()
     }
   })
@@ -374,7 +396,7 @@ describe('HistoryScreen', () => {
     await user.click(screen.getByTestId('history-calendar-mark-2026-08-17'))
     const detail = await screen.findByTestId('history-calendar-day-detail')
     expect(
-      screen.getByRole('button', { name: 'Holdings on 2026-08-17' }),
+      screen.getByRole('button', { name: holdingsOn('2026-08-17') }),
     ).toBeInTheDocument()
     expect(detail).toHaveTextContent('Revolut')
     expect(detail).toHaveTextContent(formatAmount(1000, 'EUR'))
@@ -403,7 +425,7 @@ describe('HistoryScreen', () => {
     await user.click(await screen.findByRole('button', { name: 'Calendar' }))
     await user.click(screen.getByTestId('history-calendar-mark-2026-08-17'))
     const rowButton = screen.getByRole('button', {
-      name: 'Holdings on 2026-08-17',
+      name: holdingsOn('2026-08-17'),
     })
     expect(rowButton).toHaveAttribute('aria-expanded', 'true')
     expect(screen.getByTestId('history-calendar-day-detail')).toHaveTextContent(

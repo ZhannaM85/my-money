@@ -1332,3 +1332,26 @@ test('capture History calendar snapshot days (#189)', async ({ page }) => {
   })
 })
 
+test('capture locale dates on History and snapshot lists (#258)', async ({
+  page,
+}) => {
+  await seedValidationFixture(page)
+  await page.goto('/history')
+  await expect(page.getByRole('heading', { name: 'History' })).toBeVisible()
+  await expect(page.getByText('17 Aug 2026')).toBeVisible()
+  await expect(page.getByText('2026-08-17', { exact: true })).toHaveCount(0)
+  await page.screenshot({
+    path: join(outDir, '258-history-locale-dates.png'),
+    fullPage: true,
+  })
+  await page.goto('/assets/eur-cash')
+  await expect(page.getByRole('heading', { name: 'Euro cash' })).toBeVisible()
+  const snapshotDate = page.getByText('17 Aug 2026')
+  await snapshotDate.scrollIntoViewIfNeeded()
+  await expect(snapshotDate).toBeVisible()
+  await page.screenshot({
+    path: join(outDir, '258-asset-snapshot-locale-dates.png'),
+    fullPage: true,
+  })
+})
+
