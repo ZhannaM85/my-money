@@ -72,7 +72,6 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
-| [#237](https://github.com/ZhannaM85/my-money/issues/237) | 🔍 Pending validation | Hydrate book once: SnapshotRepository.getAll + AppShell load | `getAll()` replaces per-asset snapshot reads. AppShell hydrates once + visibility resume. Screens read the store. Generation guard kept. |
 
 ---
 
