@@ -287,6 +287,7 @@ Closed live-feedback rows from Tier 8 onward. Open / pending items stay in [`../
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
+| [#251](https://github.com/ZhannaM85/my-money/issues/251) | ✅ Done | Shared test render helper + split god screen tests | `test/renderApp.tsx` resets IndexedDB + store defaults. Dashboard / Comparison suites use it; assertions unchanged. Closed 2026-09-13 — test-only; no on-device pass. |
 | [#252](https://github.com/ZhannaM85/my-money/issues/252) | ✅ Done | Make Comparison discoverable from More | More has a Comparison link to `/compare`, same chrome as Allocation. Dashboard two-pin shortcut stays. Validated on-device 2026-09-13. Shifted Итого: #261. |
 | [#253](https://github.com/ZhannaM85/my-money/issues/253) | ✅ Done | Collapse identical Button size aliases (default/lg/xl) | Dropped `lg` / `xl`. Callers use default. Tokens unchanged. Validated on-device 2026-09-13. |
 | [#254](https://github.com/ZhannaM85/my-money/issues/254) | ✅ Done | Pull-to-refresh reloads the app, not FX rates | Decision: pull = `reloadForUpdate` only. Rates stay on More Update rates (#256). Documented in `docs/FX.md`. Validated on-device 2026-09-13. |
