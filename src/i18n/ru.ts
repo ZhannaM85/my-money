@@ -7,6 +7,7 @@ export const ru: Dictionary = {
     loading: 'Загрузка…',
     save: 'Сохранить',
     cancel: 'Отмена',
+    ok: 'ОК',
     add: 'Добавить',
     addAsset: 'Добавить актив',
     continue: 'Продолжить',

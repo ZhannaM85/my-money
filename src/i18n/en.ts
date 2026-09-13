@@ -6,6 +6,7 @@ export const en: Dictionary = {
     loading: 'Loading…',
     save: 'Save',
     cancel: 'Cancel',
+    ok: 'OK',
     add: 'Add',
     addAsset: 'Add asset',
     continue: 'Continue',

@@ -6,6 +6,7 @@ import {
   formatSignedAmount,
 } from '@/shared/lib/money'
 import { Button } from '@/shared/ui/button'
+import { useConfirm } from '@/shared/ui/confirm-dialog'
 import { Chip } from '@/shared/ui/chip'
 import { PageHeader } from '@/shared/ui/page-header'
 import { StatCard } from '@/shared/ui/stat-card'
@@ -20,6 +21,7 @@ export function AssetDetailsScreen() {
   const t = useTranslation()
   const locale = useLocale()
   const d = useAssetDetailsScreen()
+  const [confirm, confirmDialog] = useConfirm()
 
   if (!d.loaded) {
     return <p className="text-sm text-muted-foreground">{t.common.loading}</p>
@@ -130,7 +132,7 @@ export function AssetDetailsScreen() {
           if (status === 'archived') d.navigate('/assets')
         }}
         onDelete={async () => {
-          if (!window.confirm(t.asset.deleteConfirm)) return
+          if (!(await confirm(t.asset.deleteConfirm))) return
           await d.deleteAsset(asset.id)
           d.navigate('/assets')
         }}
@@ -162,6 +164,7 @@ export function AssetDetailsScreen() {
         onSave={d.updateSnapshot}
         onDelete={d.deleteSnapshot}
       />
+      {confirmDialog}
     </div>
   )
 }

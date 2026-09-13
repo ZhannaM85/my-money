@@ -16,6 +16,7 @@ import {
 } from '@/shared/lib/money'
 import { isIsoDateOnOrBefore } from '@/shared/lib/dates'
 import { Button } from '@/shared/ui/button'
+import { useConfirm } from '@/shared/ui/confirm-dialog'
 import { DateField } from '@/shared/ui/date-field'
 import { MoneyInput } from '@/shared/ui/money-input'
 import { SelectField } from '@/shared/ui/select-field'
@@ -45,6 +46,7 @@ export function AssetSnapshotList({
 }) {
   const t = useTranslation()
   const locale = useLocale()
+  const [confirm, confirmDialog] = useConfirm()
   const [editingId, setEditingId] = useState<string | null>(null)
   const [editAmount, setEditAmount] = useState('')
   const [editDate, setEditDate] = useState('')
@@ -97,152 +99,162 @@ export function AssetSnapshotList({
   if (history.length === 0) return null
 
   return (
-    <ul className="flex flex-col gap-2">
-      {history.map((row) => {
-        const rate = lookupRate(quotes, row.currency, baseCurrency, row.date)
-        const shown =
-          mode === 'native' || rate === undefined
-            ? formatAmount(row.amount, row.currency, locale)
-            : formatAmount(
-                convertAmount(row.amount, rate),
-                baseCurrency,
-                locale,
-              )
-        const showNativeUnder =
-          mode === 'base' && rate !== undefined && row.currency !== baseCurrency
-        return editingId === row.id ? (
-          <li
-            key={row.id}
-            className="flex flex-col gap-2 rounded-xl bg-card px-4 py-3 ring-1 ring-foreground/10"
-          >
-            <DateField
-              label={t.asset.snapshotDate}
-              value={editDate}
-              max={today}
-              onChange={(event) => setEditDate(event.target.value)}
-              error={
-                editError === t.asset.snapshotDateInvalid
-                  ? editError
-                  : undefined
-              }
-            />
-            <SelectField
-              label={t.asset.currency}
-              value={editCurrency}
-              onChange={(event) => {
-                const next = event.target.value
-                setEditCurrency(next)
-                setEditAmount((current) =>
-                  reformatAmountInput(current, locale, next),
+    <>
+      <ul className="flex flex-col gap-2">
+        {history.map((row) => {
+          const rate = lookupRate(quotes, row.currency, baseCurrency, row.date)
+          const shown =
+            mode === 'native' || rate === undefined
+              ? formatAmount(row.amount, row.currency, locale)
+              : formatAmount(
+                  convertAmount(row.amount, rate),
+                  baseCurrency,
+                  locale,
                 )
-              }}
+          const showNativeUnder =
+            mode === 'base' &&
+            rate !== undefined &&
+            row.currency !== baseCurrency
+          return editingId === row.id ? (
+            <li
+              key={row.id}
+              className="flex flex-col gap-2 rounded-xl bg-card px-4 py-3 ring-1 ring-foreground/10"
             >
-              {((BASE_CURRENCIES as readonly string[]).includes(editCurrency)
-                ? BASE_CURRENCIES
-                : [editCurrency, ...BASE_CURRENCIES]
-              ).map((code) => (
-                <option key={code} value={code}>
-                  {code}
-                </option>
-              ))}
-            </SelectField>
-            <MoneyInput
-              aria-label={t.asset.editSnapshotAmount}
-              locale={locale}
-              currency={editCurrency}
-              value={editAmount}
-              onValueChange={setEditAmount}
-            />
-            <TextField
-              label={t.asset.snapshotNote}
-              value={editNote}
-              onChange={(event) => setEditNote(event.target.value)}
-            />
-            {duplicateEditHint && (
-              <p className="text-sm text-warning" role="status">
-                {t.asset.duplicateSnapshotHint}
-              </p>
-            )}
-            {editError && editError !== t.asset.snapshotDateInvalid && (
-              <p className="text-sm text-destructive">{editError}</p>
-            )}
-            <div className="flex gap-2">
-              <Button
-                type="button"
-                size="xl"
-                className="flex-1"
-                onClick={() => void saveEditedSnapshot()}
-              >
-                {t.common.save}
-              </Button>
-              <Button
-                type="button"
-                variant="outline"
-                size="xl"
-                className="flex-1"
-                onClick={() => {
-                  setEditingId(null)
-                  setEditError(undefined)
+              <DateField
+                label={t.asset.snapshotDate}
+                value={editDate}
+                max={today}
+                onChange={(event) => setEditDate(event.target.value)}
+                error={
+                  editError === t.asset.snapshotDateInvalid
+                    ? editError
+                    : undefined
+                }
+              />
+              <SelectField
+                label={t.asset.currency}
+                value={editCurrency}
+                onChange={(event) => {
+                  const next = event.target.value
+                  setEditCurrency(next)
+                  setEditAmount((current) =>
+                    reformatAmountInput(current, locale, next),
+                  )
                 }}
               >
-                {t.common.cancel}
-              </Button>
-            </div>
-          </li>
-        ) : (
-          <li
-            key={row.id}
-            className="flex flex-col gap-1 rounded-xl bg-card px-4 py-3 ring-1 ring-foreground/10"
-          >
-            <span className="flex items-start justify-between gap-2">
-              <span className="text-sm text-muted-foreground">{row.date}</span>
-              <span className="flex items-start gap-1">
-                <span className="flex flex-col items-end">
-                  <span className="tabular-nums text-sm">{shown}</span>
-                  {showNativeUnder ? (
-                    <span className="tabular-nums text-xs text-muted-foreground">
-                      {formatAmount(row.amount, row.currency, locale)}
-                    </span>
-                  ) : null}
-                </span>
+                {((BASE_CURRENCIES as readonly string[]).includes(editCurrency)
+                  ? BASE_CURRENCIES
+                  : [editCurrency, ...BASE_CURRENCIES]
+                ).map((code) => (
+                  <option key={code} value={code}>
+                    {code}
+                  </option>
+                ))}
+              </SelectField>
+              <MoneyInput
+                aria-label={t.asset.editSnapshotAmount}
+                locale={locale}
+                currency={editCurrency}
+                value={editAmount}
+                onValueChange={setEditAmount}
+              />
+              <TextField
+                label={t.asset.snapshotNote}
+                value={editNote}
+                onChange={(event) => setEditNote(event.target.value)}
+              />
+              {duplicateEditHint && (
+                <p className="text-sm text-warning" role="status">
+                  {t.asset.duplicateSnapshotHint}
+                </p>
+              )}
+              {editError && editError !== t.asset.snapshotDateInvalid && (
+                <p className="text-sm text-destructive">{editError}</p>
+              )}
+              <div className="flex gap-2">
                 <Button
                   type="button"
-                  variant="ghost"
-                  size="icon"
-                  aria-label={t.asset.editSnapshotAria(row.date)}
+                  size="xl"
+                  className="flex-1"
+                  onClick={() => void saveEditedSnapshot()}
+                >
+                  {t.common.save}
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="xl"
+                  className="flex-1"
                   onClick={() => {
-                    setEditingId(row.id)
-                    setEditDate(row.date)
-                    setEditCurrency(row.currency)
-                    setEditAmount(
-                      formatEditableAmount(row.amount, locale, row.currency),
-                    )
-                    setEditNote(row.note ?? '')
+                    setEditingId(null)
                     setEditError(undefined)
                   }}
                 >
-                  <Pencil />
+                  {t.common.cancel}
                 </Button>
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="icon"
-                  aria-label={t.asset.deleteSnapshotAria(row.date)}
-                  onClick={() => {
-                    if (!window.confirm(t.asset.deleteSnapshotConfirm)) return
-                    void onDelete(row.id)
-                  }}
-                >
-                  <Trash2 />
-                </Button>
+              </div>
+            </li>
+          ) : (
+            <li
+              key={row.id}
+              className="flex flex-col gap-1 rounded-xl bg-card px-4 py-3 ring-1 ring-foreground/10"
+            >
+              <span className="flex items-start justify-between gap-2">
+                <span className="text-sm text-muted-foreground">
+                  {row.date}
+                </span>
+                <span className="flex items-start gap-1">
+                  <span className="flex flex-col items-end">
+                    <span className="tabular-nums text-sm">{shown}</span>
+                    {showNativeUnder ? (
+                      <span className="tabular-nums text-xs text-muted-foreground">
+                        {formatAmount(row.amount, row.currency, locale)}
+                      </span>
+                    ) : null}
+                  </span>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    aria-label={t.asset.editSnapshotAria(row.date)}
+                    onClick={() => {
+                      setEditingId(row.id)
+                      setEditDate(row.date)
+                      setEditCurrency(row.currency)
+                      setEditAmount(
+                        formatEditableAmount(row.amount, locale, row.currency),
+                      )
+                      setEditNote(row.note ?? '')
+                      setEditError(undefined)
+                    }}
+                  >
+                    <Pencil />
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    aria-label={t.asset.deleteSnapshotAria(row.date)}
+                    onClick={() => {
+                      void confirm(t.asset.deleteSnapshotConfirm).then((ok) => {
+                        if (ok) void onDelete(row.id)
+                      })
+                    }}
+                  >
+                    <Trash2 />
+                  </Button>
+                </span>
               </span>
-            </span>
-            {row.note ? (
-              <span className="text-sm text-muted-foreground">{row.note}</span>
-            ) : null}
-          </li>
-        )
-      })}
-    </ul>
+              {row.note ? (
+                <span className="text-sm text-muted-foreground">
+                  {row.note}
+                </span>
+              ) : null}
+            </li>
+          )
+        })}
+      </ul>
+      {confirmDialog}
+    </>
   )
 }

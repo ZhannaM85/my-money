@@ -228,7 +228,7 @@ Avoid arbitrary spacing values.
 
 ## Control sizes (#232)
 
-Shared CSS tokens in `src/index.css`. Use `Button`, `Input`, `Select` / `SelectField`, `DateField`, `TextField`, `NumberInput`, `MoneyInput`, and `Chip` instead of one-off height classes. Amount fields on Update, asset detail, and forms use `MoneyInput` (locale blur, currency unit, a11y) (#236). Assets and Update reorder lists share `SortableRow`.
+Shared CSS tokens in `src/index.css`. Use `Button`, `Input`, `Select` / `SelectField`, `DateField`, `TextField`, `NumberInput`, `MoneyInput`, and `Chip` instead of one-off height classes. Amount fields on Update, asset detail, and forms use `MoneyInput` (locale blur, currency unit, a11y) (#236). Assets and Update reorder lists share `SortableRow`. Destructive confirms (delete asset/snapshot, replace backup, wipe) use `ConfirmDialog` / `useConfirm`, not `window.confirm` (#247).
 
 | Token | Value | Tailwind | Used for |
 |---|---|---|---|

@@ -20,6 +20,7 @@ import {
   reformatAmountInput,
 } from '@/shared/lib/money'
 import { Button } from '@/shared/ui/button'
+import { useConfirm } from '@/shared/ui/confirm-dialog'
 import { EmptyState } from '@/shared/ui/empty-state'
 import { Input } from '@/shared/ui/input'
 import { PageHeader } from '@/shared/ui/page-header'
@@ -235,13 +236,16 @@ export function ComparisonScreen() {
   const removeDate = useComparisonStore((state) => state.removeDate)
   const clearDates = useComparisonStore((state) => state.clearDates)
 
+  const [confirm, confirmDialog] = useConfirm()
   const confirmRemoveDate = (date: string) => {
-    if (!window.confirm(t.dashboard.removeFromComparisonConfirm(date))) return
-    removeDate(date)
+    void confirm(t.dashboard.removeFromComparisonConfirm(date)).then((ok) => {
+      if (ok) removeDate(date)
+    })
   }
   const confirmRemoveAll = () => {
-    if (!window.confirm(t.dashboard.removeAllFromComparisonConfirm)) return
-    clearDates()
+    void confirm(t.dashboard.removeAllFromComparisonConfirm).then((ok) => {
+      if (ok) clearDates()
+    })
   }
   const assets = useAssetStore((state) => state.assets)
   const snapshots = useAssetStore((state) => state.snapshots)
@@ -458,6 +462,7 @@ export function ComparisonScreen() {
           </table>
         </div>
       </div>
+      {confirmDialog}
     </div>
   )
 }

@@ -13,6 +13,7 @@ export interface Dictionary {
     loading: string
     save: string
     cancel: string
+    ok: string
     add: string
     addAsset: string
     continue: string

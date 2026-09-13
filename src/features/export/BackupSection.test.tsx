@@ -1,5 +1,5 @@
 import 'fake-indexeddb/auto'
-import { render, screen, waitFor } from '@testing-library/react'
+import { render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { DEFAULT_SETTINGS } from '@/domain/settings'
@@ -66,7 +66,6 @@ describe('BackupSection', () => {
 
   it('does not replace when confirm is cancelled (#198)', async () => {
     const user = userEvent.setup()
-    vi.spyOn(window, 'confirm').mockReturnValue(false)
     await db.assets.put(asset)
     render(<BackupSection />)
     const input = screen.getByLabelText('Import JSON backup')
@@ -74,16 +73,18 @@ describe('BackupSection', () => {
       type: 'application/json',
     })
     await user.upload(input, file)
-    await waitFor(() => {
-      expect(window.confirm).toHaveBeenCalled()
-    })
+    const dialog = await screen.findByRole('dialog')
+    expect(dialog).toHaveTextContent(
+      'This replaces every asset and snapshot on this device with the file.',
+    )
+    await user.click(within(dialog).getByRole('button', { name: 'Cancel' }))
     expect(await db.assets.toArray()).toEqual([asset])
     expect(screen.queryByText('Backup restored.')).not.toBeInTheDocument()
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
   })
 
   it('replaces after confirm (#198)', async () => {
     const user = userEvent.setup()
-    vi.spyOn(window, 'confirm').mockReturnValue(true)
     await db.assets.put(asset)
     render(<BackupSection />)
     const input = screen.getByLabelText('Import JSON backup')
@@ -91,10 +92,11 @@ describe('BackupSection', () => {
       type: 'application/json',
     })
     await user.upload(input, file)
+    const dialog = await screen.findByRole('dialog')
+    await user.click(within(dialog).getByRole('button', { name: 'OK' }))
     await waitFor(() => {
       expect(screen.getByText('Backup restored.')).toBeInTheDocument()
     })
-    expect(window.confirm).toHaveBeenCalled()
     const assets = await db.assets.toArray()
     expect(assets).toHaveLength(1)
     expect(assets[0]?.id).toBe('imported')
@@ -102,7 +104,6 @@ describe('BackupSection', () => {
 
   it('imports into an empty book without confirm (#198)', async () => {
     const user = userEvent.setup()
-    const confirm = vi.spyOn(window, 'confirm')
     render(<BackupSection />)
     const input = screen.getByLabelText('Import JSON backup')
     const file = new File([validBackup], 'backup.json', {
@@ -112,12 +113,11 @@ describe('BackupSection', () => {
     await waitFor(() => {
       expect(screen.getByText('Backup restored.')).toBeInTheDocument()
     })
-    expect(confirm).not.toHaveBeenCalled()
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
   })
 
   it('shows invalid file without asking to replace (#198)', async () => {
     const user = userEvent.setup()
-    const confirm = vi.spyOn(window, 'confirm')
     await db.assets.put(asset)
     render(<BackupSection />)
     const input = screen.getByLabelText('Import JSON backup')
@@ -130,13 +130,12 @@ describe('BackupSection', () => {
         screen.getByText('This file is not a valid My Money backup.'),
       ).toBeInTheDocument()
     })
-    expect(confirm).not.toHaveBeenCalled()
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
     expect(await db.assets.toArray()).toEqual([asset])
   })
 
   it('shows Delete all data and leaves the book when confirm is cancelled (#197)', async () => {
     const user = userEvent.setup()
-    vi.spyOn(window, 'confirm').mockReturnValue(false)
     await db.assets.put(asset)
     await db.snapshots.put({
       id: 's1',
@@ -148,7 +147,11 @@ describe('BackupSection', () => {
     })
     render(<BackupSection />)
     await user.click(screen.getByRole('button', { name: 'Delete all data' }))
-    expect(window.confirm).toHaveBeenCalled()
+    const dialog = await screen.findByRole('dialog')
+    expect(dialog).toHaveTextContent(
+      'This removes every asset, snapshot, and FX rate on this device.',
+    )
+    await user.click(within(dialog).getByRole('button', { name: 'Cancel' }))
     expect(await db.assets.toArray()).toEqual([asset])
     expect(await db.snapshots.count()).toBe(1)
     expect(
@@ -158,7 +161,6 @@ describe('BackupSection', () => {
 
   it('wipes assets and snapshots after confirm (#197)', async () => {
     const user = userEvent.setup()
-    vi.spyOn(window, 'confirm').mockReturnValue(true)
     await db.assets.put(asset)
     await db.snapshots.put({
       id: 's1',
@@ -170,6 +172,8 @@ describe('BackupSection', () => {
     })
     render(<BackupSection />)
     await user.click(screen.getByRole('button', { name: 'Delete all data' }))
+    const dialog = await screen.findByRole('dialog')
+    await user.click(within(dialog).getByRole('button', { name: 'OK' }))
     await waitFor(() => {
       expect(
         screen.getByText('All data on this device was deleted.'),

@@ -1,7 +1,7 @@
 import 'fake-indexeddb/auto'
-import { screen, waitFor } from '@testing-library/react'
+import { screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { beforeEach, describe, expect, it } from 'vitest'
 import { formatAmount } from '@/shared/lib/money'
 import { useAssetStore } from '@/stores/assetStore'
 import { useSettingsStore } from '@/stores/settingsStore'
@@ -188,13 +188,17 @@ describe('AssetDetailsScreen', () => {
 
   it('deletes an asset and its snapshots after confirmation', async () => {
     const user = userEvent.setup()
-    vi.spyOn(window, 'confirm').mockReturnValue(true)
     renderAssetDetails()
     await screen.findByRole('heading', { name: 'Revolut' })
     await user.click(
       screen.getByRole('button', { name: 'Actions for Revolut' }),
     )
     await user.click(screen.getByRole('menuitem', { name: 'Delete asset' }))
+    const dialog = await screen.findByRole('dialog')
+    expect(dialog).toHaveTextContent(
+      'Delete this asset and all its history from this device? This cannot be undone.',
+    )
+    await user.click(within(dialog).getByRole('button', { name: 'OK' }))
     await waitFor(() => {
       expect(useAssetStore.getState().assets).toHaveLength(0)
       expect(useAssetStore.getState().snapshots).toHaveLength(0)

@@ -1,4 +1,4 @@
-import { screen, waitFor } from '@testing-library/react'
+import { screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { renderApp, resetAppStores } from '@test/renderApp'
@@ -50,7 +50,6 @@ describe('ComparisonScreen (#137)', () => {
       },
     ])
     useComparisonStore.setState({ dates: ['2026-08-25', '2026-08-29'] })
-    vi.spyOn(window, 'confirm').mockReturnValue(true)
     const user = userEvent.setup()
     renderApp(<ComparisonScreen />)
     expect(await screen.findByTestId('comparison-table')).toBeInTheDocument()
@@ -62,6 +61,11 @@ describe('ComparisonScreen (#137)', () => {
       screen.getAllByText(formatAmount(150, 'EUR')).length,
     ).toBeGreaterThan(0)
     await user.click(screen.getByRole('button', { name: 'Remove 2026-08-25' }))
+    await user.click(
+      within(await screen.findByRole('dialog')).getByRole('button', {
+        name: 'OK',
+      }),
+    )
     expect(useComparisonStore.getState().dates).toEqual(['2026-08-29'])
     expect(
       await screen.findByText('Add at least two dates from Dashboard.'),
@@ -99,18 +103,23 @@ describe('ComparisonScreen (#137)', () => {
       },
     ])
     useComparisonStore.setState({ dates: ['2026-08-25', '2026-08-29'] })
-    const confirm = vi.spyOn(window, 'confirm').mockReturnValue(false)
     const user = userEvent.setup()
     renderApp(<ComparisonScreen />)
     expect(await screen.findByTestId('comparison-table')).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: 'Remove 2026-08-25' }))
-    expect(confirm).toHaveBeenCalledWith('Remove 2026-08-25 from comparison?')
+    const dialog = await screen.findByRole('dialog')
+    expect(dialog).toHaveTextContent('Remove 2026-08-25 from comparison?')
+    await user.click(within(dialog).getByRole('button', { name: 'Cancel' }))
     expect(useComparisonStore.getState().dates).toEqual([
       '2026-08-25',
       '2026-08-29',
     ])
-    confirm.mockReturnValue(true)
     await user.click(screen.getByRole('button', { name: 'Remove 2026-08-25' }))
+    await user.click(
+      within(await screen.findByRole('dialog')).getByRole('button', {
+        name: 'OK',
+      }),
+    )
     expect(useComparisonStore.getState().dates).toEqual(['2026-08-29'])
   })
 
@@ -145,18 +154,23 @@ describe('ComparisonScreen (#137)', () => {
       },
     ])
     useComparisonStore.setState({ dates: ['2026-08-25', '2026-08-29'] })
-    const confirm = vi.spyOn(window, 'confirm').mockReturnValue(false)
     const user = userEvent.setup()
     renderApp(<ComparisonScreen />)
     expect(await screen.findByTestId('comparison-table')).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: 'Remove all dates' }))
-    expect(confirm).toHaveBeenCalledWith('Remove all dates from comparison?')
+    const dialog = await screen.findByRole('dialog')
+    expect(dialog).toHaveTextContent('Remove all dates from comparison?')
+    await user.click(within(dialog).getByRole('button', { name: 'Cancel' }))
     expect(useComparisonStore.getState().dates).toEqual([
       '2026-08-25',
       '2026-08-29',
     ])
-    confirm.mockReturnValue(true)
     await user.click(screen.getByRole('button', { name: 'Remove all dates' }))
+    await user.click(
+      within(await screen.findByRole('dialog')).getByRole('button', {
+        name: 'OK',
+      }),
+    )
     expect(useComparisonStore.getState().dates).toEqual([])
     expect(
       await screen.findByText('Add at least two dates from Dashboard.'),

@@ -1,7 +1,7 @@
 import 'fake-indexeddb/auto'
 import { screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { beforeEach, describe, expect, it } from 'vitest'
 import { formatAmount } from '@/shared/lib/money'
 import { useAssetStore } from '@/stores/assetStore'
 import { useFxStore } from '@/stores/fxStore'
@@ -20,12 +20,16 @@ beforeEach(async () => {
 describe('AssetSnapshotList', () => {
   it('deletes one history snapshot after confirmation', async () => {
     const user = userEvent.setup()
-    vi.spyOn(window, 'confirm').mockReturnValue(true)
     renderAssetDetails()
     await screen.findByRole('heading', { name: 'Revolut' })
     await user.click(
       screen.getByRole('button', { name: 'Delete snapshot from 2026-08-01' }),
     )
+    const dialog = await screen.findByRole('dialog')
+    expect(dialog).toHaveTextContent(
+      'Delete this history entry? The asset stays. This cannot be undone.',
+    )
+    await user.click(within(dialog).getByRole('button', { name: 'OK' }))
     await waitFor(() => {
       expect(
         useAssetStore

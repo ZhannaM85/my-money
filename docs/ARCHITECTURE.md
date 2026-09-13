@@ -285,7 +285,7 @@ Capacitor follow-ups (icons, chrome, back button, backup share, stores) are chil
 
 ## Design system
 
-Calm, numbers-first, light theme with a green accent in the starting mock. Tailwind + shadcn/ui. Shared primitives before feature screens: `Button`, `Chip`, `Input`, `Select` / `SelectField`, `Card`, `NumberInput`, `MoneyInput`, `TextField`, `DateField`, `StatCard`, `EmptyState`, `PageHeader`, `BottomNav`, `SortableRow`. Control height lives in `--control-height` / `--control-height-compact` (#232); amount fields use `MoneyInput` (#236); pages must not invent `h-12` / pill padding.
+Calm, numbers-first, light theme with a green accent in the starting mock. Tailwind + shadcn/ui. Shared primitives before feature screens: `Button`, `Chip`, `Input`, `Select` / `SelectField`, `Card`, `NumberInput`, `MoneyInput`, `TextField`, `DateField`, `StatCard`, `EmptyState`, `PageHeader`, `BottomNav`, `SortableRow`, `ConfirmDialog`. Control height lives in `--control-height` / `--control-height-compact` (#232); amount fields use `MoneyInput` (#236); pages must not invent `h-12` / pill padding. Destructive confirms use `useConfirm` instead of `window.confirm` (#247).
 
 No gamification. Estimated valuations must look distinct from account balances. Liability amounts display as negative in summaries.
 

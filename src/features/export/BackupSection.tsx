@@ -2,6 +2,7 @@ import { useRef, useState } from 'react'
 import { useTranslation } from '@/i18n'
 import { pickImportFile } from '@/shared/lib/pickNativeTextFile'
 import { Button } from '@/shared/ui/button'
+import { useConfirm } from '@/shared/ui/confirm-dialog'
 import { useAssetStore } from '@/stores/assetStore'
 import { useComparisonStore } from '@/stores/comparisonStore'
 import { useFxStore } from '@/stores/fxStore'
@@ -18,6 +19,7 @@ import { shareOrDownloadBackupJson } from './downloadBackup'
 
 export function BackupSection() {
   const t = useTranslation()
+  const [confirm, confirmDialog] = useConfirm()
   const inputRef = useRef<HTMLInputElement>(null)
   const [message, setMessage] = useState<string | undefined>()
   const [error, setError] = useState<string | undefined>()
@@ -53,7 +55,7 @@ export function BackupSection() {
       parseBackupJson(text)
       if (
         (await bookHasAssets()) &&
-        !window.confirm(t.backup.replaceConfirm)
+        !(await confirm(t.backup.replaceConfirm))
       ) {
         return
       }
@@ -76,7 +78,7 @@ export function BackupSection() {
     setError(undefined)
     setMessage(undefined)
     const hasAssets = await bookHasAssets()
-    const confirmed = window.confirm(
+    const confirmed = await confirm(
       hasAssets ? t.backup.deleteAllConfirm : t.backup.deleteAllConfirmEmpty,
     )
     if (!confirmed) return
@@ -149,6 +151,7 @@ export function BackupSection() {
       </Button>
       {message && <p className="text-sm text-muted-foreground">{message}</p>}
       {error && <p className="text-sm text-destructive">{error}</p>}
+      {confirmDialog}
     </section>
   )
 }
