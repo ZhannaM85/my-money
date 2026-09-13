@@ -1110,8 +1110,8 @@ test('capture Dashboard range kept after leaving and returning (#185)', async ({
 
 test('capture Dashboard Update rates result (#186)', async ({ page }) => {
   await seedValidationFixture(page, { currencyDisplayMode: 'base' })
-  await page.goto('/')
-  await expect(page.getByRole('heading', { name: 'Dashboard' })).toBeVisible()
+  await page.goto('/settings')
+  await expect(page.getByRole('heading', { name: 'More' })).toBeVisible()
   await page.getByRole('button', { name: 'Update rates' }).click()
   await expect(page.getByRole('status')).toBeVisible()
   await page.screenshot({
@@ -1124,8 +1124,8 @@ test('capture Dashboard Update rates size and last-updated time (#188)', async (
   page,
 }) => {
   await seedValidationFixture(page, { currencyDisplayMode: 'base' })
-  await page.goto('/')
-  await expect(page.getByRole('heading', { name: 'Dashboard' })).toBeVisible()
+  await page.goto('/settings')
+  await expect(page.getByRole('heading', { name: 'More' })).toBeVisible()
   const updateRates = page.getByRole('button', { name: 'Update rates' })
   await expect(updateRates).toBeVisible()
   await updateRates.click()
@@ -1367,6 +1367,18 @@ test('capture tab bar while Update amount is focused (#257)', async ({
   ).toBeVisible()
   await page.screenshot({
     path: join(outDir, '257-update-tab-bar-with-keyboard.png'),
+    fullPage: true,
+  })
+})
+
+test('capture Dashboard Original+All stacked hero (#256)', async ({ page }) => {
+  await seedValidationFixture(page, { currencyDisplayMode: 'native' })
+  await page.goto('/')
+  await expect(page.getByRole('heading', { name: 'Dashboard' })).toBeVisible()
+  await expect(page.getByText('Net worth')).toBeVisible()
+  await expect(page.getByText('Holdings by currency')).toBeVisible()
+  await page.screenshot({
+    path: join(outDir, '256-dashboard-hero-original-all.png'),
     fullPage: true,
   })
 })

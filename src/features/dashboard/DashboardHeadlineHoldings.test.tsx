@@ -147,14 +147,18 @@ describe('DashboardHeadline holdings', () => {
     renderApp(<DashboardScreen />)
 
     expect(await screen.findByText('Holdings by currency')).toBeInTheDocument()
+    expect(screen.getByText('Net worth')).toBeInTheDocument()
+    const hero = screen.getByText('Net worth').closest('[data-slot="card"]')
+    expect(hero?.textContent).toMatch(/20,000/)
+    expect(hero?.textContent).toMatch(/1,000/)
     expect(
       screen.getAllByText(formatAmount(1000, 'EUR')).length,
     ).toBeGreaterThan(0)
     expect(
-      screen.getByText(
+      screen.getAllByText(
         (_, node) => node?.textContent === formatAmount(20000, 'RUB'),
-      ),
-    ).toBeInTheDocument()
+      ).length,
+    ).toBeGreaterThan(0)
     expect(screen.getByLabelText('Currency')).not.toBeDisabled()
     expect(
       screen.queryByRole('button', { name: 'About Currency' }),

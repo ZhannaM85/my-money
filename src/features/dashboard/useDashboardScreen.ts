@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useSharedChartRange } from '@/features/charts'
-import { useUpdateRates } from '@/features/net-worth'
 import { useLocale, useTranslation } from '@/i18n'
 import { todayIsoDate } from '@/shared/lib/money'
 import { useAssetStore } from '@/stores/assetStore'
@@ -80,13 +79,6 @@ export function useDashboardScreen() {
     overRangeLabel: t.history.overRange(chartRange.range),
     fxMissing: t.dashboard.fxMissing,
   })
-  const rates = useUpdateRates(
-    chartRange.start,
-    chartRange.chartEnd,
-    baseCurrency,
-    worth.fxSymbols,
-  )
-
   const onAsOfDateChange = (next: string) => {
     if (!next || next > today) {
       setAsOfError(t.dashboard.asOfDateInvalid)
@@ -158,9 +150,6 @@ export function useDashboardScreen() {
     comparisonDates,
     convertedBreakdown: worth.convertedBreakdown,
     periodOpen,
-    fxLoading: rates.fxLoading,
-    ratesStatus: rates.ratesStatus,
-    lastFetchedAt: rates.lastFetchedAt,
     chartRange,
     asOfHasData: worth.asOfHasData,
     series: worth.series,
@@ -172,7 +161,6 @@ export function useDashboardScreen() {
     onCurrencyFilterChange,
     toggleNativeCurrency,
     togglePeriod,
-    refreshRates: rates.refreshRates,
     onSelectChartDate,
     toggleHoldings,
   }

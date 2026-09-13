@@ -94,6 +94,7 @@ gh issue edit 108 --add-label validation
 | `229-settings-tab-bar-inset.png` | More · last section above tab bar (#229) |
 | `231-asset-details-refresh-top-collapsed.png` | Asset details · Update this asset + collapsed Сведения near top (RU, #231) |
 | `231-asset-details-svedeniya-expanded.png` | Asset details · Сведения expanded (RU, #231) |
+| `256-dashboard-hero-original-all.png` | Dashboard · Original+All stacked hero (#256) |
 | `257-update-tab-bar-with-keyboard.png` | Update · tab bar stays visible with amount focused (#257) |
 | `258-history-locale-dates.png` | History · list rows use locale dates (#258) |
 | `258-asset-snapshot-locale-dates.png` | Asset details · snapshot list locale dates (#258) |

@@ -9,7 +9,6 @@ import { DashboardAsOfBar } from './DashboardAsOfBar'
 import { DashboardHeadline } from './DashboardHeadline'
 import { DashboardPeriodChange } from './DashboardPeriodChange'
 import { DashboardPositions } from './DashboardPositions'
-import { UpdateRates } from '@/features/net-worth'
 import { useDashboardScreen } from './useDashboardScreen'
 
 export function DashboardScreen() {
@@ -36,18 +35,6 @@ export function DashboardScreen() {
         />
       ) : (
         <>
-          {d.showAsOfBar ? (
-            <DashboardAsOfBar
-              selectedChartDate={d.selectedChartDate}
-              today={d.today}
-              earliest={d.earliest}
-              asOfError={d.asOfError}
-              comparisonDates={d.comparisonDates}
-              onDateChange={d.onAsOfDateChange}
-              onJumpToToday={d.onJumpToToday}
-              onAddToComparison={d.onAddToComparison}
-            />
-          ) : null}
           <div
             data-testid="dashboard-scroll-body"
             className="relative z-0 flex min-w-0 w-full flex-col gap-6"
@@ -67,22 +54,26 @@ export function DashboardScreen() {
               onCurrencyFilterChange={d.onCurrencyFilterChange}
               onToggleNativeCurrency={d.toggleNativeCurrency}
             />
-            {d.convertedBreakdown && (
-              <div className="flex flex-col gap-2">
-                <DashboardPeriodChange
-                  breakdown={d.convertedBreakdown}
-                  baseCurrency={d.baseCurrency}
-                  periodOpen={d.periodOpen}
-                  onTogglePeriod={d.togglePeriod}
-                />
-                <UpdateRates
-                  fxLoading={d.fxLoading}
-                  ratesStatus={d.ratesStatus}
-                  lastFetchedAt={d.lastFetchedAt}
-                  onUpdateRates={d.refreshRates}
-                />
-              </div>
-            )}
+            {d.convertedBreakdown ? (
+              <DashboardPeriodChange
+                breakdown={d.convertedBreakdown}
+                baseCurrency={d.baseCurrency}
+                periodOpen={d.periodOpen}
+                onTogglePeriod={d.togglePeriod}
+              />
+            ) : null}
+            {d.showAsOfBar ? (
+              <DashboardAsOfBar
+                selectedChartDate={d.selectedChartDate}
+                today={d.today}
+                earliest={d.earliest}
+                asOfError={d.asOfError}
+                comparisonDates={d.comparisonDates}
+                onDateChange={d.onAsOfDateChange}
+                onJumpToToday={d.onJumpToToday}
+                onAddToComparison={d.onAddToComparison}
+              />
+            ) : null}
             {!d.showNativeAll && (
               <ChartRangeControls
                 range={d.chartRange}

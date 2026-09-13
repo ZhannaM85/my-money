@@ -6,6 +6,7 @@ import { SelectField } from '@/shared/ui/select-field'
 import { StatCard } from '@/shared/ui/stat-card'
 import { cn } from '@/shared/lib/utils'
 import { PositionsHoldingRow } from './PositionsHoldingRow'
+import { sortNativeTotalsLargestFirst } from './sortNativeTotals'
 
 export function DashboardHeadline({
   isOriginal,
@@ -39,9 +40,44 @@ export function DashboardHeadline({
   const t = useTranslation()
   const locale = useLocale()
   const showNativeAll = isOriginal && activeCurrencyFilter === 'all'
+  const stackedTotals = showNativeAll
+    ? sortNativeTotalsLargestFirst(nativeTotals)
+    : []
+  const heroTotal = stackedTotals[0]
 
   return (
     <>
+      {showNativeAll && heroTotal ? (
+        <StatCard
+          label={t.dashboard.netWorth}
+          value={formatAmount(heroTotal.amount, heroTotal.currency, locale)}
+          description={changeLabel}
+        >
+          {stackedTotals.slice(1).map((row) => (
+            <span
+              key={row.currency}
+              className="block text-xl font-semibold tabular-nums text-foreground"
+            >
+              {formatAmount(row.amount, row.currency, locale)}
+            </span>
+          ))}
+        </StatCard>
+      ) : (
+        <StatCard
+          label={t.dashboard.netWorth}
+          value={formatAmount(
+            displayHeadlineTotal,
+            isOriginal ? activeCurrencyFilter : baseCurrency,
+            locale,
+          )}
+          description={
+            selectedChartPoint
+              ? t.history.holdingsOn(selectedChartPoint.date)
+              : changeLabel
+          }
+        />
+      )}
+      {fxNote && <p className="text-sm text-muted-foreground">{fxNote}</p>}
       <SelectField
         label={t.asset.currency}
         id="dashboard-currency-filter"
@@ -69,7 +105,7 @@ export function DashboardHeadline({
             {t.dashboard.nativeHoldings}
           </span>
           <ul className="flex flex-col gap-2">
-            {nativeTotals.map((row) => {
+            {stackedTotals.map((row) => {
               const open = openNativeCurrency === row.currency
               const holdings = convertedHoldings.filter(
                 (holding) => holding.currency === row.currency,
@@ -113,22 +149,7 @@ export function DashboardHeadline({
             })}
           </ul>
         </div>
-      ) : (
-        <StatCard
-          label={t.dashboard.netWorth}
-          value={formatAmount(
-            displayHeadlineTotal,
-            isOriginal ? activeCurrencyFilter : baseCurrency,
-            locale,
-          )}
-          description={
-            selectedChartPoint
-              ? t.history.holdingsOn(selectedChartPoint.date)
-              : changeLabel
-          }
-        />
-      )}
-      {fxNote && <p className="text-sm text-muted-foreground">{fxNote}</p>}
+      ) : null}
     </>
   )
 }

@@ -3,7 +3,7 @@ import { useFxStore } from '@/stores/fxStore'
 
 export type RatesStatus = 'idle' | 'loading' | 'updated' | 'offline' | 'error'
 
-/** Update rates lives in one place (#246) — Dashboard renders the control. */
+/** Update rates lives in one place (#246) — More mounts the control (#256). */
 export function useUpdateRates(
   start: string,
   chartEnd: string,

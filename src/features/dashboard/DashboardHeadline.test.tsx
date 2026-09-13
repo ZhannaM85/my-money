@@ -41,7 +41,12 @@ describe('DashboardHeadline', () => {
       },
     )
     renderApp(<DashboardScreen />)
-    expect(await screen.findByText('Net worth')).toBeInTheDocument()
+    const netWorth = await screen.findByText('Net worth')
+    const currency = screen.getByLabelText('Currency')
+    expect(
+      netWorth.compareDocumentPosition(currency) &
+        Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy()
     expect(
       screen.getAllByText(formatAmount(1000, 'EUR')).length,
     ).toBeGreaterThan(0)
@@ -49,8 +54,8 @@ describe('DashboardHeadline', () => {
     expect(screen.getByText('From amounts')).toBeInTheDocument()
     expect(screen.getByText('From rates')).toBeInTheDocument()
     expect(
-      screen.getByRole('button', { name: 'Update rates' }),
-    ).toBeInTheDocument()
+      screen.queryByRole('button', { name: 'Update rates' }),
+    ).not.toBeInTheDocument()
     await userEvent.click(
       screen.getByRole('button', { name: 'About this month' }),
     )

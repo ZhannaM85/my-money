@@ -5,7 +5,7 @@ import { renderApp, resetAppStores } from '@test/renderApp'
 import { formatDateTime } from '@/shared/lib/money'
 import { useAssetStore } from '@/stores/assetStore'
 import { FX_LAST_FETCHED_KEY, useFxStore } from '@/stores/fxStore'
-import { DashboardScreen } from './DashboardScreen'
+import { SettingsScreen } from '@/features/settings/SettingsScreen'
 
 beforeEach(async () => {
   await resetAppStores()
@@ -39,7 +39,7 @@ describe('DashboardRates', () => {
       },
     )
     try {
-      renderApp(<DashboardScreen />)
+      renderApp(<SettingsScreen />)
       const button = await screen.findByRole('button', { name: 'Update rates' })
       await user.click(button)
       expect(ensureRange).toHaveBeenCalledWith(
@@ -88,7 +88,7 @@ describe('DashboardRates', () => {
       },
     )
     try {
-      renderApp(<DashboardScreen />)
+      renderApp(<SettingsScreen />)
       await user.click(
         await screen.findByRole('button', { name: 'Update rates' }),
       )
@@ -131,7 +131,7 @@ describe('DashboardRates', () => {
       },
     )
     try {
-      renderApp(<DashboardScreen />)
+      renderApp(<SettingsScreen />)
       const button = await screen.findByRole('button', { name: 'Update rates' })
       expect(button.className).toMatch(/\bh-control\b/)
       expect(button.className).toMatch(/\bw-full\b/)
@@ -171,14 +171,14 @@ describe('DashboardRates', () => {
         currency: 'EUR',
       },
     )
-    const { unmount } = renderApp(<DashboardScreen />)
+    const { unmount } = renderApp(<SettingsScreen />)
     expect(await screen.findByRole('status')).toHaveTextContent(
       formatDateTime(stamp, 'en'),
     )
     unmount()
     useFxStore.setState({ lastFetchedAt: undefined })
     await useFxStore.getState().loadCached()
-    renderApp(<DashboardScreen />)
+    renderApp(<SettingsScreen />)
     expect(await screen.findByRole('status')).toHaveTextContent(
       formatDateTime(stamp, 'en'),
     )

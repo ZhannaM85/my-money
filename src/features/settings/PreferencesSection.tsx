@@ -14,6 +14,7 @@ import { useSettingsStore } from '@/stores/settingsStore'
 import { MOODS, type Mood, useThemeStore } from '@/stores/themeStore'
 import { ManualRatesSection } from './ManualRatesSection'
 import { SettingsGroup } from './SettingsGroup'
+import { SettingsUpdateRates } from './SettingsUpdateRates'
 
 export function PreferencesSection() {
   const t = useTranslation()
@@ -142,6 +143,7 @@ export function PreferencesSection() {
           </Button>
         </div>
       )}
+      <SettingsUpdateRates />
       <ManualRatesSection />
       {isAndroidNativePlatform() && (
         <div className="flex flex-col gap-2">

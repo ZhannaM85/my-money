@@ -8,6 +8,7 @@ export interface StatCardProps {
   unit?: string
   description?: string
   className?: string
+  children?: React.ReactNode
 }
 
 export function StatCard({
@@ -16,6 +17,7 @@ export function StatCard({
   unit,
   description,
   className,
+  children,
 }: StatCardProps) {
   return (
     <Card className={cn('overflow-visible', className)}>
@@ -29,6 +31,7 @@ export function StatCard({
             <span className="text-lg text-muted-foreground">{unit}</span>
           )}
         </span>
+        {children}
         {description && (
           <span className="text-sm text-muted-foreground">{description}</span>
         )}
