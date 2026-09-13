@@ -784,6 +784,56 @@ test('capture Assets excluded row without Не учитывается (#265)', a
   })
 })
 
+test('capture Assets muted native under converted (#266)', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 })
+  await seedValidationFixture(page, { currencyDisplayMode: 'base' })
+  await page.evaluate(async () => {
+    const listed = await indexedDB.databases?.()
+    const existing = listed?.find((row) => row.name === 'my-money')
+    const version =
+      existing?.version && existing.version > 0 ? existing.version : 2
+    await new Promise<void>((resolve, reject) => {
+      const open = indexedDB.open('my-money', version)
+      open.onerror = () => reject(open.error ?? new Error('idb open failed'))
+      open.onsuccess = () => {
+        const db = open.result
+        if (!db.objectStoreNames.contains('fxRates')) {
+          db.close()
+          reject(new Error('missing store fxRates'))
+          return
+        }
+        const tx = db.transaction(['fxRates'], 'readwrite')
+        tx.objectStore('fxRates').put({
+          date: '2026-08-17',
+          base: 'EUR',
+          quote: 'USD',
+          rate: 1.1,
+        })
+        tx.oncomplete = () => {
+          db.close()
+          resolve()
+        }
+        tx.onerror = () => reject(tx.error ?? new Error('idb write failed'))
+      }
+    })
+  })
+  await page.reload()
+  await page.goto('/assets')
+  await expect(page.getByRole('heading', { name: 'Assets' })).toBeVisible()
+  await expect(page.getByText('USD cash')).toBeVisible()
+  await expect(page.getByText('$8,000.00')).toBeVisible()
+  await expect(page.getByText('€7,272.73')).toBeVisible()
+  await expect(page.getByText('native USD')).toHaveCount(0)
+  await page.screenshot({
+    path: join(
+      'docs',
+      'validation-proof',
+      '266',
+      '266-assets-native-under-converted.png',
+    ),
+  })
+})
+
 test('capture Add asset Quick add House chip (#149)', async ({ page }) => {
   await seedValidationFixture(page)
   await page.goto('/assets/new')

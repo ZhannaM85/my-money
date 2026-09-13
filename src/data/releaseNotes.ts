@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 236,
+    issue: 266,
+    date: '2026-09-13T20:40:00+03:00',
+    en: 'On the Assets list in converted mode, the original amount sits under the base figure in muted text — the same stack as a snapshot on the asset card.',
+    ru: 'В списке Активов в пересчёте оригинальная сумма стоит под базовой серым текстом — тот же стек, что у снимка на карточке актива.',
+  },
+  {
     version: 235,
     issue: 265,
     date: '2026-09-13T19:20:00+03:00',

@@ -58,7 +58,25 @@ describe('AssetsScreen', () => {
 
     expect(await screen.findByText('Broker')).toBeInTheDocument()
     expect(screen.getByText(formatAmount(100, 'EUR'))).toBeInTheDocument()
-    expect(screen.getByText('native USD')).toBeInTheDocument()
+    expect(screen.getByText(formatAmount(110, 'USD'))).toBeInTheDocument()
+    expect(screen.queryByText('native USD')).not.toBeInTheDocument()
+  })
+
+  it('shows muted native under converted list amounts (#266)', async () => {
+    render(
+      <MemoryRouter>
+        <AssetsScreen />
+      </MemoryRouter>,
+    )
+    expect(await screen.findByText(formatAmount(100, 'EUR'))).toBeInTheDocument()
+    const native = screen.getByText(
+      (_, node) =>
+        node?.children.length === 0 &&
+        node.textContent === formatAmount(110, 'USD') &&
+        node.className.includes('text-muted-foreground'),
+    )
+    expect(native).toBeInTheDocument()
+    expect(native.tagName).toBe('SPAN')
   })
 
   it('shows original amounts first when the display mode is native', async () => {

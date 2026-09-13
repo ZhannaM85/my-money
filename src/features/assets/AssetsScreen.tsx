@@ -272,6 +272,11 @@ export function AssetsScreen() {
                     ? convertAmount(snapshot.amount, rate)
                     : undefined
                 const showConverted = displayMode === 'base'
+                const showNativeUnder =
+                  showConverted &&
+                  converted !== undefined &&
+                  !sameCurrency &&
+                  snapshot !== undefined
                 const primaryAmount =
                   snapshot && showConverted && converted !== undefined
                     ? formatAmount(converted, baseCurrency, locale)
@@ -323,9 +328,19 @@ export function AssetsScreen() {
                           <span className="block tabular-nums">
                             {primaryAmount}
                           </span>
-                          <span className="text-xs text-muted-foreground">
-                            {secondaryLabel}
-                          </span>
+                          {showNativeUnder ? (
+                            <span className="tabular-nums text-xs text-muted-foreground">
+                              {formatAmount(
+                                snapshot.amount,
+                                snapshot.currency,
+                                locale,
+                              )}
+                            </span>
+                          ) : (
+                            <span className="text-xs text-muted-foreground">
+                              {secondaryLabel}
+                            </span>
+                          )}
                         </>
                       ) : (
                         <span className="text-sm text-muted-foreground">

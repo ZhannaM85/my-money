@@ -104,6 +104,7 @@ gh issue edit 108 --add-label validation
 | `263-comparison-total-valign.png` | Comparison · Итого vertically aligned with totals (RU, #263) |
 | `264-assets-institution-own-row.png` | Assets · institution on its own row under type (RU, #264) |
 | `265-assets-excluded-no-not-counted.png` | Assets · excluded row greyed, no Не учитывается (RU, #265) |
+| `266-assets-native-under-converted.png` | Assets · muted native under converted amount (#266) |
 | `258-history-locale-dates.png` | History · list rows use locale dates (#258) |
 | `258-asset-snapshot-locale-dates.png` | Asset details · snapshot list locale dates (#258) |
 

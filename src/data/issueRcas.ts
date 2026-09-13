@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 266,
+    title: {
+      en: 'Assets list: show original amount under converted values',
+      ru: 'Активы: оригинальная сумма под пересчётом',
+    },
+    en: 'Converted Assets rows showed base ₽ plus a в USD label, not the native figure. Asset details (#129) already stack converted on top and muted native under. The list now does the same when mode is base and currencies differ. Same-currency / Original mode unchanged.',
+    ru: 'В пересчёте список Активов показывал базу и подпись «в USD», без оригинальной цифры. На карточке (#129) уже стек: пересчёт сверху, оригинал серым снизу. Список делает то же в режиме базы, если валюты разные. Одна валюта / Оригинал без изменений.',
+  },
+  {
     issue: 265,
     title: {
       en: 'Assets list: drop Не учитывается on excluded rows (already greyed)',
