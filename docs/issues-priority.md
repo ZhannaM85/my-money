@@ -93,7 +93,6 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 | [#247](https://github.com/ZhannaM85/my-money/issues/247) | 🔍 Pending validation | Shared confirm dialog instead of window.confirm | In-app `ConfirmDialog` / `useConfirm` for delete asset/snapshot, replace backup, wipe, and comparison date remove. Cancel / Escape / backdrop keep data. |
 | [#252](https://github.com/ZhannaM85/my-money/issues/252) | 🔍 Pending validation | Make Comparison discoverable from More | More has a Comparison link to `/compare`, same chrome as Allocation. Dashboard two-pin shortcut stays. |
 | [#253](https://github.com/ZhannaM85/my-money/issues/253) | 🔍 Pending validation | Collapse identical Button size aliases (default/lg/xl) | Dropped `lg` / `xl`. Callers use default. Tokens unchanged. |
-| [#254](https://github.com/ZhannaM85/my-money/issues/254) | 🔍 Pending validation | Pull-to-refresh reloads the app, not FX rates | Decision: pull = `reloadForUpdate` only. Rates stay on Dashboard Update rates. Documented in `docs/FX.md`. |
 
 ---
 
