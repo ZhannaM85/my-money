@@ -86,6 +86,7 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 | [#251](https://github.com/ZhannaM85/my-money/issues/251) | 🔍 Pending validation | Shared test render helper + split god screen tests | `test/renderApp.tsx` resets IndexedDB + store defaults. Dashboard / Comparison suites use it; assertions unchanged. |
 | [#240](https://github.com/ZhannaM85/my-money/issues/240) | 🔍 Pending validation | Split netWorth module + pre-index snapshots for series | Split totals / holdings / history / allocation / period change. Historical series indexes snapshots by assetId. No formula change. |
 | [#243](https://github.com/ZhannaM85/my-money/issues/243) | 🔍 Pending validation | Asset detail: fold tracking/destructive actions into Сведения | Exclude / hide / delete live in expanded Details. Native/base chips persist `currencyDisplayMode`. |
+| [#245](https://github.com/ZhannaM85/my-money/issues/245) | 🔍 Pending validation | Clarify dual currency controls (Dashboard filter vs More) | Converted Dashboard filter stays visible + disabled; InfoHint points to More. Show all / Original / Converted unchanged. No new mode. |
 
 ---
 

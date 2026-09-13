@@ -15,7 +15,7 @@ beforeEach(async () => {
 })
 
 describe('DashboardHeadline holdings', () => {
-  it('disables the currency filter in Converted mode', async () => {
+  it('disables the currency filter in Converted mode (#245)', async () => {
     const now = '2026-08-17T00:00:00.000Z'
     await useFxStore
       .getState()
@@ -80,6 +80,15 @@ describe('DashboardHeadline holdings', () => {
     expect(
       screen.queryByText(/Converted with reference exchange rates/),
     ).not.toBeInTheDocument()
+    expect(
+      screen.queryByText(/In Converted this filter stays on the More base/),
+    ).not.toBeInTheDocument()
+    await userEvent.click(
+      screen.getByRole('button', { name: 'About Currency' }),
+    )
+    expect(
+      screen.getByText(/In Converted this filter stays on the More base/),
+    ).toBeInTheDocument()
     expect(screen.getByText('From amounts')).toBeInTheDocument()
     expect(screen.getByText('From rates')).toBeInTheDocument()
   })
@@ -147,6 +156,9 @@ describe('DashboardHeadline holdings', () => {
       ),
     ).toBeInTheDocument()
     expect(screen.getByLabelText('Currency')).not.toBeDisabled()
+    expect(
+      screen.queryByRole('button', { name: 'About Currency' }),
+    ).not.toBeInTheDocument()
     expect(screen.queryByText('From amounts')).not.toBeInTheDocument()
     expect(screen.queryByTestId('allocation-chart')).not.toBeInTheDocument()
     expect(screen.queryByText('Euro cash')).not.toBeInTheDocument()

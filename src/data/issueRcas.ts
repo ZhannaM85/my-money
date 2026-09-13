@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 245,
+    title: {
+      en: 'Clarify dual currency controls (Dashboard filter vs More)',
+      ru: 'Пояснить два контроля валюты (фильтр Сводки и Ещё)',
+    },
+    en: 'After #230 the Converted Dashboard filter stayed disabled with no note, next to More “Show all currencies” plus Original/Converted chips. Same two modes, two surfaces. InfoHint on the locked filter (and on More’s base-currency field) explains the pair. Did not hide the select (#46/#87) and did not add a third mode.',
+    ru: 'После #230 фильтр Сводки в «В пересчёте» оставался выключенным без пояснения — рядом с «Показать все валюты» и чипами Оригинал/Пересчёт в «Ещё». Те же два режима, две поверхности. InfoHint на заблокированном фильтре (и на поле базовой валюты) объясняет пару. Селект не прятали (#46/#87) и третий режим не добавляли.',
+  },
+  {
     issue: 243,
     title: {
       en: 'Asset detail: fold tracking/destructive actions into Details',

@@ -55,6 +55,8 @@ export function PreferencesSection() {
         <SelectField
           label={t.settings.baseCurrency}
           id="settings-base-currency"
+          hint={t.settings.showAllCurrenciesHint}
+          aboutLabel={t.common.aboutField(t.settings.baseCurrency)}
           value={
             settings.currencyDisplayMode === 'native'
               ? SHOW_ALL_CURRENCIES
@@ -84,11 +86,6 @@ export function PreferencesSection() {
             </option>
           ))}
         </SelectField>
-        {settings.currencyDisplayMode === 'native' && (
-          <span className="text-xs text-muted-foreground">
-            {t.settings.showAllCurrenciesHint}
-          </span>
-        )}
       </div>
       <div className="flex flex-col gap-2">
         <span className="text-sm font-medium">

@@ -30,7 +30,7 @@ beforeEach(async () => {
 })
 
 describe('SettingsScreen', () => {
-  it('offers Show all currencies and selects it in Original mode', async () => {
+  it('offers Show all currencies and selects it in Original mode (#245)', async () => {
     await db.settings.put({
       ...DEFAULT_SETTINGS,
       currencyDisplayMode: 'native',
@@ -49,9 +49,13 @@ describe('SettingsScreen', () => {
       screen.getByRole('option', { name: 'Show all currencies' }),
     ).toBeInTheDocument()
     expect(
-      screen.getByText(
-        'Totals stay in each asset’s own currency. Pick a single currency to convert everything into one total.',
-      ),
+      screen.queryByText(/Show all currencies is Original/),
+    ).not.toBeInTheDocument()
+    await userEvent.click(
+      screen.getByRole('button', { name: 'About Base currency' }),
+    )
+    expect(
+      screen.getByText(/Show all currencies is Original/),
     ).toBeInTheDocument()
   })
 
@@ -109,6 +113,9 @@ describe('SettingsScreen', () => {
     await waitFor(() => {
       expect(screen.getByLabelText('Base currency')).not.toBeDisabled()
     })
+    expect(
+      screen.getByRole('button', { name: 'About Base currency' }),
+    ).toBeInTheDocument()
   })
 
   it('applies Soft Finance, Neutral, and Pastel appearance moods', async () => {

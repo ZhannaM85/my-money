@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 227,
+    issue: 245,
+    date: '2026-09-13T09:05:00+03:00',
+    en: 'Converted Dashboard keeps the currency filter visible but locked, with a tap-to-read note that the currency lives in More. Show all currencies / Original / Converted stay the same mode — no extra switch.',
+    ru: 'На Сводке в «В пересчёте» фильтр валюты остаётся, но заблокирован; по «?» видно, что валюта задаётся в «Ещё». «Показать все валюты» / «В оригинале» / «В пересчёте» — тот же режим, без нового переключателя.',
+  },
+  {
     version: 226,
     issue: 243,
     date: '2026-09-13T00:45:00+03:00',

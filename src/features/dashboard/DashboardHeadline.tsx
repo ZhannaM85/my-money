@@ -48,6 +48,10 @@ export function DashboardHeadline({
         className={cn(!isOriginal && 'text-muted-foreground opacity-60')}
         value={isOriginal ? activeCurrencyFilter : baseCurrency}
         disabled={!isOriginal}
+        hint={isOriginal ? undefined : t.dashboard.currencyFilterConvertedHint}
+        aboutLabel={
+          isOriginal ? undefined : t.common.aboutField(t.asset.currency)
+        }
         onChange={(event) => {
           onCurrencyFilterChange(event.target.value)
         }}

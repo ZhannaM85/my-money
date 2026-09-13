@@ -71,6 +71,8 @@ export const en: Dictionary = {
     ratesUpdateFailed: 'Could not update rates; using saved rates',
     periodChangeHint:
       'From amounts is what you added or reduced, valued at the latest rate. From rates is the same starting balances when the reference rate moved — including dollars you already held. Together they equal the period total.',
+    currencyFilterConvertedHint:
+      'In Converted this filter stays on the More base currency. Change that currency or switch to Original in More to filter by each asset’s own currency.',
     chartTooltip: 'Chart tooltip',
     chartTooltipShow: 'Show',
     chartTooltipHide: 'Hide',
@@ -292,7 +294,7 @@ export const en: Dictionary = {
     currencyDisplayBase: 'Converted',
     currencyDisplayNative: 'Original',
     showAllCurrenciesHint:
-      'Totals stay in each asset’s own currency. Pick a single currency to convert everything into one total.',
+      'Show all currencies is Original: amounts stay native, and Dashboard can filter by currency. A single currency is Converted: one total, and the Dashboard filter locks to that currency.',
     language: 'Language',
     languageEn: 'English',
     languageRu: 'Русский',
