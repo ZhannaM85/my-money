@@ -287,6 +287,7 @@ Closed live-feedback rows from Tier 8 onward. Open / pending items stay in [`../
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
+| [#248](https://github.com/ZhannaM85/my-money/issues/248) | ✅ Done | ESLint max-lines warn (≤500) for features/app | Warn on `src/features/**` + `src/app/**`. Tests and `src/data/**` ignored. Remaining offender `UpdateFinancesScreen` warns only. Closed 2026-09-13 — lint-only; no on-device pass. |
 | [#249](https://github.com/ZhannaM85/my-money/issues/249) | ✅ Done | ESLint import-boundary zones for domain/features | `domain/` ↛ React/Zustand/Dexie. Production features ↛ `infrastructure/persistence`. Backup/CSV I/O via `stores/backupBook`. Closed 2026-09-13 — lint-only; no on-device pass. |
 | [#250](https://github.com/ZhannaM85/my-money/issues/250) | ✅ Done | Domain test: historicalNetWorth performance at scale | 20 assets × 50 snapshots × 365 dates. Asserts one `indexSnapshotsByAssetId` pass and a time budget. No e2e screenshots. Closed 2026-09-13 — test-only; no on-device pass. |
 | [#251](https://github.com/ZhannaM85/my-money/issues/251) | ✅ Done | Shared test render helper + split god screen tests | `test/renderApp.tsx` resets IndexedDB + store defaults. Dashboard / Comparison suites use it; assertions unchanged. Closed 2026-09-13 — test-only; no on-device pass. |
