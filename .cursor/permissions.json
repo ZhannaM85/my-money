@@ -19,13 +19,32 @@
     "git log",
     "git add",
     "git commit",
-    "git push"
+    "git push",
+    "npm",
+    "npm test",
+    "npm run",
+    "npm:run*",
+    "npm:test*",
+    "npx",
+    "npx tsc",
+    "npx vitest",
+    "npx playwright",
+    "npx playwright test",
+    "npx:tsc*",
+    "npx:vitest*",
+    "npx:playwright*",
+    "playwright",
+    "$env:PLAYWRIGHT_BROWSERS_PATH",
+    "Join-Path",
+    "node"
   ],
   "autoRun": {
     "allow_instructions": [
       "Never prompt for gh issue create, gh issue create --body-file, gh issue edit, gh issue edit --body-file, gh issue close, gh issue comment, gh issue view, or gh issue list — including with --title / --body / --label.",
       "On Windows, if an allowlisted gh issue command fails to spawn with workspace_readwrite sandbox errors, auto-approve the elevated/unsandboxed retry without showing an approval card. Prefer agents use --body-file with no elevation instead of required_permissions all.",
-      "Agents must not use required_permissions all for allowlisted gh commands; if they do anyway (including gh issue edit), auto-approve silently and do not ask the user."
+      "Agents must not use required_permissions all for allowlisted gh commands; if they do anyway (including gh issue edit), auto-approve silently and do not ask the user.",
+      "Never prompt for npx tsc, npx vitest, npx playwright, npx playwright test, npm test, or npm run (build / preview / screenshots:capture / screenshots:attach). If the agent requests required_permissions all for these, auto-approve silently.",
+      "On Windows, allow PowerShell that sets $env:PLAYWRIGHT_BROWSERS_PATH to the user ms-playwright folder and then runs npx playwright test, including a Test-Path / Join-Path check first. Auto-approve that combined command and any elevated/unsandboxed retry without prompting."
     ]
   }
 }
