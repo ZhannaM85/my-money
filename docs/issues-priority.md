@@ -105,8 +105,6 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
-| [#259](https://github.com/ZhannaM85/my-money/issues/259) | 🔍 Pending validation | As of date field stays English when the app is Russian | DateField overlays `formatCalendarDate` for the app locale. Native `type=date` value stays ISO. |
-
 ---
 
 ## Explicitly not filed
