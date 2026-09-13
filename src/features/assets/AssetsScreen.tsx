@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import {
   DndContext,
@@ -8,11 +8,7 @@ import {
   useSensor,
   useSensors,
 } from '@dnd-kit/core'
-import {
-  SortableContext,
-  verticalListSortingStrategy,
-} from '@dnd-kit/sortable'
-import { EllipsisVertical } from 'lucide-react'
+import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import {
   ASSET_CLASSES,
   listOwnershipShare,
@@ -30,6 +26,7 @@ import { formatAmount } from '@/shared/lib/money'
 import { Button } from '@/shared/ui/button'
 import { Chip } from '@/shared/ui/chip'
 import { EmptyState } from '@/shared/ui/empty-state'
+import { OverflowMenu } from '@/shared/ui/overflow-menu'
 import { PageHeader } from '@/shared/ui/page-header'
 import { Select } from '@/shared/ui/select'
 import { SortableRow } from '@/shared/ui/sortable-row'
@@ -62,75 +59,6 @@ function shownAmount(
     }
   }
   return snapshot.amount
-}
-
-function AssetRowMenu({
-  name,
-  excluded,
-  onToggle,
-}: {
-  name: string
-  excluded: boolean
-  onToggle: () => void
-}) {
-  const t = useTranslation()
-  const [open, setOpen] = useState(false)
-  const rootRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    if (!open) return
-    function onDocumentPointerDown(event: PointerEvent) {
-      const root = rootRef.current
-      if (root && event.target instanceof Node && root.contains(event.target)) {
-        return
-      }
-      setOpen(false)
-    }
-    document.addEventListener('pointerdown', onDocumentPointerDown)
-    return () =>
-      document.removeEventListener('pointerdown', onDocumentPointerDown)
-  }, [open])
-
-  const actionLabel = excluded
-    ? t.dashboard.showOnPositions
-    : t.dashboard.hideFromPositions
-  const actionAria = excluded
-    ? t.dashboard.showOnPositionsAria(name)
-    : t.dashboard.hideFromPositionsAria(name)
-
-  return (
-    <div ref={rootRef} className="relative shrink-0 self-stretch">
-      <button
-        type="button"
-        className="flex h-full min-w-11 items-center justify-center px-2 text-muted-foreground"
-        aria-label={t.assets.rowMenuAria(name)}
-        aria-haspopup="menu"
-        aria-expanded={open}
-        onClick={() => setOpen((current) => !current)}
-      >
-        <EllipsisVertical className="size-5" />
-      </button>
-      {open ? (
-        <div
-          role="menu"
-          className="absolute right-2 top-full z-30 min-w-36 rounded-lg bg-card py-1 shadow-md ring-1 ring-foreground/10"
-        >
-          <button
-            type="button"
-            role="menuitem"
-            className="w-full px-3 py-3 text-left text-sm"
-            aria-label={actionAria}
-            onClick={() => {
-              setOpen(false)
-              onToggle()
-            }}
-          >
-            {actionLabel}
-          </button>
-        </div>
-      ) : null}
-    </div>
-  )
 }
 
 export function AssetsScreen() {
@@ -424,15 +352,24 @@ export function AssetsScreen() {
                     className="relative flex items-stretch rounded-xl bg-card ring-1 ring-foreground/10"
                   >
                     {inner}
-                    <AssetRowMenu
-                      name={asset.name}
-                      excluded={excluded}
-                      onToggle={() =>
-                        void setTrackingStatus(
-                          asset.id,
-                          excluded ? 'included' : 'excluded',
-                        )
-                      }
+                    <OverflowMenu
+                      className="self-stretch"
+                      ariaLabel={t.assets.rowMenuAria(asset.name)}
+                      items={[
+                        {
+                          label: excluded
+                            ? t.dashboard.showOnPositions
+                            : t.dashboard.hideFromPositions,
+                          ariaLabel: excluded
+                            ? t.dashboard.showOnPositionsAria(asset.name)
+                            : t.dashboard.hideFromPositionsAria(asset.name),
+                          onSelect: () =>
+                            void setTrackingStatus(
+                              asset.id,
+                              excluded ? 'included' : 'excluded',
+                            ),
+                        },
+                      ]}
                     />
                   </li>
                 )

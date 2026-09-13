@@ -35,23 +35,31 @@ export function AssetDetailsAccordion({
 
   return (
     <section className="flex flex-col gap-3">
-      <h2 className="text-lg font-semibold">
-        <button
-          type="button"
-          className="flex w-full items-center justify-between gap-2 text-left"
-          aria-expanded={detailsOpen}
-          onClick={() => setDetailsOpen((open) => !open)}
-        >
-          {t.asset.details}
-          <ChevronDown
-            className={cn(
-              'size-5 shrink-0 text-muted-foreground transition-transform',
-              detailsOpen && 'rotate-180',
-            )}
-            aria-hidden
-          />
-        </button>
-      </h2>
+      <div className="flex items-center gap-1">
+        <h2 className="min-w-0 flex-1 text-lg font-semibold">
+          <button
+            type="button"
+            className="flex w-full items-center justify-between gap-2 text-left"
+            aria-expanded={detailsOpen}
+            onClick={() => setDetailsOpen((open) => !open)}
+          >
+            {t.asset.details}
+            <ChevronDown
+              className={cn(
+                'size-5 shrink-0 text-muted-foreground transition-transform',
+                detailsOpen && 'rotate-180',
+              )}
+              aria-hidden
+            />
+          </button>
+        </h2>
+        <AssetDetailsTrackingActions
+          name={asset.name}
+          trackingStatus={asset.trackingStatus}
+          onSetTracking={onSetTracking}
+          onDelete={onDelete}
+        />
+      </div>
       {detailsOpen ? (
         editingDetails ? (
           <>
@@ -116,11 +124,6 @@ export function AssetDetailsAccordion({
             >
               {t.asset.editDetails}
             </Button>
-            <AssetDetailsTrackingActions
-              trackingStatus={asset.trackingStatus}
-              onSetTracking={onSetTracking}
-              onDelete={onDelete}
-            />
           </>
         )
       ) : null}

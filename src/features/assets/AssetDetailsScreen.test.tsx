@@ -103,7 +103,8 @@ describe('AssetDetailsScreen', () => {
     ).toBe(Node.DOCUMENT_POSITION_FOLLOWING)
   })
 
-  it('keeps tracking and delete actions inside expanded Details (#243)', async () => {
+  it('keeps tracking and delete actions in the Details overflow (#244)', async () => {
+    const user = userEvent.setup()
     renderAssetDetails()
     await screen.findByRole('heading', { name: 'Revolut' })
     expect(
@@ -115,6 +116,18 @@ describe('AssetDetailsScreen', () => {
     expect(
       screen.queryByRole('button', { name: 'Delete asset' }),
     ).not.toBeInTheDocument()
+    await user.click(
+      screen.getByRole('button', { name: 'Actions for Revolut' }),
+    )
+    expect(
+      screen.getByRole('menuitem', { name: 'Exclude from net worth' }),
+    ).toBeInTheDocument()
+    expect(
+      screen.getByRole('menuitem', { name: 'Hide asset' }),
+    ).toBeInTheDocument()
+    expect(
+      screen.getByRole('menuitem', { name: 'Delete asset' }),
+    ).toBeInTheDocument()
   })
 
   it('persists native/base chips to the settings display mode (#243)', async () => {
@@ -139,16 +152,21 @@ describe('AssetDetailsScreen', () => {
     const user = userEvent.setup()
     renderAssetDetails()
     await screen.findByRole('heading', { name: 'Revolut' })
-    await user.click(screen.getByRole('button', { name: /^Details$/ }))
     await user.click(
-      screen.getByRole('button', { name: 'Exclude from net worth' }),
+      screen.getByRole('button', { name: 'Actions for Revolut' }),
+    )
+    await user.click(
+      screen.getByRole('menuitem', { name: 'Exclude from net worth' }),
     )
     await waitFor(() => {
       expect(useAssetStore.getState().assets[0].trackingStatus).toBe('excluded')
     })
     expect(screen.getByText('Not counted in net worth')).toBeInTheDocument()
     await user.click(
-      screen.getByRole('button', { name: 'Include in net worth' }),
+      screen.getByRole('button', { name: 'Actions for Revolut' }),
+    )
+    await user.click(
+      screen.getByRole('menuitem', { name: 'Include in net worth' }),
     )
     await waitFor(() => {
       expect(useAssetStore.getState().assets[0].trackingStatus).toBe('included')
@@ -159,8 +177,10 @@ describe('AssetDetailsScreen', () => {
     const user = userEvent.setup()
     renderAssetDetails()
     await screen.findByRole('heading', { name: 'Revolut' })
-    await user.click(screen.getByRole('button', { name: /^Details$/ }))
-    await user.click(screen.getByRole('button', { name: 'Hide asset' }))
+    await user.click(
+      screen.getByRole('button', { name: 'Actions for Revolut' }),
+    )
+    await user.click(screen.getByRole('menuitem', { name: 'Hide asset' }))
     await waitFor(() => {
       expect(useAssetStore.getState().assets[0].trackingStatus).toBe('archived')
     })
@@ -171,8 +191,10 @@ describe('AssetDetailsScreen', () => {
     vi.spyOn(window, 'confirm').mockReturnValue(true)
     renderAssetDetails()
     await screen.findByRole('heading', { name: 'Revolut' })
-    await user.click(screen.getByRole('button', { name: /^Details$/ }))
-    await user.click(screen.getByRole('button', { name: 'Delete asset' }))
+    await user.click(
+      screen.getByRole('button', { name: 'Actions for Revolut' }),
+    )
+    await user.click(screen.getByRole('menuitem', { name: 'Delete asset' }))
     await waitFor(() => {
       expect(useAssetStore.getState().assets).toHaveLength(0)
       expect(useAssetStore.getState().snapshots).toHaveLength(0)

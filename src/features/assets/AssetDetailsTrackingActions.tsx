@@ -1,72 +1,49 @@
 import type { TrackingStatus } from '@/domain/asset'
 import { useTranslation } from '@/i18n'
-import { Button } from '@/shared/ui/button'
+import { OverflowMenu, type OverflowMenuItem } from '@/shared/ui/overflow-menu'
 
 export function AssetDetailsTrackingActions({
+  name,
   trackingStatus,
   onSetTracking,
   onDelete,
 }: {
+  name: string
   trackingStatus: TrackingStatus
   onSetTracking: (status: TrackingStatus) => Promise<void>
   onDelete: () => Promise<void>
 }) {
   const t = useTranslation()
+  const items: OverflowMenuItem[] = []
 
-  return (
-    <div className="flex flex-col gap-2">
-      {trackingStatus === 'included' ? (
-        <Button
-          type="button"
-          variant="outline"
-          size="xl"
-          className="w-full"
-          onClick={() => void onSetTracking('excluded')}
-        >
-          {t.asset.excludeFromNetWorth}
-        </Button>
-      ) : null}
-      {trackingStatus === 'excluded' ? (
-        <Button
-          type="button"
-          variant="outline"
-          size="xl"
-          className="w-full"
-          onClick={() => void onSetTracking('included')}
-        >
-          {t.asset.includeInNetWorth}
-        </Button>
-      ) : null}
-      {trackingStatus !== 'archived' ? (
-        <Button
-          type="button"
-          variant="outline"
-          size="xl"
-          className="w-full"
-          onClick={() => void onSetTracking('archived')}
-        >
-          {t.asset.hide}
-        </Button>
-      ) : (
-        <Button
-          type="button"
-          variant="outline"
-          size="xl"
-          className="w-full"
-          onClick={() => void onSetTracking('included')}
-        >
-          {t.asset.restore}
-        </Button>
-      )}
-      <Button
-        type="button"
-        variant="destructive"
-        size="xl"
-        className="w-full"
-        onClick={() => void onDelete()}
-      >
-        {t.asset.deleteAsset}
-      </Button>
-    </div>
-  )
+  if (trackingStatus === 'included') {
+    items.push({
+      label: t.asset.excludeFromNetWorth,
+      onSelect: () => void onSetTracking('excluded'),
+    })
+  }
+  if (trackingStatus === 'excluded') {
+    items.push({
+      label: t.asset.includeInNetWorth,
+      onSelect: () => void onSetTracking('included'),
+    })
+  }
+  if (trackingStatus !== 'archived') {
+    items.push({
+      label: t.asset.hide,
+      onSelect: () => void onSetTracking('archived'),
+    })
+  } else {
+    items.push({
+      label: t.asset.restore,
+      onSelect: () => void onSetTracking('included'),
+    })
+  }
+  items.push({
+    label: t.asset.deleteAsset,
+    tone: 'destructive',
+    onSelect: () => void onDelete(),
+  })
+
+  return <OverflowMenu ariaLabel={t.assets.rowMenuAria(name)} items={items} />
 }

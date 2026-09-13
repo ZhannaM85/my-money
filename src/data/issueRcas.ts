@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 244,
+    title: {
+      en: 'Unify hide/show actions across Positions / Assets / detail',
+      ru: 'Один chrome для скрыть/показать на позициях, Активах и карточке',
+    },
+    en: 'Hide/Show was taught three ways: tap-to-reveal on Positions/Allocation, ⋮ on Assets, full-width buttons on detail. Shared `OverflowMenu` on Assets and the Details heading (exclude/include, archive, delete). Positions and Allocation stay tap-to-reveal so scroll does not steal a swipe. List Hide/Show is still excluded ↔ included; detail keeps archive and delete as separate menu items.',
+    ru: 'Скрыть/показать учили тремя способами: нажатие на позициях/распределении, ⋮ на Активах, широкие кнопки на карточке. Общий `OverflowMenu` на Активах и в заголовке Сведений (не учитывать / архив / удалить). На Сводке и Распределении остаётся нажатие, чтобы скролл не перехватывал свайп. В списке Hide/Show — excluded ↔ included; на карточке архив и удаление остаются отдельными пунктами меню.',
+  },
+  {
     issue: 245,
     title: {
       en: 'Clarify dual currency controls (Dashboard filter vs More)',

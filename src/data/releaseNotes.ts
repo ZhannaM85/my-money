@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 228,
+    issue: 244,
+    date: '2026-09-13T09:10:00+03:00',
+    en: 'On Assets, Hide and Show stay in the ⋯ menu. On asset details, exclude, hide, and delete are in the same ⋯ menu on Details. Positions and Allocation still tap the row to reveal Hide or Show — not a swipe.',
+    ru: 'На Активах «Скрыть» и «Показать» остаются в меню ⋯. На карточке актива «не учитывать», «скрыть» и «удалить» — в том же меню ⋯ у Сведений. На позициях Сводки и в Распределении по-прежнему нажатие по строке открывает «Скрыть» или «Показать» — не свайп.',
+  },
+  {
     version: 227,
     issue: 245,
     date: '2026-09-13T09:05:00+03:00',
