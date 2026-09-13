@@ -12,6 +12,7 @@ import { reloadForUpdate } from '@/shared/lib/reloadForUpdate'
  * scroller under the touch is at the top — not merely `#main-content`, which
  * stays at 0 while Update’s inner holdings list scrolls (#203).
  * Triggers `reloadForUpdate()` so the reload picks up a new SW.
+ * Does **not** fetch FX — Dashboard **Update rates** does that (#254).
  *
  * #216: icon stays hidden until ~100px of drag; resisted travel after that
  * so refresh still needs a long deliberate pull (Capacitor will not change this).

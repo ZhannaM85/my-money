@@ -4,7 +4,8 @@ import { formatDateTime } from '@/shared/lib/money'
 import { Button } from '@/shared/ui/button'
 import type { RatesStatus } from './useUpdateRates'
 
-/** Single Update rates control (#246) — mount on Dashboard only. */
+/** Single Update rates control (#246) — mount on Dashboard only.
+ * Pull-to-refresh does not call this (#254). */
 export function UpdateRates({
   fxLoading,
   ratesStatus,

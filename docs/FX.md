@@ -55,6 +55,17 @@ history. It is **not** a runtime client and must not be re-homed under
 
 ---
 
+## Refreshing rates vs pull-to-refresh (#254)
+
+Pull-to-refresh reloads the shell (`reloadForUpdate` — pick up a new
+service worker / page). It does **not** fetch quotes.
+
+Users refresh FX with **Update rates** on Dashboard
+(`useUpdateRates` → `ensureRange({ force: true })`). Capacitor will not
+change this split.
+
+---
+
 ## Do not
 
 - Do not add `src/infrastructure/fx/cbr` or `src/infrastructure/fx/nbg`.
@@ -63,6 +74,7 @@ history. It is **not** a runtime client and must not be re-homed under
 - Do not send amounts, names, or assets to any FX API.
 - Do not treat Frankfurter as the RUB path. ARCHITECTURE used to say
   that; it is wrong.
+- Do not wire pull-to-refresh to Update rates or `ensureRange`.
 
 ---
 
@@ -76,6 +88,8 @@ history. It is **not** a runtime client and must not be re-homed under
 | `src/infrastructure/fx/shouldFetchFrankfurter.ts` | Offline gate |
 | `src/domain/fx/` | Pure lookup / convert / `mergeRateTables` — no HTTP |
 | `src/features/settings/ManualRatesSection.tsx` | Today’s manual overrides |
+| `src/features/net-worth/UpdateRates.tsx` | Dashboard **Update rates** button |
+| `src/shared/hooks/usePullToRefresh.ts` | Reloads the app; never fetches FX |
 | `scripts/generate-rub-rates.mjs` | Deploy-time NBG → `public/fx/rub/` |
 | `scripts/lib/nbgSeries.mjs` | NBG parse + GEL cross |
 | `scripts/lib/cbrSeries.mjs` | Generate-time dates / fill-forward (and CBR XML parse) |
