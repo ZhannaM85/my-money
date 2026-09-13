@@ -29,7 +29,8 @@ describe('Fresh vs Neutral moods (#98)', () => {
     const neutral = blockAfter(":root[data-mood='neutral'] {")
     const neutralDark = blockAfter(":root[data-mood='neutral'].dark {")
 
-    expect(token(fresh, 'primary')).toBe('#2878e8')
+    expect(token(fresh, 'action')).toBe('#2878e8')
+    expect(token(fresh, 'primary')).toBe('var(--action)')
     expect(token(neutral, 'primary')).toBe('#1d1d1f')
     expect(token(neutral, 'primary')).not.toBe(token(fresh, 'primary'))
     expect(token(neutralDark, 'primary')).not.toBe(token(freshDark, 'primary'))

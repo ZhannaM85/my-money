@@ -5,9 +5,9 @@ import {
   type TouchEvent as ReactTouchEvent,
 } from 'react'
 import {
+  Area,
+  AreaChart,
   CartesianGrid,
-  Line,
-  LineChart,
   ResponsiveContainer,
   Tooltip,
   XAxis,
@@ -268,7 +268,7 @@ export function NetWorthChart({
         }}
       >
         <ResponsiveContainer width="100%" height="100%">
-          <LineChart
+          <AreaChart
             data={[...points]}
             margin={{ top: 8, right: 8, left: 0, bottom: 0 }}
             onMouseMove={(state) =>
@@ -316,11 +316,13 @@ export function NetWorthChart({
                   : { display: 'none' }
               }
             />
-            <Line
+            <Area
               type="monotone"
               dataKey="total"
-              stroke="var(--primary)"
+              stroke="var(--positive)"
               strokeWidth={2}
+              fill="var(--positive)"
+              fillOpacity={0.12}
               dot={false}
               name={name}
               activeDot={{
@@ -339,7 +341,7 @@ export function NetWorthChart({
                 },
               }}
             />
-          </LineChart>
+          </AreaChart>
         </ResponsiveContainer>
       </div>
     </div>

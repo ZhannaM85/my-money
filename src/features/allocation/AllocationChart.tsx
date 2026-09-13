@@ -7,15 +7,8 @@ import { formatAmount } from '@/shared/lib/money'
 import { cn } from '@/shared/lib/utils'
 import { tapDebug } from '@/infrastructure/debug/tapDebug'
 import { SwipeRevealRow } from '@/shared/ui/swipe-reveal-row'
+import { allocationSliceColor } from '@/shared/lib/allocationColors'
 import { useAssetStore } from '@/stores/assetStore'
-
-const SLICE_COLORS = [
-  'var(--chart-money)',
-  'var(--chart-investments)',
-  'var(--chart-property)',
-  'var(--chart-valuables)',
-  'var(--chart-liabilities)',
-]
 
 export interface AllocationChartRow {
   id: string
@@ -72,11 +65,8 @@ export function AllocationChart({
               outerRadius={85}
               paddingAngle={2}
             >
-              {chartSlices.map((row, index) => (
-                <Cell
-                  key={row.id}
-                  fill={SLICE_COLORS[index % SLICE_COLORS.length]}
-                />
+              {chartSlices.map((row) => (
+                <Cell key={row.id} fill={allocationSliceColor(row.id)} />
               ))}
             </Pie>
             <Tooltip
@@ -96,7 +86,7 @@ export function AllocationChart({
         </ResponsiveContainer>
       </div>
       <ul className="flex flex-col gap-2">
-        {pieData.map((row, index) => {
+        {pieData.map((row) => {
           const holdings = row.holdings ?? []
           const expandable = holdings.length > 0
           const open = openId === row.id
@@ -145,7 +135,7 @@ export function AllocationChart({
                     <span
                       className="size-2.5 shrink-0 rounded-full"
                       style={{
-                        background: SLICE_COLORS[index % SLICE_COLORS.length],
+                        background: allocationSliceColor(row.id),
                       }}
                     />
                     {row.name}
@@ -177,7 +167,7 @@ export function AllocationChart({
                     <span
                       className="size-2.5 rounded-full"
                       style={{
-                        background: SLICE_COLORS[index % SLICE_COLORS.length],
+                        background: allocationSliceColor(row.id),
                       }}
                     />
                     {row.name}

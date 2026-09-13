@@ -1383,3 +1383,21 @@ test('capture Dashboard Original+All stacked hero (#256)', async ({ page }) => {
   })
 })
 
+test('capture DESIGN_SYSTEM chart tokens (#255)', async ({ page }) => {
+  await seedValidationFixture(page, { currencyDisplayMode: 'base' })
+  await page.goto('/')
+  await expect(page.getByRole('heading', { name: 'Dashboard' })).toBeVisible()
+  await expect(page.getByTestId('net-worth-chart')).toBeVisible()
+  await page.screenshot({
+    path: join(outDir, '255-dashboard-net-worth-chart.png'),
+    fullPage: true,
+  })
+  await page.goto('/allocation')
+  await expect(page.getByRole('heading', { name: 'Allocation' })).toBeVisible()
+  await expect(page.getByTestId('allocation-chart')).toBeVisible()
+  await page.screenshot({
+    path: join(outDir, '255-allocation-class-colors.png'),
+    fullPage: true,
+  })
+})
+

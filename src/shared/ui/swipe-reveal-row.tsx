@@ -111,7 +111,7 @@ export function SwipeRevealRow({
           'absolute inset-y-0 right-0 flex items-center justify-center text-sm font-medium text-white',
           ACTION_WIDTH_CLASS,
           actionTone === 'positive'
-            ? 'bg-[var(--chart-investments)]'
+            ? 'bg-positive'
             : 'bg-destructive',
         )}
         data-action-tone={actionTone}

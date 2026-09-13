@@ -559,7 +559,7 @@ describe('UpdateFinancesScreen', () => {
     expect(delta).toHaveTextContent('vs 1 Aug 2026')
     const arrow = screen.getByTestId('comparison-delta')
     expect(arrow).toHaveAttribute('data-direction', 'up')
-    expect(arrow).toHaveClass('text-[var(--chart-investments)]')
+    expect(arrow).toHaveClass('text-positive')
     expect(arrow).toHaveTextContent('+')
   })
 
@@ -591,7 +591,7 @@ describe('UpdateFinancesScreen', () => {
     expect(delta).toHaveTextContent('vs 1 Aug 2026')
     const arrow = delta.querySelector('[data-testid="comparison-delta"]')
     expect(arrow).toHaveAttribute('data-direction', 'up')
-    expect(arrow).toHaveClass('text-[var(--chart-investments)]')
+    expect(arrow).toHaveClass('text-positive')
   })
 
   it('lists excluded holdings so a new amount can be saved (#202)', async () => {

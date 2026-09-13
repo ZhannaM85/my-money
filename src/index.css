@@ -18,7 +18,22 @@
   --card-foreground: #17243a;
   --popover: #ffffff;
   --popover-foreground: #17243a;
-  --primary: #2878e8;
+  --heading: #142b4a;
+  --action: #2878e8;
+  --action-hover: #1f68d0;
+  --action-pressed: #1959b8;
+  --positive: #16a878;
+  --asset-money: #2878e8;
+  --asset-investments: #16a878;
+  --asset-cash: #f2a51a;
+  --asset-property: #7656d6;
+  --asset-valuables: #a45bc7;
+  --asset-liabilities: #e05252;
+  --currency-eur: #2878e8;
+  --currency-usd: #3b82f6;
+  --currency-gbp: #7656d6;
+  --currency-rub: #7656d6;
+  --primary: var(--action);
   --primary-foreground: #ffffff;
   --secondary: #eaf2ff;
   --secondary-foreground: #142b4a;
@@ -30,12 +45,12 @@
   --warning: #f2a51a;
   --border: #e4e8ee;
   --input: #667085;
-  --ring: #2878e8;
-  --chart-money: #2878e8;
-  --chart-investments: #16a878;
-  --chart-property: #7656d6;
-  --chart-valuables: #a45bc7;
-  --chart-liabilities: #e05252;
+  --ring: var(--action);
+  --chart-money: var(--asset-money);
+  --chart-investments: var(--asset-investments);
+  --chart-property: var(--asset-property);
+  --chart-valuables: var(--asset-valuables);
+  --chart-liabilities: var(--asset-liabilities);
 }
 
 :root[data-mood='ledger'] {
@@ -43,6 +58,7 @@
   --radius: 0.625rem;
   --background: #0a0a0a;
   --foreground: #fafafa;
+  --heading: var(--foreground);
   --card: #171717;
   --card-foreground: #fafafa;
   --popover: #171717;
@@ -60,11 +76,6 @@
   --border: #404040;
   --input: #a3a3a3;
   --ring: #7c3aed;
-  --chart-money: #2dd4bf;
-  --chart-investments: #4ade80;
-  --chart-property: #a78bfa;
-  --chart-valuables: #fbbf24;
-  --chart-liabilities: #fb7185;
 }
 
 :root[data-mood='green'] {
@@ -85,17 +96,13 @@
   --border: #d1e7d7;
   --input: #6b8f74;
   --ring: #15803d;
-  --chart-money: #15803d;
-  --chart-investments: #166534;
-  --chart-property: #14532d;
-  --chart-valuables: #047857;
-  --chart-liabilities: #3f6212;
 }
 
 .dark,
 :root[data-mood='ledger'].dark {
   --background: #0a0a0a;
   --foreground: #fafafa;
+  --heading: var(--foreground);
   --card: #171717;
   --card-foreground: #fafafa;
   --popover: #171717;
@@ -113,17 +120,13 @@
   --border: #404040;
   --input: #a3a3a3;
   --ring: #a78bfa;
-  --chart-money: #2dd4bf;
-  --chart-investments: #4ade80;
-  --chart-property: #a78bfa;
-  --chart-valuables: #fbbf24;
-  --chart-liabilities: #fb7185;
 }
 
 :root[data-mood='fresh'].dark {
   color-scheme: dark;
   --background: #0b1422;
   --foreground: #f4f7fb;
+  --heading: var(--foreground);
   --card: #142235;
   --card-foreground: #f4f7fb;
   --popover: #1b2c43;
@@ -141,16 +144,12 @@
   --border: #29394e;
   --input: #a9b5c5;
   --ring: #4b91f5;
-  --chart-money: #4b91f5;
-  --chart-investments: #35c79a;
-  --chart-property: #9277e8;
-  --chart-valuables: #a45bc7;
-  --chart-liabilities: #f06a6a;
 }
 
 :root[data-mood='green'].dark {
   --background: #0f1a12;
   --foreground: #ecfdf3;
+  --heading: var(--foreground);
   --card: #152018;
   --card-foreground: #ecfdf3;
   --popover: #152018;
@@ -188,11 +187,6 @@
   --border: #e5e5e0;
   --input: #6b7280;
   --ring: #2f7d57;
-  --chart-money: #2fa7a0;
-  --chart-investments: #2f7d57;
-  --chart-property: #8b6bd6;
-  --chart-valuables: #d9a441;
-  --chart-liabilities: #e07a5f;
 }
 
 :root[data-mood='soft'].dark {
@@ -202,6 +196,7 @@
   --popover: #1f2937;
   --popover-foreground: #f3f4f6;
   --foreground: #f3f4f6;
+  --heading: var(--foreground);
   --primary: #4faf7a;
   --primary-foreground: #0b1f16;
   --secondary: #1f2937;
@@ -213,11 +208,6 @@
   --border: #374151;
   --input: #9ca3af;
   --ring: #4faf7a;
-  --chart-money: #2dd4bf;
-  --chart-investments: #4faf7a;
-  --chart-property: #a78bfa;
-  --chart-valuables: #eab308;
-  --chart-liabilities: #fb7185;
 }
 
 :root[data-mood='neutral'] {
@@ -238,16 +228,12 @@
   --border: #d2d2d7;
   --input: #6e6e73;
   --ring: #1d1d1f;
-  --chart-money: #636366;
-  --chart-investments: #34c759;
-  --chart-property: #af52de;
-  --chart-valuables: #ff9f0a;
-  --chart-liabilities: #ff6961;
 }
 
 :root[data-mood='neutral'].dark {
   --background: #1c1c1e;
   --foreground: #f5f5f7;
+  --heading: var(--foreground);
   --card: #2c2c2e;
   --card-foreground: #f5f5f7;
   --popover: #2c2c2e;
@@ -263,11 +249,6 @@
   --border: #3a3a3c;
   --input: #98989d;
   --ring: #f5f5f7;
-  --chart-money: #aeaeb2;
-  --chart-investments: #30d158;
-  --chart-property: #bf5af2;
-  --chart-valuables: #ffd60a;
-  --chart-liabilities: #ff6961;
 }
 
 :root[data-mood='pastel'] {
@@ -288,16 +269,12 @@
   --border: #e6dfd4;
   --input: #8a8279;
   --ring: #5b8a7a;
-  --chart-money: #7eb6d9;
-  --chart-investments: #7cbc9a;
-  --chart-property: #b8a4d8;
-  --chart-valuables: #e0c07a;
-  --chart-liabilities: #e8a090;
 }
 
 :root[data-mood='pastel'].dark {
   --background: #1e2422;
   --foreground: #f2eee8;
+  --heading: var(--foreground);
   --card: #2a3230;
   --card-foreground: #f2eee8;
   --popover: #2a3230;
@@ -313,11 +290,6 @@
   --border: #3d4845;
   --input: #b5aea4;
   --ring: #8fcbb3;
-  --chart-money: #8ec5e8;
-  --chart-investments: #8fd0b0;
-  --chart-property: #cbb6e8;
-  --chart-valuables: #e8d08c;
-  --chart-liabilities: #f0b0a0;
 }
 
 @theme inline {
@@ -336,6 +308,9 @@
   --color-card-foreground: var(--card-foreground);
   --color-popover: var(--popover);
   --color-popover-foreground: var(--popover-foreground);
+  --color-heading: var(--heading);
+  --color-action: var(--action);
+  --color-positive: var(--positive);
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
   --color-secondary: var(--secondary);

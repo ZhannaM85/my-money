@@ -19,7 +19,7 @@ export function ComparisonDelta({
     <span
       className={
         up
-          ? 'inline-flex items-center justify-end gap-0.5 text-xs tabular-nums text-[var(--chart-investments)]'
+          ? 'inline-flex items-center justify-end gap-0.5 text-xs tabular-nums text-positive'
           : 'inline-flex items-center justify-end gap-0.5 text-xs tabular-nums text-destructive'
       }
       data-testid="comparison-delta"

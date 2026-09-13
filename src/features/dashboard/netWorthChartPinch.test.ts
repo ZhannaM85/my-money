@@ -1,3 +1,6 @@
+import { readFileSync } from 'node:fs'
+import { dirname, join } from 'node:path'
+import { fileURLToPath } from 'node:url'
 import { describe, expect, it } from 'vitest'
 
 /**
@@ -20,6 +23,18 @@ describe('NetWorthChart pinch wiring (#116)', () => {
       }
     }
     expect(missing).toEqual([])
+  })
+})
+
+describe('NetWorthChart series color (#255)', () => {
+  it('strokes and fills the series with --positive, not --primary', () => {
+    const source = readFileSync(
+      join(dirname(fileURLToPath(import.meta.url)), 'NetWorthChart.tsx'),
+      'utf8',
+    )
+    expect(source).toContain('stroke="var(--positive)"')
+    expect(source).toContain('fill="var(--positive)"')
+    expect(source).not.toMatch(/stroke="var\(--primary\)"/)
   })
 })
 
