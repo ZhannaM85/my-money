@@ -102,6 +102,7 @@ gh issue edit 108 --add-label validation
 | `262-update-header-tight.png` | Update · no На дату title; reorder next to date (RU, #262) |
 | `261-comparison-totals-align.png` | Comparison · Итого aligned with date columns (#261) |
 | `263-comparison-total-valign.png` | Comparison · Итого vertically aligned with totals (RU, #263) |
+| `264-assets-institution-own-row.png` | Assets · institution on its own row under type (RU, #264) |
 | `258-history-locale-dates.png` | History · list rows use locale dates (#258) |
 | `258-asset-snapshot-locale-dates.png` | Asset details · snapshot list locale dates (#258) |
 

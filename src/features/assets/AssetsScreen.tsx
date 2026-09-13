@@ -301,15 +301,22 @@ export function AssetsScreen() {
                     <span className="flex min-w-0 flex-col">
                       <span className="truncate font-medium">{asset.name}</span>
                       <span className="text-sm text-muted-foreground">
-                        {[t.asset.types[asset.type], asset.institution?.trim()]
+                        {[
+                          t.asset.types[asset.type],
+                          excluded ? t.asset.notCountedInNetWorth : '',
+                          estimated
+                            ? t.asset.valuation[asset.valuationMethod]
+                            : '',
+                          share ? t.asset.yourShare(share) : '',
+                        ]
                           .filter(Boolean)
                           .join(' · ')}
-                        {excluded ? ` · ${t.asset.notCountedInNetWorth}` : ''}
-                        {estimated
-                          ? ` · ${t.asset.valuation[asset.valuationMethod]}`
-                          : ''}
-                        {share ? ` · ${t.asset.yourShare(share)}` : ''}
                       </span>
+                      {asset.institution?.trim() ? (
+                        <span className="text-sm text-muted-foreground">
+                          {asset.institution.trim()}
+                        </span>
+                      ) : null}
                     </span>
                     <span className="shrink-0 text-right">
                       {snapshot ? (

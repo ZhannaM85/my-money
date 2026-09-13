@@ -173,7 +173,26 @@ describe('AssetsScreen', () => {
         <AssetsScreen />
       </MemoryRouter>,
     )
-    expect(await screen.findByText('Brokerage · BOG')).toBeInTheDocument()
+    expect(await screen.findByText('Brokerage')).toBeInTheDocument()
+    expect(screen.getByText('BOG')).toBeInTheDocument()
+  })
+
+  it('puts institution on its own row under the type (#264)', async () => {
+    const existing = useAssetStore.getState().assets[0]
+    await useAssetStore.getState().saveAsset({
+      ...existing!,
+      institution: 'Bank of Georgia',
+    })
+    render(
+      <MemoryRouter>
+        <AssetsScreen />
+      </MemoryRouter>,
+    )
+    expect(await screen.findByText('Brokerage')).toBeInTheDocument()
+    expect(screen.getByText('Bank of Georgia')).toBeInTheDocument()
+    expect(
+      screen.queryByText('Brokerage · Bank of Georgia'),
+    ).not.toBeInTheDocument()
   })
 
   it('shows ownership share on the muted subtitle when not 1/1 (#151)', async () => {

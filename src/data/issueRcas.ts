@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 264,
+    title: {
+      en: 'Assets list: put institution on its own row',
+      ru: 'Активы: учреждение на отдельной строке',
+    },
+    en: '#109 put type · institution on one muted subtitle. Long names wrapped mid-line and left a gap before the amount. Institution is now a second muted row under the type; excluded / valuation / share stay on the type line.',
+    ru: '#109 ставил тип · учреждение в одну серую строку. Длинные имена ломались посередине и оставляли дыру перед суммой. Учреждение теперь вторая серая строка под типом; «не учитывается» / оценка / доля остаются на строке типа.',
+  },
+  {
     issue: 263,
     title: {
       en: 'Comparison: vertically align Итого with the total amounts',

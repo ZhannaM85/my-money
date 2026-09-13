@@ -79,7 +79,7 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
-| [#264](https://github.com/ZhannaM85/my-money/issues/264) | 🔲 Open | Assets list: put institution on its own row | Follow-up to #109. Type and institution should not share one wrapping `·` line. Amount / ⋯ stay. |
+| [#264](https://github.com/ZhannaM85/my-money/issues/264) | 🔍 Pending validation | Assets list: put institution on its own row | Follow-up to #109. Institution is its own muted row under the type. Amount / ⋯ stay. |
 ---
 
 ## Explicitly not filed

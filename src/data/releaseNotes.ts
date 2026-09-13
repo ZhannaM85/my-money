@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 234,
+    issue: 264,
+    date: '2026-09-13T19:10:00+03:00',
+    en: 'On the Assets list, the institution is on its own row under the type, so long bank names no longer wrap on the same line as Cash or Deposit.',
+    ru: 'В списке Активов учреждение на своей строке под типом — длинное имя банка больше не ломается на одной строке с «Наличные» или «Вклад».',
+  },
+  {
     version: 233,
     issue: 263,
     date: '2026-09-13T18:50:00+03:00',

@@ -686,6 +686,51 @@ test('capture Assets overflow Hide and greyed excluded row (#158)', async ({
   })
 })
 
+test('capture Assets institution on its own row (#264)', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 })
+  await seedValidationFixture(page, { locale: 'ru' })
+  await page.evaluate(async () => {
+    const listed = await indexedDB.databases?.()
+    const existing = listed?.find((row) => row.name === 'my-money')
+    const version =
+      existing?.version && existing.version > 0 ? existing.version : 2
+    await new Promise<void>((resolve, reject) => {
+      const open = indexedDB.open('my-money', version)
+      open.onerror = () => reject(open.error ?? new Error('idb open failed'))
+      open.onsuccess = () => {
+        const db = open.result
+        const tx = db.transaction(['assets'], 'readwrite')
+        const store = tx.objectStore('assets')
+        const get = store.get('usd-cash')
+        get.onsuccess = () => {
+          const row = get.result
+          if (row) store.put({ ...row, institution: 'Bank of Georgia' })
+        }
+        tx.oncomplete = () => {
+          db.close()
+          resolve()
+        }
+        tx.onerror = () => reject(tx.error ?? new Error('idb write failed'))
+      }
+    })
+  })
+  await page.reload()
+  await page.goto('/assets')
+  await expect(page.getByRole('heading', { name: 'Активы' })).toBeVisible()
+  await expect(page.getByText('Bank of Georgia')).toBeVisible()
+  await expect(
+    page.getByText(/Наличные · Bank of Georgia|Cash · Bank of Georgia/),
+  ).toHaveCount(0)
+  await page.screenshot({
+    path: join(
+      'docs',
+      'validation-proof',
+      '264',
+      '264-assets-institution-own-row.png',
+    ),
+  })
+})
+
 test('capture Add asset Quick add House chip (#149)', async ({ page }) => {
   await seedValidationFixture(page)
   await page.goto('/assets/new')
