@@ -1,5 +1,7 @@
 import { Calendar } from 'lucide-react'
 import * as React from 'react'
+import { useLocale } from '@/i18n'
+import { formatCalendarDate } from '@/shared/lib/money'
 import { cn } from '@/shared/lib/utils'
 import { Input } from '@/shared/ui/input'
 
@@ -20,10 +22,13 @@ function openDatePicker(input: HTMLInputElement) {
 }
 
 export const DateField = React.forwardRef<HTMLInputElement, DateFieldProps>(
-  ({ label, error, id, className, onClick, ...props }, ref) => {
+  ({ label, error, id, className, onClick, value, ...props }, ref) => {
+    const locale = useLocale()
     const generatedId = React.useId()
     const inputId = id ?? generatedId
     const errorId = error ? `${inputId}-error` : undefined
+    const iso = typeof value === 'string' ? value : ''
+    const display = iso ? formatCalendarDate(iso, locale) : ''
 
     return (
       <div className="flex flex-col gap-1.5">
@@ -35,14 +40,25 @@ export const DateField = React.forwardRef<HTMLInputElement, DateFieldProps>(
             overflow clip made the page as wide as the native control.
             #95: 1.5× Turtle w-36 so locale dates stay on one line. */}
         <div className="relative w-[13.5rem]">
+          {display ? (
+            <span
+              aria-hidden
+              data-testid="date-field-display"
+              className="pointer-events-none absolute inset-y-0 left-0 z-[1] flex items-center px-control-x pr-10 text-base text-foreground"
+            >
+              {display}
+            </span>
+          ) : null}
           <Input
             ref={ref}
             id={inputId}
             type="date"
+            lang={locale === 'ru' ? 'ru-RU' : 'en-GB'}
+            value={value}
             aria-invalid={error ? true : undefined}
             aria-describedby={errorId}
             className={cn(
-              'w-[13.5rem] cursor-pointer bg-background pr-10',
+              'w-[13.5rem] cursor-pointer bg-background pr-10 text-transparent caret-transparent [&::-webkit-calendar-picker-indicator]:opacity-0 [&::-webkit-datetime-edit]:text-transparent [&::-webkit-datetime-edit-fields-wrapper]:text-transparent',
               className,
             )}
             onClick={(event) => {
@@ -53,7 +69,7 @@ export const DateField = React.forwardRef<HTMLInputElement, DateFieldProps>(
           />
           <Calendar
             aria-hidden
-            className="pointer-events-none absolute inset-y-0 right-3 my-auto size-4 text-muted-foreground"
+            className="pointer-events-none absolute inset-y-0 right-3 z-[1] my-auto size-4 text-muted-foreground"
           />
         </div>
         {error && (

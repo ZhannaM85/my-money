@@ -1383,6 +1383,24 @@ test('capture Dashboard Original+All stacked hero (#256)', async ({ page }) => {
   })
 })
 
+test('capture Dashboard As of locale date in Russian (#259)', async ({
+  page,
+}) => {
+  await seedValidationFixture(page, {
+    locale: 'ru',
+    currencyDisplayMode: 'base',
+  })
+  await page.goto('/')
+  await expect(page.getByRole('heading', { name: 'Сводка' })).toBeVisible()
+  const display = page.getByTestId('date-field-display').first()
+  await expect(display).toBeVisible()
+  await expect(display).not.toHaveText(/January/i)
+  await page.screenshot({
+    path: join(outDir, '259-dashboard-as-of-ru.png'),
+    fullPage: true,
+  })
+})
+
 test('capture DESIGN_SYSTEM chart tokens (#255)', async ({ page }) => {
   await seedValidationFixture(page, { currencyDisplayMode: 'base' })
   await page.goto('/')

@@ -105,7 +105,7 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
-| [#259](https://github.com/ZhannaM85/my-money/issues/259) | 🔲 Open | As of date field stays English when the app is Russian | Dashboard На дату shows `24January2025`. App language is Russian. Native DateField display, not History list rows (#258). |
+| [#259](https://github.com/ZhannaM85/my-money/issues/259) | 🔍 Pending validation | As of date field stays English when the app is Russian | DateField overlays `formatCalendarDate` for the app locale. Native `type=date` value stays ISO. |
 
 ---
 
