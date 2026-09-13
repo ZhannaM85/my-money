@@ -1055,6 +1055,74 @@ test('capture Comparison date columns sized to amounts (#182)', async ({
   })
 })
 
+test('capture Comparison Итого aligned with date columns (#261)', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 })
+  await seedValidationFixture(page, {
+    currencyDisplayMode: 'base',
+    locale: 'ru',
+  })
+  await page.evaluate(async () => {
+    const listed = await indexedDB.databases?.()
+    const existing = listed?.find((row) => row.name === 'my-money')
+    const version =
+      existing?.version && existing.version > 0 ? existing.version : 2
+    await new Promise<void>((resolve, reject) => {
+      const open = indexedDB.open('my-money', version)
+      open.onerror = () => reject(open.error ?? new Error('idb open failed'))
+      open.onsuccess = () => {
+        const db = open.result
+        const tx = db.transaction(['snapshots'], 'readwrite')
+        const store = tx.objectStore('snapshots')
+        store.put({
+          id: 's-eur',
+          assetId: 'eur-cash',
+          date: '2026-08-17',
+          amount: 2_618_702.28,
+          currency: 'EUR',
+        })
+        store.put({
+          id: 's-eur-later',
+          assetId: 'eur-cash',
+          date: '2026-08-25',
+          amount: 2_618_702.28,
+          currency: 'EUR',
+        })
+        tx.oncomplete = () => {
+          db.close()
+          resolve()
+        }
+        tx.onerror = () => reject(tx.error ?? new Error('idb write failed'))
+      }
+    })
+    localStorage.setItem(
+      'my-money-comparison',
+      JSON.stringify({
+        state: { dates: ['2026-08-17', '2026-08-25'] },
+        version: 0,
+      }),
+    )
+  })
+  await page.reload()
+  await page.goto('/compare')
+  await expect(page.getByRole('heading', { name: 'Сравнение' })).toBeVisible()
+  await expect(page.getByTestId('comparison-total-2026-08-17')).toBeVisible()
+  await expect(
+    page.getByTestId('comparison-total-2026-08-17').getByTestId(
+      'comparison-col-end-spacer',
+    ),
+  ).toBeAttached()
+  await page.screenshot({
+    path: join(
+      'docs',
+      'validation-proof',
+      '261',
+      '261-comparison-totals-align.png',
+    ),
+  })
+})
+
 test('capture Update institution under title (#184)', async ({ page }) => {
   await seedValidationFixture(page)
   await page.evaluate(async () => {

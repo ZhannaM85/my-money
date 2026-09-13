@@ -9,6 +9,7 @@ import {
   comparisonTotalDelta,
 } from '@/features/dashboard/comparisonRows'
 import { ComparisonDelta } from '@/features/dashboard/ComparisonDelta'
+import { ComparisonDateCellFrame } from '@/features/dashboard/comparisonDateCellFrame'
 import { ConversionUnavailableButton } from '@/features/dashboard/ConversionUnavailableButton'
 import { useLocale, useTranslation } from '@/i18n'
 import { snapshotOnDate, snapshotsOnOrBefore } from '@/domain/snapshot'
@@ -198,34 +199,37 @@ function ComparisonCell({
   }
 
   return (
-    <span className="flex items-start justify-end gap-1 whitespace-nowrap">
+    <ComparisonDateCellFrame
+      end={
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon"
+          className="shrink-0"
+          aria-label={t.dashboard.editComparisonAmount(name, date)}
+          onClick={(event) => {
+            event.stopPropagation()
+            const prior = snapshotsOnOrBefore(snapshots, assetId, date)
+            const source = onDate ?? prior
+            setDraft(
+              source
+                ? formatEditableAmount(source.amount, locale, source.currency)
+                : '',
+            )
+            setEditing(true)
+          }}
+        >
+          <Pencil className="size-3.5" aria-hidden />
+        </Button>
+      }
+    >
       <ComparisonAmountDisplay
         holding={holding}
         baseline={baseline}
         baseCurrency={baseCurrency}
         date={date}
       />
-      <Button
-        type="button"
-        variant="ghost"
-        size="icon"
-        className="shrink-0"
-        aria-label={t.dashboard.editComparisonAmount(name, date)}
-        onClick={(event) => {
-          event.stopPropagation()
-          const prior = snapshotsOnOrBefore(snapshots, assetId, date)
-          const source = onDate ?? prior
-          setDraft(
-            source
-              ? formatEditableAmount(source.amount, locale, source.currency)
-              : '',
-          )
-          setEditing(true)
-        }}
-      >
-        <Pencil className="size-3.5" aria-hidden />
-      </Button>
-    </span>
+    </ComparisonDateCellFrame>
   )
 }
 
@@ -437,10 +441,11 @@ export function ComparisonScreen() {
                 {dates.map((date) => (
                   <td
                     key={date}
+                    data-testid={`comparison-total-${date}`}
                     className={`px-2 py-3 text-right font-semibold tabular-nums ${COMPARISON_DATE_COL_CLASS}`}
                   >
-                    <span className="flex flex-col items-end gap-0.5 whitespace-nowrap">
-                      <span>
+                    <ComparisonDateCellFrame>
+                      <span className="tabular-nums">
                         {formatAmount(totals[date] ?? 0, baseCurrency, locale)}
                       </span>
                       <ComparisonDelta
@@ -454,7 +459,7 @@ export function ComparisonScreen() {
                         }
                         currency={baseCurrency}
                       />
-                    </span>
+                    </ComparisonDateCellFrame>
                   </td>
                 ))}
               </tr>

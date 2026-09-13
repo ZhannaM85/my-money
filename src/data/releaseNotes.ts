@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 232,
+    issue: 261,
+    date: '2026-09-13T18:45:00+03:00',
+    en: 'Comparison totals now sit in the same columns as the holding amounts, with the same trailing space as the pencil, so Итого is not shifted or clipped.',
+    ru: 'Итого в Сравнении стоит в тех же колонках, что и суммы активов, с тем же полем справа, что у карандаша — цифры больше не съезжают и не обрезаются.',
+  },
+  {
     version: 231,
     issue: 262,
     date: '2026-09-13T18:30:00+03:00',

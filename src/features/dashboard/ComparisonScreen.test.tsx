@@ -247,6 +247,45 @@ describe('ComparisonScreen (#137)', () => {
     expect(dateHeader.className).not.toContain('max-w-[8.25rem]')
   })
 
+  it('aligns Итого amounts with holding columns via the same trailing slot (#261)', async () => {
+    const now = '2026-08-17T00:00:00.000Z'
+    await useAssetStore.getState().saveAsset(
+      {
+        id: 'a1',
+        name: 'USD cash',
+        assetClass: 'money',
+        type: 'cash',
+        currency: 'EUR',
+        trackingStatus: 'included',
+        valuationMethod: 'account_balance',
+        updateFrequency: 'weekly',
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        assetId: 'a1',
+        date: '2026-08-25',
+        amount: 2_618_702.28,
+        currency: 'EUR',
+      },
+    )
+    useComparisonStore.setState({ dates: ['2026-08-25', '2026-08-29'] })
+    renderApp(<ComparisonScreen />)
+    const first = await screen.findByTestId('comparison-total-2026-08-25')
+    const second = screen.getByTestId('comparison-total-2026-08-29')
+    expect(
+      within(first).getByTestId('comparison-col-end-spacer'),
+    ).toBeInTheDocument()
+    expect(
+      within(second).getByTestId('comparison-col-end-spacer'),
+    ).toBeInTheDocument()
+    expect(
+      within(first).getByText(formatAmount(2_618_702.28, 'EUR')),
+    ).toBeInTheDocument()
+    expect(first.className).toContain('whitespace-nowrap')
+    expect(second.className).not.toContain('max-w-')
+  })
+
   it('scrolls date columns inside the table, not the page; names stay sticky (#139)', async () => {
     const now = '2026-08-17T00:00:00.000Z'
     await useAssetStore.getState().saveAsset(

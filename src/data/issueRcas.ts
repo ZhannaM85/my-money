@@ -20,6 +20,15 @@ export const issueRcas: IssueRca[] = [
     ru: 'После #238 серой подсказки не стало, но на «Обновить» осталась пустая полоса: видимый заголовок «На дату», затем одинокий значок порядка. DateField умеет прятать видимый label (доступное имя остаётся). Порядок стоит в шапке рядом с датой.',
   },
   {
+    issue: 261,
+    title: {
+      en: 'Comparison: Итого totals are shifted off the date columns',
+      ru: 'Сравнение: Итого съезжает с колонок дат',
+    },
+    en: 'Holding cells are amount + pencil. The footer was amount-only, so totals sat further right and the second figure looked clipped. Shared `ComparisonDateCellFrame` reserves the same size-11 trailing slot on Итого.',
+    ru: 'В строках актива — сумма + карандаш. В подвале была только сумма, поэтому Итого уезжало вправо, а вторая цифра обрезалась. Общий `ComparisonDateCellFrame` оставляет тот же слот size-11 у Итого.',
+  },
+  {
     issue: 252,
     title: {
       en: 'Make Comparison discoverable from More',
