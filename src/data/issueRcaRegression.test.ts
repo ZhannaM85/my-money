@@ -4,11 +4,18 @@ import { issueRcas } from './issueRcas'
 /** Live-feedback RCAs from this cutoff must be named in a *.test.ts(x) file. */
 const FIRST_REQUIRED = 90
 
-const testSources = import.meta.glob(['../**/*.test.ts', '../**/*.test.tsx'], {
-  query: '?raw',
-  import: 'default',
-  eager: true,
-}) as Record<string, string>
+const testSources = import.meta.glob(
+  [
+    '../**/*.test.ts',
+    '../**/*.test.tsx',
+    '../../scripts/**/*.test.ts',
+  ],
+  {
+    query: '?raw',
+    import: 'default',
+    eager: true,
+  },
+) as Record<string, string>
 
 describe('RCA regression coverage (#101)', () => {
   it('names each shipped RCA from #90 onward in a unit test', () => {

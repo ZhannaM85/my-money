@@ -51,5 +51,7 @@ describe('RcaSection (#94)', () => {
     expect(issues).toContain(105)
     expect(issues).toContain(106)
     expect(issues).toContain(101) // #101
+    expect(issues).toContain(127) // #127
+    expect(issues).toContain(178) // #178
   })
 })
