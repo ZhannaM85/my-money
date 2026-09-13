@@ -79,7 +79,7 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
-| [#267](https://github.com/ZhannaM85/my-money/issues/267) | 🔍 Pending validation | Assets and Update: make Order / reorder controls consistent | Shared icon-only Order button (Update chrome). Assets Cancel / Save while reordering stay. |
+| [#268](https://github.com/ZhannaM85/my-money/issues/268) | 🔲 Open | Assets: Save reorder with the same icon as Update; drop Cancel | Follow-up to #267. While dragging, Assets still has Отмена + Сохранить. Match Update: Save icon, no Cancel. |
 ---
 
 ## Explicitly not filed
