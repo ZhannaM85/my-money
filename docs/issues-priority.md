@@ -79,6 +79,7 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
+| [#265](https://github.com/ZhannaM85/my-money/issues/265) | 🔲 Open | Assets list: drop Не учитывается on excluded rows | Follow-up to #264. Greyed opacity already marks excluded; drop the wrapping «не учитывается в капитале» phrase. |
 ---
 
 ## Explicitly not filed
