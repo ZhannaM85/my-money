@@ -287,6 +287,7 @@ Closed live-feedback rows from Tier 8 onward. Open / pending items stay in [`../
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
+| [#233](https://github.com/ZhannaM85/my-money/issues/233) | ✅ Done | Split DashboardScreen into ≤500-line modules | Extracted `useDashboardScreen` / `useDashboardNetWorth`, As of bar, headline, period change, rates, and positions. Matching test slices moved. No behavior change. Closed 2026-09-13 — refactor; Сводка smoke via later Dashboard checks. |
 | [#245](https://github.com/ZhannaM85/my-money/issues/245) | ✅ Done | Clarify dual currency controls (Dashboard filter vs More) | Converted Dashboard filter stays visible + disabled; InfoHint points to More. Show all / Original / Converted unchanged. No new mode. Validated on-device 2026-09-13. |
 | [#246](https://github.com/ZhannaM85/my-money/issues/246) | ✅ Done | Shared Сводка/История read models (keep tabs separate) | Shared series + change + missing rates. Tabs stay separate (today + positions vs day list/calendar). Update rates on More (#256). Validated on-device 2026-09-13. |
 | [#247](https://github.com/ZhannaM85/my-money/issues/247) | ✅ Done | Shared confirm dialog instead of window.confirm | In-app `ConfirmDialog` / `useConfirm` for delete asset/snapshot, replace backup, wipe, and comparison date remove. Cancel / Escape / backdrop keep data. Validated on-device 2026-09-13. |
