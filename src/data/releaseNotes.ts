@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 229,
+    issue: 246,
+    date: '2026-09-13T09:20:00+03:00',
+    en: 'Dashboard and History now share the same converted series, period change, and missing-rate math, so the two tabs cannot drift. Dashboard stays today plus positions; History stays the day list and calendar. Update rates stays on Dashboard.',
+    ru: 'Сводка и История теперь считают один и тот же ряд, изменение за период и отсутствующие курсы — вкладки больше не расходятся. Сводка — сегодня и позиции; История — список дней и календарь. «Обновить курсы» остаётся на Сводке.',
+  },
+  {
     version: 228,
     issue: 244,
     date: '2026-09-13T09:10:00+03:00',

@@ -15,6 +15,12 @@ export {
 } from './holdings'
 export { historicalNativeNetWorth, historicalNetWorth } from './history'
 export {
+  convertedPeriodReadModel,
+  EMPTY_CONVERTED_PERIOD,
+  type ConvertedPeriodBreakdown,
+  type ConvertedPeriodReadModel,
+} from './convertedPeriod'
+export {
   allocation,
   attachConvertedSharePercents,
   breakdownBy,

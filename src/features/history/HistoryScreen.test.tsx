@@ -85,6 +85,9 @@ describe('HistoryScreen', () => {
     expect(
       screen.getAllByText(formatAmount(1000, 'EUR')).length,
     ).toBeGreaterThan(0)
+    expect(
+      screen.queryByRole('button', { name: 'Update rates' }),
+    ).not.toBeInTheDocument()
   })
 
   it('shows the selected-range change from the visible series, not zero vs current net worth', async () => {

@@ -2,7 +2,6 @@ import { useEffect, useMemo } from 'react'
 import type { Asset } from '@/domain/asset'
 import type { RateTable } from '@/domain/fx'
 import {
-  decomposeConvertedPeriodChange,
   historicalNativeNetWorth,
   historicalNetWorth,
   holdingsWithConversion,
@@ -11,13 +10,12 @@ import {
   periodChange,
 } from '@/domain/netWorth'
 import type { AssetSnapshot } from '@/domain/snapshot'
+import { useConvertedPeriodReadModel } from '@/features/net-worth'
 import type { Locale } from '@/i18n'
 import { fxDebug, getFxRuntimeContext } from '@/infrastructure/fx/fxDebug'
-import { isoDatesInclusive, type HistoryRange } from '@/shared/lib/dates'
+import type { HistoryRange } from '@/shared/lib/dates'
 import { formatPercent, formatSignedAmount } from '@/shared/lib/money'
-import { useFxStore } from '@/stores/fxStore'
 import { asOfHasLoggedData } from './asOfHasLoggedData'
-import { dashboardNeedsRemoteFx } from './dashboardFx'
 import { holdingsForSelectedChartDay } from './holdingsForSelectedChartDay'
 
 export function useDashboardNetWorth({
@@ -57,12 +55,6 @@ export function useDashboardNetWorth({
   overRangeLabel: string
   fxMissing: (codes: string) => string
 }) {
-  const ensureRange = useFxStore((state) => state.ensureRange)
-
-  const dates = useMemo(
-    () => isoDatesInclusive(start, chartEnd),
-    [start, chartEnd],
-  )
   const filteredAssets = useMemo(() => {
     if (activeCurrencyFilter === 'all') return assets
     return assets.filter((asset) => asset.currency === activeCurrencyFilter)
@@ -78,20 +70,15 @@ export function useDashboardNetWorth({
     )
   }, [activeCurrencyFilter, filteredAssetIds, snapshots])
 
-  useEffect(() => {
-    if (!dashboardNeedsRemoteFx(isOriginal)) return
-    const symbols = [
-      ...new Set(filteredSnapshots.map((snapshot) => snapshot.currency)),
-    ]
-    void ensureRange(start, chartEnd, baseCurrency, symbols)
-  }, [
-    baseCurrency,
-    chartEnd,
-    ensureRange,
-    filteredSnapshots,
-    isOriginal,
+  const period = useConvertedPeriodReadModel({
+    assets: filteredAssets,
+    snapshots: filteredSnapshots,
+    quotes,
     start,
-  ])
+    chartEnd,
+    baseCurrency,
+    isOriginal,
+  })
 
   const convertedResult = useMemo(
     () => netWorth(filteredAssets, filteredSnapshots, quotes, baseCurrency),
@@ -137,40 +124,23 @@ export function useDashboardNetWorth({
     () => nativeTotalsByCurrency(filteredAssets, filteredSnapshots),
     [filteredAssets, filteredSnapshots],
   )
-  const convertedSeries = useMemo(() => {
-    if (isOriginal) return []
-    return historicalNetWorth(
-      filteredAssets,
-      filteredSnapshots,
-      quotes,
-      dates,
-      baseCurrency,
-    )
-  }, [
-    baseCurrency,
-    dates,
-    filteredAssets,
-    filteredSnapshots,
-    isOriginal,
-    quotes,
-  ])
   const nativeSeries = useMemo(() => {
     if (!isOriginal || activeCurrencyFilter === 'all') return []
     return historicalNativeNetWorth(
       filteredAssets,
       filteredSnapshots,
-      dates,
+      period.dates,
       activeCurrencyFilter,
     )
   }, [
     activeCurrencyFilter,
-    dates,
     filteredAssets,
     filteredSnapshots,
     isOriginal,
+    period.dates,
   ])
 
-  const series = isOriginal ? nativeSeries : convertedSeries
+  const series = isOriginal ? nativeSeries : period.series
   const outsideSelectedPoint = useMemo(() => {
     if (!selectedChartDate) return undefined
     if (series.some((point) => point.date === selectedChartDate)) {
@@ -212,7 +182,6 @@ export function useDashboardNetWorth({
       outsideSelectedPoint,
     )
   const asOfHasData = asOfHasLoggedData(selectedChartDate, earliest)
-  const convertedTodayPoint = convertedSeries[convertedSeries.length - 1]
   const todayConvertedPoint = useMemo(() => {
     if (isOriginal) return undefined
     return historicalNetWorth(
@@ -233,16 +202,6 @@ export function useDashboardNetWorth({
   /** Today’s book at today’s rate — not a pinned chart-end point (#208, #225). */
   const convertedTodayTotal =
     todayConvertedPoint?.total ?? convertedResult.total
-  const convertedBreakdown = useMemo(() => {
-    const startHoldings = convertedSeries[0]?.holdings
-    const endHoldings = convertedTodayPoint?.holdings
-    if (isOriginal || !startHoldings || !endHoldings) return null
-    return decomposeConvertedPeriodChange(startHoldings, endHoldings)
-  }, [convertedSeries, convertedTodayPoint, isOriginal])
-  const fxSymbols = useMemo(
-    () => [...new Set(filteredSnapshots.map((snapshot) => snapshot.currency))],
-    [filteredSnapshots],
-  )
   const singleNativeTotal =
     isOriginal && activeCurrencyFilter !== 'all'
       ? (nativeTotals.find((row) => row.currency === activeCurrencyFilter)
@@ -253,23 +212,19 @@ export function useDashboardNetWorth({
     : isOriginal
       ? (singleNativeTotal ?? 0)
       : convertedTodayTotal
-  const changeFrom = series[0]?.total ?? 0
-  const changeTo =
-    series.length > 0
+  const changeFrom = isOriginal ? (series[0]?.total ?? 0) : period.changeFrom
+  const changeTo = isOriginal
+    ? series.length > 0
       ? (series[series.length - 1]?.total ?? 0)
-      : isOriginal
-        ? (singleNativeTotal ?? 0)
-        : convertedResult.total
-  const headlineTo =
-    !isOriginal && convertedBreakdown
-      ? changeFrom + convertedBreakdown.amountChange
-      : changeTo
-  const change = periodChange(changeFrom, headlineTo)
+      : (singleNativeTotal ?? 0)
+    : period.headlineTo
+  const change = isOriginal ? periodChange(changeFrom, changeTo) : period.change
   const missingCodes = [
     ...new Set(
-      (convertedTodayPoint?.missingRates ?? convertedResult.missingRates).map(
-        (row) => row.from,
-      ),
+      (period.missingRates.length > 0
+        ? period.missingRates
+        : convertedResult.missingRates
+      ).map((row) => row.from),
     ),
   ]
   const fxNote =
@@ -298,8 +253,8 @@ export function useDashboardNetWorth({
     selectedChartPoint,
     convertedHoldingsToday,
     asOfHasData,
-    convertedBreakdown,
-    fxSymbols,
+    convertedBreakdown: period.breakdown,
+    fxSymbols: period.fxSymbols,
     displayHeadlineTotal,
     fxNote,
     changeLabel,

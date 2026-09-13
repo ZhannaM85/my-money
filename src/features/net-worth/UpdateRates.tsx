@@ -2,16 +2,17 @@ import { RefreshCw } from 'lucide-react'
 import { useLocale, useTranslation } from '@/i18n'
 import { formatDateTime } from '@/shared/lib/money'
 import { Button } from '@/shared/ui/button'
-import type { DashboardRatesStatus } from './useDashboardScreen'
+import type { RatesStatus } from './useUpdateRates'
 
-export function DashboardRates({
+/** Single Update rates control (#246) — mount on Dashboard only. */
+export function UpdateRates({
   fxLoading,
   ratesStatus,
   lastFetchedAt,
   onUpdateRates,
 }: {
   fxLoading: boolean
-  ratesStatus: DashboardRatesStatus
+  ratesStatus: RatesStatus
   lastFetchedAt?: string
   onUpdateRates: () => void
 }) {

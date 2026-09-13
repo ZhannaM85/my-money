@@ -9,7 +9,7 @@ import { DashboardAsOfBar } from './DashboardAsOfBar'
 import { DashboardHeadline } from './DashboardHeadline'
 import { DashboardPeriodChange } from './DashboardPeriodChange'
 import { DashboardPositions } from './DashboardPositions'
-import { DashboardRates } from './DashboardRates'
+import { UpdateRates } from '@/features/net-worth'
 import { useDashboardScreen } from './useDashboardScreen'
 
 export function DashboardScreen() {
@@ -75,7 +75,7 @@ export function DashboardScreen() {
                   periodOpen={d.periodOpen}
                   onTogglePeriod={d.togglePeriod}
                 />
-                <DashboardRates
+                <UpdateRates
                   fxLoading={d.fxLoading}
                   ratesStatus={d.ratesStatus}
                   lastFetchedAt={d.lastFetchedAt}

@@ -88,6 +88,7 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 | [#243](https://github.com/ZhannaM85/my-money/issues/243) | 🔍 Pending validation | Asset detail: fold tracking/destructive actions into Сведения | Exclude / hide / delete live in expanded Details. Native/base chips persist `currencyDisplayMode`. |
 | [#245](https://github.com/ZhannaM85/my-money/issues/245) | 🔍 Pending validation | Clarify dual currency controls (Dashboard filter vs More) | Converted Dashboard filter stays visible + disabled; InfoHint points to More. Show all / Original / Converted unchanged. No new mode. |
 | [#244](https://github.com/ZhannaM85/my-money/issues/244) | 🔍 Pending validation | Unify hide/show chrome: Assets/detail ⋯, Positions tap-to-reveal | Shared overflow menu on Assets + detail (exclude / archive / delete). Positions / Allocation stay tap-to-reveal. |
+| [#246](https://github.com/ZhannaM85/my-money/issues/246) | 🔍 Pending validation | Shared Сводка/История read models (keep tabs separate) | Shared series + change + missing rates. Tabs stay separate (today + positions vs day list/calendar). Update rates on Dashboard only. |
 
 ---
 

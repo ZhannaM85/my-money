@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useSharedChartRange } from '@/features/charts'
+import { useUpdateRates } from '@/features/net-worth'
 import { useLocale, useTranslation } from '@/i18n'
 import { todayIsoDate } from '@/shared/lib/money'
 import { useAssetStore } from '@/stores/assetStore'
@@ -7,9 +8,6 @@ import { useComparisonStore } from '@/stores/comparisonStore'
 import { useFxStore } from '@/stores/fxStore'
 import { useSettingsStore } from '@/stores/settingsStore'
 import { useDashboardNetWorth } from './useDashboardNetWorth'
-
-export type DashboardRatesStatus =
-  'idle' | 'loading' | 'updated' | 'offline' | 'error'
 
 export function useDashboardScreen() {
   const t = useTranslation()
@@ -24,10 +22,6 @@ export function useDashboardScreen() {
     (state) => state.settings.currencyDisplayMode,
   )
   const quotes = useFxStore((state) => state.quotes)
-  const ensureRange = useFxStore((state) => state.ensureRange)
-  const markRatesFetched = useFxStore((state) => state.markRatesFetched)
-  const lastFetchedAt = useFxStore((state) => state.lastFetchedAt)
-  const fxLoading = useFxStore((state) => state.loading)
   const [currencyFilter, setCurrencyFilter] = useState<string>('all')
   const [holdingsOpen, setHoldingsOpen] = useState(false)
   const [selectedChartDate, setSelectedChartDate] = useState<string | null>(
@@ -38,7 +32,6 @@ export function useDashboardScreen() {
     null,
   )
   const [periodOpen, setPeriodOpen] = useState<'amount' | 'rate' | null>(null)
-  const [ratesStatus, setRatesStatus] = useState<DashboardRatesStatus>('idle')
   const comparisonDates = useComparisonStore((state) => state.dates)
   const addComparisonDate = useComparisonStore((state) => state.addDate)
 
@@ -87,6 +80,12 @@ export function useDashboardScreen() {
     overRangeLabel: t.history.overRange(chartRange.range),
     fxMissing: t.dashboard.fxMissing,
   })
+  const rates = useUpdateRates(
+    chartRange.start,
+    chartRange.chartEnd,
+    baseCurrency,
+    worth.fxSymbols,
+  )
 
   const onAsOfDateChange = (next: string) => {
     if (!next || next > today) {
@@ -133,30 +132,6 @@ export function useDashboardScreen() {
     setHoldingsOpen((open) => !open)
   }
 
-  const refreshRates = () => {
-    void (async () => {
-      setRatesStatus('loading')
-      const online = typeof navigator === 'undefined' ? true : navigator.onLine
-      await ensureRange(
-        chartRange.start,
-        chartRange.chartEnd,
-        baseCurrency,
-        worth.fxSymbols,
-        { force: true },
-      )
-      if (!online) {
-        setRatesStatus('offline')
-        return
-      }
-      if (useFxStore.getState().error) {
-        setRatesStatus('error')
-        return
-      }
-      markRatesFetched()
-      setRatesStatus('updated')
-    })()
-  }
-
   const loaded = assetsLoaded && settingsLoaded
   const showNativeAll = isOriginal && activeCurrencyFilter === 'all'
 
@@ -183,9 +158,9 @@ export function useDashboardScreen() {
     comparisonDates,
     convertedBreakdown: worth.convertedBreakdown,
     periodOpen,
-    fxLoading,
-    ratesStatus,
-    lastFetchedAt,
+    fxLoading: rates.fxLoading,
+    ratesStatus: rates.ratesStatus,
+    lastFetchedAt: rates.lastFetchedAt,
     chartRange,
     asOfHasData: worth.asOfHasData,
     series: worth.series,
@@ -197,7 +172,7 @@ export function useDashboardScreen() {
     onCurrencyFilterChange,
     toggleNativeCurrency,
     togglePeriod,
-    refreshRates,
+    refreshRates: rates.refreshRates,
     onSelectChartDate,
     toggleHoldings,
   }

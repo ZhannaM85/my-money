@@ -193,6 +193,7 @@ src/
   features/
     onboarding/
     charts/                # shared range chrome (#239)
+    net-worth/             # shared series + change + missing rates (#246)
     dashboard/
     assets/                # list, create/edit, asset details (Flow 4)
     update-finances/
@@ -224,13 +225,13 @@ Copy goes through `src/i18n/` (English + Russian). Locale is `settings.locale` i
 
 | Path | Screen |
 |---|---|
-| `/` | Dashboard — net worth, period change, chart, class totals |
+| `/` | Dashboard — today + positions (net worth, period change, chart) |
 | `/assets` | Asset list + filters (All / Money / Investments / Property / Valuables / Liabilities) |
 | `/assets/new` | Create asset |
 | `/assets/:id` | Asset details |
 | `/update` | Quick update flow |
 | `/allocation` | Donut + legend (by class / currency / type) |
-| `/history` | Net-worth history + range chips |
+| `/history` | History — day list / calendar (+ shared range chrome) |
 | `/settings` | More: Preferences, Data, About, collapsed Developer |
 | `/onboarding` | First-run: base currency + first assets |
 
@@ -343,11 +344,12 @@ Until later feature epics land, UI module tables below are still the intended ma
 |------|---------|
 | `features/onboarding/` | Flow 1 — first assets + base currency + first net worth |
 | `features/charts/` | Shared chart-range chrome + hook (#239). Dashboard↔History persist one range; asset details stay local. |
-| `features/dashboard/` | Flow 2 — net worth, allocation strip, chart, recent change |
+| `features/net-worth/` | Shared converted series + change + missing rates (#246). Update rates lives here; Dashboard mounts it. |
+| `features/dashboard/` | Сводка — today + positions (headline, chart, holdings) |
 | `features/update-finances/` | Flow 3 — bulk update, no-change, suggested-by-frequency |
 | `features/assets/` | List, filters, create/edit, and Flow 4 asset details (`AssetDetailsScreen`) |
 | `features/allocation/` | Donut + legend |
-| `features/history/` | Net-worth snapshots over ranges |
+| `features/history/` | История — day list / calendar over the shared range |
 | `features/settings/` | Base currency, locale, tracking, export/import, `/privacy` (#164) |
 | `features/export/` | JSON (backup) then CSV |
 

@@ -1,237 +1,43 @@
-import { useEffect, useMemo, useState } from 'react'
-import {
-  decomposeConvertedPeriodChange,
-  historicalNetWorth,
-  holdingsWithConversion,
-  nativeTotalsByCurrency,
-  periodChange,
-} from '@/domain/netWorth'
-import { ChartRangeControls, useSharedChartRange } from '@/features/charts'
+import { ChartRangeControls } from '@/features/charts'
 import { NetWorthChart } from '@/features/dashboard/NetWorthChart'
 import { HistoryCalendar } from './HistoryCalendar'
 import { HistoryDayRow } from './HistoryDayRow'
-import { useLocale, useTranslation } from '@/i18n'
-import { isoDatesInclusive, isRangeClampedToEarliest } from '@/shared/lib/dates'
-import {
-  formatAmount,
-  formatChartAxisDate,
-  formatSignedAmount,
-  todayIsoDate,
-} from '@/shared/lib/money'
+import { useHistoryScreen } from './useHistoryScreen'
+import { formatAmount, formatSignedAmount } from '@/shared/lib/money'
 import { Chip } from '@/shared/ui/chip'
 import { EmptyState } from '@/shared/ui/empty-state'
 import { PageHeader } from '@/shared/ui/page-header'
 import { StatCard } from '@/shared/ui/stat-card'
-import { useAssetStore } from '@/stores/assetStore'
-import { useFxStore } from '@/stores/fxStore'
-import { useSettingsStore } from '@/stores/settingsStore'
-
-type HistoryDayDetail =
-  | {
-      date: string
-      totals: ReturnType<typeof nativeTotalsByCurrency>
-      holdings: ReturnType<typeof holdingsWithConversion>
-    }
-  | {
-      date: string
-      total: number
-      delta: number | null
-      holdings: ReturnType<typeof holdingsWithConversion>
-    }
 
 export function HistoryScreen() {
-  const t = useTranslation()
-  const locale = useLocale()
-  const assets = useAssetStore((state) => state.assets)
-  const snapshots = useAssetStore((state) => state.snapshots)
-  const loaded = useAssetStore((state) => state.loaded)
-  const loadSettings = useSettingsStore((state) => state.load)
-  const baseCurrency = useSettingsStore((state) => state.settings.baseCurrency)
-  const isOriginal =
-    useSettingsStore((state) => state.settings.currencyDisplayMode) === 'native'
-  const quotes = useFxStore((state) => state.quotes)
-  const ensureRange = useFxStore((state) => state.ensureRange)
-  const [openDates, setOpenDates] = useState<ReadonlySet<string>>(new Set())
-  const [viewMode, setViewMode] = useState<'list' | 'calendar'>('list')
-  const [selectedCalendarDate, setSelectedCalendarDate] = useState<
-    string | null
-  >(null)
-  const today = todayIsoDate()
-
-  useEffect(() => {
-    void loadSettings()
-  }, [loadSettings])
-
-  const earliest = useMemo(() => {
-    if (snapshots.length === 0) return today
-    return snapshots.reduce(
-      (min, snapshot) => (snapshot.date < min ? snapshot.date : min),
-      snapshots[0].date,
-    )
-  }, [snapshots, today])
-
-  const chartRange = useSharedChartRange(earliest, today)
-  const { range, start, chartEnd } = chartRange
-  const rangeLabel = isRangeClampedToEarliest(range, chartEnd, earliest)
-    ? t.history.sinceDate(formatChartAxisDate(start, locale))
-    : t.history.overRange(range)
-  const dates = useMemo(
-    () => isoDatesInclusive(start, chartEnd),
-    [start, chartEnd],
-  )
-  const snapshotDays = useMemo(() => {
-    return [
-      ...new Set(
-        snapshots
-          .map((snapshot) => snapshot.date)
-          .filter((date) => date >= start && date <= chartEnd),
-      ),
-    ].sort()
-  }, [snapshots, start, chartEnd])
-  const allSnapshotDates = useMemo(
-    () => [...new Set(snapshots.map((snapshot) => snapshot.date))],
-    [snapshots],
-  )
-
-  useEffect(() => {
-    const symbols = [...new Set(snapshots.map((snapshot) => snapshot.currency))]
-    void ensureRange(start, chartEnd, baseCurrency, symbols)
-  }, [baseCurrency, chartEnd, ensureRange, snapshots, start])
-
-  const nativeTotals = useMemo(
-    () => nativeTotalsByCurrency(assets, snapshots),
-    [assets, snapshots],
-  )
-  const series = useMemo(
-    () =>
-      isOriginal
-        ? []
-        : historicalNetWorth(assets, snapshots, quotes, dates, baseCurrency),
-    [assets, baseCurrency, dates, isOriginal, quotes, snapshots],
-  )
-  const latestPoint = series[series.length - 1]
-  const breakdown = useMemo(() => {
-    if (isOriginal) return null
-    const startHoldings = series[0]?.holdings
-    const endHoldings = latestPoint?.holdings
-    if (!startHoldings || !endHoldings) return null
-    return decomposeConvertedPeriodChange(startHoldings, endHoldings)
-  }, [isOriginal, latestPoint, series])
-  const changeFrom = series[0]?.total ?? 0
-  const headlineTo = breakdown
-    ? changeFrom + breakdown.amountChange
-    : (latestPoint?.total ?? 0)
-  const change = periodChange(changeFrom, headlineTo)
-  const convertedList = useMemo(() => {
-    const byDate = new Map(series.map((point) => [point.date, point]))
-    const points = snapshotDays
-      .map((date) => byDate.get(date))
-      .filter(
-        (point): point is NonNullable<typeof point> => point !== undefined,
-      )
-    return [...points].reverse().map((point, index, rows) => {
-      const older = rows[index + 1]
-      return {
-        ...point,
-        delta: older ? point.total - older.total : null,
-      }
-    })
-  }, [series, snapshotDays])
-  const originalList = useMemo(() => {
-    return [...snapshotDays].reverse().map((date) => {
-      const asOf = snapshots.filter((snapshot) => snapshot.date <= date)
-      return {
-        date,
-        totals: nativeTotalsByCurrency(assets, asOf),
-        holdings: holdingsWithConversion(assets, asOf, quotes, baseCurrency),
-      }
-    })
-  }, [assets, baseCurrency, quotes, snapshotDays, snapshots])
-
-  const selectedCalendarDay = useMemo((): HistoryDayDetail | null => {
-    if (!selectedCalendarDate) return null
-    if (isOriginal) {
-      const asOf = snapshots.filter(
-        (snapshot) => snapshot.date <= selectedCalendarDate,
-      )
-      return {
-        date: selectedCalendarDate,
-        totals: nativeTotalsByCurrency(assets, asOf),
-        holdings: holdingsWithConversion(assets, asOf, quotes, baseCurrency),
-      }
-    }
-    const visibleRow = convertedList.find(
-      (row) => row.date === selectedCalendarDate,
-    )
-    if (visibleRow) return visibleRow
-
-    const previousDate = allSnapshotDates
-      .filter((date) => date < selectedCalendarDate)
-      .sort()
-      .at(-1)
-    const points = historicalNetWorth(
-      assets,
-      snapshots,
-      quotes,
-      previousDate
-        ? [previousDate, selectedCalendarDate]
-        : [selectedCalendarDate],
-      baseCurrency,
-    )
-    const point = points.at(-1)
-    if (!point) return null
-    const older = previousDate ? points[0] : undefined
-    return {
-      date: selectedCalendarDate,
-      total: point.total,
-      delta: older ? point.total - older.total : null,
-      holdings: point.holdings,
-    }
-  }, [
-    allSnapshotDates,
-    assets,
-    baseCurrency,
-    convertedList,
-    isOriginal,
-    quotes,
-    selectedCalendarDate,
-    snapshots,
-  ])
-
-  const toggleOpenDate = (date: string) => {
-    setOpenDates((current) => {
-      const next = new Set(current)
-      if (next.has(date)) next.delete(date)
-      else next.add(date)
-      return next
-    })
-  }
+  const h = useHistoryScreen()
+  const { t, locale } = h
 
   return (
     <div className="flex flex-col gap-6">
       <PageHeader title={t.history.title} />
       <ChartRangeControls
-        range={chartRange}
-        earliest={earliest}
-        latest={today}
+        range={h.chartRange}
+        earliest={h.earliest}
+        latest={h.today}
         showToolbar={false}
       />
-      {!loaded ? (
+      {!h.loaded ? (
         <p className="text-sm text-muted-foreground">{t.common.loading}</p>
-      ) : assets.length === 0 ? (
+      ) : h.assets.length === 0 ? (
         <EmptyState
           title={t.history.emptyTitle}
           description={t.history.emptyDescription}
         />
       ) : (
         <>
-          {isOriginal ? (
+          {h.isOriginal ? (
             <div className="flex flex-col gap-2">
               <span className="text-sm text-muted-foreground">
                 {t.dashboard.nativeHoldings}
               </span>
               <ul className="flex flex-col gap-2">
-                {nativeTotals.map((row) => (
+                {h.nativeTotals.map((row) => (
                   <li
                     key={row.currency}
                     className="flex items-center justify-between gap-3 rounded-xl bg-card px-4 py-3 ring-1 ring-foreground/10"
@@ -248,14 +54,14 @@ export function HistoryScreen() {
             <StatCard
               label={t.dashboard.netWorth}
               value={formatAmount(
-                latestPoint?.total ?? 0,
-                baseCurrency,
+                h.latestPoint?.total ?? 0,
+                h.baseCurrency,
                 locale,
               )}
-              description={`${formatSignedAmount(change.absolute, baseCurrency, locale)} ${rangeLabel}`}
+              description={`${formatSignedAmount(h.change.absolute, h.baseCurrency, locale)} ${h.rangeLabel}`}
             />
           )}
-          {breakdown && (
+          {h.breakdown && (
             <ul className="flex flex-col gap-1 text-sm">
               <li className="flex items-center justify-between gap-3">
                 <span className="text-muted-foreground">
@@ -263,8 +69,8 @@ export function HistoryScreen() {
                 </span>
                 <span className="tabular-nums">
                   {formatSignedAmount(
-                    breakdown.amountChange,
-                    baseCurrency,
+                    h.breakdown.amountChange,
+                    h.baseCurrency,
                     locale,
                   )}
                 </span>
@@ -275,29 +81,29 @@ export function HistoryScreen() {
                 </span>
                 <span className="tabular-nums">
                   {formatSignedAmount(
-                    breakdown.rateChange,
-                    baseCurrency,
+                    h.breakdown.rateChange,
+                    h.baseCurrency,
                     locale,
                   )}
                 </span>
               </li>
             </ul>
           )}
-          {!isOriginal && (
+          {!h.isOriginal && (
             <ChartRangeControls
-              range={chartRange}
-              earliest={earliest}
-              latest={today}
+              range={h.chartRange}
+              earliest={h.earliest}
+              latest={h.today}
               showPicker={false}
               showPan
             >
               <NetWorthChart
-                points={series}
-                currency={baseCurrency}
-                onZoomIn={chartRange.zoomIn}
-                onZoomOut={chartRange.zoomOut}
-                onPanEarlier={chartRange.panEarlier}
-                onPanLater={chartRange.panLater}
+                points={h.series}
+                currency={h.baseCurrency}
+                onZoomIn={h.chartRange.zoomIn}
+                onZoomOut={h.chartRange.zoomOut}
+                onPanEarlier={h.chartRange.panEarlier}
+                onPanLater={h.chartRange.panLater}
               />
             </ChartRangeControls>
           )}
@@ -306,64 +112,52 @@ export function HistoryScreen() {
             role="group"
             aria-label={t.history.viewModeLabel}
           >
-            <Chip
-              pressed={viewMode === 'list'}
-              onClick={() => {
-                setViewMode('list')
-                setSelectedCalendarDate(null)
-              }}
-            >
+            <Chip pressed={h.viewMode === 'list'} onClick={h.showList}>
               {t.history.listViewLabel}
             </Chip>
-            <Chip
-              pressed={viewMode === 'calendar'}
-              onClick={() => setViewMode('calendar')}
-            >
+            <Chip pressed={h.viewMode === 'calendar'} onClick={h.showCalendar}>
               {t.history.calendarViewLabel}
             </Chip>
           </div>
-          {viewMode === 'calendar' ? (
+          {h.viewMode === 'calendar' ? (
             <>
               <HistoryCalendar
-                snapshotDates={allSnapshotDates}
-                selectedDate={selectedCalendarDate}
-                onSelectDate={(date) => {
-                  setSelectedCalendarDate(date)
-                  setOpenDates((current) => {
-                    const next = new Set(current)
-                    next.add(date)
-                    return next
-                  })
-                }}
+                snapshotDates={h.allSnapshotDates}
+                selectedDate={h.selectedCalendarDate}
+                onSelectDate={h.selectCalendarDate}
               />
-              {selectedCalendarDay ? (
-                <ul
-                  className="flex flex-col gap-2"
-                  data-testid="history-calendar-day-detail"
-                >
-                  <HistoryDayRow
-                    row={selectedCalendarDay}
-                    open={openDates.has(selectedCalendarDay.date)}
-                    baseCurrency={baseCurrency}
-                    nativeOnly={isOriginal}
-                    label={t.history.holdingsOn(selectedCalendarDay.date)}
-                    onToggle={() => toggleOpenDate(selectedCalendarDay.date)}
-                  />
-                </ul>
-              ) : null}
+              {(() => {
+                const day = h.selectedCalendarDay
+                if (!day) return null
+                return (
+                  <ul
+                    className="flex flex-col gap-2"
+                    data-testid="history-calendar-day-detail"
+                  >
+                    <HistoryDayRow
+                      row={day}
+                      open={h.openDates.has(day.date)}
+                      baseCurrency={h.baseCurrency}
+                      nativeOnly={h.isOriginal}
+                      label={t.history.holdingsOn(day.date)}
+                      onToggle={() => h.toggleOpenDate(day.date)}
+                    />
+                  </ul>
+                )
+              })()}
             </>
           ) : (
             <ul className="flex flex-col gap-2">
-              {(isOriginal ? originalList : convertedList).map((row) => {
+              {(h.isOriginal ? h.originalList : h.convertedList).map((row) => {
                 return (
                   <HistoryDayRow
                     key={row.date}
                     row={row}
-                    open={openDates.has(row.date)}
-                    baseCurrency={baseCurrency}
-                    nativeOnly={isOriginal}
+                    open={h.openDates.has(row.date)}
+                    baseCurrency={h.baseCurrency}
+                    nativeOnly={h.isOriginal}
                     label={t.history.holdingsOn(row.date)}
-                    onToggle={() => toggleOpenDate(row.date)}
+                    onToggle={() => h.toggleOpenDate(row.date)}
                     testId={`history-day-row-${row.date}`}
                   />
                 )

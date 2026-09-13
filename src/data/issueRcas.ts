@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 246,
+    title: {
+      en: 'Shared Summary/History read models (keep tabs separate)',
+      ru: 'Общие модели чтения Сводка/История (вкладки отдельно)',
+    },
+    en: 'Both tabs recomputed series, period change, and missing rates with their own range copies, so headlines could disagree. One `convertedPeriodReadModel` + `useConvertedPeriodReadModel`. Dashboard is still today + positions; History is still the day list / calendar. Update rates lives in one module and is rendered only on Dashboard.',
+    ru: 'Обе вкладки сами считали ряд, изменение за период и отсутствующие курсы — заголовки расходились. Один `convertedPeriodReadModel` и `useConvertedPeriodReadModel`. Сводка по-прежнему сегодня + позиции; История — список дней / календарь. «Обновить курсы» в одном модуле и только на Сводке.',
+  },
+  {
     issue: 244,
     title: {
       en: 'Unify hide/show actions across Positions / Assets / detail',
