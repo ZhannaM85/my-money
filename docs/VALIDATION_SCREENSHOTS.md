@@ -98,6 +98,7 @@ gh issue edit 108 --add-label validation
 | `255-allocation-class-colors.png` | Allocation · slices colored by class id (#255) |
 | `256-dashboard-hero-original-all.png` | Dashboard · Original+All stacked hero (#256) |
 | `257-update-tab-bar-with-keyboard.png` | Update · tab bar stays visible with amount focused (#257) |
+| `260-update-tab-bar-with-keyboard.png` | Update · tab bar stays in the visual viewport with amount focused (#260) |
 | `259-dashboard-as-of-ru.png` | Dashboard · На дату uses Russian month, not January (#259) |
 | `262-update-header-tight.png` | Update · no На дату title; reorder next to date (RU, #262) |
 | `261-comparison-totals-align.png` | Comparison · Итого aligned with date columns (#261) |

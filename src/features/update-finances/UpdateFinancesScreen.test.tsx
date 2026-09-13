@@ -564,7 +564,7 @@ describe('UpdateFinancesScreen', () => {
     const saveBar = screen.getByTestId('update-save-bar')
     expect(saveBar).toContainElement(save)
     expect(saveBar.className).toMatch(/shrink-0/)
-    expect(saveBar.className).toMatch(/keyboard-inset-bottom/)
+    expect(saveBar.className).not.toMatch(/keyboard-inset-bottom/)
     expect(scroll).not.toContainElement(save)
     expect(scroll.className).toMatch(/overscroll-y-contain/)
     expect(scroll.className).toMatch(/touch-pan-y/)

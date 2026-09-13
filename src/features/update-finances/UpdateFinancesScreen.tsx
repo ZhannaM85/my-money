@@ -518,7 +518,7 @@ export function UpdateFinancesScreen() {
           {!reorder.reordering ? (
             <div
               data-testid="update-save-bar"
-              className="shrink-0 bg-background pb-[max(0.5rem,env(keyboard-inset-bottom,0px))]"
+              className="shrink-0 bg-background pb-2"
             >
               <Button
                 type="button"

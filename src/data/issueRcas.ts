@@ -29,6 +29,15 @@ export const issueRcas: IssueRca[] = [
     ru: 'В строках актива — сумма + карандаш. В подвале была только сумма, поэтому Итого уезжало вправо, а вторая цифра обрезалась. Общий `ComparisonDateCellFrame` оставляет тот же слот size-11 у Итого.',
   },
   {
+    issue: 260,
+    title: {
+      en: 'iOS: tab bar sometimes hidden when the keyboard is open',
+      ru: 'iOS: панель вкладок иногда пропадает с клавиатурой',
+    },
+    en: '#257 stopped unmounting the tab bar on focus, but Update still padded the Save bar with `keyboard-inset-bottom`. When iOS also shrinks `dvh` / visualViewport, that double offset pushed the in-flow tabs off-screen. Shell height now tracks `visualViewport.height`; Save uses a small static pad.',
+    ru: '#257 перестал снимать панель с фокуса, но «Обновить» всё ещё паддило Save через `keyboard-inset-bottom`. Когда iOS ещё и сжимает `dvh` / visualViewport, двойной отступ выталкивал вкладки. Высота оболочки теперь берёт `visualViewport.height`; у Save обычный небольшой pad.',
+  },
+  {
     issue: 252,
     title: {
       en: 'Make Comparison discoverable from More',

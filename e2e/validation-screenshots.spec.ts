@@ -1447,6 +1447,26 @@ test('capture locale dates on History and snapshot lists (#258)', async ({
   })
 })
 
+test('capture tab bar in the visual viewport with Update amount focused (#260)', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 })
+  await seedValidationFixture(page, { locale: 'ru' })
+  await page.goto('/update')
+  await expect(page.getByRole('heading', { name: 'Обновить' })).toBeVisible()
+  await page.getByLabel('Новая сумма для Euro cash').click()
+  await expect(page.getByRole('navigation', { name: 'Разделы' })).toBeVisible()
+  await expect(page.getByTestId('app-shell')).toBeVisible()
+  await page.screenshot({
+    path: join(
+      'docs',
+      'validation-proof',
+      '260',
+      '260-update-tab-bar-with-keyboard.png',
+    ),
+  })
+})
+
 test('capture tab bar while Update amount is focused (#257)', async ({
   page,
 }) => {
