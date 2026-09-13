@@ -287,6 +287,7 @@ Closed live-feedback rows from Tier 8 onward. Open / pending items stay in [`../
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
+| [#252](https://github.com/ZhannaM85/my-money/issues/252) | ✅ Done | Make Comparison discoverable from More | More has a Comparison link to `/compare`, same chrome as Allocation. Dashboard two-pin shortcut stays. Validated on-device 2026-09-13. Shifted Итого: #261. |
 | [#253](https://github.com/ZhannaM85/my-money/issues/253) | ✅ Done | Collapse identical Button size aliases (default/lg/xl) | Dropped `lg` / `xl`. Callers use default. Tokens unchanged. Validated on-device 2026-09-13. |
 | [#254](https://github.com/ZhannaM85/my-money/issues/254) | ✅ Done | Pull-to-refresh reloads the app, not FX rates | Decision: pull = `reloadForUpdate` only. Rates stay on More Update rates (#256). Documented in `docs/FX.md`. Validated on-device 2026-09-13. |
 | [#255](https://github.com/ZhannaM85/my-money/issues/255) | ✅ Done | Align CSS tokens/moods/charts with DESIGN_SYSTEM | Navy = heading; Tailwind primary = action. Allocation slices by class id. Net-worth series uses `--positive` + fill. Moods no longer recolor asset tokens. Validated on-device 2026-09-13. |

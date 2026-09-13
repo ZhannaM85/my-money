@@ -91,7 +91,6 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 | [#244](https://github.com/ZhannaM85/my-money/issues/244) | 🔍 Pending validation | Unify hide/show chrome: Assets/detail ⋯, Positions tap-to-reveal | Shared overflow menu on Assets + detail (exclude / archive / delete). Positions / Allocation stay tap-to-reveal. |
 | [#246](https://github.com/ZhannaM85/my-money/issues/246) | 🔍 Pending validation | Shared Сводка/История read models (keep tabs separate) | Shared series + change + missing rates. Tabs stay separate (today + positions vs day list/calendar). Update rates on Dashboard only. |
 | [#247](https://github.com/ZhannaM85/my-money/issues/247) | 🔍 Pending validation | Shared confirm dialog instead of window.confirm | In-app `ConfirmDialog` / `useConfirm` for delete asset/snapshot, replace backup, wipe, and comparison date remove. Cancel / Escape / backdrop keep data. |
-| [#252](https://github.com/ZhannaM85/my-money/issues/252) | 🔍 Pending validation | Make Comparison discoverable from More | More has a Comparison link to `/compare`, same chrome as Allocation. Dashboard two-pin shortcut stays. |
 
 ---
 
@@ -100,6 +99,7 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
 | [#260](https://github.com/ZhannaM85/my-money/issues/260) | 🔲 Open | iOS: tab bar sometimes hidden when the keyboard is open | Follow-up to #257. Update amount + keyboard: footer missing on some opens. Tab bar must stay visible. |
+| [#261](https://github.com/ZhannaM85/my-money/issues/261) | 🔲 Open | Comparison: Итого totals are shifted off the date columns | Follow-up to #252. Total row does not align with holding columns; second total looks cramped/truncated. |
 ---
 
 ## Explicitly not filed
