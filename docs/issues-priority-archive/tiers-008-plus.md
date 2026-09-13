@@ -320,3 +320,4 @@ Closed live-feedback rows from Tier 8 onward. Open / pending items stay in [`../
 |---|--------|-------|-------|
 | [#259](https://github.com/ZhannaM85/my-money/issues/259) | ✅ Done | As of date field stays English when the app is Russian | DateField overlays `formatCalendarDate` for the app locale. Native `type=date` value stays ISO. Validated on-device 2026-09-13. |
 | [#261](https://github.com/ZhannaM85/my-money/issues/261) | ✅ Done | Comparison: Итого totals are shifted off the date columns | Follow-up to #252. Итого uses the same trailing slot as the holding pencil so amounts line up. Validated on-device 2026-09-13. Label valign: #263. |
+| [#262](https://github.com/ZhannaM85/my-money/issues/262) | ✅ Done | Update: drop On date title; tighten header / reorder gap | Follow-up to #238. Hide На дату / On date label; reorder sits in the header next to the date. Date control stays. Validated on-device 2026-09-13. |
