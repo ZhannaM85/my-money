@@ -343,7 +343,7 @@ export function AssetForm({
         error !== t.asset.snapshotDateInvalid && (
           <p className="text-sm text-destructive">{error}</p>
         )}
-      <Button type="submit" size="xl" className="w-full" disabled={saving}>
+      <Button type="submit" className="w-full" disabled={saving}>
         {submitLabel}
       </Button>
     </form>

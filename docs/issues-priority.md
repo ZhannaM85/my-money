@@ -92,6 +92,7 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 | [#246](https://github.com/ZhannaM85/my-money/issues/246) | 🔍 Pending validation | Shared Сводка/История read models (keep tabs separate) | Shared series + change + missing rates. Tabs stay separate (today + positions vs day list/calendar). Update rates on Dashboard only. |
 | [#247](https://github.com/ZhannaM85/my-money/issues/247) | 🔍 Pending validation | Shared confirm dialog instead of window.confirm | In-app `ConfirmDialog` / `useConfirm` for delete asset/snapshot, replace backup, wipe, and comparison date remove. Cancel / Escape / backdrop keep data. |
 | [#252](https://github.com/ZhannaM85/my-money/issues/252) | 🔍 Pending validation | Make Comparison discoverable from More | More has a Comparison link to `/compare`, same chrome as Allocation. Dashboard two-pin shortcut stays. |
+| [#253](https://github.com/ZhannaM85/my-money/issues/253) | 🔍 Pending validation | Collapse identical Button size aliases (default/lg/xl) | Dropped `lg` / `xl`. Callers use default. Tokens unchanged. |
 
 ---
 

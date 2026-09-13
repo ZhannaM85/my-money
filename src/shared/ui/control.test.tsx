@@ -24,12 +24,8 @@ describe('shared control sizes (#232)', () => {
     expect(screen.getByLabelText('Currency')).toHaveClass('h-control')
   })
 
-  it('keeps xl CTAs on the same height token as default', () => {
-    render(
-      <Button size="xl" className="w-full">
-        Update rates
-      </Button>,
-    )
+  it('keeps full-width default CTAs on the control-height token', () => {
+    render(<Button className="w-full">Update rates</Button>)
     const button = screen.getByRole('button', { name: 'Update rates' })
     expect(button).toHaveClass('h-control')
     expect(button).toHaveClass('w-full')

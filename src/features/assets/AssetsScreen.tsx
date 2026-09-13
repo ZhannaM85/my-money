@@ -197,7 +197,6 @@ export function AssetsScreen() {
             <Button
               type="button"
               variant="outline"
-              size="xl"
               className="shrink-0"
               onClick={() =>
                 reorder.enter(
@@ -214,7 +213,6 @@ export function AssetsScreen() {
               <Button
                 type="button"
                 variant="outline"
-                size="xl"
                 className="shrink-0"
                 onClick={() => reorder.cancel()}
               >
@@ -222,7 +220,6 @@ export function AssetsScreen() {
               </Button>
               <Button
                 type="button"
-                size="xl"
                 className="shrink-0"
                 onClick={() =>
                   void reorder.save(

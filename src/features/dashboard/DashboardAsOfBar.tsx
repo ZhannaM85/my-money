@@ -57,7 +57,6 @@ export function DashboardAsOfBar({
           <Button
             type="button"
             variant="outline"
-            size="xl"
             className="mb-0 shrink-0 px-1.5"
             onClick={onJumpToToday}
           >

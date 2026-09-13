@@ -75,7 +75,6 @@ export function AssetDetailsAccordion({
             <Button
               type="button"
               variant="outline"
-              size="xl"
               className="w-full"
               onClick={() => setEditingDetails(false)}
             >
@@ -118,7 +117,6 @@ export function AssetDetailsAccordion({
             <Button
               type="button"
               variant="outline"
-              size="xl"
               className="w-full"
               onClick={() => setEditingDetails(true)}
             >

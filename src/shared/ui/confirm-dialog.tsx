@@ -87,7 +87,6 @@ export function ConfirmDialog({
           <Button
             type="button"
             variant="outline"
-            size="xl"
             className="flex-1"
             onClick={onCancel}
           >
@@ -96,7 +95,6 @@ export function ConfirmDialog({
           <Button
             type="button"
             variant={destructive ? 'destructive' : 'default'}
-            size="xl"
             className="flex-1"
             onClick={onConfirm}
           >

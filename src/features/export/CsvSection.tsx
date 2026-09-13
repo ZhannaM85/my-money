@@ -113,7 +113,6 @@ export function CsvSection() {
       <p className="text-sm text-muted-foreground">{t.csv.description}</p>
       <Button
         type="button"
-        size="xl"
         className="w-full"
         disabled={busy}
         onClick={() => void handleExport()}
@@ -135,7 +134,6 @@ export function CsvSection() {
       <Button
         type="button"
         variant="outline"
-        size="xl"
         className="w-full"
         disabled={busy}
         onClick={() => {
@@ -197,7 +195,6 @@ export function CsvSection() {
           )}
           <Button
             type="button"
-            size="xl"
             className="w-full"
             disabled={busy || !mappingIsComplete(draft.mapping)}
             onClick={() => void handleImport()}
@@ -207,7 +204,6 @@ export function CsvSection() {
           <Button
             type="button"
             variant="outline"
-            size="xl"
             className="w-full"
             disabled={busy}
             onClick={() => {

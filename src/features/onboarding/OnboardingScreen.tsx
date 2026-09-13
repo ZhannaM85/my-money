@@ -48,7 +48,6 @@ export function OnboardingScreen() {
         />
         <Button
           type="button"
-          size="xl"
           className="w-full"
           onClick={() => {
             setFormKey((key) => key + 1)
@@ -60,7 +59,6 @@ export function OnboardingScreen() {
         <Button
           type="button"
           variant="outline"
-          size="xl"
           className="w-full"
           onClick={() => void goToDashboard()}
         >
@@ -121,12 +119,7 @@ export function OnboardingScreen() {
           </option>
         ))}
       </SelectField>
-      <Button
-        type="button"
-        size="xl"
-        className="w-full"
-        onClick={() => setStep('asset')}
-      >
+      <Button type="button" className="w-full" onClick={() => setStep('asset')}>
         {t.common.continue}
       </Button>
       <Button type="button" variant="ghost" onClick={() => void skip()}>

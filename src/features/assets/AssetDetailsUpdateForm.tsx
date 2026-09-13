@@ -103,7 +103,6 @@ export function AssetDetailsUpdateForm({
         />
         <Button
           type="button"
-          size="xl"
           className="w-full"
           onClick={() => void saveAmount()}
         >

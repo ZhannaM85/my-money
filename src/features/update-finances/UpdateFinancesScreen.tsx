@@ -520,7 +520,6 @@ export function UpdateFinancesScreen() {
             >
               <Button
                 type="button"
-                size="xl"
                 className="w-full"
                 disabled={saving || !canSave}
                 onClick={() => void handleSave()}

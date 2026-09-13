@@ -23,8 +23,6 @@ const buttonVariants = cva(
       size: {
         default: 'h-control gap-1.5 px-3 text-base',
         sm: 'h-control-compact gap-1 px-2.5 text-sm',
-        lg: 'h-control gap-1.5 px-3 text-base',
-        xl: 'h-control gap-1.5 px-3 text-base',
         chip: 'h-control-compact rounded-full px-3 text-sm whitespace-nowrap',
         icon: 'size-8',
         'icon-compact': 'size-control-compact rounded-full',

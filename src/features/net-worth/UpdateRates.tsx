@@ -24,7 +24,6 @@ export function UpdateRates({
       <Button
         type="button"
         variant="outline"
-        size="xl"
         className="w-full gap-2"
         disabled={fxLoading || ratesStatus === 'loading'}
         aria-busy={ratesStatus === 'loading'}

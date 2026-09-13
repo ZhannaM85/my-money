@@ -124,7 +124,7 @@ export function DashboardScreen() {
                 onToggle={d.toggleHoldings}
               />
             )}
-            <Button asChild variant="outline" size="xl" className="w-full">
+            <Button asChild variant="outline" className="w-full">
               <Link to="/allocation">{t.dashboard.allocation}</Link>
             </Button>
           </div>

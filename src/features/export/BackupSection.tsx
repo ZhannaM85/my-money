@@ -101,7 +101,6 @@ export function BackupSection() {
       <p className="text-sm text-muted-foreground">{t.backup.description}</p>
       <Button
         type="button"
-        size="xl"
         className="w-full"
         disabled={busy}
         onClick={() => void handleExport()}
@@ -123,7 +122,6 @@ export function BackupSection() {
       <Button
         type="button"
         variant="outline"
-        size="xl"
         className="w-full"
         disabled={busy}
         onClick={() => {
@@ -142,7 +140,6 @@ export function BackupSection() {
       <Button
         type="button"
         variant="destructive"
-        size="xl"
         className="w-full"
         disabled={busy}
         onClick={() => void handleDeleteAll()}

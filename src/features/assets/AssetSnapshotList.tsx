@@ -174,7 +174,6 @@ export function AssetSnapshotList({
               <div className="flex gap-2">
                 <Button
                   type="button"
-                  size="xl"
                   className="flex-1"
                   onClick={() => void saveEditedSnapshot()}
                 >
@@ -183,7 +182,6 @@ export function AssetSnapshotList({
                 <Button
                   type="button"
                   variant="outline"
-                  size="xl"
                   className="flex-1"
                   onClick={() => {
                     setEditingId(null)
