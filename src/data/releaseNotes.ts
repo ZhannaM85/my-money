@@ -10,13 +10,6 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
-    version: 233,
-    issue: 260,
-    date: '2026-09-13T19:00:00+03:00',
-    en: 'The tab bar stays on screen when the iPhone keyboard opens. The app height follows the visible viewport, and Update no longer adds extra keyboard padding that could push the tabs away.',
-    ru: 'Панель вкладок остаётся на экране, когда открывается клавиатура iPhone. Высота приложения следует за видимой областью, а на «Обновить» больше нет лишнего отступа под клавиатуру, который мог вытолкнуть вкладки.',
-  },
-  {
     version: 232,
     issue: 261,
     date: '2026-09-13T18:45:00+03:00',

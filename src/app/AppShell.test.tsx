@@ -384,19 +384,4 @@ describe('AppShell tab bar stays visible while scrolling (#80)', () => {
 
     expect(screen.getByRole('navigation', { name: 'Tabs' })).toBeInTheDocument()
   })
-
-  it('sizes the shell to the visual viewport so the tab bar stays in view (#260)', async () => {
-    const viewport = mockVisualViewport(window.innerHeight)
-    renderShellWithInput()
-    const shell = await screen.findByTestId('app-shell')
-    expect(shell).toHaveStyle({ height: `${window.innerHeight}px` })
-    expect(
-      screen.getByRole('navigation', { name: 'Tabs' }),
-    ).toBeInTheDocument()
-
-    viewport.resizeTo(window.innerHeight - 320)
-
-    expect(shell).toHaveStyle({ height: `${window.innerHeight - 320}px` })
-    expect(screen.getByRole('navigation', { name: 'Tabs' })).toBeInTheDocument()
-  })
 })

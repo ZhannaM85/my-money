@@ -5,7 +5,6 @@ import { OfflineBanner } from '@/app/OfflineBanner'
 import { PullToRefreshIndicator } from '@/app/PullToRefreshIndicator'
 import { shouldShowOnboarding } from '@/domain/settings'
 import { useTranslation } from '@/i18n'
-import { useVisualViewportHeight } from '@/shared/hooks/useVisualViewportHeight'
 import { scrollAppToTop } from '@/shared/lib/scrollAppToTop'
 import { BottomNav } from '@/shared/ui/bottom-nav'
 import { useAssetStore } from '@/stores/assetStore'
@@ -32,7 +31,6 @@ export function AppShell() {
   const locale = useSettingsStore((state) => state.settings.locale)
   const onboarding = pathname === '/onboarding'
   const hideTabBar = onboarding
-  const viewportHeight = useVisualViewportHeight()
   const mainRef = useRef<HTMLElement>(null)
 
   useEffect(() => {
@@ -99,13 +97,7 @@ export function AppShell() {
   ])
 
   return (
-    <div
-      data-testid="app-shell"
-      className="flex h-dvh flex-col overflow-hidden bg-background"
-      style={
-        viewportHeight != null ? { height: `${viewportHeight}px` } : undefined
-      }
-    >
+    <div className="flex h-dvh flex-col overflow-hidden bg-background">
       <PullToRefreshIndicator />
       <a
         href="#main-content"
