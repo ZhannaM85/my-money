@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 237,
+    issue: 267,
+    date: '2026-09-13T20:50:00+03:00',
+    en: 'Assets and Update now share the same icon-only Order button. Custom-order Save and Cancel on Assets are unchanged.',
+    ru: 'На Активах и «Обновить» одна и та же иконка порядка. Сохранить и Отмена на Активах без изменений.',
+  },
+  {
     version: 236,
     issue: 266,
     date: '2026-09-13T20:40:00+03:00',

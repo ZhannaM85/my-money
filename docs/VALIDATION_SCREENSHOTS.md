@@ -105,6 +105,8 @@ gh issue edit 108 --add-label validation
 | `264-assets-institution-own-row.png` | Assets · institution on its own row under type (RU, #264) |
 | `265-assets-excluded-no-not-counted.png` | Assets · excluded row greyed, no Не учитывается (RU, #265) |
 | `266-assets-native-under-converted.png` | Assets · muted native under converted amount (#266) |
+| `267-assets-reorder-icon.png` | Assets · icon-only Order next to sort (RU, #267) |
+| `267-update-reorder-icon.png` | Update · same Order icon next to date (RU, #267) |
 | `258-history-locale-dates.png` | History · list rows use locale dates (#258) |
 | `258-asset-snapshot-locale-dates.png` | Asset details · snapshot list locale dates (#258) |
 

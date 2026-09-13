@@ -834,6 +834,43 @@ test('capture Assets muted native under converted (#266)', async ({ page }) => {
   })
 })
 
+test('capture Assets and Update shared Order icon (#267)', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 })
+  await seedValidationFixture(page, { locale: 'ru' })
+  await page.goto('/assets')
+  await expect(page.getByRole('heading', { name: 'Активы' })).toBeVisible()
+  const assetsOrder = page.getByRole('button', { name: 'Порядок' })
+  await expect(assetsOrder).toBeVisible()
+  await expect(assetsOrder).toHaveClass(/size-control/)
+  await expect(assetsOrder).toHaveText('')
+  await page.screenshot({
+    path: join(
+      'docs',
+      'validation-proof',
+      '267',
+      '267-assets-reorder-icon.png',
+    ),
+  })
+  await page.goto('/update')
+  await expect(page.getByRole('heading', { name: 'Обновить' })).toBeVisible()
+  const updateOrder = page
+    .getByTestId('update-as-of-bar')
+    .getByRole('button', { name: 'Порядок' })
+  await expect(updateOrder).toBeVisible()
+  await expect(updateOrder).toHaveClass(/size-control/)
+  await expect(updateOrder).toHaveText('')
+  await page.screenshot({
+    path: join(
+      'docs',
+      'validation-proof',
+      '267',
+      '267-update-reorder-icon.png',
+    ),
+  })
+})
+
 test('capture Add asset Quick add House chip (#149)', async ({ page }) => {
   await seedValidationFixture(page)
   await page.goto('/assets/new')

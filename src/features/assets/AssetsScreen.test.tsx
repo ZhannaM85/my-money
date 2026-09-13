@@ -412,6 +412,19 @@ describe('AssetsScreen sort (#100)', () => {
     })
   })
 
+  it('uses the same icon-only Order control as Update (#267)', async () => {
+    await addNamedAsset('cash', 'Cash', 50, 'EUR')
+    render(
+      <MemoryRouter>
+        <AssetsScreen />
+      </MemoryRouter>,
+    )
+    const enter = await screen.findByRole('button', { name: 'Reorder' })
+    expect(enter).toHaveClass('size-control')
+    expect(enter).not.toHaveTextContent('Reorder')
+    expect(enter.querySelector('svg')).toBeTruthy()
+  })
+
   it('shows drag grips only after entering reorder mode (#104)', async () => {
     const user = userEvent.setup()
     await addNamedAsset('cash', 'Cash', 50, 'EUR')

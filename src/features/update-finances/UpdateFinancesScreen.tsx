@@ -12,7 +12,7 @@ import {
   SortableContext,
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable'
-import { ListOrdered, Pencil, Save } from 'lucide-react'
+import { Pencil } from 'lucide-react'
 import { isSuggestedUpdate } from '@/domain/asset'
 import {
   latestSnapshot,
@@ -36,6 +36,7 @@ import { DateField } from '@/shared/ui/date-field'
 import { EmptyState } from '@/shared/ui/empty-state'
 import { MoneyInput } from '@/shared/ui/money-input'
 import { PageHeader } from '@/shared/ui/page-header'
+import { ReorderIconButton } from '@/shared/ui/reorder-icon-button'
 import { SortableRow } from '@/shared/ui/sortable-row'
 import { useAssetStore } from '@/stores/assetStore'
 import { useSettingsStore } from '@/stores/settingsStore'
@@ -238,22 +239,12 @@ export function UpdateFinancesScreen() {
   const ready = loaded && settingsLoaded
   const showReorder = ready && rows.length > 1
   const reorderButton = showReorder ? (
-    <Button
-      type="button"
-      variant={reorder.reordering ? 'default' : 'outline'}
-      size="icon-xl"
-      aria-pressed={reorder.reordering}
-      aria-label={
-        reorder.reordering ? t.update.saveOrder : t.assets.enterReorderMode
-      }
+    <ReorderIconButton
+      pressed={reorder.reordering}
+      idleLabel={t.assets.enterReorderMode}
+      saveLabel={t.update.saveOrder}
       onClick={toggleReorder}
-    >
-      {reorder.reordering ? (
-        <Save className="size-5" aria-hidden />
-      ) : (
-        <ListOrdered className="size-5" aria-hidden />
-      )}
-    </Button>
+    />
   ) : null
 
   return (

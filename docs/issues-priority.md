@@ -79,7 +79,7 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
-| [#267](https://github.com/ZhannaM85/my-money/issues/267) | 🔲 Open | Assets and Update: make Order / reorder controls consistent | Update uses an icon-only list button; Assets uses a labeled Порядок pill. Same action — one shared chrome. |
+| [#267](https://github.com/ZhannaM85/my-money/issues/267) | 🔍 Pending validation | Assets and Update: make Order / reorder controls consistent | Shared icon-only Order button (Update chrome). Assets Cancel / Save while reordering stay. |
 ---
 
 ## Explicitly not filed

@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 267,
+    title: {
+      en: 'Assets and Update: make Order / reorder controls consistent',
+      ru: 'Активы и Обновить: один контроль порядка',
+    },
+    en: 'Update already used an icon-only list button (#179 / #262). Assets still showed a labeled Reorder / Порядок pill. Same enter-reorder action, two chrome treatments. Shared ReorderIconButton (icon-xl ListOrdered). Assets Cancel / Save while dragging stay (#105).',
+    ru: 'На «Обновить» уже была иконка списка (#179 / #262). На Активах — подпись «Порядок». Одно действие, два вида. Общий ReorderIconButton (icon-xl ListOrdered). Отмена / Сохранить при перетаскивании на Активах как были (#105).',
+  },
+  {
     issue: 266,
     title: {
       en: 'Assets list: show original amount under converted values',

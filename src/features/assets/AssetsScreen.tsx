@@ -29,6 +29,7 @@ import { EmptyState } from '@/shared/ui/empty-state'
 import { OverflowMenu } from '@/shared/ui/overflow-menu'
 import { PageHeader } from '@/shared/ui/page-header'
 import { Select } from '@/shared/ui/select'
+import { ReorderIconButton } from '@/shared/ui/reorder-icon-button'
 import { SortableRow } from '@/shared/ui/sortable-row'
 import { useAssetStore } from '@/stores/assetStore'
 import { useFxStore } from '@/stores/fxStore'
@@ -194,19 +195,15 @@ export function AssetsScreen() {
             ))}
           </Select>
           {visible.length > 1 && !reorder.reordering ? (
-            <Button
-              type="button"
-              variant="outline"
-              className="shrink-0"
+            <ReorderIconButton
+              idleLabel={t.assets.enterReorderMode}
               onClick={() =>
                 reorder.enter(
                   visible.map((asset) => asset.id),
                   assets.map((asset) => asset.id),
                 )
               }
-            >
-              {t.assets.enterReorderMode}
-            </Button>
+            />
           ) : null}
           {reorder.reordering ? (
             <>
