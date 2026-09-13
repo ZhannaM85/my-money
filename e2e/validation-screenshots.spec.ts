@@ -731,6 +731,59 @@ test('capture Assets institution on its own row (#264)', async ({ page }) => {
   })
 })
 
+test('capture Assets excluded row without Не учитывается (#265)', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 })
+  await seedValidationFixture(page, { locale: 'ru' })
+  await page.evaluate(async () => {
+    const listed = await indexedDB.databases?.()
+    const existing = listed?.find((row) => row.name === 'my-money')
+    const version =
+      existing?.version && existing.version > 0 ? existing.version : 2
+    await new Promise<void>((resolve, reject) => {
+      const open = indexedDB.open('my-money', version)
+      open.onerror = () => reject(open.error ?? new Error('idb open failed'))
+      open.onsuccess = () => {
+        const db = open.result
+        const tx = db.transaction(['assets'], 'readwrite')
+        const store = tx.objectStore('assets')
+        const get = store.get('usd-cash')
+        get.onsuccess = () => {
+          const row = get.result
+          if (row) {
+            store.put({
+              ...row,
+              trackingStatus: 'excluded',
+              valuationMethod: 'manual_estimate',
+              ownershipShareNumerator: 1,
+              ownershipShareDenominator: 1,
+            })
+          }
+        }
+        tx.oncomplete = () => {
+          db.close()
+          resolve()
+        }
+        tx.onerror = () => reject(tx.error ?? new Error('idb write failed'))
+      }
+    })
+  })
+  await page.reload()
+  await page.goto('/assets')
+  await expect(page.getByRole('heading', { name: 'Активы' })).toBeVisible()
+  await expect(page.locator('[data-excluded="true"]')).toBeVisible()
+  await expect(page.getByText('Не учитывается в капитале')).toHaveCount(0)
+  await page.screenshot({
+    path: join(
+      'docs',
+      'validation-proof',
+      '265',
+      '265-assets-excluded-no-not-counted.png',
+    ),
+  })
+})
+
 test('capture Add asset Quick add House chip (#149)', async ({ page }) => {
   await seedValidationFixture(page)
   await page.goto('/assets/new')

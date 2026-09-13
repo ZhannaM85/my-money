@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 265,
+    title: {
+      en: 'Assets list: drop Не учитывается on excluded rows (already greyed)',
+      ru: 'Активы: убрать «Не учитывается» у серых строк',
+    },
+    en: 'Excluded Assets rows already use opacity-60. The type line still appended Not counted in net worth, which wrapped with valuation and share. Dropped that phrase on the list only. Update and asset detail keep their own hints.',
+    ru: 'Исключённые строки Активов уже opacity-60. В строке типа всё ещё было «Не учитывается в капитале» — ломалось вместе с оценкой и долей. Фразу убрали только в списке. На «Обновить» и карточке подсказки свои.',
+  },
+  {
     issue: 264,
     title: {
       en: 'Assets list: put institution on its own row',

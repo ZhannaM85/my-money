@@ -303,7 +303,6 @@ export function AssetsScreen() {
                       <span className="text-sm text-muted-foreground">
                         {[
                           t.asset.types[asset.type],
-                          excluded ? t.asset.notCountedInNetWorth : '',
                           estimated
                             ? t.asset.valuation[asset.valuationMethod]
                             : '',

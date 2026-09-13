@@ -134,6 +134,9 @@ describe('AssetsScreen', () => {
     const hidden = screen.getByText('Broker').closest('[data-excluded]')
     expect(hidden).toHaveAttribute('data-excluded', 'true')
     expect(hidden).toHaveClass('opacity-60')
+    expect(
+      screen.queryByText('Not counted in net worth'),
+    ).not.toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: 'Actions for Broker' }))
     await user.click(screen.getByRole('menuitem', { name: 'Show Broker' }))
     await waitFor(() => {
@@ -143,6 +146,21 @@ describe('AssetsScreen', () => {
     expect(
       screen.getByText('Broker').closest('[data-excluded]'),
     ).toHaveAttribute('data-excluded', 'false')
+  })
+
+  it('does not repeat Not counted on a greyed excluded row (#265)', async () => {
+    await addNamedAsset('alpha', 'Alpha', 300, 'EUR', 'excluded')
+    render(
+      <MemoryRouter>
+        <AssetsScreen />
+      </MemoryRouter>,
+    )
+    const row = (await screen.findByText('Alpha')).closest('[data-excluded]')
+    expect(row).toHaveAttribute('data-excluded', 'true')
+    expect(row).toHaveClass('opacity-60')
+    expect(
+      screen.queryByText('Not counted in net worth'),
+    ).not.toBeInTheDocument()
   })
 
   it('hides the row menu while reordering (#158)', async () => {

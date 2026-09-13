@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 235,
+    issue: 265,
+    date: '2026-09-13T19:20:00+03:00',
+    en: 'Excluded rows on Assets stay greyed and no longer repeat Not counted in net worth on the type line.',
+    ru: 'Исключённые строки на Активах остаются серыми и больше не повторяют «Не учитывается в капитале» в строке типа.',
+  },
+  {
     version: 234,
     issue: 264,
     date: '2026-09-13T19:10:00+03:00',
