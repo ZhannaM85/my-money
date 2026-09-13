@@ -283,6 +283,12 @@ Closed live-feedback rows from Tier 8 onward. Open / pending items stay in [`../
 | [#231](https://github.com/ZhannaM85/my-money/issues/231) | ✅ Done | Asset detail: move refresh + Сведения to top; make overview collapsible | Refresh/save near the top, then collapsible Сведения (collapsed by default). Chart and history stay below. Validated on-device 2026-09-11. |
 | [#232](https://github.com/ZhannaM85/my-money/issues/232) | ✅ Done | Unify button and input sizes across pages (shared design tokens) | `--control-height` / compact tokens; Button, Input, Select, Chip. Pages drop one-off `h-12` / pill classes. Validated on-device 2026-09-11. |
 
+## Tier 25 — Live feedback (2026-09-12)
+
+| # | Status | Issue | Notes |
+|---|--------|-------|-------|
+| [#258](https://github.com/ZhannaM85/my-money/issues/258) | ✅ Done | Locale-format dates on History and snapshot lists | List rows + a11y use `formatCalendarDate` (same as As of / Update). ISO stays in storage and calendar test ids. Validated on-device 2026-09-13. |
+
 ## Tier 26 — Live feedback (2026-09-13)
 
 | # | Status | Issue | Notes |
