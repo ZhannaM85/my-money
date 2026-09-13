@@ -101,6 +101,14 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 
 ---
 
+## Tier 26 — Live feedback (2026-09-13)
+
+| # | Status | Issue | Notes |
+|---|--------|-------|-------|
+| [#259](https://github.com/ZhannaM85/my-money/issues/259) | 🔲 Open | As of date field stays English when the app is Russian | Dashboard На дату shows `24January2025`. App language is Russian. Native DateField display, not History list rows (#258). |
+
+---
+
 ## Explicitly not filed
 
 Out of scope for the MVP (`PROJECT_BRIEF.md` §20) — do not implement from chat:
