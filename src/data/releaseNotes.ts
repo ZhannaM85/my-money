@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 231,
+    issue: 262,
+    date: '2026-09-13T18:30:00+03:00',
+    en: 'On Update, the date field no longer shows an On date title, and the reorder icon sits next to the date so the blank band under the title is gone.',
+    ru: 'На «Обновить» у поля даты больше нет заголовка «На дату», а значок порядка стоит рядом с датой — пустая полоса под заголовком исчезла.',
+  },
+  {
     version: 230,
     issue: 252,
     date: '2026-09-13T09:40:00+03:00',

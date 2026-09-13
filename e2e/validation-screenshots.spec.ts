@@ -870,6 +870,30 @@ test('capture Update without grey helper blurb in Russian (#238)', async ({
   })
 })
 
+test('capture Update header without On date title (#262)', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 })
+  await seedValidationFixture(page, { locale: 'ru' })
+  await page.goto('/update')
+  await expect(page.getByRole('heading', { name: 'Обновить' })).toBeVisible()
+  const asOf = page.getByLabel('На дату')
+  await expect(asOf).toBeVisible()
+  const bar = page.getByTestId('update-as-of-bar')
+  await expect(bar.getByRole('button', { name: 'Порядок' })).toBeVisible()
+  await expect(bar.locator('label', { hasText: 'На дату' })).toHaveClass(
+    /sr-only/,
+  )
+  await page.screenshot({
+    path: join(
+      'docs',
+      'validation-proof',
+      '262',
+      '262-update-header-tight.png',
+    ),
+  })
+})
+
 test('capture comparison cell edit pencil (#177)', async ({ page }) => {
   await seedValidationFixture(page, { currencyDisplayMode: 'base' })
   await page.evaluate(() => {

@@ -236,31 +236,55 @@ export function UpdateFinancesScreen() {
   )
 
   const ready = loaded && settingsLoaded
+  const showReorder = ready && rows.length > 1
+  const reorderButton = showReorder ? (
+    <Button
+      type="button"
+      variant={reorder.reordering ? 'default' : 'outline'}
+      size="icon-xl"
+      aria-pressed={reorder.reordering}
+      aria-label={
+        reorder.reordering ? t.update.saveOrder : t.assets.enterReorderMode
+      }
+      onClick={toggleReorder}
+    >
+      {reorder.reordering ? (
+        <Save className="size-5" aria-hidden />
+      ) : (
+        <ListOrdered className="size-5" aria-hidden />
+      )}
+    </Button>
+  ) : null
 
   return (
-    <div className="flex min-h-0 flex-1 flex-col gap-4">
+    <div className="flex min-h-0 flex-1 flex-col gap-3">
       <div data-testid="update-as-of-bar" className="shrink-0 bg-background">
         <PageHeader
+          className="items-center"
           title={t.update.title}
           action={
-            <DateField
-              label={t.asset.snapshotDate}
-              value={asOf}
-              max={today}
-              onChange={(event) => {
-                const next = event.target.value
-                setAsOf(next)
-                setDrafts({})
-                setEditing({})
-                setError(undefined)
-                if (!next || !isIsoDateOnOrBefore(next, today)) {
-                  setAsOfError(t.asset.snapshotDateInvalid)
-                  return
-                }
-                setAsOfError(undefined)
-              }}
-              error={asOfError}
-            />
+            <div className="flex items-center gap-2">
+              <DateField
+                label={t.asset.snapshotDate}
+                hideLabel
+                value={asOf}
+                max={today}
+                onChange={(event) => {
+                  const next = event.target.value
+                  setAsOf(next)
+                  setDrafts({})
+                  setEditing({})
+                  setError(undefined)
+                  if (!next || !isIsoDateOnOrBefore(next, today)) {
+                    setAsOfError(t.asset.snapshotDateInvalid)
+                    return
+                  }
+                  setAsOfError(undefined)
+                }}
+                error={asOfError}
+              />
+              {reorderButton}
+            </div>
           }
         />
       </div>
@@ -280,30 +304,8 @@ export function UpdateFinancesScreen() {
         <>
           <div
             data-testid="update-holdings-scroll"
-            className="flex min-h-0 flex-1 flex-col gap-6 overflow-y-auto overscroll-y-contain touch-pan-y"
+            className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto overscroll-y-contain touch-pan-y"
           >
-            {rows.length > 1 ? (
-              <div className="flex justify-end">
-                <Button
-                  type="button"
-                  variant={reorder.reordering ? 'default' : 'outline'}
-                  size="icon-xl"
-                  aria-pressed={reorder.reordering}
-                  aria-label={
-                    reorder.reordering
-                      ? t.update.saveOrder
-                      : t.assets.enterReorderMode
-                  }
-                  onClick={toggleReorder}
-                >
-                  {reorder.reordering ? (
-                    <Save className="size-5" aria-hidden />
-                  ) : (
-                    <ListOrdered className="size-5" aria-hidden />
-                  )}
-                </Button>
-              </div>
-            ) : null}
             {(() => {
               const list = (
                 <ul className="flex flex-col gap-4">

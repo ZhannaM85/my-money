@@ -10,6 +10,8 @@ export interface DateFieldProps extends Omit<
   'type'
 > {
   label: string
+  /** Keep the accessible name; hide the visible title (#262). */
+  hideLabel?: boolean
   error?: string
 }
 
@@ -22,7 +24,7 @@ function openDatePicker(input: HTMLInputElement) {
 }
 
 export const DateField = React.forwardRef<HTMLInputElement, DateFieldProps>(
-  ({ label, error, id, className, onClick, value, ...props }, ref) => {
+  ({ label, hideLabel, error, id, className, onClick, value, ...props }, ref) => {
     const locale = useLocale()
     const generatedId = React.useId()
     const inputId = id ?? generatedId
@@ -31,8 +33,11 @@ export const DateField = React.forwardRef<HTMLInputElement, DateFieldProps>(
     const display = iso ? formatCalendarDate(iso, locale) : ''
 
     return (
-      <div className="flex flex-col gap-1.5">
-        <label htmlFor={inputId} className="text-sm font-medium">
+      <div className={cn('flex flex-col', hideLabel ? 'gap-0' : 'gap-1.5')}>
+        <label
+          htmlFor={inputId}
+          className={cn('text-sm font-medium', hideLabel && 'sr-only')}
+        >
           {label}
         </label>
         {/* Fixed width, not relative sizing (Turtle #47 / #84): Safari

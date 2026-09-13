@@ -99,6 +99,7 @@ gh issue edit 108 --add-label validation
 | `256-dashboard-hero-original-all.png` | Dashboard · Original+All stacked hero (#256) |
 | `257-update-tab-bar-with-keyboard.png` | Update · tab bar stays visible with amount focused (#257) |
 | `259-dashboard-as-of-ru.png` | Dashboard · На дату uses Russian month, not January (#259) |
+| `262-update-header-tight.png` | Update · no На дату title; reorder next to date (RU, #262) |
 | `258-history-locale-dates.png` | History · list rows use locale dates (#258) |
 | `258-asset-snapshot-locale-dates.png` | Asset details · snapshot list locale dates (#258) |
 

@@ -287,6 +287,43 @@ describe('UpdateFinancesScreen', () => {
     expect(screen.queryByTestId('update-description')).not.toBeInTheDocument()
   })
 
+  it('hides the As of title and keeps reorder in the header (#262)', async () => {
+    await useAssetStore.getState().saveAsset(
+      {
+        id: 'a2',
+        name: 'Cash',
+        assetClass: 'money',
+        type: 'cash',
+        currency: 'EUR',
+        trackingStatus: 'included',
+        valuationMethod: 'account_balance',
+        updateFrequency: 'yearly',
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        assetId: 'a2',
+        date: '2026-08-01',
+        amount: 200,
+        currency: 'EUR',
+      },
+    )
+    render(
+      <MemoryRouter>
+        <UpdateFinancesScreen />
+      </MemoryRouter>,
+    )
+    const asOf = await screen.findByLabelText('As of')
+    expect((asOf as HTMLInputElement).labels?.[0]).toHaveClass('sr-only')
+    const bar = screen.getByTestId('update-as-of-bar')
+    const reorder = screen.getByRole('button', { name: 'Reorder' })
+    expect(bar).toContainElement(asOf)
+    expect(bar).toContainElement(reorder)
+    expect(screen.getByTestId('update-holdings-scroll')).not.toContainElement(
+      reorder,
+    )
+  })
+
   it('hides the reorder icon when there is only one holding (#179)', async () => {
     render(
       <MemoryRouter>

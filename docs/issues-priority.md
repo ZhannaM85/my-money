@@ -81,7 +81,7 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 |---|--------|-------|-------|
 | [#260](https://github.com/ZhannaM85/my-money/issues/260) | 🔲 Open | iOS: tab bar sometimes hidden when the keyboard is open | Follow-up to #257. Update amount + keyboard: footer missing on some opens. Tab bar must stay visible. |
 | [#261](https://github.com/ZhannaM85/my-money/issues/261) | 🔲 Open | Comparison: Итого totals are shifted off the date columns | Follow-up to #252. Total row does not align with holding columns; second total looks cramped/truncated. |
-| [#262](https://github.com/ZhannaM85/my-money/issues/262) | 🔲 Open | Update: drop On date title; tighten header / reorder gap | Follow-up to #238. Hide На дату / On date label; move reorder icon up so the blank band under the title shrinks. Date control stays. |
+| [#262](https://github.com/ZhannaM85/my-money/issues/262) | 🔍 Pending validation | Update: drop On date title; tighten header / reorder gap | Follow-up to #238. Hide На дату / On date label; reorder sits in the header next to the date. Date control stays. |
 ---
 
 ## Explicitly not filed

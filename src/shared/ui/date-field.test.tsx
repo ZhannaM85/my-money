@@ -39,6 +39,22 @@ describe('DateField', () => {
     expect(input).not.toHaveClass('max-w-full')
   })
 
+  it('can hide the visible label while keeping the accessible name (#262)', () => {
+    render(
+      <DateField
+        hideLabel
+        label="As of"
+        value="2026-08-21"
+        onChange={() => undefined}
+      />,
+    )
+    const input = screen.getByLabelText('As of')
+    expect(input).toBeInTheDocument()
+    expect(document.querySelector('label[for="' + input.id + '"]')).toHaveClass(
+      'sr-only',
+    )
+  })
+
   it('shows a Russian locale overlay, not English January (#259)', () => {
     useSettingsStore.setState({
       settings: { ...DEFAULT_SETTINGS, locale: 'ru' },

@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 262,
+    title: {
+      en: 'Update: drop On date title and tighten header / reorder gap',
+      ru: 'Обновить: убрать «На дату» и подтянуть шапку / порядок',
+    },
+    en: 'After #238 the grey helper was gone, but Update still had a blank band: visible На дату / On date title, then a lone reorder icon. DateField can hide the visible label (accessible name stays). Reorder sits in the header next to the date.',
+    ru: 'После #238 серой подсказки не стало, но на «Обновить» осталась пустая полоса: видимый заголовок «На дату», затем одинокий значок порядка. DateField умеет прятать видимый label (доступное имя остаётся). Порядок стоит в шапке рядом с датой.',
+  },
+  {
     issue: 252,
     title: {
       en: 'Make Comparison discoverable from More',
