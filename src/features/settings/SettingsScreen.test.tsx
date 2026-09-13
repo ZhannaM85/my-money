@@ -93,6 +93,9 @@ describe('SettingsScreen', () => {
       </MemoryRouter>,
     )
     const select = await screen.findByLabelText('Base currency')
+    await waitFor(() => {
+      expect(select).not.toBeDisabled()
+    })
     await user.selectOptions(select, 'RUB')
     await waitFor(() => {
       expect(select).toHaveValue('RUB')
