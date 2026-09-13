@@ -286,6 +286,39 @@ describe('ComparisonScreen (#137)', () => {
     expect(second.className).not.toContain('max-w-')
   })
 
+  it('vertically centers the Итого label with the total amounts (#263)', async () => {
+    const now = '2026-08-17T00:00:00.000Z'
+    await useAssetStore.getState().saveAsset(
+      {
+        id: 'a1',
+        name: 'USD cash',
+        assetClass: 'money',
+        type: 'cash',
+        currency: 'EUR',
+        trackingStatus: 'included',
+        valuationMethod: 'account_balance',
+        updateFrequency: 'weekly',
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        assetId: 'a1',
+        date: '2026-08-25',
+        amount: 2_618_702.28,
+        currency: 'EUR',
+      },
+    )
+    useComparisonStore.setState({ dates: ['2026-08-25', '2026-08-29'] })
+    renderApp(<ComparisonScreen />)
+    const label = await screen.findByTestId('comparison-total-label')
+    expect(label).toHaveClass('align-middle')
+    expect(label.querySelector('span')).toHaveClass('min-h-11')
+    expect(label.querySelector('span')).toHaveClass('items-center')
+    const total = screen.getByTestId('comparison-total-2026-08-25')
+    expect(total).toHaveClass('align-middle')
+    expect(total.firstElementChild).toHaveClass('items-center')
+  })
+
   it('scrolls date columns inside the table, not the page; names stay sticky (#139)', async () => {
     const now = '2026-08-17T00:00:00.000Z'
     await useAssetStore.getState().saveAsset(

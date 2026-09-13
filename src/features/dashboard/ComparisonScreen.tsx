@@ -374,9 +374,12 @@ export function ComparisonScreen() {
           <tfoot>
             <tr>
               <th
-                className={`py-3 pr-2 text-left font-semibold ${COMPARISON_NAME_COL_CLASS}`}
+                data-testid="comparison-total-label"
+                className={`py-3 pr-2 text-left align-middle font-semibold ${COMPARISON_NAME_COL_CLASS}`}
               >
-                {t.dashboard.positionsTotal}
+                <span className="inline-flex min-h-11 items-center">
+                  {t.dashboard.positionsTotal}
+                </span>
               </th>
             </tr>
           </tfoot>
@@ -442,9 +445,9 @@ export function ComparisonScreen() {
                   <td
                     key={date}
                     data-testid={`comparison-total-${date}`}
-                    className={`px-2 py-3 text-right font-semibold tabular-nums ${COMPARISON_DATE_COL_CLASS}`}
+                    className={`px-2 py-3 text-right align-middle font-semibold tabular-nums ${COMPARISON_DATE_COL_CLASS}`}
                   >
-                    <ComparisonDateCellFrame>
+                    <ComparisonDateCellFrame align="center">
                       <span className="tabular-nums">
                         {formatAmount(totals[date] ?? 0, baseCurrency, locale)}
                       </span>

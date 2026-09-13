@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 233,
+    issue: 263,
+    date: '2026-09-13T18:50:00+03:00',
+    en: 'On Comparison, Итого sits on the same vertical line as the total amounts instead of floating above them.',
+    ru: 'В Сравнении «Итого» стоит на одной вертикали с суммами, а не выше них.',
+  },
+  {
     version: 232,
     issue: 261,
     date: '2026-09-13T18:45:00+03:00',

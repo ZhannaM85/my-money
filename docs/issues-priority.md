@@ -79,7 +79,7 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
-| [#263](https://github.com/ZhannaM85/my-money/issues/263) | 🔲 Open | Comparison: vertically align Итого with the total amounts | Follow-up to #261. Label sits higher than the figures; same row center / baseline. Horizontal columns stay. |
+| [#263](https://github.com/ZhannaM85/my-money/issues/263) | 🔍 Pending validation | Comparison: vertically align Итого with the total amounts | Follow-up to #261. Итого label is min-h-11 + middle-aligned with the total amounts. Horizontal columns stay. |
 ---
 
 ## Explicitly not filed

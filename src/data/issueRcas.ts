@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 263,
+    title: {
+      en: 'Comparison: vertically align Итого with the total amounts',
+      ru: 'Сравнение: выровнять Итого по вертикали с суммами',
+    },
+    en: 'After #261 the totals lined up horizontally, but Итого sat at the top of the row while the figures sat mid-cell next to the size-11 pencil slot. The label is now a min-h-11 centered flex; footer cells use align-middle and the total frame uses items-center.',
+    ru: 'После #261 суммы сошлись по горизонтали, но «Итого» сидело вверху строки, а цифры — по центру ячейки рядом со слотом карандаша size-11. Подпись теперь flex min-h-11 по центру; ячейки подвала align-middle, рамка итога items-center.',
+  },
+  {
     issue: 262,
     title: {
       en: 'Update: drop On date title and tighten header / reorder gap',
