@@ -95,7 +95,6 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 | [#253](https://github.com/ZhannaM85/my-money/issues/253) | 🔍 Pending validation | Collapse identical Button size aliases (default/lg/xl) | Dropped `lg` / `xl`. Callers use default. Tokens unchanged. |
 | [#254](https://github.com/ZhannaM85/my-money/issues/254) | 🔍 Pending validation | Pull-to-refresh reloads the app, not FX rates | Decision: pull = `reloadForUpdate` only. Rates stay on Dashboard Update rates. Documented in `docs/FX.md`. |
 | [#255](https://github.com/ZhannaM85/my-money/issues/255) | 🔍 Pending validation | Align CSS tokens/moods/charts with DESIGN_SYSTEM | Navy = heading; Tailwind primary = action. Allocation slices by class id. Net-worth series uses `--positive` + fill. Moods no longer recolor asset tokens. |
-| [#256](https://github.com/ZhannaM85/my-money/issues/256) | 🔍 Pending validation | Сводка: hero-first hierarchy; keep a number in Original+All | Hero + period change first. Original+All stacks native totals, largest first. Update rates moved to More. |
 
 ---
 

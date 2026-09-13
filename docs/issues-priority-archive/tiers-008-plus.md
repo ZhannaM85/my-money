@@ -287,6 +287,7 @@ Closed live-feedback rows from Tier 8 onward. Open / pending items stay in [`../
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
+| [#256](https://github.com/ZhannaM85/my-money/issues/256) | ✅ Done | Сводка: hero-first hierarchy; keep a number in Original+All | Hero first. Original+All stacks native totals, largest first. Period change / As of / chart stay on Converted or a single Original currency. Update rates on More. Validated on-device 2026-09-13. |
 | [#257](https://github.com/ZhannaM85/my-money/issues/257) | ✅ Done | iOS: 44pt touch targets; keep tab bar visible with keyboard | Icon / InfoHint / comparison ✕ / calendar days are 44px. Tab bar stays mounted while typing. Save bar uses keyboard-inset padding. Validated on-device 2026-09-13. Intermittent hide: #260. |
 | [#258](https://github.com/ZhannaM85/my-money/issues/258) | ✅ Done | Locale-format dates on History and snapshot lists | List rows + a11y use `formatCalendarDate` (same as As of / Update). ISO stays in storage and calendar test ids. Validated on-device 2026-09-13. |
 
