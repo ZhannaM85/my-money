@@ -289,8 +289,13 @@ export const en: Dictionary = {
     preferencesDescription:
       'Currency, language, and how the app looks. These apply across every tab.',
     groupData: 'Data',
+    dataDescription:
+      'Back up, restore, or wipe this device — and move holdings via CSV.',
     groupAbout: 'About',
+    aboutDescription: 'Privacy and what changed in recent versions.',
     groupDeveloper: 'Developer',
+    developerDescription:
+      'Diagnostics for FX and a log of why shipped issues happened. Collapsed by default.',
     baseCurrency: 'Base currency',
     showAllCurrencies: 'Show all currencies',
     currencyDisplay: 'Asset display',

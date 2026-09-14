@@ -17,7 +17,12 @@ import {
 } from './backupActions'
 import { shareOrDownloadBackupJson } from './downloadBackup'
 
-export function BackupSection() {
+export function BackupSection({
+  embedded = false,
+}: {
+  /** Parent card already shows title/description (#272). */
+  embedded?: boolean
+}) {
   const t = useTranslation()
   const [confirm, confirmDialog] = useConfirm()
   const inputRef = useRef<HTMLInputElement>(null)
@@ -96,9 +101,13 @@ export function BackupSection() {
   }
 
   return (
-    <section className="flex flex-col gap-3">
-      <h2 className="text-lg font-semibold">{t.backup.title}</h2>
-      <p className="text-sm text-muted-foreground">{t.backup.description}</p>
+    <div className="flex flex-col gap-3">
+      {!embedded && (
+        <>
+          <h2 className="text-lg font-semibold">{t.backup.title}</h2>
+          <p className="text-sm text-muted-foreground">{t.backup.description}</p>
+        </>
+      )}
       <Button
         type="button"
         className="w-full"
@@ -149,6 +158,6 @@ export function BackupSection() {
       {message && <p className="text-sm text-muted-foreground">{message}</p>}
       {error && <p className="text-sm text-destructive">{error}</p>}
       {confirmDialog}
-    </section>
+    </div>
   )
 }

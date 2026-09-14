@@ -1,15 +1,14 @@
 import { useEffect } from 'react'
-import { BackupSection, CsvSection } from '@/features/export'
 import { releaseNotes } from '@/data/releaseNotes'
 import { useTranslation } from '@/i18n'
 import { PageHeader } from '@/shared/ui/page-header'
 import { useSettingsStore } from '@/stores/settingsStore'
 import { AboutSection } from './AboutSection'
+import { DataSection } from './DataSection'
 import { DeveloperSection } from './DeveloperSection'
 import { FeatureTogglesSection } from './FeatureTogglesSection'
 import { PreferencesSection } from './PreferencesSection'
 import { RatesSection } from './RatesSection'
-import { SettingsGroup } from './SettingsGroup'
 import { ToolsSection } from './ToolsSection'
 
 export function SettingsScreen() {
@@ -40,10 +39,7 @@ export function SettingsScreen() {
       <FeatureTogglesSection />
       <RatesSection />
       <ToolsSection />
-      <SettingsGroup title={t.settings.groupData}>
-        <BackupSection />
-        <CsvSection />
-      </SettingsGroup>
+      <DataSection />
       <AboutSection />
       <DeveloperSection />
     </div>

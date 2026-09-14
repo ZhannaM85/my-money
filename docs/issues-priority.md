@@ -87,7 +87,7 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
 | [#269](https://github.com/ZhannaM85/my-money/issues/269) | 🔍 Pending validation | Assets: distinct colors for distribution graph sectors | Higher-contrast Type + Currency hues after on-device bank/debit, apartment/house, USD/EUR, RUB/GEL. |
-| [#272](https://github.com/ZhannaM85/my-money/issues/272) | ⬜ Open | Settings: card-wrap other sections by meaning (like Feature toggles) | On-device: Data (Backup/CSV), About, Developer still unwrapped. Finish full More page. |
+| [#272](https://github.com/ZhannaM85/my-money/issues/272) | 🔍 Pending validation | Settings: card-wrap other sections by meaning (like Feature toggles) | Full More: Preferences / toggles / Rates / Tools / Data / About / Developer. |
 
 ---
 

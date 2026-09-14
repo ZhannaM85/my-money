@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 245,
+    issue: 272,
+    date: '2026-09-14T21:30:00+03:00',
+    en: 'More also wraps Data (backup and CSV), About, and Developer in the same cards — the whole settings page uses one chrome.',
+    ru: 'В «Ещё» карточками стали и Данные (копия и CSV), О приложении и Разработчику — вся страница настроек в одном оформлении.',
+  },
+  {
     version: 244,
     issue: 269,
     date: '2026-09-14T21:20:00+03:00',

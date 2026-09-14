@@ -3,6 +3,13 @@ import { ChevronDown } from 'lucide-react'
 import { useLocation } from 'react-router-dom'
 import { useTranslation } from '@/i18n'
 import { cn } from '@/shared/lib/utils'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/shared/ui/card'
 import { FxDebugSection } from './FxDebugSection'
 import { RcaSection } from './RcaSection'
 
@@ -29,38 +36,43 @@ export function DeveloperSection() {
   }, [hash])
 
   return (
-    <section className="flex flex-col gap-3">
-      <h2 className="text-lg font-semibold">
-        <button
-          type="button"
-          className="flex w-full items-center justify-between gap-2 text-left"
-          aria-expanded={open}
-          onClick={() => setUserOpen(!open)}
-        >
-          {t.settings.groupDeveloper}
-          <ChevronDown
-            className={cn(
-              'size-5 shrink-0 text-muted-foreground transition-transform',
-              open && 'rotate-180',
-            )}
-            aria-hidden
-          />
-        </button>
-      </h2>
+    <Card data-testid="settings-developer">
+      <CardHeader>
+        <CardTitle>
+          <button
+            type="button"
+            className="flex w-full items-center justify-between gap-2 text-left"
+            aria-expanded={open}
+            onClick={() => setUserOpen(!open)}
+          >
+            {t.settings.groupDeveloper}
+            <ChevronDown
+              className={cn(
+                'size-5 shrink-0 text-muted-foreground transition-transform',
+                open && 'rotate-180',
+              )}
+              aria-hidden
+            />
+          </button>
+        </CardTitle>
+        <CardDescription>{t.settings.developerDescription}</CardDescription>
+      </CardHeader>
       {open ? (
-        <>
+        <CardContent className="flex flex-col gap-4 border-t border-border pt-4">
           <FxDebugSection />
           <section id="root-causes" className="flex flex-col gap-3">
             <div className="flex flex-col gap-1">
-              <h3 className="text-lg font-semibold">{t.settings.rcaLabel}</h3>
+              <h3 className="font-medium text-foreground">
+                {t.settings.rcaLabel}
+              </h3>
               <p className="text-sm text-muted-foreground">
                 {t.settings.rcaDescription}
               </p>
             </div>
             <RcaSection />
           </section>
-        </>
+        </CardContent>
       ) : null}
-    </section>
+    </Card>
   )
 }

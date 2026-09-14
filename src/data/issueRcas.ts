@@ -16,8 +16,8 @@ export const issueRcas: IssueRca[] = [
       en: 'Settings: card-wrap other sections by meaning',
       ru: 'Настройки: карточки секций по смыслу',
     },
-    en: '#271 Feature toggles card looked right on device; Preferences, rates, and Comparison/Allocation still floated. Shared SettingsCard: Preferences, Feature toggles, Exchange rates (update + manual), Tools (Comparison + Allocation). Data/About/Developer unchanged.',
-    ru: 'Карточка #271 на устройстве ок; Параметры, курсы и Сравнение/Распределение плавали. Общий SettingsCard: Параметры, переключатели, Курсы (обновить + ручные), Инструменты. Данные/О приложении/Разработчику без изменений.',
+    en: '#271 Feature toggles card looked right on device; Preferences, rates, and Comparison/Allocation still floated. Shared SettingsCard for Preferences, Feature toggles, Exchange rates, Tools. On-device follow-up: also wrap Data (Backup+CSV), About, and Developer — full More page carded.',
+    ru: 'Карточка #271 на устройстве ок; Параметры, курсы и Сравнение/Распределение плавали. SettingsCard для Параметров, переключателей, Курсов, Инструментов. Доработка: также Данные (Backup+CSV), О приложении и Разработчику — вся «Ещё» в карточках.',
   },
   {
     issue: 271,

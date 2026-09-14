@@ -2038,13 +2038,20 @@ test('capture Settings meaning cards (#272)', async ({ page }) => {
   await expect(page.getByTestId('feature-toggles')).toBeVisible()
   await expect(page.getByTestId('settings-rates')).toBeVisible()
   await expect(page.getByTestId('settings-tools')).toBeVisible()
+  await expect(page.getByTestId('settings-data')).toBeVisible()
+  await expect(page.getByTestId('settings-about')).toBeVisible()
+  await expect(page.getByTestId('settings-developer')).toBeVisible()
   await expect(
     page.getByRole('heading', { name: 'Курсы валют' }),
   ).toBeVisible()
   await expect(
     page.getByRole('heading', { name: 'Инструменты' }),
   ).toBeVisible()
-  await page.getByTestId('settings-tools').scrollIntoViewIfNeeded()
+  await expect(page.getByRole('heading', { name: 'Данные' })).toBeVisible()
+  await expect(
+    page.getByRole('heading', { name: 'О приложении' }),
+  ).toBeVisible()
+  await page.getByTestId('settings-developer').scrollIntoViewIfNeeded()
   await page.screenshot({
     path: join(outDir, '272-settings-section-cards.png'),
     fullPage: true,

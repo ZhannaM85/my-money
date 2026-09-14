@@ -229,8 +229,11 @@ export interface Dictionary {
     groupPreferences: string
     preferencesDescription: string
     groupData: string
+    dataDescription: string
     groupAbout: string
+    aboutDescription: string
     groupDeveloper: string
+    developerDescription: string
     baseCurrency: string
     showAllCurrencies: string
     currencyDisplay: string

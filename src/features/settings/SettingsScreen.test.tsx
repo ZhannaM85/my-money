@@ -225,10 +225,15 @@ describe('SettingsScreen', () => {
     expect(screen.getByTestId('feature-toggles')).toBeInTheDocument()
     expect(screen.getByTestId('settings-rates')).toBeInTheDocument()
     expect(screen.getByTestId('settings-tools')).toBeInTheDocument()
+    expect(screen.getByTestId('settings-data')).toBeInTheDocument()
+    expect(screen.getByTestId('settings-about')).toBeInTheDocument()
+    expect(screen.getByTestId('settings-developer')).toBeInTheDocument()
     expect(
       screen.getByRole('heading', { name: 'Exchange rates' }),
     ).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: 'Tools' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Data' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'About' })).toBeInTheDocument()
     expect(
       screen.getByRole('link', { name: 'Comparison' }),
     ).toBeInTheDocument()

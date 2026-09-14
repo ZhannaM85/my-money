@@ -22,7 +22,12 @@ type CsvDraft = {
   mapping: Partial<CsvColumnMapping>
 }
 
-export function CsvSection() {
+export function CsvSection({
+  embedded = false,
+}: {
+  /** Parent card already shows title/description (#272). */
+  embedded?: boolean
+}) {
   const t = useTranslation()
   const inputRef = useRef<HTMLInputElement>(null)
   const [message, setMessage] = useState<string | undefined>()
@@ -108,9 +113,13 @@ export function CsvSection() {
   const extraIssues = (preview?.issues.length ?? 0) - previewIssues.length
 
   return (
-    <section className="flex flex-col gap-3">
-      <h2 className="text-lg font-semibold">{t.csv.title}</h2>
-      <p className="text-sm text-muted-foreground">{t.csv.description}</p>
+    <div className="flex flex-col gap-3">
+      {!embedded && (
+        <>
+          <h2 className="text-lg font-semibold">{t.csv.title}</h2>
+          <p className="text-sm text-muted-foreground">{t.csv.description}</p>
+        </>
+      )}
       <Button
         type="button"
         className="w-full"
@@ -222,6 +231,6 @@ export function CsvSection() {
         </p>
       ))}
       {error && <p className="text-sm text-destructive">{error}</p>}
-    </section>
+    </div>
   )
 }

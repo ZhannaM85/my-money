@@ -294,8 +294,13 @@ export const ru: Dictionary = {
     preferencesDescription:
       'Валюта, язык и внешний вид. Действует на всех вкладках.',
     groupData: 'Данные',
+    dataDescription:
+      'Резервная копия, восстановление или очистка на этом устройстве — и перенос через CSV.',
     groupAbout: 'О приложении',
+    aboutDescription: 'Конфиденциальность и что изменилось в последних версиях.',
     groupDeveloper: 'Разработчику',
+    developerDescription:
+      'Диагностика FX и журнал причин выпущенных задач. По умолчанию свёрнуто.',
     baseCurrency: 'Базовая валюта',
     showAllCurrencies: 'Показать все валюты',
     currencyDisplay: 'Показ активов',
