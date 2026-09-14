@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 241,
+    issue: 269,
+    date: '2026-09-14T20:55:00+03:00',
+    en: 'Allocation colors are farther apart on phone: bank vs debit card, apartment vs house, and Currency slices for USD, EUR, RUB, and GEL no longer look the same.',
+    ru: 'Цвета распределения дальше друг от друга на телефоне: счёт и дебетовая карта, квартира и дом, а также доли USD, EUR, RUB и GEL больше не сливаются.',
+  },
+  {
     version: 240,
     issue: 270,
     date: '2026-09-14T20:45:00+03:00',

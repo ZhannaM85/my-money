@@ -59,4 +59,26 @@ describe('allocationSliceColor (#255, #269)', () => {
       'var(--asset-cash)',
     ])
   })
+
+  it('keeps nearby Type pairs visually distinct (#269 on-device)', () => {
+    expect(allocationSliceColor('bank')).toBe('var(--asset-bank)')
+    expect(allocationSliceColor('debit_card')).toBe('var(--asset-debit-card)')
+    expect(allocationSliceColor('bank')).not.toBe(
+      allocationSliceColor('debit_card'),
+    )
+    expect(allocationSliceColor('apartment')).toBe('var(--asset-apartment)')
+    expect(allocationSliceColor('house')).toBe('var(--asset-house)')
+    expect(allocationSliceColor('apartment')).not.toBe(
+      allocationSliceColor('house'),
+    )
+  })
+
+  it('keeps common currencies on distinct tokens (#269 on-device)', () => {
+    expect(allocationSliceColor('EUR')).toBe('var(--currency-eur)')
+    expect(allocationSliceColor('USD')).toBe('var(--currency-usd)')
+    expect(allocationSliceColor('RUB')).toBe('var(--currency-rub)')
+    expect(allocationSliceColor('GEL')).toBe('var(--currency-gel)')
+    const hues = ['EUR', 'USD', 'RUB', 'GEL', 'GBP'].map(allocationSliceColor)
+    expect(new Set(hues).size).toBe(5)
+  })
 })

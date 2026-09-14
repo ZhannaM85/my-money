@@ -25,8 +25,8 @@ export const issueRcas: IssueRca[] = [
       en: 'Assets: distinct colors for distribution graph sectors',
       ru: 'Активы: разные цвета секторов на графике распределения',
     },
-    en: '#255 colored slices by class id, so Type view mapped cash, deposit, and bank to the same money blue. Each type now has its own token (DESIGN_SYSTEM bank/cash/crypto plus extra hues). Class view still uses class colors.',
-    ru: '#255 красил доли по классу, поэтому в виде «Тип» наличные, вклад и счёт были одним синим. У каждого типа свой токен (bank/cash/crypto из DESIGN_SYSTEM и дополнительные оттенки). Вид по классу по-прежнему классовый.',
+    en: '#255 colored by class id, so Type collapsed cash/deposit/bank to one blue. First pass gave each type a token. On-device still: bank≈debit_card, apartment≈house, USD≈EUR, RUB≈GEL. Second pass: high-contrast Type hues (magenta debit, teal house) and chart currencies (green USD, rose RUB, amber GEL).',
+    ru: '#255 красил по классу — в «Тип» наличные/вклад/счёт были одним синим. Первый проход: токен на тип. На устройстве всё ещё: счёт≈карта, квартира≈дом, USD≈EUR, RUB≈GEL. Второй: контрастные типы (маджента карта, бирюза дом) и валюты (зелёный USD, розовый RUB, янтарный GEL).',
   },
   {
     issue: 268,

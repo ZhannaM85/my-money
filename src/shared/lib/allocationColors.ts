@@ -19,7 +19,7 @@ const TYPE_COLORS: Record<string, string> = {
   bonds: 'var(--asset-bonds)',
   crypto: 'var(--asset-crypto)',
   other_investment: 'var(--asset-other)',
-  apartment: 'var(--asset-property)',
+  apartment: 'var(--asset-apartment)',
   house: 'var(--asset-house)',
   land: 'var(--asset-land)',
   vehicle: 'var(--asset-vehicles)',
@@ -39,22 +39,24 @@ const CURRENCY_COLORS: Record<string, string> = {
   USD: 'var(--currency-usd)',
   GBP: 'var(--currency-gbp)',
   RUB: 'var(--currency-rub)',
+  GEL: 'var(--currency-gel)',
+  BTC: 'var(--currency-btc)',
+  USDT: 'var(--currency-usdt)',
 }
 
 const FALLBACK = [
-  ...Object.values(CLASS_COLORS),
-  'var(--asset-bank)',
+  'var(--currency-eur)',
+  'var(--currency-usd)',
+  'var(--currency-rub)',
+  'var(--currency-gel)',
+  'var(--currency-gbp)',
   'var(--asset-cash)',
-  'var(--asset-deposit)',
-  'var(--asset-savings)',
+  'var(--asset-debit-card)',
+  'var(--asset-house)',
   'var(--asset-vehicles)',
   'var(--asset-crypto)',
+  'var(--asset-deposit)',
   'var(--asset-other)',
-  'var(--asset-debit-card)',
-  'var(--asset-stocks)',
-  'var(--asset-etf)',
-  'var(--asset-bonds)',
-  'var(--asset-house)',
 ]
 
 /** Slice color by class / type / currency id — not list index (#255, #269). */

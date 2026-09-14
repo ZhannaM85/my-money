@@ -1795,7 +1795,7 @@ test('capture Allocation Type distinct sector colors (#269)', async ({
 }) => {
   await seedValidationFixture(page, {
     locale: 'ru',
-    currencyDisplayMode: 'base',
+    currencyDisplayMode: 'native',
   })
   await page.evaluate(async () => {
     const now = '2026-08-17T00:00:00.000Z'
@@ -1835,11 +1835,71 @@ test('capture Allocation Type distinct sector colors (#269)', async ({
           updatedAt: now,
         })
         tx.objectStore('assets').put({
-          id: 'eur-invest',
-          name: 'Other inv',
-          assetClass: 'investments',
-          type: 'other_investment',
+          id: 'eur-debit',
+          name: 'Debit',
+          assetClass: 'money',
+          type: 'debit_card',
           currency: 'EUR',
+          trackingStatus: 'included',
+          valuationMethod: 'account_balance',
+          updateFrequency: 'weekly',
+          createdAt: now,
+          updatedAt: now,
+        })
+        tx.objectStore('assets').put({
+          id: 'eur-apt',
+          name: 'Apt',
+          assetClass: 'property',
+          type: 'apartment',
+          currency: 'EUR',
+          trackingStatus: 'included',
+          valuationMethod: 'my_estimate',
+          updateFrequency: 'yearly',
+          createdAt: now,
+          updatedAt: now,
+        })
+        tx.objectStore('assets').put({
+          id: 'eur-house',
+          name: 'House',
+          assetClass: 'property',
+          type: 'house',
+          currency: 'EUR',
+          trackingStatus: 'included',
+          valuationMethod: 'my_estimate',
+          updateFrequency: 'yearly',
+          createdAt: now,
+          updatedAt: now,
+        })
+        tx.objectStore('assets').put({
+          id: 'usd-cash',
+          name: 'USD cash',
+          assetClass: 'money',
+          type: 'cash',
+          currency: 'USD',
+          trackingStatus: 'included',
+          valuationMethod: 'account_balance',
+          updateFrequency: 'weekly',
+          createdAt: now,
+          updatedAt: now,
+        })
+        tx.objectStore('assets').put({
+          id: 'rub-cash',
+          name: 'RUB cash',
+          assetClass: 'money',
+          type: 'cash',
+          currency: 'RUB',
+          trackingStatus: 'included',
+          valuationMethod: 'account_balance',
+          updateFrequency: 'weekly',
+          createdAt: now,
+          updatedAt: now,
+        })
+        tx.objectStore('assets').put({
+          id: 'gel-cash',
+          name: 'GEL cash',
+          assetClass: 'money',
+          type: 'cash',
+          currency: 'GEL',
           trackingStatus: 'included',
           valuationMethod: 'account_balance',
           updateFrequency: 'weekly',
@@ -1857,15 +1917,50 @@ test('capture Allocation Type distinct sector colors (#269)', async ({
           id: 's-bank',
           assetId: 'eur-bank',
           date: '2026-08-17',
-          amount: 300,
+          amount: 3000,
           currency: 'EUR',
         })
         tx.objectStore('snapshots').put({
-          id: 's-invest',
-          assetId: 'eur-invest',
+          id: 's-debit',
+          assetId: 'eur-debit',
           date: '2026-08-17',
-          amount: 8000,
+          amount: 1500,
           currency: 'EUR',
+        })
+        tx.objectStore('snapshots').put({
+          id: 's-apt',
+          assetId: 'eur-apt',
+          date: '2026-08-17',
+          amount: 120000,
+          currency: 'EUR',
+        })
+        tx.objectStore('snapshots').put({
+          id: 's-house',
+          assetId: 'eur-house',
+          date: '2026-08-17',
+          amount: 90000,
+          currency: 'EUR',
+        })
+        tx.objectStore('snapshots').put({
+          id: 's-usd',
+          assetId: 'usd-cash',
+          date: '2026-08-17',
+          amount: 5000,
+          currency: 'USD',
+        })
+        tx.objectStore('snapshots').put({
+          id: 's-rub',
+          assetId: 'rub-cash',
+          date: '2026-08-17',
+          amount: 400000,
+          currency: 'RUB',
+        })
+        tx.objectStore('snapshots').put({
+          id: 's-gel',
+          assetId: 'gel-cash',
+          date: '2026-08-17',
+          amount: 2000,
+          currency: 'GEL',
         })
         tx.oncomplete = () => {
           db.close()
@@ -1878,13 +1973,24 @@ test('capture Allocation Type distinct sector colors (#269)', async ({
   await page.goto('/allocation')
   await expect(page.getByRole('heading', { name: 'Распределение' })).toBeVisible()
   await page.getByRole('button', { name: 'Тип' }).click()
-  await expect(page.getByText('Наличные')).toBeVisible()
-  await expect(page.getByText('Вклад')).toBeVisible()
   await expect(page.getByText('Банковский счёт')).toBeVisible()
+  await expect(page.getByText('Дебетовая карта')).toBeVisible()
+  await expect(page.getByText('Квартира')).toBeVisible()
+  await expect(page.getByText('Дом')).toBeVisible()
   await expect(page.getByTestId('allocation-chart')).toBeVisible()
   await expect(page.locator('[data-testid="allocation-chart"] path').first()).toBeVisible()
   await page.screenshot({
     path: join(outDir, '269-allocation-type-colors.png'),
+    fullPage: true,
+  })
+  await page.getByRole('button', { name: 'Валюта' }).click()
+  await expect(page.getByRole('button', { name: /EUR/ })).toBeVisible()
+  await expect(page.getByRole('button', { name: /USD/ })).toBeVisible()
+  await expect(page.getByRole('button', { name: /RUB/ })).toBeVisible()
+  await expect(page.getByRole('button', { name: /GEL/ })).toBeVisible()
+  await expect(page.locator('[data-testid="allocation-chart"] path').first()).toBeVisible()
+  await page.screenshot({
+    path: join(outDir, '269-allocation-currency-colors.png'),
     fullPage: true,
   })
 })

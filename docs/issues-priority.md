@@ -86,7 +86,7 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
-| [#269](https://github.com/ZhannaM85/my-money/issues/269) | ⬜ Open | Assets: distinct colors for distribution graph sectors | On-device still: bank≈debit_card, apartment≈house; Currency USD≈EUR, RUB≈GEL. Need higher-contrast Type + Currency hues. |
+| [#269](https://github.com/ZhannaM85/my-money/issues/269) | 🔍 Pending validation | Assets: distinct colors for distribution graph sectors | Higher-contrast Type + Currency hues after on-device bank/debit, apartment/house, USD/EUR, RUB/GEL. |
 | [#271](https://github.com/ZhannaM85/my-money/issues/271) | ⬜ Open | Settings: Feature toggles card like Turtle (title, description, switch) | Follow-up to #270. Dedicated card; Positions is first toggle. |
 
 ---
