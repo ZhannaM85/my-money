@@ -79,6 +79,15 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
+
+---
+
+## Tier 27 — Live feedback (2026-09-14)
+
+| # | Status | Issue | Notes |
+|---|--------|-------|-------|
+| [#269](https://github.com/ZhannaM85/my-money/issues/269) | ⬜ Open | Assets: distinct colors for distribution graph sectors | Phone 2026-09-14. After #255, cash/deposit/bank share one blue. Need a larger distinct palette per sector. |
+
 ---
 
 ## Explicitly not filed
