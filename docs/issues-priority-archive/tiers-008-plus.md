@@ -335,3 +335,4 @@ Closed live-feedback rows from Tier 8 onward. Open / pending items stay in [`../
 |---|--------|-------|-------|
 | [#270](https://github.com/ZhannaM85/my-money/issues/270) | ✅ Done | Settings: toggle to hide Dashboard Positions | Persisted show/hide for Сводка Позиции. Default shown. Validated on-device 2026-09-14. Chrome: #271. |
 | [#271](https://github.com/ZhannaM85/my-money/issues/271) | ✅ Done | Settings: Feature toggles card like Turtle | Title + description + switch row. Positions moved out of Preferences chips. Validated on-device 2026-09-14. Card chrome elsewhere: #272. |
+| [#269](https://github.com/ZhannaM85/my-money/issues/269) | ✅ Done | Assets: distinct colors for distribution graph sectors | Type + Currency high-contrast hues; cash light green / GEL cyan (no yellow). Validated on-device 2026-09-14. |
