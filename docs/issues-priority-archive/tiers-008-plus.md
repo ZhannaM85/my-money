@@ -328,3 +328,9 @@ Closed live-feedback rows from Tier 8 onward. Open / pending items stay in [`../
 | [#266](https://github.com/ZhannaM85/my-money/issues/266) | ✅ Done | Assets list: show original amount under converted values | Follow-up to #129. Converted primary; muted native underneath (same as asset details). Same-currency / Original unchanged. Validated on-device 2026-09-13. |
 | [#267](https://github.com/ZhannaM85/my-money/issues/267) | ✅ Done | Assets and Update: make Order / reorder controls consistent | Shared icon-only Order button (Update chrome). Validated on-device 2026-09-13. Save/Cancel while dragging: #268. |
 | [#268](https://github.com/ZhannaM85/my-money/issues/268) | ✅ Done | Assets: Save reorder with the same icon as Update; drop Cancel | Follow-up to #267. Pressed Order icon saves. No Cancel. Named sort still discards. Validated on-device 2026-09-13. |
+
+## Tier 27 — Live feedback (2026-09-14)
+
+| # | Status | Issue | Notes |
+|---|--------|-------|-------|
+| [#270](https://github.com/ZhannaM85/my-money/issues/270) | ✅ Done | Settings: toggle to hide Dashboard Positions | Persisted show/hide for Сводка Позиции. Default shown. Validated on-device 2026-09-14. Chrome: #271. |
