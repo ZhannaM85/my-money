@@ -13,7 +13,12 @@ import { useAssetStore } from '@/stores/assetStore'
 import { useFxStore } from '@/stores/fxStore'
 import { useSettingsStore } from '@/stores/settingsStore'
 
-export function ManualRatesSection() {
+export function ManualRatesSection({
+  embedded = false,
+}: {
+  /** When true, parent card already shows title/description (#272). */
+  embedded?: boolean
+}) {
   const t = useTranslation()
   const locale = useLocale()
   const baseCurrency = useSettingsStore((state) => state.settings.baseCurrency)
@@ -92,21 +97,23 @@ export function ManualRatesSection() {
   }
 
   return (
-    <section className="flex flex-col gap-3">
-      <div className="flex flex-col gap-1">
-        <h2 className="text-lg font-semibold">{t.settings.manualRatesTitle}</h2>
-        <p className="text-sm text-muted-foreground">
-          {t.settings.manualRatesDescription}
-        </p>
-        {todayManuals.length > 0 && (
-          <p className="text-xs text-muted-foreground">
-            {t.settings.manualRatesActive(todayManuals.length, today)}
+    <div className="flex flex-col gap-3">
+      {!embedded && (
+        <div className="flex flex-col gap-1">
+          <h2 className="text-lg font-semibold">{t.settings.manualRatesTitle}</h2>
+          <p className="text-sm text-muted-foreground">
+            {t.settings.manualRatesDescription}
           </p>
-        )}
-      </div>
+        </div>
+      )}
+      {todayManuals.length > 0 && (
+        <p className="text-xs text-muted-foreground">
+          {t.settings.manualRatesActive(todayManuals.length, today)}
+        </p>
+      )}
 
       {!editing && todayManuals.length > 0 && (
-        <ul className="flex flex-col gap-2 rounded-xl bg-card p-4 ring-1 ring-foreground/10">
+        <ul className="flex flex-col gap-2 rounded-xl bg-muted/40 p-3 ring-1 ring-foreground/10">
           {todayManuals.map((quote) => (
             <li
               key={`${quote.base}-${quote.quote}`}
@@ -157,7 +164,7 @@ export function ManualRatesSection() {
           )}
         </div>
       ) : (
-        <div className="flex flex-col gap-4 rounded-xl bg-card p-4 ring-1 ring-foreground/10">
+        <div className="flex flex-col gap-4 rounded-xl bg-muted/40 p-3 ring-1 ring-foreground/10">
           <p className="text-sm text-muted-foreground">
             {t.settings.manualRatesHint(today)}
           </p>
@@ -193,6 +200,7 @@ export function ManualRatesSection() {
           </div>
         </div>
       )}
-    </section>
+    </div>
   )
 }
+

@@ -214,6 +214,29 @@ describe('SettingsScreen', () => {
     )
   })
 
+  it('groups More into meaning cards (#272)', async () => {
+    render(
+      <MemoryRouter>
+        <SettingsScreen />
+      </MemoryRouter>,
+    )
+    await screen.findByRole('heading', { name: 'Preferences' })
+    expect(screen.getByTestId('settings-preferences')).toBeInTheDocument()
+    expect(screen.getByTestId('feature-toggles')).toBeInTheDocument()
+    expect(screen.getByTestId('settings-rates')).toBeInTheDocument()
+    expect(screen.getByTestId('settings-tools')).toBeInTheDocument()
+    expect(
+      screen.getByRole('heading', { name: 'Exchange rates' }),
+    ).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Tools' })).toBeInTheDocument()
+    expect(
+      screen.getByRole('link', { name: 'Comparison' }),
+    ).toBeInTheDocument()
+    expect(
+      screen.getByRole('link', { name: 'Allocation' }),
+    ).toBeInTheDocument()
+  })
+
   it('groups More and keeps Developer collapsed (#235)', async () => {
     const user = userEvent.setup()
     render(

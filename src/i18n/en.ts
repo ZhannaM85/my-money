@@ -286,6 +286,8 @@ export const en: Dictionary = {
   settings: {
     title: 'More',
     groupPreferences: 'Preferences',
+    preferencesDescription:
+      'Currency, language, and how the app looks. These apply across every tab.',
     groupData: 'Data',
     groupAbout: 'About',
     groupDeveloper: 'Developer',
@@ -304,6 +306,12 @@ export const en: Dictionary = {
     skipWelcome: 'Skip welcome',
     comparison: 'Comparison',
     allocation: 'Allocation',
+    toolsTitle: 'Tools',
+    toolsDescription:
+      'Open Comparison or Allocation without leaving More.',
+    ratesTitle: 'Exchange rates',
+    ratesDescription:
+      'Refresh reference rates, or enter manual rates for today when a quote is missing.',
     appearance: 'Appearance',
     moodFresh: 'Fresh',
     moodLedger: 'Colorful',

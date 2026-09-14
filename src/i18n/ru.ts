@@ -291,6 +291,8 @@ export const ru: Dictionary = {
   settings: {
     title: 'Ещё',
     groupPreferences: 'Параметры',
+    preferencesDescription:
+      'Валюта, язык и внешний вид. Действует на всех вкладках.',
     groupData: 'Данные',
     groupAbout: 'О приложении',
     groupDeveloper: 'Разработчику',
@@ -309,6 +311,12 @@ export const ru: Dictionary = {
     skipWelcome: 'Пропустить приветствие',
     comparison: 'Сравнение',
     allocation: 'Распределение',
+    toolsTitle: 'Инструменты',
+    toolsDescription:
+      'Открыть Сравнение или Распределение, не уходя из «Ещё».',
+    ratesTitle: 'Курсы валют',
+    ratesDescription:
+      'Обновите справочные курсы или введите ручные на сегодня, если котировки нет.',
     appearance: 'Оформление',
     moodFresh: 'Свежее',
     moodLedger: 'Цветное',

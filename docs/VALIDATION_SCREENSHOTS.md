@@ -114,6 +114,7 @@ gh issue edit 108 --add-label validation
 | `270-dashboard-positions-hidden.png` | Dashboard · Positions block hidden (RU, #270) |
 | `271-settings-feature-toggles.png` | More · Feature toggles card with switch (RU, #271) |
 | `271-dashboard-positions-hidden.png` | Dashboard · Positions hidden via Feature toggles (RU, #271) |
+| `272-settings-section-cards.png` | More · Preferences / Rates / Tools cards (RU, #272) |
 | `258-history-locale-dates.png` | History · list rows use locale dates (#258) |
 | `258-asset-snapshot-locale-dates.png` | Asset details · snapshot list locale dates (#258) |
 

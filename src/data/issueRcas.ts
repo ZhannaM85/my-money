@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 272,
+    title: {
+      en: 'Settings: card-wrap other sections by meaning',
+      ru: 'Настройки: карточки секций по смыслу',
+    },
+    en: '#271 Feature toggles card looked right on device; Preferences, rates, and Comparison/Allocation still floated. Shared SettingsCard: Preferences, Feature toggles, Exchange rates (update + manual), Tools (Comparison + Allocation). Data/About/Developer unchanged.',
+    ru: 'Карточка #271 на устройстве ок; Параметры, курсы и Сравнение/Распределение плавали. Общий SettingsCard: Параметры, переключатели, Курсы (обновить + ручные), Инструменты. Данные/О приложении/Разработчику без изменений.',
+  },
+  {
     issue: 271,
     title: {
       en: 'Settings: Feature toggles card like Turtle',

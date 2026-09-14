@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 243,
+    issue: 272,
+    date: '2026-09-14T21:15:00+03:00',
+    en: 'More groups Preferences, Feature toggles, Exchange rates, and Tools into the same card style — rates and Comparison/Allocation no longer float on the page.',
+    ru: 'В «Ещё» Параметры, переключатели, курсы и инструменты в одном стиле карточек — курсы и Сравнение/Распределение больше не плавают на фоне.',
+  },
+  {
     version: 242,
     issue: 271,
     date: '2026-09-14T21:05:00+03:00',

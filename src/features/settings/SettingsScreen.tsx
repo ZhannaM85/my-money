@@ -1,16 +1,16 @@
 import { useEffect } from 'react'
-import { Link } from 'react-router-dom'
 import { BackupSection, CsvSection } from '@/features/export'
 import { releaseNotes } from '@/data/releaseNotes'
 import { useTranslation } from '@/i18n'
-import { Button } from '@/shared/ui/button'
 import { PageHeader } from '@/shared/ui/page-header'
 import { useSettingsStore } from '@/stores/settingsStore'
 import { AboutSection } from './AboutSection'
 import { DeveloperSection } from './DeveloperSection'
 import { FeatureTogglesSection } from './FeatureTogglesSection'
 import { PreferencesSection } from './PreferencesSection'
+import { RatesSection } from './RatesSection'
 import { SettingsGroup } from './SettingsGroup'
+import { ToolsSection } from './ToolsSection'
 
 export function SettingsScreen() {
   const t = useTranslation()
@@ -38,12 +38,8 @@ export function SettingsScreen() {
       />
       <PreferencesSection />
       <FeatureTogglesSection />
-      <Button asChild variant="outline" className="w-full">
-        <Link to="/compare">{t.settings.comparison}</Link>
-      </Button>
-      <Button asChild variant="outline" className="w-full">
-        <Link to="/allocation">{t.settings.allocation}</Link>
-      </Button>
+      <RatesSection />
+      <ToolsSection />
       <SettingsGroup title={t.settings.groupData}>
         <BackupSection />
         <CsvSection />

@@ -12,9 +12,7 @@ import { SelectField } from '@/shared/ui/select-field'
 import { useAssetStore } from '@/stores/assetStore'
 import { useSettingsStore } from '@/stores/settingsStore'
 import { MOODS, type Mood, useThemeStore } from '@/stores/themeStore'
-import { ManualRatesSection } from './ManualRatesSection'
-import { SettingsGroup } from './SettingsGroup'
-import { SettingsUpdateRates } from './SettingsUpdateRates'
+import { SettingsCard } from './SettingsCard'
 
 export function PreferencesSection() {
   const t = useTranslation()
@@ -51,7 +49,11 @@ export function PreferencesSection() {
     loaded && !settings.onboardingCompleted && assetCount === 0
 
   return (
-    <SettingsGroup title={t.settings.groupPreferences}>
+    <SettingsCard
+      testId="settings-preferences"
+      title={t.settings.groupPreferences}
+      description={t.settings.preferencesDescription}
+    >
       <div className="flex flex-col gap-1.5">
         <SelectField
           label={t.settings.baseCurrency}
@@ -143,10 +145,8 @@ export function PreferencesSection() {
           </Button>
         </div>
       )}
-      <SettingsUpdateRates />
-      <ManualRatesSection />
       {isAndroidNativePlatform() && (
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2 border-t border-border pt-4">
           <span className="text-sm font-medium">
             {t.settings.homeScreenWidget}
           </span>
@@ -166,6 +166,6 @@ export function PreferencesSection() {
           </Button>
         </div>
       )}
-    </SettingsGroup>
+    </SettingsCard>
   )
 }

@@ -2027,3 +2027,27 @@ test('capture Settings Feature toggles card (#271)', async ({ page }) => {
   })
 })
 
+test('capture Settings meaning cards (#272)', async ({ page }) => {
+  await seedValidationFixture(page, {
+    locale: 'ru',
+    currencyDisplayMode: 'base',
+  })
+  await page.goto('/settings')
+  await expect(page.getByRole('heading', { name: 'Ещё' })).toBeVisible()
+  await expect(page.getByTestId('settings-preferences')).toBeVisible()
+  await expect(page.getByTestId('feature-toggles')).toBeVisible()
+  await expect(page.getByTestId('settings-rates')).toBeVisible()
+  await expect(page.getByTestId('settings-tools')).toBeVisible()
+  await expect(
+    page.getByRole('heading', { name: 'Курсы валют' }),
+  ).toBeVisible()
+  await expect(
+    page.getByRole('heading', { name: 'Инструменты' }),
+  ).toBeVisible()
+  await page.getByTestId('settings-tools').scrollIntoViewIfNeeded()
+  await page.screenshot({
+    path: join(outDir, '272-settings-section-cards.png'),
+    fullPage: true,
+  })
+})
+

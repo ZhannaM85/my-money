@@ -227,6 +227,7 @@ export interface Dictionary {
   settings: {
     title: string
     groupPreferences: string
+    preferencesDescription: string
     groupData: string
     groupAbout: string
     groupDeveloper: string
@@ -243,6 +244,10 @@ export interface Dictionary {
     skipWelcome: string
     comparison: string
     allocation: string
+    toolsTitle: string
+    toolsDescription: string
+    ratesTitle: string
+    ratesDescription: string
     appearance: string
     moodFresh: string
     moodLedger: string
