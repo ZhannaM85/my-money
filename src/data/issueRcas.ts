@@ -43,8 +43,8 @@ export const issueRcas: IssueRca[] = [
       en: 'Assets: distinct colors for distribution graph sectors',
       ru: 'Активы: разные цвета секторов на графике распределения',
     },
-    en: '#255 colored by class id, so Type collapsed cash/deposit/bank to one blue. First pass gave each type a token. On-device still: bank≈debit_card, apartment≈house, USD≈EUR, RUB≈GEL. Second pass: high-contrast Type hues (magenta debit, teal house) and chart currencies (green USD, rose RUB, amber GEL).',
-    ru: '#255 красил по классу — в «Тип» наличные/вклад/счёт были одним синим. Первый проход: токен на тип. На устройстве всё ещё: счёт≈карта, квартира≈дом, USD≈EUR, RUB≈GEL. Второй: контрастные типы (маджента карта, бирюза дом) и валюты (зелёный USD, розовый RUB, янтарный GEL).',
+    en: '#255 colored by class id, so Type collapsed cash/deposit/bank to one blue. First pass gave each type a token. On-device still: bank≈debit_card, apartment≈house, USD≈EUR, RUB≈GEL. Second pass: high-contrast Type hues (magenta debit, teal house) and chart currencies (green USD, rose RUB, amber GEL). Third: drop yellow cash/GEL — cash light green, GEL cyan.',
+    ru: '#255 красил по классу — в «Тип» наличные/вклад/счёт были одним синим. Первый проход: токен на тип. На устройстве всё ещё: счёт≈карта, квартира≈дом, USD≈EUR, RUB≈GEL. Второй: контрастные типы (маджента карта, бирюза дом) и валюты (зелёный USD, розовый RUB, янтарный GEL). Третий: убрать жёлтый у наличных/GEL — наличные светло-зелёные, GEL бирюзовый.',
   },
   {
     issue: 268,

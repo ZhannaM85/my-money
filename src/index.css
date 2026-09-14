@@ -25,7 +25,7 @@
   --positive: #16a878;
   --asset-money: #2878e8;
   --asset-investments: #16a878;
-  --asset-cash: #f2a51a;
+  --asset-cash: #4ade80;
   --asset-property: #7656d6;
   --asset-valuables: #a45bc7;
   --asset-liabilities: #e05252;
@@ -57,7 +57,7 @@
   --currency-usd: #059669;
   --currency-gbp: #7c3aed;
   --currency-rub: #e11d48;
-  --currency-gel: #f59e0b;
+  --currency-gel: #22d3ee;
   --currency-btc: #f7931a;
   --currency-usdt: #26a17b;
   --primary: var(--action);

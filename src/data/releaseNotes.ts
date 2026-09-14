@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 244,
+    issue: 269,
+    date: '2026-09-14T21:20:00+03:00',
+    en: 'Allocation no longer uses yellow for cash (or GEL): cash is light green, GEL is cyan, so slices stay easy to tell apart.',
+    ru: 'В распределении больше нет жёлтого у наличных (и GEL): наличные — светло-зелёные, GEL — бирюзовый, доли проще различать.',
+  },
+  {
     version: 243,
     issue: 272,
     date: '2026-09-14T21:15:00+03:00',
