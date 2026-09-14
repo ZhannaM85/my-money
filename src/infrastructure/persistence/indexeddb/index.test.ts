@@ -114,6 +114,7 @@ describe('IndexedDb repositories', () => {
     expect(loaded.baseCurrency).toBe('GBP')
     expect(loaded.onboardingCompleted).toBe(false)
     expect(loaded.showChartTooltip).toBe(true)
+    expect(loaded.showDashboardPositions).toBe(true)
   })
 
   it('stores FX quotes and looks up inverse rates', async () => {

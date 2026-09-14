@@ -4,6 +4,7 @@ import { useTranslation } from '@/i18n'
 import { Button } from '@/shared/ui/button'
 import { EmptyState } from '@/shared/ui/empty-state'
 import { PageHeader } from '@/shared/ui/page-header'
+import { useSettingsStore } from '@/stores/settingsStore'
 import { NetWorthChart } from './NetWorthChart'
 import { DashboardAsOfBar } from './DashboardAsOfBar'
 import { DashboardHeadline } from './DashboardHeadline'
@@ -14,6 +15,9 @@ import { useDashboardScreen } from './useDashboardScreen'
 export function DashboardScreen() {
   const t = useTranslation()
   const d = useDashboardScreen()
+  const showDashboardPositions = useSettingsStore(
+    (state) => state.settings.showDashboardPositions,
+  )
 
   return (
     <div
@@ -102,19 +106,21 @@ export function DashboardScreen() {
                 )}
               </ChartRangeControls>
             )}
-            {d.convertedHoldingsToday.length > 0 && !d.showNativeAll && (
-              <DashboardPositions
-                holdings={d.convertedHoldingsToday}
-                holdingsOpen={d.holdingsOpen}
-                selectedChartPoint={d.selectedChartPoint}
-                displayHeadlineTotal={d.displayHeadlineTotal}
-                isOriginal={d.isOriginal}
-                activeCurrencyFilter={d.activeCurrencyFilter}
-                baseCurrency={d.baseCurrency}
-                asOfDate={d.selectedChartDate ?? d.today}
-                onToggle={d.toggleHoldings}
-              />
-            )}
+            {d.convertedHoldingsToday.length > 0 &&
+              !d.showNativeAll &&
+              showDashboardPositions && (
+                <DashboardPositions
+                  holdings={d.convertedHoldingsToday}
+                  holdingsOpen={d.holdingsOpen}
+                  selectedChartPoint={d.selectedChartPoint}
+                  displayHeadlineTotal={d.displayHeadlineTotal}
+                  isOriginal={d.isOriginal}
+                  activeCurrencyFilter={d.activeCurrencyFilter}
+                  baseCurrency={d.baseCurrency}
+                  asOfDate={d.selectedChartDate ?? d.today}
+                  onToggle={d.toggleHoldings}
+                />
+              )}
             <Button asChild variant="outline" className="w-full">
               <Link to="/allocation">{t.dashboard.allocation}</Link>
             </Button>

@@ -192,6 +192,25 @@ describe('SettingsScreen', () => {
     expect(useSettingsStore.getState().settings.homeScreenWidget).toBe(true)
   })
 
+  it('lets the user hide Dashboard Positions (#270)', async () => {
+    const user = userEvent.setup()
+    await db.settings.put(DEFAULT_SETTINGS)
+    render(
+      <MemoryRouter>
+        <SettingsScreen />
+      </MemoryRouter>,
+    )
+    const shown = await screen.findByRole('button', { name: 'Shown' })
+    expect(shown).toHaveAttribute('aria-pressed', 'true')
+    await user.click(screen.getByRole('button', { name: 'Hidden' }))
+    expect(
+      await screen.findByRole('button', { name: 'Hidden' }),
+    ).toHaveAttribute('aria-pressed', 'true')
+    expect(useSettingsStore.getState().settings.showDashboardPositions).toBe(
+      false,
+    )
+  })
+
   it('groups More and keeps Developer collapsed (#235)', async () => {
     const user = userEvent.setup()
     render(

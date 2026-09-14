@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 270,
+    title: {
+      en: 'Settings: toggle to hide Dashboard Positions',
+      ru: 'Настройки: переключатель скрыть Позиции на Сводке',
+    },
+    en: 'Some users do not want the Positions list on Dashboard. Settings now has Shown/Hidden for that block (list, count, Итого). Default shown. Allocation link stays.',
+    ru: 'Часть людей не хочет список Позиций на Сводке. В настройках Shown/Hidden для блока (список, счётчик, Итого). По умолчанию показан. Ссылка на распределение остаётся.',
+  },
+  {
     issue: 269,
     title: {
       en: 'Assets: distinct colors for distribution graph sectors',

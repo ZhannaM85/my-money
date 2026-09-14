@@ -350,6 +350,11 @@ export const en: Dictionary = {
       'Android only. Off by default. Converted net worth and as-of date on a 2×2 glance. Add it from the home-screen widget picker after you turn this on.',
     homeScreenWidgetOn: 'Widget on',
     homeScreenWidgetOff: 'Widget off',
+    dashboardPositions: 'Dashboard positions',
+    dashboardPositionsHint:
+      'The Positions list and total under the chart. Holdings stay on Assets either way.',
+    dashboardPositionsShown: 'Shown',
+    dashboardPositionsHidden: 'Hidden',
     readPrivacyPolicyLabel: 'Privacy policy',
   },
   privacyPolicy: {

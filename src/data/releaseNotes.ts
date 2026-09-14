@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 240,
+    issue: 270,
+    date: '2026-09-14T20:45:00+03:00',
+    en: 'Settings can hide Dashboard Positions (the list and total under the chart). Default stays shown. Allocation is unchanged.',
+    ru: 'В настройках можно скрыть Позиции на Сводке (список и итого под графиком). По умолчанию они на месте. Распределение без изменений.',
+  },
+  {
     version: 239,
     issue: 269,
     date: '2026-09-14T20:30:00+03:00',

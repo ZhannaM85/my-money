@@ -21,6 +21,8 @@ export interface Settings {
   assetListOrder: string[]
   /** Holdings popover on net-worth charts (#141). Default on. */
   showChartTooltip: boolean
+  /** Positions list + total on Dashboard (#270). Default on. */
+  showDashboardPositions: boolean
   /** Android home-screen glance widget (#190). Off by default. */
   homeScreenWidget: boolean
   updatedAt: string
@@ -35,6 +37,7 @@ export const DEFAULT_SETTINGS: Settings = {
   assetListSort: 'custom',
   assetListOrder: [],
   showChartTooltip: true,
+  showDashboardPositions: true,
   homeScreenWidget: false,
   updatedAt: '1970-01-01T00:00:00.000Z',
 }

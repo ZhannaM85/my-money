@@ -109,6 +109,8 @@ gh issue edit 108 --add-label validation
 | `267-update-reorder-icon.png` | Update · same Order icon next to date (RU, #267) |
 | `268-assets-reorder-save-icon.png` | Assets · Save icon while reordering, no Отмена (RU, #268) |
 | `269-allocation-type-colors.png` | Allocation · Type view distinct sector colors (RU, #269) |
+| `270-settings-positions-toggle.png` | More · Dashboard Positions Shown/Hidden (RU, #270) |
+| `270-dashboard-positions-hidden.png` | Dashboard · Positions block hidden (RU, #270) |
 | `258-history-locale-dates.png` | History · list rows use locale dates (#258) |
 | `258-asset-snapshot-locale-dates.png` | Asset details · snapshot list locale dates (#258) |
 

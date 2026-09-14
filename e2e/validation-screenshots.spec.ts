@@ -1889,3 +1889,32 @@ test('capture Allocation Type distinct sector colors (#269)', async ({
   })
 })
 
+test('capture Settings hide Dashboard Positions (#270)', async ({ page }) => {
+  await seedValidationFixture(page, {
+    locale: 'ru',
+    currencyDisplayMode: 'base',
+  })
+  await page.goto('/settings')
+  await expect(page.getByRole('heading', { name: 'Ещё' })).toBeVisible()
+  await expect(page.getByText('Позиции на Сводке', { exact: true })).toBeVisible()
+  await page.screenshot({
+    path: join(outDir, '270-settings-positions-toggle.png'),
+    fullPage: true,
+  })
+  await page.getByRole('button', { name: 'Скрыть' }).click()
+  await expect(page.getByRole('button', { name: 'Скрыть' })).toHaveAttribute(
+    'aria-pressed',
+    'true',
+  )
+  await page.goto('/')
+  await expect(page.getByRole('heading', { name: 'Сводка' })).toBeVisible()
+  await expect(page.getByTestId('dashboard-positions')).toHaveCount(0)
+  const allocation = page.getByRole('link', { name: 'Распределение' })
+  await expect(allocation).toBeVisible()
+  await allocation.scrollIntoViewIfNeeded()
+  await page.screenshot({
+    path: join(outDir, '270-dashboard-positions-hidden.png'),
+    fullPage: true,
+  })
+})
+

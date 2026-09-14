@@ -74,4 +74,19 @@ describe('settingsStore', () => {
     await useSettingsStore.getState().load()
     expect(useSettingsStore.getState().settings.showChartTooltip).toBe(false)
   })
+
+  it('persists hiding Dashboard Positions (#270)', async () => {
+    await useSettingsStore.getState().load()
+    expect(useSettingsStore.getState().settings.showDashboardPositions).toBe(
+      true,
+    )
+    await useSettingsStore.getState().setShowDashboardPositions(false)
+    expect(useSettingsStore.getState().settings.showDashboardPositions).toBe(
+      false,
+    )
+    await useSettingsStore.getState().load()
+    expect(useSettingsStore.getState().settings.showDashboardPositions).toBe(
+      false,
+    )
+  })
 })

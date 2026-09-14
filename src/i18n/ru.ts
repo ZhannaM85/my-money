@@ -355,6 +355,11 @@ export const ru: Dictionary = {
       'Только Android. По умолчанию выкл. Пересчитанный итог и дата на плитке 2×2. После включения добавьте виджет с домашнего экрана.',
     homeScreenWidgetOn: 'Виджет включён',
     homeScreenWidgetOff: 'Виджет выключен',
+    dashboardPositions: 'Позиции на Сводке',
+    dashboardPositionsHint:
+      'Список позиций и итого под графиком. Активы остаются на вкладке Активы.',
+    dashboardPositionsShown: 'Показывать',
+    dashboardPositionsHidden: 'Скрыть',
     readPrivacyPolicyLabel: 'Политика конфиденциальности',
   },
   privacyPolicy: {

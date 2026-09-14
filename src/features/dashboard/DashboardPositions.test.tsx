@@ -4,6 +4,8 @@ import { beforeEach, describe, expect, it } from 'vitest'
 import { renderApp, resetAppStores } from '@test/renderApp'
 import { formatAmount, todayIsoDate } from '@/shared/lib/money'
 import { addDaysIso } from '@/shared/lib/dates'
+import { DEFAULT_SETTINGS } from '@/domain/settings'
+import { db } from '@/infrastructure/persistence/indexeddb'
 import { useAssetStore } from '@/stores/assetStore'
 import { useFxStore } from '@/stores/fxStore'
 import { useChartRangeStore } from '@/stores/chartRangeStore'
@@ -48,6 +50,41 @@ describe('DashboardPositions', () => {
     expect(
       asOf.compareDocumentPosition(chart) & Node.DOCUMENT_POSITION_FOLLOWING,
     ).toBeTruthy()
+  })
+
+  it('hides Positions when Settings toggle is off (#270)', async () => {
+    const today = todayIsoDate()
+    const now = `${today}T00:00:00.000Z`
+    await db.settings.put({
+      ...DEFAULT_SETTINGS,
+      showDashboardPositions: false,
+    })
+    await useAssetStore.getState().saveAsset(
+      {
+        id: 'a1',
+        name: 'Cash',
+        assetClass: 'money',
+        type: 'cash',
+        currency: 'EUR',
+        trackingStatus: 'included',
+        valuationMethod: 'account_balance',
+        updateFrequency: 'weekly',
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        assetId: 'a1',
+        date: today,
+        amount: 1000,
+        currency: 'EUR',
+      },
+    )
+    renderApp(<DashboardScreen />)
+    expect(await screen.findByTestId('net-worth-chart')).toBeInTheDocument()
+    expect(screen.queryByTestId('dashboard-positions')).not.toBeInTheDocument()
+    expect(
+      screen.getByRole('link', { name: 'Allocation' }),
+    ).toBeInTheDocument()
   })
 
   it('shows today Positions after save when the visible chart range ends earlier (#208)', async () => {
