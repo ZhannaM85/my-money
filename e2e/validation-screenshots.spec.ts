@@ -1790,3 +1790,102 @@ test('capture DESIGN_SYSTEM chart tokens (#255)', async ({ page }) => {
   })
 })
 
+test('capture Allocation Type distinct sector colors (#269)', async ({
+  page,
+}) => {
+  await seedValidationFixture(page, {
+    locale: 'ru',
+    currencyDisplayMode: 'base',
+  })
+  await page.evaluate(async () => {
+    const now = '2026-08-17T00:00:00.000Z'
+    const version = await (async () => {
+      const listed = await indexedDB.databases?.()
+      const existing = listed?.find((row) => row.name === 'my-money')
+      return existing?.version && existing.version > 0 ? existing.version : 2
+    })()
+    await new Promise<void>((resolve, reject) => {
+      const open = indexedDB.open('my-money', version)
+      open.onerror = () => reject(open.error ?? new Error('idb open failed'))
+      open.onsuccess = () => {
+        const db = open.result
+        const tx = db.transaction(['assets', 'snapshots'], 'readwrite')
+        tx.objectStore('assets').put({
+          id: 'eur-deposit',
+          name: 'Deposit',
+          assetClass: 'money',
+          type: 'deposit',
+          currency: 'EUR',
+          trackingStatus: 'included',
+          valuationMethod: 'account_balance',
+          updateFrequency: 'weekly',
+          createdAt: now,
+          updatedAt: now,
+        })
+        tx.objectStore('assets').put({
+          id: 'eur-bank',
+          name: 'Bank',
+          assetClass: 'money',
+          type: 'bank',
+          currency: 'EUR',
+          trackingStatus: 'included',
+          valuationMethod: 'account_balance',
+          updateFrequency: 'weekly',
+          createdAt: now,
+          updatedAt: now,
+        })
+        tx.objectStore('assets').put({
+          id: 'eur-invest',
+          name: 'Other inv',
+          assetClass: 'investments',
+          type: 'other_investment',
+          currency: 'EUR',
+          trackingStatus: 'included',
+          valuationMethod: 'account_balance',
+          updateFrequency: 'weekly',
+          createdAt: now,
+          updatedAt: now,
+        })
+        tx.objectStore('snapshots').put({
+          id: 's-deposit',
+          assetId: 'eur-deposit',
+          date: '2026-08-17',
+          amount: 6000,
+          currency: 'EUR',
+        })
+        tx.objectStore('snapshots').put({
+          id: 's-bank',
+          assetId: 'eur-bank',
+          date: '2026-08-17',
+          amount: 300,
+          currency: 'EUR',
+        })
+        tx.objectStore('snapshots').put({
+          id: 's-invest',
+          assetId: 'eur-invest',
+          date: '2026-08-17',
+          amount: 8000,
+          currency: 'EUR',
+        })
+        tx.oncomplete = () => {
+          db.close()
+          resolve()
+        }
+        tx.onerror = () => reject(tx.error ?? new Error('idb write failed'))
+      }
+    })
+  })
+  await page.goto('/allocation')
+  await expect(page.getByRole('heading', { name: 'Распределение' })).toBeVisible()
+  await page.getByRole('button', { name: 'Тип' }).click()
+  await expect(page.getByText('Наличные')).toBeVisible()
+  await expect(page.getByText('Вклад')).toBeVisible()
+  await expect(page.getByText('Банковский счёт')).toBeVisible()
+  await expect(page.getByTestId('allocation-chart')).toBeVisible()
+  await expect(page.locator('[data-testid="allocation-chart"] path').first()).toBeVisible()
+  await page.screenshot({
+    path: join(outDir, '269-allocation-type-colors.png'),
+    fullPage: true,
+  })
+})
+

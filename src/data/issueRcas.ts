@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 269,
+    title: {
+      en: 'Assets: distinct colors for distribution graph sectors',
+      ru: 'Активы: разные цвета секторов на графике распределения',
+    },
+    en: '#255 colored slices by class id, so Type view mapped cash, deposit, and bank to the same money blue. Each type now has its own token (DESIGN_SYSTEM bank/cash/crypto plus extra hues). Class view still uses class colors.',
+    ru: '#255 красил доли по классу, поэтому в виде «Тип» наличные, вклад и счёт были одним синим. У каждого типа свой токен (bank/cash/crypto из DESIGN_SYSTEM и дополнительные оттенки). Вид по классу по-прежнему классовый.',
+  },
+  {
     issue: 268,
     title: {
       en: 'Assets: Save reorder with the same icon as Update; drop Cancel',

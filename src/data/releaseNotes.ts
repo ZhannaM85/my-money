@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 239,
+    issue: 269,
+    date: '2026-09-14T20:30:00+03:00',
+    en: 'Allocation Type slices no longer share one class color. Cash, deposit, bank, and the other types each have a distinct hue on the donut and legend.',
+    ru: 'В распределении по типу доли больше не делят один цвет класса. Наличные, вклад, счёт и остальные типы на кольце и в легенде разного цвета.',
+  },
+  {
     version: 238,
     issue: 268,
     date: '2026-09-13T21:00:00+03:00',
