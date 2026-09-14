@@ -86,7 +86,7 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
-| [#269](https://github.com/ZhannaM85/my-money/issues/269) | 🔍 Pending validation | Assets: distinct colors for distribution graph sectors | Phone 2026-09-14. After #255, cash/deposit/bank share one blue. Need a larger distinct palette per sector. |
+| [#269](https://github.com/ZhannaM85/my-money/issues/269) | ⬜ Open | Assets: distinct colors for distribution graph sectors | On-device still: bank≈debit_card, apartment≈house; Currency USD≈EUR, RUB≈GEL. Need higher-contrast Type + Currency hues. |
 | [#270](https://github.com/ZhannaM85/my-money/issues/270) | 🔍 Pending validation | Settings: toggle to hide Dashboard Positions | Phone 2026-09-14. Optional Позиции block on Сводка. Default shown. Allocation stays. |
 
 ---
