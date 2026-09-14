@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 271,
+    title: {
+      en: 'Settings: Feature toggles card like Turtle',
+      ru: 'Настройки: карточка переключателей как в Turtle',
+    },
+    en: '#270 hid Positions via chips buried in Preferences. Users expect more toggles later and Turtle-style chrome: section title, description, title+blurb+switch rows. Feature toggles card; same showDashboardPositions setting.',
+    ru: '#270 прятал Позиции чипами в Параметрах. Нужны ещё переключатели и оформление как в Turtle: заголовок секции, описание, строки title+текст+switch. Карточка «Переключатели»; тот же showDashboardPositions.',
+  },
+  {
     issue: 270,
     title: {
       en: 'Settings: toggle to hide Dashboard Positions',

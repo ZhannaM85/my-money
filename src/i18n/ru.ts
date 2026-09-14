@@ -357,9 +357,10 @@ export const ru: Dictionary = {
     homeScreenWidgetOff: 'Виджет выключен',
     dashboardPositions: 'Позиции на Сводке',
     dashboardPositionsHint:
-      'Список позиций и итого под графиком. Активы остаются на вкладке Активы.',
-    dashboardPositionsShown: 'Показывать',
-    dashboardPositionsHidden: 'Скрыть',
+      'Показывать список позиций и итого под графиком на Сводке. Активы остаются на вкладке Активы.',
+    featureTogglesTitle: 'Переключатели функций',
+    featureTogglesDescription:
+      'Необязательные части приложения, которые можно включить или выключить. Со временем здесь появятся новые переключатели.',
     readPrivacyPolicyLabel: 'Политика конфиденциальности',
   },
   privacyPolicy: {

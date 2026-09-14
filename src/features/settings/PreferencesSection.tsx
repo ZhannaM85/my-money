@@ -28,9 +28,6 @@ export function PreferencesSection() {
   const setHomeScreenWidget = useSettingsStore(
     (state) => state.setHomeScreenWidget,
   )
-  const setShowDashboardPositions = useSettingsStore(
-    (state) => state.setShowDashboardPositions,
-  )
   const completeOnboarding = useSettingsStore(
     (state) => state.completeOnboarding,
   )
@@ -126,30 +123,6 @@ export function PreferencesSection() {
               key={item.id}
               pressed={mood === item.id}
               onClick={() => setMood(item.id)}
-            >
-              {item.label}
-            </Chip>
-          ))}
-        </div>
-      </div>
-      <div className="flex flex-col gap-2">
-        <span className="text-sm font-medium">
-          {t.settings.dashboardPositions}
-        </span>
-        <p className="text-sm text-muted-foreground">
-          {t.settings.dashboardPositionsHint}
-        </p>
-        <div className="flex flex-wrap gap-2">
-          {(
-            [
-              { on: true, label: t.settings.dashboardPositionsShown },
-              { on: false, label: t.settings.dashboardPositionsHidden },
-            ] as const
-          ).map((item) => (
-            <Chip
-              key={item.label}
-              pressed={settings.showDashboardPositions === item.on}
-              onClick={() => void setShowDashboardPositions(item.on)}
             >
               {item.label}
             </Chip>

@@ -352,9 +352,10 @@ export const en: Dictionary = {
     homeScreenWidgetOff: 'Widget off',
     dashboardPositions: 'Dashboard positions',
     dashboardPositionsHint:
-      'The Positions list and total under the chart. Holdings stay on Assets either way.',
-    dashboardPositionsShown: 'Shown',
-    dashboardPositionsHidden: 'Hidden',
+      'Show the Positions list and total under the chart on Dashboard. Holdings stay on Assets either way.',
+    featureTogglesTitle: 'Feature toggles',
+    featureTogglesDescription:
+      'Optional pieces of the app you can turn on or off. More toggles will land here over time.',
     readPrivacyPolicyLabel: 'Privacy policy',
   },
   privacyPolicy: {

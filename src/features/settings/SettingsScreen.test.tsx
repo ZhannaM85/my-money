@@ -192,7 +192,7 @@ describe('SettingsScreen', () => {
     expect(useSettingsStore.getState().settings.homeScreenWidget).toBe(true)
   })
 
-  it('lets the user hide Dashboard Positions (#270)', async () => {
+  it('lets the user hide Dashboard Positions from Feature toggles (#271)', async () => {
     const user = userEvent.setup()
     await db.settings.put(DEFAULT_SETTINGS)
     render(
@@ -200,12 +200,15 @@ describe('SettingsScreen', () => {
         <SettingsScreen />
       </MemoryRouter>,
     )
-    const shown = await screen.findByRole('button', { name: 'Shown' })
-    expect(shown).toHaveAttribute('aria-pressed', 'true')
-    await user.click(screen.getByRole('button', { name: 'Hidden' }))
     expect(
-      await screen.findByRole('button', { name: 'Hidden' }),
-    ).toHaveAttribute('aria-pressed', 'true')
+      await screen.findByRole('heading', { name: 'Feature toggles' }),
+    ).toBeInTheDocument()
+    const toggle = await screen.findByRole('switch', {
+      name: 'Dashboard positions',
+    })
+    expect(toggle).toHaveAttribute('aria-checked', 'true')
+    await user.click(toggle)
+    expect(toggle).toHaveAttribute('aria-checked', 'false')
     expect(useSettingsStore.getState().settings.showDashboardPositions).toBe(
       false,
     )

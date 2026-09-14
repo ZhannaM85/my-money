@@ -8,6 +8,7 @@ import { PageHeader } from '@/shared/ui/page-header'
 import { useSettingsStore } from '@/stores/settingsStore'
 import { AboutSection } from './AboutSection'
 import { DeveloperSection } from './DeveloperSection'
+import { FeatureTogglesSection } from './FeatureTogglesSection'
 import { PreferencesSection } from './PreferencesSection'
 import { SettingsGroup } from './SettingsGroup'
 
@@ -36,6 +37,7 @@ export function SettingsScreen() {
         }
       />
       <PreferencesSection />
+      <FeatureTogglesSection />
       <Button asChild variant="outline" className="w-full">
         <Link to="/compare">{t.settings.comparison}</Link>
       </Button>

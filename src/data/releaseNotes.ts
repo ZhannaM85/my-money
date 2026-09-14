@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 242,
+    issue: 271,
+    date: '2026-09-14T21:05:00+03:00',
+    en: 'More has a Feature toggles card with a clear title, description, and switch — Dashboard Positions lives there now, ready for more options later.',
+    ru: 'В «Ещё» карточка «Переключатели функций» с заголовком, описанием и выключателем — «Позиции на Сводке» теперь там, место для следующих опций.',
+  },
+  {
     version: 241,
     issue: 269,
     date: '2026-09-14T20:55:00+03:00',

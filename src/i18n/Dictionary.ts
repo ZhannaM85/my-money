@@ -283,8 +283,8 @@ export interface Dictionary {
     homeScreenWidgetOff: string
     dashboardPositions: string
     dashboardPositionsHint: string
-    dashboardPositionsShown: string
-    dashboardPositionsHidden: string
+    featureTogglesTitle: string
+    featureTogglesDescription: string
     readPrivacyPolicyLabel: string
   }
   /** #164 — full privacy policy at `/privacy` (store listings need a stable URL). */

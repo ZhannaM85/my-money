@@ -112,6 +112,8 @@ gh issue edit 108 --add-label validation
 | `269-allocation-currency-colors.png` | Allocation · Currency EUR/USD/RUB/GEL distinct (RU, #269) |
 | `270-settings-positions-toggle.png` | More · Dashboard Positions Shown/Hidden (RU, #270) |
 | `270-dashboard-positions-hidden.png` | Dashboard · Positions block hidden (RU, #270) |
+| `271-settings-feature-toggles.png` | More · Feature toggles card with switch (RU, #271) |
+| `271-dashboard-positions-hidden.png` | Dashboard · Positions hidden via Feature toggles (RU, #271) |
 | `258-history-locale-dates.png` | History · list rows use locale dates (#258) |
 | `258-asset-snapshot-locale-dates.png` | Asset details · snapshot list locale dates (#258) |
 

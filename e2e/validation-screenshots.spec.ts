@@ -1995,23 +1995,26 @@ test('capture Allocation Type distinct sector colors (#269)', async ({
   })
 })
 
-test('capture Settings hide Dashboard Positions (#270)', async ({ page }) => {
+test('capture Settings Feature toggles card (#271)', async ({ page }) => {
   await seedValidationFixture(page, {
     locale: 'ru',
     currencyDisplayMode: 'base',
   })
   await page.goto('/settings')
   await expect(page.getByRole('heading', { name: 'Ещё' })).toBeVisible()
-  await expect(page.getByText('Позиции на Сводке', { exact: true })).toBeVisible()
+  await expect(
+    page.getByRole('heading', { name: 'Переключатели функций' }),
+  ).toBeVisible()
+  await expect(page.getByTestId('feature-toggles')).toBeVisible()
+  const toggle = page.getByRole('switch', { name: 'Позиции на Сводке' })
+  await expect(toggle).toHaveAttribute('aria-checked', 'true')
+  await toggle.scrollIntoViewIfNeeded()
   await page.screenshot({
-    path: join(outDir, '270-settings-positions-toggle.png'),
+    path: join(outDir, '271-settings-feature-toggles.png'),
     fullPage: true,
   })
-  await page.getByRole('button', { name: 'Скрыть' }).click()
-  await expect(page.getByRole('button', { name: 'Скрыть' })).toHaveAttribute(
-    'aria-pressed',
-    'true',
-  )
+  await toggle.click()
+  await expect(toggle).toHaveAttribute('aria-checked', 'false')
   await page.goto('/')
   await expect(page.getByRole('heading', { name: 'Сводка' })).toBeVisible()
   await expect(page.getByTestId('dashboard-positions')).toHaveCount(0)
@@ -2019,7 +2022,7 @@ test('capture Settings hide Dashboard Positions (#270)', async ({ page }) => {
   await expect(allocation).toBeVisible()
   await allocation.scrollIntoViewIfNeeded()
   await page.screenshot({
-    path: join(outDir, '270-dashboard-positions-hidden.png'),
+    path: join(outDir, '271-dashboard-positions-hidden.png'),
     fullPage: true,
   })
 })
