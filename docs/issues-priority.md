@@ -93,7 +93,7 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
-| [#273](https://github.com/ZhannaM85/my-money/issues/273) | 🔍 Pending validation | Dashboard: notify when + day is already in comparison | Keep + tappable; toast instead of disabled when day already pinned. |
+| [#273](https://github.com/ZhannaM85/my-money/issues/273) | 🔲 Open | Dashboard: notify when + day is already in comparison | On-device: disable + when pinned; permanent bordered notice (orange/purple); no 4s toast. |
 | [#274](https://github.com/ZhannaM85/my-money/issues/274) | 🔍 Pending validation | Dashboard: sync На дату with chart day selection | Chart pin and As of field can disagree (e.g. 20 авг. vs 7 сент.). |
 
 ---
