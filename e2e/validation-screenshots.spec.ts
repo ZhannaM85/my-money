@@ -2058,3 +2058,28 @@ test('capture Settings meaning cards (#272)', async ({ page }) => {
   })
 })
 
+test('capture Dashboard already-added comparison notice (#273)', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 })
+  await seedValidationFixture(page, {
+    locale: 'ru',
+    currencyDisplayMode: 'base',
+  })
+  await page.goto('/')
+  await expect(page.getByRole('heading', { name: 'Сводка' })).toBeVisible()
+  const add = page.getByRole('button', { name: 'Добавить к сравнению' })
+  await expect(add).toBeEnabled()
+  await add.click()
+  await add.click()
+  await expect(page.getByTestId('comparison-already-added')).toBeVisible()
+  await expect(page.getByTestId('comparison-already-added')).toHaveText(
+    'Этот день уже добавлен в сравнение, выберите другой день.',
+  )
+  await expect(add).toBeEnabled()
+  await page.screenshot({
+    path: join(outDir, '273-dashboard-comparison-already-added.png'),
+    fullPage: true,
+  })
+})
+

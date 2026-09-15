@@ -40,6 +40,8 @@ export const ru: Dictionary = {
     asOfDateInvalid: 'Выберите сегодня или прошедшую дату',
     jumpToToday: 'Сегодня',
     addToComparison: 'Добавить к сравнению',
+    comparisonDayAlreadyAdded:
+      'Этот день уже добавлен в сравнение, выберите другой день.',
     navigateToComparison: 'Перейти к сравнению',
     comparisonTitle: 'Сравнение',
     comparisonNeedTwoDates: 'Добавьте хотя бы две даты со Сводки.',

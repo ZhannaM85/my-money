@@ -39,6 +39,8 @@ export const en: Dictionary = {
     asOfDateInvalid: 'Choose today or a past date',
     jumpToToday: 'Today',
     addToComparison: 'Add to comparison',
+    comparisonDayAlreadyAdded:
+      'This day is already added to the comparison, pick another day.',
     navigateToComparison: 'Go to comparison',
     comparisonTitle: 'Comparison',
     comparisonNeedTwoDates: 'Add at least two dates from Dashboard.',

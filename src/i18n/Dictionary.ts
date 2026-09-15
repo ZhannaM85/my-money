@@ -46,6 +46,7 @@ export interface Dictionary {
     asOfDateInvalid: string
     jumpToToday: string
     addToComparison: string
+    comparisonDayAlreadyAdded: string
     navigateToComparison: string
     comparisonTitle: string
     comparisonNeedTwoDates: string

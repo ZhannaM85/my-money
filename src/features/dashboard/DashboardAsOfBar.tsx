@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Plus } from 'lucide-react'
 import { useTranslation } from '@/i18n'
@@ -25,6 +26,14 @@ export function DashboardAsOfBar({
 }) {
   const t = useTranslation()
   const asOfValue = selectedChartDate ?? today
+  const [noticeForDate, setNoticeForDate] = useState<string | null>(null)
+  const alreadyAddedNotice = noticeForDate === asOfValue
+
+  useEffect(() => {
+    if (!alreadyAddedNotice) return
+    const timer = window.setTimeout(() => setNoticeForDate(null), 4000)
+    return () => window.clearTimeout(timer)
+  }, [alreadyAddedNotice, noticeForDate])
 
   return (
     <div
@@ -48,8 +57,14 @@ export function DashboardAsOfBar({
           size="icon-xl"
           className="mb-0 shrink-0"
           aria-label={t.dashboard.addToComparison}
-          disabled={comparisonDates.includes(asOfValue)}
-          onClick={onAddToComparison}
+          onClick={() => {
+            if (comparisonDates.includes(asOfValue)) {
+              setNoticeForDate(asOfValue)
+              return
+            }
+            setNoticeForDate(null)
+            onAddToComparison()
+          }}
         >
           <Plus className="size-5" aria-hidden />
         </Button>
@@ -64,6 +79,15 @@ export function DashboardAsOfBar({
           </Button>
         ) : null}
       </div>
+      {alreadyAddedNotice ? (
+        <p
+          role="status"
+          data-testid="comparison-already-added"
+          className="text-sm text-muted-foreground"
+        >
+          {t.dashboard.comparisonDayAlreadyAdded}
+        </p>
+      ) : null}
       {comparisonDates.length >= 2 ? (
         <Link
           to="/compare"

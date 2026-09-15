@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 273,
+    title: {
+      en: 'Dashboard: notify when + day is already in comparison',
+      ru: 'Сводка: сообщение, если день уже в сравнении',
+    },
+    en: 'The + next to As of was disabled when that day was already pinned, which looked broken. + stays tappable and shows a short status notice to pick another day instead of adding a duplicate.',
+    ru: '«+» рядом с «На дату» отключался, если день уже в сравнении — казалось, что кнопка сломана. «+» остаётся нажимаемым и показывает короткое сообщение выбрать другой день, без дубликата.',
+  },
+  {
     issue: 272,
     title: {
       en: 'Settings: card-wrap other sections by meaning',

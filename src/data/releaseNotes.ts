@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 246,
+    issue: 273,
+    date: '2026-09-15T14:40:00+03:00',
+    en: 'On Dashboard, tapping + when that day is already in comparison shows a short notice instead of greying the button out.',
+    ru: 'На Сводке нажатие «+», когда этот день уже в сравнении, показывает короткое сообщение вместо серой кнопки.',
+  },
+  {
     version: 245,
     issue: 272,
     date: '2026-09-14T21:30:00+03:00',
