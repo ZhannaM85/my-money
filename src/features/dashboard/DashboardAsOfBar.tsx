@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Plus } from 'lucide-react'
 import { useTranslation } from '@/i18n'
@@ -26,14 +25,7 @@ export function DashboardAsOfBar({
 }) {
   const t = useTranslation()
   const asOfValue = selectedChartDate ?? today
-  const [noticeForDate, setNoticeForDate] = useState<string | null>(null)
-  const alreadyAddedNotice = noticeForDate === asOfValue
-
-  useEffect(() => {
-    if (!alreadyAddedNotice) return
-    const timer = window.setTimeout(() => setNoticeForDate(null), 4000)
-    return () => window.clearTimeout(timer)
-  }, [alreadyAddedNotice, noticeForDate])
+  const alreadyAdded = comparisonDates.includes(asOfValue)
 
   return (
     <div
@@ -57,14 +49,8 @@ export function DashboardAsOfBar({
           size="icon-xl"
           className="mb-0 shrink-0"
           aria-label={t.dashboard.addToComparison}
-          onClick={() => {
-            if (comparisonDates.includes(asOfValue)) {
-              setNoticeForDate(asOfValue)
-              return
-            }
-            setNoticeForDate(null)
-            onAddToComparison()
-          }}
+          disabled={alreadyAdded}
+          onClick={onAddToComparison}
         >
           <Plus className="size-5" aria-hidden />
         </Button>
@@ -79,11 +65,11 @@ export function DashboardAsOfBar({
           </Button>
         ) : null}
       </div>
-      {alreadyAddedNotice ? (
+      {alreadyAdded ? (
         <p
           role="status"
           data-testid="comparison-already-added"
-          className="text-sm text-muted-foreground"
+          className="rounded-lg border border-warning/40 bg-warning/10 px-3 py-2 text-sm text-foreground"
         >
           {t.dashboard.comparisonDayAlreadyAdded}
         </p>

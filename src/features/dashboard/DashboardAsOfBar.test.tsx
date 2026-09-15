@@ -225,7 +225,7 @@ describe('DashboardAsOfBar', () => {
     expect(scroll).toContainElement(body)
   })
 
-  it('keeps + enabled and notifies when the day is already in comparison (#273)', async () => {
+  it('disables + and permanently notifies when the day is already in comparison (#273)', async () => {
     const today = todayIsoDate()
     const past = addDaysIso(today, -4)
     const now = `${today}T00:00:00.000Z`
@@ -262,15 +262,13 @@ describe('DashboardAsOfBar', () => {
     expect(await screen.findByText('Net worth')).toBeInTheDocument()
     const add = screen.getByRole('button', { name: 'Add to comparison' })
     await user.click(add)
-    expect(add).toBeEnabled()
-    expect(
-      screen.queryByTestId('comparison-already-added'),
-    ).not.toBeInTheDocument()
-    await user.click(add)
-    expect(screen.getByTestId('comparison-already-added')).toHaveTextContent(
+    expect(add).toBeDisabled()
+    const notice = screen.getByTestId('comparison-already-added')
+    expect(notice).toHaveTextContent(
       'This day is already added to the comparison, pick another day.',
     )
-    expect(add).toBeEnabled()
+    expect(notice).toHaveClass('border-warning/40')
+    expect(notice).toHaveClass('bg-warning/10')
   })
 
   it('adds As of dates to comparison and shows a banner after two (#137)', async () => {

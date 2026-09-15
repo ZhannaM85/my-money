@@ -187,6 +187,7 @@ export function NetWorthChart({
   const onSelectDateRef = useRef(onSelectDate)
   const pendingDateRef = useRef<string | null>(null)
   const awaitingCommitRef = useRef(false)
+  const fallbackCommitTimerRef = useRef<number | null>(null)
   const pointerStartRef = useRef<{ x: number; y: number } | null>(null)
   const showChartTooltip = useSettingsStore(
     (state) => state.settings.showChartTooltip,
@@ -199,26 +200,43 @@ export function NetWorthChart({
     onSelectDateRef.current = onSelectDate
   }, [onSelectDate])
 
-  const rememberHoverDate = useCallback((date: string | null) => {
-    // Keep the last real day — Recharts may briefly report null between
-    // pointerup and the synthetic mouse move on iOS (#274).
-    if (date) pendingDateRef.current = date
+  const cancelAwaitingCommit = useCallback(() => {
+    awaitingCommitRef.current = false
+    if (fallbackCommitTimerRef.current !== null) {
+      window.clearTimeout(fallbackCommitTimerRef.current)
+      fallbackCommitTimerRef.current = null
+    }
   }, [])
 
-  const flushAwaitingCommit = useCallback(() => {
-    if (!awaitingCommitRef.current) return
-    const date = pendingDateRef.current
-    if (!date) return
-    awaitingCommitRef.current = false
+  const commitDate = useCallback((date: string) => {
+    cancelAwaitingCommit()
     onSelectDateRef.current?.(date)
-  }, [])
+  }, [cancelAwaitingCommit])
+
+  const rememberHoverDate = useCallback(
+    (date: string | null) => {
+      // Recharts renders its tooltip with the newly active point after its
+      // chart-level mouse handler has returned. Commit here so an iOS
+      // synthetic mouse move cannot flush the previous hovered day (#274).
+      if (!date) return
+      pendingDateRef.current = date
+      if (awaitingCommitRef.current) commitDate(date)
+    },
+    [commitDate],
+  )
 
   const requestCommitAfterTouch = useCallback(() => {
-    // iOS: pointerup runs before synthetic mousemove updates the active day.
-    // Wait for that mouse move (or a macrotask) before committing (#274 lag).
+    // iOS: pointerup runs before the synthetic mousemove/tooltip render that
+    // supplies the new active day. Prefer that exact day; the timeout is only
+    // a fallback for browsers that emit neither a mousemove nor a click.
     awaitingCommitRef.current = true
-    window.setTimeout(() => flushAwaitingCommit(), 0)
-  }, [flushAwaitingCommit])
+    fallbackCommitTimerRef.current = window.setTimeout(() => {
+      const date = pendingDateRef.current
+      if (awaitingCommitRef.current && date) commitDate(date)
+    }, 150)
+  }, [commitDate])
+
+  useEffect(() => cancelAwaitingCommit, [cancelAwaitingCommit])
 
   const name = seriesName ?? t.dashboard.netWorth
   if (points.length === 0) return null
@@ -271,7 +289,7 @@ export function NetWorthChart({
           if (event.pointerType === 'mouse') return
           pointerStartRef.current = { x: event.clientX, y: event.clientY }
           pannedRef.current = false
-          awaitingCommitRef.current = false
+          cancelAwaitingCommit()
         }}
         onPointerUp={(event) => {
           const start = pointerStartRef.current
@@ -290,7 +308,7 @@ export function NetWorthChart({
         }}
         onPointerCancel={() => {
           pointerStartRef.current = null
-          awaitingCommitRef.current = false
+          cancelAwaitingCommit()
         }}
       >
         <ResponsiveContainer width="100%" height="100%">
@@ -299,11 +317,11 @@ export function NetWorthChart({
             margin={{ top: 8, right: 8, left: 0, bottom: 0 }}
             onMouseMove={(state) => {
               selectDateFromChartState(state, rememberHoverDate)
-              flushAwaitingCommit()
             }}
             onClick={(state) => {
-              awaitingCommitRef.current = false
-              selectDateFromChartState(state, onSelectDateRef.current)
+              selectDateFromChartState(state, (date) => {
+                if (date) commitDate(date)
+              })
             }}
           >
             <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
