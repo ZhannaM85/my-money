@@ -93,8 +93,6 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
-| [#273](https://github.com/ZhannaM85/my-money/issues/273) | 🔲 Open | Dashboard: notify when + day is already in comparison | On-device: disable + when pinned; permanent bordered notice (orange/purple); no 4s toast. |
-| [#274](https://github.com/ZhannaM85/my-money/issues/274) | 🔲 Open | Dashboard: sync На дату with chart day selection | On-device: gray Recharts cursor ≠ green committed As of pin; calendar follows green only. |
 
 ---
 
