@@ -4,7 +4,7 @@ import { renderApp } from '@test/renderApp'
 import { DEFAULT_SETTINGS } from '@/domain/settings'
 import { formatAmount } from '@/shared/lib/money'
 import { useSettingsStore } from '@/stores/settingsStore'
-import { isChartDateTap } from './chartDateTap'
+import { isChartDateTap, shouldCommitChartDaySelection } from './chartDateTap'
 import { NetWorthChart, NetWorthChartTooltip } from './NetWorthChart'
 
 afterEach(() => {
@@ -272,5 +272,12 @@ describe('NetWorthChart', () => {
     expect(isChartDateTap(3, 8)).toBe(true)
     expect(isChartDateTap(0, 40)).toBe(false)
     expect(isChartDateTap(30, 30)).toBe(false)
+  })
+
+  it('commits As of on horizontal day scrub, not vertical scroll (#274)', () => {
+    expect(shouldCommitChartDaySelection(0, 4)).toBe(true)
+    expect(shouldCommitChartDaySelection(28, 4)).toBe(true)
+    expect(shouldCommitChartDaySelection(4, 40)).toBe(false)
+    expect(shouldCommitChartDaySelection(50, 10, true)).toBe(false)
   })
 })

@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 274,
+    title: {
+      en: 'Dashboard: sync На дату with chart day selection',
+      ru: 'Сводка: синхронизировать «На дату» с выбором на графике',
+    },
+    en: 'After #225, chart hover only remembered a day and As of committed on a tiny tap. Scrubbing the activeDot (common on phone) left На дату on the old day. Finger-up now commits on tap or horizontal day-scrub (not vertical scroll or range pan), and the chart pins the committed As of day.',
+    ru: 'После #225 наведение только запоминало день, а «На дату» ставилась при крошечном тапе. Проводка activeDot (обычно на телефоне) оставляла календарь на старом дне. Отпускание пальца теперь фиксирует день при тапе или горизонтальной проводке (не при вертикальном скролле и не при сдвиге диапазона), и график отмечает зафиксированную «На дату».',
+  },
+  {
     issue: 273,
     title: {
       en: 'Dashboard: notify when + day is already in comparison',

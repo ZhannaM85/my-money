@@ -51,3 +51,22 @@ describe('NetWorthChart holdings tooltip (#135)', () => {
     expect(hidden).toEqual([])
   })
 })
+
+describe('NetWorthChart As of pin (#274)', () => {
+  it('Dashboard wires selectedDate from the committed chart day', () => {
+    const source = readFileSync(
+      join(dirname(fileURLToPath(import.meta.url)), 'DashboardScreen.tsx'),
+      'utf8',
+    )
+    expect(source).toContain('selectedDate={d.selectedChartDate}')
+  })
+
+  it('pins the committed As of day with a ReferenceLine', () => {
+    const source = readFileSync(
+      join(dirname(fileURLToPath(import.meta.url)), 'NetWorthChart.tsx'),
+      'utf8',
+    )
+    expect(source).toContain('ReferenceLine')
+    expect(source).toContain('shouldCommitChartDaySelection')
+  })
+})

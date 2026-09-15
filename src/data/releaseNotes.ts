@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 247,
+    issue: 274,
+    date: '2026-09-15T15:00:00+03:00',
+    en: 'On Dashboard, picking a day on the net-worth chart updates На дату / As of to match — including after sliding to the day, not only a tiny tap.',
+    ru: 'На Сводке выбор дня на графике чистого капитала обновляет «На дату» — в том числе после проводки к дню, а не только при крошечном тапе.',
+  },
+  {
     version: 246,
     issue: 273,
     date: '2026-09-15T14:40:00+03:00',

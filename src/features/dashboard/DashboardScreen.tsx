@@ -92,6 +92,7 @@ export function DashboardScreen() {
                     currency={
                       d.isOriginal ? d.activeCurrencyFilter : d.baseCurrency
                     }
+                    selectedDate={d.selectedChartDate}
                     onZoomIn={d.chartRange.zoomIn}
                     onZoomOut={d.chartRange.zoomOut}
                     onPanEarlier={d.chartRange.panEarlier}

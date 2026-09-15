@@ -14,6 +14,8 @@ export function useChartPan(
   const startX = useRef<number | null>(null)
   const startY = useRef<number | null>(null)
   const stepped = useRef(false)
+  /** True after this gesture stepped the chart range (#274 skips As of commit). */
+  const pannedRef = useRef(false)
   const onEarlierRef = useRef(onPanEarlier)
   const onLaterRef = useRef(onPanLater)
 
@@ -35,6 +37,7 @@ export function useChartPan(
       startX.current = event.touches[0].clientX
       startY.current = event.touches[0].clientY
       stepped.current = false
+      pannedRef.current = false
     }
 
     function onMove(event: TouchEvent) {
@@ -49,6 +52,7 @@ export function useChartPan(
       event.preventDefault()
       if (stepped.current) return
       stepped.current = true
+      pannedRef.current = true
       if (dx > 0) onEarlierRef.current?.()
       else onLaterRef.current?.()
     }
@@ -71,5 +75,5 @@ export function useChartPan(
     }
   }, [])
 
-  return ref
+  return { ref, pannedRef }
 }

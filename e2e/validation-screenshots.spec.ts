@@ -2083,3 +2083,25 @@ test('capture Dashboard already-added comparison notice (#273)', async ({
   })
 })
 
+test('capture Dashboard As of synced with chart pin (#274)', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 })
+  await seedValidationFixture(page, {
+    locale: 'ru',
+    currencyDisplayMode: 'base',
+  })
+  await page.goto('/')
+  await expect(page.getByRole('heading', { name: 'Сводка' })).toBeVisible()
+  await page.getByLabel('На дату').fill('2026-08-17')
+  await expect(page.getByRole('button', { name: 'Сегодня' })).toBeVisible()
+  await expect(page.getByTestId('date-field-display')).toHaveText(
+    /17 авг\. 2026/,
+  )
+  await expect(page.getByTestId('net-worth-chart')).toBeVisible()
+  await page.screenshot({
+    path: join(outDir, '274-dashboard-asof-chart-sync.png'),
+    fullPage: true,
+  })
+})
+

@@ -8,6 +8,7 @@ import {
   Area,
   AreaChart,
   CartesianGrid,
+  ReferenceLine,
   ResponsiveContainer,
   Tooltip,
   XAxis,
@@ -27,7 +28,7 @@ import { useLocale, useTranslation } from '@/i18n'
 import { Chip } from '@/shared/ui/chip'
 import { useSettingsStore } from '@/stores/settingsStore'
 import { HoldingBreakdownList } from './HoldingBreakdownList'
-import { isChartDateTap } from './chartDateTap'
+import { shouldCommitChartDaySelection } from './chartDateTap'
 
 export const NET_WORTH_CHART_TESTID = 'net-worth-chart'
 export const CHART_TOOLTIP_SCROLL_CLASS = 'chart-tooltip-scroll'
@@ -160,6 +161,7 @@ export function NetWorthChart({
   points,
   currency,
   seriesName,
+  selectedDate,
   onZoomIn,
   onZoomOut,
   onSelectDate,
@@ -169,6 +171,8 @@ export function NetWorthChart({
   points: readonly NetWorthChartPoint[]
   currency: string
   seriesName?: string
+  /** Committed As of day — pin on the plot so it matches the date field (#274). */
+  selectedDate?: string | null
   onZoomIn: () => void
   onZoomOut: () => void
   /** Called with the tapped chart day (#112). */
@@ -181,7 +185,7 @@ export function NetWorthChart({
   const t = useTranslation()
   const locale = useLocale()
   const pinchRef = usePinchZoom(onZoomIn, onZoomOut)
-  const panRef = useChartPan(onPanEarlier, onPanLater)
+  const { ref: panRef, pannedRef } = useChartPan(onPanEarlier, onPanLater)
   const onSelectDateRef = useRef(onSelectDate)
   const pendingDateRef = useRef<string | null>(null)
   const pointerStartRef = useRef<{ x: number; y: number } | null>(null)
@@ -214,6 +218,10 @@ export function NetWorthChart({
     digits: axisDigits,
   } = chartAxisScale(Math.min(...totals), Math.max(...totals), locale)
   const xTicks = uniqueChartAxisDates(points.map((point) => point.date))
+  const pinDate =
+    selectedDate && points.some((point) => point.date === selectedDate)
+      ? selectedDate
+      : null
 
   return (
     <div className="flex min-w-0 flex-col gap-2">
@@ -251,13 +259,18 @@ export function NetWorthChart({
         onPointerDown={(event) => {
           if (event.pointerType === 'mouse') return
           pointerStartRef.current = { x: event.clientX, y: event.clientY }
+          pannedRef.current = false
         }}
         onPointerUp={(event) => {
           const start = pointerStartRef.current
           pointerStartRef.current = null
           if (!start) return
           if (
-            !isChartDateTap(event.clientX - start.x, event.clientY - start.y)
+            !shouldCommitChartDaySelection(
+              event.clientX - start.x,
+              event.clientY - start.y,
+              pannedRef.current,
+            )
           ) {
             return
           }
@@ -302,6 +315,14 @@ export function NetWorthChart({
               axisLine={false}
               tickLine={false}
             />
+            {pinDate ? (
+              <ReferenceLine
+                x={pinDate}
+                stroke="var(--positive)"
+                strokeDasharray="4 4"
+                strokeOpacity={0.85}
+              />
+            ) : null}
             <Tooltip
               content={
                 <NetWorthChartTooltip

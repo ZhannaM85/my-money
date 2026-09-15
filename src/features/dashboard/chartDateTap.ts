@@ -8,3 +8,20 @@ export function isChartDateTap(
 ): boolean {
   return Math.hypot(dx, dy) <= slop
 }
+
+/**
+ * Commit the hovered chart day on finger-up (#274).
+ * - Small move: tap (#225 / #112)
+ * - Mostly horizontal scrub: user is picking a day along the plot
+ * - Mostly vertical: page scroll — do not change As of (#225)
+ * - Range pan already consumed the gesture: do not change As of (#111)
+ */
+export function shouldCommitChartDaySelection(
+  dx: number,
+  dy: number,
+  rangePanned = false,
+): boolean {
+  if (rangePanned) return false
+  if (isChartDateTap(dx, dy)) return true
+  return Math.abs(dx) >= Math.abs(dy)
+}
