@@ -89,6 +89,14 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 
 ---
 
+## Tier 28 — Live feedback (2026-09-15)
+
+| # | Status | Issue | Notes |
+|---|--------|-------|-------|
+| [#273](https://github.com/ZhannaM85/my-money/issues/273) | 🔲 Open | Dashboard: notify when + day is already in comparison | Keep + tappable; toast instead of disabled when day already pinned. |
+
+---
+
 ## Explicitly not filed
 
 Out of scope for the MVP (`PROJECT_BRIEF.md` §20) — do not implement from chat:
