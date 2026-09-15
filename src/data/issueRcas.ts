@@ -16,8 +16,8 @@ export const issueRcas: IssueRca[] = [
       en: 'Dashboard: sync На дату with chart day selection',
       ru: 'Сводка: синхронизировать «На дату» с выбором на графике',
     },
-    en: 'After #225, chart hover only remembered a day and As of committed on a tiny tap. Scrubbing the activeDot (common on phone) left На дату on the old day. Finger-up now commits on tap or horizontal day-scrub (not vertical scroll or range pan), and the chart pins the committed As of day.',
-    ru: 'После #225 наведение только запоминало день, а «На дату» ставилась при крошечном тапе. Проводка activeDot (обычно на телефоне) оставляла календарь на старом дне. Отпускание пальца теперь фиксирует день при тапе или горизонтальной проводке (не при вертикальном скролле и не при сдвиге диапазона), и график отмечает зафиксированную «На дату».',
+    en: 'After #225, chart hover only remembered a day and As of committed on a tiny tap. Scrubbing the activeDot (common on phone) left На дату on the old day. Finger-up now commits on tap or horizontal day-scrub (not vertical scroll or range pan), and the chart pins the committed As of day. On-device follow-up: iOS fires pointerup before synthetic mousemove, so the first commit used the previous day — defer commit until after that mouse move.',
+    ru: 'После #225 наведение только запоминало день, а «На дату» ставилась при крошечном тапе. Проводка activeDot (обычно на телефоне) оставляла календарь на старом дне. Отпускание пальца теперь фиксирует день при тапе или горизонтальной проводке (не при вертикальном скролле и не при сдвиге диапазона), и график отмечает зафиксированную «На дату». Доработка на устройстве: iOS шлёт pointerup до синтетического mousemove, поэтому первый commit брал предыдущий день — commit откладывается до этого mouse move.',
   },
   {
     issue: 273,

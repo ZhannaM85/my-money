@@ -280,4 +280,43 @@ describe('NetWorthChart', () => {
     expect(shouldCommitChartDaySelection(4, 40)).toBe(false)
     expect(shouldCommitChartDaySelection(50, 10, true)).toBe(false)
   })
+
+  it('records the hovered day for a deferred touch commit (#274)', () => {
+    const onHoverDate = vi.fn()
+    const { rerender } = renderApp(
+      <NetWorthChartTooltip
+        active
+        onHoverDate={onHoverDate}
+        currency="EUR"
+        showHoldings={false}
+        payload={[
+          {
+            payload: {
+              date: '2026-08-20',
+              total: 2_200_000,
+            },
+          },
+        ]}
+      />,
+    )
+    expect(onHoverDate).toHaveBeenCalledWith('2026-08-20')
+    onHoverDate.mockClear()
+    rerender(
+      <NetWorthChartTooltip
+        active
+        onHoverDate={onHoverDate}
+        currency="EUR"
+        showHoldings={false}
+        payload={[
+          {
+            payload: {
+              date: '2026-09-07',
+              total: 2_600_000,
+            },
+          },
+        ]}
+      />,
+    )
+    expect(onHoverDate).toHaveBeenCalledWith('2026-09-07')
+  })
 })

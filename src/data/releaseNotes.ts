@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 248,
+    issue: 274,
+    date: '2026-09-15T15:15:00+03:00',
+    en: 'Picking a day on the Dashboard chart updates На дату immediately — it no longer lags one day behind on iPhone.',
+    ru: 'Выбор дня на графике Сводки сразу обновляет «На дату» — на iPhone больше нет отставания на один день.',
+  },
+  {
     version: 247,
     issue: 274,
     date: '2026-09-15T15:00:00+03:00',

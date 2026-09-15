@@ -1,6 +1,7 @@
 import {
   useCallback,
   useEffect,
+  useLayoutEffect,
   useRef,
   type TouchEvent as ReactTouchEvent,
 } from 'react'
@@ -52,19 +53,16 @@ function ChartDayHover({
   payload?: ReadonlyArray<{ payload?: NetWorthChartPoint }>
   onHoverDate?: (date: string | null) => void
 }) {
-  const onHoverDateRef = useRef(onHoverDate)
-  useEffect(() => {
-    onHoverDateRef.current = onHoverDate
-  }, [onHoverDate])
-
   const date =
     active && typeof payload?.[0]?.payload?.date === 'string'
       ? payload[0].payload.date
       : null
 
-  useEffect(() => {
-    onHoverDateRef.current?.(date)
-  }, [date])
+  // useLayoutEffect (not useEffect): run before paint so deferred touch
+  // commits see the active day sooner (#274).
+  useLayoutEffect(() => {
+    onHoverDate?.(date)
+  }, [date, onHoverDate])
 
   return null
 }
@@ -188,6 +186,7 @@ export function NetWorthChart({
   const { ref: panRef, pannedRef } = useChartPan(onPanEarlier, onPanLater)
   const onSelectDateRef = useRef(onSelectDate)
   const pendingDateRef = useRef<string | null>(null)
+  const awaitingCommitRef = useRef(false)
   const pointerStartRef = useRef<{ x: number; y: number } | null>(null)
   const showChartTooltip = useSettingsStore(
     (state) => state.settings.showChartTooltip,
@@ -201,13 +200,25 @@ export function NetWorthChart({
   }, [onSelectDate])
 
   const rememberHoverDate = useCallback((date: string | null) => {
-    pendingDateRef.current = date
+    // Keep the last real day — Recharts may briefly report null between
+    // pointerup and the synthetic mouse move on iOS (#274).
+    if (date) pendingDateRef.current = date
   }, [])
 
-  const commitPendingDate = useCallback(() => {
+  const flushAwaitingCommit = useCallback(() => {
+    if (!awaitingCommitRef.current) return
     const date = pendingDateRef.current
-    if (date) onSelectDateRef.current?.(date)
+    if (!date) return
+    awaitingCommitRef.current = false
+    onSelectDateRef.current?.(date)
   }, [])
+
+  const requestCommitAfterTouch = useCallback(() => {
+    // iOS: pointerup runs before synthetic mousemove updates the active day.
+    // Wait for that mouse move (or a macrotask) before committing (#274 lag).
+    awaitingCommitRef.current = true
+    window.setTimeout(() => flushAwaitingCommit(), 0)
+  }, [flushAwaitingCommit])
 
   const name = seriesName ?? t.dashboard.netWorth
   if (points.length === 0) return null
@@ -260,6 +271,7 @@ export function NetWorthChart({
           if (event.pointerType === 'mouse') return
           pointerStartRef.current = { x: event.clientX, y: event.clientY }
           pannedRef.current = false
+          awaitingCommitRef.current = false
         }}
         onPointerUp={(event) => {
           const start = pointerStartRef.current
@@ -274,22 +286,25 @@ export function NetWorthChart({
           ) {
             return
           }
-          commitPendingDate()
+          requestCommitAfterTouch()
         }}
         onPointerCancel={() => {
           pointerStartRef.current = null
+          awaitingCommitRef.current = false
         }}
       >
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart
             data={[...points]}
             margin={{ top: 8, right: 8, left: 0, bottom: 0 }}
-            onMouseMove={(state) =>
+            onMouseMove={(state) => {
               selectDateFromChartState(state, rememberHoverDate)
-            }
-            onClick={(state) =>
+              flushAwaitingCommit()
+            }}
+            onClick={(state) => {
+              awaitingCommitRef.current = false
               selectDateFromChartState(state, onSelectDateRef.current)
-            }
+            }}
           >
             <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
             <XAxis
