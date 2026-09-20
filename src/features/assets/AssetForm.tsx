@@ -158,6 +158,9 @@ export function AssetForm({
           ownershipShareNumerator: parsedShare.numerator,
           ownershipShareDenominator: parsedShare.denominator,
           updateFrequency,
+          ...(initial?.balanceHeadline === 'given_spent'
+            ? { balanceHeadline: 'given_spent' as const }
+            : {}),
           createdAt: initial?.createdAt ?? now,
           updatedAt: now,
         },

@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 250,
+    issue: 276,
+    date: '2026-09-20T11:20:00+03:00',
+    en: 'On Update and asset details you can type a new remaining balance or a ± added/removed amount. Each asset can show remaining or how much was given/spent.',
+    ru: 'На «Обновить» и в карточке актива можно ввести новый остаток или ± добавлено/убрано. У актива в заголовке — остаток или сколько отдано/потрачено.',
+  },
+  {
     version: 249,
     issue: 275,
     date: '2026-09-20T11:10:00+03:00',

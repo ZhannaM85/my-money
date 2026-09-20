@@ -57,6 +57,12 @@ export const ASSET_TYPES = [
 
 export type AssetType = (typeof ASSET_TYPES)[number]
 
+export const BALANCE_HEADLINES = ['remaining', 'given_spent'] as const
+export type BalanceHeadline = (typeof BALANCE_HEADLINES)[number]
+
+export const BALANCE_ENTRY_MODES = ['new_balance', 'add', 'remove'] as const
+export type BalanceEntryMode = (typeof BALANCE_ENTRY_MODES)[number]
+
 export interface Asset {
   id: string
   name: string
@@ -70,6 +76,8 @@ export interface Asset {
   ownershipShareNumerator?: number
   ownershipShareDenominator?: number
   updateFrequency: UpdateFrequency
+  /** Headline on Update / asset detail: remaining vs cumulative given/spent (#276). */
+  balanceHeadline?: BalanceHeadline
   createdAt: string
   updatedAt: string
 }

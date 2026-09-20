@@ -1,6 +1,12 @@
 import { useEffect, useMemo } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { formatOwnershipShare, ownershipMultiplier } from '@/domain/asset'
+import {
+  assetBalanceHeadline,
+  cumulativeGivenSpent,
+  formatOwnershipShare,
+  headlineNativeAmount,
+  ownershipMultiplier,
+} from '@/domain/asset'
 import { convertAmount, lookupRate } from '@/domain/fx'
 import { assetPerformance } from '@/domain/netWorth'
 import type { CurrencyDisplayMode } from '@/domain/settings'
@@ -22,6 +28,7 @@ export function useAssetDetailsScreen() {
   const saveAsset = useAssetStore((state) => state.saveAsset)
   const saveSnapshots = useAssetStore((state) => state.saveSnapshots)
   const setTrackingStatus = useAssetStore((state) => state.setTrackingStatus)
+  const setBalanceHeadline = useAssetStore((state) => state.setBalanceHeadline)
   const deleteAsset = useAssetStore((state) => state.deleteAsset)
   const deleteSnapshot = useAssetStore((state) => state.deleteSnapshot)
   const updateSnapshot = useAssetStore((state) => state.updateSnapshot)
@@ -55,6 +62,12 @@ export function useAssetDetailsScreen() {
 
   const ordered = useMemo(() => [...history].reverse(), [history])
   const snapshot = asset ? latestSnapshot(snapshots, asset.id) : undefined
+  const headline = asset ? assetBalanceHeadline(asset) : 'remaining'
+  const headlineNative = headlineNativeAmount(
+    headline,
+    snapshot?.amount,
+    asset ? cumulativeGivenSpent(snapshots, asset.id) : 0,
+  )
   const performance = asset
     ? assetPerformance(ordered, quotes, baseCurrency)
     : null
@@ -80,6 +93,10 @@ export function useAssetDetailsScreen() {
   const convertedAmount =
     snapshot && convertedNow !== undefined
       ? convertAmount(snapshot.amount, convertedNow)
+      : undefined
+  const convertedHeadline =
+    headlineNative !== undefined && convertedNow !== undefined
+      ? convertAmount(headlineNative, convertedNow)
       : undefined
 
   const shareLabel = asset
@@ -148,6 +165,9 @@ export function useAssetDetailsScreen() {
     snapshots,
     history,
     snapshot,
+    headline,
+    headlineNative,
+    convertedHeadline,
     quotes,
     mode,
     setMode,
@@ -163,6 +183,7 @@ export function useAssetDetailsScreen() {
     points,
     saveUpdate,
     saveDetails,
+    setBalanceHeadline,
     updateSnapshot,
     deleteSnapshot,
     setTrackingStatus,

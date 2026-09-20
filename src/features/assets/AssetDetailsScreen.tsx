@@ -75,14 +75,18 @@ export function AssetDetailsScreen() {
       </div>
       <StatCard
         label={
-          d.mode === 'native' ? t.asset.currentValue : t.asset.inBaseCurrency
+          d.headline === 'given_spent'
+            ? t.asset.headlineGivenSpent
+            : d.mode === 'native'
+              ? t.asset.currentValue
+              : t.asset.inBaseCurrency
         }
         value={
-          d.snapshot
+          d.headlineNative !== undefined
             ? formatAmount(
                 d.mode === 'native'
-                  ? d.snapshot.amount
-                  : (d.convertedAmount ?? d.snapshot.amount),
+                  ? d.headlineNative
+                  : (d.convertedHeadline ?? d.headlineNative),
                 d.displayCurrency ?? asset.currency,
                 locale,
               )
@@ -117,10 +121,10 @@ export function AssetDetailsScreen() {
       <AssetDetailsUpdateForm
         assetId={asset.id}
         currency={asset.currency}
-        snapshotAmount={d.snapshot?.amount}
-        snapshotCurrency={d.snapshot?.currency}
         snapshots={d.snapshots}
         today={d.today}
+        headline={d.headline}
+        onHeadlineChange={(next) => void d.setBalanceHeadline(asset.id, next)}
         onSave={d.saveUpdate}
       />
       <AssetDetailsAccordion

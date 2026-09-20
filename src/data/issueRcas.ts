@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 276,
+    title: {
+      en: 'Assets: toggle update by ± amount + show remaining vs given/spent',
+      ru: 'Активы: обновление ± суммой и показ остатка vs отдано/потрачено',
+    },
+    en: 'Update and asset-detail share one control: type a new remaining or a ± added/removed amount (still stored as a balance snapshot). Per-asset headline can show remaining or cumulative decreases (given/spent). Optional comment (#275) works in both entry modes. No envelope type.',
+    ru: '«Обновить» и карточка актива делят один контроль: новый остаток или ± добавлено/убрано (в книге по-прежнему снимок остатка). Заголовок актива — остаток или сумма снижений (отдано/потрачено). Необязательный комментарий (#275) в обоих режимах. Отдельного конверта нет.',
+  },
+  {
     issue: 275,
     title: {
       en: 'Update assets: allow optional comment when saving a new balance',

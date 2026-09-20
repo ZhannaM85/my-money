@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import type { Asset, TrackingStatus } from '@/domain/asset'
+import type { Asset, BalanceHeadline, TrackingStatus } from '@/domain/asset'
 import type { AssetSnapshot } from '@/domain/snapshot'
 import {
   IndexedDbAssetRepository,
@@ -27,6 +27,10 @@ interface AssetStoreState {
   setTrackingStatus: (
     id: string,
     trackingStatus: TrackingStatus,
+  ) => Promise<void>
+  setBalanceHeadline: (
+    id: string,
+    balanceHeadline: BalanceHeadline,
   ) => Promise<void>
   deleteAsset: (id: string) => Promise<void>
   deleteSnapshot: (id: string) => Promise<void>
@@ -75,6 +79,21 @@ export const useAssetStore = create<AssetStoreState>((set, get) => ({
       trackingStatus,
       updatedAt: new Date().toISOString(),
     })
+    await get().load()
+  },
+  setBalanceHeadline: async (id, balanceHeadline) => {
+    const existing = get().assets.find((asset) => asset.id === id)
+    if (!existing) return
+    const next: Asset = {
+      ...existing,
+      updatedAt: new Date().toISOString(),
+    }
+    if (balanceHeadline === 'given_spent') {
+      next.balanceHeadline = 'given_spent'
+    } else {
+      delete next.balanceHeadline
+    }
+    await assetRepository.upsert(next)
     await get().load()
   },
   deleteAsset: async (id) => {

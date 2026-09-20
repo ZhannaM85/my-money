@@ -1,5 +1,14 @@
 import { Pencil } from 'lucide-react'
-import type { Asset } from '@/domain/asset'
+import {
+  applyBalanceEntry,
+  assetBalanceHeadline,
+  cumulativeGivenSpent,
+  headlineNativeAmount,
+  type Asset,
+  type BalanceEntryMode,
+  type BalanceHeadline,
+  updateBaselineAmount,
+} from '@/domain/asset'
 import type { AssetSnapshot } from '@/domain/snapshot'
 import { ComparisonDelta } from '@/features/dashboard/ComparisonDelta'
 import { formatLastUpdated, useLocale, useTranslation } from '@/i18n'
@@ -11,8 +20,11 @@ import {
 } from '@/shared/lib/money'
 import { Button } from '@/shared/ui/button'
 import { Input } from '@/shared/ui/input'
-import { MoneyInput } from '@/shared/ui/money-input'
 import { SortableRow } from '@/shared/ui/sortable-row'
+import {
+  AssetBalanceUpdateControls,
+  BalanceHeadlineToggles,
+} from '@/features/assets/AssetBalanceUpdateControls'
 
 export function UpdateHoldingRow({
   asset,
@@ -21,12 +33,16 @@ export function UpdateHoldingRow({
   previous,
   suggested,
   today,
-  reordering,
   locked,
-  draftValue,
+  reordering,
+  draft,
   noteValue,
+  entryMode,
+  snapshots,
   onDraftChange,
   onNoteChange,
+  onEntryModeChange,
+  onHeadlineChange,
   onStartEdit,
 }: {
   asset: Asset
@@ -35,26 +51,39 @@ export function UpdateHoldingRow({
   previous: AssetSnapshot | undefined
   suggested: boolean
   today: string
-  reordering: boolean
   locked: boolean
-  draftValue: string
+  reordering: boolean
+  draft: string
   noteValue: string
+  entryMode: BalanceEntryMode
+  snapshots: readonly AssetSnapshot[]
   onDraftChange: (value: string) => void
   onNoteChange: (value: string) => void
+  onEntryModeChange: (mode: BalanceEntryMode) => void
+  onHeadlineChange: (headline: BalanceHeadline) => void
   onStartEdit: () => void
 }) {
   const t = useTranslation()
   const locale = useLocale()
-  const draftAmount =
-    !locked && draftValue.trim() !== '' ? parseAmount(draftValue) : undefined
+  const headline = assetBalanceHeadline(asset)
+  const givenSpent = cumulativeGivenSpent(snapshots, asset.id)
+  const displayed = headlineNativeAmount(headline, latest?.amount, givenSpent)
+  const baseline = updateBaselineAmount(onDate, previous, asset.currency)
+  const parsedDraft =
+    !locked && draft.trim() !== '' ? parseAmount(draft) : undefined
+  const resolvedAmount =
+    parsedDraft === undefined
+      ? undefined
+      : applyBalanceEntry(entryMode, parsedDraft, baseline)
   const editDelta =
     !locked &&
     previous &&
     previous.currency === asset.currency &&
-    draftAmount !== undefined &&
-    draftAmount !== previous.amount
-      ? draftAmount - previous.amount
+    resolvedAmount !== undefined &&
+    resolvedAmount !== previous.amount
+      ? resolvedAmount - previous.amount
       : null
+  const placeholderSource = onDate ?? previous
 
   const meta = (
     <>
@@ -74,9 +103,11 @@ export function UpdateHoldingRow({
         </span>
         {!reordering ? (
           <span className="text-sm text-muted-foreground">
-            {latest
-              ? formatAmount(latest.amount, latest.currency, locale)
-              : t.asset.noValueYet}
+            {displayed !== undefined && latest
+              ? formatAmount(displayed, latest.currency, locale)
+              : displayed !== undefined
+                ? formatAmount(displayed, asset.currency, locale)
+                : t.asset.noValueYet}
           </span>
         ) : null}
       </div>
@@ -106,9 +137,13 @@ export function UpdateHoldingRow({
   return (
     <li className="flex flex-col gap-2 rounded-xl bg-card px-4 py-3 ring-1 ring-foreground/10">
       {meta}
-      <div className="flex gap-2">
-        {locked && onDate ? (
-          <>
+      {locked && onDate ? (
+        <>
+          <BalanceHeadlineToggles
+            headline={headline}
+            onHeadlineChange={onHeadlineChange}
+          />
+          <div className="flex gap-2">
             <span className="flex h-control min-w-0 flex-1 items-center justify-end tabular-nums font-medium">
               {formatAmount(onDate.amount, onDate.currency, locale)}
             </span>
@@ -121,44 +156,50 @@ export function UpdateHoldingRow({
             >
               <Pencil className="size-5" aria-hidden />
             </Button>
-          </>
-        ) : (
-          <MoneyInput
-            aria-label={t.update.newAmountAria(asset.name)}
+          </div>
+          {onDate.note ? (
+            <span
+              data-testid={`update-note-saved-${asset.id}`}
+              className="text-sm text-muted-foreground"
+            >
+              {onDate.note}
+            </span>
+          ) : null}
+        </>
+      ) : (
+        <>
+          <Input
+            data-testid={`update-note-${asset.id}`}
+            aria-label={t.update.noteAria(asset.name)}
+            placeholder={t.asset.snapshotNote}
+            value={noteValue}
+            onChange={(event) => onNoteChange(event.target.value)}
+          />
+          <AssetBalanceUpdateControls
+            amountAriaLabel={t.update.newAmountAria(asset.name)}
             locale={locale}
             currency={asset.currency}
-            value={draftValue}
-            onValueChange={onDraftChange}
+            headline={headline}
+            onHeadlineChange={onHeadlineChange}
+            entryMode={entryMode}
+            onEntryModeChange={onEntryModeChange}
+            draft={draft}
+            onDraftChange={onDraftChange}
             placeholder={
-              onDate
-                ? formatEditableAmount(onDate.amount, locale, onDate.currency)
-                : previous
-                  ? formatEditableAmount(
-                      previous.amount,
-                      locale,
-                      previous.currency,
-                    )
-                  : t.asset.amountPlaceholder
+              entryMode === 'new_balance' && placeholderSource
+                ? formatEditableAmount(
+                    placeholderSource.amount,
+                    locale,
+                    placeholderSource.currency,
+                  )
+                : t.asset.amountPlaceholder
+            }
+            resultingRemaining={
+              entryMode === 'new_balance' ? undefined : resolvedAmount
             }
           />
-        )}
-      </div>
-      {!locked ? (
-        <Input
-          data-testid={`update-note-${asset.id}`}
-          aria-label={t.update.noteAria(asset.name)}
-          placeholder={t.asset.snapshotNote}
-          value={noteValue}
-          onChange={(event) => onNoteChange(event.target.value)}
-        />
-      ) : onDate?.note ? (
-        <span
-          data-testid={`update-note-saved-${asset.id}`}
-          className="text-sm text-muted-foreground"
-        >
-          {onDate.note}
-        </span>
-      ) : null}
+        </>
+      )}
       {!locked && previous && !onDate ? (
         <p
           className="text-xs text-muted-foreground"

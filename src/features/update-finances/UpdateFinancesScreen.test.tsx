@@ -5,7 +5,7 @@ import { MemoryRouter } from 'react-router-dom'
 import { beforeEach, describe, expect, it } from 'vitest'
 import { db } from '@/infrastructure/persistence/indexeddb'
 import { addDaysIso } from '@/shared/lib/dates'
-import { todayIsoDate } from '@/shared/lib/money'
+import { formatAmount, todayIsoDate } from '@/shared/lib/money'
 import { DEFAULT_SETTINGS } from '@/domain/settings'
 import { useAssetStore } from '@/stores/assetStore'
 import { useSettingsStore } from '@/stores/settingsStore'
@@ -802,5 +802,64 @@ describe('UpdateFinancesScreen', () => {
       expect(useAssetStore.getState().snapshots[0]?.amount).toBe(1000)
     })
     expect(useAssetStore.getState().snapshots[0]?.note).toBeUndefined()
+  })
+
+  it('applies a removed amount to the previous remaining (#276)', async () => {
+    const user = userEvent.setup()
+    render(
+      <MemoryRouter>
+        <UpdateFinancesScreen />
+      </MemoryRouter>,
+    )
+    await screen.findByLabelText('Revolut new amount')
+    await user.click(screen.getByRole('button', { name: 'Removed' }))
+    await user.type(screen.getByLabelText('Revolut new amount'), '230')
+    await user.type(screen.getByLabelText('Revolut note'), 'Gifted')
+    await user.click(screen.getByRole('button', { name: 'Save updates' }))
+    await waitFor(() => {
+      expect(
+        useAssetStore
+          .getState()
+          .snapshots.some(
+            (row) =>
+              row.assetId === 'a1' &&
+              row.date === todayIsoDate() &&
+              row.amount === 770 &&
+              row.note === 'Gifted',
+          ),
+      ).toBe(true)
+    })
+  })
+
+  it('toggles the holding headline to cumulative given/spent (#276)', async () => {
+    const user = userEvent.setup()
+    await useAssetStore.getState().saveSnapshots([
+      {
+        assetId: 'a1',
+        date: todayIsoDate(),
+        amount: 700,
+        currency: 'EUR',
+      },
+    ])
+    render(
+      <MemoryRouter>
+        <UpdateFinancesScreen />
+      </MemoryRouter>,
+    )
+    await screen.findByText('Revolut')
+    expect(
+      screen.getAllByText(formatAmount(700, 'EUR', 'en')).length,
+    ).toBeGreaterThan(0)
+    await user.click(
+      screen.getAllByRole('button', { name: 'Given / spent' })[0]!,
+    )
+    await waitFor(() => {
+      expect(useAssetStore.getState().assets[0]?.balanceHeadline).toBe(
+        'given_spent',
+      )
+    })
+    expect(
+      screen.getAllByText(formatAmount(300, 'EUR', 'en')).length,
+    ).toBeGreaterThan(0)
   })
 })

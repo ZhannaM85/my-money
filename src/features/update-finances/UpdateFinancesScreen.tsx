@@ -9,7 +9,12 @@ import {
   useSensors,
 } from '@dnd-kit/core'
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
-import { isSuggestedUpdate } from '@/domain/asset'
+import {
+  applyBalanceEntry,
+  type BalanceEntryMode,
+  isSuggestedUpdate,
+  updateBaselineAmount,
+} from '@/domain/asset'
 import {
   latestSnapshot,
   optionalSnapshotNote,
@@ -19,7 +24,7 @@ import {
 } from '@/domain/snapshot'
 import { sortAssets } from '@/features/assets/assetListOrder'
 import { useAssetReorder } from '@/features/assets/useAssetReorder'
-import { useLocale, useTranslation } from '@/i18n'
+import { useTranslation, useLocale } from '@/i18n'
 import { isIsoDateOnOrBefore } from '@/shared/lib/dates'
 import {
   formatEditableAmount,
@@ -67,9 +72,13 @@ export function UpdateFinancesScreen() {
   const persistCustomAssetOrder = useSettingsStore(
     (state) => state.persistCustomAssetOrder,
   )
+  const setBalanceHeadline = useAssetStore((state) => state.setBalanceHeadline)
   const [drafts, setDrafts] = useState<Record<string, string>>({})
   const [notes, setNotes] = useState<Record<string, string>>({})
   const [editing, setEditing] = useState<Record<string, boolean>>({})
+  const [entryModes, setEntryModes] = useState<
+    Record<string, BalanceEntryMode>
+  >({})
   const [error, setError] = useState<string | undefined>()
   const [saving, setSaving] = useState(false)
   const today = todayIsoDate()
@@ -127,6 +136,7 @@ export function UpdateFinancesScreen() {
     setDrafts({})
     setNotes({})
     setEditing({})
+    setEntryModes({})
   }
 
   function startEdit(
@@ -136,6 +146,7 @@ export function UpdateFinancesScreen() {
     note?: string,
   ) {
     setEditing((current) => ({ ...current, [assetId]: true }))
+    setEntryModes((current) => ({ ...current, [assetId]: 'new_balance' }))
     setDrafts((current) => ({
       ...current,
       [assetId]: formatEditableAmount(amount, locale, currency),
@@ -195,15 +206,20 @@ export function UpdateFinancesScreen() {
       note?: string
     }[] = []
     const toUpdate: AssetSnapshot[] = []
-    for (const { asset, onDate } of rows) {
+    for (const { asset, onDate, previous } of rows) {
       const raw = drafts[asset.id]?.trim() ?? ''
       if (onDate && !editing[asset.id]) continue
       if (raw !== '') {
-        const amount = parseAmount(raw)
-        if (amount === undefined) {
+        const parsed = parseAmount(raw)
+        if (parsed === undefined) {
           setError(t.update.enterNumberFor(asset.name))
           return
         }
+        const amount = applyBalanceEntry(
+          entryModes[asset.id] ?? 'new_balance',
+          parsed,
+          updateBaselineAmount(onDate, previous, asset.currency),
+        )
         const note = optionalSnapshotNote(notes[asset.id])
         if (onDate) {
           toUpdate.push(
@@ -318,42 +334,55 @@ export function UpdateFinancesScreen() {
             {(() => {
               const list = (
                 <ul className="flex flex-col gap-4">
-                  {rows.map((row) => (
-                    <UpdateHoldingRow
-                      key={row.asset.id}
-                      asset={row.asset}
-                      latest={row.latest}
-                      onDate={row.onDate}
-                      previous={row.previous}
-                      suggested={row.suggested}
-                      today={today}
-                      reordering={reorder.reordering}
-                      locked={Boolean(row.onDate) && !editing[row.asset.id]}
-                      draftValue={drafts[row.asset.id] ?? ''}
-                      noteValue={notes[row.asset.id] ?? ''}
-                      onDraftChange={(value) => {
-                        setDrafts((current) => ({
-                          ...current,
-                          [row.asset.id]: value,
-                        }))
-                      }}
-                      onNoteChange={(value) => {
-                        setNotes((current) => ({
-                          ...current,
-                          [row.asset.id]: value,
-                        }))
-                      }}
-                      onStartEdit={() => {
-                        if (!row.onDate) return
-                        startEdit(
-                          row.asset.id,
-                          row.onDate.amount,
-                          row.onDate.currency,
-                          row.onDate.note,
-                        )
-                      }}
-                    />
-                  ))}
+                  {rows.map(
+                    ({ asset, latest, onDate, previous, suggested }) => (
+                      <UpdateHoldingRow
+                        key={asset.id}
+                        asset={asset}
+                        latest={latest}
+                        onDate={onDate}
+                        previous={previous}
+                        suggested={suggested}
+                        today={today}
+                        locked={Boolean(onDate) && !editing[asset.id]}
+                        reordering={reorder.reordering}
+                        draft={drafts[asset.id] ?? ''}
+                        noteValue={notes[asset.id] ?? ''}
+                        entryMode={entryModes[asset.id] ?? 'new_balance'}
+                        snapshots={snapshots}
+                        onDraftChange={(value) => {
+                          setDrafts((current) => ({
+                            ...current,
+                            [asset.id]: value,
+                          }))
+                        }}
+                        onNoteChange={(value) => {
+                          setNotes((current) => ({
+                            ...current,
+                            [asset.id]: value,
+                          }))
+                        }}
+                        onEntryModeChange={(mode) => {
+                          setEntryModes((current) => ({
+                            ...current,
+                            [asset.id]: mode,
+                          }))
+                        }}
+                        onHeadlineChange={(headline) => {
+                          void setBalanceHeadline(asset.id, headline)
+                        }}
+                        onStartEdit={() => {
+                          if (!onDate) return
+                          startEdit(
+                            asset.id,
+                            onDate.amount,
+                            onDate.currency,
+                            onDate.note,
+                          )
+                        }}
+                      />
+                    ),
+                  )}
                 </ul>
               )
               if (!reorder.reordering) return list

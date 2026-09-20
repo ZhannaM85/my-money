@@ -2,6 +2,8 @@ export type {
   Asset,
   AssetClass,
   AssetType,
+  BalanceEntryMode,
+  BalanceHeadline,
   TrackingStatus,
   ValuationMethod,
   UpdateFrequency,
@@ -9,6 +11,8 @@ export type {
 export {
   ASSET_CLASSES,
   ASSET_TYPES,
+  BALANCE_ENTRY_MODES,
+  BALANCE_HEADLINES,
   TRACKING_STATUSES,
   VALUATION_METHODS,
   UPDATE_FREQUENCIES,
@@ -16,6 +20,14 @@ export {
   contributesToNetWorth,
   isListedOnDashboard,
 } from './Asset'
+export {
+  applyBalanceEntry,
+  assetBalanceHeadline,
+  cumulativeGivenSpent,
+  headlineNativeAmount,
+  snapshotsChronological,
+  updateBaselineAmount,
+} from './balanceHeadline'
 export {
   daysBetweenIso,
   isSuggestedUpdate,

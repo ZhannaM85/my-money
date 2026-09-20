@@ -231,6 +231,12 @@ export const ru: Dictionary = {
     ownershipShareInvalid: 'Введите долю, например 1/2 или 1/1',
     yourShare: (share) => `Ваша доля: ${share}`,
     suggestedNow: 'Пора обновить',
+    headlineRemaining: 'Остаток',
+    headlineGivenSpent: 'Отдано / потрачено',
+    entryNewBalance: 'Новый остаток',
+    entryAdded: 'Добавить',
+    entryRemoved: 'Убрать',
+    resultingRemaining: (amount) => `Новый остаток ${amount}`,
   },
   update: {
     title: 'Обновить',
@@ -300,7 +306,8 @@ export const ru: Dictionary = {
     dataDescription:
       'Резервная копия, восстановление или очистка на этом устройстве — и перенос через CSV.',
     groupAbout: 'О приложении',
-    aboutDescription: 'Конфиденциальность и что изменилось в последних версиях.',
+    aboutDescription:
+      'Конфиденциальность и что изменилось в последних версиях.',
     groupDeveloper: 'Разработчику',
     developerDescription:
       'Диагностика FX и журнал причин выпущенных задач. По умолчанию свёрнуто.',
@@ -320,8 +327,7 @@ export const ru: Dictionary = {
     comparison: 'Сравнение',
     allocation: 'Распределение',
     toolsTitle: 'Инструменты',
-    toolsDescription:
-      'Открыть Сравнение или Распределение, не уходя из «Ещё».',
+    toolsDescription: 'Открыть Сравнение или Распределение, не уходя из «Ещё».',
     ratesTitle: 'Курсы валют',
     ratesDescription:
       'Обновите справочные курсы или введите ручные на сегодня, если котировки нет.',

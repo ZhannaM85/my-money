@@ -1,30 +1,41 @@
 import { useState } from 'react'
-import { hasDuplicateSnapshot, optionalSnapshotNote } from '@/domain/snapshot'
-import type { AssetSnapshot } from '@/domain/snapshot'
+import {
+  applyBalanceEntry,
+  type BalanceEntryMode,
+  type BalanceHeadline,
+  updateBaselineAmount,
+} from '@/domain/asset'
+import {
+  hasDuplicateSnapshot,
+  optionalSnapshotNote,
+  snapshotBeforeDate,
+  snapshotOnDate,
+  type AssetSnapshot,
+} from '@/domain/snapshot'
 import { useLocale, useTranslation } from '@/i18n'
 import { formatEditableAmount, parseAmount } from '@/shared/lib/money'
 import { isIsoDateOnOrBefore } from '@/shared/lib/dates'
 import { Button } from '@/shared/ui/button'
 import { DateField } from '@/shared/ui/date-field'
 import { InfoHint } from '@/shared/ui/info-hint'
-import { MoneyInput } from '@/shared/ui/money-input'
 import { TextField } from '@/shared/ui/text-field'
+import { AssetBalanceUpdateControls } from './AssetBalanceUpdateControls'
 
 export function AssetDetailsUpdateForm({
   assetId,
   currency,
-  snapshotAmount,
-  snapshotCurrency,
   snapshots,
   today,
+  headline,
+  onHeadlineChange,
   onSave,
 }: {
   assetId: string
   currency: string
-  snapshotAmount?: number
-  snapshotCurrency?: string
   snapshots: readonly AssetSnapshot[]
   today: string
+  headline: BalanceHeadline
+  onHeadlineChange: (headline: BalanceHeadline) => void
   onSave: (input: {
     date: string
     amount: number
@@ -37,20 +48,29 @@ export function AssetDetailsUpdateForm({
   const [amountError, setAmountError] = useState<string | undefined>()
   const [amountDate, setAmountDate] = useState(today)
   const [amountNote, setAmountNote] = useState('')
+  const [entryMode, setEntryMode] = useState<BalanceEntryMode>('new_balance')
 
-  const parsedAmountDraft = parseAmount(amountDraft)
+  const onDate = snapshotOnDate(snapshots, assetId, amountDate)
+  const previous = snapshotBeforeDate(snapshots, assetId, amountDate)
+  const baseline = updateBaselineAmount(onDate, previous, currency)
+  const parsedDraft = parseAmount(amountDraft)
+  const resolvedAmount =
+    parsedDraft === undefined
+      ? undefined
+      : applyBalanceEntry(entryMode, parsedDraft, baseline)
   const duplicateAmountHint =
-    parsedAmountDraft !== undefined &&
+    resolvedAmount !== undefined &&
     hasDuplicateSnapshot(snapshots, {
       assetId,
       date: amountDate,
-      amount: parsedAmountDraft,
+      amount: resolvedAmount,
       currency,
     })
+  const placeholderSource = onDate ?? previous
 
   async function saveAmount() {
-    const amount = parseAmount(amountDraft)
-    if (amount === undefined) {
+    const parsed = parseAmount(amountDraft)
+    if (parsed === undefined) {
       setAmountError(t.asset.enterCurrentAmount)
       return
     }
@@ -59,11 +79,13 @@ export function AssetDetailsUpdateForm({
       return
     }
     setAmountError(undefined)
+    const amount = applyBalanceEntry(entryMode, parsed, baseline)
     const note = optionalSnapshotNote(amountNote)
     await onSave({ date: amountDate, amount, ...(note ? { note } : {}) })
     setAmountDraft('')
     setAmountDate(today)
     setAmountNote('')
+    setEntryMode('new_balance')
   }
 
   return (
@@ -89,16 +111,27 @@ export function AssetDetailsUpdateForm({
         onChange={(event) => setAmountNote(event.target.value)}
       />
       <div className="flex min-w-0 flex-col gap-2">
-        <MoneyInput
-          aria-label={t.asset.newAmount}
+        <AssetBalanceUpdateControls
+          amountAriaLabel={t.asset.newAmount}
           locale={locale}
           currency={currency}
-          value={amountDraft}
-          onValueChange={setAmountDraft}
+          headline={headline}
+          onHeadlineChange={onHeadlineChange}
+          entryMode={entryMode}
+          onEntryModeChange={setEntryMode}
+          draft={amountDraft}
+          onDraftChange={setAmountDraft}
           placeholder={
-            snapshotAmount !== undefined && snapshotCurrency
-              ? formatEditableAmount(snapshotAmount, locale, snapshotCurrency)
+            entryMode === 'new_balance' && placeholderSource
+              ? formatEditableAmount(
+                  placeholderSource.amount,
+                  locale,
+                  placeholderSource.currency,
+                )
               : t.asset.amountPlaceholder
+          }
+          resultingRemaining={
+            entryMode === 'new_balance' ? undefined : resolvedAmount
           }
         />
         <Button

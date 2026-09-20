@@ -130,6 +130,8 @@ interface Asset {
   valuationMethod: ValuationMethod;
   purchaseValue?: number;
   updateFrequency: UpdateFrequency;
+  /** Optional. `given_spent` shows cumulative decreases on Update / asset detail; omit or remaining for current balance (#276). */
+  balanceHeadline?: 'remaining' | 'given_spent';
   createdAt: string;
   updatedAt: string;
 }
@@ -165,6 +167,7 @@ Pure, unit-tested domain functions (no storage, no React, no network):
 - `allocation(netWorthBreakdown)` — by class, by currency, by type
 - `periodChange(history, from, to)` — absolute + percent
 - `assetPerformance(snapshots, rates, baseCurrency)` — native vs base, optional FX vs value split
+- `cumulativeGivenSpent(snapshots, assetId)` / `applyBalanceEntry(mode, parsed, baseline)` — remaining vs given/spent headline and ± update entry (#276)
 - `historicalNetWorth(assets, snapshots, rates, dates)` — uses **that date's** FX, not today's; if that day has no quote, carries forward the last earlier rate so the holding is not dropped. Each point includes the holding-by-holding breakdown for tooltips and History.
 
 ---

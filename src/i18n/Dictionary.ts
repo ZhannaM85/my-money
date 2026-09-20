@@ -173,6 +173,12 @@ export interface Dictionary {
     ownershipShareInvalid: string
     yourShare: (share: string) => string
     suggestedNow: string
+    headlineRemaining: string
+    headlineGivenSpent: string
+    entryNewBalance: string
+    entryAdded: string
+    entryRemoved: string
+    resultingRemaining: (amount: string) => string
   }
   update: {
     title: string

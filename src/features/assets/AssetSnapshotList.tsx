@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Pencil, Trash2 } from 'lucide-react'
 import { convertAmount, lookupRate, type RateTable } from '@/domain/fx'
+import { ComparisonDelta } from '@/features/dashboard/ComparisonDelta'
 import { BASE_CURRENCIES } from '@/domain/settings'
 import {
   hasDuplicateSnapshot,
@@ -102,7 +103,7 @@ export function AssetSnapshotList({
   return (
     <>
       <ul className="flex flex-col gap-2">
-        {history.map((row) => {
+        {history.map((row, index) => {
           const rate = lookupRate(quotes, row.currency, baseCurrency, row.date)
           const shown =
             mode === 'native' || rate === undefined
@@ -117,6 +118,13 @@ export function AssetSnapshotList({
             rate !== undefined &&
             row.currency !== baseCurrency
           const dateLabel = formatCalendarDate(row.date, locale)
+          const previous = history
+            .slice(index + 1)
+            .find((item) => item.currency === row.currency)
+          const historyDelta =
+            previous && previous.amount !== row.amount
+              ? row.amount - previous.amount
+              : null
           return editingId === row.id ? (
             <li
               key={row.id}
@@ -210,6 +218,12 @@ export function AssetSnapshotList({
                       <span className="tabular-nums text-xs text-muted-foreground">
                         {formatAmount(row.amount, row.currency, locale)}
                       </span>
+                    ) : null}
+                    {historyDelta !== null ? (
+                      <ComparisonDelta
+                        delta={historyDelta}
+                        currency={row.currency}
+                      />
                     ) : null}
                   </span>
                   <Button

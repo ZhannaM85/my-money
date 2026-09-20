@@ -318,4 +318,35 @@ describe('assetStore', () => {
     expect(amounts).toHaveLength(2)
     spy.mockRestore()
   })
+
+  it('persists given/spent headline without a new snapshot (#276)', async () => {
+    const now = '2026-08-17T00:00:00.000Z'
+    await useAssetStore.getState().saveAsset(
+      {
+        id: 'a1',
+        name: 'Revolut',
+        assetClass: 'money',
+        type: 'bank',
+        currency: 'EUR',
+        trackingStatus: 'included',
+        valuationMethod: 'account_balance',
+        updateFrequency: 'weekly',
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        assetId: 'a1',
+        date: '2026-08-17',
+        amount: 1000,
+        currency: 'EUR',
+      },
+    )
+    await useAssetStore.getState().setBalanceHeadline('a1', 'given_spent')
+    expect(useAssetStore.getState().assets[0]?.balanceHeadline).toBe(
+      'given_spent',
+    )
+    expect(useAssetStore.getState().snapshots).toHaveLength(1)
+    await useAssetStore.getState().setBalanceHeadline('a1', 'remaining')
+    expect(useAssetStore.getState().assets[0]?.balanceHeadline).toBeUndefined()
+  })
 })

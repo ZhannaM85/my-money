@@ -227,6 +227,12 @@ export const en: Dictionary = {
     ownershipShareInvalid: 'Enter a share like 1/2 or 1/1',
     yourShare: (share) => `Your share: ${share}`,
     suggestedNow: 'Suggested now',
+    headlineRemaining: 'Remaining',
+    headlineGivenSpent: 'Given / spent',
+    entryNewBalance: 'New balance',
+    entryAdded: 'Added',
+    entryRemoved: 'Removed',
+    resultingRemaining: (amount) => `New balance ${amount}`,
   },
   update: {
     title: 'Update',
@@ -315,8 +321,7 @@ export const en: Dictionary = {
     comparison: 'Comparison',
     allocation: 'Allocation',
     toolsTitle: 'Tools',
-    toolsDescription:
-      'Open Comparison or Allocation without leaving More.',
+    toolsDescription: 'Open Comparison or Allocation without leaving More.',
     ratesTitle: 'Exchange rates',
     ratesDescription:
       'Refresh reference rates, or enter manual rates for today when a quote is missing.',

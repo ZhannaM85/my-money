@@ -3,7 +3,7 @@ import { screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { beforeEach, describe, expect, it } from 'vitest'
 import { addDaysIso } from '@/shared/lib/dates'
-import { todayIsoDate } from '@/shared/lib/money'
+import { formatAmount, todayIsoDate } from '@/shared/lib/money'
 import { useAssetStore } from '@/stores/assetStore'
 import {
   renderAssetDetails,
@@ -107,5 +107,50 @@ describe('AssetDetailsUpdateForm', () => {
           ),
       ).toBe(true)
     })
+  })
+
+  it('saves a ± amount against the current remaining (#276)', async () => {
+    const user = userEvent.setup()
+    renderAssetDetails()
+    await screen.findByRole('heading', { name: 'Revolut' })
+    await user.click(screen.getByRole('button', { name: 'Removed' }))
+    await user.type(screen.getByLabelText('New amount'), '250')
+    expect(screen.getByTestId('resulting-remaining')).toHaveTextContent(/750/)
+    await user.click(screen.getByRole('button', { name: /^Save$/ }))
+    await waitFor(() => {
+      expect(
+        useAssetStore
+          .getState()
+          .snapshots.some(
+            (row) =>
+              row.assetId === 'a1' &&
+              row.date === todayIsoDate() &&
+              row.amount === 750,
+          ),
+      ).toBe(true)
+    })
+  })
+
+  it('persists given/spent headline and shows cumulative decreases (#276)', async () => {
+    const user = userEvent.setup()
+    renderAssetDetails()
+    await screen.findByRole('heading', { name: 'Revolut' })
+    await user.click(screen.getByRole('button', { name: 'Removed' }))
+    await user.type(screen.getByLabelText('New amount'), '250')
+    await user.click(screen.getByRole('button', { name: /^Save$/ }))
+    await waitFor(() => {
+      expect(
+        useAssetStore
+          .getState()
+          .snapshots.some((row) => row.assetId === 'a1' && row.amount === 750),
+      ).toBe(true)
+    })
+    await user.click(screen.getByRole('button', { name: 'Given / spent' }))
+    await waitFor(() => {
+      expect(useAssetStore.getState().assets[0]?.balanceHeadline).toBe(
+        'given_spent',
+      )
+    })
+    expect(screen.getByText(formatAmount(250, 'EUR', 'en'))).toBeInTheDocument()
   })
 })
