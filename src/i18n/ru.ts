@@ -244,6 +244,8 @@ export const ru: Dictionary = {
     removeSpendLine: (index) => `Удалить запись ${index}`,
     spendLineAmount: (index) => `Запись ${index}`,
     spendLineNote: (index) => `Комментарий к записи ${index}`,
+    editSpendLine: (index) => `Изменить запись ${index}`,
+    saveSpendLine: (index) => `Сохранить запись ${index}`,
   },
   update: {
     title: 'Обновить',

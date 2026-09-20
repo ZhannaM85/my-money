@@ -240,6 +240,8 @@ export const en: Dictionary = {
     removeSpendLine: (index) => `Remove entry ${index}`,
     spendLineAmount: (index) => `Entry ${index}`,
     spendLineNote: (index) => `Entry ${index} note`,
+    editSpendLine: (index) => `Edit entry ${index}`,
+    saveSpendLine: (index) => `Save entry ${index}`,
   },
   update: {
     title: 'Update',

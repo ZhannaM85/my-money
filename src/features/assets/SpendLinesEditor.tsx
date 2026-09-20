@@ -1,12 +1,16 @@
-import { Plus, Trash2 } from 'lucide-react'
+import { useState } from 'react'
+import { Plus } from 'lucide-react'
 import type { FlowDirection } from '@/domain/snapshot'
 import type { Locale } from '@/domain/settings'
 import { useTranslation } from '@/i18n'
 import { Button } from '@/shared/ui/button'
-import { Chip } from '@/shared/ui/chip'
-import { Input } from '@/shared/ui/input'
-import { MoneyInput } from '@/shared/ui/money-input'
-import { emptySpendLine, type SpendLineDraft } from './spendLines'
+import { SpendLineRow } from './SpendLineRow'
+import {
+  emptySpendLine,
+  spendLineIsEditing,
+  type SpendLineDraft,
+  type SpendLineViewOverride,
+} from './spendLines'
 
 export function SpendLinesEditor({
   lines,
@@ -24,6 +28,9 @@ export function SpendLinesEditor({
   noteAria: (index: number) => string
 }) {
   const t = useTranslation()
+  const [overrides, setOverrides] = useState<
+    Record<string, SpendLineViewOverride>
+  >({})
   const rows = lines.length > 0 ? [...lines] : [emptySpendLine()]
 
   function update(index: number, patch: Partial<SpendLineDraft>) {
@@ -35,56 +42,29 @@ export function SpendLinesEditor({
     update(index, { direction })
   }
 
+  function setOverride(key: string, override: SpendLineViewOverride) {
+    setOverrides((current) => ({ ...current, [key]: override }))
+  }
+
   return (
     <div className="flex flex-col gap-2" data-testid="spend-lines">
       {rows.map((row, index) => (
-        <div
+        <SpendLineRow
           key={row.key}
-          className="flex flex-col gap-2"
-          data-testid={`spend-line-${index}`}
-        >
-          <div className="flex flex-wrap gap-2">
-            <Chip
-              pressed={row.direction !== 'received'}
-              onClick={() => setDirection(index, 'given')}
-            >
-              {t.asset.flowGiven}
-            </Chip>
-            <Chip
-              pressed={row.direction === 'received'}
-              onClick={() => setDirection(index, 'received')}
-            >
-              {t.asset.flowReceived}
-            </Chip>
-          </div>
-          <div className="flex gap-2">
-            <MoneyInput
-              aria-label={amountAria(index + 1)}
-              locale={locale}
-              currency={currency}
-              value={row.amount}
-              onValueChange={(amount) => update(index, { amount })}
-              placeholder={t.asset.amountPlaceholder}
-            />
-            {rows.length > 1 || row.snapshotId ? (
-              <Button
-                type="button"
-                variant="outline"
-                size="icon-xl"
-                aria-label={t.asset.removeSpendLine(index + 1)}
-                onClick={() => onChange(rows.filter((_, i) => i !== index))}
-              >
-                <Trash2 className="size-5" aria-hidden />
-              </Button>
-            ) : null}
-          </div>
-          <Input
-            aria-label={noteAria(index + 1)}
-            placeholder={t.asset.snapshotNote}
-            value={row.note}
-            onChange={(event) => update(index, { note: event.target.value })}
-          />
-        </div>
+          row={row}
+          index={index}
+          editing={spendLineIsEditing(row, overrides[row.key])}
+          canRemove={rows.length > 1 || Boolean(row.snapshotId)}
+          locale={locale}
+          currency={currency}
+          amountAria={amountAria(index + 1)}
+          noteAria={noteAria(index + 1)}
+          onUpdate={(patch) => update(index, patch)}
+          onSetDirection={(direction) => setDirection(index, direction)}
+          onRemove={() => onChange(rows.filter((_, i) => i !== index))}
+          onStartEdit={() => setOverride(row.key, 'edit')}
+          onCommit={() => setOverride(row.key, 'view')}
+        />
       ))}
       <Button
         type="button"

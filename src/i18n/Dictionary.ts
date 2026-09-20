@@ -186,6 +186,8 @@ export interface Dictionary {
     removeSpendLine: (index: number) => string
     spendLineAmount: (index: number) => string
     spendLineNote: (index: number) => string
+    editSpendLine: (index: number) => string
+    saveSpendLine: (index: number) => string
   }
   update: {
     title: string

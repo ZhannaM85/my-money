@@ -5,6 +5,7 @@ import {
   planSameDaySpendPersist,
   spendBaselineAmount,
   spendLineDraftsFromEntries,
+  spendLineIsEditing,
   spendLinesMatchSaved,
   spendLinesOrDefault,
 } from './spendLines'
@@ -71,6 +72,18 @@ describe('parseSpendLineDrafts (#279)', () => {
     expect(spendLinesOrDefault(undefined, 'usd-cash')[0]?.key).toBe(
       'usd-cash-spend-0',
     )
+  })
+})
+
+describe('spendLineIsEditing (#283)', () => {
+  it('starts unsaved lines editable and saved lines read-only', () => {
+    expect(spendLineIsEditing({})).toBe(true)
+    expect(spendLineIsEditing({ snapshotId: 's1' })).toBe(false)
+  })
+
+  it('lets pencil force edit and save force view', () => {
+    expect(spendLineIsEditing({ snapshotId: 's1' }, 'edit')).toBe(true)
+    expect(spendLineIsEditing({}, 'view')).toBe(false)
   })
 })
 

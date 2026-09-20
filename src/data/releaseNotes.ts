@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 255,
+    issue: 283,
+    date: '2026-09-20T20:40:00+03:00',
+    en: 'Saved Given / received lines on Update are read-only. Tap the pencil to change a line, then the save icon to lock it again. New lines stay editable until you save them.',
+    ru: 'Сохранённые строки «Отдано / получено» на «Обновить» только для просмотра. Карандаш открывает строку, иконка сохранения снова её закрывает. Новые записи остаются полями до первого сохранения.',
+  },
+  {
     version: 254,
     issue: 282,
     date: '2026-09-20T17:10:00+03:00',

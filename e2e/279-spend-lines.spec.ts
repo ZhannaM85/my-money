@@ -30,21 +30,17 @@ test('Given/received spend lines on Update, asset detail, and History (#279)', a
     path: join(proofDir, '279-update-spend-lines.png'),
   })
   await page.getByRole('button', { name: 'Сохранить обновления' }).click()
-  await expect(page.getByLabel('Комментарий к записи 1 для USD cash')).toHaveValue(
-    'Подарок',
-  )
-  await expect(page.getByLabel('Комментарий к записи 2 для USD cash')).toHaveValue(
-    'Поездка',
-  )
+  await expect(page.getByTestId('spend-line-note-0')).toHaveText('Подарок')
+  await expect(page.getByTestId('spend-line-note-1')).toHaveText('Поездка')
+  await expect(page.getByLabel('Запись 1 для USD cash')).toHaveCount(0)
 
   await page.goto('/assets/usd-cash')
   await expect(page.getByRole('heading', { name: 'USD cash' })).toBeVisible()
-  await expect(page.getByLabel('Запись 1')).toBeVisible()
+  await expect(page.getByTestId('spend-line-note-0')).toHaveText('Подарок')
+  await expect(page.getByTestId('spend-line-note-1')).toHaveText('Поездка')
   await page.screenshot({
     path: join(proofDir, '279-asset-detail-spend-lines.png'),
   })
-  await expect(page.getByText('Подарок')).toBeVisible()
-  await expect(page.getByText('Поездка')).toBeVisible()
 
   await page.goto('/history')
   await expect(page.getByRole('heading', { name: 'История' })).toBeVisible()

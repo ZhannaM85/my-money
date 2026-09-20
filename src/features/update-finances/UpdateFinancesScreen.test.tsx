@@ -861,9 +861,6 @@ describe('UpdateFinancesScreen', () => {
     expect(
       screen.getAllByText(formatAmount(0, 'EUR', 'en')).length,
     ).toBeGreaterThan(0)
-    expect(
-      screen.queryByText(formatAmount(300, 'EUR', 'en')),
-    ).not.toBeInTheDocument()
   })
 
   it('saves multiple same-day spend lines as separate remaining snapshots (#279)', async () => {
@@ -909,24 +906,28 @@ describe('UpdateFinancesScreen', () => {
         useAssetStore
           .getState()
           .snapshots.filter(
-            (row) =>
-              row.assetId === 'usd-cash' && row.date === todayIsoDate(),
+            (row) => row.assetId === 'usd-cash' && row.date === todayIsoDate(),
           )
           .slice()
           .sort((a, b) => a.createdAt.localeCompare(b.createdAt))
-          .map((row) => ({ amount: row.amount, note: row.note, flow: row.flow })),
+          .map((row) => ({
+            amount: row.amount,
+            note: row.note,
+            flow: row.flow,
+          })),
       ).toEqual([
         { amount: 7000, note: 'Gift', flow: -1000 },
         { amount: 5000, note: 'Travel', flow: -2000 },
       ])
     })
-    expect(await screen.findByLabelText('USD cash entry 1 note')).toHaveValue(
+    expect(await screen.findByTestId('spend-line-note-0')).toHaveTextContent(
       'Gift',
     )
-    expect(screen.getByLabelText('USD cash entry 2 note')).toHaveValue(
-      'Travel',
+    expect(screen.getByTestId('spend-line-note-1')).toHaveTextContent('Travel')
+    expect(screen.getByTestId('spend-line-amount-0')).toHaveTextContent(
+      formatAmount(1000, 'USD', 'en'),
     )
-    expect(screen.getByLabelText('USD cash entry 1')).toHaveValue('1,000.00')
+    expect(screen.queryByLabelText('USD cash entry 1')).not.toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Save updates' })).toBeDisabled()
   })
 
@@ -979,13 +980,19 @@ describe('UpdateFinancesScreen', () => {
         <UpdateFinancesScreen />
       </MemoryRouter>,
     )
-    const giftAmount = await screen.findByLabelText('USD cash entry 1')
-    expect(giftAmount).toHaveValue('1,500.00')
-    expect(screen.getByLabelText('USD cash entry 1 note')).toHaveValue(
+    expect(await screen.findByTestId('spend-line-note-0')).toHaveTextContent(
       'Anton',
     )
+    expect(screen.getByTestId('spend-line-amount-0')).toHaveTextContent(
+      formatAmount(1500, 'USD', 'en'),
+    )
+    await user.click(screen.getByRole('button', { name: 'Edit entry 1' }))
+    const giftAmount = await screen.findByLabelText('USD cash entry 1')
+    expect(giftAmount).toHaveValue('1,500.00')
+    expect(screen.getByLabelText('USD cash entry 1 note')).toHaveValue('Anton')
     await user.clear(giftAmount)
     await user.type(giftAmount, '1200')
+    await user.click(screen.getByRole('button', { name: 'Save entry 1' }))
     await user.click(screen.getByRole('button', { name: 'Remove entry 2' }))
     await user.click(screen.getByRole('button', { name: 'Save updates' }))
     await waitFor(() => {
@@ -1070,9 +1077,8 @@ describe('UpdateFinancesScreen', () => {
     )
     await waitFor(() => {
       expect(
-        useAssetStore
-          .getState()
-          .assets.find((row) => row.id === 'usd-cash')?.balanceHeadline,
+        useAssetStore.getState().assets.find((row) => row.id === 'usd-cash')
+          ?.balanceHeadline,
       ).toBe('given_spent')
     })
     expect(

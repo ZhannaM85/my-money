@@ -170,19 +170,25 @@ describe('AssetDetailsUpdateForm', () => {
         useAssetStore
           .getState()
           .snapshots.filter(
-            (row) =>
-              row.assetId === 'a1' && row.date === todayIsoDate(),
+            (row) => row.assetId === 'a1' && row.date === todayIsoDate(),
           )
           .slice()
           .sort((a, b) => a.createdAt.localeCompare(b.createdAt))
-          .map((row) => ({ amount: row.amount, note: row.note, flow: row.flow })),
+          .map((row) => ({
+            amount: row.amount,
+            note: row.note,
+            flow: row.flow,
+          })),
       ).toEqual([
         { amount: 750, note: 'Gift', flow: -250 },
         { amount: 600, note: 'Travel', flow: -150 },
       ])
     })
-    expect(await screen.findByLabelText('Entry 1 note')).toHaveValue('Gift')
-    expect(screen.getByLabelText('Entry 2 note')).toHaveValue('Travel')
+    expect(await screen.findByTestId('spend-line-note-0')).toHaveTextContent(
+      'Gift',
+    )
+    expect(screen.getByTestId('spend-line-note-1')).toHaveTextContent('Travel')
+    expect(screen.queryByLabelText('Entry 1')).not.toBeInTheDocument()
   })
 
   it('edits a saved spend line on Update this asset (#280)', async () => {
@@ -211,10 +217,15 @@ describe('AssetDetailsUpdateForm', () => {
     ])
     renderAssetDetails()
     await screen.findByRole('heading', { name: 'Revolut' })
+    expect(await screen.findByTestId('spend-line-amount-0')).toHaveTextContent(
+      formatAmount(250, 'EUR', 'en'),
+    )
+    await user.click(screen.getByRole('button', { name: 'Edit entry 1' }))
     const amount = await screen.findByLabelText('Entry 1')
     expect(amount).toHaveValue('250.00')
     await user.clear(amount)
     await user.type(amount, '200')
+    await user.click(screen.getByRole('button', { name: 'Save entry 1' }))
     await user.click(screen.getByRole('button', { name: /^Save$/ }))
     await waitFor(() => {
       const rows = useAssetStore
@@ -222,12 +233,12 @@ describe('AssetDetailsUpdateForm', () => {
         .snapshots.filter((row) => row.assetId === 'a1' && row.date === today)
         .slice()
         .sort((a, b) => a.createdAt.localeCompare(b.createdAt))
-      expect(rows.map((row) => ({ amount: row.amount, note: row.note }))).toEqual(
-        [
-          { amount: 800, note: 'Gift' },
-          { amount: 650, note: 'Travel' },
-        ],
-      )
+      expect(
+        rows.map((row) => ({ amount: row.amount, note: row.note })),
+      ).toEqual([
+        { amount: 800, note: 'Gift' },
+        { amount: 650, note: 'Travel' },
+      ])
     })
   })
 })

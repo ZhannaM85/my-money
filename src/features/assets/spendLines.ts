@@ -1,7 +1,4 @@
-import {
-  snapshotsFromSpendLines,
-  updateBaselineAmount,
-} from '@/domain/asset'
+import { snapshotsFromSpendLines, updateBaselineAmount } from '@/domain/asset'
 import type { Locale } from '@/domain/settings'
 import {
   isExplicitFlowRow,
@@ -20,6 +17,18 @@ export type SpendLineDraft = {
   note: string
   direction: FlowDirection
   snapshotId?: string
+}
+
+/** Pencil forces edit; Save forces view. Otherwise saved lines start read-only (#283). */
+export type SpendLineViewOverride = 'edit' | 'view'
+
+export function spendLineIsEditing(
+  line: Pick<SpendLineDraft, 'snapshotId'>,
+  override?: SpendLineViewOverride,
+): boolean {
+  if (override === 'edit') return true
+  if (override === 'view') return false
+  return line.snapshotId === undefined
 }
 
 export function emptySpendLine(
@@ -107,9 +116,7 @@ export function stampSpendLineTimes(
   )
 }
 
-export function parseSpendLineDrafts(
-  drafts: readonly SpendLineDraft[],
-): {
+export function parseSpendLineDrafts(drafts: readonly SpendLineDraft[]): {
   amount: number
   direction: FlowDirection
   note?: string

@@ -125,6 +125,9 @@ gh issue edit 108 --add-label validation
 | `280-update-editable-spends.png` | Update · saved given/spent lines in the editor (RU, #280) |
 | `280-update-given-spent-headline.png` | Update · Given/spent header is since last refill, not remaining (RU, #280) |
 | `280-asset-detail-editable-spends.png` | Asset details · saved spend lines on Обновить этот актив (RU, #280) |
+| `283-update-readonly-spends.png` | Update · saved given/received lines read-only with pencil (RU, #283) |
+| `283-update-after-line-save.png` | Update · line locked again after per-line Save (RU, #283) |
+| `283-asset-detail-readonly-spends.png` | Asset details · same read-only lines on Обновить этот актив (RU, #283) |
 | `276-update-delta-entry.png` | Update · Remaining / Given chips + new balance / ± (RU, #276) |
 | `276-asset-detail-delta-entry.png` | Asset details · Update this asset same chips + remaining field (RU, #276) |
 | `258-history-locale-dates.png` | History · list rows use locale dates (#258) |

@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 283,
+    title: {
+      en: 'Given/received lines: read-only until pencil; save returns to read-only',
+      ru: 'Строки Отдано/получено: только просмотр до карандаша; сохранить возвращает в просмотр',
+    },
+    en: 'Saved Отдано / получено lines on Update and asset-detail were always live inputs, so amounts were easy to change by accident. Each saved line is now read-only (direction, amount, comment). Pencil opens that line; the Save icon commits those edits and locks the line again. Delete and + Add entry stay; a new unsaved line stays editable until its first save.',
+    ru: 'Сохранённые строки «Отдано / получено» на «Обновить» и в карточке были всегда полями ввода — сумму легко было сдвинуть случайно. Теперь сохранённая строка только для просмотра (направление, сумма, комментарий). Карандаш открывает её; иконка сохранения фиксирует правки и снова закрывает строку. Удаление и «+ Добавить запись» остаются; новая несохранённая строка редактируется до первого сохранения.',
+  },
+  {
     issue: 282,
     title: {
       en: 'Rename Given/spent → Given/received; support money in',
