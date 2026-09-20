@@ -96,6 +96,14 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 
 ---
 
+## Tier 29 — Live feedback (2026-09-20)
+
+| # | Status | Issue | Notes |
+|---|--------|-------|-------|
+| [#275](https://github.com/ZhannaM85/my-money/issues/275) | 🔍 Pending validation | Update assets: allow optional comment when saving a new balance | Optional per-holding note on Обновить; stored on the snapshot; History/details already show notes (#97). Empty does not block Save. |
+
+---
+
 ## Explicitly not filed
 
 Out of scope for the MVP (`PROJECT_BRIEF.md` §20) — do not implement from chat:

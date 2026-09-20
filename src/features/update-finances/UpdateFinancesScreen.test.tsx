@@ -89,13 +89,17 @@ describe('UpdateFinancesScreen', () => {
       expect(
         useAssetStore
           .getState()
-          .snapshots.filter((row) => row.assetId === 'a1' && row.date === todayIsoDate()),
+          .snapshots.filter(
+            (row) => row.assetId === 'a1' && row.date === todayIsoDate(),
+          ),
       ).toHaveLength(1)
     })
     expect(
       useAssetStore
         .getState()
-        .snapshots.filter((row) => row.assetId === 'a2' && row.date === todayIsoDate()),
+        .snapshots.filter(
+          (row) => row.assetId === 'a2' && row.date === todayIsoDate(),
+        ),
     ).toHaveLength(0)
     expect(screen.queryByText(/Mark no change/)).not.toBeInTheDocument()
   })
@@ -177,9 +181,7 @@ describe('UpdateFinancesScreen', () => {
     await user.click(screen.getByRole('button', { name: 'Save updates' }))
     await waitFor(() => {
       expect(
-        useAssetStore
-          .getState()
-          .snapshots.filter((row) => row.date === past),
+        useAssetStore.getState().snapshots.filter((row) => row.date === past),
       ).toHaveLength(2)
     })
     expect(
@@ -386,9 +388,7 @@ describe('UpdateFinancesScreen', () => {
     expect(
       screen.queryByRole('button', { name: 'Reorder Revolut' }),
     ).not.toBeInTheDocument()
-    expect(
-      screen.getByRole('button', { name: 'Reorder' }),
-    ).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Reorder' })).toBeInTheDocument()
   })
 
   it('shows a Save icon on the reorder toggle while reordering (#183)', async () => {
@@ -706,5 +706,101 @@ describe('UpdateFinancesScreen', () => {
     )
     await screen.findByLabelText('Revolut new amount')
     expect(screen.queryByText('Archived cash')).not.toBeInTheDocument()
+  })
+
+  it('saves an optional per-holding note with a new balance (#275)', async () => {
+    const user = userEvent.setup()
+    await useAssetStore.getState().saveAsset(
+      {
+        id: 'usd-cash',
+        name: 'USD cash',
+        assetClass: 'money',
+        type: 'cash',
+        currency: 'USD',
+        trackingStatus: 'included',
+        valuationMethod: 'account_balance',
+        updateFrequency: 'manual',
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        assetId: 'usd-cash',
+        date: '2026-08-01',
+        amount: 8000,
+        currency: 'USD',
+      },
+    )
+    render(
+      <MemoryRouter>
+        <UpdateFinancesScreen />
+      </MemoryRouter>,
+    )
+    const amount = await screen.findByLabelText('USD cash new amount')
+    const note = screen.getByLabelText('USD cash note')
+    expect(note).toHaveAttribute('placeholder', 'Note (optional)')
+    await user.type(amount, '5700')
+    await user.type(note, '  Spent on travel  ')
+    await user.click(screen.getByRole('button', { name: 'Save updates' }))
+    await waitFor(() => {
+      expect(
+        useAssetStore
+          .getState()
+          .snapshots.find(
+            (row) => row.assetId === 'usd-cash' && row.date === todayIsoDate(),
+          )?.note,
+      ).toBe('Spent on travel')
+    })
+    expect(
+      await screen.findByTestId('update-note-saved-usd-cash'),
+    ).toHaveTextContent('Spent on travel')
+    expect(screen.queryByLabelText('USD cash note')).not.toBeInTheDocument()
+  })
+
+  it('saves without a note and does not enable Save from a comment alone (#275)', async () => {
+    const user = userEvent.setup()
+    render(
+      <MemoryRouter>
+        <UpdateFinancesScreen />
+      </MemoryRouter>,
+    )
+    const amount = await screen.findByLabelText('Revolut new amount')
+    const note = screen.getByLabelText('Revolut note')
+    const save = screen.getByRole('button', { name: 'Save updates' })
+    await user.type(note, 'Forgot the amount')
+    expect(save).toBeDisabled()
+    await user.clear(note)
+    await user.type(amount, '1500')
+    expect(save).toBeEnabled()
+    await user.click(save)
+    await waitFor(() => {
+      const saved = useAssetStore
+        .getState()
+        .snapshots.find(
+          (row) => row.assetId === 'a1' && row.date === todayIsoDate(),
+        )
+      expect(saved?.amount).toBe(1500)
+      expect(saved?.note).toBeUndefined()
+    })
+  })
+
+  it('drops a whitespace-only note when editing a locked amount (#275)', async () => {
+    const user = userEvent.setup()
+    render(
+      <MemoryRouter>
+        <UpdateFinancesScreen />
+      </MemoryRouter>,
+    )
+    const asOf = await screen.findByLabelText('As of')
+    setDateField(asOf, '2026-08-01')
+    await user.click(
+      await screen.findByRole('button', { name: 'Edit Revolut' }),
+    )
+    const note = await screen.findByLabelText('Revolut note')
+    await user.type(note, '   ')
+    await user.click(screen.getByRole('button', { name: 'Save updates' }))
+    await waitFor(() => {
+      expect(useAssetStore.getState().snapshots[0]?.amount).toBe(1000)
+    })
+    expect(useAssetStore.getState().snapshots[0]?.note).toBeUndefined()
   })
 })

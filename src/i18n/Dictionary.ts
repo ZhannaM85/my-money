@@ -181,6 +181,7 @@ export interface Dictionary {
     saveUpdates: string
     enterNumberFor: (name: string) => string
     newAmountAria: (name: string) => string
+    noteAria: (name: string) => string
     editAmountAria: (name: string) => string
     saveOrder: string
     suggestedFromDate: (date: string) => string

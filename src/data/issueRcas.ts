@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 275,
+    title: {
+      en: 'Update assets: allow optional comment when saving a new balance',
+      ru: 'Обновить: необязательный комментарий при сохранении новой суммы',
+    },
+    en: 'Asset details and Add asset already stored snapshot notes (#97). Bulk Update (Активы → Обновить) only wrote amount/date/currency, so a new balance there had no comment and History stayed blank for those saves. Empty notes still skip persist and do not block Save.',
+    ru: 'В карточке и при добавлении актива комментарий к снимку уже был (#97). Массовое «Обновить» писало только сумму/дату/валюту, поэтому новая сумма оттуда шла в Историю без комментария. Пустой комментарий по-прежнему не сохраняется и не блокирует «Сохранить обновления».',
+  },
+  {
     issue: 274,
     title: {
       en: 'Dashboard: sync На дату with chart day selection',

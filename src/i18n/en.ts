@@ -235,6 +235,7 @@ export const en: Dictionary = {
     saveUpdates: 'Save updates',
     enterNumberFor: (name) => `Enter a number for ${name}`,
     newAmountAria: (name) => `${name} new amount`,
+    noteAria: (name) => `${name} note`,
     editAmountAria: (name) => `Edit ${name}`,
     saveOrder: 'Save order',
     suggestedFromDate: (date) => `From ${date}`,

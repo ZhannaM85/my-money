@@ -239,6 +239,7 @@ export const ru: Dictionary = {
     saveUpdates: 'Сохранить обновления',
     enterNumberFor: (name) => `Введите число для «${name}»`,
     newAmountAria: (name) => `Новая сумма для ${name}`,
+    noteAria: (name) => `Комментарий для ${name}`,
     editAmountAria: (name) => `Изменить ${name}`,
     saveOrder: 'Сохранить порядок',
     suggestedFromDate: (date) => `С ${date}`,

@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 249,
+    issue: 275,
+    date: '2026-09-20T11:10:00+03:00',
+    en: 'On Update, each holding can have an optional comment with the new balance. It is saved on that snapshot and shows in History and asset details. Empty comments are skipped and do not block Save.',
+    ru: 'На «Обновить» у каждой позиции можно добавить необязательный комментарий к новой сумме. Он сохраняется в снимке и виден в Истории и карточке актива. Пустой комментарий не мешает «Сохранить обновления».',
+  },
+  {
     version: 248,
     issue: 274,
     date: '2026-09-15T15:15:00+03:00',

@@ -117,6 +117,8 @@ gh issue edit 108 --add-label validation
 | `272-settings-section-cards.png` | More · Preferences / Rates / Tools cards (RU, #272) |
 | `273-dashboard-comparison-already-added.png` | Dashboard · + still enabled; already-added notice (RU, #273) |
 | `274-dashboard-asof-chart-sync.png` | Dashboard · На дату matches chart pin (RU, #274) |
+| `275-update-optional-comment.png` | Update · optional comment under USD cash amount (RU, #275) |
+| `275-history-update-comment.png` | History · comment from Update on the day’s holdings (RU, #275) |
 | `258-history-locale-dates.png` | History · list rows use locale dates (#258) |
 | `258-asset-snapshot-locale-dates.png` | Asset details · snapshot list locale dates (#258) |
 
