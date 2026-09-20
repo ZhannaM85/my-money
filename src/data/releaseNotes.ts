@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 262,
+    issue: 293,
+    date: '2026-09-20T23:55:00+03:00',
+    en: 'On Update, the amount at the top right of each card is always the current remaining balance, including in Given / received.',
+    ru: 'На «Обновить» сумма справа вверху карточки — всегда текущий остаток, в том числе в режиме «Отдано / получено».',
+  },
+  {
     version: 261,
     issue: 292,
     date: '2026-09-20T23:10:00+03:00',

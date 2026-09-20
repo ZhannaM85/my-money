@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 293,
+    title: {
+      en: 'Update card preview: always remaining, don’t switch on Given/received',
+      ru: 'Превью карточки Обновить: всегда остаток, не менять на Отдано/получено',
+    },
+    en: 'The Update card top-right preview followed the Остаток / Отдано/получено toggle (or a stale given/received figure such as −6056.76$). It now always shows the asset’s current remaining. Given/received totals stay on the asset-detail headline if needed.',
+    ru: 'Верхний правый превью на карточке «Обновить» следовал за переключателем Остаток / Отдано/получено (или показывал устаревшую сумму вроде −6056.76$). Теперь всегда текущий остаток. Итог отдано/получено остаётся в заголовке карточки актива.',
+  },
+  {
     issue: 292,
     title: {
       en: 'Remove Remaining +/− toggles; absolute balance only',

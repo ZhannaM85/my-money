@@ -855,9 +855,9 @@ describe('UpdateFinancesScreen', () => {
       </MemoryRouter>,
     )
     await screen.findByText('Revolut')
-    expect(
-      screen.getAllByText(formatAmount(700, 'EUR', 'en')).length,
-    ).toBeGreaterThan(0)
+    expect(screen.getByTestId('update-card-preview-a1')).toHaveTextContent(
+      formatAmount(700, 'EUR', 'en'),
+    )
     await user.click(
       screen.getAllByRole('button', { name: 'Given / received' })[0]!,
     )
@@ -866,9 +866,79 @@ describe('UpdateFinancesScreen', () => {
         'given_spent',
       )
     })
-    expect(
-      screen.getAllByText(formatAmount(0, 'EUR', 'en')).length,
-    ).toBeGreaterThan(0)
+    expect(screen.getByTestId('update-card-preview-a1')).toHaveTextContent(
+      formatAmount(700, 'EUR', 'en'),
+    )
+  })
+
+  it('keeps the Update card preview on remaining in Given / received (#293)', async () => {
+    const user = userEvent.setup()
+    await useAssetStore.getState().saveAsset(
+      {
+        id: 'usd-deposit',
+        name: 'USD Deposit',
+        assetClass: 'money',
+        type: 'deposit',
+        currency: 'USD',
+        trackingStatus: 'included',
+        valuationMethod: 'account_balance',
+        updateFrequency: 'manual',
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        assetId: 'usd-deposit',
+        date: '2026-08-01',
+        amount: 12000,
+        currency: 'USD',
+      },
+    )
+    await useAssetStore.getState().saveSnapshots([
+      {
+        assetId: 'usd-deposit',
+        date: '2026-08-15',
+        amount: 8000,
+        currency: 'USD',
+        flow: 6056.76,
+      },
+      {
+        assetId: 'usd-deposit',
+        date: todayIsoDate(),
+        amount: 8000,
+        currency: 'USD',
+      },
+    ])
+    render(
+      <MemoryRouter>
+        <UpdateFinancesScreen />
+      </MemoryRouter>,
+    )
+    const card = (await screen.findByText('USD Deposit')).closest('li')
+    expect(card).toBeTruthy()
+    const preview = within(card!).getByTestId('update-card-preview-usd-deposit')
+    const remaining = formatAmount(8000, 'USD', 'en')
+    const givenHeadline = formatAmount(-6056.76, 'USD', 'en')
+    expect(preview).toHaveTextContent(remaining)
+    await user.click(
+      within(card!).getByRole('button', { name: 'Given / received' }),
+    )
+    await waitFor(() => {
+      expect(
+        useAssetStore.getState().assets.find((row) => row.id === 'usd-deposit')
+          ?.balanceHeadline,
+      ).toBe('given_spent')
+    })
+    expect(preview).toHaveTextContent(remaining)
+    expect(preview).not.toHaveTextContent(givenHeadline)
+    expect(within(card!).getByLabelText('USD Deposit entry 1')).toHaveValue('')
+    await user.click(within(card!).getByRole('button', { name: 'Remaining' }))
+    await waitFor(() => {
+      expect(
+        useAssetStore.getState().assets.find((row) => row.id === 'usd-deposit')
+          ?.balanceHeadline,
+      ).not.toBe('given_spent')
+    })
+    expect(preview).toHaveTextContent(remaining)
   })
 
   it('saves multiple same-day spend lines as separate remaining snapshots (#279)', async () => {
@@ -1090,8 +1160,11 @@ describe('UpdateFinancesScreen', () => {
       ).toBe('given_spent')
     })
     expect(
-      within(usdCard!).getAllByText(formatAmount(2300, 'USD', 'en')).length,
-    ).toBeGreaterThan(0)
+      within(usdCard!).getByTestId('update-card-preview-usd-cash'),
+    ).toHaveTextContent(formatAmount(4900, 'USD', 'en'))
+    expect(
+      within(usdCard!).queryByText(formatAmount(2300, 'USD', 'en')),
+    ).not.toBeInTheDocument()
     expect(
       screen.queryByText(formatAmount(16300, 'USD', 'en')),
     ).not.toBeInTheDocument()

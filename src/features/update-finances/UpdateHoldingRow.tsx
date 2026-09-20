@@ -1,8 +1,6 @@
 import { Pencil } from 'lucide-react'
 import {
   assetBalanceHeadline,
-  cumulativeGivenSpent,
-  headlineNativeAmount,
   snapshotsFromSpendLines,
   type Asset,
   type BalanceHeadline,
@@ -83,8 +81,6 @@ export function UpdateHoldingRow({
   const t = useTranslation()
   const locale = useLocale()
   const headline = assetBalanceHeadline(asset)
-  const givenSpent = cumulativeGivenSpent(snapshots, asset.id)
-  const displayed = headlineNativeAmount(headline, latest?.amount, givenSpent)
   const baseline = updateBaselineAmount(onDate, previous, asset.currency)
   const givenSpentMode = headline === 'given_spent'
   const savedSpends =
@@ -132,12 +128,13 @@ export function UpdateHoldingRow({
           ) : null}
         </span>
         {!reordering ? (
-          <span className="text-sm text-muted-foreground">
-            {displayed !== undefined && latest
-              ? formatAmount(displayed, latest.currency, locale)
-              : displayed !== undefined
-                ? formatAmount(displayed, asset.currency, locale)
-                : t.asset.noValueYet}
+          <span
+            className="text-sm text-muted-foreground"
+            data-testid={`update-card-preview-${asset.id}`}
+          >
+            {latest
+              ? formatAmount(latest.amount, latest.currency, locale)
+              : t.asset.noValueYet}
           </span>
         ) : null}
       </div>
