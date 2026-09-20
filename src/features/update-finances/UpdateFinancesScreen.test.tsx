@@ -839,32 +839,6 @@ describe('UpdateFinancesScreen', () => {
     })
   })
 
-  it('does not prefill given/received amount with remaining (#291)', async () => {
-    const user = userEvent.setup()
-    await useAssetStore.getState().saveSnapshots([
-      {
-        assetId: 'a1',
-        date: '2026-07-01',
-        amount: 2000,
-        currency: 'EUR',
-      },
-    ])
-    render(
-      <MemoryRouter>
-        <UpdateFinancesScreen />
-      </MemoryRouter>,
-    )
-    setDateField(await screen.findByLabelText('As of'), '2026-08-01')
-    const card = (await screen.findByText('Revolut')).closest('li')
-    expect(card).toBeTruthy()
-    await user.click(
-      within(card!).getByRole('button', { name: 'Given / received' }),
-    )
-    const amount = await screen.findByLabelText('Revolut entry 1')
-    expect(amount).toHaveValue('')
-    expect(amount).not.toHaveValue('1,000.00')
-  })
-
   it('toggles the holding headline to cumulative given/spent (#276)', async () => {
     const user = userEvent.setup()
     await useAssetStore.getState().saveSnapshots([

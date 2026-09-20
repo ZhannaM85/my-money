@@ -1,6 +1,7 @@
 import { snapshotsFromSpendLines, updateBaselineAmount } from '@/domain/asset'
 import type { Locale } from '@/domain/settings'
 import {
+  isExplicitFlowRow,
   optionalSnapshotNote,
   sameDaySpendEntries,
   snapshotsOnDateAll,
@@ -36,20 +37,6 @@ export function emptySpendLine(
   return { key, amount: '', note: '', direction: 'given' }
 }
 
-/**
- * Lines the given/received editor may load. Tagged `flow` always.
- * Untagged same-day remaining drops load only when there are two or more
- * (#279/#280). A single remaining snapshot must not become Сумма (#291).
- */
-function editorSpendRows(
-  entries: readonly SameDaySpendEntry[],
-): SameDaySpendEntry[] {
-  const tagged = entries.filter((entry) => entry.flow !== undefined)
-  if (tagged.length > 0) return tagged
-  const untagged = entries.filter((entry) => entry.drop !== 0)
-  return untagged.length > 1 ? untagged : []
-}
-
 function entryAmount(entry: SameDaySpendEntry): number {
   return Math.abs(entry.flow ?? entry.drop)
 }
@@ -59,7 +46,7 @@ export function spendLineDraftsFromEntries(
   locale: Locale,
   fallbackAssetId: string,
 ): SpendLineDraft[] {
-  const rows = editorSpendRows(entries)
+  const rows = entries.filter(isExplicitFlowRow)
   if (rows.length === 0) {
     return [emptySpendLine(`${fallbackAssetId}-spend-0`)]
   }
@@ -96,7 +83,7 @@ export function spendBaselineAmount(
   previous: Pick<AssetSnapshot, 'amount' | 'currency'> | undefined,
   currency: string,
 ): number {
-  const first = editorSpendRows(saved)[0]
+  const first = saved.find(isExplicitFlowRow)
   if (first) return first.remaining + first.drop
   return updateBaselineAmount(onDate, previous, currency)
 }
@@ -107,9 +94,9 @@ export function spendSnapshotsToEdit(
   date: string,
 ): AssetSnapshot[] {
   const ids = new Set(
-    editorSpendRows(sameDaySpendEntries(snapshots, assetId, date)).map(
-      (entry) => entry.id,
-    ),
+    sameDaySpendEntries(snapshots, assetId, date)
+      .filter(isExplicitFlowRow)
+      .map((entry) => entry.id),
   )
   return snapshotsOnDateAll(snapshots, assetId, date).filter((row) =>
     ids.has(row.id),
@@ -161,7 +148,7 @@ export function spendLinesMatchSaved(
   saved: readonly SameDaySpendEntry[],
 ): boolean {
   const parsed = parseSpendLineDrafts(drafts)
-  const rows = editorSpendRows(saved)
+  const rows = saved.filter(isExplicitFlowRow)
   if (parsed.length !== rows.length) return false
   return parsed.every((line, index) => {
     const row = rows[index]

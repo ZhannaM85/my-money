@@ -20,15 +20,6 @@ export const issueRcas: IssueRca[] = [
     ru: 'У «Остаток» больше нет ряда «Новый остаток» / + / −. В поле — фактический остаток. «Отдано» вычитает, «Получено» прибавляет в режиме Отдано/получено.',
   },
   {
-    issue: 291,
-    title: {
-      en: 'Given/received: don’t prefill amount with remaining',
-      ru: 'Отдано/получено: не подставлять остаток в сумму',
-    },
-    en: 'Switching to Отдано / получено treated a same-day remaining change as a spend line, so Сумма could show the current balance. A new line starts empty; only explicit `flow` entries load as given/received rows.',
-    ru: 'Переключение на «Отдано / получено» воспринимало изменение остатка за день как строку траты — в «Сумма» попадал текущий остаток. Новая строка пустая; подставляются только явные записи с `flow`.',
-  },
-  {
     issue: 289,
     title: {
       en: 'Given/received: purpose and amount on the same row',

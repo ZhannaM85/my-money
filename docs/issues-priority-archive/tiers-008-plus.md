@@ -338,3 +338,9 @@ Closed live-feedback rows from Tier 8 onward. Open / pending items stay in [`../
 | [#272](https://github.com/ZhannaM85/my-money/issues/272) | ✅ Done | Settings: card-wrap sections by meaning | Preferences / toggles / Rates / Tools / Data / About / Developer all SettingsCard. Validated on-device 2026-09-14. |
 | [#273](https://github.com/ZhannaM85/my-money/issues/273) | ✅ Done | Dashboard: notify when + day is already in comparison | `+` disables when the selected day is already pinned; persistent bordered warning explains that the day is already in comparison. Validated on-device 2026-09-15. |
 | [#274](https://github.com/ZhannaM85/my-money/issues/274) | ✅ Done | Dashboard: sync На дату with chart day selection | Chart day selection and the `На дату` field now commit the same day, including the iOS event-ordering fix. Validated on-device 2026-09-15. |
+
+## Tier 29 — Live feedback (2026-09-20)
+
+| # | Status | Issue | Notes |
+|---|--------|-------|-------|
+| [#291](https://github.com/ZhannaM85/my-money/issues/291) | ❌ Won't fix | Отдано/получено: don’t prefill Сумма with remaining balance | False alarm. Circled 20 000 ₽ was the given/received headline preview (#280), not a Сумма prefill. Closed not_planned 2026-09-20; code reverted. |
