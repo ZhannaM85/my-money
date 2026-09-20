@@ -40,3 +40,18 @@ describe('getDictionary', () => {
     expect(ru.asset.classes.liabilities).toBe('Обязательства')
   })
 })
+
+describe('history.overRange (#299)', () => {
+  it('localizes week/month/year instead of English range codes', () => {
+    expect(ru.history.overRange('1W')).toBe('за неделю')
+    expect(ru.history.overRange('1M')).toBe('за месяц')
+    expect(ru.history.overRange('1Y')).toBe('за год')
+    expect(ru.history.overRange('All')).toBe('за всё время')
+    expect(ru.history.overRange('Custom')).toBe('за свой период')
+    expect(en.history.overRange('1W')).toBe('over the week')
+    expect(en.history.overRange('1M')).toBe('over the month')
+    expect(en.history.overRange('1Y')).toBe('over the year')
+    expect(en.history.overRange('All')).toBe('over all time')
+    expect(en.history.overRange('Custom')).toBe('over custom range')
+  })
+})

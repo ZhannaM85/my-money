@@ -264,12 +264,20 @@ export const en: Dictionary = {
     title: 'History',
     emptyTitle: 'No history yet',
     emptyDescription: 'Snapshots from updates become the history line.',
-    overRange: (range) =>
-      range === 'Custom'
-        ? 'over custom range'
-        : range === 'All'
-          ? 'over all time'
-          : `over ${range}`,
+    overRange: (range) => {
+      switch (range) {
+        case '1W':
+          return 'over the week'
+        case '1M':
+          return 'over the month'
+        case '1Y':
+          return 'over the year'
+        case 'All':
+          return 'over all time'
+        case 'Custom':
+          return 'over custom range'
+      }
+    },
     sinceDate: (date) => `since ${date}`,
     holdingsOn: (date) => `Holdings on ${date}`,
     rangeWeek: 'Week',

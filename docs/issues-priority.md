@@ -100,6 +100,7 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
+| [#299](https://github.com/ZhannaM85/my-money/issues/299) | 🔍 Pending validation | Сводка: localize «за 1W» / «за 1Y» | Change line: `за неделю` / `за год` (EN: over the week / year). Month chip on Сводка still `за этот месяц`. |
 | [#298](https://github.com/ZhannaM85/my-money/issues/298) | 🔍 Pending validation | Rename feature toggle: drop «новое» from Обновление активов | Ещё → Переключатели: «Обновление с отдано/получено» / “Update with given/received”. |
 | [#285](https://github.com/ZhannaM85/my-money/issues/285) | 🔍 Pending validation | Обновить: remove common «Сохранить обновления» (new UX) | #295 ON: no page-level Save; per-field/per-line diskette remains; spend-line delete persists. Classic OFF keeps bottom Save. |
 | [#297](https://github.com/ZhannaM85/my-money/issues/297) | 🔍 Pending validation | Обновить: diskette after pencil must save and lock | New UX: pencil edit + diskette persists amount/comment and returns the card to read-only. Unchanged save locks quietly. |

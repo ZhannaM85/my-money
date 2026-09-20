@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 269,
+    issue: 299,
+    date: '2026-09-21T00:40:00+03:00',
+    en: 'Dashboard and History now say over the week / month / year on the change line, not 1W / 1M / 1Y.',
+    ru: 'На Сводке и в Истории изменение пишется «за неделю» / «за месяц» / «за год», а не «за 1W» / «за 1M» / «за 1Y».',
+  },
+  {
     version: 268,
     issue: 298,
     date: '2026-09-21T00:35:00+03:00',

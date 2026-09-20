@@ -2,6 +2,8 @@ import { screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { beforeEach, describe, expect, it } from 'vitest'
 import { renderApp, resetAppStores } from '@test/renderApp'
+import { DEFAULT_SETTINGS } from '@/domain/settings'
+import { db } from '@/infrastructure/persistence/indexeddb'
 import {
   formatAmount,
   formatSignedAmount,
@@ -11,6 +13,7 @@ import { addDaysIso, monthStartIso } from '@/shared/lib/dates'
 import { useAssetStore } from '@/stores/assetStore'
 import { useFxStore } from '@/stores/fxStore'
 import { useChartRangeStore } from '@/stores/chartRangeStore'
+import { useSettingsStore } from '@/stores/settingsStore'
 import { DashboardScreen } from './DashboardScreen'
 
 beforeEach(async () => {
@@ -207,5 +210,48 @@ describe('DashboardHeadline', () => {
       'aria-expanded',
       'false',
     )
+  })
+
+  it('localizes the net-worth change period in Russian (#299)', async () => {
+    const user = userEvent.setup()
+    await db.settings.put({
+      ...DEFAULT_SETTINGS,
+      locale: 'ru',
+    })
+    useSettingsStore.setState({
+      settings: { ...DEFAULT_SETTINGS, locale: 'ru' },
+      loaded: false,
+    })
+    const today = todayIsoDate()
+    const now = `${today}T00:00:00.000Z`
+    await useAssetStore.getState().saveAsset(
+      {
+        id: 'a1',
+        name: 'Revolut',
+        assetClass: 'money',
+        type: 'bank',
+        currency: 'EUR',
+        trackingStatus: 'included',
+        valuationMethod: 'account_balance',
+        updateFrequency: 'weekly',
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        assetId: 'a1',
+        date: today,
+        amount: 1000,
+        currency: 'EUR',
+      },
+    )
+    useChartRangeStore.setState({ range: '1W' })
+    renderApp(<DashboardScreen />)
+
+    expect(await screen.findByText(/за неделю/)).toBeInTheDocument()
+    expect(screen.queryByText(/1W/)).not.toBeInTheDocument()
+
+    await user.click(screen.getByRole('button', { name: 'Год' }))
+    expect(await screen.findByText(/за год/)).toBeInTheDocument()
+    expect(screen.queryByText(/1Y/)).not.toBeInTheDocument()
   })
 })

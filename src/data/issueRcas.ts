@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 299,
+    title: {
+      en: 'Dashboard: localize “over 1W” / “over 1Y”',
+      ru: 'Сводка: локализовать «за 1W» / «за 1Y»',
+    },
+    en: '`history.overRange` interpolated the internal range code, so Russian showed `за 1W` / `за 1Y`. It now uses localized period words (`за неделю` / `за месяц` / `за год`; English `over the week` / `over the month` / `over the year`). All and Custom were already localized. Dashboard Month still uses `this month`.',
+    ru: '`history.overRange` подставлял внутренний код диапазона, поэтому по-русски было «за 1W» / «за 1Y». Теперь слова периода: «за неделю» / «за месяц» / «за год» (EN: over the week / month / year). «Всё» и «Свой» уже были локализованы. Месяц на Сводке по-прежнему «за этот месяц».',
+  },
+  {
     issue: 298,
     title: {
       en: 'Rename feature toggle: drop “new” from Update assets',

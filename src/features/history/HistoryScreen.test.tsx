@@ -171,7 +171,7 @@ describe('HistoryScreen', () => {
     ).toBeInTheDocument()
     expect(
       screen.queryByText(
-        `${formatSignedAmount(endTotal - startTotal, 'EUR')} over 1M`,
+        `${formatSignedAmount(endTotal - startTotal, 'EUR')} over the month`,
       ),
     ).not.toBeInTheDocument()
   })
@@ -227,10 +227,10 @@ describe('HistoryScreen', () => {
     )
 
     expect(
-      await screen.findByText(`${formatSignedAmount(500, 'EUR')} over 1M`),
+      await screen.findByText(`${formatSignedAmount(500, 'EUR')} over the month`),
     ).toBeInTheDocument()
     expect(
-      screen.queryByText(`${formatSignedAmount(200, 'EUR')} over 1M`),
+      screen.queryByText(`${formatSignedAmount(200, 'EUR')} over the month`),
     ).not.toBeInTheDocument()
   })
 

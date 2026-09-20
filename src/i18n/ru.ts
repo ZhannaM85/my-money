@@ -268,12 +268,20 @@ export const ru: Dictionary = {
     title: 'История',
     emptyTitle: 'Истории пока нет',
     emptyDescription: 'Снимки из обновлений становятся линией истории.',
-    overRange: (range) =>
-      range === 'Custom'
-        ? 'за свой период'
-        : range === 'All'
-          ? 'за всё время'
-          : `за ${range}`,
+    overRange: (range) => {
+      switch (range) {
+        case '1W':
+          return 'за неделю'
+        case '1M':
+          return 'за месяц'
+        case '1Y':
+          return 'за год'
+        case 'All':
+          return 'за всё время'
+        case 'Custom':
+          return 'за свой период'
+      }
+    },
     sinceDate: (date) => `с ${date}`,
     holdingsOn: (date) => `Позиции на ${date}`,
     rangeWeek: 'Неделя',
