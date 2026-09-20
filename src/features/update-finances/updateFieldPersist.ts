@@ -92,6 +92,9 @@ export function planUpdatePersistRow({
   if (!result.ok && result.error === 'invalid_amount') {
     return { ok: false, error: enterNumberFor(asset.name) }
   }
+  if (!result.ok && result.error === 'noop') {
+    return { ok: false }
+  }
   return result
 }
 

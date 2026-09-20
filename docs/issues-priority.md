@@ -100,6 +100,7 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
+| [#290](https://github.com/ZhannaM85/my-money/issues/290) | 🔍 Pending validation | Обновить: hide leaking “noop” on comparison row | Unchanged field save no longer renders the persist sentinel. Comparison delta stays. |
 | [#288](https://github.com/ZhannaM85/my-money/issues/288) | 🔍 Pending validation | Unify field-level save icon to diskette (not checkmark) | Остаток, comment, and given/received field saves all use lucide Save. Page-level «Сохранить обновления» left for #285. |
 | [#286](https://github.com/ZhannaM85/my-money/issues/286) | 🔍 Pending validation | CI: Assets reorder-grip test flakes after Save | Wait for the #104 grip to leave after async persist. Unblocks CI/Pages after #284. |
 | [#284](https://github.com/ZhannaM85/my-money/issues/284) | 🔍 Pending validation | Обновить: per-field / per-card save that persists | Остаток, comment, and #283 spend-line Save write through to IndexedDB immediately. Page-level «Сохранить обновления» kept until #285. |

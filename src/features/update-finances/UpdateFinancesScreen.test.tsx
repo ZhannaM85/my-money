@@ -1191,6 +1191,36 @@ describe('UpdateFinancesScreen', () => {
     ).toBeInTheDocument()
   })
 
+  it('does not leak noop next to the remaining comparison delta (#290)', async () => {
+    const user = userEvent.setup()
+    await useAssetStore.getState().saveSnapshots([
+      {
+        assetId: 'a1',
+        date: '2026-07-01',
+        amount: 1500,
+        currency: 'EUR',
+      },
+    ])
+    render(
+      <MemoryRouter>
+        <UpdateFinancesScreen />
+      </MemoryRouter>,
+    )
+    setDateField(await screen.findByLabelText('As of'), '2026-08-01')
+    await user.click(
+      await screen.findByRole('button', { name: 'Edit Revolut' }),
+    )
+    expect(
+      await screen.findByTestId('update-edit-delta-a1'),
+    ).toBeInTheDocument()
+    await user.click(
+      screen.getByRole('button', { name: 'Save remaining for Revolut' }),
+    )
+    expect(screen.queryByText('noop')).not.toBeInTheDocument()
+    expect(screen.queryByTestId('update-save-error-a1')).not.toBeInTheDocument()
+    expect(screen.getByTestId('update-edit-delta-a1')).toBeInTheDocument()
+  })
+
   it('uses the diskette icon for remaining and comment field saves (#288)', async () => {
     render(
       <MemoryRouter>

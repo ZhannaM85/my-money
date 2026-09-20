@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 290,
+    title: {
+      en: 'Update: hide leaking “noop” on comparison row',
+      ru: 'Обновить: не показывать «noop» у строки сравнения',
+    },
+    en: 'An unchanged Остаток field save returned the internal persist sentinel `noop`, and that raw string rendered in red next to the vs-previous delta. No-op saves are silent now; only real validation errors are shown.',
+    ru: 'Сохранение остатка без изменений возвращало внутренний `noop`, и эта строка рисовалась красным рядом с дельтой «сравн. с». Пустое сохранение теперь тихое; в UI только настоящие ошибки проверки.',
+  },
+  {
     issue: 288,
     title: {
       en: 'Unify field-level save icon to diskette (not checkmark)',

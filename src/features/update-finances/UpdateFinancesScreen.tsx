@@ -265,16 +265,7 @@ export function UpdateFinancesScreen() {
     if (!result.ok) {
       setFieldStatus((current) => ({
         ...current,
-        [assetId]: {
-          error:
-            result.error ??
-            (scope === 'remaining'
-              ? t.update.enterNumberFor(
-                  rows.find((row) => row.asset.id === assetId)?.asset.name ??
-                    '',
-                )
-              : undefined),
-        },
+        [assetId]: { error: result.error },
       }))
       return
     }

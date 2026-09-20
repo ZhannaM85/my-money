@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 258,
+    issue: 290,
+    date: '2026-09-20T22:50:00+03:00',
+    en: 'Update no longer shows the word “noop” next to a remaining comparison. If nothing changed, the save just stays quiet.',
+    ru: 'На «Обновить» больше не появляется слово «noop» рядом со сравнением остатка. Если ничего не изменилось, сохранение просто молчит.',
+  },
+  {
     version: 257,
     issue: 288,
     date: '2026-09-20T22:40:00+03:00',
