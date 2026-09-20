@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 267,
+    issue: 285,
+    date: '2026-09-21T00:30:00+03:00',
+    en: 'On the new Update screen, there is no Save updates button at the bottom. Each remaining or given/received field saves with its diskette. The previous Update screen still has the bottom button.',
+    ru: 'На новом экране «Обновить» нет общей кнопки «Сохранить обновления». Остаток и строки отдано/получено сохраняются дискетой. На прежнем экране нижняя кнопка остаётся.',
+  },
+  {
     version: 266,
     issue: 297,
     date: '2026-09-21T00:20:00+03:00',

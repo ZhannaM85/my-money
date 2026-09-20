@@ -28,7 +28,7 @@ test('Given/received headline is explicit entries; saved lines editable (#280, #
   await page
     .getByLabel('Комментарий к записи 2 для USD cash')
     .fill('Общая карта 70,000 рублей')
-  await page.getByRole('button', { name: 'Сохранить обновления' }).click()
+  await page.getByRole('button', { name: 'Сохранить запись 1' }).click()
   await expect(usdCard.getByTestId('spend-line-note-0')).toHaveText(
     'Антону за низ участка',
   )
@@ -48,7 +48,6 @@ test('Given/received headline is explicit entries; saved lines editable (#280, #
   await page.getByLabel('Запись 1 для USD cash').fill('1200')
   await usdCard.getByRole('button', { name: 'Сохранить запись 1' }).click()
   await page.getByRole('button', { name: 'Удалить запись 2' }).click()
-  await page.getByRole('button', { name: 'Сохранить обновления' }).click()
   await expect(usdCard.getByTestId('spend-line-note-0')).toHaveText(
     'Антону за низ участка',
   )

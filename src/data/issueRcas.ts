@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 285,
+    title: {
+      en: 'Update: remove common Save updates on the new path',
+      ru: 'Обновить: убрать общую «Сохранить обновления» на новом пути',
+    },
+    en: 'After per-field save (#284), the shared bottom Save updates button is gone when the #295 Update toggle is on. Diskette / per-line saves remain, and deleting a given/received line writes immediately. Classic (toggle off) still has the page Save.',
+    ru: 'После сохранения по полям (#284) общая нижняя «Сохранить обновления» скрыта, когда переключатель #295 включён. Дискеты и сохранение строк остаются; удаление записи отдано/получено пишется сразу. Прежний экран (выкл) по-прежнему с общей кнопкой.',
+  },
+  {
     issue: 297,
     title: {
       en: 'Update: diskette after pencil must save and return to read-only',

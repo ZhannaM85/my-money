@@ -100,6 +100,7 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
+| [#285](https://github.com/ZhannaM85/my-money/issues/285) | 🔍 Pending validation | Обновить: remove common «Сохранить обновления» (new UX) | #295 ON: no page-level Save; per-field/per-line diskette remains; spend-line delete persists. Classic OFF keeps bottom Save. |
 | [#297](https://github.com/ZhannaM85/my-money/issues/297) | 🔍 Pending validation | Обновить: diskette after pencil must save and lock | New UX: pencil edit + diskette persists amount/comment and returns the card to read-only. Unchanged save locks quietly. |
 | [#296](https://github.com/ZhannaM85/my-money/issues/296) | 🔍 Pending validation | Отдано/получено: Сумма before comment | Amount then comment LTR on new Update UX only (#295 ON). |
 | [#295](https://github.com/ZhannaM85/my-money/issues/295) | 🔍 Pending validation | Feature toggle: new Обновить UX (default off) | Ещё → Переключатели: «Новое обновление активов». OFF = classic remaining + page Save. ON = given/received, field saves, #294/#296. |

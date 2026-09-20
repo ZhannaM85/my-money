@@ -71,7 +71,7 @@ export function UpdateHoldingRow({
   onSpendLinesChange: (lines: SpendLineDraft[]) => void
   onStartEdit: () => void
   onSaveAmount: () => void
-  onSaveSpends: () => void
+  onSaveSpends: (lines?: readonly SpendLineDraft[]) => void
   saveDisabled: boolean
   saveMessage?: string
   saveError?: string
@@ -227,7 +227,7 @@ export function UpdateHoldingRow({
           saveAmountLabel={t.update.saveAmountAria(asset.name)}
           saveAmountTestId={`update-save-amount-${asset.id}`}
           amountSaveDisabled={saveDisabled}
-          onSaveSpendLine={() => onSaveSpends()}
+          onSaveSpendLine={(_, lines) => onSaveSpends(lines)}
           newUx={newUx}
           noteField={
             givenSpentMode ? undefined : (

@@ -21,7 +21,7 @@ test('Per-field save persists on Update and asset detail (#284)', async ({
   await page.getByLabel('Комментарий для USD cash').fill('Сняла наличные')
   await expect(
     page.getByRole('button', { name: 'Сохранить обновления' }),
-  ).toBeVisible()
+  ).toHaveCount(0)
   await page.screenshot({
     path: join(proofDir, '284-update-field-save.png'),
   })
@@ -49,7 +49,7 @@ test('Per-field save persists on Update and asset detail (#284)', async ({
   await expect(page.getByTestId('spend-line-note-0')).toHaveText('Подарок')
   await expect(
     page.getByRole('button', { name: 'Сохранить обновления' }),
-  ).toBeVisible()
+  ).toHaveCount(0)
 
   await page.goto('/assets/usd-cash')
   await expect(page.getByRole('heading', { name: 'USD cash' })).toBeVisible()

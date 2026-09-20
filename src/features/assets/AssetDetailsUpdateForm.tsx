@@ -178,19 +178,23 @@ export function AssetDetailsUpdateForm({
     if (ok) resetRemainingDrafts()
   }
 
-  async function saveSpends() {
+  async function saveSpends(draftOverride?: readonly SpendLineDraft[]) {
     if (!isIsoDateOnOrBefore(amountDate, today)) {
       setAmountError(t.asset.snapshotDateInvalid)
       return
     }
+    const drafts = draftOverride ? [...draftOverride] : spendLines
+    const entries = draftOverride
+      ? snapshotsFromSpendLines(spendBaseline, parseSpendLineDrafts(drafts))
+      : spendEntries
     const hasSavedSpends = savedSpends.some((entry) => entry.drop > 0)
-    if (spendEntries.length === 0 && !hasSavedSpends) {
+    if (entries.length === 0 && !hasSavedSpends) {
       setAmountError(t.asset.enterCurrentAmount)
       return
     }
     const result = planSpendPersist({
       snapshots,
-      drafts: spendLines,
+      drafts,
       assetId,
       date: amountDate,
       currency,
@@ -274,7 +278,7 @@ export function AssetDetailsUpdateForm({
           saveAmountLabel={newUx ? t.asset.saveAmountAria : undefined}
           saveAmountTestId="asset-save-amount"
           amountSaveDisabled={saving}
-          onSaveSpendLine={() => void saveSpends()}
+          onSaveSpendLine={(_, lines) => void saveSpends(lines)}
           newUx={newUx}
           noteField={
             givenSpentMode ? undefined : (

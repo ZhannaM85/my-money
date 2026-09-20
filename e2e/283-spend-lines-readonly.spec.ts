@@ -28,7 +28,7 @@ test('Saved given/received lines are read-only until pencil (#283)', async ({
   await page
     .getByLabel('Комментарий к записи 2 для USD cash')
     .fill('Общая карта')
-  await page.getByRole('button', { name: 'Сохранить обновления' }).click()
+  await page.getByRole('button', { name: 'Сохранить запись 1' }).click()
 
   await expect(usdCard.getByTestId('spend-line-0')).toHaveAttribute(
     'data-editing',

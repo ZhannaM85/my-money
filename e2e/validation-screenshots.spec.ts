@@ -1189,7 +1189,7 @@ test('capture Update prefill from snapshot before As of (#180)', async ({
 })
 
 test('capture Update stay in view mode after Save (#181)', async ({ page }) => {
-  await seedValidationFixture(page)
+  await seedValidationFixture(page, { newUpdateUx: false })
   await page.goto('/update')
   await expect(page.getByRole('heading', { name: 'Update' })).toBeVisible()
   const count = await page.getByLabel(/new amount$/).count()
@@ -1565,7 +1565,7 @@ test('capture Update pinned As of (#191)', async ({ page }) => {
 })
 
 test('capture Update post-save delta (#193)', async ({ page }) => {
-  await seedValidationFixture(page)
+  await seedValidationFixture(page, { newUpdateUx: false })
   await page.goto('/update')
   await expect(page.getByRole('heading', { name: 'Update' })).toBeVisible()
   await page.getByLabel('Euro cash new amount').fill('1500')
@@ -1578,7 +1578,7 @@ test('capture Update post-save delta (#193)', async ({ page }) => {
 })
 
 test('capture Update save only filled rows (#200)', async ({ page }) => {
-  await seedValidationFixture(page)
+  await seedValidationFixture(page, { newUpdateUx: false })
   await page.goto('/update')
   await expect(page.getByRole('heading', { name: 'Update' })).toBeVisible()
   await page.getByLabel('Euro cash new amount').fill('1500')
@@ -1658,7 +1658,7 @@ test('capture Update excluded holdings (#202)', async ({ page }) => {
 })
 
 test('capture Update pinned Save below holdings (#203)', async ({ page }) => {
-  await seedValidationFixture(page)
+  await seedValidationFixture(page, { newUpdateUx: false })
   await page.goto('/update')
   await expect(page.getByRole('heading', { name: 'Update' })).toBeVisible()
   const scroll = page.getByTestId('update-holdings-scroll')
@@ -1675,7 +1675,7 @@ test('capture Update pinned Save below holdings (#203)', async ({ page }) => {
 test('capture Update Save disabled until an amount is typed (#204)', async ({
   page,
 }) => {
-  await seedValidationFixture(page)
+  await seedValidationFixture(page, { newUpdateUx: false })
   await page.goto('/update')
   await expect(page.getByRole('heading', { name: 'Update' })).toBeVisible()
   const save = page.getByRole('button', { name: 'Save updates' })

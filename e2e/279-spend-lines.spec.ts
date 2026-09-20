@@ -29,7 +29,7 @@ test('Given/received spend lines on Update, asset detail, and History (#279)', a
   await page.screenshot({
     path: join(proofDir, '279-update-spend-lines.png'),
   })
-  await page.getByRole('button', { name: 'Сохранить обновления' }).click()
+  await page.getByRole('button', { name: 'Сохранить запись 1' }).click()
   await expect(page.getByTestId('spend-line-note-0')).toHaveText('Подарок')
   await expect(page.getByTestId('spend-line-note-1')).toHaveText('Поездка')
   await expect(page.getByLabel('Запись 1 для USD cash')).toHaveCount(0)

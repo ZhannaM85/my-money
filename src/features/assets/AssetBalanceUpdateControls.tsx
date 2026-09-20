@@ -77,7 +77,7 @@ export function AssetBalanceUpdateControls({
   saveAmountLabel?: string
   saveAmountTestId?: string
   amountSaveDisabled?: boolean
-  onSaveSpendLine?: (index: number) => void
+  onSaveSpendLine?: (index: number, nextLines?: SpendLineDraft[]) => void
   noteField?: ReactNode
   newUx?: boolean
 }) {

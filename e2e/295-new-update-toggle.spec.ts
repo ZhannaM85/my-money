@@ -53,6 +53,9 @@ test('New asset update toggle defaults off and gates the new UX (#295)', async (
   await expect(
     page.getByRole('button', { name: 'Сохранить остаток: USD cash' }),
   ).toBeVisible()
+  await expect(
+    page.getByRole('button', { name: 'Сохранить обновления' }),
+  ).toHaveCount(0)
   await page.screenshot({
     path: join(proofDir, '295-update-new-ux.png'),
   })

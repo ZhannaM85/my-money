@@ -29,7 +29,7 @@ test('Update optional comment on a new balance shows in History (#275)', async (
   await page.screenshot({
     path: join(proofDir, '275-update-optional-comment.png'),
   })
-  await page.getByRole('button', { name: 'Сохранить обновления' }).click()
+  await page.getByRole('button', { name: 'Сохранить остаток: USD cash' }).click()
   await expect(page.getByTestId('update-note-saved-usd-cash')).toHaveText(
     'Сняла наличные',
   )

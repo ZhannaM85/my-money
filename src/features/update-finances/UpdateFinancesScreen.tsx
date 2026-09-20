@@ -26,6 +26,7 @@ import { DateField } from '@/shared/ui/date-field'
 import { EmptyState } from '@/shared/ui/empty-state'
 import { PageHeader } from '@/shared/ui/page-header'
 import { ReorderIconButton } from '@/shared/ui/reorder-icon-button'
+import { useNewUpdateUx } from '@/features/settings/useNewUpdateUx'
 import { useAssetStore } from '@/stores/assetStore'
 import { useSettingsStore } from '@/stores/settingsStore'
 import {
@@ -61,6 +62,7 @@ export function UpdateFinancesScreen() {
   const persistCustomAssetOrder = useSettingsStore(
     (state) => state.persistCustomAssetOrder,
   )
+  const newUx = useNewUpdateUx()
   const setBalanceHeadline = useAssetStore((state) => state.setBalanceHeadline)
   const [drafts, setDrafts] = useState<Record<string, string>>({})
   const [notes, setNotes] = useState<Record<string, string>>({})
@@ -195,6 +197,7 @@ export function UpdateFinancesScreen() {
   function planRow(
     assetId: string,
     scope: 'auto' | 'remaining' | 'note' | 'spends',
+    spendOverride?: readonly SpendLineDraft[],
   ): ReturnType<typeof planUpdatePersistRow> {
     const row = rows.find((item) => item.asset.id === assetId)
     if (!row) return { ok: false }
@@ -206,7 +209,9 @@ export function UpdateFinancesScreen() {
       drafts,
       notes,
       editing,
-      spendLines,
+      spendLines: spendOverride
+        ? { ...spendLines, [assetId]: [...spendOverride] }
+        : spendLines,
       snapshots,
       enterNumberFor: t.update.enterNumberFor,
     })
@@ -249,12 +254,13 @@ export function UpdateFinancesScreen() {
   async function saveField(
     assetId: string,
     scope: 'remaining' | 'note' | 'spends',
+    spendOverride?: readonly SpendLineDraft[],
   ) {
     if (!isIsoDateOnOrBefore(asOf, today)) {
       setAsOfError(t.asset.snapshotDateInvalid)
       return
     }
-    const result = planRow(assetId, scope)
+    const result = planRow(assetId, scope, spendOverride)
     if (!result.ok) {
       setFieldStatus((current) => ({
         ...current,
@@ -270,7 +276,7 @@ export function UpdateFinancesScreen() {
         updateSnapshot,
         deleteSnapshot,
       })
-      if (scope !== 'spends') clearAssetDrafts(assetId)
+      clearAssetDrafts(assetId)
       setFieldStatus((current) => ({
         ...current,
         [assetId]: wrote ? { message: t.update.holdingSaved } : {},
@@ -410,7 +416,9 @@ export function UpdateFinancesScreen() {
                         onSaveAmount={() =>
                           void saveField(asset.id, 'remaining')
                         }
-                        onSaveSpends={() => void saveField(asset.id, 'spends')}
+                        onSaveSpends={(lines) =>
+                          void saveField(asset.id, 'spends', lines)
+                        }
                         saveDisabled={saving || savingAssetId === asset.id}
                         saveMessage={fieldStatus[asset.id]?.message}
                         saveError={fieldStatus[asset.id]?.error}
@@ -437,7 +445,7 @@ export function UpdateFinancesScreen() {
             })()}
           </div>
           {error && <p className="text-sm text-destructive">{error}</p>}
-          {!reorder.reordering ? (
+          {!newUx && !reorder.reordering ? (
             <div
               data-testid="update-save-bar"
               className="shrink-0 bg-background pb-[max(0.5rem,env(keyboard-inset-bottom,0px))]"

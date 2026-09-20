@@ -23,14 +23,22 @@ function setDateField(input: HTMLElement, value: string) {
   input.dispatchEvent(new Event('change', { bubbles: true }))
 }
 
+async function enableNewUpdateUx() {
+  await db.settings.put({ ...DEFAULT_SETTINGS, newUpdateUx: true })
+  useSettingsStore.setState({
+    settings: { ...DEFAULT_SETTINGS, newUpdateUx: true },
+    loaded: true,
+  })
+}
+
 beforeEach(async () => {
   await db.assets.clear()
   await db.snapshots.clear()
   await db.settings.clear()
-  await db.settings.put({ ...DEFAULT_SETTINGS, newUpdateUx: true })
+  await db.settings.put(DEFAULT_SETTINGS)
   useAssetStore.setState({ assets: [], snapshots: [], loaded: false })
   useSettingsStore.setState({
-    settings: { ...DEFAULT_SETTINGS, newUpdateUx: true },
+    settings: DEFAULT_SETTINGS,
     loaded: true,
   })
   await useAssetStore.getState().saveAsset(
@@ -842,6 +850,7 @@ describe('UpdateFinancesScreen', () => {
 
   it('toggles the holding headline to cumulative given/spent (#276)', async () => {
     const user = userEvent.setup()
+    await enableNewUpdateUx()
     await useAssetStore.getState().saveSnapshots([
       {
         assetId: 'a1',
@@ -874,6 +883,7 @@ describe('UpdateFinancesScreen', () => {
 
   it('keeps the Update card preview on remaining in Given / received (#293)', async () => {
     const user = userEvent.setup()
+    await enableNewUpdateUx()
     await useAssetStore.getState().saveAsset(
       {
         id: 'usd-deposit',
@@ -944,6 +954,7 @@ describe('UpdateFinancesScreen', () => {
 
   it('saves multiple same-day spend lines as separate remaining snapshots (#279)', async () => {
     const user = userEvent.setup()
+    await enableNewUpdateUx()
     await useAssetStore.getState().saveAsset(
       {
         id: 'usd-cash',
@@ -971,15 +982,16 @@ describe('UpdateFinancesScreen', () => {
       </MemoryRouter>,
     )
     await screen.findByLabelText('USD cash entry 1')
-    const save = screen.getByRole('button', { name: 'Save updates' })
     await user.type(screen.getByLabelText('USD cash entry 1 note'), 'Gift')
-    expect(save).toBeDisabled()
     await user.type(screen.getByLabelText('USD cash entry 1'), '1000')
     await user.click(screen.getByRole('button', { name: 'Add entry' }))
     await user.type(screen.getByLabelText('USD cash entry 2'), '2000')
     await user.type(screen.getByLabelText('USD cash entry 2 note'), 'Travel')
     expect(screen.getByTestId('resulting-remaining')).toHaveTextContent(/5,000/)
-    await user.click(save)
+    expect(
+      screen.queryByRole('button', { name: 'Save updates' }),
+    ).not.toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Save entry 1' }))
     await waitFor(() => {
       expect(
         useAssetStore
@@ -1007,11 +1019,14 @@ describe('UpdateFinancesScreen', () => {
       formatAmount(1000, 'USD', 'en'),
     )
     expect(screen.queryByLabelText('USD cash entry 1')).not.toBeInTheDocument()
-    expect(screen.getByRole('button', { name: 'Save updates' })).toBeDisabled()
+    expect(
+      screen.queryByRole('button', { name: 'Save updates' }),
+    ).not.toBeInTheDocument()
   })
 
   it('edits and removes a saved same-day spend line (#280)', async () => {
     const user = userEvent.setup()
+    await enableNewUpdateUx()
     await useAssetStore.getState().saveAsset(
       {
         id: 'usd-cash',
@@ -1073,7 +1088,9 @@ describe('UpdateFinancesScreen', () => {
     await user.type(giftAmount, '1200')
     await user.click(screen.getByRole('button', { name: 'Save entry 1' }))
     await user.click(screen.getByRole('button', { name: 'Remove entry 2' }))
-    await user.click(screen.getByRole('button', { name: 'Save updates' }))
+    expect(
+      screen.queryByRole('button', { name: 'Save updates' }),
+    ).not.toBeInTheDocument()
     await waitFor(() => {
       const rows = useAssetStore
         .getState()
@@ -1088,6 +1105,7 @@ describe('UpdateFinancesScreen', () => {
 
   it('shows only explicit given/received entries, not lifetime drawdowns (#280)', async () => {
     const user = userEvent.setup()
+    await enableNewUpdateUx()
     await useAssetStore.getState().saveAsset(
       {
         id: 'usd-cash',
@@ -1173,6 +1191,7 @@ describe('UpdateFinancesScreen', () => {
 
   it('persists remaining and comment from field save without Save updates (#284)', async () => {
     const user = userEvent.setup()
+    await enableNewUpdateUx()
     render(
       <MemoryRouter>
         <UpdateFinancesScreen />
@@ -1180,7 +1199,9 @@ describe('UpdateFinancesScreen', () => {
     )
     await user.type(await screen.findByLabelText('Revolut new amount'), '1500')
     await user.type(screen.getByLabelText('Revolut note'), 'Top-up')
-    expect(screen.getByRole('button', { name: 'Save updates' })).toBeEnabled()
+    expect(
+      screen.queryByRole('button', { name: 'Save updates' }),
+    ).not.toBeInTheDocument()
     await user.click(
       screen.getByRole('button', { name: 'Save remaining for Revolut' }),
     )
@@ -1206,12 +1227,13 @@ describe('UpdateFinancesScreen', () => {
       await screen.findByTestId('update-save-status-a1'),
     ).toHaveTextContent('Saved')
     expect(
-      screen.getByRole('button', { name: 'Save updates' }),
-    ).toBeInTheDocument()
+      screen.queryByRole('button', { name: 'Save updates' }),
+    ).not.toBeInTheDocument()
   })
 
   it('persists a comment-only field save onto the existing As of snapshot (#284)', async () => {
     const user = userEvent.setup()
+    await enableNewUpdateUx()
     render(
       <MemoryRouter>
         <UpdateFinancesScreen />
@@ -1246,6 +1268,7 @@ describe('UpdateFinancesScreen', () => {
 
   it('persists a given/received line from its save control (#284)', async () => {
     const user = userEvent.setup()
+    await enableNewUpdateUx()
     await useAssetStore.getState().setBalanceHeadline('a1', 'given_spent')
     render(
       <MemoryRouter>
@@ -1269,12 +1292,13 @@ describe('UpdateFinancesScreen', () => {
       ).toBeTruthy()
     })
     expect(
-      screen.getByRole('button', { name: 'Save updates' }),
-    ).toBeInTheDocument()
+      screen.queryByRole('button', { name: 'Save updates' }),
+    ).not.toBeInTheDocument()
   })
 
   it('does not leak noop next to the remaining comparison delta (#290)', async () => {
     const user = userEvent.setup()
+    await enableNewUpdateUx()
     await useAssetStore.getState().saveSnapshots([
       {
         assetId: 'a1',
@@ -1308,6 +1332,7 @@ describe('UpdateFinancesScreen', () => {
 
   it('persists a pencil edit from the diskette and returns to read-only (#297)', async () => {
     const user = userEvent.setup()
+    await enableNewUpdateUx()
     render(
       <MemoryRouter>
         <UpdateFinancesScreen />
@@ -1345,6 +1370,7 @@ describe('UpdateFinancesScreen', () => {
   })
 
   it('uses the diskette icon for remaining and comment field saves (#288)', async () => {
+    await enableNewUpdateUx()
     render(
       <MemoryRouter>
         <UpdateFinancesScreen />
@@ -1359,8 +1385,8 @@ describe('UpdateFinancesScreen', () => {
       screen.queryByRole('button', { name: 'Save comment for Revolut' }),
     ).not.toBeInTheDocument()
     expect(
-      screen.getByRole('button', { name: 'Save updates' }),
-    ).toBeInTheDocument()
+      screen.queryByRole('button', { name: 'Save updates' }),
+    ).not.toBeInTheDocument()
   })
 
   it('keeps classic Update when the new UX toggle is off (#295)', async () => {
@@ -1405,6 +1431,7 @@ describe('UpdateFinancesScreen', () => {
 
   it('puts the comment under remaining and saves both with one diskette (#294)', async () => {
     const user = userEvent.setup()
+    await enableNewUpdateUx()
     render(
       <MemoryRouter>
         <UpdateFinancesScreen />
@@ -1432,5 +1459,44 @@ describe('UpdateFinancesScreen', () => {
           ),
       ).toMatchObject({ amount: 1500, note: 'Top-up' })
     })
+  })
+
+  it('hides page Save on the new UX and keeps it on classic (#285)', async () => {
+    const user = userEvent.setup()
+    await enableNewUpdateUx()
+    const { unmount } = render(
+      <MemoryRouter>
+        <UpdateFinancesScreen />
+      </MemoryRouter>,
+    )
+    await screen.findByLabelText('Revolut new amount')
+    expect(
+      screen.queryByRole('button', { name: 'Save updates' }),
+    ).not.toBeInTheDocument()
+    expect(screen.queryByTestId('update-save-bar')).not.toBeInTheDocument()
+    expect(
+      screen.getByRole('button', { name: 'Save remaining for Revolut' }),
+    ).toBeInTheDocument()
+    unmount()
+
+    await db.settings.put(DEFAULT_SETTINGS)
+    useSettingsStore.setState({
+      settings: DEFAULT_SETTINGS,
+      loaded: true,
+    })
+    render(
+      <MemoryRouter>
+        <UpdateFinancesScreen />
+      </MemoryRouter>,
+    )
+    const amount = await screen.findByLabelText('Revolut new amount')
+    expect(screen.getByTestId('update-save-bar')).toBeInTheDocument()
+    const save = screen.getByRole('button', { name: 'Save updates' })
+    expect(save).toBeDisabled()
+    await user.type(amount, '1500')
+    expect(save).toBeEnabled()
+    expect(
+      screen.queryByRole('button', { name: 'Save remaining for Revolut' }),
+    ).not.toBeInTheDocument()
   })
 })
