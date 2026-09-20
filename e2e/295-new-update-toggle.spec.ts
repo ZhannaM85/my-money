@@ -19,7 +19,7 @@ test('New asset update toggle defaults off and gates the new UX (#295)', async (
   await expect(
     page.getByRole('heading', { name: 'Переключатели функций' }),
   ).toBeVisible()
-  const toggle = page.getByRole('switch', { name: 'Новое обновление активов' })
+  const toggle = page.getByRole('switch', { name: 'Обновление с отдано/получено' })
   await expect(toggle).toHaveAttribute('aria-checked', 'false')
   await page.screenshot({
     path: join(proofDir, '295-settings-new-update-toggle.png'),

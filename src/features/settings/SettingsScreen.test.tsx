@@ -214,7 +214,7 @@ describe('SettingsScreen', () => {
     )
   })
 
-  it('defaults New asset update off and persists turning it on (#295)', async () => {
+  it('defaults Update with given/received off and persists turning it on (#295, #298)', async () => {
     const user = userEvent.setup()
     await db.settings.put(DEFAULT_SETTINGS)
     render(
@@ -223,7 +223,7 @@ describe('SettingsScreen', () => {
       </MemoryRouter>,
     )
     const toggle = await screen.findByRole('switch', {
-      name: 'New asset update',
+      name: 'Update with given/received',
     })
     expect(toggle).toHaveAttribute('aria-checked', 'false')
     await user.click(toggle)

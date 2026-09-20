@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 268,
+    issue: 298,
+    date: '2026-09-21T00:35:00+03:00',
+    en: 'More → Feature toggles now says Update with given/received instead of New asset update. Off is still the previous Update screen.',
+    ru: 'В «Ещё → Переключатели функций» вместо «Новое обновление активов» — «Обновление с отдано/получено». Выкл по-прежнему прежний экран «Обновить».',
+  },
+  {
     version: 267,
     issue: 285,
     date: '2026-09-21T00:30:00+03:00',

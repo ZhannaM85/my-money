@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 298,
+    title: {
+      en: 'Rename feature toggle: drop “new” from Update assets',
+      ru: 'Переименовать переключатель: убрать «новое» у Обновления активов',
+    },
+    en: 'The #295 More → Feature toggles switch is no longer time-bound “New asset update”. It is Update with given/received: Update screen with separate given/received entries and per-field save. Off — previous screen.',
+    ru: 'Переключатель #295 в «Ещё → Переключатели функций» больше не «Новое обновление активов». Теперь «Обновление с отдано/получено»: экран «Обновить» с отдельными записями отдано/получено и сохранением по полям. Выкл — прежний экран.',
+  },
+  {
     issue: 285,
     title: {
       en: 'Update: remove common Save updates on the new path',

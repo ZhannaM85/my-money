@@ -387,9 +387,9 @@ export const en: Dictionary = {
     dashboardPositions: 'Dashboard positions',
     dashboardPositionsHint:
       'Show the Positions list and total under the chart on Dashboard. Holdings stay on Assets either way.',
-    newUpdateUx: 'New asset update',
+    newUpdateUx: 'Update with given/received',
     newUpdateUxHint:
-      'Optional new Update screen: given/received entries and per-field save. Off uses the previous Update screen.',
+      'Update screen with separate given/received entries and per-field save. Off — previous screen.',
     featureTogglesTitle: 'Feature toggles',
     featureTogglesDescription:
       'Optional pieces of the app you can turn on or off. More toggles will land here over time.',
