@@ -804,7 +804,7 @@ describe('UpdateFinancesScreen', () => {
     expect(useAssetStore.getState().snapshots[0]?.note).toBeUndefined()
   })
 
-  it('applies a removed amount to the previous remaining (#276)', async () => {
+  it('saves the typed remaining as an absolute balance (#292)', async () => {
     const user = userEvent.setup()
     render(
       <MemoryRouter>
@@ -812,8 +812,16 @@ describe('UpdateFinancesScreen', () => {
       </MemoryRouter>,
     )
     await screen.findByLabelText('Revolut new amount')
-    await user.click(screen.getByRole('button', { name: 'Removed' }))
-    await user.type(screen.getByLabelText('Revolut new amount'), '230')
+    expect(
+      screen.queryByTestId('balance-entry-toggles'),
+    ).not.toBeInTheDocument()
+    expect(
+      screen.queryByRole('button', { name: 'New balance' }),
+    ).not.toBeInTheDocument()
+    expect(
+      screen.queryByRole('button', { name: 'Removed' }),
+    ).not.toBeInTheDocument()
+    await user.type(screen.getByLabelText('Revolut new amount'), '770')
     await user.type(screen.getByLabelText('Revolut note'), 'Gifted')
     await user.click(screen.getByRole('button', { name: 'Save updates' }))
     await waitFor(() => {

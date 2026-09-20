@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 292,
+    title: {
+      en: 'Remove Remaining +/− toggles; absolute balance only',
+      ru: 'Убрать +/− у Остатка; только абсолютный остаток',
+    },
+    en: 'Остаток no longer has the «Новый остаток» / + / − row. The field is the actual remaining balance. Отдано subtracts and Получено adds in given/received mode.',
+    ru: 'У «Остаток» больше нет ряда «Новый остаток» / + / −. В поле — фактический остаток. «Отдано» вычитает, «Получено» прибавляет в режиме Отдано/получено.',
+  },
+  {
     issue: 291,
     title: {
       en: 'Given/received: don’t prefill amount with remaining',

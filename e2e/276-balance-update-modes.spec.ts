@@ -9,7 +9,7 @@ test.beforeAll(() => {
   mkdirSync(proofDir, { recursive: true })
 })
 
-test('Update and asset detail share remaining / ± entry (#276)', async ({
+test('Update and asset detail share remaining vs given/received (#276)', async ({
   page,
 }) => {
   await page.setViewportSize({ width: 390, height: 844 })
@@ -21,12 +21,8 @@ test('Update and asset detail share remaining / ± entry (#276)', async ({
     page.getByRole('button', { name: 'Остаток', exact: true }).first(),
   ).toBeVisible()
   await expect(
-    page.getByRole('button', { name: 'Новый остаток', exact: true }).first(),
+    page.getByRole('button', { name: 'Отдано / получено' }).first(),
   ).toBeVisible()
-  await page.getByRole('button', { name: 'Убрать' }).first().click()
-  await expect(
-    page.getByRole('button', { name: 'Убрать' }).first(),
-  ).toHaveAttribute('aria-pressed', 'true')
   await expect(page.getByTestId('asset-balance-update').first()).toBeVisible()
   await page.screenshot({
     path: join(proofDir, '276-update-delta-entry.png'),
@@ -41,14 +37,8 @@ test('Update and asset detail share remaining / ± entry (#276)', async ({
     page.getByRole('button', { name: 'Остаток', exact: true }),
   ).toBeVisible()
   await expect(
-    page.getByRole('button', { name: 'Новый остаток', exact: true }),
+    page.getByRole('button', { name: 'Отдано / получено' }),
   ).toBeVisible()
-  await page.getByRole('button', { name: 'Убрать' }).click()
-  await expect(page.getByRole('button', { name: 'Убрать' })).toHaveAttribute(
-    'aria-pressed',
-    'true',
-  )
-  await expect(page.getByPlaceholder('Сумма')).toBeVisible()
   await page.screenshot({
     path: join(proofDir, '276-asset-detail-delta-entry.png'),
   })

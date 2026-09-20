@@ -9,7 +9,7 @@ import {
   useSensors,
 } from '@dnd-kit/core'
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
-import { type BalanceEntryMode, isSuggestedUpdate } from '@/domain/asset'
+import { isSuggestedUpdate } from '@/domain/asset'
 import {
   latestSnapshot,
   sameDaySpendEntries,
@@ -65,9 +65,6 @@ export function UpdateFinancesScreen() {
   const [drafts, setDrafts] = useState<Record<string, string>>({})
   const [notes, setNotes] = useState<Record<string, string>>({})
   const [editing, setEditing] = useState<Record<string, boolean>>({})
-  const [entryModes, setEntryModes] = useState<
-    Record<string, BalanceEntryMode>
-  >({})
   const [spendLines, setSpendLines] = useState<
     Record<string, SpendLineDraft[]>
   >({})
@@ -132,7 +129,6 @@ export function UpdateFinancesScreen() {
     setDrafts({})
     setNotes({})
     setEditing({})
-    setEntryModes({})
     setSpendLines({})
   }
 
@@ -140,7 +136,6 @@ export function UpdateFinancesScreen() {
     setDrafts((current) => omitDraftKey(current, assetId))
     setNotes((current) => omitDraftKey(current, assetId))
     setEditing((current) => omitDraftKey(current, assetId))
-    setEntryModes((current) => omitDraftKey(current, assetId))
     setSpendLines((current) => omitDraftKey(current, assetId))
   }
 
@@ -151,7 +146,6 @@ export function UpdateFinancesScreen() {
     note?: string,
   ) {
     setEditing((current) => ({ ...current, [assetId]: true }))
-    setEntryModes((current) => ({ ...current, [assetId]: 'new_balance' }))
     setDrafts((current) => ({
       ...current,
       [assetId]: formatEditableAmount(amount, locale, currency),
@@ -212,7 +206,6 @@ export function UpdateFinancesScreen() {
       drafts,
       notes,
       editing,
-      entryModes,
       spendLines,
       snapshots,
       enterNumberFor: t.update.enterNumberFor,
@@ -377,7 +370,6 @@ export function UpdateFinancesScreen() {
                         reordering={reorder.reordering}
                         draft={drafts[asset.id] ?? ''}
                         noteValue={notes[asset.id] ?? ''}
-                        entryMode={entryModes[asset.id] ?? 'new_balance'}
                         spendLines={spendLinesForEditor(
                           spendLines[asset.id],
                           sameDaySpendEntries(snapshots, asset.id, asOf),
@@ -395,12 +387,6 @@ export function UpdateFinancesScreen() {
                           setNotes((current) => ({
                             ...current,
                             [asset.id]: value,
-                          }))
-                        }}
-                        onEntryModeChange={(mode) => {
-                          setEntryModes((current) => ({
-                            ...current,
-                            [asset.id]: mode,
                           }))
                         }}
                         onSpendLinesChange={(lines) => {

@@ -100,6 +100,7 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
+| [#292](https://github.com/ZhannaM85/my-money/issues/292) | 🔍 Pending validation | Remove Остаток +/− toggles; absolute balance only | Entire «Новый остаток» / ± row gone. Остаток is absolute; Отдано/Получено move money. |
 | [#291](https://github.com/ZhannaM85/my-money/issues/291) | 🔍 Pending validation | Отдано/получено: don’t prefill Сумма with remaining balance | New given/received amount starts empty; remaining-only same-day rows are not loaded as spends. |
 | [#289](https://github.com/ZhannaM85/my-money/issues/289) | 🔍 Pending validation | Отдано/получено: purpose and amount on the same row | View + edit keep note and amount on one row; pencil/trash stay. |
 | [#290](https://github.com/ZhannaM85/my-money/issues/290) | 🔍 Pending validation | Обновить: hide leaking “noop” on comparison row | Unchanged field save no longer renders the persist sentinel. Comparison delta stays. |

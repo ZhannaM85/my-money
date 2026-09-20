@@ -35,7 +35,6 @@ describe('planUpdatePersistRow (#290)', () => {
       drafts: { cash: '1,000.00' },
       notes: {},
       editing: { cash: true },
-      entryModes: {},
       spendLines: {},
       snapshots: [onDate],
       enterNumberFor: (name) => `Enter a number for ${name}`,

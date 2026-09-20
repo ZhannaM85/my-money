@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 261,
+    issue: 292,
+    date: '2026-09-20T23:10:00+03:00',
+    en: 'Remaining is now just the actual balance — the New balance / + / − row is gone. Use Given or Received when money moves.',
+    ru: '«Остаток» — просто фактический баланс: ряда «Новый остаток» / + / − больше нет. Движение денег — через Отдано или Получено.',
+  },
+  {
     version: 260,
     issue: 291,
     date: '2026-09-20T23:00:00+03:00',

@@ -1,8 +1,4 @@
-import {
-  assetBalanceHeadline,
-  type Asset,
-  type BalanceEntryMode,
-} from '@/domain/asset'
+import { assetBalanceHeadline, type Asset } from '@/domain/asset'
 import type { Locale } from '@/domain/settings'
 import { sameDaySpendEntries, type AssetSnapshot } from '@/domain/snapshot'
 import {
@@ -35,7 +31,6 @@ export function planUpdatePersistRow({
   drafts,
   notes,
   editing,
-  entryModes,
   spendLines,
   snapshots,
   enterNumberFor,
@@ -47,7 +42,6 @@ export function planUpdatePersistRow({
   drafts: Record<string, string>
   notes: Record<string, string>
   editing: Record<string, boolean>
-  entryModes: Record<string, BalanceEntryMode>
   spendLines: Record<string, SpendLineDraft[]>
   snapshots: readonly AssetSnapshot[]
   enterNumberFor: (name: string) => string
@@ -84,7 +78,7 @@ export function planUpdatePersistRow({
     currency: asset.currency,
     draft: drafts[asset.id] ?? '',
     note: notes[asset.id] ?? onDate?.note ?? '',
-    entryMode: entryModes[asset.id] ?? 'new_balance',
+    entryMode: 'new_balance',
     onDate,
     previous,
     requireAmount: scope !== 'note',

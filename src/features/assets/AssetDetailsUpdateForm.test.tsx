@@ -109,13 +109,20 @@ describe('AssetDetailsUpdateForm', () => {
     })
   })
 
-  it('saves a ± amount against the current remaining (#276)', async () => {
+  it('saves remaining as an absolute balance without ± chips (#292)', async () => {
     const user = userEvent.setup()
     renderAssetDetails()
     await screen.findByRole('heading', { name: 'Revolut' })
-    await user.click(screen.getByRole('button', { name: 'Removed' }))
-    await user.type(screen.getByLabelText('New amount'), '250')
-    expect(screen.getByTestId('resulting-remaining')).toHaveTextContent(/750/)
+    expect(
+      screen.queryByTestId('balance-entry-toggles'),
+    ).not.toBeInTheDocument()
+    expect(
+      screen.queryByRole('button', { name: 'New balance' }),
+    ).not.toBeInTheDocument()
+    expect(
+      screen.queryByRole('button', { name: 'Removed' }),
+    ).not.toBeInTheDocument()
+    await user.type(screen.getByLabelText('New amount'), '750')
     await user.click(screen.getByRole('button', { name: /^Save$/ }))
     await waitFor(() => {
       expect(
@@ -135,8 +142,7 @@ describe('AssetDetailsUpdateForm', () => {
     const user = userEvent.setup()
     renderAssetDetails()
     await screen.findByRole('heading', { name: 'Revolut' })
-    await user.click(screen.getByRole('button', { name: 'Removed' }))
-    await user.type(screen.getByLabelText('New amount'), '250')
+    await user.type(screen.getByLabelText('New amount'), '750')
     await user.click(screen.getByRole('button', { name: /^Save$/ }))
     await waitFor(() => {
       expect(

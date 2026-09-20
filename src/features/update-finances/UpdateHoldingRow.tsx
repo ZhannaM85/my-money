@@ -1,12 +1,10 @@
 import { Pencil } from 'lucide-react'
 import {
-  applyBalanceEntry,
   assetBalanceHeadline,
   cumulativeGivenSpent,
   headlineNativeAmount,
   snapshotsFromSpendLines,
   type Asset,
-  type BalanceEntryMode,
   type BalanceHeadline,
   updateBaselineAmount,
 } from '@/domain/asset'
@@ -44,12 +42,10 @@ export function UpdateHoldingRow({
   reordering,
   draft,
   noteValue,
-  entryMode,
   spendLines,
   snapshots,
   onDraftChange,
   onNoteChange,
-  onEntryModeChange,
   onHeadlineChange,
   onSpendLinesChange,
   onStartEdit,
@@ -70,12 +66,10 @@ export function UpdateHoldingRow({
   reordering: boolean
   draft: string
   noteValue: string
-  entryMode: BalanceEntryMode
   spendLines: readonly SpendLineDraft[]
   snapshots: readonly AssetSnapshot[]
   onDraftChange: (value: string) => void
   onNoteChange: (value: string) => void
-  onEntryModeChange: (mode: BalanceEntryMode) => void
   onHeadlineChange: (headline: BalanceHeadline) => void
   onSpendLinesChange: (lines: SpendLineDraft[]) => void
   onStartEdit: () => void
@@ -109,9 +103,7 @@ export function UpdateHoldingRow({
       : undefined
   const resolvedAmount = givenSpentMode
     ? spendEntries.at(-1)?.remaining
-    : parsedDraft === undefined
-      ? undefined
-      : applyBalanceEntry(entryMode, parsedDraft, baseline)
+    : parsedDraft
   const remainingLocked = locked && !givenSpentMode
   const editDelta =
     !remainingLocked &&
@@ -229,12 +221,10 @@ export function UpdateHoldingRow({
             currency={asset.currency}
             headline={headline}
             onHeadlineChange={onHeadlineChange}
-            entryMode={entryMode}
-            onEntryModeChange={onEntryModeChange}
             draft={draft}
             onDraftChange={onDraftChange}
             placeholder={
-              entryMode === 'new_balance' && placeholderSource
+              placeholderSource
                 ? formatEditableAmount(
                     placeholderSource.amount,
                     locale,
@@ -243,13 +233,9 @@ export function UpdateHoldingRow({
                 : t.asset.amountPlaceholder
             }
             resultingRemaining={
-              givenSpentMode
-                ? spendEntries.length > 0
-                  ? resolvedAmount
-                  : undefined
-                : entryMode === 'new_balance'
-                  ? undefined
-                  : resolvedAmount
+              givenSpentMode && spendEntries.length > 0
+                ? resolvedAmount
+                : undefined
             }
             spendLines={spendLines}
             onSpendLinesChange={onSpendLinesChange}

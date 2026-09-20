@@ -128,6 +128,8 @@ gh issue edit 108 --add-label validation
 | `283-update-readonly-spends.png` | Update · saved given/received lines read-only with pencil (RU, #283) |
 | `283-update-after-line-save.png` | Update · line locked again after per-line Save (RU, #283) |
 | `283-asset-detail-readonly-spends.png` | Asset details · same read-only lines on Обновить этот актив (RU, #283) |
+| `292-update-absolute-remaining.png` | Update · Остаток is absolute; no Новый остаток / ± row (RU, #292) |
+| `292-asset-detail-absolute-remaining.png` | Asset details · same absolute remaining field (RU, #292) |
 | `289-update-spend-edit-row.png` | Update · purpose + amount on one given/received edit row (RU, #289) |
 | `289-update-spend-view-row.png` | Update · purpose + amount on one read-only row (RU, #289) |
 | `289-asset-detail-spend-row.png` | Asset details · same single-row spend line (RU, #289) |

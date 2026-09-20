@@ -178,9 +178,6 @@ export interface Dictionary {
     headlineGivenSpent: string
     flowGiven: string
     flowReceived: string
-    entryNewBalance: string
-    entryAdded: string
-    entryRemoved: string
     resultingRemaining: (amount: string) => string
     addSpendLine: string
     removeSpendLine: (index: number) => string

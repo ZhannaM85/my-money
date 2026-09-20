@@ -1,8 +1,6 @@
 import { useMemo, useState } from 'react'
 import {
-  applyBalanceEntry,
   snapshotsFromSpendLines,
-  type BalanceEntryMode,
   type BalanceHeadline,
   updateBaselineAmount,
 } from '@/domain/asset'
@@ -68,7 +66,6 @@ export function AssetDetailsUpdateForm({
   const [amountError, setAmountError] = useState<string | undefined>()
   const [amountDate, setAmountDate] = useState(today)
   const [amountNote, setAmountNote] = useState('')
-  const [entryMode, setEntryMode] = useState<BalanceEntryMode>('new_balance')
   const [spendLineEdits, setSpendLineEdits] = useState<
     Record<string, SpendLineDraft[]>
   >({})
@@ -102,9 +99,7 @@ export function AssetDetailsUpdateForm({
   const parsedDraft = parseAmount(amountDraft)
   const resolvedAmount = givenSpentMode
     ? spendEntries.at(-1)?.remaining
-    : parsedDraft === undefined
-      ? undefined
-      : applyBalanceEntry(entryMode, parsedDraft, baseline)
+    : parsedDraft
   const spendIds = new Set(
     savedSpends.filter((entry) => entry.drop > 0).map((entry) => entry.id),
   )
@@ -131,7 +126,6 @@ export function AssetDetailsUpdateForm({
     setAmountDraft('')
     setAmountDate(today)
     setAmountNote('')
-    setEntryMode('new_balance')
   }
 
   async function persistResult(
@@ -171,7 +165,7 @@ export function AssetDetailsUpdateForm({
         currency,
         draft: amountDraft,
         note: amountNote,
-        entryMode,
+        entryMode: 'new_balance',
         onDate,
         previous,
         requireAmount,
@@ -268,12 +262,10 @@ export function AssetDetailsUpdateForm({
           currency={currency}
           headline={headline}
           onHeadlineChange={onHeadlineChange}
-          entryMode={entryMode}
-          onEntryModeChange={setEntryMode}
           draft={amountDraft}
           onDraftChange={setAmountDraft}
           placeholder={
-            entryMode === 'new_balance' && placeholderSource
+            placeholderSource
               ? formatEditableAmount(
                   placeholderSource.amount,
                   locale,
@@ -282,13 +274,9 @@ export function AssetDetailsUpdateForm({
               : t.asset.amountPlaceholder
           }
           resultingRemaining={
-            givenSpentMode
-              ? spendEntries.length > 0
-                ? resolvedAmount
-                : undefined
-              : entryMode === 'new_balance'
-                ? undefined
-                : resolvedAmount
+            givenSpentMode && spendEntries.length > 0
+              ? resolvedAmount
+              : undefined
           }
           spendLines={spendLines}
           onSpendLinesChange={(lines) => {

@@ -1,4 +1,4 @@
-import type { BalanceEntryMode, BalanceHeadline } from '@/domain/asset'
+import type { BalanceHeadline } from '@/domain/asset'
 import type { Locale } from '@/domain/settings'
 import { useTranslation } from '@/i18n'
 import { formatAmount } from '@/shared/lib/money'
@@ -43,8 +43,6 @@ export function AssetBalanceUpdateControls({
   currency,
   headline,
   onHeadlineChange,
-  entryMode,
-  onEntryModeChange,
   draft,
   onDraftChange,
   placeholder,
@@ -64,8 +62,6 @@ export function AssetBalanceUpdateControls({
   currency: string
   headline: BalanceHeadline
   onHeadlineChange: (headline: BalanceHeadline) => void
-  entryMode: BalanceEntryMode
-  onEntryModeChange: (mode: BalanceEntryMode) => void
   draft: string
   onDraftChange: (value: string) => void
   placeholder?: string
@@ -81,13 +77,6 @@ export function AssetBalanceUpdateControls({
   onSaveSpendLine?: (index: number) => void
 }) {
   const t = useTranslation()
-
-  function setMode(mode: BalanceEntryMode) {
-    if (mode === entryMode) return
-    onDraftChange('')
-    onEntryModeChange(mode)
-  }
-
   const givenSpentLines =
     headline === 'given_spent' && spendLines && onSpendLinesChange
 
@@ -126,71 +115,32 @@ export function AssetBalanceUpdateControls({
             </p>
           ) : null}
         </>
+      ) : onSaveAmount && saveAmountLabel ? (
+        <div className="flex gap-2">
+          <MoneyInput
+            aria-label={amountAriaLabel}
+            locale={locale}
+            currency={currency}
+            value={draft}
+            onValueChange={onDraftChange}
+            placeholder={placeholder}
+          />
+          <FieldSaveButton
+            label={saveAmountLabel}
+            testId={saveAmountTestId ?? 'save-remaining-amount'}
+            disabled={amountSaveDisabled}
+            onClick={onSaveAmount}
+          />
+        </div>
       ) : (
-        <>
-          <div
-            className="flex flex-wrap gap-2"
-            data-testid="balance-entry-toggles"
-          >
-            <Chip
-              pressed={entryMode === 'new_balance'}
-              onClick={() => setMode('new_balance')}
-            >
-              {t.asset.entryNewBalance}
-            </Chip>
-            <Chip
-              pressed={entryMode === 'add'}
-              aria-label={t.asset.entryAdded}
-              onClick={() => setMode('add')}
-            >
-              +
-            </Chip>
-            <Chip
-              pressed={entryMode === 'remove'}
-              aria-label={t.asset.entryRemoved}
-              onClick={() => setMode('remove')}
-            >
-              −
-            </Chip>
-          </div>
-          {onSaveAmount && saveAmountLabel ? (
-            <div className="flex gap-2">
-              <MoneyInput
-                aria-label={amountAriaLabel}
-                locale={locale}
-                currency={currency}
-                value={draft}
-                onValueChange={onDraftChange}
-                placeholder={placeholder}
-              />
-              <FieldSaveButton
-                label={saveAmountLabel}
-                testId={saveAmountTestId ?? 'save-remaining-amount'}
-                disabled={amountSaveDisabled}
-                onClick={onSaveAmount}
-              />
-            </div>
-          ) : (
-            <MoneyInput
-              aria-label={amountAriaLabel}
-              locale={locale}
-              currency={currency}
-              value={draft}
-              onValueChange={onDraftChange}
-              placeholder={placeholder}
-            />
-          )}
-          {entryMode !== 'new_balance' && resultingRemaining !== undefined ? (
-            <p
-              className="text-xs text-muted-foreground"
-              data-testid="resulting-remaining"
-            >
-              {t.asset.resultingRemaining(
-                formatAmount(resultingRemaining, currency, locale),
-              )}
-            </p>
-          ) : null}
-        </>
+        <MoneyInput
+          aria-label={amountAriaLabel}
+          locale={locale}
+          currency={currency}
+          value={draft}
+          onValueChange={onDraftChange}
+          placeholder={placeholder}
+        />
       )}
     </div>
   )
