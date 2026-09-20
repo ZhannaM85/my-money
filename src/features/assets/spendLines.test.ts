@@ -88,6 +88,31 @@ describe('spendLineIsEditing (#283)', () => {
 })
 
 describe('saved spend line drafts (#280)', () => {
+  it('does not turn a remaining-only same-day drop into a spend amount (#291)', () => {
+    expect(
+      spendLineDraftsFromEntries(
+        [
+          {
+            id: 's-remaining',
+            remaining: 20000,
+            drop: 5000,
+            direction: 'given',
+            currency: 'RUB',
+          },
+        ],
+        'en',
+        'mir',
+      ),
+    ).toEqual([
+      {
+        key: 'mir-spend-0',
+        amount: '',
+        note: '',
+        direction: 'given',
+      },
+    ])
+  })
+
   it('loads drop amounts and notes into editable drafts', () => {
     expect(spendLineDraftsFromEntries(saved, 'en', 'usd-cash')).toEqual([
       {
@@ -105,6 +130,25 @@ describe('saved spend line drafts (#280)', () => {
         direction: 'given',
       },
     ])
+  })
+
+  it('uses on-date remaining as baseline when the same-day row has no flow (#291)', () => {
+    expect(
+      spendBaselineAmount(
+        [
+          {
+            id: 's-remaining',
+            remaining: 20000,
+            drop: 5000,
+            direction: 'given',
+            currency: 'RUB',
+          },
+        ],
+        { amount: 20000, currency: 'RUB' },
+        { amount: 25000, currency: 'RUB' },
+        'RUB',
+      ),
+    ).toBe(20000)
   })
 
   it('uses the remaining just before the first spend as the baseline', () => {

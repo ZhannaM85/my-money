@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 260,
+    issue: 291,
+    date: '2026-09-20T23:00:00+03:00',
+    en: 'Switching a holding to Given / received no longer copies the remaining balance into Amount. That field starts empty.',
+    ru: 'Переключение актива на «Отдано / получено» больше не копирует остаток в «Сумма». Поле начинается пустым.',
+  },
+  {
     version: 259,
     issue: 289,
     date: '2026-09-20T22:55:00+03:00',

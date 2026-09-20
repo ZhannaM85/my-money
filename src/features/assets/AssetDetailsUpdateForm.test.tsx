@@ -154,6 +154,25 @@ describe('AssetDetailsUpdateForm', () => {
     expect(screen.getByText(formatAmount(0, 'EUR', 'en'))).toBeInTheDocument()
   })
 
+  it('does not prefill given/received amount with remaining (#291)', async () => {
+    const user = userEvent.setup()
+    await useAssetStore.getState().saveSnapshots([
+      {
+        assetId: 'a1',
+        date: todayIsoDate(),
+        amount: 800,
+        currency: 'EUR',
+      },
+    ])
+    renderAssetDetails()
+    await screen.findByRole('heading', { name: 'Revolut' })
+    await user.click(screen.getByRole('button', { name: 'Given / received' }))
+    const amount = await screen.findByLabelText('Entry 1')
+    expect(amount).toHaveValue('')
+    expect(amount).not.toHaveValue('800.00')
+    expect(amount).not.toHaveValue('1,000.00')
+  })
+
   it('saves multiple spend lines as separate same-day snapshots (#279)', async () => {
     const user = userEvent.setup()
     await useAssetStore.getState().setBalanceHeadline('a1', 'given_spent')
