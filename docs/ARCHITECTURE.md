@@ -168,6 +168,7 @@ Pure, unit-tested domain functions (no storage, no React, no network):
 - `periodChange(history, from, to)` — absolute + percent
 - `assetPerformance(snapshots, rates, baseCurrency)` — native vs base, optional FX vs value split
 - `cumulativeGivenSpent(snapshots, assetId)` / `applyBalanceEntry(mode, parsed, baseline)` — remaining vs given/spent headline and ± update entry (#276)
+- `snapshotsFromSpendLines(baseline, lines)` / `sameDaySpendEntries` — given/spent multi-line spends on one date (#279); each line appends a remaining snapshot
 - `historicalNetWorth(assets, snapshots, rates, dates)` — uses **that date's** FX, not today's; if that day has no quote, carries forward the last earlier rate so the holding is not dropped. Each point includes the holding-by-holding breakdown for tooltips and History.
 
 ---

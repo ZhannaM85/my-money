@@ -122,21 +122,25 @@ export function useAssetDetailsScreen() {
           }
         : null
 
-  async function saveUpdate(input: {
-    date: string
-    amount: number
-    note?: string
-  }) {
-    if (!asset) return
-    await saveSnapshots([
-      {
+  async function saveUpdate(
+    inputs: readonly {
+      date: string
+      amount: number
+      note?: string
+      createdAt?: string
+    }[],
+  ) {
+    if (!asset || inputs.length === 0) return
+    await saveSnapshots(
+      inputs.map((input) => ({
         assetId: asset.id,
         date: input.date,
         amount: input.amount,
         currency: asset.currency,
+        ...(input.createdAt ? { createdAt: input.createdAt } : {}),
         ...(input.note ? { note: input.note } : {}),
-      },
-    ])
+      })),
+    )
   }
 
   async function saveDetails({

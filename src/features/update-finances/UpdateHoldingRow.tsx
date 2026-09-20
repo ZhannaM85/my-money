@@ -4,12 +4,13 @@ import {
   assetBalanceHeadline,
   cumulativeGivenSpent,
   headlineNativeAmount,
+  snapshotsFromSpendLines,
   type Asset,
   type BalanceEntryMode,
   type BalanceHeadline,
   updateBaselineAmount,
 } from '@/domain/asset'
-import type { AssetSnapshot } from '@/domain/snapshot'
+import { sameDaySpendEntries, type AssetSnapshot } from '@/domain/snapshot'
 import { ComparisonDelta } from '@/features/dashboard/ComparisonDelta'
 import { formatLastUpdated, useLocale, useTranslation } from '@/i18n'
 import {
@@ -25,6 +26,10 @@ import {
   AssetBalanceUpdateControls,
   BalanceHeadlineToggles,
 } from '@/features/assets/AssetBalanceUpdateControls'
+import {
+  parseSpendLineDrafts,
+  type SpendLineDraft,
+} from '@/features/assets/spendLines'
 
 export function UpdateHoldingRow({
   asset,
@@ -38,11 +43,13 @@ export function UpdateHoldingRow({
   draft,
   noteValue,
   entryMode,
+  spendLines,
   snapshots,
   onDraftChange,
   onNoteChange,
   onEntryModeChange,
   onHeadlineChange,
+  onSpendLinesChange,
   onStartEdit,
 }: {
   asset: Asset
@@ -56,11 +63,13 @@ export function UpdateHoldingRow({
   draft: string
   noteValue: string
   entryMode: BalanceEntryMode
+  spendLines: readonly SpendLineDraft[]
   snapshots: readonly AssetSnapshot[]
   onDraftChange: (value: string) => void
   onNoteChange: (value: string) => void
   onEntryModeChange: (mode: BalanceEntryMode) => void
   onHeadlineChange: (headline: BalanceHeadline) => void
+  onSpendLinesChange: (lines: SpendLineDraft[]) => void
   onStartEdit: () => void
 }) {
   const t = useTranslation()
@@ -69,14 +78,26 @@ export function UpdateHoldingRow({
   const givenSpent = cumulativeGivenSpent(snapshots, asset.id)
   const displayed = headlineNativeAmount(headline, latest?.amount, givenSpent)
   const baseline = updateBaselineAmount(onDate, previous, asset.currency)
+  const givenSpentMode = headline === 'given_spent'
+  const spendEntries = givenSpentMode
+    ? snapshotsFromSpendLines(baseline, parseSpendLineDrafts(spendLines))
+    : []
   const parsedDraft =
-    !locked && draft.trim() !== '' ? parseAmount(draft) : undefined
-  const resolvedAmount =
-    parsedDraft === undefined
+    !locked && !givenSpentMode && draft.trim() !== ''
+      ? parseAmount(draft)
+      : undefined
+  const resolvedAmount = givenSpentMode
+    ? spendEntries.at(-1)?.remaining
+    : parsedDraft === undefined
       ? undefined
       : applyBalanceEntry(entryMode, parsedDraft, baseline)
+  const remainingLocked = locked && !givenSpentMode
+  const savedSpends =
+    givenSpentMode && onDate
+      ? sameDaySpendEntries(snapshots, asset.id, onDate.date)
+      : []
   const editDelta =
-    !locked &&
+    !remainingLocked &&
     previous &&
     previous.currency === asset.currency &&
     resolvedAmount !== undefined &&
@@ -137,7 +158,7 @@ export function UpdateHoldingRow({
   return (
     <li className="flex flex-col gap-2 rounded-xl bg-card px-4 py-3 ring-1 ring-foreground/10">
       {meta}
-      {locked && onDate ? (
+      {remainingLocked && onDate ? (
         <>
           <BalanceHeadlineToggles
             headline={headline}
@@ -168,13 +189,36 @@ export function UpdateHoldingRow({
         </>
       ) : (
         <>
-          <Input
-            data-testid={`update-note-${asset.id}`}
-            aria-label={t.update.noteAria(asset.name)}
-            placeholder={t.asset.snapshotNote}
-            value={noteValue}
-            onChange={(event) => onNoteChange(event.target.value)}
-          />
+          {savedSpends.length > 0 ? (
+            <ul
+              data-testid={`saved-spends-${asset.id}`}
+              className="flex flex-col gap-1"
+            >
+              {savedSpends.map((entry, index) => (
+                <li
+                  key={`${asset.id}-saved-${index}`}
+                  className="flex items-start justify-between gap-2 text-sm text-muted-foreground"
+                >
+                  <span>{entry.note}</span>
+                  {entry.drop !== 0 ? (
+                    <ComparisonDelta
+                      delta={-entry.drop}
+                      currency={entry.currency}
+                    />
+                  ) : null}
+                </li>
+              ))}
+            </ul>
+          ) : null}
+          {!givenSpentMode ? (
+            <Input
+              data-testid={`update-note-${asset.id}`}
+              aria-label={t.update.noteAria(asset.name)}
+              placeholder={t.asset.snapshotNote}
+              value={noteValue}
+              onChange={(event) => onNoteChange(event.target.value)}
+            />
+          ) : null}
           <AssetBalanceUpdateControls
             amountAriaLabel={t.update.newAmountAria(asset.name)}
             locale={locale}
@@ -195,12 +239,24 @@ export function UpdateHoldingRow({
                 : t.asset.amountPlaceholder
             }
             resultingRemaining={
-              entryMode === 'new_balance' ? undefined : resolvedAmount
+              givenSpentMode
+                ? spendEntries.length > 0
+                  ? resolvedAmount
+                  : undefined
+                : entryMode === 'new_balance'
+                  ? undefined
+                  : resolvedAmount
             }
+            spendLines={spendLines}
+            onSpendLinesChange={onSpendLinesChange}
+            spendAmountAria={(index) =>
+              t.update.spendAmountAria(asset.name, index)
+            }
+            spendNoteAria={(index) => t.update.spendNoteAria(asset.name, index)}
           />
         </>
       )}
-      {!locked && previous && !onDate ? (
+      {!remainingLocked && previous && !onDate && !givenSpentMode ? (
         <p
           className="text-xs text-muted-foreground"
           data-testid={`suggested-from-date-${asset.id}`}

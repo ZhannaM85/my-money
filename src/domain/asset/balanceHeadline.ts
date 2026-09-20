@@ -68,3 +68,20 @@ export function applyBalanceEntry(
   const magnitude = Math.abs(parsed)
   return mode === 'add' ? baseline + magnitude : baseline - magnitude
 }
+
+export type SpendLine = {
+  amount: number
+  note?: string
+}
+
+/** One remaining snapshot per spend, each decreasing the previous remaining (#279). */
+export function snapshotsFromSpendLines(
+  baseline: number,
+  lines: readonly SpendLine[],
+): { remaining: number; note?: string }[] {
+  let remaining = baseline
+  return lines.map((line) => {
+    remaining = applyBalanceEntry('remove', line.amount, remaining)
+    return line.note ? { remaining, note: line.note } : { remaining }
+  })
+}

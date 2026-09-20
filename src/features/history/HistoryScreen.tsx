@@ -147,6 +147,7 @@ export function HistoryScreen() {
                         formatCalendarDate(day.date, locale),
                       )}
                       onToggle={() => h.toggleOpenDate(day.date)}
+                      snapshots={h.snapshots}
                     />
                   </ul>
                 )
@@ -167,6 +168,7 @@ export function HistoryScreen() {
                     )}
                     onToggle={() => h.toggleOpenDate(row.date)}
                     testId={`history-day-row-${row.date}`}
+                    snapshots={h.snapshots}
                   />
                 )
               })}

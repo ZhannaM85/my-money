@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import {
   applyBalanceEntry,
+  snapshotsFromSpendLines,
   type BalanceEntryMode,
   type BalanceHeadline,
   updateBaselineAmount,
@@ -20,6 +21,12 @@ import { DateField } from '@/shared/ui/date-field'
 import { InfoHint } from '@/shared/ui/info-hint'
 import { TextField } from '@/shared/ui/text-field'
 import { AssetBalanceUpdateControls } from './AssetBalanceUpdateControls'
+import {
+  emptySpendLine,
+  parseSpendLineDrafts,
+  stampSpendLineTimes,
+  type SpendLineDraft,
+} from './spendLines'
 
 export function AssetDetailsUpdateForm({
   assetId,
@@ -36,11 +43,14 @@ export function AssetDetailsUpdateForm({
   today: string
   headline: BalanceHeadline
   onHeadlineChange: (headline: BalanceHeadline) => void
-  onSave: (input: {
-    date: string
-    amount: number
-    note?: string
-  }) => Promise<void>
+  onSave: (
+    inputs: readonly {
+      date: string
+      amount: number
+      note?: string
+      createdAt?: string
+    }[],
+  ) => Promise<void>
 }) {
   const t = useTranslation()
   const locale = useLocale()
@@ -49,39 +59,76 @@ export function AssetDetailsUpdateForm({
   const [amountDate, setAmountDate] = useState(today)
   const [amountNote, setAmountNote] = useState('')
   const [entryMode, setEntryMode] = useState<BalanceEntryMode>('new_balance')
+  const [spendLines, setSpendLines] = useState<SpendLineDraft[]>(() => [
+    emptySpendLine(`${assetId}-spend-0`),
+  ])
 
   const onDate = snapshotOnDate(snapshots, assetId, amountDate)
   const previous = snapshotBeforeDate(snapshots, assetId, amountDate)
   const baseline = updateBaselineAmount(onDate, previous, currency)
+  const givenSpentMode = headline === 'given_spent'
+  const spendEntries = givenSpentMode
+    ? snapshotsFromSpendLines(baseline, parseSpendLineDrafts(spendLines))
+    : []
   const parsedDraft = parseAmount(amountDraft)
-  const resolvedAmount =
-    parsedDraft === undefined
+  const resolvedAmount = givenSpentMode
+    ? spendEntries.at(-1)?.remaining
+    : parsedDraft === undefined
       ? undefined
       : applyBalanceEntry(entryMode, parsedDraft, baseline)
-  const duplicateAmountHint =
-    resolvedAmount !== undefined &&
-    hasDuplicateSnapshot(snapshots, {
-      assetId,
-      date: amountDate,
-      amount: resolvedAmount,
-      currency,
-    })
+  const duplicateAmountHint = givenSpentMode
+    ? spendEntries.some((entry) =>
+        hasDuplicateSnapshot(snapshots, {
+          assetId,
+          date: amountDate,
+          amount: entry.remaining,
+          currency,
+        }),
+      )
+    : resolvedAmount !== undefined &&
+      hasDuplicateSnapshot(snapshots, {
+        assetId,
+        date: amountDate,
+        amount: resolvedAmount,
+        currency,
+      })
   const placeholderSource = onDate ?? previous
 
   async function saveAmount() {
+    if (!isIsoDateOnOrBefore(amountDate, today)) {
+      setAmountError(t.asset.snapshotDateInvalid)
+      return
+    }
+    if (givenSpentMode) {
+      if (spendEntries.length === 0) {
+        setAmountError(t.asset.enterCurrentAmount)
+        return
+      }
+      setAmountError(undefined)
+      const stamps = stampSpendLineTimes(spendEntries.length)
+      await onSave(
+        spendEntries.map((entry, index) => ({
+          date: amountDate,
+          amount: entry.remaining,
+          createdAt: stamps[index],
+          ...(entry.note ? { note: entry.note } : {}),
+        })),
+      )
+      setSpendLines([emptySpendLine(`${assetId}-spend-0`)])
+      setAmountDate(today)
+      return
+    }
     const parsed = parseAmount(amountDraft)
     if (parsed === undefined) {
       setAmountError(t.asset.enterCurrentAmount)
       return
     }
-    if (!isIsoDateOnOrBefore(amountDate, today)) {
-      setAmountError(t.asset.snapshotDateInvalid)
-      return
-    }
     setAmountError(undefined)
     const amount = applyBalanceEntry(entryMode, parsed, baseline)
     const note = optionalSnapshotNote(amountNote)
-    await onSave({ date: amountDate, amount, ...(note ? { note } : {}) })
+    await onSave([
+      { date: amountDate, amount, ...(note ? { note } : {}) },
+    ])
     setAmountDraft('')
     setAmountDate(today)
     setAmountNote('')
@@ -105,11 +152,13 @@ export function AssetDetailsUpdateForm({
           amountError === t.asset.snapshotDateInvalid ? amountError : undefined
         }
       />
-      <TextField
-        label={t.asset.snapshotNote}
-        value={amountNote}
-        onChange={(event) => setAmountNote(event.target.value)}
-      />
+      {!givenSpentMode ? (
+        <TextField
+          label={t.asset.snapshotNote}
+          value={amountNote}
+          onChange={(event) => setAmountNote(event.target.value)}
+        />
+      ) : null}
       <div className="flex min-w-0 flex-col gap-2">
         <AssetBalanceUpdateControls
           amountAriaLabel={t.asset.newAmount}
@@ -131,8 +180,16 @@ export function AssetDetailsUpdateForm({
               : t.asset.amountPlaceholder
           }
           resultingRemaining={
-            entryMode === 'new_balance' ? undefined : resolvedAmount
+            givenSpentMode
+              ? spendEntries.length > 0
+                ? resolvedAmount
+                : undefined
+              : entryMode === 'new_balance'
+                ? undefined
+                : resolvedAmount
           }
+          spendLines={spendLines}
+          onSpendLinesChange={setSpendLines}
         />
         <Button
           type="button"

@@ -271,6 +271,41 @@ describe('HistoryScreen', () => {
     expect(await screen.findByText('Revolut')).toBeInTheDocument()
   })
 
+  it('lists each same-day spend under the holdings row (#279)', async () => {
+    await useAssetStore.getState().saveSnapshots([
+      {
+        assetId: 'a1',
+        date: '2026-08-17',
+        amount: 700,
+        currency: 'EUR',
+        createdAt: '2026-08-17T10:00:00.000Z',
+        note: 'Gift',
+      },
+      {
+        assetId: 'a1',
+        date: '2026-08-17',
+        amount: 500,
+        currency: 'EUR',
+        createdAt: '2026-08-17T11:00:00.000Z',
+        note: 'Travel',
+      },
+    ])
+    render(
+      <MemoryRouter>
+        <HistoryScreen />
+      </MemoryRouter>,
+    )
+    await userEvent.click(await screen.findByRole('button', { name: 'All' }))
+    await userEvent.click(
+      await screen.findByRole('button', { name: holdingsOn('2026-08-17') }),
+    )
+    expect(await screen.findByText('Gift')).toBeInTheDocument()
+    expect(screen.getByText('Travel')).toBeInTheDocument()
+    expect(screen.getByTestId('same-day-spend-a1-1')).toHaveTextContent(
+      'Travel',
+    )
+  })
+
   it('shows a snapshot note on the expanded holdings list (#97)', async () => {
     const existing = useAssetStore
       .getState()

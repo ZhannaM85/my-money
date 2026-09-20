@@ -26,8 +26,10 @@ export {
   cumulativeGivenSpent,
   headlineNativeAmount,
   snapshotsChronological,
+  snapshotsFromSpendLines,
   updateBaselineAmount,
 } from './balanceHeadline'
+export type { SpendLine } from './balanceHeadline'
 export {
   daysBetweenIso,
   isSuggestedUpdate,

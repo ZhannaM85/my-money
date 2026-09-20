@@ -153,4 +153,35 @@ describe('AssetDetailsUpdateForm', () => {
     })
     expect(screen.getByText(formatAmount(250, 'EUR', 'en'))).toBeInTheDocument()
   })
+
+  it('saves multiple spend lines as separate same-day snapshots (#279)', async () => {
+    const user = userEvent.setup()
+    await useAssetStore.getState().setBalanceHeadline('a1', 'given_spent')
+    renderAssetDetails()
+    await screen.findByRole('heading', { name: 'Revolut' })
+    await user.type(screen.getByLabelText('Spending 1'), '250')
+    await user.type(screen.getByLabelText('Spending 1 note'), 'Gift')
+    await user.click(screen.getByRole('button', { name: 'Add spending' }))
+    await user.type(screen.getByLabelText('Spending 2'), '150')
+    await user.type(screen.getByLabelText('Spending 2 note'), 'Travel')
+    await user.click(screen.getByRole('button', { name: /^Save$/ }))
+    await waitFor(() => {
+      expect(
+        useAssetStore
+          .getState()
+          .snapshots.filter(
+            (row) =>
+              row.assetId === 'a1' && row.date === todayIsoDate(),
+          )
+          .slice()
+          .sort((a, b) => a.createdAt.localeCompare(b.createdAt))
+          .map((row) => ({ amount: row.amount, note: row.note })),
+      ).toEqual([
+        { amount: 750, note: 'Gift' },
+        { amount: 600, note: 'Travel' },
+      ])
+    })
+    expect(await screen.findByText('Gift')).toBeInTheDocument()
+    expect(screen.getByText('Travel')).toBeInTheDocument()
+  })
 })

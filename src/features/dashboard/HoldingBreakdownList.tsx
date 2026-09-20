@@ -1,4 +1,6 @@
 import type { HoldingConversion } from '@/domain/netWorth'
+import { sameDaySpendEntries, type AssetSnapshot } from '@/domain/snapshot'
+import { ComparisonDelta } from '@/features/dashboard/ComparisonDelta'
 import { ConversionUnavailableButton } from '@/features/dashboard/ConversionUnavailableButton'
 import { useLocale, useTranslation } from '@/i18n'
 import { formatAmount } from '@/shared/lib/money'
@@ -10,18 +12,26 @@ export function HoldingBreakdownList({
   compact = false,
   nativeOnly = false,
   asOfDate,
+  snapshots,
 }: {
   holdings: readonly HoldingConversion[]
   baseCurrency: string
   compact?: boolean
   nativeOnly?: boolean
   asOfDate?: string
+  snapshots?: readonly AssetSnapshot[]
 }) {
   const t = useTranslation()
   const locale = useLocale()
   return (
     <ul className={cn('flex flex-col', compact ? 'gap-1' : 'gap-2')}>
-      {holdings.map((row) => (
+      {holdings.map((row) => {
+        const spendEntries =
+          !compact && snapshots && asOfDate
+            ? sameDaySpendEntries(snapshots, row.assetId, asOfDate)
+            : []
+        const showSpendEntries = spendEntries.length > 1
+        return (
         <li
           key={row.assetId}
           className={
@@ -97,13 +107,34 @@ export function HoldingBreakdownList({
               )}
             </span>
           </span>
-          {!compact && row.note ? (
-            <span className="text-xs text-muted-foreground whitespace-normal">
-              {row.note}
-            </span>
-          ) : null}
+          {showSpendEntries
+            ? spendEntries.map((entry, index) =>
+                entry.note || entry.drop !== 0 ? (
+                  <span
+                    key={`${row.assetId}-spend-${index}`}
+                    className="flex items-start justify-between gap-2"
+                    data-testid={`same-day-spend-${row.assetId}-${index}`}
+                  >
+                    <span className="text-xs text-muted-foreground whitespace-normal">
+                      {entry.note}
+                    </span>
+                    {entry.drop !== 0 ? (
+                      <ComparisonDelta
+                        delta={-entry.drop}
+                        currency={entry.currency}
+                      />
+                    ) : null}
+                  </span>
+                ) : null,
+              )
+            : !compact && row.note ? (
+                <span className="text-xs text-muted-foreground whitespace-normal">
+                  {row.note}
+                </span>
+              ) : null}
         </li>
-      ))}
+        )
+      })}
     </ul>
   )
 }

@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 252,
+    issue: 279,
+    date: '2026-09-20T16:30:00+03:00',
+    en: 'In Given / spent you can add several spendings on the same day, each with an amount and an optional comment. The sum lowers the remaining balance, and History and asset details list each spending.',
+    ru: 'В «Отдано / потрачено» можно добавить несколько трат за один день — у каждой сумма и необязательный комментарий. Сумма уменьшает остаток, а История и карточка актива показывают каждую трату.',
+  },
+  {
     version: 251,
     issue: 277,
     date: '2026-09-20T11:45:00+03:00',

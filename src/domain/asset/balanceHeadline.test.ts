@@ -6,6 +6,7 @@ import {
   cumulativeGivenSpent,
   headlineNativeAmount,
   snapshotsChronological,
+  snapshotsFromSpendLines,
   updateBaselineAmount,
 } from './balanceHeadline'
 
@@ -84,6 +85,20 @@ describe('cumulativeGivenSpent (#276)', () => {
         'a1',
       ).map((row) => row.id),
     ).toEqual(['s1', 's2'])
+  })
+})
+
+describe('snapshotsFromSpendLines (#279)', () => {
+  it('writes one remaining per line so the sum is the net decrease', () => {
+    expect(
+      snapshotsFromSpendLines(8000, [
+        { amount: 1000, note: 'Gift' },
+        { amount: 2000, note: 'Travel' },
+      ]),
+    ).toEqual([
+      { remaining: 7000, note: 'Gift' },
+      { remaining: 5000, note: 'Travel' },
+    ])
   })
 })
 

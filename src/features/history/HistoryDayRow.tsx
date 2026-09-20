@@ -1,4 +1,5 @@
 import { ChevronDown } from 'lucide-react'
+import type { AssetSnapshot } from '@/domain/snapshot'
 import { HoldingBreakdownList } from '@/features/dashboard/HoldingBreakdownList'
 import { useLocale } from '@/i18n'
 import {
@@ -29,6 +30,7 @@ export function HistoryDayRow({
   label,
   onToggle,
   testId,
+  snapshots,
 }: {
   row: OriginalHistoryDayRow | ConvertedHistoryDayRow
   open: boolean
@@ -37,6 +39,7 @@ export function HistoryDayRow({
   label: string
   onToggle: () => void
   testId?: string
+  snapshots?: readonly AssetSnapshot[]
 }) {
   const locale = useLocale()
 
@@ -87,6 +90,7 @@ export function HistoryDayRow({
             baseCurrency={baseCurrency}
             nativeOnly={nativeOnly}
             asOfDate={row.date}
+            snapshots={snapshots}
           />
         </div>
       ) : null}

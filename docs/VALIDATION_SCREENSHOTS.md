@@ -119,6 +119,9 @@ gh issue edit 108 --add-label validation
 | `274-dashboard-asof-chart-sync.png` | Dashboard · На дату matches chart pin (RU, #274) |
 | `275-update-optional-comment.png` | Update · optional comment under USD cash amount (RU, #275) |
 | `275-history-update-comment.png` | History · comment from Update on the day’s holdings (RU, #275) |
+| `279-update-spend-lines.png` | Update · Given/spent multi-line spends (RU, #279) |
+| `279-asset-detail-spend-lines.png` | Asset details · same spend lines on Обновить этот актив (RU, #279) |
+| `279-history-same-day-spends.png` | History · same-day spends listed separately after All (RU, #279) |
 | `276-update-delta-entry.png` | Update · Remaining / Given chips + new balance / ± (RU, #276) |
 | `276-asset-detail-delta-entry.png` | Asset details · Update this asset same chips + remaining field (RU, #276) |
 | `258-history-locale-dates.png` | History · list rows use locale dates (#258) |

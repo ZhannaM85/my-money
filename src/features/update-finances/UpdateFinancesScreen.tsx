@@ -11,8 +11,10 @@ import {
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import {
   applyBalanceEntry,
+  assetBalanceHeadline,
   type BalanceEntryMode,
   isSuggestedUpdate,
+  snapshotsFromSpendLines,
   updateBaselineAmount,
 } from '@/domain/asset'
 import {
@@ -38,6 +40,12 @@ import { PageHeader } from '@/shared/ui/page-header'
 import { ReorderIconButton } from '@/shared/ui/reorder-icon-button'
 import { useAssetStore } from '@/stores/assetStore'
 import { useSettingsStore } from '@/stores/settingsStore'
+import {
+  parseSpendLineDrafts,
+  spendLinesOrDefault,
+  stampSpendLineTimes,
+  type SpendLineDraft,
+} from '@/features/assets/spendLines'
 import { UpdateHoldingRow } from './UpdateHoldingRow'
 
 function snapshotWithNote(
@@ -78,6 +86,9 @@ export function UpdateFinancesScreen() {
   const [editing, setEditing] = useState<Record<string, boolean>>({})
   const [entryModes, setEntryModes] = useState<
     Record<string, BalanceEntryMode>
+  >({})
+  const [spendLines, setSpendLines] = useState<
+    Record<string, SpendLineDraft[]>
   >({})
   const [error, setError] = useState<string | undefined>()
   const [saving, setSaving] = useState(false)
@@ -137,6 +148,7 @@ export function UpdateFinancesScreen() {
     setNotes({})
     setEditing({})
     setEntryModes({})
+    setSpendLines({})
   }
 
   function startEdit(
@@ -204,9 +216,30 @@ export function UpdateFinancesScreen() {
       amount: number
       currency: string
       note?: string
+      createdAt?: string
     }[] = []
     const toUpdate: AssetSnapshot[] = []
     for (const { asset, onDate, previous } of rows) {
+      if (assetBalanceHeadline(asset) === 'given_spent') {
+        const lines = parseSpendLineDrafts(spendLines[asset.id] ?? [])
+        if (lines.length === 0) continue
+        const entries = snapshotsFromSpendLines(
+          updateBaselineAmount(onDate, previous, asset.currency),
+          lines,
+        )
+        const stamps = stampSpendLineTimes(entries.length)
+        entries.forEach((entry, index) => {
+          toWrite.push({
+            assetId: asset.id,
+            date: asOf,
+            amount: entry.remaining,
+            currency: asset.currency,
+            createdAt: stamps[index],
+            ...(entry.note ? { note: entry.note } : {}),
+          })
+        })
+        continue
+      }
       const raw = drafts[asset.id]?.trim() ?? ''
       if (onDate && !editing[asset.id]) continue
       if (raw !== '') {
@@ -265,10 +298,13 @@ export function UpdateFinancesScreen() {
   const canSave = useMemo(
     () =>
       rows.some(({ asset, onDate }) => {
+        if (assetBalanceHeadline(asset) === 'given_spent') {
+          return parseSpendLineDrafts(spendLines[asset.id] ?? []).length > 0
+        }
         if (onDate && !editing[asset.id]) return false
         return (drafts[asset.id]?.trim() ?? '') !== ''
       }),
-    [drafts, editing, rows],
+    [drafts, editing, rows, spendLines],
   )
 
   const ready = loaded && settingsLoaded
@@ -349,6 +385,10 @@ export function UpdateFinancesScreen() {
                         draft={drafts[asset.id] ?? ''}
                         noteValue={notes[asset.id] ?? ''}
                         entryMode={entryModes[asset.id] ?? 'new_balance'}
+                        spendLines={spendLinesOrDefault(
+                          spendLines[asset.id],
+                          asset.id,
+                        )}
                         snapshots={snapshots}
                         onDraftChange={(value) => {
                           setDrafts((current) => ({
@@ -366,6 +406,12 @@ export function UpdateFinancesScreen() {
                           setEntryModes((current) => ({
                             ...current,
                             [asset.id]: mode,
+                          }))
+                        }}
+                        onSpendLinesChange={(lines) => {
+                          setSpendLines((current) => ({
+                            ...current,
+                            [asset.id]: lines,
                           }))
                         }}
                         onHeadlineChange={(headline) => {

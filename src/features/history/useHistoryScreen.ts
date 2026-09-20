@@ -197,6 +197,7 @@ export function useHistoryScreen() {
     locale,
     loaded,
     assets,
+    snapshots,
     today,
     earliest,
     isOriginal,

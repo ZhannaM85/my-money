@@ -3,7 +3,9 @@ import {
   hasDuplicateSnapshot,
   optionalSnapshotNote,
   snapshotBeforeDate,
+  sameDaySpendEntries,
   snapshotOnDate,
+  snapshotsOnDateAll,
   snapshotsOnOrBefore,
 } from './AssetSnapshot'
 import {
@@ -71,6 +73,46 @@ describe('hasDuplicateSnapshot (#115)', () => {
         excludeId: 's1',
       }),
     ).toBe(false)
+  })
+})
+
+describe('sameDaySpendEntries (#279)', () => {
+  it('lists each same-day remaining drop in createdAt order', () => {
+    const rows = [
+      {
+        id: 's0',
+        assetId: 'a1',
+        date: '2026-08-01',
+        amount: 8000,
+        currency: 'USD',
+        createdAt: '2026-08-01T00:00:00.000Z',
+      },
+      {
+        id: 's1',
+        assetId: 'a1',
+        date: '2026-08-20',
+        amount: 7000,
+        currency: 'USD',
+        createdAt: '2026-08-20T10:00:00.000Z',
+        note: 'Gift',
+      },
+      {
+        id: 's2',
+        assetId: 'a1',
+        date: '2026-08-20',
+        amount: 5000,
+        currency: 'USD',
+        createdAt: '2026-08-20T11:00:00.000Z',
+        note: 'Travel',
+      },
+    ]
+    expect(snapshotsOnDateAll(rows, 'a1', '2026-08-20').map((row) => row.id)).toEqual(
+      ['s1', 's2'],
+    )
+    expect(sameDaySpendEntries(rows, 'a1', '2026-08-20')).toEqual([
+      { remaining: 7000, drop: 1000, currency: 'USD', note: 'Gift' },
+      { remaining: 5000, drop: 2000, currency: 'USD', note: 'Travel' },
+    ])
   })
 })
 

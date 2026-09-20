@@ -61,13 +61,61 @@ export function snapshotOnDate(
   assetId: string,
   date: string,
 ): AssetSnapshot | undefined {
-  const matching = snapshots.filter(
-    (snapshot) => snapshot.assetId === assetId && snapshot.date === date,
-  )
+  const matching = snapshotsOnDateAll(snapshots, assetId, date)
   if (matching.length === 0) return undefined
   return matching.reduce((best, current) =>
     current.createdAt > best.createdAt ? current : best,
   )
+}
+
+/** Same-day rows, oldest `createdAt` first (#279). */
+export function snapshotsOnDateAll(
+  snapshots: readonly AssetSnapshot[],
+  assetId: string,
+  date: string,
+): AssetSnapshot[] {
+  return snapshots
+    .filter(
+      (snapshot) => snapshot.assetId === assetId && snapshot.date === date,
+    )
+    .slice()
+    .sort((a, b) => a.createdAt.localeCompare(b.createdAt))
+}
+
+export type SameDaySpendEntry = {
+  remaining: number
+  drop: number
+  currency: string
+  note?: string
+}
+
+/** Per-snapshot remaining change on that calendar day (#279). */
+export function sameDaySpendEntries(
+  snapshots: readonly AssetSnapshot[],
+  assetId: string,
+  date: string,
+): SameDaySpendEntry[] {
+  const rows = snapshotsOnDateAll(snapshots, assetId, date)
+  if (rows.length === 0) return []
+  const previous = snapshotBeforeDate(snapshots, assetId, date)
+  let priorAmount = previous?.amount
+  let priorCurrency = previous?.currency
+  return rows.map((row) => {
+    const drop =
+      priorAmount !== undefined && priorCurrency === row.currency
+        ? priorAmount - row.amount
+        : 0
+    priorAmount = row.amount
+    priorCurrency = row.currency
+    return row.note
+      ? {
+          remaining: row.amount,
+          drop,
+          currency: row.currency,
+          note: row.note,
+        }
+      : { remaining: row.amount, drop, currency: row.currency }
+  })
 }
 
 /** Same date + amount (+ currency) as another row on this asset (#115). */

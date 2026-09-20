@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 279,
+    title: {
+      en: 'Update given/spent: allow multiple spendings on the same day',
+      ru: 'Обновить отдано/потрачено: несколько трат в один день',
+    },
+    en: 'Given/spent on bulk Update and asset-detail only had one amount per save. A shared spend-line list (amount + optional comment) appends one remaining snapshot per line so the sum decreases the balance and History/details can show each spending.',
+    ru: 'В режиме «Отдано / потрачено» на «Обновить» и в карточке была одна сумма за сохранение. Общий список строк (сумма + необязательный комментарий) пишет по снимку остатка на строку: сумма снижает баланс, История и карточка показывают каждую трату.',
+  },
+  {
     issue: 277,
     title: {
       en: 'Summary: rephrase FX rate missing / disclaimer subheader (clearer RU)',

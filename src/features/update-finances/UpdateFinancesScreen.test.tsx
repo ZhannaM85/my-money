@@ -862,4 +862,66 @@ describe('UpdateFinancesScreen', () => {
       screen.getAllByText(formatAmount(300, 'EUR', 'en')).length,
     ).toBeGreaterThan(0)
   })
+
+  it('saves multiple same-day spend lines as separate remaining snapshots (#279)', async () => {
+    const user = userEvent.setup()
+    await useAssetStore.getState().saveAsset(
+      {
+        id: 'usd-cash',
+        name: 'USD cash',
+        assetClass: 'money',
+        type: 'cash',
+        currency: 'USD',
+        trackingStatus: 'included',
+        valuationMethod: 'account_balance',
+        updateFrequency: 'manual',
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        assetId: 'usd-cash',
+        date: '2026-08-01',
+        amount: 8000,
+        currency: 'USD',
+      },
+    )
+    await useAssetStore.getState().setBalanceHeadline('usd-cash', 'given_spent')
+    render(
+      <MemoryRouter>
+        <UpdateFinancesScreen />
+      </MemoryRouter>,
+    )
+    await screen.findByLabelText('USD cash spending 1')
+    const save = screen.getByRole('button', { name: 'Save updates' })
+    await user.type(screen.getByLabelText('USD cash spending 1 note'), 'Gift')
+    expect(save).toBeDisabled()
+    await user.type(screen.getByLabelText('USD cash spending 1'), '1000')
+    await user.click(screen.getByRole('button', { name: 'Add spending' }))
+    await user.type(screen.getByLabelText('USD cash spending 2'), '2000')
+    await user.type(screen.getByLabelText('USD cash spending 2 note'), 'Travel')
+    expect(screen.getByTestId('resulting-remaining')).toHaveTextContent(/5,000/)
+    await user.click(save)
+    await waitFor(() => {
+      expect(
+        useAssetStore
+          .getState()
+          .snapshots.filter(
+            (row) =>
+              row.assetId === 'usd-cash' && row.date === todayIsoDate(),
+          )
+          .slice()
+          .sort((a, b) => a.createdAt.localeCompare(b.createdAt))
+          .map((row) => ({ amount: row.amount, note: row.note })),
+      ).toEqual([
+        { amount: 7000, note: 'Gift' },
+        { amount: 5000, note: 'Travel' },
+      ])
+    })
+    expect(await screen.findByTestId('saved-spends-usd-cash')).toHaveTextContent(
+      'Gift',
+    )
+    expect(screen.getByTestId('saved-spends-usd-cash')).toHaveTextContent(
+      'Travel',
+    )
+  })
 })

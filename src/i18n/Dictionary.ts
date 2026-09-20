@@ -180,6 +180,10 @@ export interface Dictionary {
     entryAdded: string
     entryRemoved: string
     resultingRemaining: (amount: string) => string
+    addSpendLine: string
+    removeSpendLine: (index: number) => string
+    spendLineAmount: (index: number) => string
+    spendLineNote: (index: number) => string
   }
   update: {
     title: string
@@ -189,6 +193,8 @@ export interface Dictionary {
     enterNumberFor: (name: string) => string
     newAmountAria: (name: string) => string
     noteAria: (name: string) => string
+    spendAmountAria: (name: string, index: number) => string
+    spendNoteAria: (name: string, index: number) => string
     editAmountAria: (name: string) => string
     saveOrder: string
     suggestedFromDate: (date: string) => string
