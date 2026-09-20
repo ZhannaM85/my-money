@@ -296,6 +296,12 @@ describe('DashboardHeadline holdings', () => {
     expect(await screen.findByText('Ruble cash')).toBeInTheDocument()
     expect(screen.getByText('Conversion not available')).toBeInTheDocument()
     expect(
+      screen.getByText(
+        'No RUB rate on this date. Available rates are for reference, not for exchanging at a bank.',
+      ),
+    ).toBeInTheDocument()
+    expect(screen.queryByText(/executable quote/)).not.toBeInTheDocument()
+    expect(
       screen.getAllByText(
         (_, node) =>
           node?.children.length === 0 &&
@@ -305,6 +311,68 @@ describe('DashboardHeadline holdings', () => {
     expect(
       screen.getAllByText(formatAmount(1000, 'EUR')).length,
     ).toBeGreaterThan(0)
+  })
+
+  it('uses plain Russian when a Converted rate is missing (#277)', async () => {
+    const now = '2026-08-17T00:00:00.000Z'
+    await db.settings.put({
+      ...DEFAULT_SETTINGS,
+      locale: 'ru',
+    })
+    useSettingsStore.setState({
+      settings: { ...DEFAULT_SETTINGS, locale: 'ru' },
+      loaded: false,
+    })
+    await useAssetStore.getState().saveAsset(
+      {
+        id: 'eur',
+        name: 'Euro cash',
+        assetClass: 'money',
+        type: 'cash',
+        currency: 'EUR',
+        trackingStatus: 'included',
+        valuationMethod: 'account_balance',
+        updateFrequency: 'weekly',
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        assetId: 'eur',
+        date: '2026-08-17',
+        amount: 1000,
+        currency: 'EUR',
+      },
+    )
+    await useAssetStore.getState().saveAsset(
+      {
+        id: 'rub',
+        name: 'Ruble cash',
+        assetClass: 'money',
+        type: 'cash',
+        currency: 'RUB',
+        trackingStatus: 'included',
+        valuationMethod: 'account_balance',
+        updateFrequency: 'weekly',
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        assetId: 'rub',
+        date: '2026-08-17',
+        amount: 20000,
+        currency: 'RUB',
+      },
+    )
+
+    renderApp(<DashboardScreen />)
+
+    expect(
+      await screen.findByText(
+        'Нет курса RUB на эту дату. Имеющиеся курсы — справочные, не для обмена в банке.',
+      ),
+    ).toBeInTheDocument()
+    expect(screen.queryByText(/дату снимка/)).not.toBeInTheDocument()
+    expect(screen.queryByText(/исполняемая котировка/)).not.toBeInTheDocument()
   })
 
   it('lists each Converted holding with original and converted amounts', async () => {

@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 251,
+    issue: 277,
+    date: '2026-09-20T11:45:00+03:00',
+    en: 'When a converted rate is missing on Summary, the note under net worth is plain language — no jargon about snapshot dates or executable quotes.',
+    ru: 'Если на Сводке нет курса для пересчёта, подсказка под чистым капиталом обычным языком: нет курса на эту дату, имеющиеся курсы справочные, не для обмена в банке.',
+  },
+  {
     version: 250,
     issue: 276,
     date: '2026-09-20T11:20:00+03:00',

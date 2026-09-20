@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 277,
+    title: {
+      en: 'Summary: rephrase FX rate missing / disclaimer subheader (clearer RU)',
+      ru: 'Сводка: переформулировать подзаголовок про отсутствующий курс (проще RU)',
+    },
+    en: 'The Converted net-worth subheader mixed missing-rate and disclaimer jargon («snapshot date», «executable quote»). The UI is still one paragraph, shown only when a rate is missing (#230). Combined plain line from the issue: no rate on this date; available rates are for reference, not a bank exchange.',
+    ru: 'Подзаголовок пересчитанного чистого капитала мешал предупреждение об отсутствии курса и жаргон («дата снимка», «исполняемая котировка»). По-прежнему один абзац, только если курса нет (#230). Комбинированная формулировка с issue: нет курса на эту дату; имеющиеся курсы справочные, не для обмена в банке.',
+  },
+  {
     issue: 276,
     title: {
       en: 'Assets: toggle update by ± amount + show remaining vs given/spent',
