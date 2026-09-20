@@ -63,6 +63,7 @@ export interface Dictionary {
     emptyTitle: string
     emptyDescription: string
     fxMissing: (codes: string) => string
+    fxDisclaimer: string
     allocation: string
     nativeHoldings: string
     conversionUnavailable: string

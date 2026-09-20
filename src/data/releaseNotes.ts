@@ -13,8 +13,8 @@ export const releaseNotes: ReleaseNote[] = [
     version: 251,
     issue: 277,
     date: '2026-09-20T11:45:00+03:00',
-    en: 'When a converted rate is missing on Summary, the note under net worth is plain language — no jargon about snapshot dates or executable quotes.',
-    ru: 'Если на Сводке нет курса для пересчёта, подсказка под чистым капиталом обычным языком: нет курса на эту дату, имеющиеся курсы справочные, не для обмена в банке.',
+    en: 'On converted Summary, a missing rate says that currency is not converted to ₽. When rates exist, a short disclaimer: rates are for reference, not bank quotes. No snapshot/executable-quote jargon.',
+    ru: 'На пересчитанной Сводке без курса: «Нет курса … на эту дату — эта валюта не пересчитана в ₽.» Если курсы есть: «Курсы справочные, не банковские котировки.» Без жаргона про снимок и исполняемую котировку.',
   },
   {
     version: 250,

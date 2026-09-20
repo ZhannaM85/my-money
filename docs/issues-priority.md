@@ -100,7 +100,7 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
-| [#277](https://github.com/ZhannaM85/my-money/issues/277) | 🔍 Pending validation | Сводка: rephrase FX rate missing / disclaimer subheader (clearer RU) | Single-paragraph `fxNote`: «Нет курса USD на эту дату. Имеющиеся курсы — справочные, не для обмена в банке.» Dropped «снимок» / «исполняемая котировка». |
+| [#277](https://github.com/ZhannaM85/my-money/issues/277) | 🔍 Pending validation | Сводка: rephrase FX rate missing / disclaimer subheader (clearer RU) | Split `fxNote`: missing «Нет курса USD на эту дату — эта валюта не пересчитана в ₽.»; rates exist «Курсы справочные, не банковские котировки.» |
 | [#276](https://github.com/ZhannaM85/my-money/issues/276) | 🔍 Pending validation | Assets: toggle update by ± amount + show remaining vs given/spent | Shared entry (new remaining or ±) on bulk Update and asset-detail update. Per-asset headline remaining vs cumulative given/spent. No envelope type. |
 | [#275](https://github.com/ZhannaM85/my-money/issues/275) | 🔍 Pending validation | Update assets: allow optional comment when saving a new balance | Optional per-holding note on Обновить; stored on the snapshot; History/details already show notes (#97). Empty does not block Save. |
 | [#254](https://github.com/ZhannaM85/my-money/issues/254) | 🔍 Pending validation | Pull-to-refresh should update rates | Product pick: pull = same `refreshFxRates` / `ensureRange({ force: true })` as More Update rates. Does not reload the shell. |

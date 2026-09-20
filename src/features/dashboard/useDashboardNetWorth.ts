@@ -16,6 +16,7 @@ import { fxDebug, getFxRuntimeContext } from '@/infrastructure/fx/fxDebug'
 import type { HistoryRange } from '@/shared/lib/dates'
 import { formatPercent, formatSignedAmount } from '@/shared/lib/money'
 import { asOfHasLoggedData } from './asOfHasLoggedData'
+import { dashboardFxNote } from './dashboardFx'
 import { holdingsForSelectedChartDay } from './holdingsForSelectedChartDay'
 
 export function useDashboardNetWorth({
@@ -36,6 +37,7 @@ export function useDashboardNetWorth({
   thisMonthLabel,
   overRangeLabel,
   fxMissing,
+  fxDisclaimer,
 }: {
   assets: readonly Asset[]
   snapshots: readonly AssetSnapshot[]
@@ -54,6 +56,7 @@ export function useDashboardNetWorth({
   thisMonthLabel: string
   overRangeLabel: string
   fxMissing: (codes: string) => string
+  fxDisclaimer: string
 }) {
   const filteredAssets = useMemo(() => {
     if (activeCurrencyFilter === 'all') return assets
@@ -227,10 +230,12 @@ export function useDashboardNetWorth({
       ).map((row) => row.from),
     ),
   ]
-  const fxNote =
-    !isOriginal && missingCodes.length > 0
-      ? fxMissing(missingCodes.join(', '))
-      : undefined
+  const fxNote = dashboardFxNote({
+    isOriginal,
+    missingCodes,
+    fxMissing,
+    fxDisclaimer,
+  })
   const changeCurrency = isOriginal
     ? activeCurrencyFilter === 'all'
       ? null

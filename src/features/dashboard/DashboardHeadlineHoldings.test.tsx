@@ -81,6 +81,9 @@ describe('DashboardHeadline holdings', () => {
       screen.queryByText(/Converted with reference exchange rates/),
     ).not.toBeInTheDocument()
     expect(
+      screen.getByText('Rates are for reference, not bank quotes.'),
+    ).toBeInTheDocument()
+    expect(
       screen.queryByText(/In Converted this filter stays on the More base/),
     ).not.toBeInTheDocument()
     await userEvent.click(
@@ -166,6 +169,9 @@ describe('DashboardHeadline holdings', () => {
     expect(screen.queryByText('From amounts')).not.toBeInTheDocument()
     expect(screen.queryByTestId('allocation-chart')).not.toBeInTheDocument()
     expect(screen.queryByText('Euro cash')).not.toBeInTheDocument()
+    expect(
+      screen.queryByText('Rates are for reference, not bank quotes.'),
+    ).not.toBeInTheDocument()
     await userEvent.click(
       screen.getByRole('button', { name: 'EUR · Holdings' }),
     )
@@ -297,9 +303,12 @@ describe('DashboardHeadline holdings', () => {
     expect(screen.getByText('Conversion not available')).toBeInTheDocument()
     expect(
       screen.getByText(
-        'No RUB rate on this date. Available rates are for reference, not for exchanging at a bank.',
+        'No RUB rate on this date — this currency is not converted to ₽.',
       ),
     ).toBeInTheDocument()
+    expect(
+      screen.queryByText('Rates are for reference, not bank quotes.'),
+    ).not.toBeInTheDocument()
     expect(screen.queryByText(/executable quote/)).not.toBeInTheDocument()
     expect(
       screen.getAllByText(
@@ -368,11 +377,58 @@ describe('DashboardHeadline holdings', () => {
 
     expect(
       await screen.findByText(
-        'Нет курса RUB на эту дату. Имеющиеся курсы — справочные, не для обмена в банке.',
+        'Нет курса RUB на эту дату — эта валюта не пересчитана в ₽.',
       ),
     ).toBeInTheDocument()
+    expect(
+      screen.queryByText('Курсы справочные, не банковские котировки.'),
+    ).not.toBeInTheDocument()
     expect(screen.queryByText(/дату снимка/)).not.toBeInTheDocument()
     expect(screen.queryByText(/исполняемая котировка/)).not.toBeInTheDocument()
+  })
+
+  it('uses the short Russian disclaimer when Converted rates exist (#277)', async () => {
+    const now = '2026-08-17T00:00:00.000Z'
+    await db.settings.put({
+      ...DEFAULT_SETTINGS,
+      locale: 'ru',
+    })
+    useSettingsStore.setState({
+      settings: { ...DEFAULT_SETTINGS, locale: 'ru' },
+      loaded: false,
+    })
+    await useFxStore
+      .getState()
+      .saveManualRates([
+        { date: '2026-08-17', base: 'EUR', quote: 'USD', rate: 1.1 },
+      ])
+    await useAssetStore.getState().saveAsset(
+      {
+        id: 'usd',
+        name: 'Dollar cash',
+        assetClass: 'money',
+        type: 'cash',
+        currency: 'USD',
+        trackingStatus: 'included',
+        valuationMethod: 'account_balance',
+        updateFrequency: 'weekly',
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        assetId: 'usd',
+        date: '2026-08-17',
+        amount: 110,
+        currency: 'USD',
+      },
+    )
+
+    renderApp(<DashboardScreen />)
+
+    expect(
+      await screen.findByText('Курсы справочные, не банковские котировки.'),
+    ).toBeInTheDocument()
+    expect(screen.queryByText(/не пересчитана в/)).not.toBeInTheDocument()
   })
 
   it('lists each Converted holding with original and converted amounts', async () => {
@@ -443,5 +499,9 @@ describe('DashboardHeadline holdings', () => {
     expect(
       screen.getAllByText(formatAmount(1200, 'EUR')).length,
     ).toBeGreaterThan(0)
+    expect(
+      screen.getByText('Rates are for reference, not bank quotes.'),
+    ).toBeInTheDocument()
+    expect(screen.queryByText(/not converted to/)).not.toBeInTheDocument()
   })
 })

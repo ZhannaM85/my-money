@@ -16,8 +16,8 @@ export const issueRcas: IssueRca[] = [
       en: 'Summary: rephrase FX rate missing / disclaimer subheader (clearer RU)',
       ru: 'Сводка: переформулировать подзаголовок про отсутствующий курс (проще RU)',
     },
-    en: 'The Converted net-worth subheader mixed missing-rate and disclaimer jargon («snapshot date», «executable quote»). The UI is still one paragraph, shown only when a rate is missing (#230). Combined plain line from the issue: no rate on this date; available rates are for reference, not a bank exchange.',
-    ru: 'Подзаголовок пересчитанного чистого капитала мешал предупреждение об отсутствии курса и жаргон («дата снимка», «исполняемая котировка»). По-прежнему один абзац, только если курса нет (#230). Комбинированная формулировка с issue: нет курса на эту дату; имеющиеся курсы справочные, не для обмена в банке.',
+    en: 'The Converted net-worth subheader mixed missing-rate and disclaimer jargon («snapshot date», «executable quote»). Split into two plain lines: missing rate = that currency is not converted to ₽; when rates exist = reference, not bank quotes. Original mode still has no FX note.',
+    ru: 'Подзаголовок пересчитанного чистого капитала мешал предупреждение об отсутствии курса и жаргон («дата снимка», «исполняемая котировка»). Две простые строки: нет курса — валюта не пересчитана в ₽; если курсы есть — справочные, не банковские котировки. В оригинале по-прежнему без FX-подсказки.',
   },
   {
     issue: 276,
