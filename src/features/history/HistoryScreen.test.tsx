@@ -260,6 +260,9 @@ describe('HistoryScreen', () => {
       </MemoryRouter>,
     )
 
+    // All keeps 2026-08-17 in the list once 1M (30 days from today) no
+    // longer includes that date (#278, same class as #223).
+    await userEvent.click(await screen.findByRole('button', { name: 'All' }))
     await screen.findByRole('button', { name: holdingsOn('2026-08-17') })
     expect(screen.queryByText('Revolut')).not.toBeInTheDocument()
     await userEvent.click(
@@ -284,6 +287,7 @@ describe('HistoryScreen', () => {
       </MemoryRouter>,
     )
 
+    await userEvent.click(await screen.findByRole('button', { name: 'All' }))
     await userEvent.click(
       await screen.findByRole('button', { name: holdingsOn('2026-08-17') }),
     )
