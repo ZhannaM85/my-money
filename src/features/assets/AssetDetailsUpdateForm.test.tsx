@@ -145,13 +145,13 @@ describe('AssetDetailsUpdateForm', () => {
           .snapshots.some((row) => row.assetId === 'a1' && row.amount === 750),
       ).toBe(true)
     })
-    await user.click(screen.getByRole('button', { name: 'Given / spent' }))
+    await user.click(screen.getByRole('button', { name: 'Given / received' }))
     await waitFor(() => {
       expect(useAssetStore.getState().assets[0]?.balanceHeadline).toBe(
         'given_spent',
       )
     })
-    expect(screen.getByText(formatAmount(250, 'EUR', 'en'))).toBeInTheDocument()
+    expect(screen.getByText(formatAmount(0, 'EUR', 'en'))).toBeInTheDocument()
   })
 
   it('saves multiple spend lines as separate same-day snapshots (#279)', async () => {
@@ -159,11 +159,11 @@ describe('AssetDetailsUpdateForm', () => {
     await useAssetStore.getState().setBalanceHeadline('a1', 'given_spent')
     renderAssetDetails()
     await screen.findByRole('heading', { name: 'Revolut' })
-    await user.type(screen.getByLabelText('Spending 1'), '250')
-    await user.type(screen.getByLabelText('Spending 1 note'), 'Gift')
-    await user.click(screen.getByRole('button', { name: 'Add spending' }))
-    await user.type(screen.getByLabelText('Spending 2'), '150')
-    await user.type(screen.getByLabelText('Spending 2 note'), 'Travel')
+    await user.type(screen.getByLabelText('Entry 1'), '250')
+    await user.type(screen.getByLabelText('Entry 1 note'), 'Gift')
+    await user.click(screen.getByRole('button', { name: 'Add entry' }))
+    await user.type(screen.getByLabelText('Entry 2'), '150')
+    await user.type(screen.getByLabelText('Entry 2 note'), 'Travel')
     await user.click(screen.getByRole('button', { name: /^Save$/ }))
     await waitFor(() => {
       expect(
@@ -175,13 +175,59 @@ describe('AssetDetailsUpdateForm', () => {
           )
           .slice()
           .sort((a, b) => a.createdAt.localeCompare(b.createdAt))
-          .map((row) => ({ amount: row.amount, note: row.note })),
+          .map((row) => ({ amount: row.amount, note: row.note, flow: row.flow })),
       ).toEqual([
-        { amount: 750, note: 'Gift' },
-        { amount: 600, note: 'Travel' },
+        { amount: 750, note: 'Gift', flow: -250 },
+        { amount: 600, note: 'Travel', flow: -150 },
       ])
     })
-    expect(await screen.findByText('Gift')).toBeInTheDocument()
-    expect(screen.getByText('Travel')).toBeInTheDocument()
+    expect(await screen.findByLabelText('Entry 1 note')).toHaveValue('Gift')
+    expect(screen.getByLabelText('Entry 2 note')).toHaveValue('Travel')
+  })
+
+  it('edits a saved spend line on Update this asset (#280)', async () => {
+    const user = userEvent.setup()
+    const today = todayIsoDate()
+    await useAssetStore.getState().setBalanceHeadline('a1', 'given_spent')
+    await useAssetStore.getState().saveSnapshots([
+      {
+        id: 's-gift',
+        assetId: 'a1',
+        date: today,
+        amount: 750,
+        currency: 'EUR',
+        createdAt: `${today}T10:00:00.000Z`,
+        note: 'Gift',
+      },
+      {
+        id: 's-travel',
+        assetId: 'a1',
+        date: today,
+        amount: 600,
+        currency: 'EUR',
+        createdAt: `${today}T11:00:00.000Z`,
+        note: 'Travel',
+      },
+    ])
+    renderAssetDetails()
+    await screen.findByRole('heading', { name: 'Revolut' })
+    const amount = await screen.findByLabelText('Entry 1')
+    expect(amount).toHaveValue('250.00')
+    await user.clear(amount)
+    await user.type(amount, '200')
+    await user.click(screen.getByRole('button', { name: /^Save$/ }))
+    await waitFor(() => {
+      const rows = useAssetStore
+        .getState()
+        .snapshots.filter((row) => row.assetId === 'a1' && row.date === today)
+        .slice()
+        .sort((a, b) => a.createdAt.localeCompare(b.createdAt))
+      expect(rows.map((row) => ({ amount: row.amount, note: row.note }))).toEqual(
+        [
+          { amount: 800, note: 'Gift' },
+          { amount: 650, note: 'Travel' },
+        ],
+      )
+    })
   })
 })

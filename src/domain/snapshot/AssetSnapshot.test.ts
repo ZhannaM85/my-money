@@ -110,8 +110,22 @@ describe('sameDaySpendEntries (#279)', () => {
       ['s1', 's2'],
     )
     expect(sameDaySpendEntries(rows, 'a1', '2026-08-20')).toEqual([
-      { remaining: 7000, drop: 1000, currency: 'USD', note: 'Gift' },
-      { remaining: 5000, drop: 2000, currency: 'USD', note: 'Travel' },
+      {
+        id: 's1',
+        remaining: 7000,
+        drop: 1000,
+        direction: 'given',
+        currency: 'USD',
+        note: 'Gift',
+      },
+      {
+        id: 's2',
+        remaining: 5000,
+        drop: 2000,
+        direction: 'given',
+        currency: 'USD',
+        note: 'Travel',
+      },
     ])
   })
 })

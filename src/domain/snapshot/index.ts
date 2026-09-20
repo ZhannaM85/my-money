@@ -9,7 +9,8 @@ export {
   optionalSnapshotNote,
   hasDuplicateSnapshot,
 } from './AssetSnapshot'
-export type { SameDaySpendEntry } from './AssetSnapshot'
+export type { SameDaySpendEntry, FlowDirection } from './AssetSnapshot'
+export { flowDirection, isExplicitFlowRow } from './AssetSnapshot'
 export {
   indexSnapshotsByAssetId,
   latestIndexedSnapshotOnOrBefore,

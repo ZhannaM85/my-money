@@ -11,6 +11,24 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 282,
+    title: {
+      en: 'Rename Given/spent → Given/received; support money in',
+      ru: 'Переименовать Отдано/потрачено → Отдано/получено; учесть получение',
+    },
+    en: 'The mode is now Given / received. Each line is Given (out, lowers remaining) or Received (in, raises remaining). The headline is the net of those explicit entries only, same rule as #280.',
+    ru: 'Режим теперь «Отдано / получено». В строке: Отдано (уменьшает остаток) или Получено (увеличивает). Заголовок — нетто только этих явных записей, как в #280.',
+  },
+  {
+    issue: 280,
+    title: {
+      en: 'Given/spent headline shows wrong inflated total (not cumulative spent)',
+      ru: 'Заголовок «отдано / получено» показывает завышенную сумму',
+    },
+    en: 'The headline summed every historical remaining drop (lifetime gross drawdowns, e.g. $40875 across 42 USD-cash decreases). It now sums only explicit given/received entries stored as snapshot.flow (plus untagged #279 same-day multi-line rows). Остаток is still latest remaining. Saved same-day lines are editable.',
+    ru: 'Заголовок суммировал все снижения остатка за историю (например 40875 $ по 42 снижениям USD cash). Теперь только явные записи режима «Отдано / получено» (поле flow), плюс неразмеченные строки #279 за один день. Остаток по-прежнему последний remaining. Сохранённые строки за день можно править.',
+  },
+  {
     issue: 279,
     title: {
       en: 'Update given/spent: allow multiple spendings on the same day',

@@ -28,6 +28,7 @@ import {
 } from '@/features/assets/AssetBalanceUpdateControls'
 import {
   parseSpendLineDrafts,
+  spendBaselineAmount,
   type SpendLineDraft,
 } from '@/features/assets/spendLines'
 
@@ -79,8 +80,15 @@ export function UpdateHoldingRow({
   const displayed = headlineNativeAmount(headline, latest?.amount, givenSpent)
   const baseline = updateBaselineAmount(onDate, previous, asset.currency)
   const givenSpentMode = headline === 'given_spent'
+  const savedSpends =
+    givenSpentMode && onDate
+      ? sameDaySpendEntries(snapshots, asset.id, onDate.date)
+      : []
+  const spendBaseline = givenSpentMode
+    ? spendBaselineAmount(savedSpends, onDate, previous, asset.currency)
+    : baseline
   const spendEntries = givenSpentMode
-    ? snapshotsFromSpendLines(baseline, parseSpendLineDrafts(spendLines))
+    ? snapshotsFromSpendLines(spendBaseline, parseSpendLineDrafts(spendLines))
     : []
   const parsedDraft =
     !locked && !givenSpentMode && draft.trim() !== ''
@@ -92,10 +100,6 @@ export function UpdateHoldingRow({
       ? undefined
       : applyBalanceEntry(entryMode, parsedDraft, baseline)
   const remainingLocked = locked && !givenSpentMode
-  const savedSpends =
-    givenSpentMode && onDate
-      ? sameDaySpendEntries(snapshots, asset.id, onDate.date)
-      : []
   const editDelta =
     !remainingLocked &&
     previous &&
@@ -189,27 +193,6 @@ export function UpdateHoldingRow({
         </>
       ) : (
         <>
-          {savedSpends.length > 0 ? (
-            <ul
-              data-testid={`saved-spends-${asset.id}`}
-              className="flex flex-col gap-1"
-            >
-              {savedSpends.map((entry, index) => (
-                <li
-                  key={`${asset.id}-saved-${index}`}
-                  className="flex items-start justify-between gap-2 text-sm text-muted-foreground"
-                >
-                  <span>{entry.note}</span>
-                  {entry.drop !== 0 ? (
-                    <ComparisonDelta
-                      delta={-entry.drop}
-                      currency={entry.currency}
-                    />
-                  ) : null}
-                </li>
-              ))}
-            </ul>
-          ) : null}
           {!givenSpentMode ? (
             <Input
               data-testid={`update-note-${asset.id}`}
@@ -278,6 +261,7 @@ export function UpdateHoldingRow({
         </p>
       ) : null}
       {locked &&
+      !givenSpentMode &&
       onDate &&
       previous &&
       onDate.currency === previous.currency &&

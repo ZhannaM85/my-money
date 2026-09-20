@@ -26,6 +26,7 @@ export {
   cumulativeGivenSpent,
   headlineNativeAmount,
   snapshotsChronological,
+  signedFlow,
   snapshotsFromSpendLines,
   updateBaselineAmount,
 } from './balanceHeadline'

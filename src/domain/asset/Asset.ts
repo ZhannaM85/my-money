@@ -76,7 +76,7 @@ export interface Asset {
   ownershipShareNumerator?: number
   ownershipShareDenominator?: number
   updateFrequency: UpdateFrequency
-  /** Headline on Update / asset detail: remaining vs cumulative given/spent (#276). */
+  /** Headline on Update / asset detail: remaining vs explicit given/received (#276, #280). */
   balanceHeadline?: BalanceHeadline
   createdAt: string
   updatedAt: string

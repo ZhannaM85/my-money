@@ -127,20 +127,45 @@ export function useAssetDetailsScreen() {
       date: string
       amount: number
       note?: string
+      flow?: number
       createdAt?: string
+      id?: string
     }[],
+    deleteIds: readonly string[] = [],
   ) {
-    if (!asset || inputs.length === 0) return
-    await saveSnapshots(
-      inputs.map((input) => ({
-        assetId: asset.id,
+    if (!asset || (inputs.length === 0 && deleteIds.length === 0)) return
+    const toCreate = inputs.filter((input) => !input.id)
+    const toUpdate = inputs.filter((input) => input.id)
+    for (const input of toUpdate) {
+      const existing = snapshots.find((row) => row.id === input.id)
+      if (!existing) continue
+      const next = {
+        ...existing,
         date: input.date,
         amount: input.amount,
-        currency: asset.currency,
-        ...(input.createdAt ? { createdAt: input.createdAt } : {}),
-        ...(input.note ? { note: input.note } : {}),
-      })),
-    )
+      }
+      if (input.note) next.note = input.note
+      else delete next.note
+      if (input.flow !== undefined) next.flow = input.flow
+      else delete next.flow
+      await updateSnapshot(next)
+    }
+    if (toCreate.length > 0) {
+      await saveSnapshots(
+        toCreate.map((input) => ({
+          assetId: asset.id,
+          date: input.date,
+          amount: input.amount,
+          currency: asset.currency,
+          ...(input.createdAt ? { createdAt: input.createdAt } : {}),
+          ...(input.note ? { note: input.note } : {}),
+          ...(input.flow !== undefined ? { flow: input.flow } : {}),
+        })),
+      )
+    }
+    for (const id of deleteIds) {
+      await deleteSnapshot(id)
+    }
   }
 
   async function saveDetails({

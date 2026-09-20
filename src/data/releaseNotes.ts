@@ -10,6 +10,20 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 254,
+    issue: 282,
+    date: '2026-09-20T17:10:00+03:00',
+    en: 'The Update toggle is now Given / received. You can record money out or money in; the header is the net of those entries only.',
+    ru: 'На «Обновить» режим называется «Отдано / получено». Можно записать и уход, и приход; в заголовке — нетто только этих записей.',
+  },
+  {
+    version: 253,
+    issue: 280,
+    date: '2026-09-20T17:00:00+03:00',
+    en: 'Given / received on Update and asset details is the sum of amounts you entered in that mode, not every historical drop in remaining. Same-day entries can be edited or removed.',
+    ru: '«Отдано / получено» на «Обновить» и в карточке — сумма сумм, введённых в этом режиме, а не все снижения остатка за историю. Записи за этот день можно изменить или удалить.',
+  },
+  {
     version: 252,
     issue: 279,
     date: '2026-09-20T16:30:00+03:00',

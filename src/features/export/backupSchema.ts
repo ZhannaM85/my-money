@@ -49,6 +49,7 @@ const snapshotSchema = z.object({
   currency: z.string().min(1),
   createdAt: z.string().min(1),
   note: z.string().min(1).optional(),
+  flow: z.number().optional(),
 })
 
 const fxQuoteSchema = z.object({

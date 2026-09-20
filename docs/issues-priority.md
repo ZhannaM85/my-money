@@ -100,6 +100,8 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
+| [#282](https://github.com/ZhannaM85/my-money/issues/282) | 🔍 Pending validation | Rename Отдано/потрачено → Отдано/получено; support received money | Copy rename. Mode has Given + Received lines. Headline is net of explicit `flow` entries only (#280). |
+| [#280](https://github.com/ZhannaM85/my-money/issues/280) | 🔍 Pending validation | Given/spent headline shows wrong inflated total (not cumulative spent) | Headline = sum of explicit given/received `flow` (not lifetime remaining drawdowns). Saved same-day lines editable. |
 | [#279](https://github.com/ZhannaM85/my-money/issues/279) | 🔍 Pending validation | Update given/spent: allow multiple spendings on the same day | Shared spend-line list (amount + optional comment) on bulk Update and asset-detail. Sum decreases remaining; each line appends a snapshot so History/details can show them separately. |
 | [#278](https://github.com/ZhannaM85/my-money/issues/278) | 🔍 Pending validation | CI: History list tests fail when 1M no longer includes 2026-08-17 | History list tests now select All so the 2026-08-17 holdings row stays in-range. Unblocks Pages deploy #319. |
 | [#277](https://github.com/ZhannaM85/my-money/issues/277) | 🔍 Pending validation | Сводка: rephrase FX rate missing / disclaimer subheader (clearer RU) | Split `fxNote`: missing «Нет курса USD на эту дату — эта валюта не пересчитана в ₽.»; rates exist «Курсы справочные, не банковские котировки.» |

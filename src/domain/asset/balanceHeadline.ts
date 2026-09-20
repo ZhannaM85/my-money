@@ -1,7 +1,12 @@
 import type { Asset, BalanceEntryMode, BalanceHeadline } from './Asset'
-import type { AssetSnapshot } from '@/domain/snapshot'
+import {
+  sameDaySpendEntries,
+  snapshotsOnDateAll,
+  type AssetSnapshot,
+  type FlowDirection,
+} from '@/domain/snapshot'
 
-export type { BalanceEntryMode, BalanceHeadline }
+export type { BalanceEntryMode, BalanceHeadline, FlowDirection }
 
 export function assetBalanceHeadline(
   asset: Pick<Asset, 'balanceHeadline'>,
@@ -23,21 +28,43 @@ export function snapshotsChronological(
     )
 }
 
-/** Sum of same-currency drops between consecutive snapshots. */
+export function signedFlow(direction: FlowDirection, amount: number): number {
+  const magnitude = Math.abs(amount)
+  return direction === 'received' ? magnitude : -magnitude
+}
+
+/**
+ * Net given from explicit given/received entries only (#280, #282).
+ * `flow` on a snapshot is remaining-change from that mode (+ in / − out).
+ * Untagged #279 same-day multi-line rows are counted once as a compat shim.
+ * Single-day Остаток updates never count — that was the $40875 bug.
+ */
 export function cumulativeGivenSpent(
   snapshots: readonly AssetSnapshot[],
   assetId: string,
 ): number {
-  const rows = snapshotsChronological(snapshots, assetId)
-  let given = 0
-  for (let index = 1; index < rows.length; index += 1) {
-    const previous = rows[index - 1]
-    const current = rows[index]
-    if (previous.currency !== current.currency) continue
-    const drop = previous.amount - current.amount
-    if (drop > 0) given += drop
+  let netGiven = 0
+  const tagged = new Set<string>()
+  for (const row of snapshotsChronological(snapshots, assetId)) {
+    if (row.flow === undefined) continue
+    tagged.add(row.id)
+    netGiven -= row.flow
   }
-  return given
+  const dates = new Set(
+    snapshots
+      .filter((row) => row.assetId === assetId)
+      .map((row) => row.date),
+  )
+  for (const date of dates) {
+    const day = snapshotsOnDateAll(snapshots, assetId, date)
+    const untagged = day.filter((row) => row.flow === undefined)
+    if (untagged.length < 2) continue
+    for (const entry of sameDaySpendEntries(snapshots, assetId, date)) {
+      if (tagged.has(entry.id) || entry.drop === 0) continue
+      netGiven += entry.drop
+    }
+  }
+  return netGiven
 }
 
 export function headlineNativeAmount(
@@ -71,17 +98,24 @@ export function applyBalanceEntry(
 
 export type SpendLine = {
   amount: number
+  direction?: FlowDirection
   note?: string
 }
 
-/** One remaining snapshot per spend, each decreasing the previous remaining (#279). */
+/** One remaining snapshot per line; given decreases, received increases (#279, #282). */
 export function snapshotsFromSpendLines(
   baseline: number,
   lines: readonly SpendLine[],
-): { remaining: number; note?: string }[] {
+): { remaining: number; flow: number; note?: string }[] {
   let remaining = baseline
   return lines.map((line) => {
-    remaining = applyBalanceEntry('remove', line.amount, remaining)
-    return line.note ? { remaining, note: line.note } : { remaining }
+    const direction = line.direction === 'received' ? 'received' : 'given'
+    remaining = applyBalanceEntry(
+      direction === 'received' ? 'add' : 'remove',
+      line.amount,
+      remaining,
+    )
+    const flow = signedFlow(direction, line.amount)
+    return line.note ? { remaining, flow, note: line.note } : { remaining, flow }
   })
 }

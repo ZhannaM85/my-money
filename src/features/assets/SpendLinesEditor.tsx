@@ -1,7 +1,9 @@
 import { Plus, Trash2 } from 'lucide-react'
+import type { FlowDirection } from '@/domain/snapshot'
 import type { Locale } from '@/domain/settings'
 import { useTranslation } from '@/i18n'
 import { Button } from '@/shared/ui/button'
+import { Chip } from '@/shared/ui/chip'
 import { Input } from '@/shared/ui/input'
 import { MoneyInput } from '@/shared/ui/money-input'
 import { emptySpendLine, type SpendLineDraft } from './spendLines'
@@ -28,6 +30,11 @@ export function SpendLinesEditor({
     onChange(rows.map((row, i) => (i === index ? { ...row, ...patch } : row)))
   }
 
+  function setDirection(index: number, direction: FlowDirection) {
+    if (rows[index]?.direction === direction) return
+    update(index, { direction })
+  }
+
   return (
     <div className="flex flex-col gap-2" data-testid="spend-lines">
       {rows.map((row, index) => (
@@ -36,6 +43,20 @@ export function SpendLinesEditor({
           className="flex flex-col gap-2"
           data-testid={`spend-line-${index}`}
         >
+          <div className="flex flex-wrap gap-2">
+            <Chip
+              pressed={row.direction !== 'received'}
+              onClick={() => setDirection(index, 'given')}
+            >
+              {t.asset.flowGiven}
+            </Chip>
+            <Chip
+              pressed={row.direction === 'received'}
+              onClick={() => setDirection(index, 'received')}
+            >
+              {t.asset.flowReceived}
+            </Chip>
+          </div>
           <div className="flex gap-2">
             <MoneyInput
               aria-label={amountAria(index + 1)}
@@ -45,7 +66,7 @@ export function SpendLinesEditor({
               onValueChange={(amount) => update(index, { amount })}
               placeholder={t.asset.amountPlaceholder}
             />
-            {rows.length > 1 ? (
+            {rows.length > 1 || row.snapshotId ? (
               <Button
                 type="button"
                 variant="outline"

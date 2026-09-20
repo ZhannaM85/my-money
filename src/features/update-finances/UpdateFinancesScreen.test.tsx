@@ -1,5 +1,5 @@
 import 'fake-indexeddb/auto'
-import { render, screen, waitFor } from '@testing-library/react'
+import { render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router-dom'
 import { beforeEach, describe, expect, it } from 'vitest'
@@ -851,7 +851,7 @@ describe('UpdateFinancesScreen', () => {
       screen.getAllByText(formatAmount(700, 'EUR', 'en')).length,
     ).toBeGreaterThan(0)
     await user.click(
-      screen.getAllByRole('button', { name: 'Given / spent' })[0]!,
+      screen.getAllByRole('button', { name: 'Given / received' })[0]!,
     )
     await waitFor(() => {
       expect(useAssetStore.getState().assets[0]?.balanceHeadline).toBe(
@@ -859,8 +859,11 @@ describe('UpdateFinancesScreen', () => {
       )
     })
     expect(
-      screen.getAllByText(formatAmount(300, 'EUR', 'en')).length,
+      screen.getAllByText(formatAmount(0, 'EUR', 'en')).length,
     ).toBeGreaterThan(0)
+    expect(
+      screen.queryByText(formatAmount(300, 'EUR', 'en')),
+    ).not.toBeInTheDocument()
   })
 
   it('saves multiple same-day spend lines as separate remaining snapshots (#279)', async () => {
@@ -891,14 +894,14 @@ describe('UpdateFinancesScreen', () => {
         <UpdateFinancesScreen />
       </MemoryRouter>,
     )
-    await screen.findByLabelText('USD cash spending 1')
+    await screen.findByLabelText('USD cash entry 1')
     const save = screen.getByRole('button', { name: 'Save updates' })
-    await user.type(screen.getByLabelText('USD cash spending 1 note'), 'Gift')
+    await user.type(screen.getByLabelText('USD cash entry 1 note'), 'Gift')
     expect(save).toBeDisabled()
-    await user.type(screen.getByLabelText('USD cash spending 1'), '1000')
-    await user.click(screen.getByRole('button', { name: 'Add spending' }))
-    await user.type(screen.getByLabelText('USD cash spending 2'), '2000')
-    await user.type(screen.getByLabelText('USD cash spending 2 note'), 'Travel')
+    await user.type(screen.getByLabelText('USD cash entry 1'), '1000')
+    await user.click(screen.getByRole('button', { name: 'Add entry' }))
+    await user.type(screen.getByLabelText('USD cash entry 2'), '2000')
+    await user.type(screen.getByLabelText('USD cash entry 2 note'), 'Travel')
     expect(screen.getByTestId('resulting-remaining')).toHaveTextContent(/5,000/)
     await user.click(save)
     await waitFor(() => {
@@ -911,17 +914,172 @@ describe('UpdateFinancesScreen', () => {
           )
           .slice()
           .sort((a, b) => a.createdAt.localeCompare(b.createdAt))
-          .map((row) => ({ amount: row.amount, note: row.note })),
+          .map((row) => ({ amount: row.amount, note: row.note, flow: row.flow })),
       ).toEqual([
-        { amount: 7000, note: 'Gift' },
-        { amount: 5000, note: 'Travel' },
+        { amount: 7000, note: 'Gift', flow: -1000 },
+        { amount: 5000, note: 'Travel', flow: -2000 },
       ])
     })
-    expect(await screen.findByTestId('saved-spends-usd-cash')).toHaveTextContent(
+    expect(await screen.findByLabelText('USD cash entry 1 note')).toHaveValue(
       'Gift',
     )
-    expect(screen.getByTestId('saved-spends-usd-cash')).toHaveTextContent(
+    expect(screen.getByLabelText('USD cash entry 2 note')).toHaveValue(
       'Travel',
     )
+    expect(screen.getByLabelText('USD cash entry 1')).toHaveValue('1,000.00')
+    expect(screen.getByRole('button', { name: 'Save updates' })).toBeDisabled()
+  })
+
+  it('edits and removes a saved same-day spend line (#280)', async () => {
+    const user = userEvent.setup()
+    await useAssetStore.getState().saveAsset(
+      {
+        id: 'usd-cash',
+        name: 'USD cash',
+        assetClass: 'money',
+        type: 'cash',
+        currency: 'USD',
+        trackingStatus: 'included',
+        valuationMethod: 'account_balance',
+        updateFrequency: 'manual',
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        assetId: 'usd-cash',
+        date: '2026-08-01',
+        amount: 8000,
+        currency: 'USD',
+      },
+    )
+    const today = todayIsoDate()
+    await useAssetStore.getState().saveSnapshots([
+      {
+        id: 's-gift',
+        assetId: 'usd-cash',
+        date: today,
+        amount: 6500,
+        currency: 'USD',
+        createdAt: `${today}T10:00:00.000Z`,
+        note: 'Anton',
+      },
+      {
+        id: 's-card',
+        assetId: 'usd-cash',
+        date: today,
+        amount: 5700,
+        currency: 'USD',
+        createdAt: `${today}T11:00:00.000Z`,
+        note: 'Card',
+      },
+    ])
+    await useAssetStore.getState().setBalanceHeadline('usd-cash', 'given_spent')
+    render(
+      <MemoryRouter>
+        <UpdateFinancesScreen />
+      </MemoryRouter>,
+    )
+    const giftAmount = await screen.findByLabelText('USD cash entry 1')
+    expect(giftAmount).toHaveValue('1,500.00')
+    expect(screen.getByLabelText('USD cash entry 1 note')).toHaveValue(
+      'Anton',
+    )
+    await user.clear(giftAmount)
+    await user.type(giftAmount, '1200')
+    await user.click(screen.getByRole('button', { name: 'Remove entry 2' }))
+    await user.click(screen.getByRole('button', { name: 'Save updates' }))
+    await waitFor(() => {
+      const rows = useAssetStore
+        .getState()
+        .snapshots.filter(
+          (row) => row.assetId === 'usd-cash' && row.date === today,
+        )
+      expect(
+        rows.map((row) => ({ amount: row.amount, note: row.note })),
+      ).toEqual([{ amount: 6800, note: 'Anton' }])
+    })
+  })
+
+  it('shows only explicit given/received entries, not lifetime drawdowns (#280)', async () => {
+    const user = userEvent.setup()
+    await useAssetStore.getState().saveAsset(
+      {
+        id: 'usd-cash',
+        name: 'USD cash',
+        assetClass: 'money',
+        type: 'cash',
+        currency: 'USD',
+        trackingStatus: 'included',
+        valuationMethod: 'account_balance',
+        updateFrequency: 'manual',
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        assetId: 'usd-cash',
+        date: '2025-12-01',
+        amount: 15000,
+        currency: 'USD',
+      },
+    )
+    await useAssetStore.getState().saveSnapshots([
+      {
+        assetId: 'usd-cash',
+        date: '2026-01-01',
+        amount: 1000,
+        currency: 'USD',
+      },
+      {
+        assetId: 'usd-cash',
+        date: '2026-08-25',
+        amount: 8000,
+        currency: 'USD',
+      },
+      {
+        assetId: 'usd-cash',
+        date: '2026-09-03',
+        amount: 8000,
+        currency: 'USD',
+      },
+      {
+        assetId: 'usd-cash',
+        date: todayIsoDate(),
+        amount: 5700,
+        currency: 'USD',
+        createdAt: `${todayIsoDate()}T10:00:00.000Z`,
+        flow: -1500,
+      },
+      {
+        assetId: 'usd-cash',
+        date: todayIsoDate(),
+        amount: 4900,
+        currency: 'USD',
+        createdAt: `${todayIsoDate()}T11:00:00.000Z`,
+        flow: -800,
+      },
+    ])
+    render(
+      <MemoryRouter>
+        <UpdateFinancesScreen />
+      </MemoryRouter>,
+    )
+    const usdCard = (await screen.findByText('USD cash')).closest('li')
+    expect(usdCard).toBeTruthy()
+    await user.click(
+      within(usdCard!).getByRole('button', { name: 'Given / received' }),
+    )
+    await waitFor(() => {
+      expect(
+        useAssetStore
+          .getState()
+          .assets.find((row) => row.id === 'usd-cash')?.balanceHeadline,
+      ).toBe('given_spent')
+    })
+    expect(
+      within(usdCard!).getAllByText(formatAmount(2300, 'USD', 'en')).length,
+    ).toBeGreaterThan(0)
+    expect(
+      screen.queryByText(formatAmount(16300, 'USD', 'en')),
+    ).not.toBeInTheDocument()
   })
 })

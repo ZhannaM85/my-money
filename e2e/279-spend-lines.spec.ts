@@ -9,7 +9,7 @@ test.beforeAll(() => {
   mkdirSync(proofDir, { recursive: true })
 })
 
-test('Given/spent spend lines on Update, asset detail, and History (#279)', async ({
+test('Given/received spend lines on Update, asset detail, and History (#279)', async ({
   page,
 }) => {
   await page.setViewportSize({ width: 390, height: 844 })
@@ -18,28 +18,28 @@ test('Given/spent spend lines on Update, asset detail, and History (#279)', asyn
   await page.goto('/update')
   await expect(page.getByRole('heading', { name: 'Обновить' })).toBeVisible()
   const usdCard = page.locator('li').filter({ hasText: 'USD cash' })
-  await usdCard.getByRole('button', { name: 'Отдано / потрачено' }).click()
-  await expect(page.getByLabel('Трата 1 для USD cash')).toBeVisible()
-  await page.getByLabel('Трата 1 для USD cash').fill('1000')
-  await page.getByLabel('Комментарий к трате 1 для USD cash').fill('Подарок')
-  await page.getByRole('button', { name: 'Добавить трату' }).click()
-  await page.getByLabel('Трата 2 для USD cash').fill('2000')
-  await page.getByLabel('Комментарий к трате 2 для USD cash').fill('Поездка')
+  await usdCard.getByRole('button', { name: 'Отдано / получено' }).click()
+  await expect(page.getByLabel('Запись 1 для USD cash')).toBeVisible()
+  await page.getByLabel('Запись 1 для USD cash').fill('1000')
+  await page.getByLabel('Комментарий к записи 1 для USD cash').fill('Подарок')
+  await page.getByRole('button', { name: 'Добавить запись' }).click()
+  await page.getByLabel('Запись 2 для USD cash').fill('2000')
+  await page.getByLabel('Комментарий к записи 2 для USD cash').fill('Поездка')
   await expect(page.getByTestId('spend-lines')).toBeVisible()
   await page.screenshot({
     path: join(proofDir, '279-update-spend-lines.png'),
   })
   await page.getByRole('button', { name: 'Сохранить обновления' }).click()
-  await expect(page.getByTestId('saved-spends-usd-cash')).toContainText(
+  await expect(page.getByLabel('Комментарий к записи 1 для USD cash')).toHaveValue(
     'Подарок',
   )
-  await expect(page.getByTestId('saved-spends-usd-cash')).toContainText(
+  await expect(page.getByLabel('Комментарий к записи 2 для USD cash')).toHaveValue(
     'Поездка',
   )
 
   await page.goto('/assets/usd-cash')
   await expect(page.getByRole('heading', { name: 'USD cash' })).toBeVisible()
-  await expect(page.getByLabel('Трата 1')).toBeVisible()
+  await expect(page.getByLabel('Запись 1')).toBeVisible()
   await page.screenshot({
     path: join(proofDir, '279-asset-detail-spend-lines.png'),
   })

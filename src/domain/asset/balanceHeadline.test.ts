@@ -33,31 +33,25 @@ describe('assetBalanceHeadline (#276)', () => {
   })
 })
 
-describe('cumulativeGivenSpent (#276)', () => {
-  it('sums consecutive decreases for the 8000 → 5700 gift case', () => {
+describe('cumulativeGivenSpent (#280)', () => {
+  it('sums tagged explicit flows only, not lifetime remaining drawdowns', () => {
     expect(
       cumulativeGivenSpent(
         [
           snap({ id: 's1', date: '2026-08-01', amount: 8000 }),
-          snap({ id: 's2', date: '2026-08-20', amount: 5700 }),
-        ],
-        'a1',
-      ),
-    ).toBe(2300)
-  })
-
-  it('ignores increases and currency breaks', () => {
-    expect(
-      cumulativeGivenSpent(
-        [
-          snap({ id: 's1', date: '2026-08-01', amount: 8000 }),
-          snap({ id: 's2', date: '2026-08-10', amount: 5700 }),
-          snap({ id: 's3', date: '2026-08-12', amount: 6000 }),
           snap({
-            id: 's4',
-            date: '2026-08-15',
-            amount: 5000,
-            currency: 'EUR',
+            id: 's2',
+            date: '2026-09-20',
+            amount: 6500,
+            flow: -1500,
+            createdAt: '2026-09-20T10:00:00.000Z',
+          }),
+          snap({
+            id: 's3',
+            date: '2026-09-20',
+            amount: 5700,
+            flow: -800,
+            createdAt: '2026-09-20T11:00:00.000Z',
           }),
         ],
         'a1',
@@ -65,6 +59,63 @@ describe('cumulativeGivenSpent (#276)', () => {
     ).toBe(2300)
   })
 
+  it('does not count single-day Остаток updates as given/received', () => {
+    expect(
+      cumulativeGivenSpent(
+        [
+          snap({ id: 's1', date: '2025-12-01', amount: 15000 }),
+          snap({ id: 's2', date: '2026-01-01', amount: 1000 }),
+          snap({ id: 's3', date: '2026-08-25', amount: 8000 }),
+          snap({ id: 's4', date: '2026-09-03', amount: 8000 }),
+          snap({ id: 's5', date: '2026-09-20', amount: 5700 }),
+        ],
+        'a1',
+      ),
+    ).toBe(0)
+  })
+
+  it('counts untagged #279 same-day multi-line drops as explicit given', () => {
+    expect(
+      cumulativeGivenSpent(
+        [
+          snap({ id: 's0', date: '2026-09-03', amount: 8000 }),
+          snap({
+            id: 's1',
+            date: '2026-09-20',
+            amount: 6500,
+            createdAt: '2026-09-20T10:00:00.000Z',
+          }),
+          snap({
+            id: 's2',
+            date: '2026-09-20',
+            amount: 5700,
+            createdAt: '2026-09-20T11:00:00.000Z',
+          }),
+        ],
+        'a1',
+      ),
+    ).toBe(2300)
+  })
+
+  it('nets received (+) against given (−) (#282)', () => {
+    expect(
+      cumulativeGivenSpent(
+        [
+          snap({ id: 's1', date: '2026-09-20', amount: 6500, flow: -1500 }),
+          snap({
+            id: 's2',
+            date: '2026-09-21',
+            amount: 7300,
+            flow: 800,
+          }),
+        ],
+        'a1',
+      ),
+    ).toBe(700)
+  })
+})
+
+describe('snapshotsChronological (#276)', () => {
   it('orders same-day rows by createdAt', () => {
     expect(
       snapshotsChronological(
@@ -88,7 +139,7 @@ describe('cumulativeGivenSpent (#276)', () => {
   })
 })
 
-describe('snapshotsFromSpendLines (#279)', () => {
+describe('snapshotsFromSpendLines (#279, #282)', () => {
   it('writes one remaining per line so the sum is the net decrease', () => {
     expect(
       snapshotsFromSpendLines(8000, [
@@ -96,9 +147,15 @@ describe('snapshotsFromSpendLines (#279)', () => {
         { amount: 2000, note: 'Travel' },
       ]),
     ).toEqual([
-      { remaining: 7000, note: 'Gift' },
-      { remaining: 5000, note: 'Travel' },
+      { remaining: 7000, flow: -1000, note: 'Gift' },
+      { remaining: 5000, flow: -2000, note: 'Travel' },
     ])
+  })
+
+  it('increases remaining for a received line', () => {
+    expect(
+      snapshotsFromSpendLines(5700, [{ amount: 800, direction: 'received' }]),
+    ).toEqual([{ remaining: 6500, flow: 800 }])
   })
 })
 

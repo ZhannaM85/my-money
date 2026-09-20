@@ -122,6 +122,9 @@ gh issue edit 108 --add-label validation
 | `279-update-spend-lines.png` | Update · Given/spent multi-line spends (RU, #279) |
 | `279-asset-detail-spend-lines.png` | Asset details · same spend lines on Обновить этот актив (RU, #279) |
 | `279-history-same-day-spends.png` | History · same-day spends listed separately after All (RU, #279) |
+| `280-update-editable-spends.png` | Update · saved given/spent lines in the editor (RU, #280) |
+| `280-update-given-spent-headline.png` | Update · Given/spent header is since last refill, not remaining (RU, #280) |
+| `280-asset-detail-editable-spends.png` | Asset details · saved spend lines on Обновить этот актив (RU, #280) |
 | `276-update-delta-entry.png` | Update · Remaining / Given chips + new balance / ± (RU, #276) |
 | `276-asset-detail-delta-entry.png` | Asset details · Update this asset same chips + remaining field (RU, #276) |
 | `258-history-locale-dates.png` | History · list rows use locale dates (#258) |

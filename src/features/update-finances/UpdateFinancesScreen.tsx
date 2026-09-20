@@ -14,12 +14,12 @@ import {
   assetBalanceHeadline,
   type BalanceEntryMode,
   isSuggestedUpdate,
-  snapshotsFromSpendLines,
   updateBaselineAmount,
 } from '@/domain/asset'
 import {
   latestSnapshot,
   optionalSnapshotNote,
+  sameDaySpendEntries,
   snapshotBeforeDate,
   snapshotOnDate,
   type AssetSnapshot,
@@ -42,8 +42,11 @@ import { useAssetStore } from '@/stores/assetStore'
 import { useSettingsStore } from '@/stores/settingsStore'
 import {
   parseSpendLineDrafts,
-  spendLinesOrDefault,
-  stampSpendLineTimes,
+  planSameDaySpendPersist,
+  spendBaselineAmount,
+  spendLinesForEditor,
+  spendLinesMatchSaved,
+  spendSnapshotsToEdit,
   type SpendLineDraft,
 } from '@/features/assets/spendLines'
 import { UpdateHoldingRow } from './UpdateHoldingRow'
@@ -66,6 +69,7 @@ export function UpdateFinancesScreen() {
   const locale = useLocale()
   const saveSnapshots = useAssetStore((state) => state.saveSnapshots)
   const updateSnapshot = useAssetStore((state) => state.updateSnapshot)
+  const deleteSnapshot = useAssetStore((state) => state.deleteSnapshot)
   const assets = useAssetStore((state) => state.assets)
   const snapshots = useAssetStore((state) => state.snapshots)
   const loaded = useAssetStore((state) => state.loaded)
@@ -219,25 +223,33 @@ export function UpdateFinancesScreen() {
       createdAt?: string
     }[] = []
     const toUpdate: AssetSnapshot[] = []
+    const toDelete: string[] = []
     for (const { asset, onDate, previous } of rows) {
       if (assetBalanceHeadline(asset) === 'given_spent') {
-        const lines = parseSpendLineDrafts(spendLines[asset.id] ?? [])
-        if (lines.length === 0) continue
-        const entries = snapshotsFromSpendLines(
-          updateBaselineAmount(onDate, previous, asset.currency),
-          lines,
-        )
-        const stamps = stampSpendLineTimes(entries.length)
-        entries.forEach((entry, index) => {
-          toWrite.push({
-            assetId: asset.id,
-            date: asOf,
-            amount: entry.remaining,
-            currency: asset.currency,
-            createdAt: stamps[index],
-            ...(entry.note ? { note: entry.note } : {}),
-          })
+        const drafted = spendLines[asset.id]
+        if (drafted === undefined) continue
+        const saved = sameDaySpendEntries(snapshots, asset.id, asOf)
+        if (spendLinesMatchSaved(drafted, saved)) continue
+        const lines = parseSpendLineDrafts(drafted)
+        if (lines.length === 0 && saved.every((entry) => entry.drop <= 0)) {
+          continue
+        }
+        const plan = planSameDaySpendPersist({
+          existingSpends: spendSnapshotsToEdit(snapshots, asset.id, asOf),
+          drafts: drafted,
+          baseline: spendBaselineAmount(
+            saved,
+            onDate,
+            previous,
+            asset.currency,
+          ),
+          assetId: asset.id,
+          date: asOf,
+          currency: asset.currency,
         })
+        toUpdate.push(...plan.toUpdate)
+        toWrite.push(...plan.toCreate)
+        toDelete.push(...plan.toDelete)
         continue
       }
       const raw = drafts[asset.id]?.trim() ?? ''
@@ -278,7 +290,7 @@ export function UpdateFinancesScreen() {
         continue
       }
     }
-    if (toWrite.length === 0 && toUpdate.length === 0) {
+    if (toWrite.length === 0 && toUpdate.length === 0 && toDelete.length === 0) {
       setError(undefined)
       return
     }
@@ -288,6 +300,9 @@ export function UpdateFinancesScreen() {
       if (toWrite.length > 0) await saveSnapshots(toWrite)
       for (const snapshot of toUpdate) {
         await updateSnapshot(snapshot)
+      }
+      for (const id of toDelete) {
+        await deleteSnapshot(id)
       }
       resetDrafts()
     } finally {
@@ -299,12 +314,17 @@ export function UpdateFinancesScreen() {
     () =>
       rows.some(({ asset, onDate }) => {
         if (assetBalanceHeadline(asset) === 'given_spent') {
-          return parseSpendLineDrafts(spendLines[asset.id] ?? []).length > 0
+          const drafted = spendLines[asset.id]
+          if (drafted === undefined) return false
+          return !spendLinesMatchSaved(
+            drafted,
+            sameDaySpendEntries(snapshots, asset.id, asOf),
+          )
         }
         if (onDate && !editing[asset.id]) return false
         return (drafts[asset.id]?.trim() ?? '') !== ''
       }),
-    [drafts, editing, rows, spendLines],
+    [asOf, drafts, editing, rows, snapshots, spendLines],
   )
 
   const ready = loaded && settingsLoaded
@@ -385,8 +405,10 @@ export function UpdateFinancesScreen() {
                         draft={drafts[asset.id] ?? ''}
                         noteValue={notes[asset.id] ?? ''}
                         entryMode={entryModes[asset.id] ?? 'new_balance'}
-                        spendLines={spendLinesOrDefault(
+                        spendLines={spendLinesForEditor(
                           spendLines[asset.id],
+                          sameDaySpendEntries(snapshots, asset.id, asOf),
+                          locale,
                           asset.id,
                         )}
                         snapshots={snapshots}

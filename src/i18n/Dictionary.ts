@@ -176,6 +176,8 @@ export interface Dictionary {
     suggestedNow: string
     headlineRemaining: string
     headlineGivenSpent: string
+    flowGiven: string
+    flowReceived: string
     entryNewBalance: string
     entryAdded: string
     entryRemoved: string

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import {
   applyBalanceEntry,
   snapshotsFromSpendLines,
@@ -9,6 +9,7 @@ import {
 import {
   hasDuplicateSnapshot,
   optionalSnapshotNote,
+  sameDaySpendEntries,
   snapshotBeforeDate,
   snapshotOnDate,
   type AssetSnapshot,
@@ -24,7 +25,11 @@ import { AssetBalanceUpdateControls } from './AssetBalanceUpdateControls'
 import {
   emptySpendLine,
   parseSpendLineDrafts,
-  stampSpendLineTimes,
+  planSameDaySpendPersist,
+  spendBaselineAmount,
+  spendLineDraftsFromEntries,
+  spendLinesMatchSaved,
+  spendSnapshotsToEdit,
   type SpendLineDraft,
 } from './spendLines'
 
@@ -48,8 +53,11 @@ export function AssetDetailsUpdateForm({
       date: string
       amount: number
       note?: string
+      flow?: number
       createdAt?: string
+      id?: string
     }[],
+    deleteIds?: readonly string[],
   ) => Promise<void>
 }) {
   const t = useTranslation()
@@ -59,16 +67,33 @@ export function AssetDetailsUpdateForm({
   const [amountDate, setAmountDate] = useState(today)
   const [amountNote, setAmountNote] = useState('')
   const [entryMode, setEntryMode] = useState<BalanceEntryMode>('new_balance')
-  const [spendLines, setSpendLines] = useState<SpendLineDraft[]>(() => [
-    emptySpendLine(`${assetId}-spend-0`),
-  ])
+  const [spendLineEdits, setSpendLineEdits] = useState<
+    Record<string, SpendLineDraft[]>
+  >({})
 
   const onDate = snapshotOnDate(snapshots, assetId, amountDate)
   const previous = snapshotBeforeDate(snapshots, assetId, amountDate)
   const baseline = updateBaselineAmount(onDate, previous, currency)
   const givenSpentMode = headline === 'given_spent'
+  const savedSpends = useMemo(
+    () => sameDaySpendEntries(snapshots, assetId, amountDate),
+    [snapshots, assetId, amountDate],
+  )
+  const savedKey = savedSpends
+    .filter((entry) => entry.drop > 0)
+    .map((entry) => `${entry.id}:${entry.drop}:${entry.note ?? ''}`)
+    .join('|')
+  const spendEditKey = `${assetId}|${amountDate}|${locale}|${savedKey}`
+  const spendLines = givenSpentMode
+    ? (spendLineEdits[spendEditKey] ??
+      spendLineDraftsFromEntries(savedSpends, locale, assetId))
+    : [emptySpendLine(`${assetId}-spend-0`)]
+
+  const spendBaseline = givenSpentMode
+    ? spendBaselineAmount(savedSpends, onDate, previous, currency)
+    : baseline
   const spendEntries = givenSpentMode
-    ? snapshotsFromSpendLines(baseline, parseSpendLineDrafts(spendLines))
+    ? snapshotsFromSpendLines(spendBaseline, parseSpendLineDrafts(spendLines))
     : []
   const parsedDraft = parseAmount(amountDraft)
   const resolvedAmount = givenSpentMode
@@ -76,9 +101,13 @@ export function AssetDetailsUpdateForm({
     : parsedDraft === undefined
       ? undefined
       : applyBalanceEntry(entryMode, parsedDraft, baseline)
+  const spendIds = new Set(
+    savedSpends.filter((entry) => entry.drop > 0).map((entry) => entry.id),
+  )
+  const snapshotsForDuplicate = snapshots.filter((row) => !spendIds.has(row.id))
   const duplicateAmountHint = givenSpentMode
     ? spendEntries.some((entry) =>
-        hasDuplicateSnapshot(snapshots, {
+        hasDuplicateSnapshot(snapshotsForDuplicate, {
           assetId,
           date: amountDate,
           amount: entry.remaining,
@@ -100,21 +129,43 @@ export function AssetDetailsUpdateForm({
       return
     }
     if (givenSpentMode) {
-      if (spendEntries.length === 0) {
+      const hasSavedSpends = savedSpends.some((entry) => entry.drop > 0)
+      if (spendEntries.length === 0 && !hasSavedSpends) {
         setAmountError(t.asset.enterCurrentAmount)
         return
       }
+      if (spendLinesMatchSaved(spendLines, savedSpends)) {
+        setAmountError(undefined)
+        return
+      }
       setAmountError(undefined)
-      const stamps = stampSpendLineTimes(spendEntries.length)
+      const plan = planSameDaySpendPersist({
+        existingSpends: spendSnapshotsToEdit(snapshots, assetId, amountDate),
+        drafts: spendLines,
+        baseline: spendBaseline,
+        assetId,
+        date: amountDate,
+        currency,
+      })
       await onSave(
-        spendEntries.map((entry, index) => ({
-          date: amountDate,
-          amount: entry.remaining,
-          createdAt: stamps[index],
-          ...(entry.note ? { note: entry.note } : {}),
-        })),
+        [
+          ...plan.toUpdate.map((row) => ({
+            id: row.id,
+            date: row.date,
+            amount: row.amount,
+            flow: row.flow,
+            ...(row.note ? { note: row.note } : {}),
+          })),
+          ...plan.toCreate.map((row) => ({
+            date: row.date,
+            amount: row.amount,
+            createdAt: row.createdAt,
+            flow: row.flow,
+            ...(row.note ? { note: row.note } : {}),
+          })),
+        ],
+        plan.toDelete,
       )
-      setSpendLines([emptySpendLine(`${assetId}-spend-0`)])
       setAmountDate(today)
       return
     }
@@ -189,7 +240,12 @@ export function AssetDetailsUpdateForm({
                 : resolvedAmount
           }
           spendLines={spendLines}
-          onSpendLinesChange={setSpendLines}
+          onSpendLinesChange={(lines) => {
+            setSpendLineEdits((current) => ({
+              ...current,
+              [spendEditKey]: lines,
+            }))
+          }}
         />
         <Button
           type="button"

@@ -6,6 +6,11 @@ export interface AssetSnapshot {
   currency: string
   createdAt: string
   note?: string
+  /**
+   * Explicit given/received entry (#280, #282): remaining change from that
+   * mode only. Positive = received, negative = given. Omitted on Остаток saves.
+   */
+  flow?: number
 }
 
 export function optionalSnapshotNote(
@@ -82,14 +87,33 @@ export function snapshotsOnDateAll(
     .sort((a, b) => a.createdAt.localeCompare(b.createdAt))
 }
 
+export type FlowDirection = 'given' | 'received'
+
 export type SameDaySpendEntry = {
+  id: string
   remaining: number
   drop: number
+  direction: FlowDirection
+  flow?: number
   currency: string
   note?: string
 }
 
-/** Per-snapshot remaining change on that calendar day (#279). */
+export function flowDirection(
+  flow: number | undefined,
+  drop: number,
+): FlowDirection {
+  if (flow !== undefined) return flow >= 0 ? 'received' : 'given'
+  return drop < 0 ? 'received' : 'given'
+}
+
+export function isExplicitFlowRow(
+  entry: Pick<SameDaySpendEntry, 'drop' | 'flow'>,
+): boolean {
+  return entry.flow !== undefined || entry.drop !== 0
+}
+
+/** Per-snapshot remaining change on that calendar day (#279, #280). */
 export function sameDaySpendEntries(
   snapshots: readonly AssetSnapshot[],
   assetId: string,
@@ -107,14 +131,16 @@ export function sameDaySpendEntries(
         : 0
     priorAmount = row.amount
     priorCurrency = row.currency
-    return row.note
-      ? {
-          remaining: row.amount,
-          drop,
-          currency: row.currency,
-          note: row.note,
-        }
-      : { remaining: row.amount, drop, currency: row.currency }
+    const direction = flowDirection(row.flow, drop)
+    return {
+      id: row.id,
+      remaining: row.amount,
+      drop,
+      direction,
+      currency: row.currency,
+      ...(row.flow !== undefined ? { flow: row.flow } : {}),
+      ...(row.note ? { note: row.note } : {}),
+    }
   })
 }
 
