@@ -410,7 +410,6 @@ export function UpdateFinancesScreen() {
                         onSaveAmount={() =>
                           void saveField(asset.id, 'remaining')
                         }
-                        onSaveNote={() => void saveField(asset.id, 'note')}
                         onSaveSpends={() => void saveField(asset.id, 'spends')}
                         saveDisabled={saving || savingAssetId === asset.id}
                         saveMessage={fieldStatus[asset.id]?.message}

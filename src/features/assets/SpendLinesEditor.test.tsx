@@ -113,6 +113,24 @@ describe('SpendLinesEditor (#283)', () => {
     )
   })
 
+  it('puts amount before comment on the same row (#296)', async () => {
+    const user = userEvent.setup()
+    render(<EditorHarness initial={saved} />)
+    const viewAmount = screen.getByTestId('spend-line-amount-0')
+    const viewNote = screen.getByTestId('spend-line-note-0')
+    expect(
+      viewAmount.compareDocumentPosition(viewNote) &
+        Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy()
+
+    await user.click(screen.getByRole('button', { name: 'Edit entry 1' }))
+    const amount = screen.getByLabelText('Entry 1')
+    const note = screen.getByLabelText('Entry 1 note')
+    expect(
+      amount.compareDocumentPosition(note) & Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy()
+  })
+
   it('puts purpose and amount on the same row in view and edit (#289)', async () => {
     const user = userEvent.setup()
     render(<EditorHarness initial={saved} />)

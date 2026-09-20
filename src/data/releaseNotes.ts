@@ -10,6 +10,27 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 265,
+    issue: 296,
+    date: '2026-09-21T00:10:00+03:00',
+    en: 'On Given / received lines, the amount comes first, then the comment.',
+    ru: 'В строках «Отдано / получено» сначала сумма, потом комментарий.',
+  },
+  {
+    version: 264,
+    issue: 294,
+    date: '2026-09-21T00:05:00+03:00',
+    en: 'On the new Update Remaining path, the comment sits under the amount, and one diskette saves both.',
+    ru: 'В новом режиме «Остаток» комментарий под суммой, и одна дискета сохраняет оба.',
+  },
+  {
+    version: 263,
+    issue: 295,
+    date: '2026-09-21T00:00:00+03:00',
+    en: 'More → Feature toggles has New asset update, off by default. Off is the previous Update screen; on is the new one.',
+    ru: 'В «Ещё → Переключатели функций» появилось «Новое обновление активов», по умолчанию выкл. Выкл — прежний экран «Обновить», вкл — новый.',
+  },
+  {
     version: 262,
     issue: 293,
     date: '2026-09-20T23:55:00+03:00',

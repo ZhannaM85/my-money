@@ -240,7 +240,6 @@ export const en: Dictionary = {
     editSpendLine: (index) => `Edit entry ${index}`,
     saveSpendLine: (index) => `Save entry ${index}`,
     saveAmountAria: 'Save remaining',
-    saveNoteAria: 'Save comment',
     holdingSaved: 'Saved',
   },
   update: {
@@ -254,7 +253,6 @@ export const en: Dictionary = {
     spendAmountAria: (name, index) => `${name} entry ${index}`,
     spendNoteAria: (name, index) => `${name} entry ${index} note`,
     saveAmountAria: (name) => `Save remaining for ${name}`,
-    saveNoteAria: (name) => `Save comment for ${name}`,
     holdingSaved: 'Saved',
     saveFailed: 'Could not save',
     editAmountAria: (name) => `Edit ${name}`,
@@ -389,6 +387,9 @@ export const en: Dictionary = {
     dashboardPositions: 'Dashboard positions',
     dashboardPositionsHint:
       'Show the Positions list and total under the chart on Dashboard. Holdings stay on Assets either way.',
+    newUpdateUx: 'New asset update',
+    newUpdateUxHint:
+      'Optional new Update screen: given/received entries and per-field save. Off uses the previous Update screen.',
     featureTogglesTitle: 'Feature toggles',
     featureTogglesDescription:
       'Optional pieces of the app you can turn on or off. More toggles will land here over time.',

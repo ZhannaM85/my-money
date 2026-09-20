@@ -21,6 +21,7 @@ interface SettingsStoreState {
   persistCustomAssetOrder: (assetListOrder: string[]) => Promise<void>
   setShowChartTooltip: (showChartTooltip: boolean) => Promise<void>
   setShowDashboardPositions: (showDashboardPositions: boolean) => Promise<void>
+  setNewUpdateUx: (newUpdateUx: boolean) => Promise<void>
   setHomeScreenWidget: (homeScreenWidget: boolean) => Promise<void>
   completeOnboarding: () => Promise<void>
 }
@@ -63,6 +64,9 @@ export const useSettingsStore = create<SettingsStoreState>((set, get) => {
     },
     setShowDashboardPositions: async (showDashboardPositions) => {
       await save({ showDashboardPositions })
+    },
+    setNewUpdateUx: async (newUpdateUx) => {
+      await save({ newUpdateUx })
     },
     setHomeScreenWidget: async (homeScreenWidget) => {
       await save({ homeScreenWidget })

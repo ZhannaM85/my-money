@@ -244,7 +244,6 @@ export const ru: Dictionary = {
     editSpendLine: (index) => `Изменить запись ${index}`,
     saveSpendLine: (index) => `Сохранить запись ${index}`,
     saveAmountAria: 'Сохранить остаток',
-    saveNoteAria: 'Сохранить заметку',
     holdingSaved: 'Сохранено',
   },
   update: {
@@ -258,7 +257,6 @@ export const ru: Dictionary = {
     spendAmountAria: (name, index) => `Запись ${index} для ${name}`,
     spendNoteAria: (name, index) => `Комментарий к записи ${index} для ${name}`,
     saveAmountAria: (name) => `Сохранить остаток: ${name}`,
-    saveNoteAria: (name) => `Сохранить заметку: ${name}`,
     holdingSaved: 'Сохранено',
     saveFailed: 'Не удалось сохранить',
     editAmountAria: (name) => `Изменить ${name}`,
@@ -395,6 +393,9 @@ export const ru: Dictionary = {
     dashboardPositions: 'Позиции на Сводке',
     dashboardPositionsHint:
       'Показывать список позиций и итого под графиком на Сводке. Активы остаются на вкладке Активы.',
+    newUpdateUx: 'Новое обновление активов',
+    newUpdateUxHint:
+      'Необязательный новый экран «Обновить»: отдельные записи отдано/получено и сохранение по полям. Выкл — прежний экран.',
     featureTogglesTitle: 'Переключатели функций',
     featureTogglesDescription:
       'Необязательные части приложения, которые можно включить или выключить. Со временем здесь появятся новые переключатели.',

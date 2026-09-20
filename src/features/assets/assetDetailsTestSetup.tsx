@@ -23,6 +23,8 @@ export function setDateField(input: HTMLElement, value: string) {
 export async function resetAssetDetailsStores() {
   await db.assets.clear()
   await db.snapshots.clear()
+  await db.settings.clear()
+  await db.settings.put({ ...DEFAULT_SETTINGS, newUpdateUx: true })
   useAssetStore.setState({ assets: [], snapshots: [], loaded: false })
   useFxStore.setState({
     ...useFxStore.getState(),
@@ -30,7 +32,7 @@ export async function resetAssetDetailsStores() {
     manualQuotes: [],
   })
   useSettingsStore.setState({
-    settings: DEFAULT_SETTINGS,
+    settings: { ...DEFAULT_SETTINGS, newUpdateUx: true },
     loaded: true,
   })
   resetChartRangeStore()

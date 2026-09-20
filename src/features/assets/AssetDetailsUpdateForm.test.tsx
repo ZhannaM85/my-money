@@ -2,9 +2,11 @@ import 'fake-indexeddb/auto'
 import { screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { beforeEach, describe, expect, it } from 'vitest'
+import { db } from '@/infrastructure/persistence/indexeddb'
 import { addDaysIso } from '@/shared/lib/dates'
 import { formatAmount, todayIsoDate } from '@/shared/lib/money'
 import { useAssetStore } from '@/stores/assetStore'
+import { useSettingsStore } from '@/stores/settingsStore'
 import {
   renderAssetDetails,
   resetAssetDetailsStores,
@@ -302,11 +304,81 @@ describe('AssetDetailsUpdateForm', () => {
     renderAssetDetails()
     await screen.findByRole('heading', { name: 'Revolut' })
     const remaining = screen.getByRole('button', { name: 'Save remaining' })
-    const comment = screen.getByRole('button', { name: 'Save comment' })
     expect(remaining.querySelector('.lucide-save')).toBeTruthy()
-    expect(comment.querySelector('.lucide-save')).toBeTruthy()
     expect(remaining.querySelector('.lucide-check')).toBeFalsy()
-    expect(comment.querySelector('.lucide-check')).toBeFalsy()
+    expect(
+      screen.queryByRole('button', { name: 'Save comment' }),
+    ).not.toBeInTheDocument()
     expect(screen.getByRole('button', { name: /^Save$/ })).toBeInTheDocument()
+  })
+
+  it('keeps classic Update this asset when the new UX toggle is off (#295)', async () => {
+    const user = userEvent.setup()
+    const settings = {
+      ...useSettingsStore.getState().settings,
+      newUpdateUx: false,
+    }
+    await db.settings.put(settings)
+    useSettingsStore.setState({
+      settings,
+      loaded: true,
+    })
+    renderAssetDetails()
+    await screen.findByRole('heading', { name: 'Revolut' })
+    expect(
+      screen.queryByRole('button', { name: 'Given / received' }),
+    ).not.toBeInTheDocument()
+    expect(
+      screen.queryByRole('button', { name: 'Save remaining' }),
+    ).not.toBeInTheDocument()
+    expect(
+      screen.queryByRole('button', { name: 'Save comment' }),
+    ).not.toBeInTheDocument()
+    await user.type(screen.getByLabelText('New amount'), '1100')
+    await user.type(screen.getByLabelText('Note (optional)'), 'Classic')
+    await user.click(screen.getByRole('button', { name: /^Save$/ }))
+    await waitFor(() => {
+      expect(
+        useAssetStore
+          .getState()
+          .snapshots.some(
+            (row) =>
+              row.assetId === 'a1' &&
+              row.date === todayIsoDate() &&
+              row.amount === 1100 &&
+              row.note === 'Classic',
+          ),
+      ).toBe(true)
+    })
+  })
+
+  it('puts the comment under remaining and saves both with one diskette (#294)', async () => {
+    const user = userEvent.setup()
+    renderAssetDetails()
+    await screen.findByRole('heading', { name: 'Revolut' })
+    const amount = screen.getByLabelText('New amount')
+    const note = screen.getByLabelText('Note (optional)')
+    expect(
+      amount.compareDocumentPosition(note) & Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy()
+    expect(
+      screen.queryByRole('button', { name: 'Save comment' }),
+    ).not.toBeInTheDocument()
+    await user.type(amount, '1100')
+    await user.type(note, 'Top-up')
+    await user.click(screen.getByRole('button', { name: 'Save remaining' }))
+    await waitFor(() => {
+      expect(
+        useAssetStore
+          .getState()
+          .snapshots.some(
+            (row) =>
+              row.assetId === 'a1' &&
+              row.date === todayIsoDate() &&
+              row.amount === 1100 &&
+              row.note === 'Top-up',
+          ),
+      ).toBe(true)
+    })
   })
 })

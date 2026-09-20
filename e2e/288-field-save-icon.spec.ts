@@ -19,13 +19,11 @@ test('Field-level saves use the diskette icon (#288)', async ({ page }) => {
   const remainingSave = page.getByRole('button', {
     name: 'Сохранить остаток: USD cash',
   })
-  const commentSave = page.getByRole('button', {
-    name: 'Сохранить заметку: USD cash',
-  })
   await expect(remainingSave.locator('.lucide-save')).toBeVisible()
-  await expect(commentSave.locator('.lucide-save')).toBeVisible()
   await expect(remainingSave.locator('.lucide-check')).toHaveCount(0)
-  await expect(commentSave.locator('.lucide-check')).toHaveCount(0)
+  await expect(
+    page.getByRole('button', { name: 'Сохранить заметку: USD cash' }),
+  ).toHaveCount(0)
   await page.screenshot({
     path: join(proofDir, '288-update-field-save-diskette.png'),
   })
@@ -44,11 +42,11 @@ test('Field-level saves use the diskette icon (#288)', async ({ page }) => {
   const detailRemaining = page.getByRole('button', {
     name: 'Сохранить остаток',
   })
-  const detailComment = page.getByRole('button', { name: 'Сохранить заметку' })
   await expect(detailRemaining.locator('.lucide-save')).toBeVisible()
-  await expect(detailComment.locator('.lucide-save')).toBeVisible()
   await expect(detailRemaining.locator('.lucide-check')).toHaveCount(0)
-  await expect(detailComment.locator('.lucide-check')).toHaveCount(0)
+  await expect(
+    page.getByRole('button', { name: 'Сохранить заметку' }),
+  ).toHaveCount(0)
   await page.screenshot({
     path: join(proofDir, '288-asset-detail-field-save-diskette.png'),
   })

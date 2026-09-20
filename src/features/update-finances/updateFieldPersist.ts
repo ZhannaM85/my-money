@@ -81,7 +81,7 @@ export function planUpdatePersistRow({
     entryMode: 'new_balance',
     onDate,
     previous,
-    requireAmount: scope !== 'note',
+    requireAmount: scope === 'auto' || !onDate,
   })
   if (!result.ok && result.error === 'invalid_amount') {
     return { ok: false, error: enterNumberFor(asset.name) }

@@ -23,6 +23,10 @@ export interface Settings {
   showChartTooltip: boolean
   /** Positions list + total on Dashboard (#270). Default on. */
   showDashboardPositions: boolean
+  /**
+   * New Обновить UX (#295). Off by default = classic remaining + page save.
+   */
+  newUpdateUx: boolean
   /** Android home-screen glance widget (#190). Off by default. */
   homeScreenWidget: boolean
   updatedAt: string
@@ -38,6 +42,7 @@ export const DEFAULT_SETTINGS: Settings = {
   assetListOrder: [],
   showChartTooltip: true,
   showDashboardPositions: true,
+  newUpdateUx: false,
   homeScreenWidget: false,
   updatedAt: '1970-01-01T00:00:00.000Z',
 }

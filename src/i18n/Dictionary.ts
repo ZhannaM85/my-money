@@ -186,7 +186,6 @@ export interface Dictionary {
     editSpendLine: (index: number) => string
     saveSpendLine: (index: number) => string
     saveAmountAria: string
-    saveNoteAria: string
     holdingSaved: string
   }
   update: {
@@ -200,7 +199,6 @@ export interface Dictionary {
     spendAmountAria: (name: string, index: number) => string
     spendNoteAria: (name: string, index: number) => string
     saveAmountAria: (name: string) => string
-    saveNoteAria: (name: string) => string
     holdingSaved: string
     saveFailed: string
     editAmountAria: (name: string) => string
@@ -314,6 +312,8 @@ export interface Dictionary {
     homeScreenWidgetOff: string
     dashboardPositions: string
     dashboardPositionsHint: string
+    newUpdateUx: string
+    newUpdateUxHint: string
     featureTogglesTitle: string
     featureTogglesDescription: string
     readPrivacyPolicyLabel: string

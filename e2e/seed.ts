@@ -6,13 +6,15 @@ export async function seedValidationFixture(
   options?: {
     currencyDisplayMode?: 'native' | 'base'
     locale?: 'en' | 'ru'
+    newUpdateUx?: boolean
   },
 ) {
   const currencyDisplayMode = options?.currencyDisplayMode ?? 'native'
   const locale = options?.locale ?? 'en'
+  const newUpdateUx = options?.newUpdateUx ?? true
   await page.goto('/settings')
   await page.waitForFunction(() => document.readyState === 'complete')
-  await page.evaluate(async ({ mode, locale }) => {
+  await page.evaluate(async ({ mode, locale, newUpdateUx }) => {
     const now = '2026-08-17T00:00:00.000Z'
 
     const version = await (async () => {
@@ -43,6 +45,7 @@ export async function seedValidationFixture(
           onboardingCompleted: true,
           assetListSort: 'custom',
           assetListOrder: [],
+          newUpdateUx,
           updatedAt: now,
         })
         tx.objectStore('assets').clear()
@@ -92,7 +95,7 @@ export async function seedValidationFixture(
         tx.onerror = () => reject(tx.error ?? new Error('idb write failed'))
       }
     })
-  }, { mode: currencyDisplayMode, locale })
+  }, { mode: currencyDisplayMode, locale, newUpdateUx })
   await page.reload()
   await page
     .getByRole('heading', { name: locale === 'ru' ? 'Ещё' : 'More' })

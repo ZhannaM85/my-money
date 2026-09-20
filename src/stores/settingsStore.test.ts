@@ -89,4 +89,13 @@ describe('settingsStore', () => {
       false,
     )
   })
+
+  it('persists the new Update UX toggle off by default (#295)', async () => {
+    await useSettingsStore.getState().load()
+    expect(useSettingsStore.getState().settings.newUpdateUx).toBe(false)
+    await useSettingsStore.getState().setNewUpdateUx(true)
+    expect(useSettingsStore.getState().settings.newUpdateUx).toBe(true)
+    await useSettingsStore.getState().load()
+    expect(useSettingsStore.getState().settings.newUpdateUx).toBe(true)
+  })
 })

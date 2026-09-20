@@ -11,6 +11,33 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 296,
+    title: {
+      en: 'Given/received row: amount before comment',
+      ru: 'Строка Отдано/получено: сумма перед комментарием',
+    },
+    en: 'Отдано / получено rows showed comment then amount. Amount is now first (left → right), then the optional comment, then pencil/save/trash. New Update UX only (#295).',
+    ru: 'В строках «Отдано / получено» комментарий стоял перед суммой. Теперь сначала сумма (слева направо), потом необязательный комментарий, потом карандаш/сохранение/корзина. Только в новом «Обновить» (#295).',
+  },
+  {
+    issue: 295,
+    title: {
+      en: 'Feature toggle: new Update UX (default off = classic)',
+      ru: 'Переключатель: новое Обновить (выкл = прежний экран)',
+    },
+    en: 'Users disliked the new Обновить chrome. More → Feature toggles now has New asset update, off by default. Off is classic remaining + page Save. On is given/received, per-field save, and the #294/#296 layout.',
+    ru: 'Новый экран «Обновить» не подошёл. В «Ещё → Переключатели функций» — «Новое обновление активов», по умолчанию выкл. Выкл — прежний остаток и общая «Сохранить». Вкл — отдано/получено, сохранение по полям и раскладка #294/#296.',
+  },
+  {
+    issue: 294,
+    title: {
+      en: 'Остаток update: comment under amount; single save icon',
+      ru: 'Обновление Остатка: комментарий под суммой; одна дискета',
+    },
+    en: 'Остаток on Update had Комментарий above the remaining field and two diskettes (comment vs amount). Comment is under the amount now, and one diskette writes amount + optional comment together. Same layout on asset-detail. Page-level Save updates is unchanged (#285).',
+    ru: 'В режиме «Остаток» на «Обновить» комментарий стоял над суммой, и были две дискеты (комментарий и остаток). Комментарий теперь под суммой, одна дискета пишет остаток и необязательный комментарий вместе. То же в карточке актива. Общая «Сохранить обновления» без изменений (#285).',
+  },
+  {
     issue: 293,
     title: {
       en: 'Update card preview: always remaining, don’t switch on Given/received',

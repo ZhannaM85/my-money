@@ -130,6 +130,12 @@ gh issue edit 108 --add-label validation
 | `283-asset-detail-readonly-spends.png` | Asset details · same read-only lines on Обновить этот актив (RU, #283) |
 | `292-update-absolute-remaining.png` | Update · Остаток is absolute; no Новый остаток / ± row (RU, #292) |
 | `292-asset-detail-absolute-remaining.png` | Asset details · same absolute remaining field (RU, #292) |
+| `295-settings-new-update-toggle.png` | More · New asset update toggle off by default (RU, #295) |
+| `295-update-classic.png` | Update · classic remaining + page Save when toggle off (RU, #295) |
+| `295-update-new-ux.png` | Update · new UX when toggle on (RU, #295) |
+| `296-update-spend-amount-before-comment.png` | Update · Given/received amount then comment (RU, #296) |
+| `294-update-comment-under-amount.png` | Update · Остаток comment under amount, one diskette (RU, #294) |
+| `294-asset-detail-comment-under-amount.png` | Asset details · same comment-under-amount + one diskette (RU, #294) |
 | `289-update-spend-edit-row.png` | Update · purpose + amount on one given/received edit row (RU, #289) |
 | `289-update-spend-view-row.png` | Update · purpose + amount on one read-only row (RU, #289) |
 | `289-asset-detail-spend-row.png` | Asset details · same single-row spend line (RU, #289) |

@@ -18,8 +18,8 @@ import { Button } from '@/shared/ui/button'
 import { DateField } from '@/shared/ui/date-field'
 import { InfoHint } from '@/shared/ui/info-hint'
 import { TextField } from '@/shared/ui/text-field'
+import { useNewUpdateUx } from '@/features/settings/useNewUpdateUx'
 import { AssetBalanceUpdateControls } from './AssetBalanceUpdateControls'
-import { FieldSaveButton } from './FieldSaveButton'
 import {
   persistPlanToSaveInputs,
   planRemainingPersist,
@@ -62,6 +62,7 @@ export function AssetDetailsUpdateForm({
 }) {
   const t = useTranslation()
   const locale = useLocale()
+  const newUx = useNewUpdateUx()
   const [amountDraft, setAmountDraft] = useState('')
   const [amountError, setAmountError] = useState<string | undefined>()
   const [amountDate, setAmountDate] = useState(today)
@@ -75,7 +76,7 @@ export function AssetDetailsUpdateForm({
   const onDate = snapshotOnDate(snapshots, assetId, amountDate)
   const previous = snapshotBeforeDate(snapshots, assetId, amountDate)
   const baseline = updateBaselineAmount(onDate, previous, currency)
-  const givenSpentMode = headline === 'given_spent'
+  const givenSpentMode = newUx && headline === 'given_spent'
   const savedSpends = useMemo(
     () => sameDaySpendEntries(snapshots, assetId, amountDate),
     [snapshots, assetId, amountDate],
@@ -153,11 +154,12 @@ export function AssetDetailsUpdateForm({
     }
   }
 
-  async function saveRemaining(requireAmount: boolean) {
+  async function saveRemaining() {
     if (!isIsoDateOnOrBefore(amountDate, today)) {
       setAmountError(t.asset.snapshotDateInvalid)
       return
     }
+    const requireAmount = !onDate
     const ok = await persistResult(
       planRemainingPersist({
         assetId,
@@ -218,7 +220,7 @@ export function AssetDetailsUpdateForm({
       await saveSpends()
       return
     }
-    await saveRemaining(true)
+    await saveRemaining()
   }
 
   return (
@@ -238,23 +240,6 @@ export function AssetDetailsUpdateForm({
           amountError === t.asset.snapshotDateInvalid ? amountError : undefined
         }
       />
-      {!givenSpentMode ? (
-        <div className="flex items-end gap-2">
-          <div className="min-w-0 flex-1">
-            <TextField
-              label={t.asset.snapshotNote}
-              value={amountNote}
-              onChange={(event) => setAmountNote(event.target.value)}
-            />
-          </div>
-          <FieldSaveButton
-            label={t.asset.saveNoteAria}
-            testId="asset-save-note"
-            disabled={saving}
-            onClick={() => void saveRemaining(false)}
-          />
-        </div>
-      ) : null}
       <div className="flex min-w-0 flex-col gap-2">
         <AssetBalanceUpdateControls
           amountAriaLabel={t.asset.newAmount}
@@ -285,11 +270,21 @@ export function AssetDetailsUpdateForm({
               [spendEditKey]: lines,
             }))
           }}
-          onSaveAmount={() => void saveRemaining(true)}
-          saveAmountLabel={t.asset.saveAmountAria}
+          onSaveAmount={newUx ? () => void saveRemaining() : undefined}
+          saveAmountLabel={newUx ? t.asset.saveAmountAria : undefined}
           saveAmountTestId="asset-save-amount"
           amountSaveDisabled={saving}
           onSaveSpendLine={() => void saveSpends()}
+          newUx={newUx}
+          noteField={
+            givenSpentMode ? undefined : (
+              <TextField
+                label={t.asset.snapshotNote}
+                value={amountNote}
+                onChange={(event) => setAmountNote(event.target.value)}
+              />
+            )
+          }
         />
         <Button
           type="button"

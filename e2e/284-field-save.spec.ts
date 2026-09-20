@@ -58,7 +58,7 @@ test('Per-field save persists on Update and asset detail (#284)', async ({
   ).toBeVisible()
   await expect(
     page.getByRole('button', { name: 'Сохранить заметку' }),
-  ).toBeVisible()
+  ).toHaveCount(0)
   await page.screenshot({
     path: join(proofDir, '284-asset-detail-field-save.png'),
   })

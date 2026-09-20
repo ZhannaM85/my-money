@@ -100,6 +100,9 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
+| [#296](https://github.com/ZhannaM85/my-money/issues/296) | 🔍 Pending validation | Отдано/получено: Сумма before comment | Amount then comment LTR on new Update UX only (#295 ON). |
+| [#295](https://github.com/ZhannaM85/my-money/issues/295) | 🔍 Pending validation | Feature toggle: new Обновить UX (default off) | Ещё → Переключатели: «Новое обновление активов». OFF = classic remaining + page Save. ON = given/received, field saves, #294/#296. |
+| [#294](https://github.com/ZhannaM85/my-money/issues/294) | 🔍 Pending validation | Остаток update: comment under amount; single save | ON path only (#295). Comment under remaining; one diskette writes amount + comment. Page-level Save left for #285. |
 | [#293](https://github.com/ZhannaM85/my-money/issues/293) | 🔍 Pending validation | Обновить card preview: always remaining | Top-right stays current remaining in Остаток and Отдано/получено. Does not swap to given/received headline. |
 | [#292](https://github.com/ZhannaM85/my-money/issues/292) | 🔍 Pending validation | Remove Остаток +/− toggles; absolute balance only | Entire «Новый остаток» / ± row gone. Остаток is absolute; Отдано/Получено move money. |
 | [#289](https://github.com/ZhannaM85/my-money/issues/289) | 🔍 Pending validation | Отдано/получено: purpose and amount on the same row | View + edit keep note and amount on one row; pencil/trash stay. |

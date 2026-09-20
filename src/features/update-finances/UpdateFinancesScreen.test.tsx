@@ -27,9 +27,10 @@ beforeEach(async () => {
   await db.assets.clear()
   await db.snapshots.clear()
   await db.settings.clear()
+  await db.settings.put({ ...DEFAULT_SETTINGS, newUpdateUx: true })
   useAssetStore.setState({ assets: [], snapshots: [], loaded: false })
   useSettingsStore.setState({
-    settings: DEFAULT_SETTINGS,
+    settings: { ...DEFAULT_SETTINGS, newUpdateUx: true },
     loaded: true,
   })
   await useAssetStore.getState().saveAsset(
@@ -1224,7 +1225,7 @@ describe('UpdateFinancesScreen', () => {
     await user.clear(note)
     await user.type(note, 'Edited comment')
     await user.click(
-      screen.getByRole('button', { name: 'Save comment for Revolut' }),
+      screen.getByRole('button', { name: 'Save remaining for Revolut' }),
     )
     await waitFor(() => {
       expect(
@@ -1311,15 +1312,84 @@ describe('UpdateFinancesScreen', () => {
     const remaining = await screen.findByRole('button', {
       name: 'Save remaining for Revolut',
     })
-    const comment = screen.getByRole('button', {
-      name: 'Save comment for Revolut',
-    })
     expect(remaining.querySelector('.lucide-save')).toBeTruthy()
-    expect(comment.querySelector('.lucide-save')).toBeTruthy()
     expect(remaining.querySelector('.lucide-check')).toBeFalsy()
-    expect(comment.querySelector('.lucide-check')).toBeFalsy()
+    expect(
+      screen.queryByRole('button', { name: 'Save comment for Revolut' }),
+    ).not.toBeInTheDocument()
     expect(
       screen.getByRole('button', { name: 'Save updates' }),
     ).toBeInTheDocument()
+  })
+
+  it('keeps classic Update when the new UX toggle is off (#295)', async () => {
+    const user = userEvent.setup()
+    await db.settings.put({ ...DEFAULT_SETTINGS, newUpdateUx: false })
+    useSettingsStore.setState({
+      settings: { ...DEFAULT_SETTINGS, newUpdateUx: false },
+      loaded: true,
+    })
+    render(
+      <MemoryRouter>
+        <UpdateFinancesScreen />
+      </MemoryRouter>,
+    )
+    const amount = await screen.findByLabelText('Revolut new amount')
+    const note = screen.getByLabelText('Revolut note')
+    expect(
+      amount.compareDocumentPosition(note) & Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy()
+    expect(
+      screen.queryByRole('button', { name: 'Given / received' }),
+    ).not.toBeInTheDocument()
+    expect(
+      screen.queryByRole('button', { name: 'Save remaining for Revolut' }),
+    ).not.toBeInTheDocument()
+    expect(
+      screen.queryByRole('button', { name: 'Save comment for Revolut' }),
+    ).not.toBeInTheDocument()
+    await user.type(amount, '1500')
+    await user.type(note, 'Classic note')
+    await user.click(screen.getByRole('button', { name: 'Save updates' }))
+    await waitFor(() => {
+      expect(
+        useAssetStore
+          .getState()
+          .snapshots.find(
+            (row) => row.assetId === 'a1' && row.date === todayIsoDate(),
+          ),
+      ).toMatchObject({ amount: 1500, note: 'Classic note' })
+    })
+  })
+
+  it('puts the comment under remaining and saves both with one diskette (#294)', async () => {
+    const user = userEvent.setup()
+    render(
+      <MemoryRouter>
+        <UpdateFinancesScreen />
+      </MemoryRouter>,
+    )
+    const amount = await screen.findByLabelText('Revolut new amount')
+    const note = screen.getByLabelText('Revolut note')
+    expect(
+      amount.compareDocumentPosition(note) & Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy()
+    expect(
+      screen.queryByRole('button', { name: 'Save comment for Revolut' }),
+    ).not.toBeInTheDocument()
+    await user.type(amount, '1500')
+    await user.type(note, 'Top-up')
+    await user.click(
+      screen.getByRole('button', { name: 'Save remaining for Revolut' }),
+    )
+    await waitFor(() => {
+      expect(
+        useAssetStore
+          .getState()
+          .snapshots.find(
+            (row) => row.assetId === 'a1' && row.date === todayIsoDate(),
+          ),
+      ).toMatchObject({ amount: 1500, note: 'Top-up' })
+    })
   })
 })

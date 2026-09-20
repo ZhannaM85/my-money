@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react'
 import type { BalanceHeadline } from '@/domain/asset'
 import type { Locale } from '@/domain/settings'
 import { useTranslation } from '@/i18n'
@@ -56,6 +57,8 @@ export function AssetBalanceUpdateControls({
   saveAmountTestId,
   amountSaveDisabled,
   onSaveSpendLine,
+  noteField,
+  newUx = false,
 }: {
   amountAriaLabel: string
   locale: Locale
@@ -75,20 +78,25 @@ export function AssetBalanceUpdateControls({
   saveAmountTestId?: string
   amountSaveDisabled?: boolean
   onSaveSpendLine?: (index: number) => void
+  noteField?: ReactNode
+  newUx?: boolean
 }) {
   const t = useTranslation()
   const givenSpentLines =
-    headline === 'given_spent' && spendLines && onSpendLinesChange
+    newUx && headline === 'given_spent' && spendLines && onSpendLinesChange
+  const fieldSave = newUx && onSaveAmount && saveAmountLabel
 
   return (
     <div
       className="flex min-w-0 flex-col gap-2"
       data-testid="asset-balance-update"
     >
-      <BalanceHeadlineToggles
-        headline={headline}
-        onHeadlineChange={onHeadlineChange}
-      />
+      {newUx ? (
+        <BalanceHeadlineToggles
+          headline={headline}
+          onHeadlineChange={onHeadlineChange}
+        />
+      ) : null}
       {givenSpentLines ? (
         <>
           <SpendLinesEditor
@@ -115,16 +123,19 @@ export function AssetBalanceUpdateControls({
             </p>
           ) : null}
         </>
-      ) : onSaveAmount && saveAmountLabel ? (
-        <div className="flex gap-2">
-          <MoneyInput
-            aria-label={amountAriaLabel}
-            locale={locale}
-            currency={currency}
-            value={draft}
-            onValueChange={onDraftChange}
-            placeholder={placeholder}
-          />
+      ) : fieldSave ? (
+        <div className="flex items-start gap-2">
+          <div className="flex min-w-0 flex-1 flex-col gap-2">
+            <MoneyInput
+              aria-label={amountAriaLabel}
+              locale={locale}
+              currency={currency}
+              value={draft}
+              onValueChange={onDraftChange}
+              placeholder={placeholder}
+            />
+            {noteField}
+          </div>
           <FieldSaveButton
             label={saveAmountLabel}
             testId={saveAmountTestId ?? 'save-remaining-amount'}
@@ -133,14 +144,17 @@ export function AssetBalanceUpdateControls({
           />
         </div>
       ) : (
-        <MoneyInput
-          aria-label={amountAriaLabel}
-          locale={locale}
-          currency={currency}
-          value={draft}
-          onValueChange={onDraftChange}
-          placeholder={placeholder}
-        />
+        <>
+          <MoneyInput
+            aria-label={amountAriaLabel}
+            locale={locale}
+            currency={currency}
+            value={draft}
+            onValueChange={onDraftChange}
+            placeholder={placeholder}
+          />
+          {noteField}
+        </>
       )}
     </div>
   )

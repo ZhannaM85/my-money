@@ -22,7 +22,7 @@ import {
   AssetBalanceUpdateControls,
   BalanceHeadlineToggles,
 } from '@/features/assets/AssetBalanceUpdateControls'
-import { FieldSaveButton } from '@/features/assets/FieldSaveButton'
+import { useNewUpdateUx } from '@/features/settings/useNewUpdateUx'
 import {
   parseSpendLineDrafts,
   spendBaselineAmount,
@@ -48,7 +48,6 @@ export function UpdateHoldingRow({
   onSpendLinesChange,
   onStartEdit,
   onSaveAmount,
-  onSaveNote,
   onSaveSpends,
   saveDisabled,
   saveMessage,
@@ -72,7 +71,6 @@ export function UpdateHoldingRow({
   onSpendLinesChange: (lines: SpendLineDraft[]) => void
   onStartEdit: () => void
   onSaveAmount: () => void
-  onSaveNote: () => void
   onSaveSpends: () => void
   saveDisabled: boolean
   saveMessage?: string
@@ -80,9 +78,10 @@ export function UpdateHoldingRow({
 }) {
   const t = useTranslation()
   const locale = useLocale()
+  const newUx = useNewUpdateUx()
   const headline = assetBalanceHeadline(asset)
   const baseline = updateBaselineAmount(onDate, previous, asset.currency)
-  const givenSpentMode = headline === 'given_spent'
+  const givenSpentMode = newUx && headline === 'given_spent'
   const savedSpends =
     givenSpentMode && onDate
       ? sameDaySpendEntries(snapshots, asset.id, onDate.date)
@@ -166,10 +165,12 @@ export function UpdateHoldingRow({
       {meta}
       {remainingLocked && onDate ? (
         <>
-          <BalanceHeadlineToggles
-            headline={headline}
-            onHeadlineChange={onHeadlineChange}
-          />
+          {newUx ? (
+            <BalanceHeadlineToggles
+              headline={headline}
+              onHeadlineChange={onHeadlineChange}
+            />
+          ) : null}
           <div className="flex gap-2">
             <span className="flex h-control min-w-0 flex-1 items-center justify-end tabular-nums font-medium">
               {formatAmount(onDate.amount, onDate.currency, locale)}
@@ -194,9 +195,42 @@ export function UpdateHoldingRow({
           ) : null}
         </>
       ) : (
-        <>
-          {!givenSpentMode ? (
-            <div className="flex gap-2">
+        <AssetBalanceUpdateControls
+          amountAriaLabel={t.update.newAmountAria(asset.name)}
+          locale={locale}
+          currency={asset.currency}
+          headline={headline}
+          onHeadlineChange={onHeadlineChange}
+          draft={draft}
+          onDraftChange={onDraftChange}
+          placeholder={
+            placeholderSource
+              ? formatEditableAmount(
+                  placeholderSource.amount,
+                  locale,
+                  placeholderSource.currency,
+                )
+              : t.asset.amountPlaceholder
+          }
+          resultingRemaining={
+            givenSpentMode && spendEntries.length > 0
+              ? resolvedAmount
+              : undefined
+          }
+          spendLines={spendLines}
+          onSpendLinesChange={onSpendLinesChange}
+          spendAmountAria={(index) =>
+            t.update.spendAmountAria(asset.name, index)
+          }
+          spendNoteAria={(index) => t.update.spendNoteAria(asset.name, index)}
+          onSaveAmount={onSaveAmount}
+          saveAmountLabel={t.update.saveAmountAria(asset.name)}
+          saveAmountTestId={`update-save-amount-${asset.id}`}
+          amountSaveDisabled={saveDisabled}
+          onSaveSpendLine={() => onSaveSpends()}
+          newUx={newUx}
+          noteField={
+            givenSpentMode ? undefined : (
               <Input
                 data-testid={`update-note-${asset.id}`}
                 aria-label={t.update.noteAria(asset.name)}
@@ -204,49 +238,9 @@ export function UpdateHoldingRow({
                 value={noteValue}
                 onChange={(event) => onNoteChange(event.target.value)}
               />
-              <FieldSaveButton
-                label={t.update.saveNoteAria(asset.name)}
-                testId={`update-save-note-${asset.id}`}
-                disabled={saveDisabled}
-                onClick={onSaveNote}
-              />
-            </div>
-          ) : null}
-          <AssetBalanceUpdateControls
-            amountAriaLabel={t.update.newAmountAria(asset.name)}
-            locale={locale}
-            currency={asset.currency}
-            headline={headline}
-            onHeadlineChange={onHeadlineChange}
-            draft={draft}
-            onDraftChange={onDraftChange}
-            placeholder={
-              placeholderSource
-                ? formatEditableAmount(
-                    placeholderSource.amount,
-                    locale,
-                    placeholderSource.currency,
-                  )
-                : t.asset.amountPlaceholder
-            }
-            resultingRemaining={
-              givenSpentMode && spendEntries.length > 0
-                ? resolvedAmount
-                : undefined
-            }
-            spendLines={spendLines}
-            onSpendLinesChange={onSpendLinesChange}
-            spendAmountAria={(index) =>
-              t.update.spendAmountAria(asset.name, index)
-            }
-            spendNoteAria={(index) => t.update.spendNoteAria(asset.name, index)}
-            onSaveAmount={onSaveAmount}
-            saveAmountLabel={t.update.saveAmountAria(asset.name)}
-            saveAmountTestId={`update-save-amount-${asset.id}`}
-            amountSaveDisabled={saveDisabled}
-            onSaveSpendLine={() => onSaveSpends()}
-          />
-        </>
+            )
+          }
+        />
       )}
       {saveError ? (
         <p

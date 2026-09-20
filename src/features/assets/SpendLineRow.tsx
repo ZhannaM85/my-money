@@ -79,25 +79,25 @@ export function SpendLineRow({
         </span>
         <div className="flex gap-2" data-testid={`spend-line-values-${index}`}>
           <span className="flex h-control min-w-0 flex-1 items-center gap-1.5">
+            <span
+              className="shrink-0 tabular-nums font-medium"
+              data-testid={`spend-line-amount-${index}`}
+            >
+              {displayAmount(row.amount, locale, currency)}
+            </span>
             {note ? (
               <>
+                <span className="text-muted-foreground" aria-hidden>
+                  ·
+                </span>
                 <span
                   data-testid={`spend-line-note-${index}`}
                   className="min-w-0 truncate text-sm text-muted-foreground"
                 >
                   {row.note}
                 </span>
-                <span className="text-muted-foreground" aria-hidden>
-                  ·
-                </span>
               </>
             ) : null}
-            <span
-              className="ml-auto shrink-0 tabular-nums font-medium"
-              data-testid={`spend-line-amount-${index}`}
-            >
-              {displayAmount(row.amount, locale, currency)}
-            </span>
           </span>
           <Button
             type="button"
@@ -135,13 +135,6 @@ export function SpendLineRow({
         </Chip>
       </div>
       <div className="flex gap-2" data-testid={`spend-line-values-${index}`}>
-        <Input
-          className="min-w-0 flex-1"
-          aria-label={noteAria}
-          placeholder={t.asset.snapshotNote}
-          value={row.note}
-          onChange={(event) => onUpdate({ note: event.target.value })}
-        />
         <div className="w-[8.75rem] shrink-0">
           <MoneyInput
             aria-label={amountAria}
@@ -152,6 +145,13 @@ export function SpendLineRow({
             placeholder={t.asset.amountPlaceholder}
           />
         </div>
+        <Input
+          className="min-w-0 flex-1"
+          aria-label={noteAria}
+          placeholder={t.asset.snapshotNote}
+          value={row.note}
+          onChange={(event) => onUpdate({ note: event.target.value })}
+        />
         <FieldSaveButton label={t.asset.saveSpendLine(n)} onClick={onCommit} />
         {removeButton}
       </div>

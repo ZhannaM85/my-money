@@ -214,6 +214,23 @@ describe('SettingsScreen', () => {
     )
   })
 
+  it('defaults New asset update off and persists turning it on (#295)', async () => {
+    const user = userEvent.setup()
+    await db.settings.put(DEFAULT_SETTINGS)
+    render(
+      <MemoryRouter>
+        <SettingsScreen />
+      </MemoryRouter>,
+    )
+    const toggle = await screen.findByRole('switch', {
+      name: 'New asset update',
+    })
+    expect(toggle).toHaveAttribute('aria-checked', 'false')
+    await user.click(toggle)
+    expect(toggle).toHaveAttribute('aria-checked', 'true')
+    expect(useSettingsStore.getState().settings.newUpdateUx).toBe(true)
+  })
+
   it('groups More into meaning cards (#272)', async () => {
     render(
       <MemoryRouter>
