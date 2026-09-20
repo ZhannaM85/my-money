@@ -1,4 +1,4 @@
-import { Pencil, Save, Trash2 } from 'lucide-react'
+import { Pencil, Trash2 } from 'lucide-react'
 import type { FlowDirection } from '@/domain/snapshot'
 import type { Locale } from '@/domain/settings'
 import { useTranslation } from '@/i18n'
@@ -7,6 +7,7 @@ import { Button } from '@/shared/ui/button'
 import { Chip } from '@/shared/ui/chip'
 import { Input } from '@/shared/ui/input'
 import { MoneyInput } from '@/shared/ui/money-input'
+import { FieldSaveButton } from './FieldSaveButton'
 import type { SpendLineDraft } from './spendLines'
 
 function displayAmount(
@@ -134,15 +135,7 @@ export function SpendLineRow({
           onValueChange={(amount) => onUpdate({ amount })}
           placeholder={t.asset.amountPlaceholder}
         />
-        <Button
-          type="button"
-          variant="outline"
-          size="icon-xl"
-          aria-label={t.asset.saveSpendLine(n)}
-          onClick={onCommit}
-        >
-          <Save className="size-5" aria-hidden />
-        </Button>
+        <FieldSaveButton label={t.asset.saveSpendLine(n)} onClick={onCommit} />
         {removeButton}
       </div>
       <Input

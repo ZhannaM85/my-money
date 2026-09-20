@@ -1190,4 +1190,25 @@ describe('UpdateFinancesScreen', () => {
       screen.getByRole('button', { name: 'Save updates' }),
     ).toBeInTheDocument()
   })
+
+  it('uses the diskette icon for remaining and comment field saves (#288)', async () => {
+    render(
+      <MemoryRouter>
+        <UpdateFinancesScreen />
+      </MemoryRouter>,
+    )
+    const remaining = await screen.findByRole('button', {
+      name: 'Save remaining for Revolut',
+    })
+    const comment = screen.getByRole('button', {
+      name: 'Save comment for Revolut',
+    })
+    expect(remaining.querySelector('.lucide-save')).toBeTruthy()
+    expect(comment.querySelector('.lucide-save')).toBeTruthy()
+    expect(remaining.querySelector('.lucide-check')).toBeFalsy()
+    expect(comment.querySelector('.lucide-check')).toBeFalsy()
+    expect(
+      screen.getByRole('button', { name: 'Save updates' }),
+    ).toBeInTheDocument()
+  })
 })

@@ -1,4 +1,4 @@
-import { Check } from 'lucide-react'
+import { Save } from 'lucide-react'
 import { Button } from '@/shared/ui/button'
 
 export function FieldSaveButton({
@@ -22,7 +22,7 @@ export function FieldSaveButton({
       disabled={disabled}
       onClick={onClick}
     >
-      <Check className="size-5" aria-hidden />
+      <Save className="size-5" aria-hidden />
     </Button>
   )
 }

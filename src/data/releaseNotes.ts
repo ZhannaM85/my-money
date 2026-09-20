@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 257,
+    issue: 288,
+    date: '2026-09-20T22:40:00+03:00',
+    en: 'Remaining, comment, and given/received field saves on Update and asset details all use the same diskette icon.',
+    ru: 'Сохранение остатка, комментария и строк «Отдано / получено» на «Обновить» и в карточке — одна иконка дискеты.',
+  },
+  {
     version: 256,
     issue: 284,
     date: '2026-09-20T21:10:00+03:00',

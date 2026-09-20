@@ -128,6 +128,9 @@ gh issue edit 108 --add-label validation
 | `283-update-readonly-spends.png` | Update · saved given/received lines read-only with pencil (RU, #283) |
 | `283-update-after-line-save.png` | Update · line locked again after per-line Save (RU, #283) |
 | `283-asset-detail-readonly-spends.png` | Asset details · same read-only lines on Обновить этот актив (RU, #283) |
+| `288-update-field-save-diskette.png` | Update · Остаток / comment field save is diskette (RU, #288) |
+| `288-update-spend-line-save-diskette.png` | Update · Отдано/получено line save is diskette (RU, #288) |
+| `288-asset-detail-field-save-diskette.png` | Asset details · same diskette field saves (RU, #288) |
 | `284-update-field-save.png` | Update · per-field save on Остаток / comment (RU, #284) |
 | `284-update-spend-line-save.png` | Update · per-line save on Отдано/получено (RU, #284) |
 | `284-asset-detail-field-save.png` | Asset details · same field save on Обновить этот актив (RU, #284) |

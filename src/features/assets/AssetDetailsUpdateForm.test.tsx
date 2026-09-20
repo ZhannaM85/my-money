@@ -291,4 +291,16 @@ describe('AssetDetailsUpdateForm', () => {
     })
     expect(screen.getByRole('button', { name: /^Save$/ })).toBeInTheDocument()
   })
+
+  it('uses the diskette icon for remaining and comment field saves (#288)', async () => {
+    renderAssetDetails()
+    await screen.findByRole('heading', { name: 'Revolut' })
+    const remaining = screen.getByRole('button', { name: 'Save remaining' })
+    const comment = screen.getByRole('button', { name: 'Save comment' })
+    expect(remaining.querySelector('.lucide-save')).toBeTruthy()
+    expect(comment.querySelector('.lucide-save')).toBeTruthy()
+    expect(remaining.querySelector('.lucide-check')).toBeFalsy()
+    expect(comment.querySelector('.lucide-check')).toBeFalsy()
+    expect(screen.getByRole('button', { name: /^Save$/ })).toBeInTheDocument()
+  })
 })

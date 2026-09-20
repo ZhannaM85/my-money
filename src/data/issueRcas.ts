@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 288,
+    title: {
+      en: 'Unify field-level save icon to diskette (not checkmark)',
+      ru: 'Одна иконка дискеты для сохранения поля (не галочка)',
+    },
+    en: 'Остаток / Новый остаток and Комментарий used a checkmark while Отдано / получено lines used a diskette. All field-level persist controls now use the diskette. Page-level Save updates is unchanged (#285).',
+    ru: 'Остаток / Новый остаток и Комментарий были с галочкой, строки «Отдано / получено» — с дискетой. Все полевые сохранения теперь с дискетой. Общая «Сохранить обновления» без изменений (#285).',
+  },
+  {
     issue: 284,
     title: {
       en: 'Update: per-field / per-card save that persists',

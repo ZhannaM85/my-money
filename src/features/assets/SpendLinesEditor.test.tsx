@@ -58,10 +58,13 @@ describe('SpendLinesEditor (#283)', () => {
     await user.click(screen.getByRole('button', { name: 'Edit entry 1' }))
     const amount = screen.getByLabelText('Entry 1')
     expect(amount).toHaveValue('1,500.00')
+    const save = screen.getByRole('button', { name: 'Save entry 1' })
+    expect(save.querySelector('.lucide-save')).toBeTruthy()
+    expect(save.querySelector('.lucide-check')).toBeFalsy()
     await user.clear(amount)
     await user.type(amount, '1200')
     await user.click(screen.getByRole('button', { name: 'Received' }))
-    await user.click(screen.getByRole('button', { name: 'Save entry 1' }))
+    await user.click(save)
 
     expect(screen.getByTestId('spend-line-0')).toHaveAttribute(
       'data-editing',
