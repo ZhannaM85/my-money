@@ -347,7 +347,7 @@ Until later feature epics land, UI module tables below are still the intended ma
 |------|---------|
 | `features/onboarding/` | Flow 1 — first assets + base currency + first net worth |
 | `features/charts/` | Shared chart-range chrome + hook (#239). Dashboard↔History persist one range; asset details stay local. |
-| `features/net-worth/` | Shared converted series + change + missing rates (#246). Update rates lives here; Dashboard mounts it. |
+| `features/net-worth/` | Shared converted series + change + missing rates (#246). Update rates lives here; More mounts the button (#256). Pull-to-refresh uses the same `refreshFxRates` force-fetch (#254). |
 | `features/dashboard/` | Сводка — today + positions (headline, chart, holdings) |
 | `features/update-finances/` | Flow 3 — bulk update, no-change, suggested-by-frequency |
 | `features/assets/` | List, filters, create/edit, and Flow 4 asset details (`AssetDetailsScreen`) |

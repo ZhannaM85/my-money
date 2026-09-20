@@ -57,12 +57,13 @@ history. It is **not** a runtime client and must not be re-homed under
 
 ## Refreshing rates vs pull-to-refresh (#254)
 
-Pull-to-refresh reloads the shell (`reloadForUpdate` — pick up a new
-service worker / page). It does **not** fetch quotes.
+Pull-to-refresh is the same **intentional** FX refresh as **Update rates**
+on More: `refreshFxRates` → `ensureRange({ force: true })`, then
+`markRatesFetched`. Capacitor will not change this — the gesture is wired
+in `usePullToRefresh` / `PullToRefreshIndicator`.
 
-Users refresh FX with **Update rates** on Dashboard
-(`useUpdateRates` → `ensureRange({ force: true })`). Capacitor will not
-change this split.
+The shell reload (`reloadForUpdate`) stays on the **app update** banner
+when a new service worker is waiting. Pull does not reload the page.
 
 ---
 
@@ -74,7 +75,7 @@ change this split.
 - Do not send amounts, names, or assets to any FX API.
 - Do not treat Frankfurter as the RUB path. ARCHITECTURE used to say
   that; it is wrong.
-- Do not wire pull-to-refresh to Update rates or `ensureRange`.
+- Do not add a second FX force-fetch beside `refreshFxRates`.
 
 ---
 
@@ -88,8 +89,9 @@ change this split.
 | `src/infrastructure/fx/shouldFetchFrankfurter.ts` | Offline gate |
 | `src/domain/fx/` | Pure lookup / convert / `mergeRateTables` — no HTTP |
 | `src/features/settings/ManualRatesSection.tsx` | Today’s manual overrides |
-| `src/features/net-worth/UpdateRates.tsx` | Dashboard **Update rates** button |
-| `src/shared/hooks/usePullToRefresh.ts` | Reloads the app; never fetches FX |
+| `src/features/net-worth/UpdateRates.tsx` | More **Update rates** button |
+| `src/features/net-worth/refreshFxRates.ts` | Shared force-fetch used by More and pull-to-refresh |
+| `src/shared/hooks/usePullToRefresh.ts` | Gesture; `onRefresh` is the FX force-fetch (#254) |
 | `scripts/generate-rub-rates.mjs` | Deploy-time NBG → `public/fx/rub/` |
 | `scripts/lib/nbgSeries.mjs` | NBG parse + GEL cross |
 | `scripts/lib/cbrSeries.mjs` | Generate-time dates / fill-forward (and CBR XML parse) |

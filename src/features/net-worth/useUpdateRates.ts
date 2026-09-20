@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useFxStore } from '@/stores/fxStore'
+import { refreshFxRates } from './refreshFxRates'
 
 export type RatesStatus = 'idle' | 'loading' | 'updated' | 'offline' | 'error'
 
@@ -10,8 +11,6 @@ export function useUpdateRates(
   baseCurrency: string,
   fxSymbols: readonly string[],
 ) {
-  const ensureRange = useFxStore((state) => state.ensureRange)
-  const markRatesFetched = useFxStore((state) => state.markRatesFetched)
   const lastFetchedAt = useFxStore((state) => state.lastFetchedAt)
   const fxLoading = useFxStore((state) => state.loading)
   const [ratesStatus, setRatesStatus] = useState<RatesStatus>('idle')
@@ -19,20 +18,9 @@ export function useUpdateRates(
   const refreshRates = () => {
     void (async () => {
       setRatesStatus('loading')
-      const online = typeof navigator === 'undefined' ? true : navigator.onLine
-      await ensureRange(start, chartEnd, baseCurrency, fxSymbols, {
-        force: true,
-      })
-      if (!online) {
-        setRatesStatus('offline')
-        return
-      }
-      if (useFxStore.getState().error) {
-        setRatesStatus('error')
-        return
-      }
-      markRatesFetched()
-      setRatesStatus('updated')
+      setRatesStatus(
+        await refreshFxRates(start, chartEnd, baseCurrency, fxSymbols),
+      )
     })()
   }
 

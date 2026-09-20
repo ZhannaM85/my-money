@@ -23,7 +23,7 @@ export async function reloadForUpdate(
       const registration = await navigator.serviceWorker.getRegistration()
       if (registration) {
         // #220: registration.update() can hang for a minute on a slow phone
-        // network — cap the wait so pull-to-refresh always reloads.
+        // network — cap the wait so an update reload always completes.
         await Promise.race([
           registration.update().then(() => undefined),
           raceTimeout(SW_UPDATE_TIMEOUT_MS),

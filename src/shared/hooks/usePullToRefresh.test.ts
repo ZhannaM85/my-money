@@ -1,6 +1,5 @@
-import { act, renderHook } from '@testing-library/react'
-import { afterEach, describe, expect, it, vi } from 'vitest'
-import { useFxStore } from '@/stores/fxStore'
+import { act, renderHook, waitFor } from '@testing-library/react'
+import { describe, expect, it, vi } from 'vitest'
 import { PULL_ARM_SLOP, PULL_THRESHOLD } from '@/shared/lib/pullToRefresh'
 import { usePullToRefresh } from './usePullToRefresh'
 
@@ -24,27 +23,49 @@ function dispatchTouch(
   document.dispatchEvent(event)
 }
 
-describe('usePullToRefresh (#254)', () => {
-  afterEach(() => {
-    reloadForUpdate.mockClear()
-  })
+function pullToRefresh(target: EventTarget) {
+  const delta = PULL_ARM_SLOP + PULL_THRESHOLD / 0.45 + 10
+  dispatchTouch('touchstart', 0, target)
+  dispatchTouch('touchmove', delta, target)
+  dispatchTouch('touchend', delta, target)
+}
 
-  it('reloads the app and does not fetch FX rates', () => {
-    const ensureRange = vi.spyOn(useFxStore.getState(), 'ensureRange')
+describe('usePullToRefresh (#254)', () => {
+  it('runs onRefresh and does not reload the shell', async () => {
+    const onRefresh = vi.fn().mockResolvedValue('updated')
     const target = document.createElement('div')
     document.body.appendChild(target)
-    renderHook(() => usePullToRefresh())
+    const { result } = renderHook(() => usePullToRefresh(onRefresh))
 
-    const delta = PULL_ARM_SLOP + PULL_THRESHOLD / 0.45 + 10
     act(() => {
-      dispatchTouch('touchstart', 0, target)
-      dispatchTouch('touchmove', delta, target)
-      dispatchTouch('touchend', delta, target)
+      pullToRefresh(target)
     })
 
-    expect(reloadForUpdate).toHaveBeenCalledTimes(1)
-    expect(ensureRange).not.toHaveBeenCalled()
+    expect(onRefresh).toHaveBeenCalledTimes(1)
+    expect(reloadForUpdate).not.toHaveBeenCalled()
+    expect(result.current.isRefreshing).toBe(true)
+
+    await waitFor(() => {
+      expect(result.current.isRefreshing).toBe(false)
+    })
+    expect(result.current.pullDistance).toBe(0)
     target.remove()
-    ensureRange.mockRestore()
+  })
+
+  it('clears the spinner even when onRefresh rejects', async () => {
+    const onRefresh = vi.fn().mockRejectedValue(new Error('offline'))
+    const target = document.createElement('div')
+    document.body.appendChild(target)
+    const { result } = renderHook(() => usePullToRefresh(onRefresh))
+
+    act(() => {
+      pullToRefresh(target)
+    })
+
+    await waitFor(() => {
+      expect(result.current.isRefreshing).toBe(false)
+    })
+    expect(reloadForUpdate).not.toHaveBeenCalled()
+    target.remove()
   })
 })

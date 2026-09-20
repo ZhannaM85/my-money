@@ -5,19 +5,17 @@ import {
   PULL_THRESHOLD,
   resistedPullDistance,
 } from '@/shared/lib/pullToRefresh'
-import { reloadForUpdate } from '@/shared/lib/reloadForUpdate'
 
 /**
  * Drag-down-to-refresh gesture (#39). Only activates when every vertical
  * scroller under the touch is at the top — not merely `#main-content`, which
  * stays at 0 while Update’s inner holdings list scrolls (#203).
- * Triggers `reloadForUpdate()` so the reload picks up a new SW.
- * Does **not** fetch FX — More **Update rates** does that (#254, #256).
+ * Runs `onRefresh` (FX force-fetch, #254) instead of reloading the shell.
  *
  * #216: icon stays hidden until ~100px of drag; resisted travel after that
  * so refresh still needs a long deliberate pull (Capacitor will not change this).
  */
-export function usePullToRefresh(): {
+export function usePullToRefresh(onRefresh: () => Promise<unknown>): {
   pullDistance: number
   isRefreshing: boolean
 } {
@@ -27,10 +25,23 @@ export function usePullToRefresh(): {
   const pulling = useRef(false)
   const armed = useRef(false)
   const currentPull = useRef(0)
+  const refreshing = useRef(false)
+  const onRefreshRef = useRef(onRefresh)
 
   useEffect(() => {
+    onRefreshRef.current = onRefresh
+  }, [onRefresh])
+
+  useEffect(() => {
+    function finishRefresh() {
+      refreshing.current = false
+      currentPull.current = 0
+      setPullDistance(0)
+      setIsRefreshing(false)
+    }
+
     function onTouchStart(event: TouchEvent) {
-      if (!isAtRefreshableTop(event.target)) return
+      if (refreshing.current || !isAtRefreshableTop(event.target)) return
       startY.current = event.touches[0].clientY
       pulling.current = true
       armed.current = false
@@ -62,8 +73,9 @@ export function usePullToRefresh(): {
       armed.current = false
       startY.current = null
       if (currentPull.current >= PULL_THRESHOLD) {
+        refreshing.current = true
         setIsRefreshing(true)
-        void reloadForUpdate()
+        void onRefreshRef.current().then(finishRefresh, finishRefresh)
       } else {
         currentPull.current = 0
         setPullDistance(0)

@@ -1,5 +1,9 @@
 import { useMemo } from 'react'
-import { UpdateRates, useUpdateRates } from '@/features/net-worth'
+import {
+  fxRefreshWindow,
+  UpdateRates,
+  useUpdateRates,
+} from '@/features/net-worth'
 import { todayIsoDate } from '@/shared/lib/money'
 import { useAssetStore } from '@/stores/assetStore'
 import { useSettingsStore } from '@/stores/settingsStore'
@@ -9,18 +13,11 @@ export function SettingsUpdateRates() {
   const snapshots = useAssetStore((state) => state.snapshots)
   const baseCurrency = useSettingsStore((state) => state.settings.baseCurrency)
   const today = todayIsoDate()
-  const earliest = useMemo(() => {
-    if (snapshots.length === 0) return today
-    return snapshots.reduce(
-      (min, snapshot) => (snapshot.date < min ? snapshot.date : min),
-      snapshots[0].date,
-    )
-  }, [snapshots, today])
-  const symbols = useMemo(
-    () => [...new Set(snapshots.map((snapshot) => snapshot.currency))],
-    [snapshots],
+  const { start, symbols } = useMemo(
+    () => fxRefreshWindow(snapshots, today),
+    [snapshots, today],
   )
-  const rates = useUpdateRates(earliest, today, baseCurrency, symbols)
+  const rates = useUpdateRates(start, today, baseCurrency, symbols)
 
   return (
     <UpdateRates

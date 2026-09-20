@@ -5,7 +5,7 @@ import { Button } from '@/shared/ui/button'
 import type { RatesStatus } from './useUpdateRates'
 
 /** Single Update rates control (#246) — mount on More (#256).
- * Pull-to-refresh does not call this (#254). */
+ * Pull-to-refresh uses the same `refreshFxRates` path (#254). */
 export function UpdateRates({
   fxLoading,
   ratesStatus,

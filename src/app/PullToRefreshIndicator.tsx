@@ -1,4 +1,5 @@
 import { RefreshCw } from 'lucide-react'
+import { useRefreshFxRates } from '@/features/net-worth'
 import { useTranslation } from '@/i18n'
 import { usePullToRefresh } from '@/shared/hooks'
 import { PULL_THRESHOLD } from '@/shared/lib/pullToRefresh'
@@ -6,7 +7,8 @@ import { cn } from '@/shared/lib/utils'
 
 export function PullToRefreshIndicator() {
   const t = useTranslation()
-  const { pullDistance, isRefreshing } = usePullToRefresh()
+  const refreshFxRates = useRefreshFxRates()
+  const { pullDistance, isRefreshing } = usePullToRefresh(refreshFxRates)
 
   if (pullDistance === 0 && !isRefreshing) return null
 
