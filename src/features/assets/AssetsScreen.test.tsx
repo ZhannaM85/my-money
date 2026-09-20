@@ -457,9 +457,11 @@ describe('AssetsScreen sort (#100)', () => {
       await screen.findByRole('button', { name: 'Reorder Broker' }),
     ).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: 'Save order' }))
-    expect(
-      screen.queryByRole('button', { name: 'Reorder Broker' }),
-    ).not.toBeInTheDocument()
+    await waitFor(() => {
+      expect(
+        screen.queryByRole('button', { name: 'Reorder Broker' }),
+      ).not.toBeInTheDocument()
+    })
   })
 
   it('leaves reorder mode when a named sort is chosen', async () => {
