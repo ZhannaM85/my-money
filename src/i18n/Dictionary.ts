@@ -188,6 +188,9 @@ export interface Dictionary {
     spendLineNote: (index: number) => string
     editSpendLine: (index: number) => string
     saveSpendLine: (index: number) => string
+    saveAmountAria: string
+    saveNoteAria: string
+    holdingSaved: string
   }
   update: {
     title: string
@@ -199,6 +202,10 @@ export interface Dictionary {
     noteAria: (name: string) => string
     spendAmountAria: (name: string, index: number) => string
     spendNoteAria: (name: string, index: number) => string
+    saveAmountAria: (name: string) => string
+    saveNoteAria: (name: string) => string
+    holdingSaved: string
+    saveFailed: string
     editAmountAria: (name: string) => string
     saveOrder: string
     suggestedFromDate: (date: string) => string

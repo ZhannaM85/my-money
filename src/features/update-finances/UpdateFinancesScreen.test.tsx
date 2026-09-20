@@ -1088,4 +1088,106 @@ describe('UpdateFinancesScreen', () => {
       screen.queryByText(formatAmount(16300, 'USD', 'en')),
     ).not.toBeInTheDocument()
   })
+
+  it('persists remaining and comment from field save without Save updates (#284)', async () => {
+    const user = userEvent.setup()
+    render(
+      <MemoryRouter>
+        <UpdateFinancesScreen />
+      </MemoryRouter>,
+    )
+    await user.type(await screen.findByLabelText('Revolut new amount'), '1500')
+    await user.type(screen.getByLabelText('Revolut note'), 'Top-up')
+    expect(screen.getByRole('button', { name: 'Save updates' })).toBeEnabled()
+    await user.click(
+      screen.getByRole('button', { name: 'Save remaining for Revolut' }),
+    )
+    await waitFor(() => {
+      expect(
+        useAssetStore
+          .getState()
+          .snapshots.find(
+            (row) => row.assetId === 'a1' && row.date === todayIsoDate(),
+          ),
+      ).toMatchObject({ amount: 1500, note: 'Top-up' })
+    })
+    const stored = await db.snapshots.where('assetId').equals('a1').toArray()
+    expect(
+      stored.some(
+        (row) =>
+          row.date === todayIsoDate() &&
+          row.amount === 1500 &&
+          row.note === 'Top-up',
+      ),
+    ).toBe(true)
+    expect(
+      await screen.findByTestId('update-save-status-a1'),
+    ).toHaveTextContent('Saved')
+    expect(
+      screen.getByRole('button', { name: 'Save updates' }),
+    ).toBeInTheDocument()
+  })
+
+  it('persists a comment-only field save onto the existing As of snapshot (#284)', async () => {
+    const user = userEvent.setup()
+    render(
+      <MemoryRouter>
+        <UpdateFinancesScreen />
+      </MemoryRouter>,
+    )
+    setDateField(await screen.findByLabelText('As of'), '2026-08-01')
+    await user.click(
+      await screen.findByRole('button', { name: 'Edit Revolut' }),
+    )
+    const note = await screen.findByLabelText('Revolut note')
+    await user.clear(note)
+    await user.type(note, 'Edited comment')
+    await user.click(
+      screen.getByRole('button', { name: 'Save comment for Revolut' }),
+    )
+    await waitFor(() => {
+      expect(
+        useAssetStore
+          .getState()
+          .snapshots.find(
+            (row) => row.assetId === 'a1' && row.date === '2026-08-01',
+          )?.note,
+      ).toBe('Edited comment')
+    })
+    const stored = await db.snapshots.where('assetId').equals('a1').toArray()
+    expect(
+      stored.some(
+        (row) => row.date === '2026-08-01' && row.note === 'Edited comment',
+      ),
+    ).toBe(true)
+  })
+
+  it('persists a given/received line from its save control (#284)', async () => {
+    const user = userEvent.setup()
+    await useAssetStore.getState().setBalanceHeadline('a1', 'given_spent')
+    render(
+      <MemoryRouter>
+        <UpdateFinancesScreen />
+      </MemoryRouter>,
+    )
+    await user.type(await screen.findByLabelText('Revolut entry 1'), '250')
+    await user.type(screen.getByLabelText('Revolut entry 1 note'), 'Gift')
+    await user.click(screen.getByRole('button', { name: 'Save entry 1' }))
+    await waitFor(() => {
+      expect(
+        useAssetStore
+          .getState()
+          .snapshots.find(
+            (row) =>
+              row.assetId === 'a1' &&
+              row.date === todayIsoDate() &&
+              row.flow === -250 &&
+              row.note === 'Gift',
+          ),
+      ).toBeTruthy()
+    })
+    expect(
+      screen.getByRole('button', { name: 'Save updates' }),
+    ).toBeInTheDocument()
+  })
 })

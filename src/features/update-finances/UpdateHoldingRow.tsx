@@ -26,6 +26,7 @@ import {
   AssetBalanceUpdateControls,
   BalanceHeadlineToggles,
 } from '@/features/assets/AssetBalanceUpdateControls'
+import { FieldSaveButton } from '@/features/assets/FieldSaveButton'
 import {
   parseSpendLineDrafts,
   spendBaselineAmount,
@@ -52,6 +53,12 @@ export function UpdateHoldingRow({
   onHeadlineChange,
   onSpendLinesChange,
   onStartEdit,
+  onSaveAmount,
+  onSaveNote,
+  onSaveSpends,
+  saveDisabled,
+  saveMessage,
+  saveError,
 }: {
   asset: Asset
   latest: AssetSnapshot | undefined
@@ -72,6 +79,12 @@ export function UpdateHoldingRow({
   onHeadlineChange: (headline: BalanceHeadline) => void
   onSpendLinesChange: (lines: SpendLineDraft[]) => void
   onStartEdit: () => void
+  onSaveAmount: () => void
+  onSaveNote: () => void
+  onSaveSpends: () => void
+  saveDisabled: boolean
+  saveMessage?: string
+  saveError?: string
 }) {
   const t = useTranslation()
   const locale = useLocale()
@@ -194,13 +207,21 @@ export function UpdateHoldingRow({
       ) : (
         <>
           {!givenSpentMode ? (
-            <Input
-              data-testid={`update-note-${asset.id}`}
-              aria-label={t.update.noteAria(asset.name)}
-              placeholder={t.asset.snapshotNote}
-              value={noteValue}
-              onChange={(event) => onNoteChange(event.target.value)}
-            />
+            <div className="flex gap-2">
+              <Input
+                data-testid={`update-note-${asset.id}`}
+                aria-label={t.update.noteAria(asset.name)}
+                placeholder={t.asset.snapshotNote}
+                value={noteValue}
+                onChange={(event) => onNoteChange(event.target.value)}
+              />
+              <FieldSaveButton
+                label={t.update.saveNoteAria(asset.name)}
+                testId={`update-save-note-${asset.id}`}
+                disabled={saveDisabled}
+                onClick={onSaveNote}
+              />
+            </div>
           ) : null}
           <AssetBalanceUpdateControls
             amountAriaLabel={t.update.newAmountAria(asset.name)}
@@ -236,9 +257,31 @@ export function UpdateHoldingRow({
               t.update.spendAmountAria(asset.name, index)
             }
             spendNoteAria={(index) => t.update.spendNoteAria(asset.name, index)}
+            onSaveAmount={onSaveAmount}
+            saveAmountLabel={t.update.saveAmountAria(asset.name)}
+            saveAmountTestId={`update-save-amount-${asset.id}`}
+            amountSaveDisabled={saveDisabled}
+            onSaveSpendLine={() => onSaveSpends()}
           />
         </>
       )}
+      {saveError ? (
+        <p
+          className="text-sm text-destructive"
+          data-testid={`update-save-error-${asset.id}`}
+        >
+          {saveError}
+        </p>
+      ) : null}
+      {saveMessage ? (
+        <p
+          className="text-sm text-muted-foreground"
+          data-testid={`update-save-status-${asset.id}`}
+          role="status"
+        >
+          {saveMessage}
+        </p>
+      ) : null}
       {!remainingLocked && previous && !onDate && !givenSpentMode ? (
         <p
           className="text-xs text-muted-foreground"

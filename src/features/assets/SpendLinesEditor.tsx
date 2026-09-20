@@ -19,6 +19,7 @@ export function SpendLinesEditor({
   currency,
   amountAria,
   noteAria,
+  onSaveLine,
 }: {
   lines: readonly SpendLineDraft[]
   onChange: (lines: SpendLineDraft[]) => void
@@ -26,6 +27,7 @@ export function SpendLinesEditor({
   currency: string
   amountAria: (index: number) => string
   noteAria: (index: number) => string
+  onSaveLine?: (index: number) => void
 }) {
   const t = useTranslation()
   const [overrides, setOverrides] = useState<
@@ -63,7 +65,10 @@ export function SpendLinesEditor({
           onSetDirection={(direction) => setDirection(index, direction)}
           onRemove={() => onChange(rows.filter((_, i) => i !== index))}
           onStartEdit={() => setOverride(row.key, 'edit')}
-          onCommit={() => setOverride(row.key, 'view')}
+          onCommit={() => {
+            onSaveLine?.(index)
+            setOverride(row.key, 'view')
+          }}
         />
       ))}
       <Button

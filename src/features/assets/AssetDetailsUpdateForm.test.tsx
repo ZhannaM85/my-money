@@ -241,4 +241,54 @@ describe('AssetDetailsUpdateForm', () => {
       ])
     })
   })
+
+  it('persists remaining and note from the field save (#284)', async () => {
+    const user = userEvent.setup()
+    renderAssetDetails()
+    await screen.findByRole('heading', { name: 'Revolut' })
+    await user.type(screen.getByLabelText('New amount'), '1100')
+    await user.type(screen.getByLabelText('Note (optional)'), 'Top-up')
+    await user.click(screen.getByRole('button', { name: 'Save remaining' }))
+    await waitFor(() => {
+      expect(
+        useAssetStore
+          .getState()
+          .snapshots.some(
+            (row) =>
+              row.assetId === 'a1' &&
+              row.date === todayIsoDate() &&
+              row.amount === 1100 &&
+              row.note === 'Top-up',
+          ),
+      ).toBe(true)
+    })
+    expect(
+      await screen.findByTestId('asset-update-save-status'),
+    ).toHaveTextContent('Saved')
+    expect(screen.getByRole('button', { name: /^Save$/ })).toBeInTheDocument()
+  })
+
+  it('persists a given/received line from its save control (#284)', async () => {
+    const user = userEvent.setup()
+    await useAssetStore.getState().setBalanceHeadline('a1', 'given_spent')
+    renderAssetDetails()
+    await screen.findByRole('heading', { name: 'Revolut' })
+    await user.type(screen.getByLabelText('Entry 1'), '250')
+    await user.type(screen.getByLabelText('Entry 1 note'), 'Gift')
+    await user.click(screen.getByRole('button', { name: 'Save entry 1' }))
+    await waitFor(() => {
+      expect(
+        useAssetStore
+          .getState()
+          .snapshots.some(
+            (row) =>
+              row.assetId === 'a1' &&
+              row.date === todayIsoDate() &&
+              row.flow === -250 &&
+              row.note === 'Gift',
+          ),
+      ).toBe(true)
+    })
+    expect(screen.getByRole('button', { name: /^Save$/ })).toBeInTheDocument()
+  })
 })

@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 256,
+    issue: 284,
+    date: '2026-09-20T21:10:00+03:00',
+    en: 'On Update and asset details, saving a remaining amount, comment, or given/received line writes that change immediately. Save updates at the bottom is still there.',
+    ru: 'На «Обновить» и в карточке сохранение остатка, комментария или записи «Отдано / получено» сразу пишет изменение. Кнопка «Сохранить обновления» внизу пока остаётся.',
+  },
+  {
     version: 255,
     issue: 283,
     date: '2026-09-20T20:40:00+03:00',

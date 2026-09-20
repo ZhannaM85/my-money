@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 284,
+    title: {
+      en: 'Update: per-field / per-card save that persists',
+      ru: 'Обновить: сохранение поля/карточки, которое пишется в книгу',
+    },
+    en: 'Bulk Update and asset-detail only wrote the book after the screen-level Save. #283’s spend-line Save icon only returned the row to read-only in React. Остаток, comment, and that Save now persist the asset’s snapshot(s) to IndexedDB immediately. The page-level Save updates button stays until #285.',
+    ru: 'Массовое «Обновить» и карточка писали книгу только общей кнопкой. Иконка сохранения строки (#283) только возвращала просмотр в React. Остаток, комментарий и та же иконка теперь пишут снимок в IndexedDB сразу. Общая «Сохранить обновления» остаётся до #285.',
+  },
+  {
     issue: 283,
     title: {
       en: 'Given/received lines: read-only until pencil; save returns to read-only',

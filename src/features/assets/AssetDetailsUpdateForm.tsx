@@ -8,7 +8,6 @@ import {
 } from '@/domain/asset'
 import {
   hasDuplicateSnapshot,
-  optionalSnapshotNote,
   sameDaySpendEntries,
   snapshotBeforeDate,
   snapshotOnDate,
@@ -22,14 +21,17 @@ import { DateField } from '@/shared/ui/date-field'
 import { InfoHint } from '@/shared/ui/info-hint'
 import { TextField } from '@/shared/ui/text-field'
 import { AssetBalanceUpdateControls } from './AssetBalanceUpdateControls'
+import { FieldSaveButton } from './FieldSaveButton'
+import {
+  persistPlanToSaveInputs,
+  planRemainingPersist,
+  planSpendPersist,
+} from './persistHolding'
 import {
   emptySpendLine,
   parseSpendLineDrafts,
-  planSameDaySpendPersist,
   spendBaselineAmount,
   spendLineDraftsFromEntries,
-  spendLinesMatchSaved,
-  spendSnapshotsToEdit,
   type SpendLineDraft,
 } from './spendLines'
 
@@ -70,6 +72,8 @@ export function AssetDetailsUpdateForm({
   const [spendLineEdits, setSpendLineEdits] = useState<
     Record<string, SpendLineDraft[]>
   >({})
+  const [saving, setSaving] = useState(false)
+  const [saveMessage, setSaveMessage] = useState<string | undefined>()
 
   const onDate = snapshotOnDate(snapshots, assetId, amountDate)
   const previous = snapshotBeforeDate(snapshots, assetId, amountDate)
@@ -123,67 +127,104 @@ export function AssetDetailsUpdateForm({
       })
   const placeholderSource = onDate ?? previous
 
-  async function saveAmount() {
-    if (!isIsoDateOnOrBefore(amountDate, today)) {
-      setAmountError(t.asset.snapshotDateInvalid)
-      return
-    }
-    if (givenSpentMode) {
-      const hasSavedSpends = savedSpends.some((entry) => entry.drop > 0)
-      if (spendEntries.length === 0 && !hasSavedSpends) {
-        setAmountError(t.asset.enterCurrentAmount)
-        return
-      }
-      if (spendLinesMatchSaved(spendLines, savedSpends)) {
-        setAmountError(undefined)
-        return
-      }
-      setAmountError(undefined)
-      const plan = planSameDaySpendPersist({
-        existingSpends: spendSnapshotsToEdit(snapshots, assetId, amountDate),
-        drafts: spendLines,
-        baseline: spendBaseline,
-        assetId,
-        date: amountDate,
-        currency,
-      })
-      await onSave(
-        [
-          ...plan.toUpdate.map((row) => ({
-            id: row.id,
-            date: row.date,
-            amount: row.amount,
-            flow: row.flow,
-            ...(row.note ? { note: row.note } : {}),
-          })),
-          ...plan.toCreate.map((row) => ({
-            date: row.date,
-            amount: row.amount,
-            createdAt: row.createdAt,
-            flow: row.flow,
-            ...(row.note ? { note: row.note } : {}),
-          })),
-        ],
-        plan.toDelete,
-      )
-      setAmountDate(today)
-      return
-    }
-    const parsed = parseAmount(amountDraft)
-    if (parsed === undefined) {
-      setAmountError(t.asset.enterCurrentAmount)
-      return
-    }
-    setAmountError(undefined)
-    const amount = applyBalanceEntry(entryMode, parsed, baseline)
-    const note = optionalSnapshotNote(amountNote)
-    await onSave([
-      { date: amountDate, amount, ...(note ? { note } : {}) },
-    ])
+  function resetRemainingDrafts() {
     setAmountDraft('')
     setAmountDate(today)
     setAmountNote('')
     setEntryMode('new_balance')
+  }
+
+  async function persistResult(
+    result: ReturnType<typeof planRemainingPersist>,
+    requireAmount: boolean,
+  ) {
+    if (!result.ok) {
+      if (
+        result.error === 'invalid_amount' ||
+        (result.error === 'noop' && requireAmount)
+      ) {
+        setAmountError(t.asset.enterCurrentAmount)
+      }
+      return false
+    }
+    setAmountError(undefined)
+    setSaving(true)
+    try {
+      const { inputs, deleteIds } = persistPlanToSaveInputs(result.plan)
+      await onSave(inputs, deleteIds)
+      setSaveMessage(t.asset.holdingSaved)
+      return true
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  async function saveRemaining(requireAmount: boolean) {
+    if (!isIsoDateOnOrBefore(amountDate, today)) {
+      setAmountError(t.asset.snapshotDateInvalid)
+      return
+    }
+    const ok = await persistResult(
+      planRemainingPersist({
+        assetId,
+        date: amountDate,
+        currency,
+        draft: amountDraft,
+        note: amountNote,
+        entryMode,
+        onDate,
+        previous,
+        requireAmount,
+        write: 'append',
+      }),
+      requireAmount,
+    )
+    if (ok) resetRemainingDrafts()
+  }
+
+  async function saveSpends() {
+    if (!isIsoDateOnOrBefore(amountDate, today)) {
+      setAmountError(t.asset.snapshotDateInvalid)
+      return
+    }
+    const hasSavedSpends = savedSpends.some((entry) => entry.drop > 0)
+    if (spendEntries.length === 0 && !hasSavedSpends) {
+      setAmountError(t.asset.enterCurrentAmount)
+      return
+    }
+    const result = planSpendPersist({
+      snapshots,
+      drafts: spendLines,
+      assetId,
+      date: amountDate,
+      currency,
+      onDate,
+      previous,
+    })
+    if (!result.ok) {
+      setAmountError(
+        result.error === 'noop' ? undefined : t.asset.enterCurrentAmount,
+      )
+      return
+    }
+    setAmountError(undefined)
+    setSaving(true)
+    try {
+      const { inputs, deleteIds } = persistPlanToSaveInputs(result.plan)
+      await onSave(inputs, deleteIds)
+      setSaveMessage(t.asset.holdingSaved)
+      setAmountDate(today)
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  async function saveAmount() {
+    if (givenSpentMode) {
+      await saveSpends()
+      return
+    }
+    await saveRemaining(true)
   }
 
   return (
@@ -204,11 +245,21 @@ export function AssetDetailsUpdateForm({
         }
       />
       {!givenSpentMode ? (
-        <TextField
-          label={t.asset.snapshotNote}
-          value={amountNote}
-          onChange={(event) => setAmountNote(event.target.value)}
-        />
+        <div className="flex items-end gap-2">
+          <div className="min-w-0 flex-1">
+            <TextField
+              label={t.asset.snapshotNote}
+              value={amountNote}
+              onChange={(event) => setAmountNote(event.target.value)}
+            />
+          </div>
+          <FieldSaveButton
+            label={t.asset.saveNoteAria}
+            testId="asset-save-note"
+            disabled={saving}
+            onClick={() => void saveRemaining(false)}
+          />
+        </div>
       ) : null}
       <div className="flex min-w-0 flex-col gap-2">
         <AssetBalanceUpdateControls
@@ -246,10 +297,16 @@ export function AssetDetailsUpdateForm({
               [spendEditKey]: lines,
             }))
           }}
+          onSaveAmount={() => void saveRemaining(true)}
+          saveAmountLabel={t.asset.saveAmountAria}
+          saveAmountTestId="asset-save-amount"
+          amountSaveDisabled={saving}
+          onSaveSpendLine={() => void saveSpends()}
         />
         <Button
           type="button"
           className="w-full"
+          disabled={saving}
           onClick={() => void saveAmount()}
         >
           {t.common.save}
@@ -262,6 +319,15 @@ export function AssetDetailsUpdateForm({
       )}
       {amountError && amountError !== t.asset.snapshotDateInvalid && (
         <p className="text-sm text-destructive">{amountError}</p>
+      )}
+      {saveMessage && (
+        <p
+          className="text-sm text-muted-foreground"
+          data-testid="asset-update-save-status"
+          role="status"
+        >
+          {saveMessage}
+        </p>
       )}
     </section>
   )

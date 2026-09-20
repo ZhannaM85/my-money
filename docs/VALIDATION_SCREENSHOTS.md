@@ -128,6 +128,9 @@ gh issue edit 108 --add-label validation
 | `283-update-readonly-spends.png` | Update · saved given/received lines read-only with pencil (RU, #283) |
 | `283-update-after-line-save.png` | Update · line locked again after per-line Save (RU, #283) |
 | `283-asset-detail-readonly-spends.png` | Asset details · same read-only lines on Обновить этот актив (RU, #283) |
+| `284-update-field-save.png` | Update · per-field save on Остаток / comment (RU, #284) |
+| `284-update-spend-line-save.png` | Update · per-line save on Отдано/получено (RU, #284) |
+| `284-asset-detail-field-save.png` | Asset details · same field save on Обновить этот актив (RU, #284) |
 | `276-update-delta-entry.png` | Update · Remaining / Given chips + new balance / ± (RU, #276) |
 | `276-asset-detail-delta-entry.png` | Asset details · Update this asset same chips + remaining field (RU, #276) |
 | `258-history-locale-dates.png` | History · list rows use locale dates (#258) |

@@ -9,30 +9,18 @@ import {
   useSensors,
 } from '@dnd-kit/core'
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
-import {
-  applyBalanceEntry,
-  assetBalanceHeadline,
-  type BalanceEntryMode,
-  isSuggestedUpdate,
-  updateBaselineAmount,
-} from '@/domain/asset'
+import { type BalanceEntryMode, isSuggestedUpdate } from '@/domain/asset'
 import {
   latestSnapshot,
-  optionalSnapshotNote,
   sameDaySpendEntries,
   snapshotBeforeDate,
   snapshotOnDate,
-  type AssetSnapshot,
 } from '@/domain/snapshot'
 import { sortAssets } from '@/features/assets/assetListOrder'
 import { useAssetReorder } from '@/features/assets/useAssetReorder'
 import { useTranslation, useLocale } from '@/i18n'
 import { isIsoDateOnOrBefore } from '@/shared/lib/dates'
-import {
-  formatEditableAmount,
-  parseAmount,
-  todayIsoDate,
-} from '@/shared/lib/money'
+import { formatEditableAmount, todayIsoDate } from '@/shared/lib/money'
 import { Button } from '@/shared/ui/button'
 import { DateField } from '@/shared/ui/date-field'
 import { EmptyState } from '@/shared/ui/empty-state'
@@ -41,28 +29,17 @@ import { ReorderIconButton } from '@/shared/ui/reorder-icon-button'
 import { useAssetStore } from '@/stores/assetStore'
 import { useSettingsStore } from '@/stores/settingsStore'
 import {
-  parseSpendLineDrafts,
-  planSameDaySpendPersist,
-  spendBaselineAmount,
   spendLinesForEditor,
-  spendLinesMatchSaved,
-  spendSnapshotsToEdit,
   type SpendLineDraft,
 } from '@/features/assets/spendLines'
+import {
+  mergeUpdatePlans,
+  omitDraftKey,
+  persistUpdatePlan,
+  planUpdatePersistRow,
+  updateRowCanSave,
+} from './updateFieldPersist'
 import { UpdateHoldingRow } from './UpdateHoldingRow'
-
-function snapshotWithNote(
-  snapshot: AssetSnapshot,
-  note: string | undefined,
-): AssetSnapshot {
-  const next = { ...snapshot }
-  if (note) {
-    next.note = note
-  } else {
-    delete next.note
-  }
-  return next
-}
 
 export function UpdateFinancesScreen() {
   const t = useTranslation()
@@ -96,6 +73,10 @@ export function UpdateFinancesScreen() {
   >({})
   const [error, setError] = useState<string | undefined>()
   const [saving, setSaving] = useState(false)
+  const [savingAssetId, setSavingAssetId] = useState<string | undefined>()
+  const [fieldStatus, setFieldStatus] = useState<
+    Record<string, { message?: string; error?: string }>
+  >({})
   const today = todayIsoDate()
   const [asOf, setAsOf] = useState(today)
   const [asOfError, setAsOfError] = useState<string | undefined>()
@@ -155,6 +136,14 @@ export function UpdateFinancesScreen() {
     setSpendLines({})
   }
 
+  function clearAssetDrafts(assetId: string) {
+    setDrafts((current) => omitDraftKey(current, assetId))
+    setNotes((current) => omitDraftKey(current, assetId))
+    setEditing((current) => omitDraftKey(current, assetId))
+    setEntryModes((current) => omitDraftKey(current, assetId))
+    setSpendLines((current) => omitDraftKey(current, assetId))
+  }
+
   function startEdit(
     assetId: string,
     amount: number,
@@ -209,121 +198,114 @@ export function UpdateFinancesScreen() {
     )
   }
 
+  function planRow(
+    assetId: string,
+    scope: 'auto' | 'remaining' | 'note' | 'spends',
+  ): ReturnType<typeof planUpdatePersistRow> {
+    const row = rows.find((item) => item.asset.id === assetId)
+    if (!row) return { ok: false }
+    return planUpdatePersistRow({
+      row,
+      scope,
+      asOf,
+      locale,
+      drafts,
+      notes,
+      editing,
+      entryModes,
+      spendLines,
+      snapshots,
+      enterNumberFor: t.update.enterNumberFor,
+    })
+  }
+
   async function handleSave() {
     if (!isIsoDateOnOrBefore(asOf, today)) {
       setAsOfError(t.asset.snapshotDateInvalid)
       return
     }
-    const toWrite: {
-      assetId: string
-      date: string
-      amount: number
-      currency: string
-      note?: string
-      createdAt?: string
-    }[] = []
-    const toUpdate: AssetSnapshot[] = []
-    const toDelete: string[] = []
-    for (const { asset, onDate, previous } of rows) {
-      if (assetBalanceHeadline(asset) === 'given_spent') {
-        const drafted = spendLines[asset.id]
-        if (drafted === undefined) continue
-        const saved = sameDaySpendEntries(snapshots, asset.id, asOf)
-        if (spendLinesMatchSaved(drafted, saved)) continue
-        const lines = parseSpendLineDrafts(drafted)
-        if (lines.length === 0 && saved.every((entry) => entry.drop <= 0)) {
-          continue
-        }
-        const plan = planSameDaySpendPersist({
-          existingSpends: spendSnapshotsToEdit(snapshots, asset.id, asOf),
-          drafts: drafted,
-          baseline: spendBaselineAmount(
-            saved,
-            onDate,
-            previous,
-            asset.currency,
-          ),
-          assetId: asset.id,
-          date: asOf,
-          currency: asset.currency,
-        })
-        toUpdate.push(...plan.toUpdate)
-        toWrite.push(...plan.toCreate)
-        toDelete.push(...plan.toDelete)
-        continue
-      }
-      const raw = drafts[asset.id]?.trim() ?? ''
-      if (onDate && !editing[asset.id]) continue
-      if (raw !== '') {
-        const parsed = parseAmount(raw)
-        if (parsed === undefined) {
-          setError(t.update.enterNumberFor(asset.name))
+    const plans = []
+    for (const { asset } of rows) {
+      const result = planRow(asset.id, 'auto')
+      if (!result.ok) {
+        if (result.error) {
+          setError(result.error)
           return
         }
-        const amount = applyBalanceEntry(
-          entryModes[asset.id] ?? 'new_balance',
-          parsed,
-          updateBaselineAmount(onDate, previous, asset.currency),
-        )
-        const note = optionalSnapshotNote(notes[asset.id])
-        if (onDate) {
-          toUpdate.push(
-            snapshotWithNote(
-              {
-                ...onDate,
-                amount,
-                date: asOf,
-                currency: asset.currency,
-              },
-              note,
-            ),
-          )
-        } else {
-          toWrite.push({
-            assetId: asset.id,
-            date: asOf,
-            amount,
-            currency: asset.currency,
-            ...(note ? { note } : {}),
-          })
-        }
         continue
       }
-    }
-    if (toWrite.length === 0 && toUpdate.length === 0 && toDelete.length === 0) {
-      setError(undefined)
-      return
+      plans.push(result.plan)
     }
     setError(undefined)
     setSaving(true)
     try {
-      if (toWrite.length > 0) await saveSnapshots(toWrite)
-      for (const snapshot of toUpdate) {
-        await updateSnapshot(snapshot)
+      const wrote = await persistUpdatePlan(mergeUpdatePlans(plans), {
+        saveSnapshots,
+        updateSnapshot,
+        deleteSnapshot,
+      })
+      if (wrote) {
+        resetDrafts()
+        setFieldStatus({})
       }
-      for (const id of toDelete) {
-        await deleteSnapshot(id)
-      }
-      resetDrafts()
     } finally {
       setSaving(false)
     }
   }
 
+  async function saveField(
+    assetId: string,
+    scope: 'remaining' | 'note' | 'spends',
+  ) {
+    if (!isIsoDateOnOrBefore(asOf, today)) {
+      setAsOfError(t.asset.snapshotDateInvalid)
+      return
+    }
+    const result = planRow(assetId, scope)
+    if (!result.ok) {
+      setFieldStatus((current) => ({
+        ...current,
+        [assetId]: {
+          error:
+            result.error ??
+            (scope === 'remaining'
+              ? t.update.enterNumberFor(
+                  rows.find((row) => row.asset.id === assetId)?.asset.name ??
+                    '',
+                )
+              : undefined),
+        },
+      }))
+      return
+    }
+    setFieldStatus((current) => ({ ...current, [assetId]: {} }))
+    setSavingAssetId(assetId)
+    try {
+      await persistUpdatePlan(result.plan, {
+        saveSnapshots,
+        updateSnapshot,
+        deleteSnapshot,
+      })
+      if (scope !== 'spends') clearAssetDrafts(assetId)
+      setFieldStatus((current) => ({
+        ...current,
+        [assetId]: { message: t.update.holdingSaved },
+      }))
+    } catch {
+      setFieldStatus((current) => ({
+        ...current,
+        [assetId]: { error: t.update.saveFailed },
+      }))
+    } finally {
+      setSavingAssetId(undefined)
+    }
+  }
+
   const canSave = useMemo(
     () =>
-      rows.some(({ asset, onDate }) => {
-        if (assetBalanceHeadline(asset) === 'given_spent') {
-          const drafted = spendLines[asset.id]
-          if (drafted === undefined) return false
-          return !spendLinesMatchSaved(
-            drafted,
-            sameDaySpendEntries(snapshots, asset.id, asOf),
-          )
-        }
-        if (onDate && !editing[asset.id]) return false
-        return (drafts[asset.id]?.trim() ?? '') !== ''
-      }),
+      rows.some((row) =>
+        updateRowCanSave(row, asOf, drafts, editing, spendLines, snapshots),
+      ),
     [asOf, drafts, editing, rows, snapshots, spendLines],
   )
 
@@ -448,6 +430,14 @@ export function UpdateFinancesScreen() {
                             onDate.note,
                           )
                         }}
+                        onSaveAmount={() =>
+                          void saveField(asset.id, 'remaining')
+                        }
+                        onSaveNote={() => void saveField(asset.id, 'note')}
+                        onSaveSpends={() => void saveField(asset.id, 'spends')}
+                        saveDisabled={saving || savingAssetId === asset.id}
+                        saveMessage={fieldStatus[asset.id]?.message}
+                        saveError={fieldStatus[asset.id]?.error}
                       />
                     ),
                   )}
