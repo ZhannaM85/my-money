@@ -53,6 +53,7 @@ export function SpendLineRow({
   const n = index + 1
   const directionLabel =
     row.direction === 'received' ? t.asset.flowReceived : t.asset.flowGiven
+  const note = row.note.trim()
 
   const removeButton = canRemove ? (
     <Button
@@ -76,12 +77,27 @@ export function SpendLineRow({
         <span className="inline-flex h-control-compact w-fit items-center rounded-full bg-primary px-3 text-sm font-medium text-primary-foreground">
           {directionLabel}
         </span>
-        <div className="flex gap-2">
-          <span
-            className="flex h-control min-w-0 flex-1 items-center justify-end tabular-nums font-medium"
-            data-testid={`spend-line-amount-${index}`}
-          >
-            {displayAmount(row.amount, locale, currency)}
+        <div className="flex gap-2" data-testid={`spend-line-values-${index}`}>
+          <span className="flex h-control min-w-0 flex-1 items-center gap-1.5">
+            {note ? (
+              <>
+                <span
+                  data-testid={`spend-line-note-${index}`}
+                  className="min-w-0 truncate text-sm text-muted-foreground"
+                >
+                  {row.note}
+                </span>
+                <span className="text-muted-foreground" aria-hidden>
+                  ·
+                </span>
+              </>
+            ) : null}
+            <span
+              className="ml-auto shrink-0 tabular-nums font-medium"
+              data-testid={`spend-line-amount-${index}`}
+            >
+              {displayAmount(row.amount, locale, currency)}
+            </span>
           </span>
           <Button
             type="button"
@@ -94,14 +110,6 @@ export function SpendLineRow({
           </Button>
           {removeButton}
         </div>
-        {row.note.trim() ? (
-          <span
-            data-testid={`spend-line-note-${index}`}
-            className="text-sm text-muted-foreground"
-          >
-            {row.note}
-          </span>
-        ) : null}
       </div>
     )
   }
@@ -126,24 +134,27 @@ export function SpendLineRow({
           {t.asset.flowReceived}
         </Chip>
       </div>
-      <div className="flex gap-2">
-        <MoneyInput
-          aria-label={amountAria}
-          locale={locale}
-          currency={currency}
-          value={row.amount}
-          onValueChange={(amount) => onUpdate({ amount })}
-          placeholder={t.asset.amountPlaceholder}
+      <div className="flex gap-2" data-testid={`spend-line-values-${index}`}>
+        <Input
+          className="min-w-0 flex-1"
+          aria-label={noteAria}
+          placeholder={t.asset.snapshotNote}
+          value={row.note}
+          onChange={(event) => onUpdate({ note: event.target.value })}
         />
+        <div className="w-[8.75rem] shrink-0">
+          <MoneyInput
+            aria-label={amountAria}
+            locale={locale}
+            currency={currency}
+            value={row.amount}
+            onValueChange={(amount) => onUpdate({ amount })}
+            placeholder={t.asset.amountPlaceholder}
+          />
+        </div>
         <FieldSaveButton label={t.asset.saveSpendLine(n)} onClick={onCommit} />
         {removeButton}
       </div>
-      <Input
-        aria-label={noteAria}
-        placeholder={t.asset.snapshotNote}
-        value={row.note}
-        onChange={(event) => onUpdate({ note: event.target.value })}
-      />
     </div>
   )
 }

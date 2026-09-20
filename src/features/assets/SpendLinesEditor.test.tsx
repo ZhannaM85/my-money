@@ -113,6 +113,23 @@ describe('SpendLinesEditor (#283)', () => {
     )
   })
 
+  it('puts purpose and amount on the same row in view and edit (#289)', async () => {
+    const user = userEvent.setup()
+    render(<EditorHarness initial={saved} />)
+    const viewRow = screen.getByTestId('spend-line-values-0')
+    expect(viewRow).toContainElement(screen.getByTestId('spend-line-note-0'))
+    expect(viewRow).toContainElement(screen.getByTestId('spend-line-amount-0'))
+    expect(viewRow.className.split(' ')).toContain('flex')
+    expect(viewRow.className.split(' ')).not.toContain('flex-col')
+
+    await user.click(screen.getByRole('button', { name: 'Edit entry 1' }))
+    const editRow = screen.getByTestId('spend-line-values-0')
+    expect(editRow).toContainElement(screen.getByLabelText('Entry 1 note'))
+    expect(editRow).toContainElement(screen.getByLabelText('Entry 1'))
+    expect(editRow.className.split(' ')).toContain('flex')
+    expect(editRow.className.split(' ')).not.toContain('flex-col')
+  })
+
   it('keeps delete on a read-only saved line', async () => {
     const user = userEvent.setup()
     render(<EditorHarness initial={saved} />)

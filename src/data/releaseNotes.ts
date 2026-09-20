@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 259,
+    issue: 289,
+    date: '2026-09-20T22:55:00+03:00',
+    en: 'Given / received lines show purpose and amount on one row, then the pencil or save icon.',
+    ru: 'В строках «Отдано / получено» назначение и сумма в одной строке, рядом карандаш или иконка сохранения.',
+  },
+  {
     version: 258,
     issue: 290,
     date: '2026-09-20T22:50:00+03:00',

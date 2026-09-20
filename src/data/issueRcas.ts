@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 289,
+    title: {
+      en: 'Given/received: purpose and amount on the same row',
+      ru: 'Отдано/получено: назначение и сумма в одной строке',
+    },
+    en: 'Отдано / получено lines stacked amount and purpose. View and edit now keep purpose and amount on one row (pencil/trash stay), on bulk Update and asset-detail.',
+    ru: 'В строках «Отдано / получено» сумма и назначение были друг под другом. В просмотре и правке они теперь в одной строке (карандаш и корзина на месте) на «Обновить» и в карточке.',
+  },
+  {
     issue: 290,
     title: {
       en: 'Update: hide leaking “noop” on comparison row',
