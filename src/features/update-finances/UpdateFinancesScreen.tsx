@@ -265,7 +265,7 @@ export function UpdateFinancesScreen() {
     setFieldStatus((current) => ({ ...current, [assetId]: {} }))
     setSavingAssetId(assetId)
     try {
-      await persistUpdatePlan(result.plan, {
+      const wrote = await persistUpdatePlan(result.plan, {
         saveSnapshots,
         updateSnapshot,
         deleteSnapshot,
@@ -273,7 +273,7 @@ export function UpdateFinancesScreen() {
       if (scope !== 'spends') clearAssetDrafts(assetId)
       setFieldStatus((current) => ({
         ...current,
-        [assetId]: { message: t.update.holdingSaved },
+        [assetId]: wrote ? { message: t.update.holdingSaved } : {},
       }))
     } catch {
       setFieldStatus((current) => ({

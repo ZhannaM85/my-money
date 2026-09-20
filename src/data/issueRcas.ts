@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 297,
+    title: {
+      en: 'Update: diskette after pencil must save and return to read-only',
+      ru: 'Обновить: дискета после карандаша должна сохранить и вернуть просмотр',
+    },
+    en: 'After pencil on a locked Обновить card, the diskette treated an unchanged remaining persist as a silent no-op and left the card in edit. It now writes amount + comment when they changed, and always returns the card to read-only. Unchanged saves stay quiet (no “noop”). New UX only (#295).',
+    ru: 'После карандаша на карточке «Обновить» дискета считала неизменённый остаток тихим no-op и оставляла правку. Теперь пишет сумму и комментарий, если они изменились, и всегда возвращает карточку в просмотр. Без изменений — тихо, без «noop». Только новый UX (#295).',
+  },
+  {
     issue: 296,
     title: {
       en: 'Given/received row: amount before comment',

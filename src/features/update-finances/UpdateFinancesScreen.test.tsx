@@ -1300,7 +1300,48 @@ describe('UpdateFinancesScreen', () => {
     )
     expect(screen.queryByText('noop')).not.toBeInTheDocument()
     expect(screen.queryByTestId('update-save-error-a1')).not.toBeInTheDocument()
-    expect(screen.getByTestId('update-edit-delta-a1')).toBeInTheDocument()
+    expect(
+      await screen.findByRole('button', { name: 'Edit Revolut' }),
+    ).toBeInTheDocument()
+    expect(screen.queryByTestId('update-edit-delta-a1')).not.toBeInTheDocument()
+  })
+
+  it('persists a pencil edit from the diskette and returns to read-only (#297)', async () => {
+    const user = userEvent.setup()
+    render(
+      <MemoryRouter>
+        <UpdateFinancesScreen />
+      </MemoryRouter>,
+    )
+    setDateField(await screen.findByLabelText('As of'), '2026-08-01')
+    await user.click(
+      await screen.findByRole('button', { name: 'Edit Revolut' }),
+    )
+    const amount = await screen.findByLabelText('Revolut new amount')
+    await user.clear(amount)
+    await user.type(amount, '1600')
+    await user.clear(screen.getByLabelText('Revolut note'))
+    await user.type(screen.getByLabelText('Revolut note'), 'After pencil')
+    await user.click(
+      screen.getByRole('button', { name: 'Save remaining for Revolut' }),
+    )
+    await waitFor(() => {
+      expect(useAssetStore.getState().snapshots[0]).toMatchObject({
+        amount: 1600,
+        note: 'After pencil',
+        date: '2026-08-01',
+      })
+    })
+    expect(
+      await screen.findByRole('button', { name: 'Edit Revolut' }),
+    ).toBeInTheDocument()
+    expect(
+      screen.queryByLabelText('Revolut new amount'),
+    ).not.toBeInTheDocument()
+    expect(
+      await screen.findByTestId('update-save-status-a1'),
+    ).toHaveTextContent('Saved')
+    expect(screen.queryByText('noop')).not.toBeInTheDocument()
   })
 
   it('uses the diskette icon for remaining and comment field saves (#288)', async () => {

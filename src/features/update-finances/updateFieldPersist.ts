@@ -3,6 +3,7 @@ import type { Locale } from '@/domain/settings'
 import { sameDaySpendEntries, type AssetSnapshot } from '@/domain/snapshot'
 import {
   applyHoldingPersistPlan,
+  emptyPersistPlan,
   isEmptyPersistPlan,
   mergePersistPlans,
   planRemainingPersist,
@@ -52,7 +53,7 @@ export function planUpdatePersistRow({
     if (scope === 'auto' && spendLines[asset.id] === undefined) {
       return { ok: false }
     }
-    return planSpendPersist({
+    const spendResult = planSpendPersist({
       snapshots,
       drafts: spendLinesForEditor(
         spendLines[asset.id],
@@ -66,6 +67,10 @@ export function planUpdatePersistRow({
       onDate,
       previous,
     })
+    if (!spendResult.ok && spendResult.error === 'noop') {
+      return { ok: true, plan: emptyPersistPlan() }
+    }
+    return spendResult
   }
   if (givenSpent) return { ok: false }
   if (scope === 'auto' && onDate && !editing[asset.id]) return { ok: false }
@@ -87,7 +92,7 @@ export function planUpdatePersistRow({
     return { ok: false, error: enterNumberFor(asset.name) }
   }
   if (!result.ok && result.error === 'noop') {
-    return { ok: false }
+    return { ok: true, plan: emptyPersistPlan() }
   }
   return result
 }

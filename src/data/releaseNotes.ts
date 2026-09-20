@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 266,
+    issue: 297,
+    date: '2026-09-21T00:20:00+03:00',
+    en: 'On Update, the diskette after the pencil now saves the card and returns it to read-only.',
+    ru: 'На «Обновить» дискета после карандаша сохраняет карточку и возвращает её в просмотр.',
+  },
+  {
     version: 265,
     issue: 296,
     date: '2026-09-21T00:10:00+03:00',

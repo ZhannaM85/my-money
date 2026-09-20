@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import type { Asset } from '@/domain/asset'
 import type { AssetSnapshot } from '@/domain/snapshot'
+import { emptyPersistPlan } from '@/features/assets/persistHolding'
 import { planUpdatePersistRow } from './updateFieldPersist'
 
 const asset: Asset = {
@@ -39,6 +40,6 @@ describe('planUpdatePersistRow (#290)', () => {
       snapshots: [onDate],
       enterNumberFor: (name) => `Enter a number for ${name}`,
     })
-    expect(result).toEqual({ ok: false })
+    expect(result).toEqual({ ok: true, plan: emptyPersistPlan() })
   })
 })
