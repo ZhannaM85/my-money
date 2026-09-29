@@ -58,7 +58,6 @@ export const en: Dictionary = {
     emptyDescription: 'Add what you own or owe to see your first net worth.',
     fxMissing: (codes) =>
       `No ${codes} rate on this date — this currency is not converted to ₽.`,
-    fxDisclaimer: 'Rates are for reference, not bank quotes.',
     allocation: 'Allocation',
     nativeHoldings: 'Holdings by currency',
     conversionUnavailable: 'Conversion not available',

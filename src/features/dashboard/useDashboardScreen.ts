@@ -78,7 +78,6 @@ export function useDashboardScreen() {
     thisMonthLabel: t.dashboard.thisMonth,
     overRangeLabel: t.history.overRange(chartRange.range),
     fxMissing: t.dashboard.fxMissing,
-    fxDisclaimer: t.dashboard.fxDisclaimer,
   })
   const onAsOfDateChange = (next: string) => {
     if (!next || next > today) {

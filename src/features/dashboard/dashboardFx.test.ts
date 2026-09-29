@@ -8,9 +8,8 @@ describe('dashboard FX policy (#113)', () => {
   })
 })
 
-describe('dashboard FX subheader (#277)', () => {
+describe('dashboard FX subheader (#277, #302)', () => {
   const fxMissing = (codes: string) => `missing:${codes}`
-  const fxDisclaimer = 'disclaimer'
 
   it('stays off in Original', () => {
     expect(
@@ -18,7 +17,6 @@ describe('dashboard FX subheader (#277)', () => {
         isOriginal: true,
         missingCodes: ['USD'],
         fxMissing,
-        fxDisclaimer,
       }),
     ).toBeUndefined()
   })
@@ -29,19 +27,17 @@ describe('dashboard FX subheader (#277)', () => {
         isOriginal: false,
         missingCodes: ['USD'],
         fxMissing,
-        fxDisclaimer,
       }),
     ).toBe('missing:USD')
   })
 
-  it('uses the short disclaimer when rates exist', () => {
+  it('stays off when rates exist (#302)', () => {
     expect(
       dashboardFxNote({
         isOriginal: false,
         missingCodes: [],
         fxMissing,
-        fxDisclaimer,
       }),
-    ).toBe('disclaimer')
+    ).toBeUndefined()
   })
 })

@@ -81,8 +81,8 @@ describe('DashboardHeadline holdings', () => {
       screen.queryByText(/Converted with reference exchange rates/),
     ).not.toBeInTheDocument()
     expect(
-      screen.getByText('Rates are for reference, not bank quotes.'),
-    ).toBeInTheDocument()
+      screen.queryByText('Rates are for reference, not bank quotes.'),
+    ).not.toBeInTheDocument()
     expect(
       screen.queryByText(/In Converted this filter stays on the More base/),
     ).not.toBeInTheDocument()
@@ -387,7 +387,7 @@ describe('DashboardHeadline holdings', () => {
     expect(screen.queryByText(/исполняемая котировка/)).not.toBeInTheDocument()
   })
 
-  it('uses the short Russian disclaimer when Converted rates exist (#277)', async () => {
+  it('hides the FX disclaimer when Converted rates exist (#302)', async () => {
     const now = '2026-08-17T00:00:00.000Z'
     await db.settings.put({
       ...DEFAULT_SETTINGS,
@@ -425,9 +425,10 @@ describe('DashboardHeadline holdings', () => {
 
     renderApp(<DashboardScreen />)
 
+    expect(await screen.findByText('Чистый капитал')).toBeInTheDocument()
     expect(
-      await screen.findByText('Курсы справочные, не банковские котировки.'),
-    ).toBeInTheDocument()
+      screen.queryByText('Курсы справочные, не банковские котировки.'),
+    ).not.toBeInTheDocument()
     expect(screen.queryByText(/не пересчитана в/)).not.toBeInTheDocument()
   })
 
@@ -500,8 +501,8 @@ describe('DashboardHeadline holdings', () => {
       screen.getAllByText(formatAmount(1200, 'EUR')).length,
     ).toBeGreaterThan(0)
     expect(
-      screen.getByText('Rates are for reference, not bank quotes.'),
-    ).toBeInTheDocument()
+      screen.queryByText('Rates are for reference, not bank quotes.'),
+    ).not.toBeInTheDocument()
     expect(screen.queryByText(/not converted to/)).not.toBeInTheDocument()
   })
 })
