@@ -1,5 +1,5 @@
 ---
-description: One GitHub issue = one commit, one push, then the validation label. Never bulk-ship a batch.
+description: One GitHub issue = one commit, one push — including on-device close/archive. Never bulk-ship or bulk-archive a batch.
 alwaysApply: true
 ---
 
@@ -24,14 +24,32 @@ After each issue is implemented and the local checks for that issue pass:
 
 Do **not** wait for on-device confirmation to add `validation`. Closing / `validated` / archive still wait for the user.
 
-After the user confirms on-device (close + `validated` + move the row to the archive), **commit and `git push`** that archive doc change. Do not leave it local.
+## On-device validation (close + archive) — also one issue at a time
+
+When the user confirms issues as validated on a device, **do not batch**. "Close them one by one" means the full path per issue, not only separate `gh` closes with one archive commit at the end.
+
+For **each** issue, finish this loop before the next:
+
+1. `gh issue edit N --add-label validated --remove-label validation`
+2. `gh issue close N --reason completed`
+3. Move that issue's row from `docs/issues-priority.md` into the archive (`✅ Done`, note validated on-device).
+4. **One commit** for that archive doc change (subject like `#N: archive as validated on-device.`).
+5. **`git push`** that commit.
+
+```
+# BAD
+Close #277-#300 individually in gh, then one commit "Archive #277-#300 as validated"
+
+# GOOD
+Close #277 → archive row → commit `#277: archive as validated on-device.` → push → only then #278
+```
 
 The same for **logging-only** batches: after `gh issue create` + the `docs/issues-priority.md` row, commit that doc and **`git push`**. Do not wait for the user to ask.
 
 ```
-# ❌ BAD
-Implement #23–#33, then one commit / one push “so it shows up on the phone”
+# BAD
+Implement #23-#33, then one commit / one push "so it shows up on the phone"
 
-# ✅ GOOD
+# GOOD
 Finish #24 → commit `#24: …` → push → label `validation` → only then start #25
 ```
