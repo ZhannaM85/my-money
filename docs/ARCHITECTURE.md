@@ -10,7 +10,7 @@ Product context lives in `PROJECT_BRIEF.md`; the visual language lives in `docs/
 
 ## System Overview
 
-My Money is a local-first personal balance sheet: the user manually records assets and liabilities, the app converts them into one base currency, and history is a first-class feature. Everything for the web/PWA/Android client runs in the browser — no backend, no accounts, no telemetry, no AI. User data lives in IndexedDB. The only expected **runtime** FX network call is Frankfurter. RUB history is generated at deploy time from NBG and loaded same-origin. Manual overrides live in IndexedDB. See `docs/FX.md`.
+My Money is a local-first personal balance sheet: the user manually records assets and liabilities, the app converts them into one base currency, and history is a first-class feature. Everything for the web/PWA/Android client runs in the browser — no backend, no accounts, no telemetry, no AI. User data lives in IndexedDB. Runtime FX calls are Frankfurter (non-RUB/GEL) and NBG (RUB pairs). RUB history is also generated at deploy time from NBG and loaded same-origin as the offline fallback. Manual overrides live in IndexedDB. See `docs/FX.md`.
 
 iOS is the **same Capacitor wrap** as Android (`ios/` next to `android/`), not a Swift rewrite. #20 (native Swift/SwiftUI) is won't-fix.
 
@@ -34,7 +34,7 @@ flowchart TD
     end
     subgraph Infra ["infrastructure/"]
         F["persistence/indexeddb/<br/>Dexie schema + IndexedDb*Repository"]
-        G["fx/frankfurter + rubStatic"]
+        G["fx/frankfurter + nbg + rubStatic"]
     end
 
     A --> B
@@ -45,7 +45,8 @@ flowchart TD
     F -. implements .-> E
     F --> H[("IndexedDB<br/>in the browser")]
     G --> I[("Frankfurter API<br/>online only; no RUB/GEL")]
-    G --> J[("public/fx/rub/*.json<br/>NBG at generate time")]
+    G --> K[("NBG API<br/>online RUB pairs")]
+    G --> J[("public/fx/rub/*.json<br/>offline RUB fallback")]
 
     style Domain fill:#eff6ff,stroke:#3b82f6
     style Infra fill:#fef3c7,stroke:#d97706
@@ -194,8 +195,9 @@ src/
       indexeddb/           # Dexie schema + repository IMPLEMENTATIONS
     fx/
       frankfurter/         # live Frankfurter; skips RUB/GEL
-      rubStatic/           # same-origin CODE→RUB JSON (NBG at generate time)
-      # no cbr/ or nbg/ clients — those APIs are generate-time only (docs/FX.md)
+      nbg/                 # live NBG for RUB pairs (CODE→RUB via GEL)
+      rubStatic/           # same-origin CODE→RUB JSON (offline / history fallback)
+      # no cbr/ client — CBR stays generate-time only (docs/FX.md)
     debug/                 # tap / download debug text
   features/
     onboarding/
@@ -265,14 +267,15 @@ Base currency is stored in `Settings`. Changing it re-reads FX and re-renders; i
 Canonical detail: [`docs/FX.md`](./FX.md). `fxStore` is the only runtime orchestrator.
 
 - **Frankfurter** ([api.frankfurter.dev](https://api.frankfurter.dev/) v2, no API key) while online. Skips `RUB` and `GEL`. Client: `infrastructure/fx/frankfurter/`. Offline gate: `shouldFetchFrankfurter`.
-- **Static RUB** — same-origin `{BASE_URL}fx/rub/{CODE}.json`, generated at deploy from NBG (`npm run generate:rub-rates`). Client: `infrastructure/fx/rubStatic/`. Not a live NBG/CBR call.
+- **NBG** ([nbg.gov.ge](https://nbg.gov.ge/gw/api/ct/monetarypolicy/currencies/en/json/) day table) while online, for pairs that involve `RUB`. Cross via GEL in `scripts/lib/nbgSeries.mjs`. Client: `infrastructure/fx/nbg/`. `ensureRange({ force: true })` refetches the window’s end date (#301). Skipped offline.
+- **Static RUB** — same-origin `{BASE_URL}fx/rub/{CODE}.json`, generated at deploy from NBG (`npm run generate:rub-rates`). Client: `infrastructure/fx/rubStatic/`. Offline and history fallback, not a substitute for the live NBG call.
 - **Manual overrides** — Settings → IndexedDB; `mergeRateTables` prefers them over system quotes for the same pair + date.
-- Cache system quotes in IndexedDB via `FxRateRepository` so charts work offline after a fetch or static load.
+- Cache system quotes in IndexedDB via `FxRateRepository` so charts work offline after a fetch or static load. NBG overwrites the same pair + date from the static file.
 - Converted values are estimates / reference rates, labeled as such — not executable quotes.
 - Same-currency pairs are rate `1` with no network.
 - Historical net worth **must** use the rate for that history date (weekend/holiday/missing-dataset dates reuse the previous quote via `lookupRateOnOrBefore`). A missing same-day quote must not drop the holding.
 - Only currency codes and dates are sent. User balances, names, and assets never leave the device.
-- Do **not** add `src/infrastructure/fx/cbr` or `nbg`, and do not add a third live fetch.
+- Do **not** add `src/infrastructure/fx/cbr`, and do not add a third live fetch.
 
 ---
 
@@ -342,7 +345,8 @@ Until later feature epics land, UI module tables below are still the intended ma
 |------|---------|
 | `infrastructure/persistence/indexeddb/` | Dexie schema, migrations, `IndexedDb*Repository` |
 | `infrastructure/fx/frankfurter/` | Live Frankfurter (skips RUB/GEL); write through `FxRateRepository` |
-| `infrastructure/fx/rubStatic/` | Same-origin generated CODE→RUB series |
+| `infrastructure/fx/nbg/` | Live NBG for RUB pairs; write through `FxRateRepository` |
+| `infrastructure/fx/rubStatic/` | Same-origin generated CODE→RUB series (offline / history) |
 | `scripts/generate-rub-rates.mjs` | Deploy-time NBG fetch → `public/fx/rub/` |
 
 ### Features

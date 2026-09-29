@@ -14,6 +14,11 @@ import {
 import { fxDebug, recordEnsureRangeWindow } from '@/infrastructure/fx/fxDebug'
 import { shouldFetchFrankfurter } from '@/infrastructure/fx/shouldFetchFrankfurter'
 import {
+  ensureNbgRates,
+  ensureNbgRange,
+  NbgFxClient,
+} from '@/infrastructure/fx/nbg'
+import {
   ensureStaticRubRates,
   ensureStaticRubRange,
   StaticRubRateClient,
@@ -24,6 +29,7 @@ export const FX_LAST_FETCHED_KEY = 'my-money-fx-last-fetched'
 const fxRepository = new IndexedDbFxRateRepository()
 const manualRepository = new IndexedDbManualFxRateRepository()
 const frankfurter = new FrankfurterFxClient()
+const nbg = new NbgFxClient()
 const staticRub = new StaticRubRateClient()
 
 function readLastFetchedAt(): string | undefined {
@@ -100,8 +106,7 @@ export const useFxStore = create<FxStoreState>((set) => ({
     set({ loading: true, error: undefined })
     let failed = false
     fxDebug('ensureRates start', { requests: [...requests] })
-    const online =
-      typeof navigator === 'undefined' ? true : navigator.onLine
+    const online = typeof navigator === 'undefined' ? true : navigator.onLine
     if (shouldFetchFrankfurter(online)) {
       try {
         await ensureFxRates(requests, fxRepository, frankfurter)
@@ -117,6 +122,16 @@ export const useFxStore = create<FxStoreState>((set) => ({
     } catch (error) {
       failed = true
       fxDebug('ensureRates static RUB failed', { error: String(error) })
+    }
+    if (online) {
+      try {
+        await ensureNbgRates(requests, fxRepository, nbg)
+      } catch (error) {
+        failed = true
+        fxDebug('ensureRates NBG failed', { error: String(error) })
+      }
+    } else {
+      fxDebug('ensureRates skipped NBG while offline')
     }
     const { quotes, manualQuotes } = await loadMergedQuotes()
     fxDebug('ensureRates done', {
@@ -142,8 +157,7 @@ export const useFxStore = create<FxStoreState>((set) => ({
       force: Boolean(options?.force),
     })
     recordEnsureRangeWindow({ start, end, base, symbols: [...symbols] })
-    const online =
-      typeof navigator === 'undefined' ? true : navigator.onLine
+    const online = typeof navigator === 'undefined' ? true : navigator.onLine
     if (shouldFetchFrankfurter(online)) {
       try {
         await ensureFxRange(
@@ -175,6 +189,24 @@ export const useFxStore = create<FxStoreState>((set) => ({
     } catch (error) {
       failed = true
       fxDebug('ensureRange static RUB failed', { error: String(error) })
+    }
+    if (online) {
+      try {
+        await ensureNbgRange(
+          start,
+          end,
+          base,
+          symbols,
+          fxRepository,
+          nbg,
+          options,
+        )
+      } catch (error) {
+        failed = true
+        fxDebug('ensureRange NBG failed', { error: String(error) })
+      }
+    } else {
+      fxDebug('ensureRange skipped NBG while offline')
     }
     const { quotes, manualQuotes } = await loadMergedQuotes()
     fxDebug('ensureRange done', {

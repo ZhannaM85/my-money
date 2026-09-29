@@ -1,7 +1,8 @@
 /**
- * Generate-time only. Writes public/fx/rub/*.json from NBG.
- * The app loads those files via rubStatic — it must not fetch NBG/CBR.
- * See docs/FX.md.
+ * Generate-time history. Writes public/fx/rub/*.json from NBG.
+ * The app also fetches NBG at runtime for recent RUB gaps
+ * (`src/infrastructure/fx/nbg`). These files stay the offline fallback.
+ * Do not fetch CBR from the app. See docs/FX.md.
  */
 import { mkdir, writeFile } from 'node:fs/promises'
 import path from 'node:path'

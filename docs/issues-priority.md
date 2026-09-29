@@ -131,6 +131,7 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
 | [#300](https://github.com/ZhannaM85/my-money/issues/300) | 🔍 Pending validation | Ещё → Разработчику: drop «По умолчанию свёрнуто» / Collapsed by default | `settings.developerDescription` keeps the first sentence only. |
+| [#301](https://github.com/ZhannaM85/my-money/issues/301) | 🔍 Pending validation | FX: fetch live NBG rates at runtime for RUB | Обновить курсы / pull-to-refresh call NBG for RUB (CODE→RUB via GEL) and store quotes. Static `public/fx/rub` stays the offline fallback. Frankfurter unchanged for other pairs. |
 
 ---
 

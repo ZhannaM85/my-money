@@ -14,7 +14,7 @@ const featureTestIgnores = [
 ]
 
 export default tseslint.config(
-  { ignores: ['dist', 'android', 'ios', '**/*.d.ts'] },
+  { ignores: ['dist', 'android', 'ios', '**/*.d.ts', '**/*.d.mts'] },
   {
     files: ['**/*.{ts,tsx}'],
     extends: [
