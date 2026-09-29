@@ -375,5 +375,6 @@ Closed live-feedback rows from Tier 8 onward. Open / pending items stay in [`../
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
+| [#301](https://github.com/ZhannaM85/my-money/issues/301) | ✅ Done | FX: fetch live NBG rates at runtime for RUB | Update rates / pull-to-refresh call NBG for RUB (CODE to RUB via GEL) and store quotes. Static public/fx/rub stays the offline fallback. Frankfurter unchanged for other pairs. Validated on-device 2026-09-29. |
 | [#302](https://github.com/ZhannaM85/my-money/issues/302) | ✅ Done | Сводка: remove FX disclaimer | Drop the reference-rates line when quotes exist. Keep fxMissing when a held currency has no rate for the as-of date. Validated on-device 2026-09-29. |
 | [#303](https://github.com/ZhannaM85/my-money/issues/303) | ✅ Done | Сводка: native amount in brackets on converted period rows | Non-base «Из сумм» / «Из курсов» lines: converted (native CODE). Base-currency rows unchanged. Validated on-device 2026-09-29. |
