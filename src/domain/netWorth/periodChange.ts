@@ -26,8 +26,16 @@ export function decomposeConvertedPeriodChange(
   holdings: {
     assetId: string
     name: string
+    currency: string
     amountChange: number
     rateChange: number
+    /** Native quantity change (end − start). Same sign as `amountChange`. */
+    nativeAmountChange: number
+    /**
+     * Rate move expressed in the holding currency at the end rate
+     * (the rate that values amount changes). Same sign as `rateChange`.
+     */
+    nativeRateChange: number
   }[]
 } {
   const countedStart = start.filter((row) => !row.excluded)
@@ -46,8 +54,11 @@ export function decomposeConvertedPeriodChange(
   const holdings: {
     assetId: string
     name: string
+    currency: string
     amountChange: number
     rateChange: number
+    nativeAmountChange: number
+    nativeRateChange: number
   }[] = []
   for (const id of ids) {
     const from = startById.get(id)
@@ -69,15 +80,21 @@ export function decomposeConvertedPeriodChange(
           ? startConverted / startNative
           : 0
     const startRate = startNative !== 0 ? startConverted / startNative : endRate
-    const holdingAmount = (endNative - startNative) * endRate
+    const nativeAmountChange = endNative - startNative
+    const holdingAmount = nativeAmountChange * endRate
     const holdingRate = startNative * (endRate - startRate)
+    const nativeRate = endRate !== 0 ? endRate : startRate
+    const nativeRateChange = nativeRate !== 0 ? holdingRate / nativeRate : 0
     amountChange += holdingAmount
     rateChange += holdingRate
     holdings.push({
       assetId: id,
       name: to?.name ?? from?.name ?? id,
+      currency: to?.currency ?? from?.currency ?? '',
       amountChange: holdingAmount,
       rateChange: holdingRate,
+      nativeAmountChange,
+      nativeRateChange,
     })
   }
   return {

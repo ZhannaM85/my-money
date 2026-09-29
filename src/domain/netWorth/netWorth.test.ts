@@ -228,12 +228,16 @@ describe('allocation / periodChange / history / performance', () => {
     expect(split.amountChange).toBeCloseTo(6000)
     expect(split.rateChange).toBeCloseTo(-70_000)
     expect(split.totalChange).toBeCloseTo(-64_000)
-    expect(split.holdings.find((row) => row.assetId === 'usd')?.amountChange).toBeCloseTo(
-      166_000,
-    )
-    expect(split.holdings.find((row) => row.assetId === 'usd')?.rateChange).toBeCloseTo(
-      -70_000,
-    )
+    const usd = split.holdings.find((row) => row.assetId === 'usd')
+    expect(usd?.amountChange).toBeCloseTo(166_000)
+    expect(usd?.rateChange).toBeCloseTo(-70_000)
+    expect(usd?.currency).toBe('USD')
+    expect(usd?.nativeAmountChange).toBe(2000)
+    expect(usd?.nativeRateChange).toBeCloseTo(-70_000 / 83)
+    const rub = split.holdings.find((row) => row.assetId === 'rub')
+    expect(rub?.currency).toBe('RUB')
+    expect(rub?.nativeAmountChange).toBe(-160_000)
+    expect(rub?.nativeRateChange).toBe(0)
   })
 
   it('ignores excluded holdings in period-change math (#147)', () => {

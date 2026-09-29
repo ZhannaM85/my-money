@@ -4,10 +4,13 @@ import {
   compactAxisFractionDigits,
   formatCalendarDate,
   formatChartAxisDate,
+  formatConvertedWithNativeAmount,
   formatDateTime,
   formatCompactNumber,
   formatEditableAmount,
   formatEditableRate,
+  formatSignedAmount,
+  formatSignedAmountWithCode,
   parseAmount,
   parseRate,
   reformatAmountInput,
@@ -54,6 +57,39 @@ describe('parseRate (#93)', () => {
     const rate = 0.0119474
     expect(parseRate(formatEditableRate(rate, 'en'))).toBeCloseTo(rate)
     expect(parseRate(formatEditableRate(rate, 'ru'))).toBeCloseTo(rate)
+  })
+})
+
+describe('formatConvertedWithNativeAmount (#303)', () => {
+  it('appends a signed native amount and code for another currency', () => {
+    expect(formatConvertedWithNativeAmount(450, 'EUR', 500, 'USD', 'en')).toBe(
+      `${formatSignedAmount(450, 'EUR', 'en')} (${formatSignedAmountWithCode(500, 'USD', 'en')})`,
+    )
+    expect(formatConvertedWithNativeAmount(450, 'EUR', 500, 'USD', 'en')).toBe(
+      '+€450.00 (+500.00 USD)',
+    )
+    expect(formatConvertedWithNativeAmount(-100, 'EUR', -50, 'USD', 'en')).toBe(
+      '−€100.00 (−50.00 USD)',
+    )
+  })
+
+  it('leaves base-currency rows without brackets', () => {
+    expect(formatConvertedWithNativeAmount(100, 'EUR', 100, 'EUR', 'en')).toBe(
+      formatSignedAmount(100, 'EUR', 'en'),
+    )
+    expect(
+      formatConvertedWithNativeAmount(100, 'EUR', 100, 'EUR', 'en'),
+    ).not.toMatch(/[()]/)
+  })
+
+  it('keeps the Russian locale grouping and the same minus sign', () => {
+    expect(
+      formatConvertedWithNativeAmount(2000, 'RUB', -500, 'USD', 'ru'),
+    ).toBe(
+      `${formatSignedAmount(2000, 'RUB', 'ru')} (${formatSignedAmountWithCode(-500, 'USD', 'ru')})`,
+    )
+    expect(formatSignedAmountWithCode(-500, 'USD', 'ru')).toMatch(/^−/)
+    expect(formatSignedAmountWithCode(-500, 'USD', 'ru')).toContain('USD')
   })
 })
 

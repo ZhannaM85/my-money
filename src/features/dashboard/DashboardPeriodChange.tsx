@@ -1,19 +1,14 @@
 import { ChevronDown } from 'lucide-react'
+import type { ConvertedPeriodBreakdown } from '@/domain/netWorth'
 import { useLocale, useTranslation, type Locale } from '@/i18n'
-import { formatSignedAmount } from '@/shared/lib/money'
+import {
+  formatConvertedWithNativeAmount,
+  formatSignedAmount,
+} from '@/shared/lib/money'
 import { InfoHint } from '@/shared/ui/info-hint'
 import { cn } from '@/shared/lib/utils'
 
-type PeriodBreakdown = {
-  amountChange: number
-  rateChange: number
-  holdings: readonly {
-    assetId: string
-    name: string
-    amountChange: number
-    rateChange: number
-  }[]
-}
+type PeriodBreakdown = ConvertedPeriodBreakdown
 
 export function DashboardPeriodChange({
   breakdown,
@@ -110,7 +105,15 @@ function PeriodChangeRow({
             >
               <span className="truncate text-muted-foreground">{row.name}</span>
               <span className="tabular-nums">
-                {formatSignedAmount(row[field], baseCurrency, locale)}
+                {formatConvertedWithNativeAmount(
+                  row[field],
+                  baseCurrency,
+                  kind === 'amount'
+                    ? row.nativeAmountChange
+                    : row.nativeRateChange,
+                  row.currency,
+                  locale,
+                )}
               </span>
             </div>
           ))}

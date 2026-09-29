@@ -157,6 +157,41 @@ export function formatSignedAmount(
   return formatted
 }
 
+/** Signed grouped amount plus ISO code, e.g. `+1,000.00 USD`. */
+export function formatSignedAmountWithCode(
+  amount: number,
+  currency: string,
+  locale: Locale = 'en',
+): string {
+  const formatted = formatEditableAmount(Math.abs(amount), locale, currency)
+  if (amount > 0) return `+${formatted} ${currency}`
+  if (amount < 0) return `−${formatted} ${currency}`
+  return `${formatted} ${currency}`
+}
+
+/**
+ * Converted period-row figure. Non-base holdings append the native amount
+ * in brackets: `converted (native CODE)`.
+ */
+export function formatConvertedWithNativeAmount(
+  converted: number,
+  baseCurrency: string,
+  nativeAmount: number,
+  nativeCurrency: string,
+  locale: Locale = 'en',
+): string {
+  const convertedText = formatSignedAmount(converted, baseCurrency, locale)
+  if (nativeCurrency === '' || nativeCurrency === baseCurrency) {
+    return convertedText
+  }
+  const nativeText = formatSignedAmountWithCode(
+    nativeAmount,
+    nativeCurrency,
+    locale,
+  )
+  return `${convertedText} (${nativeText})`
+}
+
 export function formatPercent(percent: number, locale: Locale = 'en'): string {
   const formatted = new Intl.NumberFormat(localeTag(locale), {
     minimumFractionDigits: 1,
