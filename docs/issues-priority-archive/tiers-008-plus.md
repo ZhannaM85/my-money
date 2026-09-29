@@ -370,3 +370,9 @@ Closed live-feedback rows from Tier 8 onward. Open / pending items stay in [`../
 | [#279](https://github.com/ZhannaM85/my-money/issues/279) | ✅ Done | Update given/spent: allow multiple spendings on the same day | Shared spend-line list (amount + optional comment) on bulk Update and asset-detail. Sum decreases remaining; each line appends a snapshot so History/details can show them separately. Validated on-device 2026-09-29. |
 | [#278](https://github.com/ZhannaM85/my-money/issues/278) | ✅ Done | CI: History list tests fail when 1M no longer includes 2026-08-17 | History list tests now select All so the 2026-08-17 holdings row stays in-range. Unblocks Pages deploy #319. Validated on-device 2026-09-29. |
 | [#277](https://github.com/ZhannaM85/my-money/issues/277) | ✅ Done | Сводка: rephrase FX rate missing / disclaimer subheader (clearer RU) | Split `fxNote`: missing «Нет курса USD на эту дату — эта валюта не пересчитана в ₽.»; rates exist «Курсы справочные, не банковские котировки.» Validated on-device 2026-09-29. |
+
+## Tier 30 — Live feedback (2026-09-29)
+
+| # | Status | Issue | Notes |
+|---|--------|-------|-------|
+| [#303](https://github.com/ZhannaM85/my-money/issues/303) | ✅ Done | Сводка: native amount in brackets on converted period rows | Non-base «Из сумм» / «Из курсов» lines: converted (native CODE). Base-currency rows unchanged. Validated on-device 2026-09-29. |
