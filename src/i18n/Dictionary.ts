@@ -77,7 +77,6 @@ export interface Dictionary {
     ratesUpdated: string
     ratesUpdateOffline: string
     ratesUpdateFailed: string
-    periodChangeHint: string
     currencyFilterConvertedHint: string
     chartTooltip: string
     chartTooltipShow: string

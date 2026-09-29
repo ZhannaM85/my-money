@@ -5,7 +5,6 @@ import {
   formatConvertedWithNativeAmount,
   formatSignedAmount,
 } from '@/shared/lib/money'
-import { InfoHint } from '@/shared/ui/info-hint'
 import { cn } from '@/shared/lib/utils'
 
 type PeriodBreakdown = ConvertedPeriodBreakdown
@@ -25,33 +24,28 @@ export function DashboardPeriodChange({
   const locale = useLocale()
 
   return (
-    <InfoHint
-      hint={t.dashboard.periodChangeHint}
-      label={t.common.aboutField(t.dashboard.thisMonth)}
-    >
-      <ul className="flex flex-col gap-1 text-sm">
-        <PeriodChangeRow
-          kind="amount"
-          label={t.dashboard.amountChange}
-          total={breakdown.amountChange}
-          holdings={breakdown.holdings}
-          open={periodOpen === 'amount'}
-          baseCurrency={baseCurrency}
-          locale={locale}
-          onToggle={() => onTogglePeriod('amount')}
-        />
-        <PeriodChangeRow
-          kind="rate"
-          label={t.dashboard.rateChange}
-          total={breakdown.rateChange}
-          holdings={breakdown.holdings}
-          open={periodOpen === 'rate'}
-          baseCurrency={baseCurrency}
-          locale={locale}
-          onToggle={() => onTogglePeriod('rate')}
-        />
-      </ul>
-    </InfoHint>
+    <ul className="flex flex-col gap-1 text-sm">
+      <PeriodChangeRow
+        kind="amount"
+        label={t.dashboard.amountChange}
+        total={breakdown.amountChange}
+        holdings={breakdown.holdings}
+        open={periodOpen === 'amount'}
+        baseCurrency={baseCurrency}
+        locale={locale}
+        onToggle={() => onTogglePeriod('amount')}
+      />
+      <PeriodChangeRow
+        kind="rate"
+        label={t.dashboard.rateChange}
+        total={breakdown.rateChange}
+        holdings={breakdown.holdings}
+        open={periodOpen === 'rate'}
+        baseCurrency={baseCurrency}
+        locale={locale}
+        onToggle={() => onTogglePeriod('rate')}
+      />
+    </ul>
   )
 }
 

@@ -59,12 +59,16 @@ describe('DashboardHeadline', () => {
     expect(
       screen.queryByRole('button', { name: 'Update rates' }),
     ).not.toBeInTheDocument()
-    await userEvent.click(
-      screen.getByRole('button', { name: 'About this month' }),
-    )
     expect(
-      screen.getByText(/From amounts is what you added or reduced/),
-    ).toBeInTheDocument()
+      screen.queryByRole('button', { name: 'About this month' }),
+    ).not.toBeInTheDocument()
+    expect(
+      screen.queryByText(/From amounts is what you added or reduced/),
+    ).not.toBeInTheDocument()
+    const amountRow = screen.getByRole('button', { name: /From amounts/ })
+    expect(amountRow).toHaveAttribute('aria-expanded', 'false')
+    await userEvent.click(amountRow)
+    expect(amountRow).toHaveAttribute('aria-expanded', 'true')
   })
 
   it('shows this-month change from the month-start snapshot', async () => {
