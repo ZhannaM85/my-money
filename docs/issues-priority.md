@@ -108,7 +108,6 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
 | [#300](https://github.com/ZhannaM85/my-money/issues/300) | 🔍 Pending validation | Ещё → Разработчику: drop «По умолчанию свёрнуто» / Collapsed by default | `settings.developerDescription` keeps the first sentence only. |
-| [#304](https://github.com/ZhannaM85/my-money/issues/304) | 🔍 Pending validation | Сводка: remove period breakdown help icon and description | Drop the (?) control and the «Из сумм» / «Из курсов» explanation. Rows and expanders stay. |
 
 ---
 
