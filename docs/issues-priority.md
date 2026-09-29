@@ -126,6 +126,14 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 
 ---
 
+## Tier 30 — Live feedback (2026-09-29)
+
+| # | Status | Issue | Notes |
+|---|--------|-------|-------|
+| [#300](https://github.com/ZhannaM85/my-money/issues/300) | 🔍 Pending validation | Ещё → Разработчику: drop «По умолчанию свёрнуто» / Collapsed by default | `settings.developerDescription` keeps the first sentence only. |
+
+---
+
 ## Explicitly not filed
 
 Out of scope for the MVP (`PROJECT_BRIEF.md` §20) — do not implement from chat:

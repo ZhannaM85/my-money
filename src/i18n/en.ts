@@ -325,7 +325,7 @@ export const en: Dictionary = {
     aboutDescription: 'Privacy and what changed in recent versions.',
     groupDeveloper: 'Developer',
     developerDescription:
-      'Diagnostics for FX and a log of why shipped issues happened. Collapsed by default.',
+      'Diagnostics for FX and a log of why shipped issues happened.',
     baseCurrency: 'Base currency',
     showAllCurrencies: 'Show all currencies',
     currencyDisplay: 'Asset display',
