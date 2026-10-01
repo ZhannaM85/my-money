@@ -10,6 +10,41 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 274,
+    issue: 304,
+    date: '2026-09-29T10:45:46+03:00',
+    en: 'On Summary, From amounts and From rates no longer have a help button or the long explanation. The rows and their holding lists stay.',
+    ru: 'На Сводке у «Из сумм» и «Из курсов» больше нет кнопки «?» и длинного пояснения. Строки и списки позиций остаются.',
+  },
+  {
+    version: 273,
+    issue: 303,
+    date: '2026-09-29T10:40:46+03:00',
+    en: 'On converted Summary, a From amounts or From rates line in another currency shows that currency amount in brackets after the converted figure.',
+    ru: 'На пересчитанной Сводке в «Из сумм» и «Из курсов» для другой валюты после пересчитанной суммы в скобках указана сумма в валюте позиции.',
+  },
+  {
+    version: 272,
+    issue: 302,
+    date: '2026-09-29T10:29:24+03:00',
+    en: 'Summary no longer says rates are for reference, not bank quotes, when rates exist. A missing rate still says that currency is not converted.',
+    ru: 'На Сводке больше нет строки «Курсы справочные, не банковские котировки.», когда курсы есть. Если курса нет, по-прежнему видно, что эта валюта не пересчитана.',
+  },
+  {
+    version: 271,
+    issue: 301,
+    date: '2026-09-29T10:25:15+03:00',
+    en: 'Update rates now fetches live National Bank of Georgia quotes for the ruble. Offline, previously saved rates are still used.',
+    ru: '«Обновить курсы» запрашивает живые курсы Нацбанка Грузии для рубля. Без сети остаются ранее сохранённые курсы.',
+  },
+  {
+    version: 270,
+    issue: 300,
+    date: '2026-09-29T10:08:24+03:00',
+    en: 'More → Developer no longer says collapsed by default. The description is only the FX diagnostics and the shipped-issue log.',
+    ru: 'В «Ещё → Разработчику» больше нет «По умолчанию свёрнуто.». Остаётся диагностика FX и журнал причин выпущенных задач.',
+  },
+  {
     version: 269,
     issue: 299,
     date: '2026-09-21T00:40:00+03:00',

@@ -111,6 +111,14 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 
 ---
 
+## Tier 31 — Live feedback (2026-10-01)
+
+| # | Status | Issue | Notes |
+|---|--------|-------|-------|
+| [#307](https://github.com/ZhannaM85/my-money/issues/307) | 🔍 Pending validation | Changelog: add Tier 30 release notes (#301–#304 live NBG + Сводка polish) | v270–v274 for validated #300 plus #301–#304. About only. |
+
+---
+
 ## Explicitly not filed
 
 Out of scope for the MVP (`PROJECT_BRIEF.md` §20) — do not implement from chat:
