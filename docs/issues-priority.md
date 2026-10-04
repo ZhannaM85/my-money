@@ -115,7 +115,6 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
-| [#307](https://github.com/ZhannaM85/my-money/issues/307) | 🔍 Pending validation | Changelog: add Tier 30 release notes (#301–#304 live NBG + Сводка polish) | v270–v274 for validated #300 plus #301–#304. About only. |
 
 ---
 
