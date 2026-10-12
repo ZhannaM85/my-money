@@ -124,6 +124,7 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 |---|--------|-------|-------|
 | [#308](https://github.com/ZhannaM85/my-money/issues/308) | 🔲 Open | Assets: display a sticky total near the page heading | Show the total and keep it visible while scrolling, including on mobile. Follow the currency-conversion setting. No screenshots attached. |
 | [#309](https://github.com/ZhannaM85/my-money/issues/309) | 🔲 Open | Dashboard: keep the top net-worth card sticky | Keep net worth and period change visible while scrolling, including on mobile. No screenshots attached. |
+| [#310](https://github.com/ZhannaM85/my-money/issues/310) | 🔲 Open | Dashboard: hide disabled currency selector in single-currency conversion mode | Hide the selector and associated label/help row when currency is fixed by conversion; retain selection in modes that allow it. No screenshots attached. |
 
 ---
 
