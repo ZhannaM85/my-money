@@ -44,12 +44,8 @@ describe('DashboardHeadline', () => {
       },
     )
     renderApp(<DashboardScreen />)
-    const netWorth = await screen.findByText('Net worth')
-    const currency = screen.getByLabelText('Currency')
-    expect(
-      netWorth.compareDocumentPosition(currency) &
-        Node.DOCUMENT_POSITION_FOLLOWING,
-    ).toBeTruthy()
+    await screen.findByText('Net worth')
+    expect(screen.queryByLabelText('Currency')).not.toBeInTheDocument()
     expect(
       screen.getAllByText(formatAmount(1000, 'EUR')).length,
     ).toBeGreaterThan(0)

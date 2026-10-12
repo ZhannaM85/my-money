@@ -15,7 +15,7 @@ beforeEach(async () => {
 })
 
 describe('DashboardHeadline holdings', () => {
-  it('disables the currency filter in Converted mode (#245)', async () => {
+  it('hides the currency filter in Converted mode while keeping the converted total (#310)', async () => {
     const now = '2026-08-17T00:00:00.000Z'
     await useFxStore
       .getState()
@@ -68,9 +68,8 @@ describe('DashboardHeadline holdings', () => {
     expect(
       await screen.findAllByText(formatAmount(1100, 'EUR')),
     ).not.toHaveLength(0)
-    const currency = screen.getByLabelText('Currency')
-    expect(currency).toBeDisabled()
-    expect(currency).toHaveValue('EUR')
+    expect(screen.queryByLabelText('Currency')).not.toBeInTheDocument()
+    expect(screen.queryByText('Currency', { exact: true })).not.toBeInTheDocument()
     expect(
       screen.queryByRole('option', { name: 'All' }),
     ).not.toBeInTheDocument()
@@ -86,12 +85,9 @@ describe('DashboardHeadline holdings', () => {
     expect(
       screen.queryByText(/In Converted this filter stays on the More base/),
     ).not.toBeInTheDocument()
-    await userEvent.click(
-      screen.getByRole('button', { name: 'About Currency' }),
-    )
     expect(
-      screen.getByText(/In Converted this filter stays on the More base/),
-    ).toBeInTheDocument()
+      screen.queryByRole('button', { name: 'About Currency' }),
+    ).not.toBeInTheDocument()
     expect(screen.getByText('From amounts')).toBeInTheDocument()
     expect(screen.getByText('From rates')).toBeInTheDocument()
   })

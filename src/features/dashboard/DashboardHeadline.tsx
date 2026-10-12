@@ -83,27 +83,21 @@ export function DashboardHeadline({
         )}
       </div>
       {fxNote && <p className="text-sm text-muted-foreground">{fxNote}</p>}
-      <SelectField
-        label={t.asset.currency}
-        id="dashboard-currency-filter"
-        className={cn(!isOriginal && 'text-muted-foreground opacity-60')}
-        value={isOriginal ? activeCurrencyFilter : baseCurrency}
-        disabled={!isOriginal}
-        hint={isOriginal ? undefined : t.dashboard.currencyFilterConvertedHint}
-        aboutLabel={
-          isOriginal ? undefined : t.common.aboutField(t.asset.currency)
-        }
-        onChange={(event) => {
-          onCurrencyFilterChange(event.target.value)
-        }}
-      >
-        {isOriginal && <option value="all">{t.assets.filterAll}</option>}
-        {(isOriginal ? availableCurrencies : [baseCurrency]).map((code) => (
-          <option key={code} value={code}>
-            {code}
-          </option>
-        ))}
-      </SelectField>
+      {isOriginal && (
+        <SelectField
+          label={t.asset.currency}
+          id="dashboard-currency-filter"
+          value={activeCurrencyFilter}
+          onChange={(event) => onCurrencyFilterChange(event.target.value)}
+        >
+          <option value="all">{t.assets.filterAll}</option>
+          {availableCurrencies.map((code) => (
+            <option key={code} value={code}>
+              {code}
+            </option>
+          ))}
+        </SelectField>
+      )}
       {showNativeAll ? (
         <div className="flex flex-col gap-2">
           <span className="text-sm text-muted-foreground">

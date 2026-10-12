@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 277,
+    issue: 310,
+    date: '2026-10-12T19:36:00+03:00',
+    en: 'Dashboard hides the currency selector when all amounts are converted to one currency.',
+    ru: 'На Сводке скрыт выбор валюты, когда все суммы пересчитаны в одну валюту.',
+  },
+  {
     version: 276,
     issue: 309,
     date: '2026-10-12T19:33:00+03:00',

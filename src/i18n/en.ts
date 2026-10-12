@@ -329,7 +329,7 @@ export const en: Dictionary = {
     currencyDisplayBase: 'Converted',
     currencyDisplayNative: 'Original',
     showAllCurrenciesHint:
-      'Show all currencies is Original: amounts stay native, and Dashboard can filter by currency. A single currency is Converted: one total, and the Dashboard filter locks to that currency.',
+      'Show all currencies is Original: amounts stay native, and Dashboard can filter by currency. A single currency is Converted: Dashboard shows one total in that currency.',
     language: 'Language',
     languageEn: 'English',
     languageRu: 'Русский',
