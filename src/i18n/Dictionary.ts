@@ -137,6 +137,13 @@ export interface Dictionary {
     saveAsset: string
     saveDetails: string
     editDetails: string
+    renameAsset: string
+    saveName: string
+    cancelRename: string
+    cancelRenameConfirm: string
+    discardRename: string
+    keepRenaming: string
+    renameFailed: string
     notFound: string
     backToAssets: string
     native: string

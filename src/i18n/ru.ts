@@ -103,6 +103,13 @@ export const ru: Dictionary = {
     rowMenuAria: (name) => `Действия: ${name}`,
   },
   asset: {
+    renameAsset: 'Переименовать актив',
+    saveName: 'Сохранить название',
+    cancelRename: 'Отменить переименование',
+    cancelRenameConfirm: 'Отменить изменения названия?',
+    discardRename: 'Отменить изменения',
+    keepRenaming: 'Продолжить',
+    renameFailed: 'Не удалось сохранить название. Попробуйте ещё раз.',
     classes: {
       money: 'Деньги',
       investments: 'Инвестиции',

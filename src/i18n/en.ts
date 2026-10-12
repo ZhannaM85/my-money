@@ -100,6 +100,13 @@ export const en: Dictionary = {
     rowMenuAria: (name) => `Actions for ${name}`,
   },
   asset: {
+    renameAsset: 'Rename asset',
+    saveName: 'Save name',
+    cancelRename: 'Cancel renaming',
+    cancelRenameConfirm: 'Discard the name changes?',
+    discardRename: 'Discard changes',
+    keepRenaming: 'Keep editing',
+    renameFailed: 'Could not save the name. Please try again.',
     classes: {
       money: 'Money',
       investments: 'Investments',

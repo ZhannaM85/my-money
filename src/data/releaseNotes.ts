@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 278,
+    issue: 311,
+    date: '2026-10-12T21:20:45+03:00',
+    en: 'Rename an asset with the pencil beside its name. Save the new name or confirm cancellation with the cross.',
+    ru: 'Переименуйте актив с помощью карандаша рядом с названием. Сохраните новое название или подтвердите отмену через крестик.',
+  },
+  {
     version: 277,
     issue: 310,
     date: '2026-10-12T19:36:00+03:00',

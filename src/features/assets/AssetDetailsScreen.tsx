@@ -15,6 +15,7 @@ import { NetWorthChart } from '@/features/dashboard/NetWorthChart'
 import { AssetDetailsAccordion } from './AssetDetailsAccordion'
 import { AssetDetailsUpdateForm } from './AssetDetailsUpdateForm'
 import { AssetSnapshotList } from './AssetSnapshotList'
+import { AssetNameEditor } from './AssetNameEditor'
 import { useAssetDetailsScreen } from './useAssetDetailsScreen'
 
 export function AssetDetailsScreen() {
@@ -41,8 +42,14 @@ export function AssetDetailsScreen() {
 
   return (
     <div className="flex flex-col gap-6">
-      <PageHeader
-        title={asset.name}
+      <AssetNameEditor
+        key={asset.id}
+        name={asset.name}
+        onSave={(name) =>
+          d.saveDetails({
+            asset: { ...asset, name, updatedAt: new Date().toISOString() },
+          })
+        }
         description={
           asset.institution?.trim()
             ? `${t.asset.types[asset.type]} · ${asset.institution.trim()} · ${asset.currency}`
