@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 276,
+    issue: 309,
+    date: '2026-10-12T19:33:00+03:00',
+    en: 'The Dashboard net-worth card now stays visible while you scroll.',
+    ru: 'Карточка чистого капитала на Сводке теперь остаётся видимой при прокрутке.',
+  },
+  {
     version: 275,
     issue: 308,
     date: '2026-10-12T19:30:46+03:00',

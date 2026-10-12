@@ -47,36 +47,41 @@ export function DashboardHeadline({
 
   return (
     <>
-      {showNativeAll && heroTotal ? (
-        <StatCard
-          label={t.dashboard.netWorth}
-          value={formatAmount(heroTotal.amount, heroTotal.currency, locale)}
-          description={changeLabel}
-        >
-          {stackedTotals.slice(1).map((row) => (
-            <span
-              key={row.currency}
-              className="block text-xl font-semibold tabular-nums text-foreground"
-            >
-              {formatAmount(row.amount, row.currency, locale)}
-            </span>
-          ))}
-        </StatCard>
-      ) : (
-        <StatCard
-          label={t.dashboard.netWorth}
-          value={formatAmount(
-            displayHeadlineTotal,
-            isOriginal ? activeCurrencyFilter : baseCurrency,
-            locale,
-          )}
-          description={
-            selectedChartPoint
-              ? t.history.holdingsOn(selectedChartPoint.date)
-              : changeLabel
-          }
-        />
-      )}
+      <div
+        data-testid="dashboard-sticky-summary"
+        className="sticky top-0 z-30 -mx-4 bg-background px-4 py-3"
+      >
+        {showNativeAll && heroTotal ? (
+          <StatCard
+            label={t.dashboard.netWorth}
+            value={formatAmount(heroTotal.amount, heroTotal.currency, locale)}
+            description={changeLabel}
+          >
+            {stackedTotals.slice(1).map((row) => (
+              <span
+                key={row.currency}
+                className="block text-xl font-semibold tabular-nums text-foreground"
+              >
+                {formatAmount(row.amount, row.currency, locale)}
+              </span>
+            ))}
+          </StatCard>
+        ) : (
+          <StatCard
+            label={t.dashboard.netWorth}
+            value={formatAmount(
+              displayHeadlineTotal,
+              isOriginal ? activeCurrencyFilter : baseCurrency,
+              locale,
+            )}
+            description={
+              selectedChartPoint
+                ? t.history.holdingsOn(selectedChartPoint.date)
+                : changeLabel
+            }
+          />
+        )}
+      </div>
       {fxNote && <p className="text-sm text-muted-foreground">{fxNote}</p>}
       <SelectField
         label={t.asset.currency}
