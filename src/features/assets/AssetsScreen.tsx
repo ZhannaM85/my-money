@@ -15,6 +15,7 @@ import {
   type AssetClass,
 } from '@/domain/asset'
 import { convertAmount, lookupRate, type RateTable } from '@/domain/fx'
+import { nativeTotalsByCurrency, netWorth } from '@/domain/netWorth'
 import {
   ASSET_LIST_SORTS,
   type AssetListSort,
@@ -155,16 +156,46 @@ export function AssetsScreen() {
     )
   }
 
+  const total = useMemo(() => {
+    if (displayMode === 'native') {
+      return {
+        label: nativeTotalsByCurrency(assets, snapshots)
+          .map((row) => formatAmount(row.amount, row.currency, locale))
+          .join(' · ') || formatAmount(0, baseCurrency, locale),
+        missingRates: [],
+      }
+    }
+    const result = netWorth(assets, snapshots, quotes, baseCurrency)
+    return {
+      label: formatAmount(result.total, baseCurrency, locale),
+      missingRates: result.missingRates,
+    }
+  }, [assets, snapshots, quotes, baseCurrency, displayMode, locale])
+
   return (
     <div className="flex flex-col gap-6">
-      <PageHeader
-        title={t.assets.title}
-        action={
-          <Button asChild>
-            <Link to="/assets/new">{t.common.add}</Link>
-          </Button>
-        }
-      />
+      <div
+        data-testid="assets-sticky-header"
+        className="sticky top-0 z-30 -mx-4 bg-background px-4 py-3"
+      >
+        <PageHeader
+          title={t.assets.title}
+          description={
+            loaded ? `${t.dashboard.positionsTotal}: ${total.label}` : undefined
+          }
+          action={
+            <Button asChild>
+              <Link to="/assets/new">{t.common.add}</Link>
+            </Button>
+          }
+        />
+        {loaded && total.missingRates.length > 0 && (
+          <p className="mt-2 text-sm text-muted-foreground">
+            {t.dashboard.conversionUnavailable}:{' '}
+            {[...new Set(total.missingRates.map((rate) => rate.from))].join(', ')}
+          </p>
+        )}
+      </div>
       <div className="flex flex-wrap gap-2" data-testid="asset-filters">
         {filters.map((item) => (
           <Chip

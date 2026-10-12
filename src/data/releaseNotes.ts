@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 275,
+    issue: 308,
+    date: '2026-10-12T19:30:46+03:00',
+    en: 'Assets now shows a total that stays visible while you scroll.',
+    ru: 'На странице «Активы» появилась общая сумма, которая остаётся видимой при прокрутке.',
+  },
+  {
     version: 274,
     issue: 304,
     date: '2026-09-29T10:45:46+03:00',

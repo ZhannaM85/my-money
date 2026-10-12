@@ -49,6 +49,31 @@ beforeEach(async () => {
 })
 
 describe('AssetsScreen', () => {
+  it('totals tracked assets without mixing native currencies or counting hidden holdings (#308)', async () => {
+    await addNamedAsset('cash', 'Cash', 50, 'EUR')
+    await addNamedAsset('excluded', 'Excluded', 1000, 'EUR', 'excluded')
+    await addNamedAsset('archived', 'Archived', 2000, 'EUR', 'archived')
+    render(<MemoryRouter><AssetsScreen /></MemoryRouter>)
+    await screen.findByText('Broker')
+    const header = screen.getByTestId('assets-sticky-header')
+    expect(header).toHaveTextContent(`Total: ${formatAmount(150, 'EUR')}`)
+    await useSettingsStore.getState().setCurrencyDisplayMode('native')
+    await waitFor(() => {
+      expect(header).toHaveTextContent(formatAmount(50, 'EUR'))
+      expect(header).toHaveTextContent(formatAmount(110, 'USD'))
+    })
+  })
+
+  it('reports a missing conversion without adding native amounts into the base total (#308)', async () => {
+    useFxStore.setState({ quotes: [] })
+    await addNamedAsset('cash', 'Cash', 50, 'EUR')
+    render(<MemoryRouter><AssetsScreen /></MemoryRouter>)
+    await screen.findByText('Broker')
+    const header = screen.getByTestId('assets-sticky-header')
+    expect(header).toHaveTextContent(`Total: ${formatAmount(50, 'EUR')}`)
+    expect(header).toHaveTextContent('Conversion not available: USD')
+  })
+
   it('shows converted amounts first when the display mode is converted', async () => {
     render(
       <MemoryRouter>
