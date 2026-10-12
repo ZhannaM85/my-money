@@ -118,6 +118,14 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 
 ---
 
+## Tier 32 — Live feedback (2026-10-12)
+
+| # | Status | Issue | Notes |
+|---|--------|-------|-------|
+| [#308](https://github.com/ZhannaM85/my-money/issues/308) | 🔲 Open | Assets: display a sticky total near the page heading | Show the total and keep it visible while scrolling, including on mobile. Follow the currency-conversion setting. No screenshots attached. |
+
+---
+
 ## Explicitly not filed
 
 Out of scope for the MVP (`PROJECT_BRIEF.md` §20) — do not implement from chat:
