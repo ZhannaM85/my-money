@@ -129,6 +129,14 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 
 ---
 
+## Tier 33 — Live feedback (2026-10-13)
+
+| # | Status | Issue | Notes |
+|---|--------|-------|-------|
+| [#313](https://github.com/ZhannaM85/my-money/issues/313) | 🔲 Open | Dashboard: net-worth card bleeds through date input while scrolling up | Reported on iPhone with two screenshots. Card border/title/monthly change overlaps the На дату controls at intermediate scroll positions. Preserve sticky summary behavior from #309. |
+
+---
+
 ## Explicitly not filed
 
 Out of scope for the MVP (`PROJECT_BRIEF.md` §20) — do not implement from chat:
