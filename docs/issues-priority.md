@@ -122,7 +122,6 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
-| [#308](https://github.com/ZhannaM85/my-money/issues/308) | 🔍 Pending validation | Assets: display a sticky total near the page heading | Sticky header shows the overall tracked total; converted total or separate native currency totals. Respects hidden holdings, shares, and debts; flags missing FX. Mobile/desktop scrolling verified. |
 
 ---
 
