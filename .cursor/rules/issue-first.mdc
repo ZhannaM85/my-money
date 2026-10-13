@@ -7,7 +7,7 @@ alwaysApply: true
 
 Do not write product code without, in this order:
 
-1. `gh issue create` with `--label` and `--body-file` (never unlabeled; never elevate allowlisted `gh`).
+1. `gh issue create` with `--label` and `--body-file` (never unlabeled). Use the available sandbox approval mechanism if an authorized command is blocked by network or filesystem restrictions.
 2. A row in `docs/issues-priority.md`.
 3. Only then implement — unless the user is in a live reporting burst, in which case **stop at step 2**. See `.cursor/rules/logging-only.mdc`. “Let’s add”, “let’s implement”, “fix it”, “apply”, or “like Turtle” during a reporting burst still means **log**, not implement. Same-chat “address it after you log” does not unlock code on the next screenshot. If unsure, ask.
 

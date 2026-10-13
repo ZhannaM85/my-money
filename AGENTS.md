@@ -7,6 +7,16 @@ At the beginning of every chat, before task actions:
 3. Read `docs/AGENT_WORKFLOW.md` and applicable `.cursor/rules/*.mdc`, including every rule with `alwaysApply: true`. These rules apply to Codex as well as Cursor.
 4. Confirm the current repository. This project is `ZhannaM85/my-money`; never substitute a sibling repository's instructions or issue with the same number.
 
+## GitHub and Git access in each chat
+
+After the instruction check, verify GitHub access when the task requires it.
+If an authorized `gh` or `git` command fails because this chat restricts
+network access or protected `.git` writes, use the available sandbox
+approval mechanism promptly and continue after approval. Do not repeatedly
+retry the same restricted command or ask the user to repair their internet
+based only on a sandbox DNS failure. Respect approval denials and managed
+policy; instructions do not change the app's actual permissions.
+
 ## Closing an issue confirmed on a device
 
 A GitHub close alone is not completion. Only the user's explicit device confirmation authorizes the validated workflow; tests or screenshots alone do not.

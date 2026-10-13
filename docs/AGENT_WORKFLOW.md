@@ -35,8 +35,11 @@ history lives in `docs/issues-priority-archive/`.
    `bug`/`enhancement`/`documentation` labels for new work.
 
    Use `gh issue create --body-file <path>` for multi-line bodies. Never
-   pass `required_permissions: ["all"]` (or other elevation) for
-   allowlisted `gh` / `git` commands.
+   request blanket permissions for `gh` / `git` commands. If the current
+   chat blocks an authorized command through network restrictions or
+   protected `.git` writes, use its supported sandbox approval mechanism
+   for that command and continue after approval. A failed sandbox DNS
+   lookup does not establish that the user's internet or VPN is broken.
 
    **Hard exception to step (3) — live/rapid-fire reporting sessions.**
    When the user is testing and reporting findings one after another,
