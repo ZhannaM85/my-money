@@ -391,3 +391,4 @@ Closed live-feedback rows from Tier 8 onward. Open / pending items stay in [`../
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
 | [#311](https://github.com/ZhannaM85/my-money/issues/311) | ✅ Done | Assets: add renaming with save and confirmed cancel actions | Detail-page pencil opens a prefilled name input with save/cancel icons. Cross confirms discard; dismissing keeps the draft. Trims names, rejects blanks, preserves history, and retains failed drafts for retry. EN/RU mobile flow verified. Validated on-device 2026-10-13. |
+| [#310](https://github.com/ZhannaM85/my-money/issues/310) | ✅ Done | Dashboard: hide disabled currency selector in single-currency conversion mode | Converted mode omits currency selector, label, and help row. Original retains enabled filtering; totals stay in the configured currency. Settings help updated in EN/RU. Validated on-device 2026-10-13. |
