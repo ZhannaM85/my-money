@@ -385,3 +385,9 @@ Closed live-feedback rows from Tier 8 onward. Open / pending items stay in [`../
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
 | [#307](https://github.com/ZhannaM85/my-money/issues/307) | ✅ Done | Changelog: add Tier 30 release notes (#301–#304 live NBG + Сводка polish) | v270–v274 for validated #300 plus #301–#304. About only. Validated on-device 2026-10-04. |
+
+## Tier 32 — Live feedback (2026-10-12)
+
+| # | Status | Issue | Notes |
+|---|--------|-------|-------|
+| [#311](https://github.com/ZhannaM85/my-money/issues/311) | ✅ Done | Assets: add renaming with save and confirmed cancel actions | Detail-page pencil opens a prefilled name input with save/cancel icons. Cross confirms discard; dismissing keeps the draft. Trims names, rejects blanks, preserves history, and retains failed drafts for retry. EN/RU mobile flow verified. Validated on-device 2026-10-13. |
