@@ -13,18 +13,27 @@ export async function seedValidationFixture(
   const locale = options?.locale ?? 'en'
   const newUpdateUx = options?.newUpdateUx ?? true
   await page.goto('/settings')
-  await page.waitForFunction(() => document.readyState === 'complete')
+  await page.waitForFunction(
+    () =>
+      new Promise<boolean>((resolve) => {
+        const open = indexedDB.open('my-money')
+        open.onerror = () => resolve(false)
+        open.onsuccess = () => {
+          const database = open.result
+          const ready = ['settings', 'assets', 'snapshots'].every((name) =>
+            database.objectStoreNames.contains(name),
+          )
+          database.close()
+          resolve(ready)
+        }
+      }),
+  )
   await page.evaluate(async ({ mode, locale, newUpdateUx }) => {
     const now = '2026-08-17T00:00:00.000Z'
 
-    const version = await (async () => {
-      const listed = await indexedDB.databases?.()
-      const existing = listed?.find((row) => row.name === 'my-money')
-      return existing?.version && existing.version > 0 ? existing.version : 2
-    })()
-
     await new Promise<void>((resolve, reject) => {
-      const open = indexedDB.open('my-money', version)
+      // Open the existing schema without the optional indexedDB.databases API.
+      const open = indexedDB.open('my-money')
       open.onerror = () => reject(open.error ?? new Error('idb open failed'))
       open.onsuccess = () => {
         const db = open.result

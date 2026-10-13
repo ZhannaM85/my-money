@@ -1,3 +1,4 @@
+import { useLayoutEffect, useRef } from 'react'
 import { ChevronDown } from 'lucide-react'
 import type { HoldingConversion } from '@/domain/netWorth'
 import { useLocale, useTranslation } from '@/i18n'
@@ -44,12 +45,36 @@ export function DashboardHeadline({
     ? sortNativeTotalsLargestFirst(nativeTotals)
     : []
   const heroTotal = stackedTotals[0]
+  const summaryRef = useRef<HTMLDivElement>(null)
+
+  useLayoutEffect(() => {
+    const summary = summaryRef.current
+    const body = summary?.parentElement
+    if (!summary || !body) return
+    const updateHeight = () => {
+      body.style.setProperty(
+        '--dashboard-summary-height',
+        `${summary.getBoundingClientRect().height}px`,
+      )
+    }
+    updateHeight()
+    const observer =
+      typeof ResizeObserver === 'undefined'
+        ? undefined
+        : new ResizeObserver(updateHeight)
+    observer?.observe(summary)
+    return () => {
+      observer?.disconnect()
+      body.style.removeProperty('--dashboard-summary-height')
+    }
+  }, [])
 
   return (
     <>
       <div
+        ref={summaryRef}
         data-testid="dashboard-sticky-summary"
-        className="sticky top-0 z-30 -mx-4 bg-background px-4 py-3"
+        className="sticky top-0 z-40 -mx-4 bg-background px-4 py-3"
       >
         {showNativeAll && heroTotal ? (
           <StatCard

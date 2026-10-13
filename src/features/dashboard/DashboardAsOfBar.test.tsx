@@ -209,7 +209,7 @@ describe('DashboardAsOfBar', () => {
     )
     expect(scroll).toContainElement(asOf)
     expect(bar.className).toContain('sticky')
-    expect(bar.className).toContain('top-0')
+    expect(bar.className).toContain('top-[var(--dashboard-summary-height,0px)]')
     // #214: scroll on AppShell `#main-content` only — nested overflow split the
     // iOS scrollbar. Sticky As of still sticks to that single scrollport.
     expect(scroll.className).not.toContain('overflow-y-auto')

@@ -129,7 +129,7 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
-| [#313](https://github.com/ZhannaM85/my-money/issues/313) | 🔲 Open | Dashboard: net-worth card bleeds through date input while scrolling up | Reported on iPhone with two screenshots. Card border/title/monthly change overlaps the На дату controls at intermediate scroll positions. Preserve sticky summary behavior from #309. |
+| [#313](https://github.com/ZhannaM85/my-money/issues/313) | 🔍 Pending validation | Dashboard: net-worth card bleeds through date input while scrolling up | Date bar sticks below the measured summary height; ResizeObserver tracks height changes. Sticky summary retained. Mobile/desktop Chromium and WebKit scrolling checks; screenshots in docs/validation-proof/313. |
 
 ---
 
