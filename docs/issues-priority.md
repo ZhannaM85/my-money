@@ -133,6 +133,14 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 
 ---
 
+## Tier 34 — Live feedback (2026-10-15)
+
+| # | Status | Issue | Notes |
+|---|--------|-------|-------|
+| [#316](https://github.com/ZhannaM85/my-money/issues/316) | 🔲 Open | Mobile: extra blank space above sticky footer on Update and Comparison | Reported on iPhone; History, Dashboard, and Settings unaffected. Suspected padding / footer clearance; cause unverified. Screenshots omitted as requested. |
+
+---
+
 ## Explicitly not filed
 
 Out of scope for the MVP (`PROJECT_BRIEF.md` §20) — do not implement from chat:
