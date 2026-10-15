@@ -132,6 +132,8 @@ export function AppShell() {
           nested-scroll). Bottom padding here sits in that box and overflowing
           page content paints through it, flush with the tab bar. A shrink-0
           spacer after the outlet stays in the content flow.
+          #316: Update owns its inset inside the holdings scroller; a shell
+          spacer would reserve a permanent blank strip below that scroller.
         */}
         <div className="flex min-h-0 w-full flex-1 flex-col pt-6">
           {fxError && (
@@ -140,11 +142,13 @@ export function AppShell() {
             </p>
           )}
           <Outlet />
-          <div
-            data-testid="main-bottom-inset"
-            className="h-8 shrink-0"
-            aria-hidden="true"
-          />
+          {pathname !== '/update' && (
+            <div
+              data-testid="main-bottom-inset"
+              className="h-8 shrink-0"
+              aria-hidden="true"
+            />
+          )}
         </div>
       </main>
       {!hideTabBar && <BottomNav />}

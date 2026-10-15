@@ -361,7 +361,7 @@ export function UpdateFinancesScreen() {
           >
             {(() => {
               const list = (
-                <ul className="flex flex-col gap-4">
+                <ul className="flex shrink-0 flex-col gap-4 pb-8">
                   {rows.map(
                     ({ asset, latest, onDate, previous, suggested }) => (
                       <UpdateHoldingRow
