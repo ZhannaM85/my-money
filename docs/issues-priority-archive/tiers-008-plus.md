@@ -394,3 +394,9 @@ Closed live-feedback rows from Tier 8 onward. Open / pending items stay in [`../
 | [#310](https://github.com/ZhannaM85/my-money/issues/310) | ✅ Done | Dashboard: hide disabled currency selector in single-currency conversion mode | Converted mode omits currency selector, label, and help row. Original retains enabled filtering; totals stay in the configured currency. Settings help updated in EN/RU. Validated on-device 2026-10-13. |
 | [#309](https://github.com/ZhannaM85/my-money/issues/309) | ✅ Done | Dashboard: keep the top net-worth card sticky | Net-worth summary stays below the app header while scrolling; currency controls and details scroll normally. Converted and Original modes verified on mobile/desktop. Validated on-device 2026-10-13. Date-input overlap tracked separately in #313. |
 | [#308](https://github.com/ZhannaM85/my-money/issues/308) | ✅ Done | Assets: display a sticky total near the page heading | Sticky header shows the overall tracked total; converted total or separate native currency totals. Respects hidden holdings, shares, and debts; flags missing FX. Mobile/desktop scrolling verified. Validated on-device 2026-10-13. |
+
+## Tier 34 — Live feedback (2026-10-15)
+
+| # | Status | Issue | Notes |
+|---|--------|-------|-------|
+| [#316](https://github.com/ZhannaM85/my-money/issues/316) | ✅ Done | Mobile: extra blank space above sticky footer on Update and Comparison | Update end spacing moves inside the holdings scroller; Comparison no longer flex-shrinks and clips content. Build, lint, 70 affected tests, and Chromium/WebKit geometry checks passed. Screenshots kept local as requested. Validated on-device 2026-10-16. |

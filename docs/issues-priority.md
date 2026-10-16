@@ -137,7 +137,6 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
-| [#316](https://github.com/ZhannaM85/my-money/issues/316) | 🔍 Pending validation | Mobile: extra blank space above sticky footer on Update and Comparison | Update end spacing moves inside the holdings scroller; Comparison no longer flex-shrinks and clips content. Build, lint, 70 affected tests, and Chromium/WebKit geometry checks pass. Screenshots kept local as requested. |
 
 ---
 
