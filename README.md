@@ -11,8 +11,9 @@ and they have to be fast.
 
 ## Status
 
-Greenfield product. Domain, assets, onboarding, and JSON backup are on `main`.
-Confirm each issue on a device before it is closed.
+The web app is deployed on GitHub Pages, and Android and iOS builds use the
+Capacitor wrapper. Product data stays on the device; there is no backend or
+account system.
 
 **Repo:** [github.com/ZhannaM85/my-money](https://github.com/ZhannaM85/my-money)
 
@@ -22,12 +23,21 @@ Start at [`docs/issues-priority.md`](docs/issues-priority.md).
 
 ## What it does
 
-- Track assets and liabilities across categories and currencies.
+- Track assets and liabilities across categories and currencies, with asset
+  details, editable dated snapshots, and included, excluded, or archived status.
 - Convert everything into a user-chosen base currency (Frankfurter online for non-RUB/GEL, live NBG for RUB with static RUB as the offline fallback, optional manual overrides). See [`docs/FX.md`](docs/FX.md).
-- Keep a snapshot history per asset, including historical FX.
-- Show net worth, allocation, and change over time.
-- Make a full-picture update take under a minute (previous value + “no change”).
-- Stay on-device (IndexedDB). Export/import is the backup.
+- Keep dated balance history per asset and use historical exchange rates when
+  calculating past net worth.
+- Review net worth, holdings, allocation, and changes over time; compare selected
+  dates and inspect the holdings behind each total.
+- Update many balances together, with suggested values based on update frequency
+  and a quick way to keep an unchanged value.
+- Choose base-currency or native-currency display, English or Russian, and a
+  visual theme. On Android, an optional home-screen widget shows net worth and
+  its as-of date.
+- Keep data on-device in IndexedDB. Export or restore a JSON backup, or move
+  snapshot rows with CSV. JSON restore replaces the local book after
+  confirmation; CSV imports append matching rows. See [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
 
 ## Platforms
 
@@ -53,11 +63,14 @@ Start at [`docs/issues-priority.md`](docs/issues-priority.md).
 ```bash
 npm install
 npm run dev      # start the dev server
-npm test         # run the test suite
+npm run test     # run the test suite
 npm run lint     # lint
 npm run build    # typecheck + production web build
 npm run cap:sync # web build (base /) + copy into android/ and ios/
 ```
+
+The project requires Node.js 22. `npm run build` runs the TypeScript build
+check before producing the web bundle.
 
 Native device steps: [`docs/native-app-device-testing.md`](docs/native-app-device-testing.md).
 
