@@ -140,6 +140,14 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 
 ---
 
+## Tier 35 — Live feedback (2026-10-26)
+
+| # | Status | Issue | Notes |
+|---|--------|-------|-------|
+| [#320](https://github.com/ZhannaM85/my-money/issues/320) | 🔲 Open | Fix vulnerable sharp and librsvg dependency | Dependabot #45 / GHSA-wq5f-xc86-pv6w: update sharp and ensure no locked copies remain below 0.35.5. |
+
+---
+
 ## Explicitly not filed
 
 Out of scope for the MVP (`PROJECT_BRIEF.md` §20) — do not implement from chat:
