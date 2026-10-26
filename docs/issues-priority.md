@@ -145,6 +145,7 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
 | [#320](https://github.com/ZhannaM85/my-money/issues/320) | 🔲 Open | Fix vulnerable sharp and librsvg dependency | Dependabot #45 / GHSA-wq5f-xc86-pv6w: update sharp and ensure no locked copies remain below 0.35.5. |
+| [#321](https://github.com/ZhannaM85/my-money/issues/321) | 🔲 Open | iPhone: app logo appears blurred in header | Reported on device 2026-10-26; My Money only, not reproduced in Turtle Steps. Screenshot supplied in chat. |
 
 ---
 
