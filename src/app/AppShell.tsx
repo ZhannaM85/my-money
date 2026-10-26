@@ -107,18 +107,19 @@ export function AppShell() {
       </a>
       <OfflineBanner />
       <AppUpdateBanner />
-      <header className="shrink-0 border-b border-border bg-background">
+      <header className="relative shrink-0 border-b border-border bg-background">
         <button
           type="button"
           data-testid="scroll-to-top"
           aria-label={t.common.scrollToTop}
           onClick={() => scrollAppToTop()}
-          className="mx-auto flex w-full max-w-3xl cursor-pointer items-center px-4 pt-[calc(env(safe-area-inset-top)+0.75rem)] pb-3 text-left"
-        >
+          className="absolute inset-0 cursor-pointer"
+        />
+        <div className="pointer-events-none relative z-10 mx-auto flex max-w-3xl items-center px-4 pt-[calc(env(safe-area-inset-top)+0.75rem)] pb-3">
           <span className="text-sm font-semibold text-foreground">
             {t.appName}
           </span>
-        </button>
+        </div>
       </header>
       <main
         ref={mainRef}

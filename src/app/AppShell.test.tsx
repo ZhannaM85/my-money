@@ -59,7 +59,9 @@ describe('AppShell', () => {
         <AppShell />
       </MemoryRouter>,
     )
-    expect(screen.getByText('My Money')).toBeInTheDocument()
+    const appName = screen.getByText('My Money')
+    expect(appName).toBeInTheDocument()
+    expect(appName.closest('button')).toBeNull()
     expect(
       await screen.findByRole('navigation', { name: 'Tabs' }),
     ).toBeInTheDocument()
