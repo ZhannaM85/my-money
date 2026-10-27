@@ -10,11 +10,18 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 281,
+    issue: 321,
+    date: '2026-10-27T12:20:00+03:00',
+    en: 'The frosted blur across the My Money title and the page heading is gone on iPhone.',
+    ru: 'Матовое размытие поверх названия My Money и заголовка страницы на iPhone убрано.',
+  },
+  {
     version: 280,
     issue: 321,
     date: '2026-10-27T12:05:00+03:00',
-    en: 'The My Money title at the top of the screen is sharp on iPhone.',
-    ru: 'Название My Money вверху экрана на iPhone отображается чётко.',
+    en: 'The app shell height matches the iPhone screen. The frosted band over the title was still there.',
+    ru: 'Высота оболочки совпадает с экраном iPhone. Матовая полоса поверх названия всё ещё была.',
   },
   {
     version: 279,

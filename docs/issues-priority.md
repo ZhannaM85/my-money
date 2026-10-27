@@ -144,7 +144,7 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
-| [#321](https://github.com/ZhannaM85/my-money/issues/321) | 🔍 Pending validation | iPhone: app logo appears blurred in header | Moving the title out of the scroll button (v279) did not stop the blur. Shell is `h-full` (not `100dvh`) so the WebView document is not a fractional pixel tall; header padding snaps the safe-area inset to whole pixels; iOS 26 top scroll-edge frost is hidden on the native web view. Release v280. Awaiting iPhone check. |
+| [#321](https://github.com/ZhannaM85/my-money/issues/321) | 🔲 Open | iPhone: app logo appears blurred in header | v280 still frosted on device (smoky band over My Money and the top of the page title). Cause: iOS 26 liquid-glass scroll pocket on the WKWebView. v280's key-value `setHidden` never reached WebKit's wrapper, and a second UIWindow left the storyboard controller on screen. v281 reuses that window, calls `setHidden:` with a real BOOL, disables WebView scrolling (`ios.scrollEnabled: false`), and sets `UIDesignRequiresCompatibility`. Validation waits for an iPhone check of v281. |
 
 ---
 
