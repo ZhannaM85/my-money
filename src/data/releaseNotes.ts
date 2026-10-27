@@ -10,11 +10,18 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 280,
+    issue: 321,
+    date: '2026-10-27T12:05:00+03:00',
+    en: 'The My Money title at the top of the screen is sharp on iPhone.',
+    ru: 'Название My Money вверху экрана на iPhone отображается чётко.',
+  },
+  {
     version: 279,
     issue: 321,
     date: '2026-10-27T11:41:00+03:00',
-    en: 'The My Money title in the app header now renders sharply on iPhone.',
-    ru: 'Название My Money в шапке приложения теперь отображается чётко на iPhone.',
+    en: 'The My Money title sits next to the header tap target instead of inside it.',
+    ru: 'Название My Money в шапке стоит рядом с кнопкой прокрутки наверх, а не внутри неё.',
   },
   {
     version: 278,

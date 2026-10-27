@@ -366,6 +366,16 @@
   body {
     @apply bg-background text-foreground;
   }
+  /*
+    #321: snap the status-bar inset to a whole CSS pixel before padding the
+    app name. A fractional safe-area (Display Zoom, iOS 26) puts the glyphs
+    off the pixel grid, which reads as a gray blur on small semibold text.
+    The unrounded fallback stays for iOS 15.0–15.3, where round() is invalid.
+  */
+  .app-header-safe-top {
+    padding-top: calc(env(safe-area-inset-top, 0px) + 0.75rem);
+    padding-top: calc(round(env(safe-area-inset-top, 0px), 1px) + 12px);
+  }
   /* #216: page scroller keeps iOS overlay indicators — no forced gutter/thin bar. */
   #main-content {
     -webkit-overflow-scrolling: touch;

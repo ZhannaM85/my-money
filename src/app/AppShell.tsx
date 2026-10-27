@@ -97,7 +97,13 @@ export function AppShell() {
   ])
 
   return (
-    <div className="flex h-dvh flex-col overflow-hidden bg-background">
+    // #321: `h-dvh` (100dvh) is often a fractional device pixel taller than
+    // the iOS web view. That makes the document scrollable, so iOS 26's
+    // liquid-glass top edge blurs the header, and the shell layer itself
+    // is scaled — "My Money" sits on that layer and looks soft. Text inside
+    // the main scroller is its own layer and stays sharp. Turtle Steps uses
+    // `h-full` (100% of the web view) and does not blur.
+    <div className="relative flex h-full min-h-0 flex-col overflow-hidden bg-background">
       <PullToRefreshIndicator />
       <a
         href="#main-content"
@@ -115,7 +121,7 @@ export function AppShell() {
           onClick={() => scrollAppToTop()}
           className="absolute inset-0 cursor-pointer"
         />
-        <div className="pointer-events-none relative z-10 mx-auto flex max-w-3xl items-center px-4 pt-[calc(env(safe-area-inset-top)+0.75rem)] pb-3">
+        <div className="app-header-safe-top pointer-events-none relative z-10 mx-auto flex max-w-3xl items-center px-4 pb-3">
           <span className="text-sm font-semibold text-foreground">
             {t.appName}
           </span>

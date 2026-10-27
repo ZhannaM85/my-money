@@ -144,7 +144,7 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
-| [#321](https://github.com/ZhannaM85/my-money/issues/321) | 🔍 Pending validation | iPhone: app logo appears blurred in header | Header title moved outside the scroll-to-top button, matching Turtle Steps. AppShell test (14), build, lint pass. Awaiting iPhone screenshot; Playwright capture blocked because sandbox browser cannot reach localhost. |
+| [#321](https://github.com/ZhannaM85/my-money/issues/321) | 🔍 Pending validation | iPhone: app logo appears blurred in header | Moving the title out of the scroll button (v279) did not stop the blur. Shell is `h-full` (not `100dvh`) so the WebView document is not a fractional pixel tall; header padding snaps the safe-area inset to whole pixels; iOS 26 top scroll-edge frost is hidden on the native web view. Release v280. Awaiting iPhone check. |
 
 ---
 

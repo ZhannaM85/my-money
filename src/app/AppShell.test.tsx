@@ -62,6 +62,11 @@ describe('AppShell', () => {
     const appName = screen.getByText('My Money')
     expect(appName).toBeInTheDocument()
     expect(appName.closest('button')).toBeNull()
+    expect(appName.parentElement).toHaveClass('app-header-safe-top')
+    const shell = screen.getByRole('banner').parentElement
+    expect(shell).toHaveClass('h-full')
+    expect(shell).toHaveClass('min-h-0')
+    expect(shell).not.toHaveClass('h-dvh')
     expect(
       await screen.findByRole('navigation', { name: 'Tabs' }),
     ).toBeInTheDocument()
