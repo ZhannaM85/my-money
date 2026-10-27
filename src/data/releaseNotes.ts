@@ -10,11 +10,18 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 282,
+    issue: 321,
+    date: '2026-10-27T13:05:00+03:00',
+    en: 'The My Money title in the top header is sharp in the iPhone home-screen app.',
+    ru: 'Название My Money в верхней шапке чёткое в приложении на домашнем экране iPhone.',
+  },
+  {
     version: 281,
     issue: 321,
     date: '2026-10-27T12:20:00+03:00',
-    en: 'The frosted blur across the My Money title and the page heading is gone on iPhone.',
-    ru: 'Матовое размытие поверх названия My Money и заголовка страницы на iPhone убрано.',
+    en: 'A native iOS shell change only. The home-screen app was unchanged, and the frosted title was still there.',
+    ru: 'Изменение только нативной оболочки iOS. Приложение на домашнем экране не менялось, матовое название оставалось.',
   },
   {
     version: 280,

@@ -66,8 +66,8 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
-	<!-- #321: pre-iOS-26 look. WebKit turns off the liquid-glass content-inset
-	     fill (the frosted band over the top of WKWebView) when this is set. -->
+	<!-- Capacitor only. Opt the native shell out of the iOS 26 WebView
+	     liquid-glass fill. The home-screen PWA does not read this key. -->
 	<key>UIDesignRequiresCompatibility</key>
 	<true/>
 </dict>

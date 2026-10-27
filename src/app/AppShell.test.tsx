@@ -72,9 +72,11 @@ describe('AppShell', () => {
     ).toBeInTheDocument()
     expect(screen.getByRole('link', { name: 'Dashboard' })).toBeInTheDocument()
     expect(screen.getByRole('link', { name: 'Update' })).toBeInTheDocument()
-    expect(
-      screen.getByRole('link', { name: 'Skip to content' }),
-    ).toHaveAttribute('href', '#main-content')
+    const skip = screen.getByRole('link', { name: 'Skip to content' })
+    expect(skip).toHaveAttribute('href', '#main-content')
+    expect(skip.className).not.toMatch(/translate/)
+    expect(skip).toHaveClass('sr-only')
+    expect(screen.getByTestId('scroll-to-top')).toHaveClass('appearance-none')
   })
 
   it('scrolls to top when the app chrome header is tapped (#215)', async () => {
@@ -157,7 +159,7 @@ describe('AppShell', () => {
     ).toBeTruthy()
   })
 
-  it('stacks main above the tab bar so chart tooltips are not covered (#131)', async () => {
+  it('keeps the page scroller out of a z-index layer so the header stays sharp (#321, #131)', async () => {
     render(
       <MemoryRouter>
         <AppShell />
@@ -165,8 +167,13 @@ describe('AppShell', () => {
     )
     const nav = await screen.findByRole('navigation', { name: 'Tabs' })
     const main = screen.getByRole('main')
-    expect(main).toHaveClass('z-20')
+    // Tab bar is in-flow after main, so tooltips do not need a scrollport
+    // stacking context. z-index here promotes the layer that blurred the title.
+    expect(main.className).not.toMatch(/\bz-\d/)
     expect(nav).toHaveClass('z-10')
+    expect(
+      main.compareDocumentPosition(nav) & Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy()
   })
 
   it('lets main scroll instead of overlaying the tab bar with extra padding', async () => {

@@ -5,8 +5,8 @@ const config: CapacitorConfig = {
   appName: 'My Money',
   webDir: 'dist',
   ios: {
-    // #321: the document does not scroll. A scrollable WKWebView is what
-    // iOS 26 frosts along the top edge, over the app title.
+    // Capacitor only. The home-screen PWA ignores this. A future native
+    // shell should not scroll the WKWebView under the iOS 26 top pocket.
     contentInset: 'never',
     scrollEnabled: false,
   },

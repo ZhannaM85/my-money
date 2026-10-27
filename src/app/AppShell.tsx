@@ -97,17 +97,16 @@ export function AppShell() {
   ])
 
   return (
-    // #321: `h-dvh` (100dvh) is often a fractional device pixel taller than
-    // the iOS web view. That makes the document scrollable, so iOS 26's
-    // liquid-glass top edge blurs the header, and the shell layer itself
-    // is scaled — "My Money" sits on that layer and looks soft. Text inside
-    // the main scroller is its own layer and stays sharp. Turtle Steps uses
-    // `h-full` (100% of the web view) and does not blur.
+    // #321: this is the home-screen PWA (Safari), not a Capacitor binary.
+    // A transformed child of this overflow-hidden shell makes WebKit flatten
+    // the header into one soft layer. Text inside #main-content stays sharp
+    // because that scroller is its own layer. Turtle Steps has no skip-link
+    // transform and no z-index on main. Do not put a transform on this shell.
     <div className="relative flex h-full min-h-0 flex-col overflow-hidden bg-background">
       <PullToRefreshIndicator />
       <a
         href="#main-content"
-        className="bg-primary text-primary-foreground absolute top-3 left-3 z-50 -translate-y-[200%] rounded-lg px-3 py-2 text-sm font-medium focus:translate-y-0"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-3 focus:left-3 focus:z-50 focus:rounded-lg focus:bg-primary focus:px-3 focus:py-2 focus:text-sm focus:font-medium focus:text-primary-foreground"
       >
         {t.common.skipToContent}
       </a>
@@ -119,7 +118,7 @@ export function AppShell() {
           data-testid="scroll-to-top"
           aria-label={t.common.scrollToTop}
           onClick={() => scrollAppToTop()}
-          className="absolute inset-0 cursor-pointer"
+          className="absolute inset-0 cursor-pointer appearance-none border-0 bg-transparent"
         />
         <div className="app-header-safe-top pointer-events-none relative z-10 mx-auto flex max-w-3xl items-center px-4 pb-3">
           <span className="text-sm font-semibold text-foreground">
@@ -130,7 +129,7 @@ export function AppShell() {
       <main
         ref={mainRef}
         id="main-content"
-        className="relative z-20 mx-auto flex w-full min-h-0 min-w-0 max-w-3xl flex-1 flex-col overflow-x-hidden overflow-y-auto overscroll-x-none px-4"
+        className="relative mx-auto flex w-full min-h-0 min-w-0 max-w-3xl flex-1 flex-col overflow-x-hidden overflow-y-auto overscroll-x-none px-4"
       >
         {/*
           #217: vertical padding must not live on the scrollport — sticky As of

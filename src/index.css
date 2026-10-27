@@ -367,10 +367,9 @@
     @apply bg-background text-foreground;
   }
   /*
-    #321: snap the status-bar inset to a whole CSS pixel before padding the
-    app name. A fractional safe-area (Display Zoom, iOS 26) puts the glyphs
-    off the pixel grid, which reads as a gray blur on small semibold text.
-    The unrounded fallback stays for iOS 15.0–15.3, where round() is invalid.
+    Whole-pixel status-bar padding. The unrounded fallback stays for
+    iOS 15.0–15.3, where round() is invalid. This snap did not remove the
+    header frost (#321); that was the skip-link transform in AppShell.
   */
   .app-header-safe-top {
     padding-top: calc(env(safe-area-inset-top, 0px) + 0.75rem);

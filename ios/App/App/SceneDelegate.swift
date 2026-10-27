@@ -7,10 +7,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = scene as? UIWindowScene else { return }
 
-        // #321: the storyboard already created this window and put a plain
-        // CAPBridgeViewController in it. A second UIWindow left that
-        // controller on screen, so the frost hide never ran. Replace the
-        // root of the window UIKit is actually showing.
+        // Capacitor only. The home-screen PWA never loads this delegate.
+        // Reuse the storyboard window so a second UIWindow cannot hide this
+        // root controller.
         let window = self.window ?? UIWindow(windowScene: windowScene)
         self.window = window
         window.rootViewController = MoneyBridgeViewController()
@@ -29,12 +28,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 }
 
 /**
- * #321 — iOS 26 draws a liquid-glass scroll pocket over the top of a
- * scrollable WKWebView. That pocket is the smoky band on "My Money" and
- * the top of the page title. The page itself scrolls inside `#main-content`,
- * so the WebView scroll view must not scroll, and each edge effect has to
- * be hidden through `setHidden:` (key-value `setValue` does not reach the
- * WebKit wrapper, which is why v280 changed nothing).
+ * Capacitor-only. iOS 26 can draw a liquid-glass scroll pocket on a
+ * scrollable WKWebView. The installed app is the Safari home-screen PWA,
+ * which never runs this class — the PWA frost is fixed in AppShell.
+ * Kept so a future native binary does not scroll the WebView under that
+ * pocket. Hide each edge effect with `setHidden:`; key-value `setValue`
+ * does not reach the WebKit wrapper.
  */
 class MoneyBridgeViewController: CAPBridgeViewController {
     override func capacitorDidLoad() {
