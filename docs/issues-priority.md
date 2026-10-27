@@ -144,7 +144,6 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
-| [#320](https://github.com/ZhannaM85/my-money/issues/320) | 🔲 Open | Fix vulnerable sharp and librsvg dependency | Dependabot #45 / GHSA-wq5f-xc86-pv6w: update sharp and ensure no locked copies remain below 0.35.5. |
 | [#321](https://github.com/ZhannaM85/my-money/issues/321) | 🔍 Pending validation | iPhone: app logo appears blurred in header | Header title moved outside the scroll-to-top button, matching Turtle Steps. AppShell test (14), build, lint pass. Awaiting iPhone screenshot; Playwright capture blocked because sandbox browser cannot reach localhost. |
 
 ---

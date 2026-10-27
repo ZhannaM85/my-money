@@ -400,3 +400,9 @@ Closed live-feedback rows from Tier 8 onward. Open / pending items stay in [`../
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
 | [#316](https://github.com/ZhannaM85/my-money/issues/316) | ✅ Done | Mobile: extra blank space above sticky footer on Update and Comparison | Update end spacing moves inside the holdings scroller; Comparison no longer flex-shrinks and clips content. Build, lint, 70 affected tests, and Chromium/WebKit geometry checks passed. Screenshots kept local as requested. Validated on-device 2026-10-16. |
+
+## Tier 35 — Live feedback (2026-10-26)
+
+| # | Status | Issue | Notes |
+|---|--------|-------|-------|
+| [#320](https://github.com/ZhannaM85/my-money/issues/320) | ✅ Done | Fix vulnerable sharp and librsvg dependency | Updated the sharp override and lockfile to 0.35.5, including @capacitor/assets resolution. Dependabot alert #45 fixed. Validated in repository 2026-10-27. |
