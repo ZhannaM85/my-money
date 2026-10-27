@@ -62,7 +62,10 @@ describe('AppShell', () => {
     const appName = screen.getByText('My Money')
     expect(appName).toBeInTheDocument()
     expect(appName.closest('button')).toBeNull()
-    expect(appName.parentElement).toHaveClass('app-header-safe-top')
+    expect(appName.parentElement).toHaveClass(
+      'pt-[calc(env(safe-area-inset-top)+0.75rem)]',
+    )
+    expect(appName.parentElement).not.toHaveClass('app-header-safe-top')
     const shell = screen.getByRole('banner').parentElement
     expect(shell).toHaveClass('h-full')
     expect(shell).toHaveClass('min-h-0')
@@ -76,7 +79,13 @@ describe('AppShell', () => {
     expect(skip).toHaveAttribute('href', '#main-content')
     expect(skip.className).not.toMatch(/translate/)
     expect(skip).toHaveClass('sr-only')
-    expect(screen.getByTestId('scroll-to-top')).toHaveClass('appearance-none')
+    expect(screen.getByTestId('scroll-to-top')).toHaveClass(
+      'absolute',
+      'inset-0',
+    )
+    expect(screen.getByTestId('scroll-to-top')).not.toHaveClass(
+      'appearance-none',
+    )
   })
 
   it('scrolls to top when the app chrome header is tapped (#215)', async () => {

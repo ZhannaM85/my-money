@@ -97,10 +97,6 @@ export function AppShell() {
   ])
 
   return (
-    // #321: iOS 26/27 home-screen Liquid Glass frosts ~112px at the top of a
-    // web view that draws under the status bar. Safe-area padding only clears
-    // the clock, so the title stayed soft. The extra pad lives in
-    // iosStatusBarOverlay.ts. Do not put a transform on this shell.
     <div className="relative flex h-full min-h-0 flex-col overflow-hidden bg-background">
       <PullToRefreshIndicator />
       <a
@@ -117,9 +113,9 @@ export function AppShell() {
           data-testid="scroll-to-top"
           aria-label={t.common.scrollToTop}
           onClick={() => scrollAppToTop()}
-          className="absolute inset-0 cursor-pointer appearance-none border-0 bg-transparent"
+          className="absolute inset-0 cursor-pointer"
         />
-        <div className="app-header-safe-top pointer-events-none relative z-10 mx-auto flex max-w-3xl items-center px-4 pb-3">
+        <div className="pointer-events-none relative z-10 mx-auto flex max-w-3xl items-center justify-between gap-4 px-4 pt-[calc(env(safe-area-inset-top)+0.75rem)] pb-3">
           <span className="text-sm font-semibold text-foreground">
             {t.appName}
           </span>

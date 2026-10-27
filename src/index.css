@@ -366,20 +366,8 @@
   body {
     @apply bg-background text-foreground;
   }
-  /*
-    Status-bar padding. The unrounded fallback stays for iOS 15.0–15.3,
-    where round() is invalid. `--ios-status-overlay-pad` is set only when
-    the home-screen web view still draws under the iOS 26/27 frost (#321).
-  */
-  .app-header-safe-top {
-    padding-top: calc(
-      env(safe-area-inset-top, 0px) + 0.75rem +
-        var(--ios-status-overlay-pad, 0px)
-    );
-    padding-top: calc(
-      round(env(safe-area-inset-top, 0px), 1px) + 12px +
-        var(--ios-status-overlay-pad, 0px)
-    );
+  html {
+    @apply font-sans;
   }
   /* #216: page scroller keeps iOS overlay indicators — no forced gutter/thin bar. */
   #main-content {

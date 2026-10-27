@@ -144,7 +144,7 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
-| [#321](https://github.com/ZhannaM85/my-money/issues/321) | 🔍 Pending validation | iPhone: app logo appears blurred in header | v283. iOS 26/27 home-screen Liquid Glass frosts ~112px over a web view that draws under the status bar; safe-area padding left the title inside that band (v280–v282). Current icons get extra header padding so the title starts at 120px. `apple-mobile-web-app-status-bar-style=default` drops the frost, but iOS reads it only when the icon is added — remove the Home Screen icon and add it again from Safari. |
+| [#321](https://github.com/ZhannaM85/my-money/issues/321) | 🔍 Pending validation | iPhone: app logo appears blurred in header | v284. v283’s extra offset painted a second, soft title above the real one. Header markup is Turtle’s again: same safe-area padding utility, same full-header button, no `appearance-none`, no `round()` padding, pull-to-refresh is `absolute`. |
 
 ---
 

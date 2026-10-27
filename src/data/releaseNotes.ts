@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 284,
+    issue: 321,
+    date: '2026-10-27T14:40:00+03:00',
+    en: 'The top header matches Turtle Steps. The extra gap above the title is gone.',
+    ru: 'Верхняя шапка как в Turtle Steps. Лишний зазор над названием убран.',
+  },
+  {
     version: 283,
     issue: 321,
     date: '2026-10-27T14:10:00+03:00',
