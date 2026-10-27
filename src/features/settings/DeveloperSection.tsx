@@ -11,9 +11,14 @@ import {
   CardTitle,
 } from '@/shared/ui/card'
 import { FxDebugSection } from './FxDebugSection'
+import { HeaderBlurDebug } from './HeaderBlurDebug'
 import { RcaSection } from './RcaSection'
 
-const DEVELOPER_HASHES = new Set(['#fx-debug', '#root-causes'])
+const DEVELOPER_HASHES = new Set([
+  '#fx-debug',
+  '#header-debug',
+  '#root-causes',
+])
 
 function hashOpensDeveloper(hash: string): boolean {
   return DEVELOPER_HASHES.has(hash)
@@ -59,6 +64,7 @@ export function DeveloperSection() {
       </CardHeader>
       {open ? (
         <CardContent className="flex flex-col gap-4 border-t border-border pt-4">
+          <HeaderBlurDebug />
           <FxDebugSection />
           <section id="root-causes" className="flex flex-col gap-3">
             <div className="flex flex-col gap-1">

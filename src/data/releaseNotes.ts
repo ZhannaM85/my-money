@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 285,
+    issue: 321,
+    date: '2026-10-27T15:15:00+03:00',
+    en: 'More → Developer has a header check. Turn one option on and look at the My Money title.',
+    ru: 'В «Ещё → Разработчику» есть проверка шапки. Включите один пункт и посмотрите на название My Money.',
+  },
+  {
     version: 284,
     issue: 321,
     date: '2026-10-27T14:40:00+03:00',

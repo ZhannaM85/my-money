@@ -144,7 +144,7 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
-| [#321](https://github.com/ZhannaM85/my-money/issues/321) | 🔍 Pending validation | iPhone: app logo appears blurred in header | v284. v283’s extra offset painted a second, soft title above the real one. Header markup is Turtle’s again: same safe-area padding utility, same full-header button, no `appearance-none`, no `round()` padding, pull-to-refresh is `absolute`. |
+| [#321](https://github.com/ZhannaM85/my-money/issues/321) | 🔍 Pending validation | iPhone: app logo appears blurred in header | Also soft in Turtle Steps, so it is not the header markup. v285: More → Developer → «Шапка на iPhone». One toggle at a time, then send the report. |
 
 ---
 
