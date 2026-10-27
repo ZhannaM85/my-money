@@ -97,11 +97,10 @@ export function AppShell() {
   ])
 
   return (
-    // #321: this is the home-screen PWA (Safari), not a Capacitor binary.
-    // A transformed child of this overflow-hidden shell makes WebKit flatten
-    // the header into one soft layer. Text inside #main-content stays sharp
-    // because that scroller is its own layer. Turtle Steps has no skip-link
-    // transform and no z-index on main. Do not put a transform on this shell.
+    // #321: iOS 26/27 home-screen Liquid Glass frosts ~112px at the top of a
+    // web view that draws under the status bar. Safe-area padding only clears
+    // the clock, so the title stayed soft. The extra pad lives in
+    // iosStatusBarOverlay.ts. Do not put a transform on this shell.
     <div className="relative flex h-full min-h-0 flex-col overflow-hidden bg-background">
       <PullToRefreshIndicator />
       <a

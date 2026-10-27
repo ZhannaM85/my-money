@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 283,
+    issue: 321,
+    date: '2026-10-27T14:10:00+03:00',
+    en: 'On iPhone, the home-screen title sits below the status-bar frost. If it still looks soft, remove My Money from the Home Screen and add it again from Safari.',
+    ru: 'На iPhone название в шапке опускается ниже матового края строки состояния. Если оно всё ещё мягкое, удалите My Money с домашнего экрана и снова добавьте из Safari.',
+  },
+  {
     version: 282,
     issue: 321,
     date: '2026-10-27T13:05:00+03:00',

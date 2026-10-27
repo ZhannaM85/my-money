@@ -8,6 +8,13 @@
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/manifest.json" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
+    <!-- #321: iOS reads this only when the icon is added to the Home Screen.
+         `default` starts the web view below the status bar, so Liquid Glass
+         does not frost the title. `black-translucent` (and a missing value
+         on some iOS 26/27 installs) paints that frost over the header.
+         An already-installed icon keeps the old style until it is removed
+         and added again. The head script below pads that install. -->
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <meta name="apple-mobile-web-app-title" content="My Money" />
     <meta
       name="theme-color"
@@ -37,6 +44,26 @@
         }
         if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
           document.documentElement.classList.add('dark')
+        }
+      })()
+      // #321: keep the title below the iOS home-screen frost on icons
+      // added before the status-bar meta above. Numbers match
+      // iosStatusBarOverlay.ts (120 clear, 44 below-status-bar cutoff).
+      ;(() => {
+        if (navigator.standalone !== true) return
+        if (window.matchMedia('(orientation: landscape)').matches) return
+        if (screen.height - window.innerHeight >= 44) return
+        const probe = document.createElement('div')
+        probe.style.paddingTop = 'env(safe-area-inset-top)'
+        document.documentElement.appendChild(probe)
+        const inset = Number.parseFloat(getComputedStyle(probe).paddingTop) || 0
+        probe.remove()
+        const extra = 120 - (Math.max(0, inset) + 12)
+        if (extra > 0) {
+          document.documentElement.style.setProperty(
+            '--ios-status-overlay-pad',
+            `${extra}px`,
+          )
         }
       })()
     </script>

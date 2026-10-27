@@ -144,7 +144,7 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
-| [#321](https://github.com/ZhannaM85/my-money/issues/321) | 🔲 Open | iPhone: app logo appears blurred in header | Home-screen PWA (Safari), not a native or TestFlight build. v280 (shell height) still frosted on device. v281 (scene delegate, `setHidden:`, WebView `scrollEnabled`, `UIDesignRequiresCompatibility`) never reaches that PWA and is not the fix. v282 removes the skip-link `translate` that flattened the overflow-hidden shell (header soft, `#main-content` sharp — Turtle has no such transform), drops `z-20` on the scroller, and sets `appearance-none` on the full-header button. Awaiting a normal PWA refresh of v282. |
+| [#321](https://github.com/ZhannaM85/my-money/issues/321) | 🔍 Pending validation | iPhone: app logo appears blurred in header | v283. iOS 26/27 home-screen Liquid Glass frosts ~112px over a web view that draws under the status bar; safe-area padding left the title inside that band (v280–v282). Current icons get extra header padding so the title starts at 120px. `apple-mobile-web-app-status-bar-style=default` drops the frost, but iOS reads it only when the icon is added — remove the Home Screen icon and add it again from Safari. |
 
 ---
 
