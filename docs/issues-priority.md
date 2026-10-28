@@ -144,7 +144,6 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
-| [#321](https://github.com/ZhannaM85/my-money/issues/321) | 🔍 Pending validation | iPhone: app logo appears blurred in header | Home-screen safe-area is 0. Title at 12px was soft; 48px was sharp and looked low. v287 uses 40px (`2.5rem`) in standalone. If the top of the letters softens, go back to 48. |
 
 ---
 

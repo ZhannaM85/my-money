@@ -406,3 +406,4 @@ Closed live-feedback rows from Tier 8 onward. Open / pending items stay in [`../
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
 | [#320](https://github.com/ZhannaM85/my-money/issues/320) | ✅ Done | Fix vulnerable sharp and librsvg dependency | Updated the sharp override and lockfile to 0.35.5, including @capacitor/assets resolution. Dependabot alert #45 fixed. Validated in repository 2026-10-27. |
+| [#321](https://github.com/ZhannaM85/my-money/issues/321) | ✅ Done | iPhone: app logo appears blurred in header | Home-screen safe-area is 0, so the title started 12px inside the frost. Standalone padding is 40px (`2.5rem`). 48px was sharp but low; 40px confirmed sharp on iPhone. Temporary More check removed. Validated on-device 2026-10-28. |
