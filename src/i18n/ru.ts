@@ -335,7 +335,7 @@ export const ru: Dictionary = {
       'Конфиденциальность и что изменилось в последних версиях.',
     groupDeveloper: 'Разработчику',
     developerDescription:
-      'Диагностика шапки на iPhone, FX и журнал причин выпущенных задач.',
+      'Диагностика FX и журнал причин выпущенных задач.',
     baseCurrency: 'Базовая валюта',
     showAllCurrencies: 'Показать все валюты',
     currencyDisplay: 'Показ активов',

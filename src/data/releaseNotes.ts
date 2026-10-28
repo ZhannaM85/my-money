@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 288,
+    issue: 321,
+    date: '2026-10-28T11:40:00+03:00',
+    en: 'The iPhone header check is gone from More. The title stays at the height that was sharp.',
+    ru: 'Проверка шапки убрана из «Ещё». Название остаётся на высоте, которая была чёткой.',
+  },
+  {
     version: 287,
     issue: 321,
     date: '2026-10-28T11:30:00+03:00',
