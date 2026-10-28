@@ -63,6 +63,7 @@ describe('AppShell', () => {
     expect(appName).toBeInTheDocument()
     expect(appName.closest('button')).toBeNull()
     expect(appName.parentElement).toHaveClass(
+      'app-header-row',
       'pt-[calc(env(safe-area-inset-top)+0.75rem)]',
     )
     expect(appName.parentElement).not.toHaveClass('app-header-safe-top')

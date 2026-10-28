@@ -115,7 +115,7 @@ export function AppShell() {
           onClick={() => scrollAppToTop()}
           className="absolute inset-0 cursor-pointer"
         />
-        <div className="pointer-events-none relative z-10 mx-auto flex max-w-3xl items-center justify-between gap-4 px-4 pt-[calc(env(safe-area-inset-top)+0.75rem)] pb-3">
+        <div className="app-header-row pointer-events-none relative z-10 mx-auto flex max-w-3xl items-center justify-between gap-4 px-4 pt-[calc(env(safe-area-inset-top)+0.75rem)] pb-3">
           <span data-app-title className="text-sm font-semibold text-foreground">
             {t.appName}
           </span>

@@ -380,6 +380,15 @@
   }
 }
 
+/* #321: home-screen iOS reports safe-area-inset-top as 0, so the title
+   sat 12px from the top of the web view, inside the status-bar frost.
+   On device, 3rem (title top 48) was sharp. Browser tabs keep 0.75rem. */
+@media (display-mode: standalone) {
+  .app-header-row {
+    padding-top: max(3rem, calc(env(safe-area-inset-top, 0px) + 0.75rem));
+  }
+}
+
 /* Overlay the native glyph so the whole field still opens the picker (#68).
    Do not set max-width / overflow on date inputs — Safari ignores relative
    shrink and overflow clip widened the page (#84). Width is 1.5× Turtle

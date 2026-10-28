@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 286,
+    issue: 321,
+    date: '2026-10-28T11:25:00+03:00',
+    en: 'On the iPhone home screen, the app title sits lower so it clears the soft band under the clock.',
+    ru: 'На домашнем экране iPhone название приложения стоит ниже, чтобы не попадать в мягкую полосу под часами.',
+  },
+  {
     version: 285,
     issue: 321,
     date: '2026-10-27T15:15:00+03:00',
