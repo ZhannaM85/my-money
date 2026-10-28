@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 287,
+    issue: 321,
+    date: '2026-10-28T11:30:00+03:00',
+    en: 'The iPhone home-screen title sits a little higher. It was sharp at the lower spot.',
+    ru: 'На домашнем экране iPhone название стоит чуть выше. В более низкой позиции оно было чётким.',
+  },
+  {
     version: 286,
     issue: 321,
     date: '2026-10-28T11:25:00+03:00',

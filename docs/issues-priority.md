@@ -144,7 +144,7 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
-| [#321](https://github.com/ZhannaM85/my-money/issues/321) | 🔍 Pending validation | iPhone: app logo appears blurred in header | Home-screen app reports safe-area 0, so the title started at 12px inside the frost. v286 uses the padding that was sharp on device (3rem, title top 48) when display-mode is standalone. Check v286 with the debug toggles off. |
+| [#321](https://github.com/ZhannaM85/my-money/issues/321) | 🔍 Pending validation | iPhone: app logo appears blurred in header | Home-screen safe-area is 0. Title at 12px was soft; 48px was sharp and looked low. v287 uses 40px (`2.5rem`) in standalone. If the top of the letters softens, go back to 48. |
 
 ---
 

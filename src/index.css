@@ -382,10 +382,11 @@
 
 /* #321: home-screen iOS reports safe-area-inset-top as 0, so the title
    sat 12px from the top of the web view, inside the status-bar frost.
-   On device, 3rem (title top 48) was sharp. Browser tabs keep 0.75rem. */
+   48px was sharp and looked low; 40px is the next step up. Browser tabs
+   keep 0.75rem. */
 @media (display-mode: standalone) {
   .app-header-row {
-    padding-top: max(3rem, calc(env(safe-area-inset-top, 0px) + 0.75rem));
+    padding-top: max(2.5rem, calc(env(safe-area-inset-top, 0px) + 0.75rem));
   }
 }
 
