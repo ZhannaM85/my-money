@@ -151,6 +151,7 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
+| [#323](https://github.com/ZhannaM85/my-money/issues/323) | 🔲 Open | Allocation: keep owner-tab highlight and show breadcrumb/back context | Off-tab screen; no footer highlight. Do both: own one tab (Сводка vs Активы — pick on implement) + breadcrumb/back by entry. Not Ещё-only. |
 
 ---
 
