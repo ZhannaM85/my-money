@@ -13,6 +13,8 @@ export function SwipeRevealRow({
   children,
   revealOn = 'swipe',
   actionTone = 'destructive',
+  /** Nested rows inside a parent card stay square so rounded caps do not show on the right (#322). */
+  flush = false,
 }: {
   actionLabel: string
   actionAria: string
@@ -22,6 +24,7 @@ export function SwipeRevealRow({
   revealOn?: 'swipe' | 'click'
   /** Hide stays red; Show is green (#159). */
   actionTone?: 'destructive' | 'positive'
+  flush?: boolean
 }) {
   const [open, setOpen] = useState(false)
   const startX = useRef<number | null>(null)
@@ -104,7 +107,13 @@ export function SwipeRevealRow({
   } as const
 
   return (
-    <div className="relative overflow-hidden rounded-xl">
+    <div
+      className={cn(
+        'relative overflow-hidden',
+        flush ? 'rounded-none' : 'rounded-xl',
+      )}
+      data-flush={flush ? 'true' : 'false'}
+    >
       <button
         type="button"
         className={cn(

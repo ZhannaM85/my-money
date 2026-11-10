@@ -95,6 +95,23 @@ describe('SwipeRevealRow (#146)', () => {
     )
   })
 
+  it('stays square when flush for nested expanded rows (#322)', () => {
+    const { container } = render(
+      <SwipeRevealRow
+        flush
+        revealOn="click"
+        actionLabel="Hide"
+        actionAria="Hide Cash"
+        onAction={() => undefined}
+      >
+        <p>Cash</p>
+      </SwipeRevealRow>,
+    )
+    expect(container.firstElementChild).toHaveAttribute('data-flush', 'true')
+    expect(container.firstElementChild).toHaveClass('rounded-none')
+    expect(container.firstElementChild).not.toHaveClass('rounded-xl')
+  })
+
   it('paints Show green and Hide red (#159)', async () => {
     const user = userEvent.setup()
     const { rerender } = render(

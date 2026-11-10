@@ -97,7 +97,8 @@ export function AllocationChart({
               key={row.id}
               data-slice-excluded={sliceHidden ? 'true' : 'false'}
               className={cn(
-                'relative flex flex-col gap-2 overflow-hidden rounded-xl bg-card px-4 py-3 ring-1 ring-foreground/10',
+                // No overflow-hidden here: it clips ring-1 into incomplete right-edge caps (#322).
+                'relative flex flex-col gap-2 rounded-xl bg-card px-4 py-3 ring-1 ring-foreground/10',
                 sliceHidden && 'opacity-60 text-muted-foreground',
               )}
             >
@@ -204,6 +205,7 @@ export function AllocationChart({
                     return (
                       <SwipeRevealRow
                         key={holding.assetId}
+                        flush
                         revealOn="click"
                         actionLabel={
                           excluded

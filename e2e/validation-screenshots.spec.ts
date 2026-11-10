@@ -70,6 +70,20 @@ test('capture Allocation Type expanded holdings (#123)', async ({ page }) => {
   })
 })
 
+test('capture Allocation expanded rows without nested rounded caps (#322)', async ({
+  page,
+}) => {
+  await seedValidationFixture(page, { currencyDisplayMode: 'base' })
+  await page.goto('/allocation')
+  await expect(page.getByRole('heading', { name: 'Allocation' })).toBeVisible()
+  await page.getByRole('button', { name: 'Money · Holdings' }).click()
+  await expect(page.getByText('Euro cash')).toBeVisible()
+  await page.screenshot({
+    path: join(outDir, '322-allocation-class-expanded-flush.png'),
+    fullPage: true,
+  })
+})
+
 test('capture Allocation expanded tap Hide (#150)', async ({ page }) => {
   await seedValidationFixture(page, { currencyDisplayMode: 'base' })
   await page.goto('/allocation')

@@ -151,7 +151,7 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
-| [#322](https://github.com/ZhannaM85/my-money/issues/322) | 🔲 Open | Assets: incomplete rounded borders on the right of expanded asset rows | Expand a group (e.g. Деньги); each child row shows a faint half-rounded vertical edge on the right near amounts. |
+| [#322](https://github.com/ZhannaM85/my-money/issues/322) | 🔍 Pending validation | Assets: incomplete rounded borders on the right of expanded asset rows | Nested SwipeRevealRow uses `flush` inside Allocation / compact Dashboard groups so child rows stay square; standalone rows keep `rounded-xl`. Proof: docs/validation-proof/322. |
 
 ---
 
