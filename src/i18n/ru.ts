@@ -304,6 +304,7 @@ export const ru: Dictionary = {
   },
   allocation: {
     title: 'Распределение',
+    breadcrumbLabel: 'Навигация',
     byClass: 'Класс',
     byCurrency: 'Валюта',
     byType: 'Тип',

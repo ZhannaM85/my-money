@@ -123,7 +123,9 @@ export function DashboardScreen() {
                 />
               )}
             <Button asChild variant="outline" className="w-full">
-              <Link to="/allocation">{t.dashboard.allocation}</Link>
+              <Link to="/allocation" state={{ from: 'dashboard' }}>
+                {t.dashboard.allocation}
+              </Link>
             </Button>
           </div>
         </>

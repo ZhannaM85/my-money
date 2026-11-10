@@ -454,4 +454,37 @@ describe('AllocationScreen', () => {
       screen.getByText('Sosnovo').closest('[data-excluded]'),
     ).toHaveAttribute('data-excluded', 'true')
   })
+
+  it('shows Dashboard breadcrumb by default (#323)', async () => {
+    render(
+      <MemoryRouter initialEntries={['/allocation']}>
+        <AllocationScreen />
+      </MemoryRouter>,
+    )
+    const crumb = await screen.findByRole('navigation', { name: 'Breadcrumb' })
+    expect(crumb).toHaveTextContent('Dashboard')
+    expect(crumb).toHaveTextContent('Allocation')
+    expect(screen.getByRole('link', { name: 'Dashboard' })).toHaveAttribute(
+      'href',
+      '/',
+    )
+  })
+
+  it('shows More breadcrumb when opened from settings (#323)', async () => {
+    render(
+      <MemoryRouter
+        initialEntries={[
+          { pathname: '/allocation', state: { from: 'settings' } },
+        ]}
+      >
+        <AllocationScreen />
+      </MemoryRouter>,
+    )
+    const crumb = await screen.findByRole('navigation', { name: 'Breadcrumb' })
+    expect(crumb).toHaveTextContent('More')
+    expect(screen.getByRole('link', { name: 'More' })).toHaveAttribute(
+      'href',
+      '/settings',
+    )
+  })
 })

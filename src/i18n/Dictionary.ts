@@ -234,6 +234,7 @@ export interface Dictionary {
   }
   allocation: {
     title: string
+    breadcrumbLabel: string
     byClass: string
     byCurrency: string
     byType: string

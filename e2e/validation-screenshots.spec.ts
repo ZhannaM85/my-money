@@ -84,6 +84,28 @@ test('capture Allocation expanded rows without nested rounded caps (#322)', asyn
   })
 })
 
+test('capture Allocation breadcrumb and Dashboard owner tab (#323)', async ({
+  page,
+}) => {
+  await seedValidationFixture(page, { currencyDisplayMode: 'base' })
+  await page.goto('/')
+  await page.getByRole('link', { name: 'Allocation' }).click()
+  await expect(page.getByRole('heading', { name: 'Allocation' })).toBeVisible()
+  await expect(
+    page.getByRole('navigation', { name: 'Breadcrumb' }),
+  ).toContainText('Dashboard')
+  await expect(page.getByRole('link', { name: 'Dashboard' }).nth(1)).toBeVisible()
+  await expect(
+    page.getByRole('navigation', { name: 'Tabs' }).getByRole('link', {
+      name: 'Dashboard',
+    }),
+  ).toHaveAttribute('aria-current', 'page')
+  await page.screenshot({
+    path: join(outDir, '323-allocation-from-dashboard.png'),
+    fullPage: true,
+  })
+})
+
 test('capture Allocation expanded tap Hide (#150)', async ({ page }) => {
   await seedValidationFixture(page, { currencyDisplayMode: 'base' })
   await page.goto('/allocation')

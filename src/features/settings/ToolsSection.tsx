@@ -17,7 +17,9 @@ export function ToolsSection() {
         <Link to="/compare">{t.settings.comparison}</Link>
       </Button>
       <Button asChild variant="outline" className="w-full">
-        <Link to="/allocation">{t.settings.allocation}</Link>
+        <Link to="/allocation" state={{ from: 'settings' }}>
+          {t.settings.allocation}
+        </Link>
       </Button>
     </SettingsCard>
   )

@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+import { Link, useLocation } from 'react-router-dom'
 import {
   breakdownBy,
   nativeBreakdownBy,
@@ -15,6 +16,10 @@ import { useAssetStore } from '@/stores/assetStore'
 import { useFxStore } from '@/stores/fxStore'
 import { useSettingsStore } from '@/stores/settingsStore'
 import { AllocationChart } from './AllocationChart'
+import {
+  allocationEntryFromState,
+  allocationParentPath,
+} from './allocationEntry'
 
 type View = 'class' | 'currency' | 'type'
 
@@ -26,6 +31,11 @@ function nativeRowLabelKey(id: string): string {
 
 export function AllocationScreen() {
   const t = useTranslation()
+  const location = useLocation()
+  const entry = allocationEntryFromState(location.state)
+  const parentPath = allocationParentPath(entry)
+  const parentLabel =
+    entry === 'settings' ? t.nav.more : t.nav.dashboard
   const assets = useAssetStore((state) => state.assets)
   const snapshots = useAssetStore((state) => state.snapshots)
   const loaded = useAssetStore((state) => state.loaded)
@@ -146,7 +156,25 @@ export function AllocationScreen() {
 
   return (
     <div className="flex flex-col gap-6">
-      <PageHeader title={t.allocation.title} />
+      <div className="flex flex-col gap-2">
+        <nav aria-label={t.allocation.breadcrumbLabel}>
+          <ol className="flex flex-wrap items-center gap-1.5 text-sm text-muted-foreground">
+            <li>
+              <Link
+                to={parentPath}
+                className="underline-offset-4 hover:text-foreground hover:underline"
+              >
+                {parentLabel}
+              </Link>
+            </li>
+            <li aria-hidden="true">/</li>
+            <li className="text-foreground" aria-current="page">
+              {t.allocation.title}
+            </li>
+          </ol>
+        </nav>
+        <PageHeader title={t.allocation.title} />
+      </div>
       <div className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1">
         {views.map((item) => (
           <Chip

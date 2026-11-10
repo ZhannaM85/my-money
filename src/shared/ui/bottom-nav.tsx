@@ -1,10 +1,27 @@
 import { History, LayoutDashboard, Plus, Settings, Wallet } from 'lucide-react'
-import { NavLink } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { useTranslation } from '@/i18n'
 import { cn } from '@/shared/lib/utils'
 
+/** Off-tab screens that still belong to a primary tab (#323). */
+function tabOwnsPath(tabTo: string, pathname: string): boolean {
+  if (tabTo === '/') return pathname === '/allocation'
+  return false
+}
+
+function isTabActive(
+  tabTo: string,
+  end: boolean,
+  pathname: string,
+): boolean {
+  if (tabOwnsPath(tabTo, pathname)) return true
+  if (end) return pathname === tabTo
+  return pathname === tabTo || pathname.startsWith(`${tabTo}/`)
+}
+
 export function BottomNav() {
   const t = useTranslation()
+  const { pathname } = useLocation()
   const tabs = [
     { to: '/', label: t.nav.dashboard, end: true, icon: LayoutDashboard },
     { to: '/assets', label: t.nav.assets, icon: Wallet },
@@ -22,34 +39,34 @@ export function BottomNav() {
         {tabs.map((item) => {
           const Icon = item.icon
           const prominent = 'prominent' in item && item.prominent
+          const end = 'end' in item ? item.end : false
+          const active = isTabActive(item.to, end, pathname)
           return (
             <li key={item.to} className="flex-1">
-              <NavLink
+              <Link
                 to={item.to}
-                end={'end' in item ? item.end : false}
                 replace
                 aria-label={item.label}
+                aria-current={active ? 'page' : undefined}
                 className="flex min-h-20 flex-col items-center justify-center text-xs font-medium"
               >
-                {({ isActive }) => (
-                  <span
-                    className={cn(
-                      'inline-flex flex-col items-center gap-0.5 rounded-2xl px-3 py-1.5 transition-colors',
-                      prominent &&
-                        'rounded-full bg-primary px-3.5 py-2.5 text-primary-foreground',
-                      !prominent &&
-                        (isActive
-                          ? 'bg-muted text-primary'
-                          : 'text-muted-foreground'),
-                    )}
-                  >
-                    <Icon aria-hidden="true" className="size-5" />
-                    <span className={cn(prominent && 'sr-only')}>
-                      {item.label}
-                    </span>
+                <span
+                  className={cn(
+                    'inline-flex flex-col items-center gap-0.5 rounded-2xl px-3 py-1.5 transition-colors',
+                    prominent &&
+                      'rounded-full bg-primary px-3.5 py-2.5 text-primary-foreground',
+                    !prominent &&
+                      (active
+                        ? 'bg-muted text-primary'
+                        : 'text-muted-foreground'),
+                  )}
+                >
+                  <Icon aria-hidden="true" className="size-5" />
+                  <span className={cn(prominent && 'sr-only')}>
+                    {item.label}
                   </span>
-                )}
-              </NavLink>
+                </span>
+              </Link>
             </li>
           )
         })}

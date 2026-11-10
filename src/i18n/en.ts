@@ -300,6 +300,7 @@ export const en: Dictionary = {
   },
   allocation: {
     title: 'Allocation',
+    breadcrumbLabel: 'Breadcrumb',
     byClass: 'Class',
     byCurrency: 'Currency',
     byType: 'Type',
