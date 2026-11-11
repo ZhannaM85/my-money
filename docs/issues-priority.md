@@ -155,6 +155,14 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 
 ---
 
+## Tier 37 — Live feedback (2026-11-11)
+
+| # | Status | Issue | Notes |
+|---|--------|-------|-------|
+| [#324](https://github.com/ZhannaM85/my-money/issues/324) | 🔲 Open | Compact view: screenshot all money in one place | Dense portfolio capture — total + every cash/card/deposit without scrolling multiple frames. Screenshots: Assets + Dashboard. |
+
+---
+
 ## Explicitly not filed
 
 Out of scope for the MVP (`PROJECT_BRIEF.md` §20) — do not implement from chat:
