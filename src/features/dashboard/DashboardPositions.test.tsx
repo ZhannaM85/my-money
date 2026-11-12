@@ -9,6 +9,7 @@ import { db } from '@/infrastructure/persistence/indexeddb'
 import { useAssetStore } from '@/stores/assetStore'
 import { useFxStore } from '@/stores/fxStore'
 import { useChartRangeStore } from '@/stores/chartRangeStore'
+import { useSettingsStore } from '@/stores/settingsStore'
 import { DashboardScreen } from './DashboardScreen'
 
 beforeEach(async () => {
@@ -252,5 +253,46 @@ describe('DashboardPositions', () => {
     expect(screen.getByText('Your share: 1/1')).toBeInTheDocument()
     expect(screen.getByText('Euro cash')).toBeInTheDocument()
     expect(screen.queryAllByText('Your share: 1/1')).toHaveLength(1)
+  })
+
+  it('switches Positions to compact density and expands the list (#324)', async () => {
+    const user = userEvent.setup()
+    const today = todayIsoDate()
+    const now = `${today}T00:00:00.000Z`
+    await useAssetStore.getState().saveAsset(
+      {
+        id: 'cash',
+        name: 'Euro cash',
+        assetClass: 'money',
+        type: 'cash',
+        currency: 'EUR',
+        institution: 'Cash desk',
+        trackingStatus: 'included',
+        valuationMethod: 'account_balance',
+        updateFrequency: 'weekly',
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        assetId: 'cash',
+        date: today,
+        amount: 1000,
+        currency: 'EUR',
+      },
+    )
+    renderApp(<DashboardScreen />)
+    const density = await screen.findByTestId('positions-density-toggle')
+    expect(density).toBeInTheDocument()
+    expect(screen.queryByText('Euro cash')).not.toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Compact' }))
+    expect(await screen.findByText('Euro cash')).toBeInTheDocument()
+    expect(screen.queryByText('Cash desk')).not.toBeInTheDocument()
+    expect(screen.getByTestId('dashboard-positions').querySelector('ul')).toHaveAttribute(
+      'data-compact',
+      'true',
+    )
+    expect(useSettingsStore.getState().settings.compactDashboardPositions).toBe(
+      true,
+    )
   })
 })

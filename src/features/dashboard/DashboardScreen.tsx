@@ -120,6 +120,7 @@ export function DashboardScreen() {
                   baseCurrency={d.baseCurrency}
                   asOfDate={d.selectedChartDate ?? d.today}
                   onToggle={d.toggleHoldings}
+                  onExpand={d.expandHoldings}
                 />
               )}
             <Button asChild variant="outline" className="w-full">

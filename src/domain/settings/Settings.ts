@@ -23,6 +23,8 @@ export interface Settings {
   showChartTooltip: boolean
   /** Positions list + total on Dashboard (#270). Default on. */
   showDashboardPositions: boolean
+  /** Dense Positions rows for one-screen screenshots (#324). Default off. */
+  compactDashboardPositions: boolean
   /**
    * New Обновить UX (#295). Off by default = classic remaining + page save.
    */
@@ -42,6 +44,7 @@ export const DEFAULT_SETTINGS: Settings = {
   assetListOrder: [],
   showChartTooltip: true,
   showDashboardPositions: true,
+  compactDashboardPositions: false,
   newUpdateUx: false,
   homeScreenWidget: false,
   updatedAt: '1970-01-01T00:00:00.000Z',

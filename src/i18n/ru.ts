@@ -79,6 +79,9 @@ export const ru: Dictionary = {
     chartTooltip: 'Подсказка графика',
     chartTooltipShow: 'Показать',
     chartTooltipHide: 'Скрыть',
+    positionsDensity: 'Плотность позиций',
+    positionsDensityComfortable: 'Обычный',
+    positionsDensityCompact: 'Компактный',
     noHoldingsOnDateTitle: 'На эту дату нет позиций',
     noHoldingsOnDateDescription:
       'На этот день и раньше ничего не записано. Выберите более позднюю дату или перейдите к сегодня.',

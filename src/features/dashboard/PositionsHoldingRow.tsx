@@ -43,9 +43,10 @@ export function PositionsHoldingRow({
     >
       <div
         data-excluded={excluded ? 'true' : 'false'}
+        data-compact-row={compact ? 'true' : undefined}
         className={cn(
           compact
-            ? 'flex items-center justify-between gap-3 border-t border-border bg-card px-0 py-2'
+            ? 'flex items-center justify-between gap-3 border-t border-border bg-card px-3 py-1.5'
             : 'flex items-center justify-between gap-3 rounded-xl bg-card px-4 py-3 ring-1 ring-foreground/10',
           excluded && 'opacity-60 text-muted-foreground',
         )}
@@ -58,12 +59,12 @@ export function PositionsHoldingRow({
           >
             {row.name}
           </span>
-          {row.institution ? (
+          {!compact && row.institution ? (
             <span className="truncate text-xs text-muted-foreground">
               {row.institution}
             </span>
           ) : null}
-          {row.ownershipShare ? (
+          {!compact && row.ownershipShare ? (
             <span className="text-xs text-muted-foreground">
               {t.asset.yourShare(row.ownershipShare)}
             </span>

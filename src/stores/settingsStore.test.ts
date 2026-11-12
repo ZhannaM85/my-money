@@ -90,6 +90,21 @@ describe('settingsStore', () => {
     )
   })
 
+  it('persists compact Dashboard Positions (#324)', async () => {
+    await useSettingsStore.getState().load()
+    expect(useSettingsStore.getState().settings.compactDashboardPositions).toBe(
+      false,
+    )
+    await useSettingsStore.getState().setCompactDashboardPositions(true)
+    expect(useSettingsStore.getState().settings.compactDashboardPositions).toBe(
+      true,
+    )
+    await useSettingsStore.getState().load()
+    expect(useSettingsStore.getState().settings.compactDashboardPositions).toBe(
+      true,
+    )
+  })
+
   it('persists the new Update UX toggle off by default (#295)', async () => {
     await useSettingsStore.getState().load()
     expect(useSettingsStore.getState().settings.newUpdateUx).toBe(false)

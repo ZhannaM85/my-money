@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 289,
+    issue: 324,
+    date: '2026-11-12T08:30:00+03:00',
+    en: 'Dashboard Positions has Comfortable / Compact density. Compact packs holdings for a one-screen screenshot and expands the list.',
+    ru: 'У позиций на Сводке есть плотность «Обычный» / «Компактный». Компактный умещает список на один экран и раскрывает позиции.',
+  },
+  {
     version: 288,
     issue: 321,
     date: '2026-10-28T11:40:00+03:00',

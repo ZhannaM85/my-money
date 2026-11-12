@@ -3,6 +3,8 @@ import type { HoldingConversion } from '@/domain/netWorth'
 import { useLocale, useTranslation } from '@/i18n'
 import { formatAmount } from '@/shared/lib/money'
 import { cn } from '@/shared/lib/utils'
+import { Chip } from '@/shared/ui/chip'
+import { useSettingsStore } from '@/stores/settingsStore'
 import { PositionsHoldingRow } from './PositionsHoldingRow'
 
 export function DashboardPositions({
@@ -15,6 +17,7 @@ export function DashboardPositions({
   baseCurrency,
   asOfDate,
   onToggle,
+  onExpand,
 }: {
   holdings: readonly HoldingConversion[]
   holdingsOpen: boolean
@@ -25,15 +28,52 @@ export function DashboardPositions({
   baseCurrency: string
   asOfDate: string
   onToggle: () => void
+  onExpand?: () => void
 }) {
   const t = useTranslation()
   const locale = useLocale()
+  const compact = useSettingsStore(
+    (state) => state.settings.compactDashboardPositions,
+  )
+  const setCompactDashboardPositions = useSettingsStore(
+    (state) => state.setCompactDashboardPositions,
+  )
   const label = selectedChartPoint
     ? t.history.holdingsOn(selectedChartPoint.date)
     : t.dashboard.holdings
 
   return (
     <div className="flex flex-col gap-2" data-testid="dashboard-positions">
+      <div className="flex items-center justify-between gap-2">
+        <span className="text-sm font-medium">{t.dashboard.positionsDensity}</span>
+        <div
+          className="flex gap-2"
+          role="group"
+          aria-label={t.dashboard.positionsDensity}
+          data-testid="positions-density-toggle"
+        >
+          {(
+            [
+              {
+                compact: false,
+                label: t.dashboard.positionsDensityComfortable,
+              },
+              { compact: true, label: t.dashboard.positionsDensityCompact },
+            ] as const
+          ).map((item) => (
+            <Chip
+              key={item.label}
+              pressed={compact === item.compact}
+              onClick={() => {
+                void setCompactDashboardPositions(item.compact)
+                if (item.compact) onExpand?.()
+              }}
+            >
+              {item.label}
+            </Chip>
+          ))}
+        </div>
+      </div>
       <button
         type="button"
         className="flex items-center justify-between gap-2 text-left"
@@ -72,7 +112,15 @@ export function DashboardPositions({
         </span>
       </p>
       {holdingsOpen && (
-        <ul className="flex flex-col gap-2">
+        <ul
+          className={cn(
+            'flex flex-col',
+            compact
+              ? 'gap-0 overflow-hidden rounded-xl bg-card ring-1 ring-foreground/10 [&>li:first-child_[data-compact-row]]:border-t-0'
+              : 'gap-2',
+          )}
+          data-compact={compact ? 'true' : 'false'}
+        >
           {holdings.map((row) => (
             <li key={row.assetId}>
               <PositionsHoldingRow
@@ -80,6 +128,7 @@ export function DashboardPositions({
                 isOriginal={isOriginal}
                 baseCurrency={baseCurrency}
                 asOfDate={asOfDate}
+                compact={compact}
               />
             </li>
           ))}

@@ -81,6 +81,9 @@ export interface Dictionary {
     chartTooltip: string
     chartTooltipShow: string
     chartTooltipHide: string
+    positionsDensity: string
+    positionsDensityComfortable: string
+    positionsDensityCompact: string
     noHoldingsOnDateTitle: string
     noHoldingsOnDateDescription: string
   }

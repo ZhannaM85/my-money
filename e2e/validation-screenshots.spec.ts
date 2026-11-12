@@ -106,6 +106,21 @@ test('capture Allocation breadcrumb and Dashboard owner tab (#323)', async ({
   })
 })
 
+test('capture Dashboard Positions compact density (#324)', async ({ page }) => {
+  await seedValidationFixture(page, { currencyDisplayMode: 'base' })
+  await page.goto('/')
+  await expect(page.getByTestId('dashboard-positions')).toBeVisible()
+  await page.getByRole('button', { name: 'Compact' }).click()
+  await expect(page.getByText('Euro cash')).toBeVisible()
+  await expect(
+    page.getByTestId('dashboard-positions').locator('ul'),
+  ).toHaveAttribute('data-compact', 'true')
+  await page.screenshot({
+    path: join(outDir, '324-dashboard-positions-compact.png'),
+    fullPage: true,
+  })
+})
+
 test('capture Allocation expanded tap Hide (#150)', async ({ page }) => {
   await seedValidationFixture(page, { currencyDisplayMode: 'base' })
   await page.goto('/allocation')

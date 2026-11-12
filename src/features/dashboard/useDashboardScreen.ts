@@ -124,6 +124,10 @@ export function useDashboardScreen() {
     setHoldingsOpen((open) => !open)
   }
 
+  const expandHoldings = () => {
+    setHoldingsOpen(true)
+  }
+
   const loaded = assetsLoaded && settingsLoaded
   const showNativeAll = isOriginal && activeCurrencyFilter === 'all'
 
@@ -163,5 +167,6 @@ export function useDashboardScreen() {
     togglePeriod,
     onSelectChartDate,
     toggleHoldings,
+    expandHoldings,
   }
 }

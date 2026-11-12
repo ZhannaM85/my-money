@@ -20,6 +20,7 @@ const settingsSchema = z.object({
   assetListOrder: z.array(z.string().min(1)).default([]),
   showChartTooltip: z.boolean().default(true),
   showDashboardPositions: z.boolean().default(true),
+  compactDashboardPositions: z.boolean().default(false),
   newUpdateUx: z.boolean().default(false),
   homeScreenWidget: z.boolean().default(false),
   updatedAt: z.string().min(1),
