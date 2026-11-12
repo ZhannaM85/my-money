@@ -413,3 +413,4 @@ Closed live-feedback rows from Tier 8 onward. Open / pending items stay in [`../
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
 | [#322](https://github.com/ZhannaM85/my-money/issues/322) | ✅ Done | Assets: incomplete rounded borders on the right of expanded asset rows | Nested SwipeRevealRow uses `flush` inside Allocation / compact Dashboard groups so child rows stay square; standalone rows keep `rounded-xl`. Allocation slice cards no longer clip `ring` with `overflow-hidden`. Proof: docs/validation-proof/322. Validated on-device 2026-11-10. |
+| [#323](https://github.com/ZhannaM85/my-money/issues/323) | ✅ Done | Allocation: keep owner-tab highlight and show breadcrumb/back context | Owner tab = Сводка. Breadcrumb Dashboard/More by entry state. Proof: docs/validation-proof/323. Validated on-device 2026-11-12. |

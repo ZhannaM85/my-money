@@ -151,7 +151,6 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
-| [#323](https://github.com/ZhannaM85/my-money/issues/323) | 🔍 Pending validation | Allocation: keep owner-tab highlight and show breadcrumb/back context | Owner tab = Сводка. Breadcrumb Dashboard/More by entry state. Proof: docs/validation-proof/323. |
 
 ---
 
