@@ -255,6 +255,62 @@ describe('DashboardPositions', () => {
     expect(screen.queryAllByText('Your share: 1/1')).toHaveLength(1)
   })
 
+  it('lists zero-balance Positions after funded ones (#325)', async () => {
+    const user = userEvent.setup()
+    const today = todayIsoDate()
+    const now = `${today}T00:00:00.000Z`
+    await useAssetStore.getState().saveAsset(
+      {
+        id: 'zero',
+        name: 'Aifory USDT',
+        assetClass: 'money',
+        type: 'cash',
+        currency: 'USD',
+        trackingStatus: 'included',
+        valuationMethod: 'account_balance',
+        updateFrequency: 'weekly',
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        assetId: 'zero',
+        date: today,
+        amount: 0,
+        currency: 'USD',
+      },
+    )
+    await useAssetStore.getState().saveAsset(
+      {
+        id: 'cash',
+        name: 'Euro cash',
+        assetClass: 'money',
+        type: 'cash',
+        currency: 'EUR',
+        trackingStatus: 'included',
+        valuationMethod: 'account_balance',
+        updateFrequency: 'weekly',
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        assetId: 'cash',
+        date: today,
+        amount: 1000,
+        currency: 'EUR',
+      },
+    )
+    await useFxStore.getState().saveManualRates([
+      { date: today, base: 'USD', quote: 'EUR', rate: 0.9 },
+    ])
+    renderApp(<DashboardScreen />)
+    await user.click(await screen.findByRole('button', { name: /Holdings/i }))
+    const positions = await screen.findByTestId('dashboard-positions')
+    const names = [...positions.querySelectorAll('li')].map(
+      (row) => row.querySelector('.truncate')?.textContent,
+    )
+    expect(names).toEqual(['Euro cash', 'Aifory USDT'])
+  })
+
   it('switches Positions to compact density and expands the list (#324)', async () => {
     const user = userEvent.setup()
     const today = todayIsoDate()

@@ -5,6 +5,7 @@ import { formatAmount } from '@/shared/lib/money'
 import { cn } from '@/shared/lib/utils'
 import { Chip } from '@/shared/ui/chip'
 import { useSettingsStore } from '@/stores/settingsStore'
+import { pinZeroBalanceHoldingsLast } from './pinZeroBalanceHoldingsLast'
 import { PositionsHoldingRow } from './PositionsHoldingRow'
 
 export function DashboardPositions({
@@ -41,6 +42,7 @@ export function DashboardPositions({
   const label = selectedChartPoint
     ? t.history.holdingsOn(selectedChartPoint.date)
     : t.dashboard.holdings
+  const orderedHoldings = pinZeroBalanceHoldingsLast(holdings)
 
   return (
     <div className="flex flex-col gap-2" data-testid="dashboard-positions">
@@ -86,7 +88,7 @@ export function DashboardPositions({
           className="flex items-center gap-1 text-sm text-muted-foreground"
           aria-hidden
         >
-          {holdings.length}
+          {orderedHoldings.length}
           <ChevronDown
             className={cn(
               'size-4 transition-transform',
@@ -121,7 +123,7 @@ export function DashboardPositions({
           )}
           data-compact={compact ? 'true' : 'false'}
         >
-          {holdings.map((row) => (
+          {orderedHoldings.map((row) => (
             <li key={row.assetId}>
               <PositionsHoldingRow
                 row={row}

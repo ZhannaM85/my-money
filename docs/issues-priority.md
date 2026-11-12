@@ -159,7 +159,7 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
 | [#324](https://github.com/ZhannaM85/my-money/issues/324) | 🔍 Pending validation | Compact view: screenshot all money in one place | Dashboard Positions Comfortable/Compact density; compact expands list and hides institution/share lines. Proof: docs/validation-proof/324. |
-| [#325](https://github.com/ZhannaM85/my-money/issues/325) | 🔲 Open | Positions: show zero-balance holdings at the end | Dashboard Позиции: zeros (e.g. Aifory USDT, USD Deposit) should sort after non-zero rows. |
+| [#325](https://github.com/ZhannaM85/my-money/issues/325) | 🔍 Pending validation | Positions: show zero-balance holdings at the end | pinZeroBalanceHoldingsLast on Dashboard Positions; non-zero order preserved. Proof: docs/validation-proof/325. |
 
 ---
 

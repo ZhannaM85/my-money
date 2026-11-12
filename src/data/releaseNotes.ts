@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 290,
+    issue: 325,
+    date: '2026-11-12T08:35:00+03:00',
+    en: 'Dashboard Positions puts zero-balance holdings at the end of the list.',
+    ru: 'На Сводке позиции с нулевым остатком стоят в конце списка.',
+  },
+  {
     version: 289,
     issue: 324,
     date: '2026-11-12T08:30:00+03:00',

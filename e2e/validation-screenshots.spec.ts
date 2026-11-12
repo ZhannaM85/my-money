@@ -121,6 +121,56 @@ test('capture Dashboard Positions compact density (#324)', async ({ page }) => {
   })
 })
 
+test('capture Dashboard Positions zeros at end (#325)', async ({ page }) => {
+  await seedValidationFixture(page, { currencyDisplayMode: 'base' })
+  await page.evaluate(async () => {
+    const now = '2026-08-17T00:00:00.000Z'
+    await new Promise<void>((resolve, reject) => {
+      const open = indexedDB.open('my-money')
+      open.onerror = () => reject(open.error ?? new Error('idb open failed'))
+      open.onsuccess = () => {
+        const db = open.result
+        const tx = db.transaction(['assets', 'snapshots'], 'readwrite')
+        tx.objectStore('assets').put({
+          id: 'aifory',
+          name: 'Aifory USDT',
+          assetClass: 'money',
+          type: 'cash',
+          currency: 'USD',
+          trackingStatus: 'included',
+          valuationMethod: 'account_balance',
+          updateFrequency: 'weekly',
+          createdAt: now,
+          updatedAt: now,
+        })
+        tx.objectStore('snapshots').put({
+          id: 's-aifory',
+          assetId: 'aifory',
+          date: '2026-08-17',
+          amount: 0,
+          currency: 'USD',
+        })
+        tx.oncomplete = () => {
+          db.close()
+          resolve()
+        }
+        tx.onerror = () => reject(tx.error ?? new Error('idb write failed'))
+      }
+    })
+  })
+  await page.goto('/')
+  await page.reload()
+  await page.getByRole('button', { name: /Holdings/i }).click()
+  const names = page
+    .getByTestId('dashboard-positions')
+    .locator('li .truncate')
+  await expect(names).toHaveText(['Euro cash', 'USD cash', 'Aifory USDT'])
+  await page.screenshot({
+    path: join(outDir, '325-dashboard-positions-zeros-last.png'),
+    fullPage: true,
+  })
+})
+
 test('capture Allocation expanded tap Hide (#150)', async ({ page }) => {
   await seedValidationFixture(page, { currencyDisplayMode: 'base' })
   await page.goto('/allocation')
