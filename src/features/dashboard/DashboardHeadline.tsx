@@ -6,6 +6,7 @@ import { formatAmount } from '@/shared/lib/money'
 import { SelectField } from '@/shared/ui/select-field'
 import { StatCard } from '@/shared/ui/stat-card'
 import { cn } from '@/shared/lib/utils'
+import { useSettingsStore } from '@/stores/settingsStore'
 import { PositionsHoldingRow } from './PositionsHoldingRow'
 import { sortNativeTotalsLargestFirst } from './sortNativeTotals'
 
@@ -40,6 +41,9 @@ export function DashboardHeadline({
 }) {
   const t = useTranslation()
   const locale = useLocale()
+  const compactPositions = useSettingsStore(
+    (state) => state.settings.compactDashboardPositions,
+  )
   const showNativeAll = isOriginal && activeCurrencyFilter === 'all'
   const stackedTotals = showNativeAll
     ? sortNativeTotalsLargestFirst(nativeTotals)
@@ -74,7 +78,13 @@ export function DashboardHeadline({
       <div
         ref={summaryRef}
         data-testid="dashboard-sticky-summary"
-        className="sticky top-0 z-40 -mx-4 bg-background px-4 py-3"
+        className={cn(
+          '-mx-4 bg-background px-4 py-3',
+          // #324: compact scrolls this card away. Sticky is only this class on
+          // #main-content — Safari and the home-screen PWA share that
+          // scrollport. Standalone safe-area padding stays on the app header.
+          !compactPositions && 'sticky top-0 z-40',
+        )}
       >
         {showNativeAll && heroTotal ? (
           <StatCard

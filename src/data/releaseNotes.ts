@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 291,
+    issue: 324,
+    date: '2026-11-12T16:25:11+03:00',
+    en: 'In compact Positions, the net-worth card, As of, and Total scroll away with the page. Comfortable density still keeps that block on screen.',
+    ru: 'В компактных позициях на Сводке карточка чистого капитала, «На дату» и «Итого» уезжают вместе со страницей. В режиме «Обычный» этот блок остаётся на экране.',
+  },
+  {
     version: 290,
     issue: 325,
     date: '2026-11-12T08:35:00+03:00',

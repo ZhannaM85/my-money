@@ -1,4 +1,4 @@
-import { screen } from '@testing-library/react'
+import { screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { beforeEach, describe, expect, it } from 'vitest'
 import { renderApp, resetAppStores } from '@test/renderApp'
@@ -83,9 +83,7 @@ describe('DashboardPositions', () => {
     renderApp(<DashboardScreen />)
     expect(await screen.findByTestId('net-worth-chart')).toBeInTheDocument()
     expect(screen.queryByTestId('dashboard-positions')).not.toBeInTheDocument()
-    expect(
-      screen.getByRole('link', { name: 'Allocation' }),
-    ).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'Allocation' })).toBeInTheDocument()
   })
 
   it('shows today Positions after save when the visible chart range ends earlier (#208)', async () => {
@@ -299,9 +297,9 @@ describe('DashboardPositions', () => {
         currency: 'EUR',
       },
     )
-    await useFxStore.getState().saveManualRates([
-      { date: today, base: 'USD', quote: 'EUR', rate: 0.9 },
-    ])
+    await useFxStore
+      .getState()
+      .saveManualRates([{ date: today, base: 'USD', quote: 'EUR', rate: 0.9 }])
     renderApp(<DashboardScreen />)
     await user.click(await screen.findByRole('button', { name: /Holdings/i }))
     const positions = await screen.findByTestId('dashboard-positions')
@@ -343,12 +341,107 @@ describe('DashboardPositions', () => {
     await user.click(screen.getByRole('button', { name: 'Compact' }))
     expect(await screen.findByText('Euro cash')).toBeInTheDocument()
     expect(screen.queryByText('Cash desk')).not.toBeInTheDocument()
-    expect(screen.getByTestId('dashboard-positions').querySelector('ul')).toHaveAttribute(
-      'data-compact',
-      'true',
-    )
+    expect(
+      screen.getByTestId('dashboard-positions').querySelector('ul'),
+    ).toHaveAttribute('data-compact', 'true')
     expect(useSettingsStore.getState().settings.compactDashboardPositions).toBe(
       true,
+    )
+  })
+
+  it('scrolls the net-worth card, As of, and Total away in compact density (#324)', async () => {
+    const user = userEvent.setup()
+    const today = todayIsoDate()
+    const now = `${today}T00:00:00.000Z`
+    await useAssetStore.getState().saveAsset(
+      {
+        id: 'cash',
+        name: 'Euro cash',
+        assetClass: 'money',
+        type: 'cash',
+        currency: 'EUR',
+        trackingStatus: 'included',
+        valuationMethod: 'account_balance',
+        updateFrequency: 'weekly',
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        assetId: 'cash',
+        date: today,
+        amount: 1000,
+        currency: 'EUR',
+      },
+    )
+    renderApp(<DashboardScreen />)
+    const summary = await screen.findByTestId('dashboard-sticky-summary')
+    const bar = screen.getByTestId('dashboard-as-of-bar')
+    const total = screen.getByTestId('positions-total')
+    expect(summary.className).toContain('sticky')
+    expect(summary.className).toContain('top-0')
+    expect(bar.className).toContain('sticky')
+    expect(bar.className).toContain('top-[var(--dashboard-summary-height,0px)]')
+    expect(total.className).not.toContain('sticky')
+
+    await user.click(screen.getByRole('button', { name: 'Compact' }))
+    expect(summary.className).not.toContain('sticky')
+    expect(summary.className).not.toContain('top-0')
+    expect(bar.className).not.toContain('sticky')
+    expect(bar.className).not.toContain('top-[var(--dashboard-summary-height')
+    expect(bar.className).not.toContain('z-30')
+    expect(total.className).not.toContain('sticky')
+
+    await user.click(screen.getByRole('button', { name: 'Comfortable' }))
+    expect(summary.className).toContain('sticky')
+    expect(summary.className).toContain('top-0')
+    expect(bar.className).toContain('sticky')
+    expect(bar.className).toContain('top-[var(--dashboard-summary-height,0px)]')
+    expect(bar.className).toContain('z-30')
+    expect(bar.className).toContain('isolate')
+  })
+
+  it('keeps the top block unstuck when compact density is already saved (#324)', async () => {
+    const today = todayIsoDate()
+    const now = `${today}T00:00:00.000Z`
+    await db.settings.put({
+      ...DEFAULT_SETTINGS,
+      compactDashboardPositions: true,
+      onboardingCompleted: true,
+    })
+    await useAssetStore.getState().saveAsset(
+      {
+        id: 'cash',
+        name: 'Euro cash',
+        assetClass: 'money',
+        type: 'cash',
+        currency: 'EUR',
+        trackingStatus: 'included',
+        valuationMethod: 'account_balance',
+        updateFrequency: 'weekly',
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        assetId: 'cash',
+        date: today,
+        amount: 1000,
+        currency: 'EUR',
+      },
+    )
+    renderApp(<DashboardScreen />)
+    const summary = await screen.findByTestId('dashboard-sticky-summary')
+    await waitFor(() => {
+      expect(summary.className).not.toContain('sticky')
+    })
+    expect(screen.getByTestId('dashboard-as-of-bar').className).not.toContain(
+      'sticky',
+    )
+    expect(screen.getByTestId('positions-total').className).not.toContain(
+      'sticky',
+    )
+    expect(screen.getByRole('button', { name: 'Compact' })).toHaveAttribute(
+      'aria-pressed',
+      'true',
     )
   })
 })

@@ -1,8 +1,10 @@
 import { Link } from 'react-router-dom'
 import { Plus } from 'lucide-react'
 import { useTranslation } from '@/i18n'
+import { cn } from '@/shared/lib/utils'
 import { Button } from '@/shared/ui/button'
 import { DateField } from '@/shared/ui/date-field'
+import { useSettingsStore } from '@/stores/settingsStore'
 
 export function DashboardAsOfBar({
   selectedChartDate,
@@ -24,13 +26,21 @@ export function DashboardAsOfBar({
   onAddToComparison: () => void
 }) {
   const t = useTranslation()
+  const compactPositions = useSettingsStore(
+    (state) => state.settings.compactDashboardPositions,
+  )
   const asOfValue = selectedChartDate ?? today
   const alreadyAdded = comparisonDates.includes(asOfValue)
 
   return (
     <div
       data-testid="dashboard-as-of-bar"
-      className="sticky top-[var(--dashboard-summary-height,0px)] z-30 isolate -mx-4 flex w-[calc(100%+2rem)] min-w-0 shrink-0 flex-col gap-2 bg-background px-4 pt-1 pb-2"
+      className={cn(
+        '-mx-4 flex w-[calc(100%+2rem)] min-w-0 shrink-0 flex-col gap-2 bg-background px-4 pt-1 pb-2',
+        // #324: same scrollport as the net-worth card. Compact does not stick.
+        !compactPositions &&
+          'sticky top-[var(--dashboard-summary-height,0px)] z-30 isolate',
+      )}
     >
       <div className="flex min-w-0 flex-nowrap items-end gap-1.5">
         <DateField
