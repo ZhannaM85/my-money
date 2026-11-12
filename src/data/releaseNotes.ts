@@ -10,6 +10,20 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 293,
+    issue: 323,
+    date: '2026-11-10T11:50:38+03:00',
+    en: 'Allocation keeps Dashboard highlighted in the tab bar, and shows a breadcrumb back to Dashboard or More.',
+    ru: 'В Распределении в панели вкладок подсвечена Сводка, а хлебные крошки ведут на Сводку или в Ещё.',
+  },
+  {
+    version: 292,
+    issue: 322,
+    date: '2026-11-10T10:35:08+03:00',
+    en: 'Expanded asset rows sit flush inside the group card on Assets and Allocation. The incomplete rounded edge on the right is gone.',
+    ru: 'Раскрытые строки активов на Активах и в Распределении стоят ровно внутри карточки группы. Неполная скруглённая кромка справа убрана.',
+  },
+  {
     version: 291,
     issue: 324,
     date: '2026-11-12T16:25:11+03:00',
