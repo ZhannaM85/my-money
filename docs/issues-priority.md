@@ -159,7 +159,6 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
 | [#324](https://github.com/ZhannaM85/my-money/issues/324) | 🔍 Pending validation | Compact view: screenshot all money in one place | Dashboard Positions Comfortable/Compact density; compact expands the list. Follow-up: compact scrolls the net-worth card, As of, and Total with the page (Comfortable stays sticky), including standalone PWA. Pending on-device. Proof: docs/validation-proof/324. |
-| [#325](https://github.com/ZhannaM85/my-money/issues/325) | 🔍 Pending validation | Positions: show zero-balance holdings at the end | pinZeroBalanceHoldingsLast on Dashboard Positions; non-zero order preserved. Proof: docs/validation-proof/325. |
 
 ---
 
