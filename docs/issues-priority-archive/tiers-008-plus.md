@@ -419,4 +419,5 @@ Closed live-feedback rows from Tier 8 onward. Open / pending items stay in [`../
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
+| [#324](https://github.com/ZhannaM85/my-money/issues/324) | ✅ Done | Compact view: screenshot all money in one place | Dashboard Positions Comfortable/Compact density; compact expands the list. Follow-up: compact scrolls the net-worth card, As of, and Total with the page (Comfortable stays sticky), including standalone PWA. Proof: docs/validation-proof/324. Validated on-device 2026-11-13. |
 | [#325](https://github.com/ZhannaM85/my-money/issues/325) | ✅ Done | Positions: show zero-balance holdings at the end | pinZeroBalanceHoldingsLast on Dashboard Positions; non-zero order preserved. Proof: docs/validation-proof/325. Validated on-device 2026-11-13. |
