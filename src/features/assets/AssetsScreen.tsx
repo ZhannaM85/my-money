@@ -16,15 +16,12 @@ import {
   type Asset,
   type AssetClass,
 } from '@/domain/asset'
-import { convertAmount, lookupRate, type RateTable } from '@/domain/fx'
+import { convertAmount, lookupRate } from '@/domain/fx'
 import { nativeTotalsByCurrency, netWorth } from '@/domain/netWorth'
-import {
-  ASSET_LIST_SORTS,
-  type AssetListSort,
-  type CurrencyDisplayMode,
-} from '@/domain/settings'
-import { latestSnapshot, type AssetSnapshot } from '@/domain/snapshot'
+import { ASSET_LIST_SORTS, type AssetListSort } from '@/domain/settings'
+import { latestSnapshot } from '@/domain/snapshot'
 import { useLocale, useTranslation } from '@/i18n'
+import { isIsoDateOnOrBefore } from '@/shared/lib/dates'
 import {
   formatAmount,
   formatCalendarDate,
@@ -35,7 +32,6 @@ import { Chip } from '@/shared/ui/chip'
 import { useConfirm } from '@/shared/ui/confirm-dialog'
 import { EmptyState } from '@/shared/ui/empty-state'
 import { OverflowMenu } from '@/shared/ui/overflow-menu'
-import { PageHeader } from '@/shared/ui/page-header'
 import { Select } from '@/shared/ui/select'
 import { ReorderIconButton } from '@/shared/ui/reorder-icon-button'
 import { SortableRow } from '@/shared/ui/sortable-row'
@@ -43,32 +39,17 @@ import { useAssetStore } from '@/stores/assetStore'
 import { useFxStore } from '@/stores/fxStore'
 import { useSettingsStore } from '@/stores/settingsStore'
 import { cn } from '@/shared/lib/utils'
+import { AssetsAsOfHeader } from './AssetsAsOfHeader'
 import { sortAssets } from './assetListOrder'
+import {
+  assetEndCaption,
+  assetListedAt,
+  shownAmount,
+  snapshotsOnBookDate,
+} from './assetsAsOf'
 import { useAssetReorder } from './useAssetReorder'
 
 type Filter = 'all' | AssetClass | 'archived'
-
-function shownAmount(
-  snapshot: AssetSnapshot | undefined,
-  quotes: RateTable,
-  baseCurrency: string,
-  displayMode: CurrencyDisplayMode,
-): number | null {
-  if (!snapshot) return null
-  if (displayMode === 'base') {
-    const sameCurrency = snapshot.currency === baseCurrency
-    const rate = lookupRate(
-      quotes,
-      snapshot.currency,
-      baseCurrency,
-      snapshot.date,
-    )
-    if (rate !== undefined && !sameCurrency) {
-      return convertAmount(snapshot.amount, rate)
-    }
-  }
-  return snapshot.amount
-}
 
 export function AssetsScreen() {
   const t = useTranslation()
@@ -77,6 +58,9 @@ export function AssetsScreen() {
   const setEndedOn = useAssetStore((state) => state.setEndedOn)
   const [confirm, confirmDialog] = useConfirm()
   const today = todayIsoDate()
+  const [selectedAsOf, setSelectedAsOf] = useState<string | null>(null)
+  const [asOfError, setAsOfError] = useState<string | undefined>()
+  const asOf = selectedAsOf ?? today
   const assets = useAssetStore((state) => state.assets)
   const snapshots = useAssetStore((state) => state.snapshots)
   const loaded = useAssetStore((state) => state.loaded)
@@ -119,23 +103,22 @@ export function AssetsScreen() {
     void loadSettings()
   }, [loadSettings])
 
+  const bookSnapshots = useMemo(
+    () => snapshotsOnBookDate(snapshots, asOf),
+    [snapshots, asOf],
+  )
+
   const visible = useMemo(() => {
-    const filtered = assets.filter((asset) => {
-      const removed = isRemovedOn(asset, today)
-      if (filter === 'archived') {
-        return asset.trackingStatus === 'archived' || removed
-      }
-      if (asset.trackingStatus === 'archived' || removed) return false
-      if (filter === 'all') return true
-      return asset.assetClass === filter
-    })
+    const filtered = assets.filter((asset) =>
+      assetListedAt(asset, asOf, filter),
+    )
     return sortAssets(filtered, {
       sort: reorder.usingDraft ? 'custom' : assetListSort,
       order: reorder.order,
       locale,
       amountOf: (asset) =>
         shownAmount(
-          latestSnapshot(snapshots, asset.id),
+          latestSnapshot(bookSnapshots, asset.id),
           quotes,
           baseCurrency,
           displayMode,
@@ -146,14 +129,28 @@ export function AssetsScreen() {
     reorder.order,
     reorder.usingDraft,
     assets,
+    asOf,
     baseCurrency,
+    bookSnapshots,
     displayMode,
     filter,
     locale,
     quotes,
-    snapshots,
-    today,
   ])
+
+  function onAsOfDateChange(next: string) {
+    if (!isIsoDateOnOrBefore(next, today)) {
+      setAsOfError(t.dashboard.asOfDateInvalid)
+      return
+    }
+    setAsOfError(undefined)
+    setSelectedAsOf(next >= today ? null : next)
+  }
+
+  function onJumpToToday() {
+    setAsOfError(undefined)
+    setSelectedAsOf(null)
+  }
 
   async function removeFromDate(asset: Asset) {
     const picked = await confirm({
@@ -188,18 +185,18 @@ export function AssetsScreen() {
     if (displayMode === 'native') {
       return {
         label:
-          nativeTotalsByCurrency(assets, snapshots)
+          nativeTotalsByCurrency(assets, bookSnapshots, asOf)
             .map((row) => formatAmount(row.amount, row.currency, locale))
             .join(' · ') || formatAmount(0, baseCurrency, locale),
         missingRates: [],
       }
     }
-    const result = netWorth(assets, snapshots, quotes, baseCurrency)
+    const result = netWorth(assets, bookSnapshots, quotes, baseCurrency, asOf)
     return {
       label: formatAmount(result.total, baseCurrency, locale),
       missingRates: result.missingRates,
     }
-  }, [assets, snapshots, quotes, baseCurrency, displayMode, locale])
+  }, [assets, asOf, bookSnapshots, quotes, baseCurrency, displayMode, locale])
 
   return (
     <div className="flex flex-col gap-6">
@@ -207,16 +204,13 @@ export function AssetsScreen() {
         data-testid="assets-sticky-header"
         className="sticky top-0 z-30 -mx-4 bg-background px-4 py-3"
       >
-        <PageHeader
-          title={t.assets.title}
-          description={
-            loaded ? `${t.dashboard.positionsTotal}: ${total.label}` : undefined
-          }
-          action={
-            <Button asChild>
-              <Link to="/assets/new">{t.common.add}</Link>
-            </Button>
-          }
+        <AssetsAsOfHeader
+          total={loaded ? total.label : undefined}
+          asOf={asOf}
+          today={today}
+          asOfError={asOfError}
+          onAsOfDateChange={onAsOfDateChange}
+          onJumpToToday={onJumpToToday}
         />
         {loaded && total.missingRates.length > 0 && (
           <p className="mt-2 text-sm text-muted-foreground">
@@ -299,7 +293,7 @@ export function AssetsScreen() {
           const list = (
             <ul className="flex flex-col gap-2">
               {visible.map((asset) => {
-                const snapshot = latestSnapshot(snapshots, asset.id)
+                const snapshot = latestSnapshot(bookSnapshots, asset.id)
                 const estimated = asset.valuationMethod !== 'account_balance'
                 const share = listOwnershipShare(asset)
                 const sameCurrency = snapshot?.currency === baseCurrency
@@ -331,7 +325,8 @@ export function AssetsScreen() {
                   ? (snapshot?.currency ?? asset.currency)
                   : t.common.native(snapshot?.currency ?? asset.currency)
                 const excluded = asset.trackingStatus === 'excluded'
-                const removed = isRemovedOn(asset, today)
+                const removed = isRemovedOn(asset, asOf)
+                const endCaption = assetEndCaption(asset, asOf, today)
                 const showRowAction =
                   !reorder.reordering &&
                   (filter !== 'archived' || Boolean(asset.endedOn))
@@ -369,9 +364,9 @@ export function AssetsScreen() {
                           {asset.institution.trim()}
                         </span>
                       ) : null}
-                      {asset.endedOn ? (
+                      {endCaption && asset.endedOn ? (
                         <span className="text-sm text-muted-foreground">
-                          {removed
+                          {endCaption === 'removed'
                             ? t.asset.removedFromDate(
                                 formatCalendarDate(asset.endedOn, locale),
                               )

@@ -5,6 +5,7 @@ import { MemoryRouter } from 'react-router-dom'
 import { beforeEach, describe, expect, it } from 'vitest'
 import { DEFAULT_SETTINGS } from '@/domain/settings'
 import { db } from '@/infrastructure/persistence/indexeddb'
+import { addDaysIso } from '@/shared/lib/dates'
 import {
   formatAmount,
   formatCalendarDate,
@@ -373,6 +374,117 @@ describe('AssetsScreen', () => {
     expect(header).toHaveTextContent(`Total: ${formatAmount(150, 'EUR')}`)
   })
 
+  it('shows the book as of a past day and restores a later removal (#329)', async () => {
+    const user = userEvent.setup()
+    const today = todayIsoDate()
+    const early = '2026-08-01'
+    const view = '2026-08-17'
+    const later = '2026-09-01'
+    const end = '2026-09-15'
+    await addNamedAsset('cash', 'Cash', 40, 'EUR')
+    const first = useAssetStore
+      .getState()
+      .snapshots.find((row) => row.assetId === 'cash')
+    await useAssetStore.getState().updateSnapshot({ ...first!, date: early })
+    await useAssetStore.getState().saveSnapshots([
+      {
+        assetId: 'cash',
+        date: later,
+        amount: 90,
+        currency: 'EUR',
+      },
+    ])
+    await useAssetStore.getState().setEndedOn('cash', end)
+
+    render(
+      <MemoryRouter>
+        <AssetsScreen />
+      </MemoryRouter>,
+    )
+    const header = screen.getByTestId('assets-sticky-header')
+    const asOfBar = screen.getByTestId('assets-as-of-bar')
+    expect(header).toContainElement(asOfBar)
+    expect(asOfBar).toHaveClass('flex-wrap')
+    expect(asOfBar).toHaveClass('col-span-2')
+    expect(asOfBar.className).toContain('sm:col-start-2')
+    const asOf = screen.getByLabelText('As of')
+    expect(asOf).toHaveValue(today)
+    expect(asOf).toHaveClass('w-[13.5rem]')
+    expect(
+      screen.queryByRole('button', { name: 'Today' }),
+    ).not.toBeInTheDocument()
+    expect(header).toHaveTextContent(`Total: ${formatAmount(100, 'EUR')}`)
+    expect(screen.queryByRole('link', { name: /Cash/ })).not.toBeInTheDocument()
+
+    setDateField(asOf, view)
+    expect(await screen.findByRole('button', { name: 'Today' })).toHaveClass(
+      'px-1.5',
+    )
+    const cash = await screen.findByRole('link', { name: /Cash/ })
+    expect(cash).toHaveAttribute('data-removed', 'false')
+    expect(cash).not.toHaveClass('opacity-60')
+    expect(
+      screen.getByText(`Removed from ${formatCalendarDate(end)}`),
+    ).toBeInTheDocument()
+    expect(screen.getByText(formatAmount(40, 'EUR'))).toBeInTheDocument()
+    expect(screen.queryByText(formatAmount(90, 'EUR'))).not.toBeInTheDocument()
+    expect(header).toHaveTextContent(`Total: ${formatAmount(140, 'EUR')}`)
+
+    await user.click(screen.getByRole('button', { name: 'Actions for Cash' }))
+    expect(
+      screen.getByRole('menuitem', { name: 'Undo removal of Cash' }),
+    ).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Actions for Cash' }))
+
+    await user.click(screen.getByRole('button', { name: 'Hidden' }))
+    expect(screen.queryByRole('link', { name: /Cash/ })).not.toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Money' }))
+    expect(
+      await screen.findByRole('link', { name: /Cash/ }),
+    ).toBeInTheDocument()
+    expect(
+      screen.queryByRole('link', { name: /Broker/ }),
+    ).not.toBeInTheDocument()
+
+    await user.click(screen.getByRole('button', { name: 'All' }))
+    setDateField(asOf, end)
+    expect(screen.queryByRole('link', { name: /Cash/ })).not.toBeInTheDocument()
+    expect(header).toHaveTextContent(`Total: ${formatAmount(100, 'EUR')}`)
+    await user.click(screen.getByRole('button', { name: 'Hidden' }))
+    const removed = await screen.findByRole('link', { name: /Cash/ })
+    expect(removed).toHaveAttribute('data-removed', 'true')
+    await user.click(screen.getByRole('button', { name: 'Actions for Cash' }))
+    await user.click(
+      screen.getByRole('menuitem', { name: 'Undo removal of Cash' }),
+    )
+    await waitFor(() => {
+      expect(
+        useAssetStore.getState().assets.find((row) => row.id === 'cash')
+          ?.endedOn,
+      ).toBeUndefined()
+    })
+    expect(screen.queryByRole('link', { name: /Cash/ })).not.toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'All' }))
+    expect(
+      await screen.findByRole('link', { name: /Cash/ }),
+    ).toBeInTheDocument()
+    expect(
+      screen.queryByText(`Removed from ${formatCalendarDate(end)}`),
+    ).not.toBeInTheDocument()
+    expect(header).toHaveTextContent(`Total: ${formatAmount(190, 'EUR')}`)
+
+    await user.click(screen.getByRole('button', { name: 'Today' }))
+    expect(asOf).toHaveValue(today)
+    expect(
+      screen.queryByRole('button', { name: 'Today' }),
+    ).not.toBeInTheDocument()
+    expect(header).toHaveTextContent(`Total: ${formatAmount(190, 'EUR')}`)
+
+    setDateField(asOf, addDaysIso(today, 1))
+    expect(screen.getByText('Choose today or a past date')).toBeInTheDocument()
+    expect(asOf).toHaveValue(today)
+  })
+
   it('wraps filter chips instead of a horizontal scroller (#153)', async () => {
     render(
       <MemoryRouter>
@@ -415,6 +527,16 @@ async function addNamedAsset(
       currency,
     },
   )
+}
+
+function setDateField(input: HTMLElement, value: string) {
+  input.focus()
+  Object.getOwnPropertyDescriptor(
+    window.HTMLInputElement.prototype,
+    'value',
+  )?.set?.call(input, value)
+  input.dispatchEvent(new Event('input', { bubbles: true }))
+  input.dispatchEvent(new Event('change', { bubbles: true }))
 }
 
 function listedAssetHrefs() {

@@ -175,7 +175,7 @@ Pure, unit-tested domain functions (no storage, no React, no network):
 - `cumulativeGivenSpent(snapshots, assetId)` — net of explicit `snapshot.flow` given/received entries only (#280, #282); not lifetime remaining drawdowns
 - `applyBalanceEntry(mode, parsed, baseline)` — remaining vs ± update entry (#276)
 - `snapshotsFromSpendLines(baseline, lines)` / `sameDaySpendEntries` — given/received lines on one date (#279, #282); each line is a remaining snapshot with `flow`. Saved lines are edited in place (#280).
-- `historicalNetWorth(assets, snapshots, rates, dates)` — uses **that date's** FX, not today's; if that day has no quote, carries forward the last earlier rate so the holding is not dropped. Each point includes the holding-by-holding breakdown for tooltips and History. An asset with `endedOn` is absent from that point on and after the end date (#328); earlier points are unchanged. New snapshots on or after `endedOn` are refused. Clearing `endedOn` restores the stored rows.
+- `historicalNetWorth(assets, snapshots, rates, dates)` — uses **that date's** FX, not today's; if that day has no quote, carries forward the last earlier rate so the holding is not dropped. Each point includes the holding-by-holding breakdown for tooltips and History. An asset with `endedOn` is absent from that point on and after the end date (#328); earlier points are unchanged. New snapshots on or after `endedOn` are refused. Clearing `endedOn` restores the stored rows. Assets reuses the Dashboard As of `DateField` (#329): the list, sort amounts, and total use snapshots on or before that day, and a later `endedOn` stays on the list so it can be cleared. Today returns to the current day.
 
 ---
 

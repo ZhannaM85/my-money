@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 295,
+    issue: 329,
+    date: '2026-11-17T15:10:00+03:00',
+    en: 'Assets has As of in the header, the same control as on Dashboard. Pick a past day to see the list and total as they were. A holding removed later still appears, marked with the day it ended, and Undo removal is in its menu. Today returns to the current day.',
+    ru: 'У Активов в шапке есть «На дату», то же поле, что на Сводке. Прошедший день показывает список и итог на ту дату. Актив, удалённый позже, остаётся в списке с датой окончания, а в меню есть «Отменить удаление». «Сегодня» возвращает к текущему дню.',
+  },
+  {
     version: 294,
     issue: 328,
     date: '2026-11-17T13:30:00+03:00',

@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 329,
+    title: {
+      en: 'Assets: As of date so a removed asset can be restored from history',
+      ru: 'Активы: «На дату», чтобы вернуть удалённый актив из истории',
+    },
+    en: 'Hidden was the only way back after an end date. Assets now reuses the Dashboard As of control. A past day lists holdings and the total from snapshots on or before that day. An asset whose end date is later stays in the list, marked removed from that end date, with Undo removal. Today clears the day. Filters, sort, and Hidden follow the same day.',
+    ru: 'После даты окончания вернуться можно было только через «Скрытые». На Активах теперь то же «На дату», что на Сводке. Прошедший день показывает активы и итог по снимкам на эту дату или раньше. Если окончание позже, актив остаётся в списке с пометкой об удалении с этой даты и пунктом «Отменить удаление». «Сегодня» сбрасывает день. Фильтры, сортировка и «Скрытые» считаются на тот же день.',
+  },
+  {
     issue: 328,
     title: {
       en: 'Assets: remove an asset from a date (keep its history)',
