@@ -38,6 +38,7 @@ export function AssetDetailsUpdateForm({
   currency,
   snapshots,
   today,
+  endedOn,
   headline,
   onHeadlineChange,
   onSave,
@@ -46,6 +47,7 @@ export function AssetDetailsUpdateForm({
   currency: string
   snapshots: readonly AssetSnapshot[]
   today: string
+  endedOn?: string
   headline: BalanceHeadline
   onHeadlineChange: (headline: BalanceHeadline) => void
   onSave: (
@@ -154,9 +156,16 @@ export function AssetDetailsUpdateForm({
     }
   }
 
+  function blockedDate(date: string): string | undefined {
+    if (!isIsoDateOnOrBefore(date, today)) return t.asset.snapshotDateInvalid
+    if (endedOn && date >= endedOn) return t.asset.snapshotAfterEnd
+    return undefined
+  }
+
   async function saveRemaining() {
-    if (!isIsoDateOnOrBefore(amountDate, today)) {
-      setAmountError(t.asset.snapshotDateInvalid)
+    const blocked = blockedDate(amountDate)
+    if (blocked) {
+      setAmountError(blocked)
       return
     }
     const requireAmount = !onDate
@@ -179,8 +188,9 @@ export function AssetDetailsUpdateForm({
   }
 
   async function saveSpends(draftOverride?: readonly SpendLineDraft[]) {
-    if (!isIsoDateOnOrBefore(amountDate, today)) {
-      setAmountError(t.asset.snapshotDateInvalid)
+    const blocked = blockedDate(amountDate)
+    if (blocked) {
+      setAmountError(blocked)
       return
     }
     const drafts = draftOverride ? [...draftOverride] : spendLines
@@ -241,7 +251,10 @@ export function AssetDetailsUpdateForm({
         max={today}
         onChange={(event) => setAmountDate(event.target.value)}
         error={
-          amountError === t.asset.snapshotDateInvalid ? amountError : undefined
+          amountError === t.asset.snapshotDateInvalid ||
+          amountError === t.asset.snapshotAfterEnd
+            ? amountError
+            : undefined
         }
       />
       <div className="flex min-w-0 flex-col gap-2">
@@ -304,9 +317,11 @@ export function AssetDetailsUpdateForm({
           {t.asset.duplicateSnapshotHint}
         </p>
       )}
-      {amountError && amountError !== t.asset.snapshotDateInvalid && (
-        <p className="text-sm text-destructive">{amountError}</p>
-      )}
+      {amountError &&
+        amountError !== t.asset.snapshotDateInvalid &&
+        amountError !== t.asset.snapshotAfterEnd && (
+          <p className="text-sm text-destructive">{amountError}</p>
+        )}
       {saveMessage && (
         <p
           className="text-sm text-muted-foreground"

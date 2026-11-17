@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import { formatLastUpdated, useLocale, useTranslation } from '@/i18n'
 import {
   formatAmount,
+  formatCalendarDate,
   formatPercent,
   formatSignedAmount,
 } from '@/shared/lib/money'
@@ -64,6 +65,11 @@ export function AssetDetailsScreen() {
       {asset.trackingStatus === 'archived' && (
         <p className="text-sm font-medium text-muted-foreground">
           {t.asset.hiddenFromLists}
+        </p>
+      )}
+      {asset.endedOn && (
+        <p className="text-sm font-medium text-muted-foreground">
+          {t.asset.removedFromDate(formatCalendarDate(asset.endedOn, locale))}
         </p>
       )}
       <div className="flex gap-2">
@@ -130,6 +136,7 @@ export function AssetDetailsScreen() {
         currency={asset.currency}
         snapshots={d.snapshots}
         today={d.today}
+        endedOn={asset.endedOn}
         headline={d.headline}
         onHeadlineChange={(next) => void d.setBalanceHeadline(asset.id, next)}
         onSave={d.saveUpdate}
@@ -142,6 +149,22 @@ export function AssetDetailsScreen() {
           await d.setTrackingStatus(asset.id, status)
           if (status === 'archived') d.navigate('/assets')
         }}
+        onRemoveFromDate={() => {
+          void (async () => {
+            const picked = await confirm({
+              message: t.assets.removeFromDateMessage,
+              confirmLabel: t.assets.removeFromDateConfirm,
+              destructive: true,
+              date: {
+                label: t.assets.removeFromDateLabel,
+                value: asset.endedOn ?? d.today,
+              },
+            })
+            if (typeof picked !== 'string') return
+            await d.setEndedOn(asset.id, picked)
+          })()
+        }}
+        onUndoRemoval={() => void d.setEndedOn(asset.id, null)}
         onDelete={async () => {
           if (!(await confirm(t.asset.deleteConfirm))) return
           await d.deleteAsset(asset.id)
@@ -172,6 +195,7 @@ export function AssetDetailsScreen() {
         quotes={d.quotes}
         baseCurrency={d.baseCurrency}
         today={d.today}
+        endedOn={asset.endedOn}
         onSave={d.updateSnapshot}
         onDelete={d.deleteSnapshot}
       />

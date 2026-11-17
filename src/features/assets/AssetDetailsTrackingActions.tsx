@@ -5,12 +5,18 @@ import { OverflowMenu, type OverflowMenuItem } from '@/shared/ui/overflow-menu'
 export function AssetDetailsTrackingActions({
   name,
   trackingStatus,
+  endedOn,
   onSetTracking,
+  onRemoveFromDate,
+  onUndoRemoval,
   onDelete,
 }: {
   name: string
   trackingStatus: TrackingStatus
+  endedOn?: string
   onSetTracking: (status: TrackingStatus) => Promise<void>
+  onRemoveFromDate: () => void
+  onUndoRemoval: () => void
   onDelete: () => Promise<void>
 }) {
   const t = useTranslation()
@@ -37,6 +43,18 @@ export function AssetDetailsTrackingActions({
     items.push({
       label: t.asset.restore,
       onSelect: () => void onSetTracking('included'),
+    })
+  }
+  items.push({
+    label: t.assets.removeFromDate,
+    ariaLabel: t.assets.removeFromDateAria(name),
+    onSelect: onRemoveFromDate,
+  })
+  if (endedOn) {
+    items.push({
+      label: t.assets.undoRemove,
+      ariaLabel: t.assets.undoRemoveAria(name),
+      onSelect: onUndoRemoval,
     })
   }
   items.push({

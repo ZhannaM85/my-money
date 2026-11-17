@@ -104,6 +104,13 @@ export interface Dictionary {
     reorderAria: (name: string) => string
     enterReorderMode: string
     rowMenuAria: (name: string) => string
+    removeFromDate: string
+    removeFromDateAria: (name: string) => string
+    removeFromDateMessage: string
+    removeFromDateLabel: string
+    removeFromDateConfirm: string
+    undoRemove: string
+    undoRemoveAria: (name: string) => string
   }
   asset: {
     classes: Record<AssetClass, string>
@@ -166,6 +173,9 @@ export interface Dictionary {
     includeInNetWorth: string
     notCountedInNetWorth: string
     hiddenFromLists: string
+    removedFromDate: (date: string) => string
+    endsOn: (date: string) => string
+    snapshotAfterEnd: string
     deleteAsset: string
     deleteConfirm: string
     deleteSnapshot: string

@@ -33,6 +33,7 @@ export function AssetSnapshotList({
   quotes,
   baseCurrency,
   today,
+  endedOn,
   onSave,
   onDelete,
 }: {
@@ -43,6 +44,7 @@ export function AssetSnapshotList({
   quotes: RateTable
   baseCurrency: string
   today: string
+  endedOn?: string
   onSave: (snapshot: AssetSnapshot) => Promise<void>
   onDelete: (id: string) => Promise<void>
 }) {
@@ -79,6 +81,10 @@ export function AssetSnapshotList({
     }
     if (!isIsoDateOnOrBefore(editDate, today)) {
       setEditError(t.asset.snapshotDateInvalid)
+      return
+    }
+    if (endedOn && editDate >= endedOn && row.date < endedOn) {
+      setEditError(t.asset.snapshotAfterEnd)
       return
     }
     setEditError(undefined)
@@ -136,7 +142,8 @@ export function AssetSnapshotList({
                 max={today}
                 onChange={(event) => setEditDate(event.target.value)}
                 error={
-                  editError === t.asset.snapshotDateInvalid
+                  editError === t.asset.snapshotDateInvalid ||
+                  editError === t.asset.snapshotAfterEnd
                     ? editError
                     : undefined
                 }
@@ -178,9 +185,11 @@ export function AssetSnapshotList({
                   {t.asset.duplicateSnapshotHint}
                 </p>
               )}
-              {editError && editError !== t.asset.snapshotDateInvalid && (
-                <p className="text-sm text-destructive">{editError}</p>
-              )}
+              {editError &&
+                editError !== t.asset.snapshotDateInvalid &&
+                editError !== t.asset.snapshotAfterEnd && (
+                  <p className="text-sm text-destructive">{editError}</p>
+                )}
               <div className="flex gap-2">
                 <Button
                   type="button"

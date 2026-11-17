@@ -86,6 +86,58 @@ describe('JSON backup', () => {
     expect(exported.manualFxRates).toEqual([manualFxRate])
   })
 
+  it('round-trips an end date and still imports backups without one (#328)', async () => {
+    const ended = {
+      ...asset,
+      id: 'ended',
+      name: 'Closed',
+      endedOn: '2026-06-01',
+    }
+    const open = { ...asset, id: 'open', name: 'Open' }
+    await importBackupJson(
+      JSON.stringify(
+        buildBackupBundle(
+          bundle.settings,
+          [ended, open],
+          [
+            {
+              ...snapshot,
+              id: 's-ended',
+              assetId: 'ended',
+              date: '2026-05-01',
+            },
+            { ...snapshot, id: 's-open', assetId: 'open' },
+          ],
+          now,
+        ),
+      ),
+    )
+    const exported = await exportBackup()
+    expect(exported.assets.find((row) => row.id === 'ended')?.endedOn).toBe(
+      '2026-06-01',
+    )
+    expect(
+      exported.assets.find((row) => row.id === 'open')?.endedOn,
+    ).toBeUndefined()
+    expect(exported.snapshots).toHaveLength(2)
+
+    await db.assets.clear()
+    await db.snapshots.clear()
+    const legacy = {
+      version: 2 as const,
+      exportedAt: now,
+      settings: bundle.settings,
+      assets: [open],
+      snapshots: [{ ...snapshot, id: 's-open', assetId: 'open' }],
+      fxRates: [],
+      manualFxRates: [],
+    }
+    await importBackupJson(JSON.stringify(legacy))
+    const again = await exportBackup()
+    expect(again.assets).toEqual([open])
+    expect(again.assets[0]?.endedOn).toBeUndefined()
+  })
+
   it('imports a v1 JSON file with empty FX tables (#194)', async () => {
     const v1 = {
       version: 1 as const,

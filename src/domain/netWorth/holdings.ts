@@ -1,9 +1,11 @@
 import type { Asset } from '@/domain/asset'
 import {
+  activeBookDate,
   contributesToNetWorth,
   effectiveAmount,
   isLiability,
   isListedOnDashboard,
+  isRemovedOn,
   listOwnershipShare,
 } from '@/domain/asset'
 import { convertAmount, lookupRate, type RateTable } from '@/domain/fx'
@@ -15,10 +17,13 @@ import type { AllocationHolding, HoldingConversion } from './types'
 export function nativeTotalsByCurrency(
   assets: readonly Asset[],
   snapshots: readonly AssetSnapshot[],
+  asOf?: string,
 ): { currency: string; amount: number }[] {
+  const on = activeBookDate(asOf)
   const buckets = new Map<string, number>()
   for (const asset of assets) {
     if (!isListedOnDashboard(asset)) continue
+    if (isRemovedOn(asset, on)) continue
     const snapshot = latestSnapshot(snapshots, asset.id)
     if (!snapshot) continue
     const native = effectiveAmount(snapshot.amount, asset)
@@ -42,10 +47,13 @@ export function allocationSliceHoldings(
   assets: readonly Asset[],
   snapshots: readonly AssetSnapshot[],
   match: (asset: Asset, snapshot: AssetSnapshot) => boolean,
+  asOf?: string,
 ): AllocationHolding[] {
+  const on = activeBookDate(asOf)
   const rows: AllocationHolding[] = []
   for (const asset of assets) {
     if (!isListedOnDashboard(asset)) continue
+    if (isRemovedOn(asset, on)) continue
     const snapshot = latestSnapshot(snapshots, asset.id)
     if (!snapshot) continue
     if (!match(asset, snapshot)) continue
@@ -75,10 +83,13 @@ export function holdingsWithConversion(
   snapshots: readonly AssetSnapshot[],
   rates: RateTable,
   baseCurrency: string,
+  asOf?: string,
 ): HoldingConversion[] {
+  const on = activeBookDate(asOf)
   const rows: HoldingConversion[] = []
   for (const asset of assets) {
     if (!isListedOnDashboard(asset)) continue
+    if (isRemovedOn(asset, on)) continue
     const snapshot = latestSnapshot(snapshots, asset.id)
     if (!snapshot) continue
     const nativeRaw = effectiveAmount(snapshot.amount, asset)

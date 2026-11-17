@@ -28,6 +28,7 @@ export function useAssetDetailsScreen() {
   const saveAsset = useAssetStore((state) => state.saveAsset)
   const saveSnapshots = useAssetStore((state) => state.saveSnapshots)
   const setTrackingStatus = useAssetStore((state) => state.setTrackingStatus)
+  const setEndedOn = useAssetStore((state) => state.setEndedOn)
   const setBalanceHeadline = useAssetStore((state) => state.setBalanceHeadline)
   const deleteAsset = useAssetStore((state) => state.deleteAsset)
   const deleteSnapshot = useAssetStore((state) => state.deleteSnapshot)
@@ -216,6 +217,7 @@ export function useAssetDetailsScreen() {
     updateSnapshot,
     deleteSnapshot,
     setTrackingStatus,
+    setEndedOn,
     deleteAsset,
     navigate,
   }

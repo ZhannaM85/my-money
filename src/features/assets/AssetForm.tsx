@@ -141,6 +141,14 @@ export function AssetForm({
       setError(t.asset.snapshotDateInvalid)
       return
     }
+    if (
+      writingSnapshot &&
+      initial?.endedOn &&
+      snapshotDate >= initial.endedOn
+    ) {
+      setError(t.asset.snapshotAfterEnd)
+      return
+    }
     setError(undefined)
     setSaving(true)
     try {
@@ -161,6 +169,7 @@ export function AssetForm({
           ...(initial?.balanceHeadline === 'given_spent'
             ? { balanceHeadline: 'given_spent' as const }
             : {}),
+          ...(initial?.endedOn ? { endedOn: initial.endedOn } : {}),
           createdAt: initial?.createdAt ?? now,
           updatedAt: now,
         },
@@ -331,7 +340,12 @@ export function AssetForm({
         value={snapshotDate}
         max={todayIsoDate()}
         onChange={(event) => setSnapshotDate(event.target.value)}
-        error={error === t.asset.snapshotDateInvalid ? error : undefined}
+        error={
+          error === t.asset.snapshotDateInvalid ||
+          error === t.asset.snapshotAfterEnd
+            ? error
+            : undefined
+        }
       />
       <TextField
         label={t.asset.snapshotNote}
@@ -343,7 +357,8 @@ export function AssetForm({
         error !== t.asset.enterCurrentAmount &&
         error !== t.asset.amountMustBeNumber &&
         error !== t.asset.ownershipShareInvalid &&
-        error !== t.asset.snapshotDateInvalid && (
+        error !== t.asset.snapshotDateInvalid &&
+        error !== t.asset.snapshotAfterEnd && (
           <p className="text-sm text-destructive">{error}</p>
         )}
       <Button type="submit" className="w-full" disabled={saving}>

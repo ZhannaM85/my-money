@@ -1,5 +1,9 @@
 import type { Asset } from '@/domain/asset'
-import { contributesToNetWorth } from '@/domain/asset'
+import {
+  activeBookDate,
+  contributesToNetWorth,
+  isRemovedOn,
+} from '@/domain/asset'
 import type { RateTable } from '@/domain/fx'
 import { latestSnapshot, type AssetSnapshot } from '@/domain/snapshot'
 import { convertedContribution, emptyByClass } from './contribution'
@@ -10,12 +14,15 @@ export function netWorth(
   snapshots: readonly AssetSnapshot[],
   rates: RateTable,
   baseCurrency: string,
+  asOf?: string,
 ): NetWorthResult {
+  const on = activeBookDate(asOf)
   const byClass = emptyByClass()
   const missingRates: MissingRate[] = []
   let total = 0
 
   for (const asset of assets) {
+    if (isRemovedOn(asset, on)) continue
     if (!contributesToNetWorth(asset)) continue
     const snapshot = latestSnapshot(snapshots, asset.id)
     if (!snapshot) continue

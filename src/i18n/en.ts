@@ -101,6 +101,14 @@ export const en: Dictionary = {
     reorderAria: (name) => `Reorder ${name}`,
     enterReorderMode: 'Reorder',
     rowMenuAria: (name) => `Actions for ${name}`,
+    removeFromDate: 'Remove from date…',
+    removeFromDateAria: (name) => `Remove ${name} from a date`,
+    removeFromDateMessage:
+      'History before this date stays in totals, the chart, and comparisons. From this date on, the asset is left out. You can undo this later.',
+    removeFromDateLabel: 'Remove from',
+    removeFromDateConfirm: 'Remove',
+    undoRemove: 'Undo removal',
+    undoRemoveAria: (name) => `Undo removal of ${name}`,
   },
   asset: {
     renameAsset: 'Rename asset',
@@ -213,6 +221,10 @@ export const en: Dictionary = {
     includeInNetWorth: 'Include in net worth',
     notCountedInNetWorth: 'Not counted in net worth',
     hiddenFromLists: 'Hidden from lists',
+    removedFromDate: (date) => `Removed from ${date}`,
+    endsOn: (date) => `Ends ${date}`,
+    snapshotAfterEnd:
+      'This asset is removed from this date on. Choose an earlier date, or undo the removal.',
     deleteAsset: 'Delete asset',
     deleteConfirm:
       'Delete this asset and all its history from this device? This cannot be undone.',

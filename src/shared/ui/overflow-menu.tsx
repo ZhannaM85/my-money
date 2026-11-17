@@ -52,7 +52,7 @@ export function OverflowMenu({
       {open ? (
         <div
           role="menu"
-          className="absolute right-0 top-full z-30 min-w-36 rounded-lg bg-card py-1 shadow-md ring-1 ring-foreground/10"
+          className="absolute right-0 top-full z-30 min-w-36 max-w-[min(18rem,calc(100vw-2rem))] rounded-lg bg-card py-1 shadow-md ring-1 ring-foreground/10"
         >
           {items.map((item) => (
             <button
@@ -60,7 +60,7 @@ export function OverflowMenu({
               type="button"
               role="menuitem"
               className={cn(
-                'w-full px-3 py-3 text-left text-sm',
+                'w-full whitespace-nowrap px-3 py-3 text-left text-sm',
                 item.tone === 'destructive' && 'text-destructive',
               )}
               aria-label={item.ariaLabel}

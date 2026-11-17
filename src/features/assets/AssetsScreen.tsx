@@ -11,7 +11,9 @@ import {
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import {
   ASSET_CLASSES,
+  isRemovedOn,
   listOwnershipShare,
+  type Asset,
   type AssetClass,
 } from '@/domain/asset'
 import { convertAmount, lookupRate, type RateTable } from '@/domain/fx'
@@ -23,9 +25,14 @@ import {
 } from '@/domain/settings'
 import { latestSnapshot, type AssetSnapshot } from '@/domain/snapshot'
 import { useLocale, useTranslation } from '@/i18n'
-import { formatAmount } from '@/shared/lib/money'
+import {
+  formatAmount,
+  formatCalendarDate,
+  todayIsoDate,
+} from '@/shared/lib/money'
 import { Button } from '@/shared/ui/button'
 import { Chip } from '@/shared/ui/chip'
+import { useConfirm } from '@/shared/ui/confirm-dialog'
 import { EmptyState } from '@/shared/ui/empty-state'
 import { OverflowMenu } from '@/shared/ui/overflow-menu'
 import { PageHeader } from '@/shared/ui/page-header'
@@ -67,6 +74,9 @@ export function AssetsScreen() {
   const t = useTranslation()
   const locale = useLocale()
   const setTrackingStatus = useAssetStore((state) => state.setTrackingStatus)
+  const setEndedOn = useAssetStore((state) => state.setEndedOn)
+  const [confirm, confirmDialog] = useConfirm()
+  const today = todayIsoDate()
   const assets = useAssetStore((state) => state.assets)
   const snapshots = useAssetStore((state) => state.snapshots)
   const loaded = useAssetStore((state) => state.loaded)
@@ -111,8 +121,11 @@ export function AssetsScreen() {
 
   const visible = useMemo(() => {
     const filtered = assets.filter((asset) => {
-      if (filter === 'archived') return asset.trackingStatus === 'archived'
-      if (asset.trackingStatus === 'archived') return false
+      const removed = isRemovedOn(asset, today)
+      if (filter === 'archived') {
+        return asset.trackingStatus === 'archived' || removed
+      }
+      if (asset.trackingStatus === 'archived' || removed) return false
       if (filter === 'all') return true
       return asset.assetClass === filter
     })
@@ -139,7 +152,22 @@ export function AssetsScreen() {
     locale,
     quotes,
     snapshots,
+    today,
   ])
+
+  async function removeFromDate(asset: Asset) {
+    const picked = await confirm({
+      message: t.assets.removeFromDateMessage,
+      confirmLabel: t.assets.removeFromDateConfirm,
+      destructive: true,
+      date: {
+        label: t.assets.removeFromDateLabel,
+        value: asset.endedOn ?? today,
+      },
+    })
+    if (typeof picked !== 'string') return
+    await setEndedOn(asset.id, picked)
+  }
 
   function onDragEnd(event: DragEndEvent) {
     const { active, over } = event
@@ -159,9 +187,10 @@ export function AssetsScreen() {
   const total = useMemo(() => {
     if (displayMode === 'native') {
       return {
-        label: nativeTotalsByCurrency(assets, snapshots)
-          .map((row) => formatAmount(row.amount, row.currency, locale))
-          .join(' · ') || formatAmount(0, baseCurrency, locale),
+        label:
+          nativeTotalsByCurrency(assets, snapshots)
+            .map((row) => formatAmount(row.amount, row.currency, locale))
+            .join(' · ') || formatAmount(0, baseCurrency, locale),
         missingRates: [],
       }
     }
@@ -192,7 +221,9 @@ export function AssetsScreen() {
         {loaded && total.missingRates.length > 0 && (
           <p className="mt-2 text-sm text-muted-foreground">
             {t.dashboard.conversionUnavailable}:{' '}
-            {[...new Set(total.missingRates.map((rate) => rate.from))].join(', ')}
+            {[...new Set(total.missingRates.map((rate) => rate.from))].join(
+              ', ',
+            )}
           </p>
         )}
       </div>
@@ -300,12 +331,15 @@ export function AssetsScreen() {
                   ? (snapshot?.currency ?? asset.currency)
                   : t.common.native(snapshot?.currency ?? asset.currency)
                 const excluded = asset.trackingStatus === 'excluded'
+                const removed = isRemovedOn(asset, today)
                 const showRowAction =
-                  !reorder.reordering && filter !== 'archived'
+                  !reorder.reordering &&
+                  (filter !== 'archived' || Boolean(asset.endedOn))
                 const inner = (
                   <Link
                     to={`/assets/${asset.id}`}
                     data-excluded={excluded ? 'true' : 'false'}
+                    data-removed={removed ? 'true' : 'false'}
                     className={cn(
                       'flex min-w-0 items-center justify-between gap-3',
                       reorder.reordering
@@ -313,7 +347,8 @@ export function AssetsScreen() {
                         : showRowAction
                           ? 'min-w-0 flex-1 px-4 py-3'
                           : 'rounded-xl bg-card px-4 py-3 ring-1 ring-foreground/10',
-                      excluded && 'opacity-60 text-muted-foreground',
+                      (excluded || removed) &&
+                        'opacity-60 text-muted-foreground',
                     )}
                   >
                     <span className="flex min-w-0 flex-col">
@@ -332,6 +367,17 @@ export function AssetsScreen() {
                       {asset.institution?.trim() ? (
                         <span className="text-sm text-muted-foreground">
                           {asset.institution.trim()}
+                        </span>
+                      ) : null}
+                      {asset.endedOn ? (
+                        <span className="text-sm text-muted-foreground">
+                          {removed
+                            ? t.asset.removedFromDate(
+                                formatCalendarDate(asset.endedOn, locale),
+                              )
+                            : t.asset.endsOn(
+                                formatCalendarDate(asset.endedOn, locale),
+                              )}
                         </span>
                       ) : null}
                     </span>
@@ -387,19 +433,39 @@ export function AssetsScreen() {
                       className="self-stretch"
                       ariaLabel={t.assets.rowMenuAria(asset.name)}
                       items={[
+                        ...(filter === 'archived'
+                          ? []
+                          : [
+                              {
+                                label: excluded
+                                  ? t.dashboard.showOnPositions
+                                  : t.dashboard.hideFromPositions,
+                                ariaLabel: excluded
+                                  ? t.dashboard.showOnPositionsAria(asset.name)
+                                  : t.dashboard.hideFromPositionsAria(
+                                      asset.name,
+                                    ),
+                                onSelect: () =>
+                                  void setTrackingStatus(
+                                    asset.id,
+                                    excluded ? 'included' : 'excluded',
+                                  ),
+                              },
+                            ]),
                         {
-                          label: excluded
-                            ? t.dashboard.showOnPositions
-                            : t.dashboard.hideFromPositions,
-                          ariaLabel: excluded
-                            ? t.dashboard.showOnPositionsAria(asset.name)
-                            : t.dashboard.hideFromPositionsAria(asset.name),
-                          onSelect: () =>
-                            void setTrackingStatus(
-                              asset.id,
-                              excluded ? 'included' : 'excluded',
-                            ),
+                          label: t.assets.removeFromDate,
+                          ariaLabel: t.assets.removeFromDateAria(asset.name),
+                          onSelect: () => void removeFromDate(asset),
                         },
+                        ...(asset.endedOn
+                          ? [
+                              {
+                                label: t.assets.undoRemove,
+                                ariaLabel: t.assets.undoRemoveAria(asset.name),
+                                onSelect: () => void setEndedOn(asset.id, null),
+                              },
+                            ]
+                          : []),
                       ]}
                     />
                   </li>
@@ -424,6 +490,7 @@ export function AssetsScreen() {
           )
         })()
       )}
+      {confirmDialog}
     </div>
   )
 }

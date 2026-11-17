@@ -10,12 +10,27 @@ import { createPortal } from 'react-dom'
 import { useTranslation } from '@/i18n'
 import { cn } from '@/shared/lib/utils'
 import { Button } from '@/shared/ui/button'
+import { DateField } from '@/shared/ui/date-field'
+
+export type ConfirmDateField = {
+  label: string
+  value: string
+}
 
 export type ConfirmOptions = {
   message: string
   confirmLabel?: string
   cancelLabel?: string
   destructive?: boolean
+  date?: ConfirmDateField
+}
+
+type ConfirmFn = {
+  (message: string): Promise<boolean>
+  (
+    options: ConfirmOptions & { date: ConfirmDateField },
+  ): Promise<string | false>
+  (options: ConfirmOptions): Promise<boolean>
 }
 
 export function ConfirmDialog({
@@ -24,6 +39,9 @@ export function ConfirmDialog({
   confirmLabel,
   cancelLabel,
   destructive = true,
+  dateLabel,
+  dateValue,
+  onDateChange,
   onConfirm,
   onCancel,
 }: {
@@ -32,6 +50,9 @@ export function ConfirmDialog({
   confirmLabel: string
   cancelLabel: string
   destructive?: boolean
+  dateLabel?: string
+  dateValue?: string
+  onDateChange?: (value: string) => void
   onConfirm: () => void
   onCancel: () => void
 }) {
@@ -83,6 +104,15 @@ export function ConfirmDialog({
         <p id={titleId} className="text-sm text-foreground">
           {message}
         </p>
+        {dateLabel ? (
+          <div className="mt-4">
+            <DateField
+              label={dateLabel}
+              value={dateValue ?? ''}
+              onChange={(event) => onDateChange?.(event.target.value)}
+            />
+          </div>
+        ) : null}
         <div className="mt-4 flex gap-2">
           <Button
             type="button"
@@ -96,6 +126,7 @@ export function ConfirmDialog({
             type="button"
             variant={destructive ? 'destructive' : 'default'}
             className="flex-1"
+            disabled={Boolean(dateLabel) && !dateValue}
             onClick={onConfirm}
           >
             {confirmLabel}
@@ -107,33 +138,53 @@ export function ConfirmDialog({
   )
 }
 
-export function useConfirm(): [
-  (messageOrOptions: string | ConfirmOptions) => Promise<boolean>,
-  ReactNode,
-] {
+export function useConfirm(): [ConfirmFn, ReactNode] {
   const t = useTranslation()
   const [request, setRequest] = useState<ConfirmOptions | null>(null)
-  const resolveRef = useRef<((value: boolean) => void) | null>(null)
+  const [dateValue, setDateValue] = useState('')
+  const resolveRef = useRef<((value: boolean | string) => void) | null>(null)
+  const requestRef = useRef<ConfirmOptions | null>(null)
+  const dateValueRef = useRef('')
 
   const finish = useCallback((ok: boolean) => {
-    resolveRef.current?.(ok)
+    const current = requestRef.current
+    const resolve = resolveRef.current
     resolveRef.current = null
+    requestRef.current = null
     setRequest(null)
+    if (!resolve) return
+    if (!ok) {
+      resolve(false)
+      return
+    }
+    if (current?.date) {
+      resolve(dateValueRef.current || false)
+      return
+    }
+    resolve(true)
   }, [])
   const onConfirm = useCallback(() => finish(true), [finish])
   const onCancel = useCallback(() => finish(false), [finish])
+
+  const changeDate = useCallback((value: string) => {
+    dateValueRef.current = value
+    setDateValue(value)
+  }, [])
 
   const confirm = useCallback((messageOrOptions: string | ConfirmOptions) => {
     const next =
       typeof messageOrOptions === 'string'
         ? { message: messageOrOptions }
         : messageOrOptions
-    return new Promise<boolean>((resolve) => {
+    requestRef.current = next
+    dateValueRef.current = next.date?.value ?? ''
+    setDateValue(dateValueRef.current)
+    return new Promise<boolean | string>((resolve) => {
       resolveRef.current?.(false)
       resolveRef.current = resolve
       setRequest(next)
     })
-  }, [])
+  }, []) as ConfirmFn
 
   useEffect(() => {
     return () => {
@@ -149,6 +200,9 @@ export function useConfirm(): [
       confirmLabel={request?.confirmLabel ?? t.common.ok}
       cancelLabel={request?.cancelLabel ?? t.common.cancel}
       destructive={request?.destructive ?? true}
+      dateLabel={request?.date?.label}
+      dateValue={dateValue}
+      onDateChange={changeDate}
       onConfirm={onConfirm}
       onCancel={onCancel}
     />

@@ -78,6 +78,11 @@ export interface Asset {
   updateFrequency: UpdateFrequency
   /** Headline on Update / asset detail: remaining vs explicit given/received (#276, #280). */
   balanceHeadline?: BalanceHeadline
+  /**
+   * Inclusive calendar date the asset stops counting (#328).
+   * History before this date stays. Omitted while the asset is still open.
+   */
+  endedOn?: string
   createdAt: string
   updatedAt: string
 }

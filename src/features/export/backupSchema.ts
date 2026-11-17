@@ -39,6 +39,10 @@ const assetSchema = z.object({
   ownershipShareNumerator: z.number().int().positive().optional(),
   ownershipShareDenominator: z.number().int().positive().optional(),
   updateFrequency: z.enum(UPDATE_FREQUENCIES),
+  endedOn: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/)
+    .optional(),
   createdAt: z.string().min(1),
   updatedAt: z.string().min(1),
 })

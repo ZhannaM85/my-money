@@ -21,12 +21,16 @@ export function AssetDetailsAccordion({
   shareLabel,
   onSave,
   onSetTracking,
+  onRemoveFromDate,
+  onUndoRemoval,
   onDelete,
 }: {
   asset: Asset
   shareLabel: string
   onSave: (values: AssetFormValues) => Promise<void>
   onSetTracking: (status: TrackingStatus) => Promise<void>
+  onRemoveFromDate: () => void
+  onUndoRemoval: () => void
   onDelete: () => Promise<void>
 }) {
   const t = useTranslation()
@@ -56,7 +60,10 @@ export function AssetDetailsAccordion({
         <AssetDetailsTrackingActions
           name={asset.name}
           trackingStatus={asset.trackingStatus}
+          endedOn={asset.endedOn}
           onSetTracking={onSetTracking}
+          onRemoveFromDate={onRemoveFromDate}
+          onUndoRemoval={onUndoRemoval}
           onDelete={onDelete}
         />
       </div>

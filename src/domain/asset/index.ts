@@ -21,6 +21,12 @@ export {
   isListedOnDashboard,
 } from './Asset'
 export {
+  SnapshotAfterEndError,
+  activeBookDate,
+  isRemovedOn,
+  snapshotWriteBlocked,
+} from './endedOn'
+export {
   applyBalanceEntry,
   assetBalanceHeadline,
   cumulativeGivenSpent,

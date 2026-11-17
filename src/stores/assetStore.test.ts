@@ -1,5 +1,6 @@
 import 'fake-indexeddb/auto'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { SnapshotAfterEndError } from '@/domain/asset'
 import {
   db,
   IndexedDbSnapshotRepository,
@@ -290,11 +291,11 @@ describe('assetStore', () => {
     let releaseStale!: (
       rows: Awaited<ReturnType<typeof originalGetAll>>,
     ) => void
-    const staleRows = new Promise<
-      Awaited<ReturnType<typeof originalGetAll>>
-    >((resolve) => {
-      releaseStale = resolve
-    })
+    const staleRows = new Promise<Awaited<ReturnType<typeof originalGetAll>>>(
+      (resolve) => {
+        releaseStale = resolve
+      },
+    )
     const spy = vi
       .spyOn(IndexedDbSnapshotRepository.prototype, 'getAll')
       .mockImplementationOnce(async () => staleRows)
@@ -348,5 +349,76 @@ describe('assetStore', () => {
     expect(useAssetStore.getState().snapshots).toHaveLength(1)
     await useAssetStore.getState().setBalanceHeadline('a1', 'remaining')
     expect(useAssetStore.getState().assets[0]?.balanceHeadline).toBeUndefined()
+  })
+
+  it('blocks snapshots on or after the end date and restores them on undo (#328)', async () => {
+    const now = '2026-08-17T00:00:00.000Z'
+    await useAssetStore.getState().saveAsset(
+      {
+        id: 'a1',
+        name: 'Deposit',
+        assetClass: 'money',
+        type: 'deposit',
+        currency: 'EUR',
+        trackingStatus: 'included',
+        valuationMethod: 'account_balance',
+        updateFrequency: 'manual',
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        assetId: 'a1',
+        date: '2026-05-01',
+        amount: 40,
+        currency: 'EUR',
+      },
+    )
+    await useAssetStore.getState().setEndedOn('a1', '2026-06-01')
+    expect(useAssetStore.getState().assets[0]?.endedOn).toBe('2026-06-01')
+    await expect(
+      useAssetStore.getState().saveSnapshots([
+        {
+          assetId: 'a1',
+          date: '2026-06-01',
+          amount: 80,
+          currency: 'EUR',
+        },
+      ]),
+    ).rejects.toBeInstanceOf(SnapshotAfterEndError)
+    expect(useAssetStore.getState().snapshots).toHaveLength(1)
+
+    const existing = useAssetStore.getState().snapshots[0]!
+    await expect(
+      useAssetStore.getState().updateSnapshot({
+        ...existing,
+        date: '2026-06-15',
+      }),
+    ).rejects.toBeInstanceOf(SnapshotAfterEndError)
+    expect(useAssetStore.getState().snapshots[0]?.date).toBe('2026-05-01')
+
+    await useAssetStore.getState().setEndedOn('a1', null)
+    await useAssetStore.getState().saveSnapshots([
+      {
+        assetId: 'a1',
+        date: '2026-06-15',
+        amount: 80,
+        currency: 'EUR',
+      },
+    ])
+    expect(useAssetStore.getState().assets[0]?.endedOn).toBeUndefined()
+    expect(
+      useAssetStore
+        .getState()
+        .snapshots.some(
+          (row) => row.date === '2026-06-15' && row.amount === 80,
+        ),
+    ).toBe(true)
+    expect(
+      useAssetStore
+        .getState()
+        .snapshots.some(
+          (row) => row.date === '2026-05-01' && row.amount === 40,
+        ),
+    ).toBe(true)
   })
 })

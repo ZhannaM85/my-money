@@ -4,6 +4,16 @@ import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 import { useConfirm } from './confirm-dialog'
 
+function setDateField(input: HTMLElement, value: string) {
+  input.focus()
+  Object.getOwnPropertyDescriptor(
+    window.HTMLInputElement.prototype,
+    'value',
+  )?.set?.call(input, value)
+  input.dispatchEvent(new Event('input', { bubbles: true }))
+  input.dispatchEvent(new Event('change', { bubbles: true }))
+}
+
 function Harness({ message }: { message: string }) {
   const [confirm, dialog] = useConfirm()
   const [result, setResult] = useState('idle')
@@ -58,5 +68,40 @@ describe('useConfirm (#247)', () => {
     const dialog = await screen.findByRole('dialog')
     await user.click(dialog.previousElementSibling as Element)
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+  })
+
+  it('returns the chosen end date (#328)', async () => {
+    const user = userEvent.setup()
+    function DateHarness() {
+      const [confirm, dialog] = useConfirm()
+      const [result, setResult] = useState('idle')
+      return (
+        <div>
+          <button
+            type="button"
+            onClick={() => {
+              void confirm({
+                message: 'History before this date stays.',
+                confirmLabel: 'Remove',
+                date: { label: 'Remove from', value: '2026-11-17' },
+              }).then((value) => setResult(String(value)))
+            }}
+          >
+            Ask
+          </button>
+          <p>{result}</p>
+          {dialog}
+        </div>
+      )
+    }
+    render(<DateHarness />)
+    await user.click(screen.getByRole('button', { name: 'Ask' }))
+    const dialog = await screen.findByRole('dialog')
+    expect(dialog).toHaveTextContent('History before this date stays.')
+    const date = within(dialog).getByLabelText('Remove from')
+    expect(date).toHaveValue('2026-11-17')
+    setDateField(date, '2026-05-01')
+    await user.click(within(dialog).getByRole('button', { name: 'Remove' }))
+    expect(screen.getByText('2026-05-01')).toBeInTheDocument()
   })
 })

@@ -1,6 +1,7 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Check, Pencil, Trash2, X } from 'lucide-react'
+import { snapshotWriteBlocked } from '@/domain/asset'
 import { historicalNetWorth } from '@/domain/netWorth'
 import type { HoldingConversion } from '@/domain/netWorth'
 import {
@@ -145,6 +146,7 @@ function ComparisonCell({
     }
     const amount = parseAmount(trimmed)
     if (amount === undefined) return
+    if (snapshotWriteBlocked(asset, date, onDate?.date)) return
     if (onDate) {
       await updateSnapshot({ ...onDate, amount })
     } else {

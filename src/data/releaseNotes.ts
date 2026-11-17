@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 294,
+    issue: 328,
+    date: '2026-11-17T13:30:00+03:00',
+    en: 'On Assets, Remove from date… ends a holding from the day you pick. Earlier totals, the chart, and comparisons stay. From that day on it leaves the active list, Dashboard total, and Positions. Find it under Hidden and undo the removal there. New values cannot be added on or after that date.',
+    ru: 'На Активах «Удалить с даты…» заканчивает актив с выбранного дня. Итоги, график и сравнения до этой даты остаются. С этого дня он пропадает из списка, итога на Сводке и позиций. Он в «Скрытых», удаление можно отменить. Новые суммы на эту дату и позже не добавляются.',
+  },
+  {
     version: 293,
     issue: 323,
     date: '2026-11-10T11:50:38+03:00',

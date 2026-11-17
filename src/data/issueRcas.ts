@@ -11,6 +11,15 @@ export interface IssueRca {
  */
 export const issueRcas: IssueRca[] = [
   {
+    issue: 328,
+    title: {
+      en: 'Assets: remove an asset from a date (keep its history)',
+      ru: 'Активы: удалить актив с даты (история сохраняется)',
+    },
+    en: 'Hide only sets excluded, and delete wipes snapshots. endedOn is a separate inclusive end date: the asset stays in the book, leaves active lists and totals on and after that date, and shows under Hidden so the date can be cleared. New snapshots on or after the end date are blocked. Backups round-trip the field; files without it still import.',
+    ru: '«Скрыть» только ставит excluded, а удаление стирает снимки. endedOn — отдельная дата окончания, включительно: актив остаётся в книге, с этой даты пропадает из списков и итогов и виден в «Скрытых», где дату можно снять. Новые снимки на эту дату и позже блокируются. Копия сохраняет поле; файлы без него по-прежнему импортируются.',
+  },
+  {
     issue: 299,
     title: {
       en: 'Dashboard: localize “over 1W” / “over 1Y”',

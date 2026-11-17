@@ -1,5 +1,11 @@
 import { create } from 'zustand'
-import type { Asset, BalanceHeadline, TrackingStatus } from '@/domain/asset'
+import {
+  SnapshotAfterEndError,
+  snapshotWriteBlocked,
+  type Asset,
+  type BalanceHeadline,
+  type TrackingStatus,
+} from '@/domain/asset'
 import type { AssetSnapshot } from '@/domain/snapshot'
 import {
   IndexedDbAssetRepository,
@@ -28,6 +34,8 @@ interface AssetStoreState {
     id: string,
     trackingStatus: TrackingStatus,
   ) => Promise<void>
+  /** `null` clears the end date and restores the asset (#328). */
+  setEndedOn: (id: string, endedOn: string | null) => Promise<void>
   setBalanceHeadline: (
     id: string,
     balanceHeadline: BalanceHeadline,
@@ -57,6 +65,9 @@ export const useAssetStore = create<AssetStoreState>((set, get) => ({
     set({ assets, snapshots, loaded: true })
   },
   saveAsset: async (asset, snapshot) => {
+    if (snapshot && snapshotWriteBlocked(asset, snapshot.date)) {
+      throw new SnapshotAfterEndError(asset.endedOn ?? snapshot.date)
+    }
     await assetRepository.upsert(asset)
     if (snapshot) {
       await snapshotRepository.append({
@@ -80,6 +91,19 @@ export const useAssetStore = create<AssetStoreState>((set, get) => ({
       trackingStatus,
       updatedAt: new Date().toISOString(),
     })
+    await get().load()
+  },
+  setEndedOn: async (id, endedOn) => {
+    const existing = get().assets.find((asset) => asset.id === id)
+    if (!existing) return
+    if (endedOn !== null && !/^\d{4}-\d{2}-\d{2}$/.test(endedOn)) return
+    const next: Asset = {
+      ...existing,
+      updatedAt: new Date().toISOString(),
+    }
+    if (endedOn) next.endedOn = endedOn
+    else delete next.endedOn
+    await assetRepository.upsert(next)
     await get().load()
   },
   setBalanceHeadline: async (id, balanceHeadline) => {
@@ -107,10 +131,21 @@ export const useAssetStore = create<AssetStoreState>((set, get) => ({
     await get().load()
   },
   updateSnapshot: async (snapshot) => {
+    const asset = get().assets.find((row) => row.id === snapshot.assetId)
+    const previous = get().snapshots.find((row) => row.id === snapshot.id)
+    if (snapshotWriteBlocked(asset, snapshot.date, previous?.date)) {
+      throw new SnapshotAfterEndError(asset?.endedOn ?? snapshot.date)
+    }
     await snapshotRepository.upsert(snapshot)
     await get().load()
   },
   saveSnapshots: async (snapshots) => {
+    for (const snapshot of snapshots) {
+      const asset = get().assets.find((row) => row.id === snapshot.assetId)
+      if (snapshotWriteBlocked(asset, snapshot.date)) {
+        throw new SnapshotAfterEndError(asset?.endedOn ?? snapshot.date)
+      }
+    }
     for (const snapshot of snapshots) {
       await snapshotRepository.append({
         id: snapshot.id ?? crypto.randomUUID(),

@@ -2,11 +2,15 @@ import { App } from '@capacitor/app'
 import { Capacitor } from '@capacitor/core'
 import { Preferences } from '@capacitor/preferences'
 import { router } from '@/app/router'
-import { contributesToNetWorth } from '@/domain/asset'
+import { contributesToNetWorth, isRemovedOn } from '@/domain/asset'
 import { netWorth } from '@/domain/netWorth'
 import { latestSnapshot } from '@/domain/snapshot'
 import { getDictionary, type Locale } from '@/i18n'
-import { formatAmount, formatCalendarDate } from '@/shared/lib/money'
+import {
+  formatAmount,
+  formatCalendarDate,
+  todayIsoDate,
+} from '@/shared/lib/money'
 import { setHomeScreenWidgetProviderEnabled } from '@/shared/native/homeScreenWidget'
 import { useAssetStore } from '@/stores/assetStore'
 import { useFxStore } from '@/stores/fxStore'
@@ -46,9 +50,10 @@ export function latestContributingAsOf(
   assets: Parameters<typeof netWorth>[0],
   snapshots: Parameters<typeof netWorth>[1],
 ): string | undefined {
+  const today = todayIsoDate()
   let max: string | undefined
   for (const asset of assets) {
-    if (!contributesToNetWorth(asset)) continue
+    if (!contributesToNetWorth(asset) || isRemovedOn(asset, today)) continue
     const snapshot = latestSnapshot(snapshots, asset.id)
     if (!snapshot) continue
     if (!max || snapshot.date > max) max = snapshot.date

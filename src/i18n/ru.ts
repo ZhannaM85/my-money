@@ -104,6 +104,14 @@ export const ru: Dictionary = {
     reorderAria: (name) => `Изменить порядок: ${name}`,
     enterReorderMode: 'Порядок',
     rowMenuAria: (name) => `Действия: ${name}`,
+    removeFromDate: 'Удалить с даты…',
+    removeFromDateAria: (name) => `Удалить ${name} с даты`,
+    removeFromDateMessage:
+      'История до этой даты остаётся в итогах, на графике и в сравнениях. С этой даты актив не учитывается. Это можно отменить.',
+    removeFromDateLabel: 'Удалить с',
+    removeFromDateConfirm: 'Удалить',
+    undoRemove: 'Отменить удаление',
+    undoRemoveAria: (name) => `Отменить удаление: ${name}`,
   },
   asset: {
     renameAsset: 'Переименовать актив',
@@ -217,6 +225,10 @@ export const ru: Dictionary = {
     includeInNetWorth: 'Учитывать в капитале',
     notCountedInNetWorth: 'Не учитывается в капитале',
     hiddenFromLists: 'Скрыт из списков',
+    removedFromDate: (date) => `Удалён с ${date}`,
+    endsOn: (date) => `Заканчивается ${date}`,
+    snapshotAfterEnd:
+      'С этой даты актив удалён. Выберите более раннюю дату или отмените удаление.',
     deleteAsset: 'Удалить актив',
     deleteConfirm:
       'Удалить этот актив и всю его историю с этого устройства? Это нельзя отменить.',
@@ -338,8 +350,7 @@ export const ru: Dictionary = {
     aboutDescription:
       'Конфиденциальность и что изменилось в последних версиях.',
     groupDeveloper: 'Разработчику',
-    developerDescription:
-      'Диагностика FX и журнал причин выпущенных задач.',
+    developerDescription: 'Диагностика FX и журнал причин выпущенных задач.',
     baseCurrency: 'Базовая валюта',
     showAllCurrencies: 'Показать все валюты',
     currencyDisplay: 'Показ активов',

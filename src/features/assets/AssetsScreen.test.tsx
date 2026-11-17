@@ -5,7 +5,11 @@ import { MemoryRouter } from 'react-router-dom'
 import { beforeEach, describe, expect, it } from 'vitest'
 import { DEFAULT_SETTINGS } from '@/domain/settings'
 import { db } from '@/infrastructure/persistence/indexeddb'
-import { formatAmount } from '@/shared/lib/money'
+import {
+  formatAmount,
+  formatCalendarDate,
+  todayIsoDate,
+} from '@/shared/lib/money'
 import { useAssetStore } from '@/stores/assetStore'
 import { useFxStore } from '@/stores/fxStore'
 import { useSettingsStore } from '@/stores/settingsStore'
@@ -53,7 +57,11 @@ describe('AssetsScreen', () => {
     await addNamedAsset('cash', 'Cash', 50, 'EUR')
     await addNamedAsset('excluded', 'Excluded', 1000, 'EUR', 'excluded')
     await addNamedAsset('archived', 'Archived', 2000, 'EUR', 'archived')
-    render(<MemoryRouter><AssetsScreen /></MemoryRouter>)
+    render(
+      <MemoryRouter>
+        <AssetsScreen />
+      </MemoryRouter>,
+    )
     await screen.findByText('Broker')
     const header = screen.getByTestId('assets-sticky-header')
     expect(header).toHaveTextContent(`Total: ${formatAmount(150, 'EUR')}`)
@@ -67,7 +75,11 @@ describe('AssetsScreen', () => {
   it('reports a missing conversion without adding native amounts into the base total (#308)', async () => {
     useFxStore.setState({ quotes: [] })
     await addNamedAsset('cash', 'Cash', 50, 'EUR')
-    render(<MemoryRouter><AssetsScreen /></MemoryRouter>)
+    render(
+      <MemoryRouter>
+        <AssetsScreen />
+      </MemoryRouter>,
+    )
     await screen.findByText('Broker')
     const header = screen.getByTestId('assets-sticky-header')
     expect(header).toHaveTextContent(`Total: ${formatAmount(50, 'EUR')}`)
@@ -93,7 +105,9 @@ describe('AssetsScreen', () => {
         <AssetsScreen />
       </MemoryRouter>,
     )
-    expect(await screen.findByText(formatAmount(100, 'EUR'))).toBeInTheDocument()
+    expect(
+      await screen.findByText(formatAmount(100, 'EUR')),
+    ).toBeInTheDocument()
     const native = screen.getByText(
       (_, node) =>
         node?.children.length === 0 &&
@@ -138,10 +152,7 @@ describe('AssetsScreen', () => {
       </MemoryRouter>,
     )
     await screen.findByText('Broker')
-    expect(listedAssetHrefs()).toEqual([
-      '/assets/a1',
-      '/assets/alpha',
-    ])
+    expect(listedAssetHrefs()).toEqual(['/assets/a1', '/assets/alpha'])
     await user.click(screen.getByRole('button', { name: 'Hidden' }))
     expect(listedAssetHrefs()).toEqual(['/assets/old'])
     expect(
@@ -170,8 +181,10 @@ describe('AssetsScreen', () => {
     await user.click(screen.getByRole('button', { name: 'Actions for Broker' }))
     await user.click(screen.getByRole('menuitem', { name: 'Hide Broker' }))
     await waitFor(() => {
-      expect(useAssetStore.getState().assets.find((a) => a.id === 'a1')
-        ?.trackingStatus).toBe('excluded')
+      expect(
+        useAssetStore.getState().assets.find((a) => a.id === 'a1')
+          ?.trackingStatus,
+      ).toBe('excluded')
     })
     expect(screen.getByRole('heading', { name: 'Assets' })).toBeInTheDocument()
     const hidden = screen.getByText('Broker').closest('[data-excluded]')
@@ -183,8 +196,10 @@ describe('AssetsScreen', () => {
     await user.click(screen.getByRole('button', { name: 'Actions for Broker' }))
     await user.click(screen.getByRole('menuitem', { name: 'Show Broker' }))
     await waitFor(() => {
-      expect(useAssetStore.getState().assets.find((a) => a.id === 'a1')
-        ?.trackingStatus).toBe('included')
+      expect(
+        useAssetStore.getState().assets.find((a) => a.id === 'a1')
+          ?.trackingStatus,
+      ).toBe('included')
     })
     expect(
       screen.getByText('Broker').closest('[data-excluded]'),
@@ -303,6 +318,61 @@ describe('AssetsScreen', () => {
     expect(screen.getAllByText(/Your share: 1\/1/)).toHaveLength(1)
   })
 
+  it('removes an asset from a date, lists it under Hidden, and undoes that (#328)', async () => {
+    const user = userEvent.setup()
+    await addNamedAsset('cash', 'Cash', 50, 'EUR')
+    render(
+      <MemoryRouter>
+        <AssetsScreen />
+      </MemoryRouter>,
+    )
+    const header = screen.getByTestId('assets-sticky-header')
+    await screen.findByRole('link', { name: /Cash/ })
+    expect(header).toHaveTextContent(`Total: ${formatAmount(150, 'EUR')}`)
+
+    await user.click(screen.getByRole('button', { name: 'Actions for Cash' }))
+    await user.click(
+      screen.getByRole('menuitem', { name: 'Remove Cash from a date' }),
+    )
+    const dialog = await screen.findByRole('dialog')
+    expect(dialog).toHaveTextContent(/History before this date stays/)
+    expect(dialog).toHaveTextContent('Remove from')
+    await user.click(screen.getByRole('button', { name: 'Remove' }))
+
+    await waitFor(() => {
+      expect(
+        useAssetStore.getState().assets.find((row) => row.id === 'cash')
+          ?.endedOn,
+      ).toBe(todayIsoDate())
+    })
+    expect(screen.queryByRole('link', { name: /Cash/ })).not.toBeInTheDocument()
+    expect(header).toHaveTextContent(`Total: ${formatAmount(100, 'EUR')}`)
+
+    await user.click(screen.getByRole('button', { name: 'Hidden' }))
+    const removed = await screen.findByRole('link', { name: /Cash/ })
+    expect(removed).toHaveAttribute('data-removed', 'true')
+    expect(
+      screen.getByText(`Removed from ${formatCalendarDate(todayIsoDate())}`),
+    ).toBeInTheDocument()
+
+    await user.click(screen.getByRole('button', { name: 'Actions for Cash' }))
+    await user.click(
+      screen.getByRole('menuitem', { name: 'Undo removal of Cash' }),
+    )
+    await waitFor(() => {
+      expect(
+        useAssetStore.getState().assets.find((row) => row.id === 'cash')
+          ?.endedOn,
+      ).toBeUndefined()
+    })
+    expect(screen.queryByRole('link', { name: /Cash/ })).not.toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'All' }))
+    expect(
+      await screen.findByRole('link', { name: /Cash/ }),
+    ).toBeInTheDocument()
+    expect(header).toHaveTextContent(`Total: ${formatAmount(150, 'EUR')}`)
+  })
+
   it('wraps filter chips instead of a horizontal scroller (#153)', async () => {
     render(
       <MemoryRouter>
@@ -310,7 +380,9 @@ describe('AssetsScreen', () => {
       </MemoryRouter>,
     )
     expect(await screen.findByTestId('asset-filters')).toHaveClass('flex-wrap')
-    expect(screen.getByTestId('asset-filters')).not.toHaveClass('overflow-x-auto')
+    expect(screen.getByTestId('asset-filters')).not.toHaveClass(
+      'overflow-x-auto',
+    )
     expect(screen.getByRole('button', { name: 'All' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Hidden' })).toBeInTheDocument()
   })
@@ -349,9 +421,8 @@ function listedAssetHrefs() {
   return screen
     .getAllByRole('link')
     .map((el) => el.getAttribute('href'))
-    .filter(
-      (href): href is string =>
-        Boolean(href?.startsWith('/assets/') && href !== '/assets/new'),
+    .filter((href): href is string =>
+      Boolean(href?.startsWith('/assets/') && href !== '/assets/new'),
     )
 }
 
@@ -372,10 +443,7 @@ describe('AssetsScreen sort (#100)', () => {
       '/assets/a1',
       '/assets/cash',
     ])
-    await user.selectOptions(
-      screen.getByLabelText('Sort assets'),
-      'amount_asc',
-    )
+    await user.selectOptions(screen.getByLabelText('Sort assets'), 'amount_asc')
     expect(listedAssetHrefs()).toEqual([
       '/assets/cash',
       '/assets/a1',
@@ -413,11 +481,9 @@ describe('AssetsScreen sort (#100)', () => {
   it('restores a persisted custom order', async () => {
     await addNamedAsset('cash', 'Cash', 50, 'EUR')
     await addNamedAsset('alpha', 'Alpha', 300, 'EUR')
-    await useSettingsStore.getState().persistCustomAssetOrder([
-      'cash',
-      'a1',
-      'alpha',
-    ])
+    await useSettingsStore
+      .getState()
+      .persistCustomAssetOrder(['cash', 'a1', 'alpha'])
     useSettingsStore.setState({
       settings: DEFAULT_SETTINGS,
       loaded: false,
@@ -449,7 +515,9 @@ describe('AssetsScreen sort (#100)', () => {
     const save = await screen.findByRole('button', { name: 'Save order' })
     expect(save).toHaveClass('size-control')
     expect(save).not.toHaveTextContent('Save')
-    expect(screen.queryByRole('button', { name: 'Cancel' })).not.toBeInTheDocument()
+    expect(
+      screen.queryByRole('button', { name: 'Cancel' }),
+    ).not.toBeInTheDocument()
   })
 
   it('uses the same icon-only Order control as Update (#267)', async () => {
@@ -511,11 +579,9 @@ describe('AssetsScreen sort (#100)', () => {
     const user = userEvent.setup()
     await addNamedAsset('cash', 'Cash', 50, 'EUR')
     await addNamedAsset('alpha', 'Alpha', 300, 'EUR')
-    await useSettingsStore.getState().persistCustomAssetOrder([
-      'cash',
-      'a1',
-      'alpha',
-    ])
+    await useSettingsStore
+      .getState()
+      .persistCustomAssetOrder(['cash', 'a1', 'alpha'])
     render(
       <MemoryRouter>
         <AssetsScreen />
@@ -524,7 +590,9 @@ describe('AssetsScreen sort (#100)', () => {
     await user.click(await screen.findByRole('button', { name: 'Reorder' }))
     const save = await screen.findByRole('button', { name: 'Save order' })
     expect(save).toHaveClass('size-control')
-    expect(screen.queryByRole('button', { name: 'Cancel' })).not.toBeInTheDocument()
+    expect(
+      screen.queryByRole('button', { name: 'Cancel' }),
+    ).not.toBeInTheDocument()
     expect(
       screen.queryByRole('button', { name: /^Save$/ }),
     ).not.toBeInTheDocument()

@@ -1,9 +1,11 @@
 import type { Asset } from '@/domain/asset'
 import {
+  activeBookDate,
   contributesToNetWorth,
   effectiveAmount,
   isLiability,
   isListedOnDashboard,
+  isRemovedOn,
 } from '@/domain/asset'
 import {
   convertAmount,
@@ -33,10 +35,13 @@ export function breakdownBy(
   rates: RateTable,
   baseCurrency: string,
   keyOf: (asset: Asset) => string,
+  asOf?: string,
 ): { id: string; amount: number; percent: number }[] {
+  const on = activeBookDate(asOf)
   const buckets = new Map<string, number>()
   for (const asset of assets) {
     if (!isListedOnDashboard(asset)) continue
+    if (isRemovedOn(asset, on)) continue
     const snapshot = latestSnapshot(snapshots, asset.id)
     if (!snapshot) continue
     const key = keyOf(asset)
@@ -128,7 +133,9 @@ export function nativeBreakdownBy(
   keyOf: (asset: Asset) => string,
   rates?: RateTable,
   shareBase?: string,
+  asOf?: string,
 ): NativeAllocationRow[] {
+  const on = activeBookDate(asOf)
   const buckets = new Map<
     string,
     {
@@ -140,6 +147,7 @@ export function nativeBreakdownBy(
   >()
   for (const asset of assets) {
     if (!isListedOnDashboard(asset)) continue
+    if (isRemovedOn(asset, on)) continue
     const snapshot = latestSnapshot(snapshots, asset.id)
     if (!snapshot) continue
     const native = effectiveAmount(snapshot.amount, asset)

@@ -9,7 +9,7 @@ import {
   useSensors,
 } from '@dnd-kit/core'
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
-import { isSuggestedUpdate } from '@/domain/asset'
+import { isRemovedOn, isSuggestedUpdate } from '@/domain/asset'
 import {
   latestSnapshot,
   sameDaySpendEntries,
@@ -90,7 +90,10 @@ export function UpdateFinancesScreen() {
 
   const rows = useMemo(() => {
     const tracked = assets
-      .filter((asset) => asset.trackingStatus !== 'archived')
+      .filter(
+        (asset) =>
+          asset.trackingStatus !== 'archived' && !isRemovedOn(asset, asOf),
+      )
       .map((asset) => {
         const latest = latestSnapshot(snapshots, asset.id)
         const onDate = snapshotOnDate(snapshots, asset.id, asOf)

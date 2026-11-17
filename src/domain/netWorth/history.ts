@@ -4,6 +4,7 @@ import {
   effectiveAmount,
   isLiability,
   isListedOnDashboard,
+  isRemovedOn,
 } from '@/domain/asset'
 import { lookupRateOnOrBefore, type RateTable } from '@/domain/fx'
 import {
@@ -31,6 +32,7 @@ function historicalPointFromAssets(
   let total = 0
   for (const asset of assets) {
     if (!isListedOnDashboard(asset)) continue
+    if (isRemovedOn(asset, date)) continue
     const snapshot = latestIndexedSnapshotOnOrBefore(
       byAsset.get(asset.id),
       date,

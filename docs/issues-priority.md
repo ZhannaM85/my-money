@@ -158,6 +158,7 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
+| [#328](https://github.com/ZhannaM85/my-money/issues/328) | 🔍 Pending validation | Assets: remove an asset from a date (keep its history) | Inclusive `endedOn`. Hidden chip lists removed assets; undo clears the date. Snapshots on or after the end date stay stored, and new ones are blocked. |
 
 ---
 
