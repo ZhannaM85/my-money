@@ -333,7 +333,7 @@ describe('AssetsScreen', () => {
 
     await user.click(screen.getByRole('button', { name: 'Actions for Cash' }))
     await user.click(
-      screen.getByRole('menuitem', { name: 'Remove Cash from a date' }),
+      screen.getByRole('menuitem', { name: 'Delete Cash' }),
     )
     const dialog = await screen.findByRole('dialog')
     expect(dialog).toHaveTextContent(/History before this date stays/)

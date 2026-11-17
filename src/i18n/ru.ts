@@ -104,8 +104,8 @@ export const ru: Dictionary = {
     reorderAria: (name) => `Изменить порядок: ${name}`,
     enterReorderMode: 'Порядок',
     rowMenuAria: (name) => `Действия: ${name}`,
-    removeFromDate: 'Удалить с даты…',
-    removeFromDateAria: (name) => `Удалить ${name} с даты`,
+    removeFromDate: 'Удалить',
+    removeFromDateAria: (name) => `Удалить ${name}`,
     removeFromDateMessage:
       'История до этой даты остаётся в итогах, на графике и в сравнениях. С этой даты актив не учитывается. Это можно отменить.',
     removeFromDateLabel: 'Удалить с',

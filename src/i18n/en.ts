@@ -101,8 +101,8 @@ export const en: Dictionary = {
     reorderAria: (name) => `Reorder ${name}`,
     enterReorderMode: 'Reorder',
     rowMenuAria: (name) => `Actions for ${name}`,
-    removeFromDate: 'Remove from date…',
-    removeFromDateAria: (name) => `Remove ${name} from a date`,
+    removeFromDate: 'Delete',
+    removeFromDateAria: (name) => `Delete ${name}`,
     removeFromDateMessage:
       'History before this date stays in totals, the chart, and comparisons. From this date on, the asset is left out. You can undo this later.',
     removeFromDateLabel: 'Remove from',
