@@ -158,7 +158,6 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
-| [#328](https://github.com/ZhannaM85/my-money/issues/328) | 🔍 Pending validation | Assets: remove an asset from a date (keep its history) | Inclusive `endedOn`. Hidden chip lists removed assets; undo clears the date. Snapshots on or after the end date stay stored, and new ones are blocked. |
 | [#329](https://github.com/ZhannaM85/my-money/issues/329) | 🔍 Pending validation | Assets: «На дату» picker so removed assets can be restored from history | As-of date in the Assets header reuses the Dashboard date control. A past day shows balances then; a later `endedOn` stays listed, marked removed from that date, with undo. |
 
 ---
