@@ -339,6 +339,18 @@ export interface Dictionary {
     /** #331 — link to public `/support` (App Store Support URL). */
     readSupportLabel: string
   }
+  /** #332 — public Marketing / Developer Website page. */
+  welcome: {
+    title: string
+    tagline: string
+    body: string
+    privacyLinkLabel: string
+    supportLinkLabel: string
+    openAppLabel: string
+    authorHeading: string
+    authorBody: string
+    githubLabel: string
+  }
   /** #331 — public App Store Support URL page. */
   support: {
     title: string

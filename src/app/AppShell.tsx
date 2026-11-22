@@ -83,7 +83,9 @@ export function AppShell() {
     if (
       pathname === '/onboarding' ||
       pathname === '/settings' ||
-      pathname === '/privacy'
+      pathname === '/privacy' ||
+      pathname === '/support' ||
+      pathname === '/welcome'
     )
       return
     navigate('/onboarding', { replace: true })

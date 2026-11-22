@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 297,
+    issue: 332,
+    date: '2026-11-22T14:00:00+03:00',
+    en: 'Public /welcome is the App Store Developer Website page: what My Money is, links to privacy and support, and an author line.',
+    ru: 'Публичная /welcome — страница Developer Website для App Store: что такое «Мои деньги», ссылки на политику и поддержку, строка об авторе.',
+  },
+  {
     version: 296,
     issue: 331,
     date: '2026-11-22T13:50:00+03:00',

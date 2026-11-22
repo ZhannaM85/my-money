@@ -424,6 +424,17 @@ export const en: Dictionary = {
     readPrivacyPolicyLabel: 'Privacy policy',
     readSupportLabel: 'App support',
   },
+  welcome: {
+    title: 'My Money',
+    tagline: 'A private, local-first personal net-worth tracker.',
+    body: 'My Money keeps your assets and balances on your device — no account, no analytics, no developer cloud copy. Track what you own and owe, update values over time, and export a backup whenever you need one. Available as a web app here, and on the App Store for iPhone when listed.',
+    privacyLinkLabel: 'Privacy policy',
+    supportLinkLabel: 'App support',
+    openAppLabel: 'Open the app',
+    authorHeading: 'About the author',
+    authorBody: 'Made by Zhanna M.',
+    githubLabel: 'GitHub profile',
+  },
   support: {
     title: 'Support',
     description: 'Help and contact for My Money',

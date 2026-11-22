@@ -14,6 +14,7 @@ import {
   PrivacyScreen,
   SettingsScreen,
   SupportScreen,
+  WelcomeScreen,
 } from '@/features/settings'
 import { OnboardingScreen } from '@/features/onboarding'
 
@@ -32,6 +33,7 @@ export const routes: RouteObject[] = [
       { path: '/settings', element: <SettingsScreen /> },
       { path: '/privacy', element: <PrivacyScreen /> },
       { path: '/support', element: <SupportScreen /> },
+      { path: '/welcome', element: <WelcomeScreen /> },
       { path: '/onboarding', element: <OnboardingScreen /> },
     ],
   },

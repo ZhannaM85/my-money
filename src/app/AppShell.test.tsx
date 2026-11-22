@@ -245,6 +245,54 @@ describe('AppShell', () => {
     expect(screen.queryByText('Onboarding welcome')).not.toBeInTheDocument()
   })
 
+  it('does not redirect /support or /welcome to onboarding (#331 #332)', async () => {
+    await db.settings.put({
+      ...DEFAULT_SETTINGS,
+      onboardingCompleted: false,
+      updatedAt: '2026-08-17T00:00:00.000Z',
+    })
+    useSettingsStore.setState({
+      settings: { ...DEFAULT_SETTINGS, onboardingCompleted: false },
+      loaded: false,
+    })
+    const supportRouter = createMemoryRouter(
+      [
+        {
+          element: <AppShell />,
+          children: [
+            { path: '/support', element: <div>Support page</div> },
+            { path: '/onboarding', element: <div>Onboarding welcome</div> },
+          ],
+        },
+      ],
+      { initialEntries: ['/support'] },
+    )
+    const { unmount } = render(<RouterProvider router={supportRouter} />)
+    expect(await screen.findByText('Support page')).toBeInTheDocument()
+    expect(screen.queryByText('Onboarding welcome')).not.toBeInTheDocument()
+    unmount()
+
+    useSettingsStore.setState({
+      settings: { ...DEFAULT_SETTINGS, onboardingCompleted: false },
+      loaded: false,
+    })
+    const welcomeRouter = createMemoryRouter(
+      [
+        {
+          element: <AppShell />,
+          children: [
+            { path: '/welcome', element: <div>Welcome page</div> },
+            { path: '/onboarding', element: <div>Onboarding welcome</div> },
+          ],
+        },
+      ],
+      { initialEntries: ['/welcome'] },
+    )
+    render(<RouterProvider router={welcomeRouter} />)
+    expect(await screen.findByText('Welcome page')).toBeInTheDocument()
+    expect(screen.queryByText('Onboarding welcome')).not.toBeInTheDocument()
+  })
+
   it('hydrates the book once and reloads only when the app is visible (#237)', async () => {
     const load = vi.fn(async () => {})
     useAssetStore.setState({ load, loaded: true })
