@@ -1,6 +1,11 @@
 import { Link } from 'react-router-dom'
 import { useTranslation } from '@/i18n'
+import {
+  AUTHOR_CREDIT,
+  AUTHOR_CREDIT_RU,
+} from '@/shared/branding/authorCredit'
 import { PageHeader } from '@/shared/ui/page-header'
+import { useSettingsStore } from '@/stores/settingsStore'
 
 // #332 — public Marketing / Developer Website page. LinkedIn omitted until a
 // stable public profile URL is chosen; GitHub author link matches Support.
@@ -8,6 +13,8 @@ const AUTHOR_GITHUB_URL = 'https://github.com/ZhannaM85'
 
 export function WelcomeScreen() {
   const t = useTranslation()
+  const locale = useSettingsStore((state) => state.settings.locale)
+  const authorName = locale === 'ru' ? AUTHOR_CREDIT_RU : AUTHOR_CREDIT
 
   return (
     <div className="flex flex-col gap-6">
@@ -38,7 +45,7 @@ export function WelcomeScreen() {
 
       <div className="flex flex-col gap-1 text-sm text-muted-foreground">
         <p className="font-medium text-foreground">{t.welcome.authorHeading}</p>
-        <p>{t.welcome.authorBody}</p>
+        <p>{t.welcome.authorBody(authorName)}</p>
         <a
           href={AUTHOR_GITHUB_URL}
           target="_blank"

@@ -348,7 +348,8 @@ export interface Dictionary {
     supportLinkLabel: string
     openAppLabel: string
     authorHeading: string
-    authorBody: string
+    /** #334 — `name` is AUTHOR_CREDIT / AUTHOR_CREDIT_RU (Zhanna M. only). */
+    authorBody: (name: string) => string
     githubLabel: string
   }
   /** #331 — public App Store Support URL page. */

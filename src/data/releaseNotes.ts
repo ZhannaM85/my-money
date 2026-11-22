@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 298,
+    issue: 334,
+    date: '2026-11-22T14:10:00+03:00',
+    en: 'Public author credit is Zhanna M. only — the full surname stays out of product and Pages surfaces.',
+    ru: 'Публичная подпись автора — только «Жанна М.»; полная фамилия не показывается в приложении и на Pages.',
+  },
+  {
     version: 297,
     issue: 332,
     date: '2026-11-22T14:00:00+03:00',

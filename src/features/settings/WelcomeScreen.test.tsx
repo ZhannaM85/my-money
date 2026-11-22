@@ -56,6 +56,6 @@ describe('WelcomeScreen (#332)', () => {
     expect(
       screen.getByRole('heading', { name: 'Мои деньги' }),
     ).toBeInTheDocument()
-    expect(screen.getByText(/Автор: Жанна М\./)).toBeInTheDocument()
+    expect(screen.getByText('Автор: Жанна М.')).toBeInTheDocument()
   })
 })

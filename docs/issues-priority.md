@@ -171,7 +171,7 @@ _App Store prep from Windows before Mac signing/TestFlight. Privacy URL already 
 | [#331](https://github.com/ZhannaM85/my-money/issues/331) | 🔍 Pending validation | App Store: public `/support` page with contact email | = turtle #1120. `/support` + About link; inbox `mymoney.zhannam85@gmail.com` (confirm/create). |
 | [#332](https://github.com/ZhannaM85/my-money/issues/332) | 🔍 Pending validation | App Store: public marketing page for Developer Website | = turtle #1119. `/welcome` live for Marketing URL. Author credit locked in #334. |
 | [#333](https://github.com/ZhannaM85/my-money/issues/333) | 🔲 Open | App Store Connect: paste Support and Marketing URLs after public pages ship | = turtle #1121. Owner step in Connect after #331/#332 are live. |
-| [#334](https://github.com/ZhannaM85/my-money/issues/334) | 🔲 Open | Author credit: use Zhanna M. — no full surname on public pages | = turtle #1122. Preventive for #332; no full surname in product today. |
+| [#334](https://github.com/ZhannaM85/my-money/issues/334) | 🔍 Pending validation | Author credit: use Zhanna M. — no full surname on public pages | = turtle #1122. `/welcome` uses AUTHOR_CREDIT; source guard test. |
 
 ---
 

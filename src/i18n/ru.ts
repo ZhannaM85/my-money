@@ -437,7 +437,7 @@ export const ru: Dictionary = {
     supportLinkLabel: 'Поддержка',
     openAppLabel: 'Открыть приложение',
     authorHeading: 'Об авторе',
-    authorBody: 'Автор: Жанна М.',
+    authorBody: (name) => `Автор: ${name}`,
     githubLabel: 'Профиль на GitHub',
   },
   support: {

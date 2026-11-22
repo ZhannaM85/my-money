@@ -432,7 +432,7 @@ export const en: Dictionary = {
     supportLinkLabel: 'App support',
     openAppLabel: 'Open the app',
     authorHeading: 'About the author',
-    authorBody: 'Made by Zhanna M.',
+    authorBody: (name) => `Made by ${name}`,
     githubLabel: 'GitHub profile',
   },
   support: {
