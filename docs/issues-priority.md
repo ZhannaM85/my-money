@@ -161,6 +161,18 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 
 ---
 
+## Tier 38 — Live feedback (2026-11-22)
+
+_App Store prep from Windows before Mac signing/TestFlight. Privacy URL already live (#164). Support + marketing pages and Developer hide should land before #170 submit._
+
+| # | Status | Issue | Notes |
+|---|--------|-------|-------|
+| [#330](https://github.com/ZhannaM85/my-money/issues/330) | 🔲 Open | Hide Developer section in App Store builds; unlock for TestFlight diagnostics | Native release: hide by default. Unlock via gesture / deep link — TestFlight and App Store often share one Archive. |
+| [#331](https://github.com/ZhannaM85/my-money/issues/331) | 🔲 Open | App Store: public `/support` page with contact email | Required Support URL. Same shape as turtle #1120. Pick a dedicated inbox before merge. |
+| [#332](https://github.com/ZhannaM85/my-money/issues/332) | 🔲 Open | App Store: public marketing page for Developer Website | Optional Marketing URL (shows as Developer Website). Same shape as turtle #1119; do before submit this time. |
+
+---
+
 ## Explicitly not filed
 
 Out of scope for the MVP (`PROJECT_BRIEF.md` §20) — do not implement from chat:
