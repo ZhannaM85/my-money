@@ -163,13 +163,15 @@ _After the four web flows feel good. Android and iOS both wrap this app. One tra
 
 ## Tier 38 — Live feedback (2026-11-22)
 
-_App Store prep from Windows before Mac signing/TestFlight. Privacy URL already live (#164). Support + marketing pages and Developer hide should land before #170 submit._
+_App Store prep from Windows before Mac signing/TestFlight. Privacy URL already live (#164). Turtle store-URL quartet mirrored: #1119→#332, #1120→#331, #1121→#333, #1122→#334. #330 (Developer hide) is separate polish._
 
 | # | Status | Issue | Notes |
 |---|--------|-------|-------|
-| [#330](https://github.com/ZhannaM85/my-money/issues/330) | 🔲 Open | Hide Developer section in App Store builds; unlock for TestFlight diagnostics | Native release: hide by default. Unlock via gesture / deep link — TestFlight and App Store often share one Archive. |
-| [#331](https://github.com/ZhannaM85/my-money/issues/331) | 🔲 Open | App Store: public `/support` page with contact email | Required Support URL. Same shape as turtle #1120. Pick a dedicated inbox before merge. |
-| [#332](https://github.com/ZhannaM85/my-money/issues/332) | 🔲 Open | App Store: public marketing page for Developer Website | Optional Marketing URL (shows as Developer Website). Same shape as turtle #1119; do before submit this time. |
+| [#330](https://github.com/ZhannaM85/my-money/issues/330) | 🔲 Open | Hide Developer section in App Store builds; unlock for TestFlight diagnostics | Separate from the Turtle URL quartet. Native release: hide by default; unlock for diagnostics. |
+| [#331](https://github.com/ZhannaM85/my-money/issues/331) | 🔲 Open | App Store: public `/support` page with contact email | = turtle #1120. Required Support URL. Pick a dedicated inbox before merge. |
+| [#332](https://github.com/ZhannaM85/my-money/issues/332) | 🔲 Open | App Store: public marketing page for Developer Website | = turtle #1119. Optional Marketing URL; do before submit this time. Author credit: #334. |
+| [#333](https://github.com/ZhannaM85/my-money/issues/333) | 🔲 Open | App Store Connect: paste Support and Marketing URLs after public pages ship | = turtle #1121. Owner step in Connect after #331/#332 are live. |
+| [#334](https://github.com/ZhannaM85/my-money/issues/334) | 🔲 Open | Author credit: use Zhanna M. — no full surname on public pages | = turtle #1122. Preventive for #332; no full surname in product today. |
 
 ---
 
