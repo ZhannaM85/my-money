@@ -10,6 +10,13 @@ export interface ReleaseNote {
 /** User-facing changelog, most-recent-first. Add a row when an issue ships. */
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 296,
+    issue: 331,
+    date: '2026-11-22T13:50:00+03:00',
+    en: 'More → About has App support. The public /support page lists a contact email and short FAQ for App Store Support URL.',
+    ru: 'В Ещё → О приложении есть «Поддержка». Публичная страница /support с email и коротким FAQ — для Support URL в App Store.',
+  },
+  {
     version: 295,
     issue: 329,
     date: '2026-11-17T15:10:00+03:00',

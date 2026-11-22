@@ -18,6 +18,12 @@ export function AboutSection() {
       >
         {t.settings.readPrivacyPolicyLabel}
       </Link>
+      <Link
+        to="/support"
+        className="text-sm text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
+      >
+        {t.settings.readSupportLabel}
+      </Link>
       <div id="release-notes" className="flex flex-col gap-2 border-t border-border pt-4">
         <h3 className="font-medium text-foreground">
           {t.settings.releaseNotesLabel}

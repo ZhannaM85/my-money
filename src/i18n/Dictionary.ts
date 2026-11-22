@@ -336,6 +336,27 @@ export interface Dictionary {
     featureTogglesTitle: string
     featureTogglesDescription: string
     readPrivacyPolicyLabel: string
+    /** #331 — link to public `/support` (App Store Support URL). */
+    readSupportLabel: string
+  }
+  /** #331 — public App Store Support URL page. */
+  support: {
+    title: string
+    description: string
+    contactHeading: string
+    contactBody: string
+    emailLabel: string
+    faqHeading: string
+    faqLocalHeading: string
+    faqLocalBody: string
+    faqBackupHeading: string
+    faqBackupBody: string
+    faqExportHeading: string
+    faqExportBody: string
+    faqOnlineHeading: string
+    faqOnlineBody: string
+    privacyLinkLabel: string
+    backToSettingsLabel: string
   }
   /** #164 — full privacy policy at `/privacy` (store listings need a stable URL). */
   privacyPolicy: {

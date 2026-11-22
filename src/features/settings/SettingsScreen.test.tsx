@@ -161,6 +161,16 @@ describe('SettingsScreen', () => {
     expect(link).toHaveAttribute('href', '/privacy')
   })
 
+  it('links to the support page (#331)', async () => {
+    render(
+      <MemoryRouter>
+        <SettingsScreen />
+      </MemoryRouter>,
+    )
+    const link = await screen.findByRole('link', { name: 'App support' })
+    expect(link).toHaveAttribute('href', '/support')
+  })
+
   it('hides the home-screen widget off Capacitor Android (#235)', async () => {
     await db.settings.put(DEFAULT_SETTINGS)
     render(

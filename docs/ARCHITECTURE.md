@@ -244,11 +244,13 @@ Copy goes through `src/i18n/` (English + Russian). Locale is `settings.locale` i
 | `/allocation` | Donut + legend (by class / currency / type) |
 | `/history` | History — day list / calendar (+ shared range chrome) |
 | `/settings` | More: Preferences, Data, About, collapsed Developer |
+| `/privacy` | Public privacy policy (#164) |
+| `/support` | Public App Store Support URL (#331) |
 | `/onboarding` | First-run: base currency + first assets |
 
 An empty book that has not skipped welcome is redirected to `/onboarding`. `/settings` stays reachable so Skip is available there too. Once any asset exists, or `settings.onboardingCompleted` is true, the gate does not run again. Dashboard already shows calculated net worth (identity FX for same-currency books); period change and the chart wait for later epics.
 
-Bottom nav from the starting mock: Dashboard, Assets, center **+** (update), History, More. More is grouped as Preferences (currency, language, appearance; Android home-screen widget only in Capacitor), Data (JSON backup, CSV), About (privacy, release notes), and a collapsed Developer section (FX debug, RCA). `#fx-debug` and `#root-causes` open Developer. Allocation stays its own route (`/allocation`), linked from More and Dashboard — not a sixth tab. Store listing stays parked.
+Bottom nav from the starting mock: Dashboard, Assets, center **+** (update), History, More. More is grouped as Preferences (currency, language, appearance; Android home-screen widget only in Capacitor), Data (JSON backup, CSV), About (privacy, support, release notes), and a collapsed Developer section (FX debug, RCA). `#fx-debug` and `#root-causes` open Developer. Allocation stays its own route (`/allocation`), linked from More and Dashboard — not a sixth tab. Public `/support` is the App Store Support URL (#331).
 
 ---
 
@@ -363,7 +365,7 @@ Until later feature epics land, UI module tables below are still the intended ma
 | `features/assets/` | List, filters, create/edit, and Flow 4 asset details (`AssetDetailsScreen`) |
 | `features/allocation/` | Donut + legend |
 | `features/history/` | История — day list / calendar over the shared range |
-| `features/settings/` | Base currency, locale, tracking, export/import, `/privacy` (#164) |
+| `features/settings/` | Base currency, locale, tracking, export/import, `/privacy` (#164), `/support` (#331) |
 | `features/export/` | JSON (backup) then CSV |
 
 ---

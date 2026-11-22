@@ -342,7 +342,7 @@ export const en: Dictionary = {
     dataDescription:
       'Back up, restore, or wipe this device — and move holdings via CSV.',
     groupAbout: 'About',
-    aboutDescription: 'Privacy and what changed in recent versions.',
+    aboutDescription: 'Privacy, support, and what changed in recent versions.',
     groupDeveloper: 'Developer',
     developerDescription:
       'Diagnostics for FX and a log of why shipped issues happened.',
@@ -422,6 +422,30 @@ export const en: Dictionary = {
     featureTogglesDescription:
       'Optional pieces of the app you can turn on or off. More toggles will land here over time.',
     readPrivacyPolicyLabel: 'Privacy policy',
+    readSupportLabel: 'App support',
+  },
+  support: {
+    title: 'Support',
+    description: 'Help and contact for My Money',
+    contactHeading: 'Contact',
+    contactBody:
+      'For app issues, feedback, or feature ideas, email the address below. This is a public support inbox for My Money — please do not send unrelated personal mail here.',
+    emailLabel: 'Email support',
+    faqHeading: 'Common questions',
+    faqLocalHeading: 'Where is my data?',
+    faqLocalBody:
+      'Your net-worth book stays on your device. There is no account and no developer cloud copy of your balances.',
+    faqBackupHeading: 'How do I keep a backup?',
+    faqBackupBody:
+      'Use More → Data to export a JSON backup. Uninstalling the app or clearing its storage can remove local records.',
+    faqExportHeading: 'Can I export my data?',
+    faqExportBody:
+      'Yes. From More you can export a JSON backup or CSV. Import replaces the book after you confirm.',
+    faqOnlineHeading: 'Does the app need the internet?',
+    faqOnlineBody:
+      'The book works offline. Public foreign-exchange reference rates need a connection when the app refreshes quotes; balances are never sent.',
+    privacyLinkLabel: 'Read the privacy policy',
+    backToSettingsLabel: 'Back to More',
   },
   privacyPolicy: {
     title: 'Privacy Policy',
@@ -450,7 +474,7 @@ export const en: Dictionary = {
       'If this policy ever changes, the update will be posted on this same page.',
     contactHeading: 'Contact',
     contactBody:
-      'Questions about this policy can be sent via the project’s GitHub page: https://github.com/ZhannaM85/my-money',
+      'Questions about this policy can be sent to mymoney.zhannam85@gmail.com (see also the Support page).',
     backToSettingsLabel: 'Back to More',
   },
   backup: {
