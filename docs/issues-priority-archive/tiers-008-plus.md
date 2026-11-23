@@ -423,3 +423,9 @@ Closed live-feedback rows from Tier 8 onward. Open / pending items stay in [`../
 | [#325](https://github.com/ZhannaM85/my-money/issues/325) | ✅ Done | Positions: show zero-balance holdings at the end | pinZeroBalanceHoldingsLast on Dashboard Positions; non-zero order preserved. Proof: docs/validation-proof/325. Validated on-device 2026-11-13. |
 | [#328](https://github.com/ZhannaM85/my-money/issues/328) | ✅ Done | Assets: remove an asset from a date (keep its history) | Inclusive `endedOn`. Hidden chip lists removed assets; undo clears the date. Snapshots on or after the end date stay stored, and new ones are blocked. Menu action is «Удалить» / Delete; the date stays in the confirm dialog. Validated on-device 2026-11-18. |
 | [#329](https://github.com/ZhannaM85/my-money/issues/329) | ✅ Done | Assets: «На дату» picker so removed assets can be restored from history | As-of date in the Assets header reuses the Dashboard date control. A past day shows balances then; a later `endedOn` stays listed, marked removed from that date, with undo. Validated on-device 2026-11-18. |
+
+## Tier 38 — Live feedback (2026-11-22)
+
+| # | Status | Issue | Notes |
+|---|--------|-------|-------|
+| [#331](https://github.com/ZhannaM85/my-money/issues/331) | ✅ Done | App Store: public `/support` page with contact email | = turtle #1120. `/support` + About link; inbox `mymoney.zhannam85@gmail.com`. Validated on-device 2026-11-23. |
