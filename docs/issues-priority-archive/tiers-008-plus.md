@@ -430,3 +430,4 @@ Closed live-feedback rows from Tier 8 onward. Open / pending items stay in [`../
 |---|--------|-------|-------|
 | [#331](https://github.com/ZhannaM85/my-money/issues/331) | ✅ Done | App Store: public `/support` page with contact email | = turtle #1120. `/support` + About link; inbox `mymoney.zhannam85@gmail.com`. Validated on-device 2026-11-23. |
 | [#332](https://github.com/ZhannaM85/my-money/issues/332) | ✅ Done | App Store: public marketing page for Developer Website | = turtle #1119. `/welcome` for Marketing URL. Validated on-device 2026-11-23. |
+| [#334](https://github.com/ZhannaM85/my-money/issues/334) | ✅ Done | Author credit: use Zhanna M. — no full surname on public pages | = turtle #1122. `/welcome` uses AUTHOR_CREDIT; source guard. Validated on-device 2026-11-23. |
