@@ -13,11 +13,22 @@ and they have to be fast.
 
 The web app is deployed on GitHub Pages, and Android and iOS builds use the
 Capacitor wrapper. Product data stays on the device; there is no backend or
-account system.
+account system. Public pages for the store listing do not require a book:
+welcome, support, and privacy.
 
 **Repo:** [github.com/ZhannaM85/my-money](https://github.com/ZhannaM85/my-money)
 
 **Live app:** [zhannam85.github.io/my-money](https://zhannam85.github.io/my-money/)
+
+**Welcome:** [zhannam85.github.io/my-money/welcome](https://zhannam85.github.io/my-money/welcome) —
+App Store Developer Website page: what My Money is, links to privacy and
+support, and the author line (Zhanna M.).
+
+**Support:** [zhannam85.github.io/my-money/support](https://zhannam85.github.io/my-money/support) —
+contact email and a short FAQ (App Store Support URL). Also linked from
+More → About.
+
+**Privacy:** [zhannam85.github.io/my-money/privacy](https://zhannam85.github.io/my-money/privacy)
 
 Start at [`docs/issues-priority.md`](docs/issues-priority.md).
 
@@ -25,11 +36,19 @@ Start at [`docs/issues-priority.md`](docs/issues-priority.md).
 
 - Track assets and liabilities across categories and currencies, with asset
   details, editable dated snapshots, and included, excluded, or archived status.
+- End a holding on a chosen day and keep earlier history. From that day it
+  leaves the active list, the Dashboard total, and Positions; it stays under
+  Hidden, and the removal can be undone. Assets uses the same As of control as
+  Dashboard, so a past day shows the list and total as they were, including
+  holdings that were removed later.
 - Convert everything into a user-chosen base currency (Frankfurter online for non-RUB/GEL, live NBG for RUB with static RUB as the offline fallback, optional manual overrides). See [`docs/FX.md`](docs/FX.md).
 - Keep dated balance history per asset and use historical exchange rates when
   calculating past net worth.
 - Review net worth, holdings, allocation, and changes over time; compare selected
-  dates and inspect the holdings behind each total.
+  dates and inspect the holdings behind each total. Dashboard Positions can use
+  a compact density, and zero-balance holdings stay at the end of the list.
+  Allocation keeps Dashboard highlighted in the tab bar and shows a breadcrumb
+  back to Dashboard or More.
 - Update many balances together, with suggested values based on update frequency
   and a quick way to keep an unchanged value.
 - Choose base-currency or native-currency display, English or Russian, and a
